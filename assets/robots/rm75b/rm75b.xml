@@ -116,28 +116,33 @@
     </body>
   </worldbody>
   <actuator>
-    <!-- <motor name="torq_joint1" joint="joint1" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint2" joint="joint2" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint3" joint="joint3" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint4" joint="joint4" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint5" joint="joint5" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint6" joint="joint6" ctrllimited="true" ctrlrange="-200 200" />
-    <motor name="torq_joint7" joint="joint7" ctrllimited="true" ctrlrange="-200 200" /> -->
-    <!-- 大关节（Base/Shoulder/Elbow）：负载大，需要较高kp -->
-    <position name="pos_joint1" joint="joint1" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-3.1 3.1" forcelimited="true" forcerange="-60 60" />
-    <position name="pos_joint2" joint="joint2" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-2.268 2.268" forcelimited="true" forcerange="-60 60" />
-    <position name="pos_joint3" joint="joint3" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-3.1 3.1" forcelimited="true" forcerange="-30 30" />
-    <position name="pos_joint4" joint="joint4" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-2.355 2.355" forcelimited="true" forcerange="-30 30" />
-    <!-- 小关节（Wrist/Hand）：负载小，kp可适当降低 -->
-    <position name="pos_joint5" joint="joint5" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-3.1 3.1" forcelimited="true" forcerange="-10 10" />
-    <position name="pos_joint6" joint="joint6" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-2.233 2.233" forcelimited="true" forcerange="-10 10" />
-    <position name="pos_joint7" joint="joint7" kp="25000" kv="500" ctrllimited="true"
-      ctrlrange="-6.28 6.28" forcelimited="true" forcerange="-10 10" />
+    <position name="pos_joint1" joint="joint1"
+      kp="5000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-3.1 3.1"
+      forcelimited="true" forcerange="-60 60" />
+    <position name="pos_joint2" joint="joint2"
+      kp="5000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-2.268 2.268"
+      forcelimited="true" forcerange="-60 60" />
+    <position name="pos_joint3" joint="joint3"
+      kp="3000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-3.1 3.1"
+      forcelimited="true" forcerange="-30 30" />
+    <position name="pos_joint4" joint="joint4"
+      kp="3000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-2.355 2.355"
+      forcelimited="true" forcerange="-30 30" />
+    <position name="pos_joint5" joint="joint5"
+      kp="2000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-3.1 3.1"
+      forcelimited="true" forcerange="-10 10" />
+    <position name="pos_joint6" joint="joint6"
+      kp="2000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-2.233 2.233"
+      forcelimited="true" forcerange="-10 10" />
+    <position name="pos_joint7" joint="joint7"
+      kp="1000" dampratio="1.0"
+      ctrllimited="true" ctrlrange="-6.28 6.28"
+      forcelimited="true" forcerange="-10 10" />
   </actuator>
 </mujoco>

@@ -658,44 +658,46 @@
     </body>
   </worldbody>
   <equality>
-    <connect site1="act_end_0_p_site" site2="crank_close_0_p_site" />
-    <connect site1="bar_close_0_p_site" site2="bar_connect_0_p_site" />
-    <connect site1="act_end_1_p_site" site2="crank_close_1_p_site" />
-    <connect site1="bar_close_1_p_site" site2="bar_connect_1_p_site" />
-    <connect site1="act_end_2_p_site" site2="crank_close_2_p_site" />
-    <connect site1="bar_close_2_p_site" site2="bar_connect_2_p_site" />
-    <connect site1="act_end_3_p_site" site2="crank_close_3_p_site" />
-    <connect site1="bar_close_3_p_site" site2="bar_connect_3_p_site" />
-    <connect site1="thumb_bar_first_close_p_site" site2="thumb_bar_first_connect_p_site" />
-    <connect site1="thumb_grasp_crank_close_p_site" site2="thumb_grasp_act_end_p_site" />
-    <connect site1="thumb_bar_second_close_p_site" site2="thumb_bar_second_connect_p_site" />
-    <connect site1="thumb_rotate_close_p_site" site2="thumb_rotate_act_end_p_site" />
+    <connect site1="act_end_0_p_site" site2="crank_close_0_p_site" solref="0.0001 5" />
+    <connect site1="bar_close_0_p_site" site2="bar_connect_0_p_site" solref="0.0001 5" />
+    <connect site1="act_end_1_p_site" site2="crank_close_1_p_site" solref="0.0001 5" />
+    <connect site1="bar_close_1_p_site" site2="bar_connect_1_p_site" solref="0.0001 5" />
+    <connect site1="act_end_2_p_site" site2="crank_close_2_p_site" solref="0.0001 5" />
+    <connect site1="bar_close_2_p_site" site2="bar_connect_2_p_site" solref="0.0001 5" />
+    <connect site1="act_end_3_p_site" site2="crank_close_3_p_site" solref="0.0001 5" />
+    <connect site1="bar_close_3_p_site" site2="bar_connect_3_p_site" solref="0.0001 5" />
+    <connect site1="thumb_bar_first_close_p_site" site2="thumb_bar_first_connect_p_site"
+      solref="0.0001 5" />
+    <connect site1="thumb_grasp_crank_close_p_site" site2="thumb_grasp_act_end_p_site"
+      solref="0.0001 5" />
+    <connect site1="thumb_bar_second_close_p_site" site2="thumb_bar_second_connect_p_site"
+      solref="0.0001 5" />
+    <connect site1="thumb_rotate_close_p_site" site2="thumb_rotate_act_end_p_site" solref="0.0001 5" />
   </equality>
   <actuator>
-    <position name="act_push_0_j" joint="act_push_0_j" ctrlrange="0 0.01" kp="25000" kv="500"
+    <!-- 4指推杆 -->
+    <position name="act_push_0_j" joint="act_push_0_j" ctrlrange="0 0.01"
+      kp="25000" dampratio="0.3"
       forcelimited="true" forcerange="-300 300" />
-    <position name="act_push_1_j" joint="act_push_1_j" ctrlrange="0 0.01" kp="25000" kv="500"
+    <position name="act_push_1_j" joint="act_push_1_j" ctrlrange="0 0.01"
+      kp="25000" dampratio="0.3"
       forcelimited="true" forcerange="-300 300" />
-    <position name="act_push_2_j" joint="act_push_2_j" ctrlrange="0 0.01" kp="25000" kv="500"
+    <position name="act_push_2_j" joint="act_push_2_j" ctrlrange="0 0.01"
+      kp="25000" dampratio="0.3"
       forcelimited="true" forcerange="-300 300" />
-    <position name="act_push_3_j" joint="act_push_3_j" ctrlrange="0 0.01" kp="25000" kv="500"
+    <position name="act_push_3_j" joint="act_push_3_j" ctrlrange="0 0.01"
+      kp="25000" dampratio="0.3"
       forcelimited="true" forcerange="-300 300" />
+
+    <!-- 拇指 -->
     <position name="thumb_rotate_act_push_j" joint="thumb_rotate_act_push_j"
-      ctrlrange="-0.0069 0.004" kp="25000" kv="500" forcelimited="true" forcerange="-300 300" />
-    <position name="thumb_grasp_act_push_j" joint="thumb_grasp_act_push_j" ctrlrange="0 0.01"
-      kp="25000" kv="500" forcelimited="true" forcerange="-300 300" />
-    <!-- <motor name="act_push_0_j" joint="act_push_0_j" ctrllimited="true" ctrlrange="-5000 5000"
-    gear="0.05"/>
-    <motor name="act_push_1_j" joint="act_push_1_j" ctrllimited="true" ctrlrange="-5000 5000"
-    gear="0.05"/>
-    <motor name="act_push_2_j" joint="act_push_2_j" ctrllimited="true" ctrlrange="-5000 5000"
-    gear="0.05"/>
-    <motor name="act_push_3_j" joint="act_push_3_j" ctrllimited="true" ctrlrange="-5000 5000"
-    gear="0.05"/>
-    <motor name="thumb_grasp_act_push_j" joint="thumb_grasp_act_push_j" ctrllimited="true"
-    ctrlrange="-5000 5000" gear="0.05"/>
-    <motor name="thumb_rotate_act_push_j" joint="thumb_rotate_act_push_j" ctrllimited="true"
-    ctrlrange="-5000 5000" gear="0.05"/> -->
+      ctrlrange="-0.0069 0.004"
+      kp="25000" dampratio="0.3"
+      forcelimited="true" forcerange="-300 300" />
+    <position name="thumb_grasp_act_push_j" joint="thumb_grasp_act_push_j"
+      ctrlrange="0 0.01"
+      kp="25000" dampratio="0.3"
+      forcelimited="true" forcerange="-300 300" />
   </actuator>
   <sensor>
     <actuatorpos name="act_push_0_j_p" actuator="act_push_0_j" />
