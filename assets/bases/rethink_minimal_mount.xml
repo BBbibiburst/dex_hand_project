@@ -1,0 +1,16 @@
+<mujoco model="rethink_mount">
+    <asset>
+        <mesh name="pedestal" file="meshes/rethink_minimal_mount/pedestal_collision.stl" scale="0.5 0.5 0.6" />
+        <mesh name="pedestal_vis" file="meshes/rethink_minimal_mount/pedestal_vis.stl" scale="0.5 0.5 0.6" />
+    </asset>
+    <worldbody>
+        <body name="base" pos="0 0 0">
+            <site name="arm_mount" pos="0 0 0.5" size="0.025" rgba="0 0.8 1 0.5" />
+            <body name="pedestal" pos="0 0 0.555">
+              <inertial pos="0 0 0" mass="60.864" diaginertia="6.0869 5.81635 4.20915" />
+              <geom name="pedestal_visual" contype="0" conaffinity="0" group="0" type="mesh" rgba="0.2 0.2 0.2 1" mesh="pedestal_vis" />
+              <geom name="pedestal_collision" rgba="0.2 0.2 0.2 1" mesh="pedestal" group="3" />
+            </body>
+        </body>
+    </worldbody>
+</mujoco>

@@ -1,0 +1,720 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="V3_Hand_Total_Assy_0702">
+  <compiler angle="radian" meshdir="./" />
+  <!-- <option iterations="50" timestep="0.002" solver="Newton" gravity="0 0 -9.81" /> -->
+  <option iterations="100" timestep="0.001" solver="Newton" gravity="0 0 -9.81" />
+  <default>
+    <joint damping="0.01" armature="0.01" frictionloss="0.01" limited="true" range="-3.14 3.14" />
+    <!-- <geom condim="4" contype="1" conaffinity="15" friction="2.0 0.5 0.05" solref="0.001 2" /> -->
+    <geom condim="4" contype="1" conaffinity="15" friction="0.9 0.2 0.2" solref="0.001 2" />
+    <motor ctrllimited="true" />
+    <equality solref="0.001 2" />
+    <default class="visualgeom">
+      <geom condim="1" contype="0" conaffinity="0" />
+    </default>
+  </default>
+  <asset>
+    <mesh name="v3_base_link" content_type="model/stl" file="meshes/v3_base_link.STL" />
+    <mesh name="act_root_0_p" content_type="model/stl" file="meshes/act_root_0_p.STL" />
+    <mesh name="act_push_0_p" content_type="model/stl" file="meshes/act_push_0_p.STL" />
+    <mesh name="act_end_0_p" content_type="model/stl" file="meshes/act_end_0_p.STL" />
+    <mesh name="bar_0_p" content_type="model/stl" file="meshes/bar_0_p.STL" />
+    <mesh name="bar_connect_0_p" content_type="model/stl" file="meshes/bar_connect_0_p.STL" />
+    <mesh name="finger_first_0_p" content_type="model/stl" file="meshes/finger_first_0_p.STL" />
+    <mesh name="finger_second_0_p" content_type="model/stl" file="meshes/finger_second_0_p.STL" />
+    <mesh name="bar_close_0_p" content_type="model/stl" file="meshes/bar_close_0_p.STL" />
+    <mesh name="skin_0_1_p" content_type="model/stl" file="meshes/skin_0_1_p.STL" />
+    <mesh name="skin_0_2_p" content_type="model/stl" file="meshes/skin_0_2_p.STL" />
+    <mesh name="crank_close_0_p" content_type="model/stl" file="meshes/crank_close_0_p.STL" />
+    <mesh name="skin_0_0_p" content_type="model/stl" file="meshes/skin_0_0_p.STL" />
+    <mesh name="act_root_1_p" content_type="model/stl" file="meshes/act_root_1_p.STL" />
+    <mesh name="act_push_1_p" content_type="model/stl" file="meshes/act_push_1_p.STL" />
+    <mesh name="act_end_1_p" content_type="model/stl" file="meshes/act_end_1_p.STL" />
+    <mesh name="bar_1_p" content_type="model/stl" file="meshes/bar_1_p.STL" />
+    <mesh name="bar_connect_1_p" content_type="model/stl" file="meshes/bar_connect_1_p.STL" />
+    <mesh name="finger_first_1_p" content_type="model/stl" file="meshes/finger_first_1_p.STL" />
+    <mesh name="finger_second_1_p" content_type="model/stl" file="meshes/finger_second_1_p.STL" />
+    <mesh name="bar_close_1_p" content_type="model/stl" file="meshes/bar_close_1_p.STL" />
+    <mesh name="skin_1_1_p" content_type="model/stl" file="meshes/skin_1_1_p.STL" />
+    <mesh name="skin_1_2_p" content_type="model/stl" file="meshes/skin_1_2_p.STL" />
+    <mesh name="crank_close_1_p" content_type="model/stl" file="meshes/crank_close_1_p.STL" />
+    <mesh name="skin_1_0_p" content_type="model/stl" file="meshes/skin_1_0_p.STL" />
+    <mesh name="act_root_2_p" content_type="model/stl" file="meshes/act_root_2_p.STL" />
+    <mesh name="act_push_2_p" content_type="model/stl" file="meshes/act_push_2_p.STL" />
+    <mesh name="act_end_2_p" content_type="model/stl" file="meshes/act_end_2_p.STL" />
+    <mesh name="bar_2_p" content_type="model/stl" file="meshes/bar_2_p.STL" />
+    <mesh name="bar_connect_2_p" content_type="model/stl" file="meshes/bar_connect_2_p.STL" />
+    <mesh name="finger_first_2_p" content_type="model/stl" file="meshes/finger_first_2_p.STL" />
+    <mesh name="finger_second_2_p" content_type="model/stl" file="meshes/finger_second_2_p.STL" />
+    <mesh name="bar_close_2_p" content_type="model/stl" file="meshes/bar_close_2_p.STL" />
+    <mesh name="skin_2_1_p" content_type="model/stl" file="meshes/skin_2_1_p.STL" />
+    <mesh name="skin_2_2_p" content_type="model/stl" file="meshes/skin_2_2_p.STL" />
+    <mesh name="crank_close_2_p" content_type="model/stl" file="meshes/crank_close_2_p.STL" />
+    <mesh name="skin_2_0_p" content_type="model/stl" file="meshes/skin_2_0_p.STL" />
+    <mesh name="act_root_3_p" content_type="model/stl" file="meshes/act_root_3_p.STL" />
+    <mesh name="act_push_3_p" content_type="model/stl" file="meshes/act_push_3_p.STL" />
+    <mesh name="act_end_3_p" content_type="model/stl" file="meshes/act_end_3_p.STL" />
+    <mesh name="bar_3_p" content_type="model/stl" file="meshes/bar_3_p.STL" />
+    <mesh name="bar_connect_3_p" content_type="model/stl" file="meshes/bar_connect_3_p.STL" />
+    <mesh name="finger_first_3_p" content_type="model/stl" file="meshes/finger_first_3_p.STL" />
+    <mesh name="finger_second_3_p" content_type="model/stl" file="meshes/finger_second_3_p.STL" />
+    <mesh name="bar_close_3_p" content_type="model/stl" file="meshes/bar_close_3_p.STL" />
+    <mesh name="skin_3_1_p" content_type="model/stl" file="meshes/skin_3_1_p.STL" />
+    <mesh name="skin_3_2_p" content_type="model/stl" file="meshes/skin_3_2_p.STL" />
+    <mesh name="crank_close_3_p" content_type="model/stl" file="meshes/crank_close_3_p.STL" />
+    <mesh name="skin_3_0_p" content_type="model/stl" file="meshes/skin_3_0_p.STL" />
+    <mesh name="thumb_rotate_act_root_p" content_type="model/stl"
+      file="meshes/thumb_rotate_act_root_p.STL" />
+    <mesh name="thumb_rotate_act_push_p" content_type="model/stl"
+      file="meshes/thumb_rotate_act_push_p.STL" />
+    <mesh name="thumb_rotate_act_end_p" content_type="model/stl"
+      file="meshes/thumb_rotate_act_end_p.STL" />
+    <mesh name="thumb_rotate_p" content_type="model/stl" file="meshes/thumb_rotate_p.STL" />
+    <mesh name="thumb_rotate_close_p" content_type="model/stl"
+      file="meshes/thumb_rotate_close_p.STL" />
+    <mesh name="thumb_bar_first_p" content_type="model/stl" file="meshes/thumb_bar_first_p.STL" />
+    <mesh name="thumb_bar_first_connect_p" content_type="model/stl"
+      file="meshes/thumb_bar_first_connect_p.STL" />
+    <mesh name="thumb_first_p" content_type="model/stl" file="meshes/thumb_first_p.STL" />
+    <mesh name="thumb_grasp_act_root_p" content_type="model/stl"
+      file="meshes/thumb_grasp_act_root_p.STL" />
+    <mesh name="thumb_grasp_act_push_p" content_type="model/stl"
+      file="meshes/thumb_grasp_act_push_p.STL" />
+    <mesh name="thumb_grasp_act_end_p" content_type="model/stl"
+      file="meshes/thumb_grasp_act_end_p.STL" />
+    <mesh name="thumb_second_p" content_type="model/stl" file="meshes/thumb_second_p.STL" />
+    <mesh name="thumb_grasp_crank_close_p" content_type="model/stl"
+      file="meshes/thumb_grasp_crank_close_p.STL" />
+    <mesh name="thumb_bar_first_close_p" content_type="model/stl"
+      file="meshes/thumb_bar_first_close_p.STL" />
+    <mesh name="thumb_third_p" content_type="model/stl" file="meshes/thumb_third_p.STL" />
+    <mesh name="thumb_bar_second_close_p" content_type="model/stl"
+      file="meshes/thumb_bar_second_close_p.STL" />
+    <mesh name="skin_4_2_p" content_type="model/stl" file="meshes/skin_4_2_p.STL" />
+    <mesh name="skin_4_1_p" content_type="model/stl" file="meshes/skin_4_1_p.STL" />
+    <mesh name="thumb_bar_second_p" content_type="model/stl" file="meshes/thumb_bar_second_p.STL" />
+    <mesh name="thumb_bar_second_connect_p" content_type="model/stl"
+      file="meshes/thumb_bar_second_connect_p.STL" />
+    <mesh name="skin_4_0_p" content_type="model/stl" file="meshes/skin_4_0_p.STL" />
+    <mesh name="skin_palm_p" content_type="model/stl" file="meshes/skin_palm_p.STL" />
+  </asset>
+  <worldbody>
+    <body name="hand_root" pos="0 0 0" quat="1 0 0 0">
+      <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+        mesh="v3_base_link" name="v3_base_link" />
+      <geom type="mesh" rgba="1 1 1 1" mesh="v3_base_link" contype="0" conaffinity="0" />
+      <geom pos="-0.01544 0.11121 -0.003" quat="0.000796327 1 0 0" type="mesh" contype="3"
+        conaffinity="3" group="1" density="0" rgba="0 0 0 1" mesh="skin_palm_p" name="skin_palm_p"
+        condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+      <geom pos="-0.01544 0.11121 -0.003" quat="0.000796327 1 0 0" type="mesh" rgba="0 0 0 1"
+        mesh="skin_palm_p" contype="0" conaffinity="0" />
+      <body name="act_root_0_p" pos="0.008 0.05768 -0.03033"
+        quat="-0.481143 0.510987 0.518632 0.488277">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
+          diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+        <joint name="act_root_0_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="act_root_0_p" name="act_root_0_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="act_root_0_p" contype="0" conaffinity="0" />
+        <body name="act_push_0_p" pos="1.8829e-05 -0.0012733 0.064147"
+          quat="0.999951 0.00992333 0.000146403 3.43694e-05">
+          <inertial pos="3.08765e-09 -5.4813e-09 0.0040919" quat="0.992362 0 0 0.123361"
+            mass="0.000523974" diaginertia="1.00995e-08 1.00882e-08 1.19419e-09" />
+          <joint name="act_push_0_j" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.01"
+            limited="true" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="act_push_0_p" name="act_push_0_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="act_push_0_p" contype="0" conaffinity="0" />
+          <geom pos="0 0 0.011" quat="0.707088 0.00520339 0.707088 -0.00520339" type="mesh"
+            contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="act_end_0_p"
+            name="act_end_0_p" />
+          <geom pos="0 0 0.011" quat="0.707088 0.00520339 0.707088 -0.00520339" type="mesh"
+            rgba="1 1 1 1" mesh="act_end_0_p" contype="0" conaffinity="0" />
+          <site name="act_end_0_p_site" pos="0 0 0.011" size="0.0015" rgba="1 0 0 1" group="3" />
+        </body>
+      </body>
+      <body name="bar_0_p" pos="-0.00356 0.133049 -0.034774"
+        quat="0.713766 -0.0214958 -0.0210733 -0.699737">
+        <inertial pos="-0.0181846 0.00391979 -7.77832e-05"
+          quat="0.0759628 0.702911 -0.0759401 0.703121" mass="0.00114197"
+          diaginertia="1.52379e-07 1.51367e-07 3.24553e-09" />
+        <joint name="bar_0_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="bar_0_p" name="bar_0_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="bar_0_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" contype="0" conaffinity="0" group="1"
+          density="0" rgba="1 1 1 1" mesh="bar_connect_0_p" name="bar_connect_0_p" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" rgba="1 1 1 1" mesh="bar_connect_0_p"
+          contype="0" conaffinity="0" />
+        <site name="bar_connect_0_p_site" pos="-0.0318999 0.00671966 -0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="finger_first_0_p" pos="0.002 0.13804 -0.0350749"
+        quat="0.0214958 0.713766 -0.699737 0.0210733">
+        <inertial pos="-0.01153 -0.00242854 -0.00136339" quat="0.602872 0.367023 0.67964 0.199822"
+          mass="0.0156128" diaginertia="3.07158e-06 2.71909e-06 1.37814e-06" />
+        <joint name="finger_first_0_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.087 1.657"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+          mesh="finger_first_0_p" name="finger_first_0_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="finger_first_0_p" contype="0" conaffinity="0" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 -1 0 0" type="mesh" contype="0"
+          conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="crank_close_0_p"
+          name="crank_close_0_p" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 -1 0 0" type="mesh" rgba="1 1 1 1"
+          mesh="crank_close_0_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.467921 -0.506491 0.493424 -0.530141"
+          type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+          mesh="skin_0_0_p" name="skin_0_0_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.467921 -0.506491 0.493424 -0.530141"
+          type="mesh" rgba="0 0 0 1" mesh="skin_0_0_p" contype="0" conaffinity="0" />
+        <body name="finger_second_0_p" pos="-0.0318983 0.00389251 0">
+          <inertial pos="-0.0171504 -0.00388346 -0.00482794"
+            quat="0.235679 0.688576 0.57471 0.374201" mass="0.0177553"
+            diaginertia="5.43551e-06 4.30941e-06 1.69387e-06" />
+          <joint name="finger_second_0_j" pos="0 0 0" axis="0 0 -1" limited="true"
+            range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+            mesh="finger_second_0_p" name="finger_second_0_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="finger_second_0_p" contype="0" conaffinity="0" />
+          <geom pos="0.0048871 -0.004954 0.0001" quat="-3.67321e-06 -1 0 0" type="mesh" contype="0"
+            conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="bar_close_0_p"
+            name="bar_close_0_p" />
+          <geom pos="0.0048871 -0.004954 0.0001" quat="-3.67321e-06 -1 0 0" type="mesh"
+            rgba="1 1 1 1" mesh="bar_close_0_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0140028 0.00423085 0.0001" quat="-0.476897 -0.494017 0.505912 -0.522082"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_0_1_p" name="skin_0_1_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0140028 0.00423085 0.0001" quat="-0.476897 -0.494017 0.505912 -0.522082"
+            type="mesh" rgba="0 0 0 1" mesh="skin_0_1_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0351717 0.00347781 0.0001" quat="-0.462885 -0.51276 0.486905 -0.534545"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_0_2_p" name="skin_0_2_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0351717 0.00347781 0.0001" quat="-0.462885 -0.51276 0.486905 -0.534545"
+            type="mesh" rgba="0 0 0 1" mesh="skin_0_2_p" contype="0" conaffinity="0" />
+          <site name="bar_close_0_p_site" pos="0.0048871 -0.004954 0.0001" size="0.0015"
+            rgba="1 0 0 1" group="3" />
+        </body>
+        <site name="crank_close_0_p_site" pos="0.00544343 -0.00440103 0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="act_root_1_p" pos="0.008 0.0586908 -0.0101945"
+        quat="-0.487443 0.507414 0.512442 0.492274">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
+          diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+        <joint name="act_root_1_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="act_root_1_p" name="act_root_1_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="act_root_1_p" contype="0" conaffinity="0" />
+        <body name="act_push_1_p" pos="1.25578e-05 -0.0012734 0.0641472"
+          quat="0.999951 0.00992417 9.76401e-05 2.29475e-05">
+          <inertial pos="3.07407e-09 -5.48451e-09 0.00409191" mass="0.000523975"
+            diaginertia="1.00989e-08 1.0089e-08 1.19419e-09" />
+          <joint name="act_push_1_j" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.01"
+            limited="true" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="act_push_1_p" name="act_push_1_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="act_push_1_p" contype="0" conaffinity="0" />
+          <geom pos="0 0 0.011" quat="0.707098 0.00347024 0.707098 -0.00347024" type="mesh"
+            contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="act_end_1_p"
+            name="act_end_1_p" />
+          <geom pos="0 0 0.011" quat="0.707098 0.00347024 0.707098 -0.00347024" type="mesh"
+            rgba="1 1 1 1" mesh="act_end_1_p" contype="0" conaffinity="0" />
+          <site name="act_end_1_p_site" pos="0 0 0.011" size="0.0015" rgba="1 0 0 1" group="3" />
+        </body>
+      </body>
+      <body name="bar_1_p" pos="-0.00356 0.134134 -0.0131246"
+        quat="0.713946 -0.0143317 -0.01405 -0.699913">
+        <inertial pos="-0.0181846 0.00391979 -7.77832e-05"
+          quat="0.0759628 0.702911 -0.0759401 0.703121" mass="0.00114197"
+          diaginertia="1.52379e-07 1.51367e-07 3.24553e-09" />
+        <joint name="bar_1_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="bar_1_p" name="bar_1_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="bar_1_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" contype="0" conaffinity="0" group="1"
+          density="0" rgba="1 1 1 1" mesh="bar_connect_1_p" name="bar_connect_1_p" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" rgba="1 1 1 1" mesh="bar_connect_1_p"
+          contype="0" conaffinity="0" />
+        <site name="bar_connect_1_p_site" pos="-0.0318999 0.00671966 -0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="finger_first_1_p" pos="0.002 0.13913 -0.0133252"
+        quat="0.0143317 0.713946 -0.699913 0.01405">
+        <inertial pos="-0.0115079 -0.0024292 -0.00136339" quat="0.60245 0.367689 0.679947 0.198826"
+          mass="0.0156128" diaginertia="3.07946e-06 2.72925e-06 1.37585e-06" />
+        <joint name="finger_first_1_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.087 1.657"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+          mesh="finger_first_1_p" name="finger_first_1_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="finger_first_1_p" contype="0" conaffinity="0" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 1 0 0" type="mesh" contype="0"
+          conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="crank_close_1_p"
+          name="crank_close_1_p" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 1 0 0" type="mesh" rgba="1 1 1 1"
+          mesh="crank_close_1_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.472252 -0.510519 0.489255 -0.526287"
+          type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+          mesh="skin_1_0_p" name="skin_1_0_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.472252 -0.510519 0.489255 -0.526287"
+          type="mesh" rgba="0 0 0 1" mesh="skin_1_0_p" contype="0" conaffinity="0" />
+        <body name="finger_second_1_p" pos="-0.0318983 0.00389251 0">
+          <inertial pos="-0.0209974 -0.00331111 -0.00499057"
+            quat="0.267723 0.685624 0.567941 0.368358" mass="0.0211046"
+            diaginertia="8.42322e-06 6.44228e-06 2.64786e-06" />
+          <joint name="finger_second_1_j" pos="0 0 0" axis="0 0 -1" limited="true"
+            range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+            mesh="finger_second_1_p" name="finger_second_1_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="finger_second_1_p" contype="0" conaffinity="0" />
+          <geom pos="0.00488705 -0.00495402 0.0001" quat="0 -1 0 0" type="mesh" contype="0"
+            conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="bar_close_1_p"
+            name="bar_close_1_p" />
+          <geom pos="0.00488705 -0.00495402 0.0001" quat="0 -1 0 0" type="mesh" rgba="1 1 1 1"
+            mesh="bar_close_1_p" contype="0" conaffinity="0" />
+          <geom pos="-0.015911 0.0047591 0.0001" quat="-0.486323 -0.492747 0.50715 -0.513313"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_1_1_p" name="skin_1_1_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.015911 0.0047591 0.0001" quat="-0.486323 -0.492747 0.50715 -0.513313"
+            type="mesh" rgba="0 0 0 1" mesh="skin_1_1_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0429721 0.00510208 0.0001" quat="-0.471191 -0.511737 0.487981 -0.527237"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_1_2_p" name="skin_1_2_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0429721 0.00510208 0.0001" quat="-0.471191 -0.511737 0.487981 -0.527237"
+            type="mesh" rgba="0 0 0 1" mesh="skin_1_2_p" contype="0" conaffinity="0" />
+          <site name="bar_close_1_p_site" pos="0.00488705 -0.00495402 0.0001" size="0.0015"
+            rgba="1 0 0 1" group="3" />
+        </body>
+        <site name="crank_close_1_p_site" pos="0.00544343 -0.00440103 0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="act_root_2_p" pos="0.008 0.059298 0.0099576"
+        quat="-0.493742 0.503735 0.50626 0.496156">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
+          diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+        <joint name="act_root_2_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="act_root_2_p" name="act_root_2_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="act_root_2_p" contype="0" conaffinity="0" />
+        <body name="act_push_2_p" pos="0 -0.00127345 0.0641472"
+          quat="0.999951 0.00992453 4.88318e-05 1.14842e-05">
+          <inertial pos="3.05943e-09 -5.49393e-09 0.0040919" mass="0.000523974"
+            diaginertia="1.00988e-08 1.00889e-08 1.19419e-09" />
+          <joint name="act_push_2_j" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.01"
+            limited="true" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="act_push_2_p" name="act_push_2_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="act_push_2_p" contype="0" conaffinity="0" />
+          <geom pos="0 0 0.011" quat="0.707105 0.00173552 0.707105 -0.00173552" type="mesh"
+            contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="act_end_2_p"
+            name="act_end_2_p" />
+          <geom pos="0 0 0.011" quat="0.707105 0.00173552 0.707105 -0.00173552" type="mesh"
+            rgba="1 1 1 1" mesh="act_end_2_p" contype="0" conaffinity="0" />
+          <site name="act_end_2_p_site" pos="0 0 0.011" size="0.0015" rgba="1 0 0 1" group="3" />
+        </body>
+      </body>
+      <body name="bar_2_p" pos="-0.00356 0.13478 0.0085423"
+        quat="0.714069 -0.00716596 -0.00702541 -0.700004">
+        <inertial pos="-0.0181846 0.00391979 -7.77832e-05"
+          quat="0.0759628 0.702911 -0.0759401 0.703121" mass="0.00114197"
+          diaginertia="1.52379e-07 1.51367e-07 3.24553e-09" />
+        <joint name="bar_2_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="bar_2_p" name="bar_2_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="bar_2_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" contype="0" conaffinity="0" group="1"
+          density="0" rgba="1 1 1 1" mesh="bar_connect_2_p" name="bar_connect_2_p" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" rgba="1 1 1 1" mesh="bar_connect_2_p"
+          contype="0" conaffinity="0" />
+        <site name="bar_connect_2_p_site" pos="-0.0318999 0.00671966 -0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="finger_first_2_p" pos="0.002 0.13978 0.008442"
+        quat="0.0071639 0.714069 -0.700004 0.00702743">
+        <inertial pos="-0.0114859 -0.00242952 -0.00136338"
+          quat="0.602024 0.368358 0.680225 0.197921" mass="0.0156128"
+          diaginertia="3.08735e-06 2.73956e-06 1.37344e-06" />
+        <joint name="finger_first_2_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.087 1.657"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+          mesh="finger_first_2_p" name="finger_first_2_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="finger_first_2_p" contype="0" conaffinity="0" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 1 0 0" type="mesh" contype="0"
+          conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="crank_close_2_p"
+          name="crank_close_2_p" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 1 0 0" type="mesh" rgba="1 1 1 1"
+          mesh="crank_close_2_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.476551 -0.514513 0.485053 -0.522397"
+          type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+          mesh="skin_2_0_p" name="skin_2_0_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.476551 -0.514513 0.485053 -0.522397"
+          type="mesh" rgba="0 0 0 1" mesh="skin_2_0_p" contype="0" conaffinity="0" />
+        <body name="finger_second_2_p" pos="-0.0318983 0.00389251 0">
+          <inertial pos="-0.0237824 -0.00325381 -0.00513523"
+            quat="0.283806 0.678225 0.567563 0.370591" mass="0.0236069"
+            diaginertia="1.13537e-05 8.58574e-06 3.5089e-06" />
+          <joint name="finger_second_2_j" pos="0 0 0" axis="0 0 -1" limited="true"
+            range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+            mesh="finger_second_2_p" name="finger_second_2_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="finger_second_2_p" contype="0" conaffinity="0" />
+          <geom pos="0.00488705 -0.00495402 0.0001" quat="0 -1 0 0" type="mesh" contype="0"
+            conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="bar_close_2_p"
+            name="bar_close_2_p" />
+          <geom pos="0.00488705 -0.00495402 0.0001" quat="0 -1 0 0" type="mesh" rgba="1 1 1 1"
+            mesh="bar_close_2_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0179082 0.00481423 0.0001" quat="-0.492634 -0.496765 0.503214 -0.507259"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_2_1_p" name="skin_2_1_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0179082 0.00481423 0.0001" quat="-0.492634 -0.496765 0.503214 -0.507259"
+            type="mesh" rgba="0 0 0 1" mesh="skin_2_1_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0489203 0.00557317 0.0001" quat="-0.475726 -0.515364 0.484148 -0.523149"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_2_2_p" name="skin_2_2_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0489203 0.00557317 0.0001" quat="-0.475726 -0.515364 0.484148 -0.523149"
+            type="mesh" rgba="0 0 0 1" mesh="skin_2_2_p" contype="0" conaffinity="0" />
+          <site name="bar_close_2_p_site" pos="0.00488705 -0.00495402 0.0001" size="0.0015"
+            rgba="1 0 0 1" group="3" />
+        </body>
+        <site name="crank_close_2_p_site" pos="0.00544343 -0.00440103 0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="act_root_3_p" pos="0.008 0.0595 0.030118"
+        quat="-0.500004 0.499998 0.500002 0.499996">
+        <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
+          diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+        <joint name="act_root_3_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="act_root_3_p" name="act_root_3_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="act_root_3_p" contype="0" conaffinity="0" />
+        <body name="act_push_3_p" pos="0 -0.00127346 0.0641472" quat="0.999951 0.00992465 0 0">
+          <inertial pos="3.04358e-09 -5.50952e-09 0.0040919" mass="0.000523974"
+            diaginertia="1.00988e-08 1.00889e-08 1.19419e-09" />
+          <joint name="act_push_3_j" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.01"
+            limited="true" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="act_push_3_p" name="act_push_3_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="act_push_3_p" contype="0" conaffinity="0" />
+          <geom pos="0 0 0.011" quat="0.707107 0 0.707107 0" type="mesh" contype="0" conaffinity="0"
+            group="1" density="0" rgba="1 1 1 1" mesh="act_end_3_p" name="act_end_3_p" />
+          <geom pos="0 0 0.011" quat="0.707107 0 0.707107 0" type="mesh" rgba="1 1 1 1"
+            mesh="act_end_3_p" contype="0" conaffinity="0" />
+          <site name="act_end_3_p_site" pos="0 0 0.011" size="0.0015" rgba="1 0 0 1" group="3" />
+        </body>
+      </body>
+      <body name="bar_3_p" pos="-0.00356 0.135 0.030218" quat="0.714106 0 0 -0.700037">
+        <inertial pos="-0.0181846 0.00391979 -7.77832e-05"
+          quat="0.0759628 0.702911 -0.0759401 0.703121" mass="0.00114197"
+          diaginertia="1.52379e-07 1.51367e-07 3.24553e-09" />
+        <joint name="bar_3_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="bar_3_p" name="bar_3_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="bar_3_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" contype="0" conaffinity="0" group="1"
+          density="0" rgba="1 1 1 1" mesh="bar_connect_3_p" name="bar_connect_3_p" />
+        <geom pos="-0.0318999 0.00671966 -0.0001" type="mesh" rgba="1 1 1 1" mesh="bar_connect_3_p"
+          contype="0" conaffinity="0" />
+        <site name="bar_connect_3_p_site" pos="-0.0318999 0.00671966 -0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="finger_first_3_p" pos="0.002 0.14 0.030218"
+        quat="-2.62306e-06 0.714106 -0.700037 2.57138e-06">
+        <inertial pos="-0.0114638 -0.00242938 -0.00136355"
+          quat="0.601598 0.369029 0.680477 0.197102" mass="0.0156125"
+          diaginertia="3.09522e-06 2.74995e-06 1.37088e-06" />
+        <joint name="finger_first_3_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-0.087 1.657"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+          mesh="finger_first_3_p" name="finger_first_3_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="finger_first_3_p" contype="0" conaffinity="0" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 -1 0 0" type="mesh" contype="0"
+          conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="crank_close_3_p"
+          name="crank_close_3_p" />
+        <geom pos="0.00544343 -0.00440103 0.0001" quat="0 -1 0 0" type="mesh" rgba="1 1 1 1"
+          mesh="crank_close_3_p" contype="0" conaffinity="0" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.480818 -0.518473 0.480818 -0.518473"
+          type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+          mesh="skin_3_0_p" name="skin_3_0_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+        <geom pos="-0.0157378 0.0119851 0.0001" quat="-0.480818 -0.518473 0.480818 -0.518473"
+          type="mesh" rgba="0 0 0 1" mesh="skin_3_0_p" contype="0" conaffinity="0" />
+        <body name="finger_second_3_p" pos="-0.031898 0.0038925 0">
+          <inertial pos="-0.0209906 -0.0033276 -0.00499058"
+            quat="0.269767 0.684699 0.568543 0.367657" mass="0.0211046"
+            diaginertia="8.42709e-06 6.44326e-06 2.65041e-06" />
+          <joint name="finger_second_3_j" pos="0 0 0" axis="0 0 -1" limited="true"
+            range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+            mesh="finger_second_3_p" name="finger_second_3_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="finger_second_3_p" contype="0" conaffinity="0" />
+          <geom pos="0.0048871 -0.004954 0.0001" quat="-3.67321e-06 -1 0 0" type="mesh" contype="0"
+            conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="bar_close_3_p"
+            name="bar_close_3_p" />
+          <geom pos="0.0048871 -0.004954 0.0001" quat="-3.67321e-06 -1 0 0" type="mesh"
+            rgba="1 1 1 1" mesh="bar_close_3_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0159111 0.00475913 0.0001" quat="-0.496831 -0.503149 0.496831 -0.503149"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_3_1_p" name="skin_3_1_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0159111 0.00475913 0.0001" quat="-0.496831 -0.503149 0.496831 -0.503149"
+            type="mesh" rgba="0 0 0 1" mesh="skin_3_1_p" contype="0" conaffinity="0" />
+          <geom pos="-0.0429721 0.00510208 0.0001" quat="-0.479649 -0.519555 0.479649 -0.519555"
+            type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+            mesh="skin_3_2_p" name="skin_3_2_p" condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="-0.0429721 0.00510208 0.0001" quat="-0.479649 -0.519555 0.479649 -0.519555"
+            type="mesh" rgba="0 0 0 1" mesh="skin_3_2_p" contype="0" conaffinity="0" />
+          <site name="bar_close_3_p_site" pos="0.0048871 -0.004954 0.0001" size="0.0015"
+            rgba="1 0 0 1" group="3" />
+        </body>
+        <site name="crank_close_3_p_site" pos="0.00544343 -0.00440103 0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+      <body name="thumb_rotate_act_root_p" pos="-0.009 0.0635 -0.031882"
+        quat="0.786978 0 0 -0.61698">
+        <inertial pos="1.71016e-12 7.27882e-12 -4.60711e-10" quat="0.5 0.5 -0.5 0.5"
+          mass="0.000586692" diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+        <joint name="thumb_rotate_act_root_j" pos="0 0 0" axis="0 0 -1" limited="true"
+          range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="thumb_rotate_act_root_p" name="thumb_rotate_act_root_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="thumb_rotate_act_root_p" contype="0" conaffinity="0" />
+        <body name="thumb_rotate_act_push_p" pos="-0.000201361 -0.000819443 0.0518834"
+          quat="0.992751 0 0 -0.120186">
+          <inertial pos="-5.12466e-10 -3.06047e-05 0.0018818"
+            quat="0.495919 0.504048 0.495919 0.504048" mass="0.000501865"
+            diaginertia="4.3975e-09 3.28941e-09 2.86126e-09" />
+          <joint name="thumb_rotate_act_push_j" pos="0 0 0" axis="0 -0.0162616 0.999868"
+            type="slide" range="-0.0069 0.004" limited="true" damping="10.0"
+            solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="thumb_rotate_act_push_p" name="thumb_rotate_act_push_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="thumb_rotate_act_push_p" contype="0"
+            conaffinity="0" />
+          <geom pos="0 -4.22801e-05 0.00259966" quat="0.5 0.5 0.5 0.5" type="mesh" contype="0"
+            conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="thumb_rotate_act_end_p"
+            name="thumb_rotate_act_end_p" />
+          <geom pos="0 -4.22801e-05 0.00259966" quat="0.5 0.5 0.5 0.5" type="mesh" rgba="1 1 1 1"
+            mesh="thumb_rotate_act_end_p" contype="0" conaffinity="0" />
+          <site name="thumb_rotate_act_end_p_site" pos="0 -4.22801e-05 0.00259966" size="0.0015"
+            rgba="1 0 0 1" group="3" />
+        </body>
+      </body>
+      <body name="thumb_rotate_p" pos="-0.015 0.0636 0.018118" quat="0.707105 0.707108 0 0">
+        <inertial pos="0.0051139 0.00448309 0.0001" mass="0.000176615"
+          diaginertia="2.18598e-09 2.18598e-09 1.37908e-10" />
+        <joint name="thumb_rotate_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+          solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+          mesh="thumb_rotate_p" name="thumb_rotate_p" />
+        <geom type="mesh" rgba="1 1 1 1" mesh="thumb_rotate_p" contype="0" conaffinity="0" />
+        <geom pos="0.0051139 0.00448309 0.0001" type="mesh" contype="0" conaffinity="0" group="1"
+          density="0" rgba="1 1 1 1" mesh="thumb_rotate_close_p" name="thumb_rotate_close_p" />
+        <geom pos="0.0051139 0.00448309 0.0001" type="mesh" rgba="1 1 1 1"
+          mesh="thumb_rotate_close_p" contype="0" conaffinity="0" />
+        <body name="thumb_bar_first_p" pos="-0.0219403 0.00521415 -0.00765"
+          quat="0.638758 0.689899 0.155045 -0.303295">
+          <inertial pos="-0.00529479 -0.028452 -0.000208866"
+            quat="0.696823 0.711109 -0.0464886 -0.081237" mass="0.00262694"
+            diaginertia="7.56664e-07 7.56447e-07 1.92094e-08" />
+          <joint name="thumb_bar_first_j" pos="0 0 0" axis="0 0 1" limited="true" range="-3.14 3.14"
+            solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+            mesh="thumb_bar_first_p" name="thumb_bar_first_p" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="thumb_bar_first_p" contype="0" conaffinity="0" />
+          <geom pos="-0.00911214 -0.0491627 0.0001" type="mesh" contype="0" conaffinity="0"
+            group="1" density="0" rgba="1 1 1 1" mesh="thumb_bar_first_connect_p"
+            name="thumb_bar_first_connect_p" />
+          <geom pos="-0.00911214 -0.0491627 0.0001" type="mesh" rgba="1 1 1 1"
+            mesh="thumb_bar_first_connect_p" contype="0" conaffinity="0" />
+          <site name="thumb_bar_first_connect_p_site" pos="-0.00911214 -0.0491627 0.0001"
+            size="0.0015" rgba="1 0 0 1" group="3" />
+        </body>
+        <body name="thumb_first_p" pos="-0.0248548 0.00577022 0.00127"
+          quat="0.638758 0.689899 0.155045 -0.303295">
+          <inertial pos="0.00383913 -0.0237823 0.00180771"
+            quat="0.489331 0.350115 -0.704242 0.376853" mass="0.0210687"
+            diaginertia="1.17542e-05 7.58051e-06 5.32361e-06" />
+          <joint name="thumb_first_j" pos="0 0 0" axis="0 0 1" limited="true" range="-0.087 0.873"
+            solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+          <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+            mesh="thumb_first_p" name="thumb_first_p" condim="4" friction="2.0 0.5 0.05"
+            solref="0.001 2" />
+          <geom type="mesh" rgba="1 1 1 1" mesh="thumb_first_p" contype="0" conaffinity="0" />
+          <geom pos="0.0200317 -0.0367688 -0.0001" quat="0.5 0.5 -0.5 -0.5" type="mesh" contype="3"
+            conaffinity="3" group="1" density="0" rgba="0 0 0 1" mesh="skin_4_0_p" name="skin_4_0_p"
+            condim="4" friction="20.0 5.0 1.0" solref="0.001 2" />
+          <geom pos="0.0200317 -0.0367688 -0.0001" quat="0.5 0.5 -0.5 -0.5" type="mesh"
+            rgba="0 0 0 1" mesh="skin_4_0_p" contype="0" conaffinity="0" />
+          <body name="thumb_grasp_act_root_p" pos="-0.00767762 -0.0055 -0.0001"
+            quat="0.437859 0.437859 0.555229 -0.555229">
+            <inertial pos="0 0 -4.60779e-10" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
+              diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
+            <joint name="thumb_grasp_act_root_j" pos="0 0 0" axis="0 0 -1" limited="true"
+              range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+              mesh="thumb_grasp_act_root_p" name="thumb_grasp_act_root_p" />
+            <geom type="mesh" rgba="1 1 1 1" mesh="thumb_grasp_act_root_p" contype="0"
+              conaffinity="0" />
+            <body name="thumb_grasp_act_push_p" pos="0 0 0.0438151" quat="0.993088 0 0 0.11737">
+              <inertial pos="-3.26367e-07 3.00177e-07 0.00283134" quat="0.707107 0 0 0.707107"
+                mass="0.000297643" diaginertia="2.86244e-09 2.62594e-09 7.96402e-10" />
+              <joint name="thumb_grasp_act_push_j" pos="0 0 0" axis="0 0 1" type="slide"
+                range="0 0.01" limited="true" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+              <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+                mesh="thumb_grasp_act_push_p" name="thumb_grasp_act_push_p" />
+              <geom type="mesh" rgba="1 1 1 1" mesh="thumb_grasp_act_push_p" contype="0"
+                conaffinity="0" />
+              <geom pos="0 0 0.00499999" quat="0.5 -0.5 -0.5 0.5" type="mesh" contype="0"
+                conaffinity="0" group="1" density="0" rgba="1 1 1 1" mesh="thumb_grasp_act_end_p"
+                name="thumb_grasp_act_end_p" />
+              <geom pos="0 0 0.00499999" quat="0.5 -0.5 -0.5 0.5" type="mesh" rgba="1 1 1 1"
+                mesh="thumb_grasp_act_end_p" contype="0" conaffinity="0" />
+              <site name="thumb_grasp_act_end_p_site" pos="0 0 0.00499999" size="0.0015"
+                rgba="1 0 0 1" group="3" />
+            </body>
+          </body>
+          <body name="thumb_second_p" pos="0.00538619 -0.0565 0">
+            <inertial pos="-0.00233836 -0.00709252 0.00194151"
+              quat="-0.208014 0.456839 -0.0195905 0.864664" mass="0.0125436"
+              diaginertia="2.32459e-06 1.7898e-06 1.50652e-06" />
+            <joint name="thumb_second_j" pos="0 0 0" axis="0 0 1" limited="true"
+              range="-0.087 0.873" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+            <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+              mesh="thumb_second_p" name="thumb_second_p" condim="4" friction="2.0 0.5 0.05"
+              solref="0.001 2" />
+            <geom type="mesh" rgba="1 1 1 1" mesh="thumb_second_p" contype="0" conaffinity="0" />
+            <geom pos="-0.0130638 0.00218495 -0.0001" type="mesh" contype="0" conaffinity="0"
+              group="1" density="0" rgba="1 1 1 1" mesh="thumb_grasp_crank_close_p"
+              name="thumb_grasp_crank_close_p" />
+            <geom pos="-0.0130638 0.00218495 -0.0001" type="mesh" rgba="1 1 1 1"
+              mesh="thumb_grasp_crank_close_p" contype="0" conaffinity="0" />
+            <geom pos="-0.00666394 0.00214287 0" type="mesh" contype="0" conaffinity="0" group="1"
+              density="0" rgba="1 1 1 1" mesh="thumb_bar_first_close_p"
+              name="thumb_bar_first_close_p" />
+            <geom pos="-0.00666394 0.00214287 0" type="mesh" rgba="1 1 1 1"
+              mesh="thumb_bar_first_close_p" contype="0" conaffinity="0" />
+            <geom pos="0.0120659 -0.0106684 -0.0001" quat="0.516981 0.516981 -0.482422 -0.482422"
+              type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+              mesh="skin_4_1_p" name="skin_4_1_p" condim="4" friction="20.0 5.0 1.0"
+              solref="0.001 2" />
+            <geom pos="0.0120659 -0.0106684 -0.0001" quat="0.516981 0.516981 -0.482422 -0.482422"
+              type="mesh" rgba="0 0 0 1" mesh="skin_4_1_p" contype="0" conaffinity="0" />
+            <body name="thumb_third_p" pos="0.00212065 -0.0233881 0">
+              <inertial pos="0.000593211 -0.00931824 0.002676"
+                quat="0.541923 0.778236 0.271911 -0.163501" mass="0.0111163"
+                diaginertia="3.14755e-06 3.10704e-06 5.28278e-07" />
+              <joint name="thumb_third_j" pos="0 0 0" axis="0 0 1" limited="true"
+                range="-0.087 0.873" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+              <geom type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="1 1 1 1"
+                mesh="thumb_third_p" name="thumb_third_p" condim="4" friction="2.0 0.5 0.05"
+                solref="0.001 2" />
+              <geom type="mesh" rgba="1 1 1 1" mesh="thumb_third_p" contype="0" conaffinity="0" />
+              <geom pos="-0.00578595 0.00158833 -0.0001" type="mesh" contype="0" conaffinity="0"
+                group="1" density="0" rgba="1 1 1 1" mesh="thumb_bar_second_close_p"
+                name="thumb_bar_second_close_p" />
+              <geom pos="-0.00578595 0.00158833 -0.0001" type="mesh" rgba="1 1 1 1"
+                mesh="thumb_bar_second_close_p" contype="0" conaffinity="0" />
+              <geom pos="0.0109191 -0.0187755 -0.0001" quat="0.48883 0.48883 -0.510926 -0.510926"
+                type="mesh" contype="3" conaffinity="3" group="1" density="0" rgba="0 0 0 1"
+                mesh="skin_4_2_p" name="skin_4_2_p" condim="4" friction="20.0 5.0 1.0"
+                solref="0.001 2" />
+              <geom pos="0.0109191 -0.0187755 -0.0001" quat="0.48883 0.48883 -0.510926 -0.510926"
+                type="mesh" rgba="0 0 0 1" mesh="skin_4_2_p" contype="0" conaffinity="0" />
+              <site name="thumb_bar_second_close_p_site" pos="-0.00578595 0.00158833 -0.0001"
+                size="0.0015" rgba="1 0 0 1" group="3" />
+            </body>
+            <site name="thumb_grasp_crank_close_p_site" pos="-0.0130638 0.00218495 -0.0001"
+              size="0.0015" rgba="1 0 0 1" group="3" />
+            <site name="thumb_bar_first_close_p_site" pos="-0.00666394 0.00214287 0" size="0.0015"
+              rgba="1 0 0 1" group="3" />
+          </body>
+          <body name="thumb_bar_second_p" pos="0.0100499 -0.05 -5e-05">
+            <inertial pos="-0.00480458 -0.0160865 -5e-05"
+              quat="0.567216 0.422216 -0.567216 0.422216" mass="0.00105976"
+              diaginertia="1.52121e-07 1.51244e-07 3.05821e-09" />
+            <joint name="thumb_bar_second_j" pos="0 0 0" axis="0 0 1" limited="true"
+              range="-3.14 3.14" solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
+              mesh="thumb_bar_second_p" name="thumb_bar_second_p" />
+            <geom type="mesh" rgba="1 1 1 1" mesh="thumb_bar_second_p" contype="0" conaffinity="0" />
+            <geom pos="-0.00832899 -0.0282998 -5e-05" type="mesh" contype="0" conaffinity="0"
+              group="1" density="0" rgba="1 1 1 1" mesh="thumb_bar_second_connect_p"
+              name="thumb_bar_second_connect_p" />
+            <geom pos="-0.00832899 -0.0282998 -5e-05" type="mesh" rgba="1 1 1 1"
+              mesh="thumb_bar_second_connect_p" contype="0" conaffinity="0" />
+            <site name="thumb_bar_second_connect_p_site" pos="-0.00832899 -0.0282998 -5e-05"
+              size="0.0015" rgba="1 0 0 1" group="3" />
+          </body>
+        </body>
+        <site name="thumb_rotate_close_p_site" pos="0.0051139 0.00448309 0.0001" size="0.0015"
+          rgba="1 0 0 1" group="3" />
+      </body>
+    </body>
+  </worldbody>
+  <equality>
+    <connect site1="act_end_0_p_site" site2="crank_close_0_p_site" />
+    <connect site1="bar_close_0_p_site" site2="bar_connect_0_p_site" />
+    <connect site1="act_end_1_p_site" site2="crank_close_1_p_site" />
+    <connect site1="bar_close_1_p_site" site2="bar_connect_1_p_site" />
+    <connect site1="act_end_2_p_site" site2="crank_close_2_p_site" />
+    <connect site1="bar_close_2_p_site" site2="bar_connect_2_p_site" />
+    <connect site1="act_end_3_p_site" site2="crank_close_3_p_site" />
+    <connect site1="bar_close_3_p_site" site2="bar_connect_3_p_site" />
+    <connect site1="thumb_bar_first_close_p_site" site2="thumb_bar_first_connect_p_site" />
+    <connect site1="thumb_grasp_crank_close_p_site" site2="thumb_grasp_act_end_p_site" />
+    <connect site1="thumb_bar_second_close_p_site" site2="thumb_bar_second_connect_p_site" />
+    <connect site1="thumb_rotate_close_p_site" site2="thumb_rotate_act_end_p_site" />
+  </equality>
+  <actuator>
+    <position name="act_push_0_j" joint="act_push_0_j" ctrlrange="0 0.01" kp="25000" kv="500"
+      forcelimited="true" forcerange="-300 300" />
+    <position name="act_push_1_j" joint="act_push_1_j" ctrlrange="0 0.01" kp="25000" kv="500"
+      forcelimited="true" forcerange="-300 300" />
+    <position name="act_push_2_j" joint="act_push_2_j" ctrlrange="0 0.01" kp="25000" kv="500"
+      forcelimited="true" forcerange="-300 300" />
+    <position name="act_push_3_j" joint="act_push_3_j" ctrlrange="0 0.01" kp="25000" kv="500"
+      forcelimited="true" forcerange="-300 300" />
+    <position name="thumb_rotate_act_push_j" joint="thumb_rotate_act_push_j"
+      ctrlrange="-0.0069 0.004" kp="25000" kv="500" forcelimited="true" forcerange="-300 300" />
+    <position name="thumb_grasp_act_push_j" joint="thumb_grasp_act_push_j" ctrlrange="0 0.01"
+      kp="25000" kv="500" forcelimited="true" forcerange="-300 300" />
+    <!-- <motor name="act_push_0_j" joint="act_push_0_j" ctrllimited="true" ctrlrange="-5000 5000"
+    gear="0.05"/>
+    <motor name="act_push_1_j" joint="act_push_1_j" ctrllimited="true" ctrlrange="-5000 5000"
+    gear="0.05"/>
+    <motor name="act_push_2_j" joint="act_push_2_j" ctrllimited="true" ctrlrange="-5000 5000"
+    gear="0.05"/>
+    <motor name="act_push_3_j" joint="act_push_3_j" ctrllimited="true" ctrlrange="-5000 5000"
+    gear="0.05"/>
+    <motor name="thumb_grasp_act_push_j" joint="thumb_grasp_act_push_j" ctrllimited="true"
+    ctrlrange="-5000 5000" gear="0.05"/>
+    <motor name="thumb_rotate_act_push_j" joint="thumb_rotate_act_push_j" ctrllimited="true"
+    ctrlrange="-5000 5000" gear="0.05"/> -->
+  </actuator>
+  <sensor>
+    <actuatorpos name="act_push_0_j_p" actuator="act_push_0_j" />
+    <actuatorvel name="act_push_0_j_v" actuator="act_push_0_j" />
+    <actuatorfrc name="act_push_0_j_f" actuator="act_push_0_j" noise="0.001" />
+    <actuatorpos name="act_push_1_j_p" actuator="act_push_1_j" />
+    <actuatorvel name="act_push_1_j_v" actuator="act_push_1_j" />
+    <actuatorfrc name="act_push_1_j_f" actuator="act_push_1_j" noise="0.001" />
+    <actuatorpos name="act_push_2_j_p" actuator="act_push_2_j" />
+    <actuatorvel name="act_push_2_j_v" actuator="act_push_2_j" />
+    <actuatorfrc name="act_push_2_j_f" actuator="act_push_2_j" noise="0.001" />
+    <actuatorpos name="act_push_3_j_p" actuator="act_push_3_j" />
+    <actuatorvel name="act_push_3_j_v" actuator="act_push_3_j" />
+    <actuatorfrc name="act_push_3_j_f" actuator="act_push_3_j" noise="0.001" />
+    <actuatorpos name="thumb_grasp_act_push_j_p" actuator="thumb_grasp_act_push_j" />
+    <actuatorvel name="thumb_grasp_act_push_j_v" actuator="thumb_grasp_act_push_j" />
+    <actuatorfrc name="thumb_grasp_act_push_j_f" actuator="thumb_grasp_act_push_j" noise="0.001" />
+    <actuatorpos name="thumb_rotate_act_push_j_p" actuator="thumb_rotate_act_push_j" />
+    <actuatorvel name="thumb_rotate_act_push_j_v" actuator="thumb_rotate_act_push_j" />
+    <actuatorfrc name="thumb_rotate_act_push_j_f" actuator="thumb_rotate_act_push_j" noise="0.001" />
+  </sensor>
+</mujoco>
