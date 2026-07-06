@@ -28,7 +28,7 @@ DEFAULT_BASE_PATH = PROJECT_ROOT / "assets" / "bases" / "rethink_minimal_mount.x
 DEFAULT_HAND_ROT_XYZ_DEG = (-90.0, -90.0, 0.0)
 
 BASE_PREFIX = "mount_"
-HAND_PREFIX = "dexhand_"
+DEFAULT_HAND_PREFIX = "dexhand_"
 DEFAULT_ATTACH_POINT_NAME = "right_hand"
 DEFAULT_BASE_ARM_MOUNT_SITE_NAME = "arm_mount"
 
@@ -110,6 +110,7 @@ def _attach_hand_to_arm(
     hand_root: mujoco.MjsBody,
     attach_point_name: str,
     rot_xyz_deg: RotXyzDeg,
+    hand_prefix: str,
 ) -> None:
     """通过带旋转的 frame，把手模型根节点挂到机械臂指定 body 下。"""
     try:
@@ -124,7 +125,7 @@ def _attach_hand_to_arm(
     attach_frame = attach_point.add_frame()
     attach_frame.pos = [0.0, 0.0, 0.0]
     attach_frame.quat = _euler_deg_to_wxyz(rot_xyz_deg)
-    attach_frame.attach_body(hand_root, prefix=HAND_PREFIX, suffix="")
+    attach_frame.attach_body(hand_root, prefix=hand_prefix, suffix="")
 
 
 def _configure_solver(spec: mujoco.MjSpec) -> None:
@@ -185,6 +186,7 @@ def build_combined_spec(
     rot_xyz_deg: RotXyzDeg = DEFAULT_HAND_ROT_XYZ_DEG,
     attach_point_name: str = DEFAULT_ATTACH_POINT_NAME,
     base_mount_site_name: str = DEFAULT_BASE_ARM_MOUNT_SITE_NAME,
+    hand_prefix: str = DEFAULT_HAND_PREFIX,
 ) -> mujoco.MjSpec:
     """
     构建未编译的机械臂 + 灵巧手 ``MjSpec``。
@@ -217,6 +219,7 @@ def build_combined_spec(
         hand_root=hand_root,
         attach_point_name=attach_point_name,
         rot_xyz_deg=rot_xyz_deg,
+        hand_prefix=hand_prefix,
     )
 
     return arm_spec
@@ -229,6 +232,7 @@ def build_combined_model(
     rot_xyz_deg: Optional[RotXyzDeg] = None,
     attach_point_name: str = DEFAULT_ATTACH_POINT_NAME,
     base_mount_site_name: str = DEFAULT_BASE_ARM_MOUNT_SITE_NAME,
+    hand_prefix: str = DEFAULT_HAND_PREFIX,
     add_scene: bool = True,
 ) -> Tuple[mujoco.MjModel, mujoco.MjData]:
     """
@@ -244,6 +248,7 @@ def build_combined_model(
         rot_xyz_deg=DEFAULT_HAND_ROT_XYZ_DEG if rot_xyz_deg is None else rot_xyz_deg,
         attach_point_name=attach_point_name,
         base_mount_site_name=base_mount_site_name,
+        hand_prefix=hand_prefix,
     )
 
     if add_scene:
