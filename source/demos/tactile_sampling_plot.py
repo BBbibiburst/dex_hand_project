@@ -4,15 +4,13 @@
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
 import numpy as np
 
+from source.environments.assets import DEX_HAND_MESH_DIR
 from source.environments.tactile_layout import tactile_patch_plot_data
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
 DEFAULT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
 
 
@@ -110,7 +108,7 @@ def _plot_patch(
     surface_alpha: float,
     point_size: float,
 ) -> None:
-    stl_path = MESH_DIR / f"{mesh_name}.STL"
+    stl_path = DEX_HAND_MESH_DIR / f"{mesh_name}.STL"
     plot_data = tactile_patch_plot_data(stl_path, mesh_name)
     rows, cols = plot_data.rows, plot_data.cols
     triangles = plot_data.triangles

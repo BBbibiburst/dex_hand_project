@@ -12,21 +12,27 @@ or sensors before calling ``spec.compile()``.
 import os
 from pathlib import Path
 import traceback
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple
 
 import mujoco
 from mujoco import viewer
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
+from source.environments.assets import (
+    DEFAULT_BASE_XML_PATH,
+    DEX_HAND_XML_PATH,
+    PathLike,
+    RM75B_XML_PATH,
+    resolve_path,
+)
+from source.environments.scene import add_preview_scene
 from source.environments.tactile_layout import write_augmented_dex_hand_xml
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-
-DEFAULT_ARM_PATH = PROJECT_ROOT / "assets" / "robots" / "rm75b" / "rm75b.xml"
-DEFAULT_HAND_PATH = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "dex_hand.xml"
-DEFAULT_BASE_PATH = PROJECT_ROOT / "assets" / "bases" / "rethink_minimal_mount.xml"
+DEFAULT_ARM_PATH = RM75B_XML_PATH
+DEFAULT_HAND_PATH = DEX_HAND_XML_PATH
+DEFAULT_BASE_PATH = DEFAULT_BASE_XML_PATH
 
 # Installation pose of the hand relative to the arm mount point, using xyz
 # Euler angles in degrees.
@@ -37,13 +43,7 @@ DEFAULT_HAND_PREFIX = "dexhand_"
 DEFAULT_ATTACH_POINT_NAME = "right_hand"
 DEFAULT_BASE_ARM_MOUNT_SITE_NAME = "arm_mount"
 
-PathLike = Union[str, Path]
 RotXyzDeg = Tuple[float, float, float]
-
-
-def _resolve_path(path: Optional[PathLike], default_path: Path) -> Path:
-    """Resolve an optional path; fall back to the default when None is passed."""
-    return Path(path) if path is not None else default_path
 
 
 def _load_spec_or_raise(path: Path, description: str) -> mujoco.MjSpec:
@@ -157,50 +157,6 @@ def _configure_solver(spec: mujoco.MjSpec) -> None:
     spec.option.iterations = 100
 
 
-def _add_default_scene(spec: mujoco.MjSpec) -> None:
-    """Add a simple skybox, ground plane, and lights for standalone preview."""
-    skybox_tex = spec.add_texture()
-    skybox_tex.name = "skybox_tex"
-    skybox_tex.type = mujoco.mjtTexture.mjTEXTURE_SKYBOX
-    skybox_tex.builtin = mujoco.mjtBuiltin.mjBUILTIN_GRADIENT
-    skybox_tex.rgb1 = [0.3, 0.5, 0.7]
-    skybox_tex.rgb2 = [0.0, 0.0, 0.0]
-    skybox_tex.width = 512
-    skybox_tex.height = 3072
-
-    ground_tex = spec.add_texture()
-    ground_tex.name = "groundplane_tex"
-    ground_tex.type = mujoco.mjtTexture.mjTEXTURE_2D
-    ground_tex.builtin = mujoco.mjtBuiltin.mjBUILTIN_CHECKER
-    ground_tex.rgb1 = [0.2, 0.3, 0.4]
-    ground_tex.rgb2 = [0.1, 0.2, 0.3]
-    ground_tex.width = 512
-    ground_tex.height = 512
-
-    ground_mat = spec.add_material()
-    ground_mat.name = "groundplane"
-    ground_mat.textures[mujoco.mjtTextureRole.mjTEXROLE_RGB] = ground_tex.name
-    ground_mat.texrepeat = [5, 5]
-    ground_mat.reflectance = 0.2
-    ground_mat.shininess = 0.1
-    ground_mat.specular = 0.1
-
-    spec.worldbody.add_light(
-        name="top_light",
-        pos=[0.0, 0.0, 4.0],
-        dir=[0.0, 0.0, -1.0],
-        diffuse=[2.0, 2.0, 2.0],
-        ambient=[0.8, 0.8, 0.8],
-        specular=[0.3, 0.3, 0.3],
-    )
-
-    floor = spec.worldbody.add_geom()
-    floor.name = "floor"
-    floor.type = mujoco.mjtGeom.mjGEOM_PLANE
-    floor.size = [0.0, 0.0, 0.05]
-    floor.material = ground_mat.name
-
-
 def build_combined_spec(
     arm_path: Optional[PathLike] = None,
     hand_path: Optional[PathLike] = None,
@@ -228,9 +184,9 @@ def build_combined_spec(
         A merged but uncompiled ``MjSpec``, ready for further customization or
         direct compilation.
     """
-    arm_path = _resolve_path(arm_path, DEFAULT_ARM_PATH)
-    hand_path = _resolve_path(hand_path, DEFAULT_HAND_PATH)
-    base_path = _resolve_path(base_path, DEFAULT_BASE_PATH)
+    arm_path = resolve_path(arm_path, DEFAULT_ARM_PATH)
+    hand_path = resolve_path(hand_path, DEFAULT_HAND_PATH)
+    base_path = resolve_path(base_path, DEFAULT_BASE_PATH)
 
     arm_spec = _load_spec_or_raise(arm_path, "arm model")
     hand_spec = _load_hand_spec_or_raise(hand_path, add_tactile=add_tactile_sensors)
@@ -280,7 +236,7 @@ def build_combined_model(
     )
 
     if add_scene:
-        _add_default_scene(spec)
+        add_preview_scene(spec)
 
     model = spec.compile()
     data = mujoco.MjData(model)

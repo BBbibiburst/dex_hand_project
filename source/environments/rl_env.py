@@ -20,6 +20,7 @@ import numpy as np
 from source.environments.controllers import Rm75bDexHandController
 from source.environments.overlays import clear_markers, draw_stats_label
 from source.environments.robot_builder import DEFAULT_HAND_PREFIX, build_combined_spec
+from source.environments.scene import add_basic_scene
 from source.environments.tactile_sensors import (
     DexHandTouchSensor,
     NullTactileSensor,
@@ -281,23 +282,9 @@ class DexHandGymEnv(gym.Env):
 
     def _augment_spec(self, spec: mujoco.MjSpec) -> None:
         if self.config.add_default_scene:
-            self._add_default_scene(spec)
+            add_basic_scene(spec)
         if self.config.enable_task_objects:
             self._add_placeholder_task_objects(spec)
-
-    def _add_default_scene(self, spec: mujoco.MjSpec) -> None:
-        floor = spec.worldbody.add_geom()
-        floor.name = "floor"
-        floor.type = mujoco.mjtGeom.mjGEOM_PLANE
-        floor.size = [0.0, 0.0, 0.05]
-        floor.rgba = [0.25, 0.25, 0.25, 1.0]
-        spec.worldbody.add_light(
-            name="rl_top_light",
-            pos=[0.0, 0.0, 4.0],
-            dir=[0.0, 0.0, -1.0],
-            diffuse=[1.5, 1.5, 1.5],
-            ambient=[0.5, 0.5, 0.5],
-        )
 
     def _add_placeholder_task_objects(self, spec: mujoco.MjSpec) -> None:
         table = spec.worldbody.add_body()
