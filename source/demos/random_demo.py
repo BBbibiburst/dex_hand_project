@@ -7,9 +7,9 @@ import time
 from typing import Any, Dict
 
 try:
-    from rl_env import make_env
+    from source.environments.rl_env import make_env
 except ImportError:
-    from .rl_env import make_env
+    from source.environments.rl_env import make_env
 
 
 def main() -> None:

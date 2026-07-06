@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Controller for the RM75B arm with dex hand."""
+"""Optimized RM75B arm + dex hand controller with smooth IK tracking."""
 
 from __future__ import annotations
 
@@ -46,16 +46,7 @@ def prefixed_names(names: Sequence[str], prefix: str = "") -> tuple[str, ...]:
 
 
 class Rm75bDexHandController:
-    """Single controller supporting joint position and end-effector IK modes.
-
-    ``position`` action:
-        13 actuator targets: 7 arm joint targets + 6 hand actuator targets.
-
-    ``ik`` action:
-        ``[x, y, z, qw, qx, qy, qz, hand0, ..., hand5]``.
-        The pose controls ``ee_site_name`` and hand entries remain direct
-        position targets.
-    """
+    """Optimized controller with smooth IK, adaptive damping, and velocity filtering."""
 
     def __init__(
         self,
@@ -68,11 +59,20 @@ class Rm75bDexHandController:
         reset_to_current_position: bool = True,
         ik_iterations: int = 80,
         damping: float = 1e-3,
+        damping_adaptive: bool = True,           # 新增：自适应阻尼
+        damping_min: float = 1e-4,                # 新增：最小阻尼
+        damping_max: float = 1e-1,                # 新增：最大阻尼
+        damping_singular_threshold: float = 0.05, # 新增：奇异值阈值
         max_joint_step: float = 0.15,
+        max_joint_velocity: float = 2.0,          # 新增：最大关节速度 (rad/s)
+        velocity_filter_alpha: float = 0.3,         # 新增：速度滤波系数 (0-1)
         position_tolerance: float = 1e-4,
         orientation_tolerance: float = 1e-3,
         position_weight: float = 1.0,
         orientation_weight: float = 0.35,
+        use_nullspace: bool = True,               # 新增：零空间优化
+        nullspace_gain: float = 0.1,              # 新增：零空间增益
+        nullspace_posture: Optional[np.ndarray] = None,  # 新增：期望姿态
     ) -> None:
         self.hand_prefix = hand_prefix
         self.ee_site_name = ee_site_name
@@ -81,11 +81,20 @@ class Rm75bDexHandController:
         self.reset_to_current_position = reset_to_current_position
         self.ik_iterations = ik_iterations
         self.damping = damping
+        self.damping_adaptive = damping_adaptive
+        self.damping_min = damping_min
+        self.damping_max = damping_max
+        self.damping_singular_threshold = damping_singular_threshold
         self.max_joint_step = max_joint_step
+        self.max_joint_velocity = max_joint_velocity
+        self.velocity_filter_alpha = velocity_filter_alpha
         self.position_tolerance = position_tolerance
         self.orientation_tolerance = orientation_tolerance
         self.position_weight = position_weight
         self.orientation_weight = orientation_weight
+        self.use_nullspace = use_nullspace
+        self.nullspace_gain = nullspace_gain
+        self.nullspace_posture = nullspace_posture
 
         self.actuator_names = (
             ARM_POSITION_ACTUATORS
@@ -93,6 +102,7 @@ class Rm75bDexHandController:
         )
         self.control_mode = self._validate_mode(control_mode)
 
+        # Internal state
         self._actuator_ids: Optional[np.ndarray] = None
         self._joint_ids: Optional[np.ndarray] = None
         self._qpos_addrs: Optional[np.ndarray] = None
@@ -104,6 +114,12 @@ class Rm75bDexHandController:
         self._last_ik_error = np.zeros(6, dtype=np.float32)
         self._last_ik_iterations = 0
         self._action_space = self._unbound_action_space()
+        
+        # 新增：平滑状态缓存
+        self._prev_target_q = None          # 上一步目标关节角
+        self._filtered_velocity = None      # 滤波后的关节速度
+        self._prev_ee_target = None       # 上一步末端目标（用于预测）
+        self._dt = 0.002                    # 假设控制频率500Hz，可外部设置
 
     @property
     def action_space(self) -> spaces.Box:
@@ -157,6 +173,10 @@ class Rm75bDexHandController:
             raise RuntimeError("Rm75bDexHandController.bind() must be called first.")
         return self._ik_data
 
+    def set_timestep(self, dt: float) -> None:
+        """设置控制周期，用于速度约束计算。"""
+        self._dt = dt
+
     def set_control_mode(self, control_mode: str) -> None:
         self.control_mode = self._validate_mode(control_mode)
         self._action_space = (
@@ -207,6 +227,16 @@ class Rm75bDexHandController:
             self.joint_ids[: len(ARM_POSITION_ACTUATORS)]
         ]
         self._ik_data = mujoco.MjData(model)
+        
+        # 初始化平滑状态
+        arm_count = len(ARM_POSITION_ACTUATORS)
+        self._prev_target_q = np.zeros(arm_count, dtype=np.float64)
+        self._filtered_velocity = np.zeros(arm_count, dtype=np.float64)
+        if self.nullspace_posture is None:
+            self.nullspace_posture = 0.5 * (
+                self._ctrl_low[:arm_count] + self._ctrl_high[:arm_count]
+            ).astype(np.float64)
+        
         self._action_space = self._bound_action_space()
 
     def reset(
@@ -232,6 +262,13 @@ class Rm75bDexHandController:
             )
         data.ctrl[self.actuator_ids] = target
         mujoco.mj_forward(model, data)
+        
+        # 重置平滑状态
+        arm_count = len(ARM_POSITION_ACTUATORS)
+        self._prev_target_q = data.qpos[self.qpos_addrs[:arm_count]].copy().astype(np.float64)
+        self._filtered_velocity.fill(0.0)
+        self._prev_ee_target = None
+        
         return {
             "controller": "rm75b_dex_hand",
             "control_mode": self.control_mode,
@@ -308,6 +345,17 @@ class Rm75bDexHandController:
 
         target_pos = action_arr[:3].astype(np.float64)
         target_quat = normalize_quat(action_arr[3:7].astype(np.float64))
+        
+        # 目标预测与平滑（减少突变）
+        if self._prev_ee_target is not None:
+            # 基于上一步目标进行简单预测和平滑
+            alpha = 0.7  # 跟踪响应 vs 平滑度
+            target_pos = alpha * target_pos + (1 - alpha) * self._prev_ee_target[:3]
+            # 四元数球面插值
+            target_quat = self._slerp(self._prev_ee_target[3:7], target_quat, alpha)
+        
+        self._prev_ee_target = np.concatenate([target_pos, target_quat])
+        
         arm_target = self._solve_ik(model, data, target_pos, target_quat)
         ctrl_target = data.ctrl[self.actuator_ids].astype(np.float32).copy()
         ctrl_target[: len(ARM_POSITION_ACTUATORS)] = arm_target
@@ -342,17 +390,28 @@ class Rm75bDexHandController:
     ) -> np.ndarray:
         tmp = self.ik_data
         tmp.qpos[:] = data.qpos
-        tmp.qvel[:] = 0.0
+        tmp.qvel[:] = data.qvel  # 同步速度状态
         tmp.ctrl[:] = data.ctrl
+        tmp.time = data.time
 
         arm_count = len(ARM_POSITION_ACTUATORS)
         qpos_addrs = self.qpos_addrs[:arm_count]
+        
+        # 使用上一步目标作为初始猜测（热启动）
+        if self._prev_target_q is not None:
+            tmp.qpos[qpos_addrs] = self._prev_target_q
+            mujoco.mj_forward(model, tmp)
+        
         q = tmp.qpos[qpos_addrs].copy()
         low = self.ctrl_low[:arm_count].astype(np.float64)
         high = self.ctrl_high[:arm_count].astype(np.float64)
         jacp = np.zeros((3, model.nv), dtype=np.float64)
         jacr = np.zeros((3, model.nv), dtype=np.float64)
         eye6 = np.eye(6, dtype=np.float64)
+        eye_nv = np.eye(arm_count, dtype=np.float64)
+
+        # 零空间投影矩阵预分配
+        null_proj = np.eye(arm_count, dtype=np.float64)
 
         for iteration in range(1, self.ik_iterations + 1):
             tmp.qpos[qpos_addrs] = q
@@ -385,16 +444,109 @@ class Rm75bDexHandController:
                     self.orientation_weight * rot_error,
                 ]
             )
-            dq = jac.T @ np.linalg.solve(
-                jac @ jac.T + (self.damping**2) * eye6, error
-            )
-            q = np.clip(
-                q + np.clip(dq, -self.max_joint_step, self.max_joint_step),
-                low,
-                high,
-            )
+            
+            # === 核心改进1: 自适应阻尼 ===
+            if self.damping_adaptive:
+                # 基于Jacobian条件数调整阻尼
+                s = np.linalg.svd(jac, compute_uv=False)
+                cond = s[0] / (s[-1] + 1e-10)
+                if cond > 1e3 or s[-1] < self.damping_singular_threshold:
+                    # 接近奇异点，增大阻尼
+                    adaptive_damp = min(
+                        self.damping_max,
+                        self.damping * (1.0 + np.log(cond) / 10.0)
+                    )
+                else:
+                    # 远离奇异点，减小阻尼提高精度
+                    adaptive_damp = max(
+                        self.damping_min,
+                        self.damping / (1.0 + 1.0 / cond)
+                    )
+            else:
+                adaptive_damp = self.damping
+            
+            # === 核心改进2: 带阻尼的伪逆 ===
+            # 使用SVD进行更稳定的求解
+            try:
+                u, s, vh = np.linalg.svd(jac, full_matrices=False)
+                # 截断小奇异值
+                s_inv = np.where(s > self.damping_singular_threshold * s[0], 
+                                1.0 / s, 
+                                0.0)
+                # 自适应阻尼正则化
+                s_damped = s / (s**2 + adaptive_damp**2)
+                dq_primary = vh.T @ (s_damped * (u.T @ error))
+            except np.linalg.LinAlgError:
+                # 回退到标准DLS
+                dq_primary = jac.T @ np.linalg.solve(
+                    jac @ jac.T + (adaptive_damp**2) * eye6, error
+                )
+            
+            # === 核心改进3: 零空间优化 ===
+            if self.use_nullspace:
+                # 计算零空间投影: I - J^+ J
+                s_inv_safe = np.where(s > 1e-6, 1.0 / s, 0.0)
+                j_inv = vh.T @ np.diag(s_inv_safe) @ u.T
+                null_proj = eye_nv - j_inv @ jac
+                # 向期望姿态靠近（如关节居中）
+                posture_error = self.nullspace_posture - q
+                dq_null = self.nullspace_gain * posture_error
+                dq = dq_primary + null_proj @ dq_null
+            else:
+                dq = dq_primary
+            
+            # === 核心改进4: 速度滤波与约束 ===
+            # 将步长转换为速度并滤波
+            raw_velocity = dq / self._dt
+            if self._filtered_velocity is not None:
+                self._filtered_velocity = (
+                    self.velocity_filter_alpha * raw_velocity
+                    + (1 - self.velocity_filter_alpha) * self._filtered_velocity
+                )
+            else:
+                self._filtered_velocity = raw_velocity
+            
+            # 应用速度约束
+            max_vel_step = self.max_joint_velocity * self._dt
+            dq_filtered = np.clip(self._filtered_velocity * self._dt, 
+                                  -max_vel_step, max_vel_step)
+            
+            # === 核心改进5: 平滑限位处理 ===
+            # 使用软约束而非硬截断
+            q_new = q + np.clip(dq_filtered, -self.max_joint_step, self.max_joint_step)
+            
+            # 软边界：在限位附近施加恢复力
+            margin = 0.1 * (high - low)  # 10%边界余量
+            for i in range(arm_count):
+                if q_new[i] < low[i] + margin[i]:
+                    q_new[i] += 0.5 * (low[i] + margin[i] - q_new[i])
+                elif q_new[i] > high[i] - margin[i]:
+                    q_new[i] -= 0.5 * (q_new[i] - (high[i] - margin[i]))
+            
+            # 最终硬限位（安全兜底）
+            q = np.clip(q_new, low, high)
 
+        self._prev_target_q = q.copy()
         return q.astype(np.float32)
+
+    @staticmethod
+    def _slerp(q1: np.ndarray, q2: np.ndarray, t: float) -> np.ndarray:
+        """四元数球面插值，确保平滑旋转过渡。"""
+        dot = np.clip(np.dot(q1, q2), -1.0, 1.0)
+        if dot < 0:
+            q2 = -q2
+            dot = -dot
+        if dot > 0.9995:
+            # 近似线性插值
+            result = q1 + t * (q2 - q1)
+            return normalize_quat(result)
+        theta_0 = np.arccos(dot)
+        theta = theta_0 * t
+        sin_theta = np.sin(theta)
+        sin_theta_0 = np.sin(theta_0)
+        s1 = np.cos(theta) - dot * sin_theta / sin_theta_0
+        s2 = sin_theta / sin_theta_0
+        return normalize_quat(s1 * q1 + s2 * q2)
 
     def _coerce_position_action(self, action: Any) -> np.ndarray:
         action_arr = np.asarray(action, dtype=np.float32)

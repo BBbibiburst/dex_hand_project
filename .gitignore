@@ -219,3 +219,7 @@ __marimo__/
 
 # mujoco
 MUJOCO_LOG.TXT
+
+# code_summary
+source/code_summary/code_list.txt
+source/code_summary/code_summary.txt
