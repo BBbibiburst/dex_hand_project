@@ -9,6 +9,14 @@ from gymnasium import spaces
 import mujoco
 import numpy as np
 
+from source.environments.transforms import (
+    mat_to_quat,
+    normalize_quat,
+    quat_conjugate,
+    quat_multiply,
+    quat_to_rotvec,
+)
+
 
 DEFAULT_EE_SITE_NAME = "right_hand_site"
 CONTROL_MODES = ("position", "ik")
@@ -35,49 +43,6 @@ DEX_HAND_POSITION_ACTUATORS = (
 
 def prefixed_names(names: Sequence[str], prefix: str = "") -> tuple[str, ...]:
     return tuple(f"{prefix}{name}" for name in names)
-
-
-def _normalize_quat(quat: np.ndarray) -> np.ndarray:
-    norm = np.linalg.norm(quat)
-    if norm <= 1e-8:
-        raise ValueError("Quaternion norm is too small.")
-    return quat / norm
-
-
-def _quat_conjugate(quat: np.ndarray) -> np.ndarray:
-    return np.asarray([quat[0], -quat[1], -quat[2], -quat[3]], dtype=np.float64)
-
-
-def _quat_multiply(lhs: np.ndarray, rhs: np.ndarray) -> np.ndarray:
-    lw, lx, ly, lz = lhs
-    rw, rx, ry, rz = rhs
-    return np.asarray(
-        [
-            lw * rw - lx * rx - ly * ry - lz * rz,
-            lw * rx + lx * rw + ly * rz - lz * ry,
-            lw * ry - lx * rz + ly * rw + lz * rx,
-            lw * rz + lx * ry - ly * rx + lz * rw,
-        ],
-        dtype=np.float64,
-    )
-
-
-def _quat_to_rotvec(quat: np.ndarray) -> np.ndarray:
-    quat = _normalize_quat(quat)
-    if quat[0] < 0.0:
-        quat = -quat
-    vector = quat[1:]
-    vector_norm = np.linalg.norm(vector)
-    if vector_norm <= 1e-8:
-        return 2.0 * vector
-    angle = 2.0 * np.arctan2(vector_norm, quat[0])
-    return angle * vector / vector_norm
-
-
-def _mat_to_quat(mat: np.ndarray) -> np.ndarray:
-    quat = np.empty(4, dtype=np.float64)
-    mujoco.mju_mat2Quat(quat, mat.reshape(9))
-    return _normalize_quat(quat)
 
 
 class Rm75bDexHandController:
@@ -194,7 +159,11 @@ class Rm75bDexHandController:
 
     def set_control_mode(self, control_mode: str) -> None:
         self.control_mode = self._validate_mode(control_mode)
-        self._action_space = self._bound_action_space() if self._ctrl_low is not None else self._unbound_action_space()
+        self._action_space = (
+            self._bound_action_space()
+            if self._ctrl_low is not None
+            else self._unbound_action_space()
+        )
 
     def bind(self, model: mujoco.MjModel, data: mujoco.MjData) -> None:
         _ = data
@@ -211,7 +180,9 @@ class Rm75bDexHandController:
                 mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_ACTUATOR, idx)
                 for idx in range(model.nu)
             ]
-            raise ValueError(f"Missing actuator(s): {missing}. Available actuators: {available}")
+            raise ValueError(
+                f"Missing actuator(s): {missing}. Available actuators: {available}"
+            )
 
         self._actuator_ids = np.asarray(actuator_ids, dtype=np.int32)
         self._joint_ids = model.actuator_trnid[self._actuator_ids, 0].astype(np.int32)
@@ -220,15 +191,21 @@ class Rm75bDexHandController:
         self._ctrl_low = ctrlrange[:, 0].copy()
         self._ctrl_high = ctrlrange[:, 1].copy()
 
-        site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name)
+        site_id = mujoco.mj_name2id(
+            model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name
+        )
         if site_id < 0:
             available = [
                 mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_SITE, idx)
                 for idx in range(model.nsite)
             ]
-            raise ValueError(f"Missing end-effector site {self.ee_site_name!r}. Available sites: {available}")
+            raise ValueError(
+                f"Missing end-effector site {self.ee_site_name!r}. Available sites: {available}"
+            )
         self._site_id = site_id
-        self._arm_dof_addrs = model.jnt_dofadr[self.joint_ids[: len(ARM_POSITION_ACTUATORS)]]
+        self._arm_dof_addrs = model.jnt_dofadr[
+            self.joint_ids[: len(ARM_POSITION_ACTUATORS)]
+        ]
         self._ik_data = mujoco.MjData(model)
         self._action_space = self._bound_action_space()
 
@@ -244,7 +221,9 @@ class Rm75bDexHandController:
         _ = rng
         _ = options
         if self.reset_to_current_position:
-            target = np.clip(data.qpos[self.qpos_addrs], self.ctrl_low, self.ctrl_high)
+            target = np.clip(
+                data.qpos[self.qpos_addrs], self.ctrl_low, self.ctrl_high
+            )
         else:
             target = np.clip(
                 np.zeros(len(self.actuator_names), dtype=np.float32),
@@ -261,7 +240,7 @@ class Rm75bDexHandController:
             "ik_site": self.ee_site_name,
             "ik_action_layout": self.ik_action_layout(),
             "ee_position": data.site_xpos[self.site_id].astype(np.float32).copy(),
-            "ee_quat": _mat_to_quat(data.site_xmat[self.site_id]).astype(np.float32),
+            "ee_quat": mat_to_quat(data.site_xmat[self.site_id]).astype(np.float32),
         }
 
     def apply_action(
@@ -279,14 +258,18 @@ class Rm75bDexHandController:
             return data.ctrl[self.actuator_ids].astype(np.float32).copy()
         return self.current_ik_action(model, data)
 
-    def current_ik_action(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+    def current_ik_action(
+        self, model: mujoco.MjModel, data: mujoco.MjData
+    ) -> np.ndarray:
         _ = model
         mujoco.mj_forward(model, data)
         ee_pos = data.site_xpos[self.site_id].astype(np.float32)
-        ee_quat = _mat_to_quat(data.site_xmat[self.site_id]).astype(np.float32)
+        ee_quat = mat_to_quat(data.site_xmat[self.site_id]).astype(np.float32)
         if not self.include_hand_action:
             return np.concatenate([ee_pos, ee_quat]).astype(np.float32)
-        hand_ctrl = data.ctrl[self.actuator_ids[len(ARM_POSITION_ACTUATORS) :]].astype(np.float32)
+        hand_ctrl = data.ctrl[
+            self.actuator_ids[len(ARM_POSITION_ACTUATORS) :]
+        ].astype(np.float32)
         return np.concatenate([ee_pos, ee_quat, hand_ctrl]).astype(np.float32)
 
     def ik_action_layout(self) -> tuple[str, ...]:
@@ -319,10 +302,12 @@ class Rm75bDexHandController:
         action_arr = np.asarray(action, dtype=np.float32)
         expected_shape = (7 + self._hand_action_size(),)
         if action_arr.shape != expected_shape:
-            raise ValueError(f"IK action must have shape {expected_shape}, got {action_arr.shape}.")
+            raise ValueError(
+                f"IK action must have shape {expected_shape}, got {action_arr.shape}."
+            )
 
         target_pos = action_arr[:3].astype(np.float64)
-        target_quat = _normalize_quat(action_arr[3:7].astype(np.float64))
+        target_quat = normalize_quat(action_arr[3:7].astype(np.float64))
         arm_target = self._solve_ik(model, data, target_pos, target_quat)
         ctrl_target = data.ctrl[self.actuator_ids].astype(np.float32).copy()
         ctrl_target[: len(ARM_POSITION_ACTUATORS)] = arm_target
@@ -373,10 +358,12 @@ class Rm75bDexHandController:
             tmp.qpos[qpos_addrs] = q
             mujoco.mj_forward(model, tmp)
             pos_error = target_pos - tmp.site_xpos[self.site_id]
-            current_quat = _mat_to_quat(tmp.site_xmat[self.site_id])
-            quat_error = _quat_multiply(target_quat, _quat_conjugate(current_quat))
-            rot_error = _quat_to_rotvec(quat_error)
-            self._last_ik_error = np.concatenate([pos_error, rot_error]).astype(np.float32)
+            current_quat = mat_to_quat(tmp.site_xmat[self.site_id])
+            quat_error = quat_multiply(target_quat, quat_conjugate(current_quat))
+            rot_error = quat_to_rotvec(quat_error)
+            self._last_ik_error = np.concatenate(
+                [pos_error, rot_error]
+            ).astype(np.float32)
             self._last_ik_iterations = iteration
 
             if (
@@ -398,8 +385,14 @@ class Rm75bDexHandController:
                     self.orientation_weight * rot_error,
                 ]
             )
-            dq = jac.T @ np.linalg.solve(jac @ jac.T + (self.damping**2) * eye6, error)
-            q = np.clip(q + np.clip(dq, -self.max_joint_step, self.max_joint_step), low, high)
+            dq = jac.T @ np.linalg.solve(
+                jac @ jac.T + (self.damping**2) * eye6, error
+            )
+            q = np.clip(
+                q + np.clip(dq, -self.max_joint_step, self.max_joint_step),
+                low,
+                high,
+            )
 
         return q.astype(np.float32)
 
@@ -407,7 +400,9 @@ class Rm75bDexHandController:
         action_arr = np.asarray(action, dtype=np.float32)
         expected_shape = (len(self.actuator_names),)
         if action_arr.shape != expected_shape:
-            raise ValueError(f"Position action must have shape {expected_shape}, got {action_arr.shape}.")
+            raise ValueError(
+                f"Position action must have shape {expected_shape}, got {action_arr.shape}."
+            )
         if self.normalized_position:
             clipped = np.clip(action_arr, -1.0, 1.0)
             midpoint = 0.5 * (self.ctrl_low + self.ctrl_high)
@@ -435,14 +430,22 @@ class Rm75bDexHandController:
             return self._ik_action_space(bound_hand=False)
         shape = (len(self.actuator_names),)
         if self.normalized_position:
-            return spaces.Box(low=-1.0, high=1.0, shape=shape, dtype=np.float32)
-        return spaces.Box(low=-np.inf, high=np.inf, shape=shape, dtype=np.float32)
+            return spaces.Box(
+                low=-1.0, high=1.0, shape=shape, dtype=np.float32
+            )
+        return spaces.Box(
+            low=-np.inf, high=np.inf, shape=shape, dtype=np.float32
+        )
 
     def _ik_action_space(self, *, bound_hand: bool) -> spaces.Box:
         hand_size = self._hand_action_size()
         if bound_hand and hand_size:
-            hand_low = self.ctrl_low[len(ARM_POSITION_ACTUATORS) :].astype(np.float32)
-            hand_high = self.ctrl_high[len(ARM_POSITION_ACTUATORS) :].astype(np.float32)
+            hand_low = self.ctrl_low[
+                len(ARM_POSITION_ACTUATORS) :
+            ].astype(np.float32)
+            hand_high = self.ctrl_high[
+                len(ARM_POSITION_ACTUATORS) :
+            ].astype(np.float32)
         else:
             hand_low = np.full(hand_size, -np.inf, dtype=np.float32)
             hand_high = np.full(hand_size, np.inf, dtype=np.float32)
@@ -470,5 +473,7 @@ class Rm75bDexHandController:
     @staticmethod
     def _validate_mode(control_mode: str) -> str:
         if control_mode not in CONTROL_MODES:
-            raise ValueError(f"control_mode must be one of {CONTROL_MODES}, got {control_mode!r}.")
+            raise ValueError(
+                f"control_mode must be one of {CONTROL_MODES}, got {control_mode!r}."
+            )
         return control_mode

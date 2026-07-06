@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""触觉传感器抽象接口。"""
+"""
+Tactile sensor abstract interface.
+"""
 
 from __future__ import annotations
 
@@ -12,21 +14,23 @@ import numpy as np
 
 
 class TactileSensorBase(ABC):
-    """触觉传感器抽象基类。
+    """Abstract base class for tactile sensors.
 
-    具体实现可以基于灵巧手 MJCF 中的 STL mesh geom、contact、ray cast、
-    自定义 site/taxel 或外部模型计算触觉信号。环境只关心 observation space
-    和 ``read`` 的返回值是否匹配。
+    Concrete implementations may compute tactile signals based on STL mesh geoms
+    in the dexterous hand MJCF, contacts, ray casting, custom sites/taxels, or
+    external models. The environment only cares that the observation space and
+    the return value of ``read`` are consistent.
     """
 
     @property
     @abstractmethod
     def observation_space(self) -> spaces.Space:
-        """触觉观测对应的 Gymnasium space。"""
+        """The Gymnasium space corresponding to tactile observations."""
 
     @abstractmethod
     def bind(self, model: mujoco.MjModel, data: mujoco.MjData) -> None:
-        """环境编译模型后调用，用于缓存 geom/site/body id 或 STL 派生数据。"""
+        """Called after the environment compiles the model; used to cache
+        geom/site/body IDs or STL-derived data."""
 
     @abstractmethod
     def reset(
@@ -37,15 +41,17 @@ class TactileSensorBase(ABC):
         rng: np.random.Generator,
         options: Optional[dict],
     ) -> Dict[str, Any]:
-        """每个 episode reset 时调用，返回要并入 info 的诊断信息。"""
+        """Called on every episode reset; returns diagnostic info to be merged
+        into the environment's info dict."""
 
     @abstractmethod
     def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> Any:
-        """读取当前触觉观测。返回值必须落在 ``observation_space`` 内。"""
+        """Read the current tactile observation. The returned value must lie
+        within ``observation_space``."""
 
 
 class NullTactileSensor(TactileSensorBase):
-    """空触觉传感器，用于先跑通环境生命周期。"""
+    """No-op tactile sensor for getting the environment lifecycle working first."""
 
     @property
     def observation_space(self) -> spaces.Space:

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-机械臂与灵巧手模型装配工具。
+Robot arm and dexterous hand model assembly tool.
 
-本模块负责加载 RM75B 机械臂、底座和灵巧手 XML，并把手模型挂载到
-机械臂的指定 body（默认 ``right_hand``）下。公开接口刻意区分
-``MjSpec`` 构建和模型编译，方便调用方在 ``spec.compile()`` 前继续添加
-相机、物体、任务逻辑或传感器。
+This module loads the RM75B arm, base, and dexterous hand XML files, and mounts
+the hand model under the specified body of the arm (default ``right_hand``).
+The public API deliberately separates ``MjSpec`` construction from model
+compilation, so the caller can continue adding cameras, objects, task logic,
+or sensors before calling ``spec.compile()``.
 """
 
 import traceback
@@ -24,7 +25,8 @@ DEFAULT_ARM_PATH = PROJECT_ROOT / "assets" / "robots" / "rm75b" / "rm75b.xml"
 DEFAULT_HAND_PATH = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "dex_hand.xml"
 DEFAULT_BASE_PATH = PROJECT_ROOT / "assets" / "bases" / "rethink_minimal_mount.xml"
 
-# 手相对机械臂挂载点的安装姿态，使用 xyz 欧拉角，单位为度。
+# Installation pose of the hand relative to the arm mount point, using xyz
+# Euler angles in degrees.
 DEFAULT_HAND_ROT_XYZ_DEG = (-90.0, -90.0, 0.0)
 
 BASE_PREFIX = "mount_"
@@ -37,22 +39,22 @@ RotXyzDeg = Tuple[float, float, float]
 
 
 def _resolve_path(path: Optional[PathLike], default_path: Path) -> Path:
-    """将可选路径解析成实际路径；调用方传 None 时使用默认路径。"""
+    """Resolve an optional path; fall back to the default when None is passed."""
     return Path(path) if path is not None else default_path
 
 
 def _load_spec_or_raise(path: Path, description: str) -> mujoco.MjSpec:
-    """加载 XML 为 ``MjSpec``，并在文件缺失时给出清晰错误。"""
+    """Load an XML file as ``MjSpec``, raising a clear error if the file is missing."""
     if not path.exists():
-        raise FileNotFoundError(f"{description} XML 文件不存在: {path}")
+        raise FileNotFoundError(f"{description} XML file not found: {path}")
     return mujoco.MjSpec.from_file(str(path))
 
 
 def _first_body_or_raise(spec: mujoco.MjSpec, description: str) -> mujoco.MjsBody:
-    """返回 worldbody 下第一个 body；缺失时带模型上下文报错。"""
+    """Return the first body under worldbody; raise with context if absent."""
     body = spec.worldbody.first_body()
     if body is None:
-        raise ValueError(f"{description} XML 的 <worldbody> 下没有 body。")
+        raise ValueError(f"{description} XML has no body under <worldbody>.")
     return body
 
 
@@ -61,25 +63,25 @@ def _site_or_raise(
     site_name: str,
     description: str,
 ) -> mujoco.MjsSite:
-    """按名字查找 site；缺失时列出当前模型中的 site。"""
+    """Look up a site by name; list available sites on failure."""
     try:
         return spec.site(site_name)
     except KeyError as exc:
         available = [site.name for site in spec.sites()]
         raise ValueError(
-            f"{description} XML 中没有 site '{site_name}'。"
-            f"可用 site: {available}"
+            f"{description} XML has no site '{site_name}'. "
+            f"Available sites: {available}"
         ) from exc
 
 
 def _euler_deg_to_wxyz(rot_xyz_deg: RotXyzDeg) -> list:
-    """将 xyz 欧拉角（度）转换成 MuJoCo 使用的 wxyz 四元数。"""
+    """Convert xyz Euler angles (degrees) to the wxyz quaternion used by MuJoCo."""
     x, y, z, w = R.from_euler("xyz", rot_xyz_deg, degrees=True).as_quat()
     return [w, x, y, z]
 
 
 def _reset_body_pos(body: mujoco.MjsBody) -> None:
-    """清零根 body 偏移，让父级 attach frame 统一负责放置。"""
+    """Zero out the root body offset so the parent attach frame handles placement."""
     if np.linalg.norm(np.asarray(body.pos, dtype=float)) > 1e-6:
         body.pos = [0.0, 0.0, 0.0]
 
@@ -89,10 +91,10 @@ def _mount_arm_on_base(
     base_path: Path,
     mount_site_name: str,
 ) -> None:
-    """把底座挂到 worldbody，并把机械臂根节点放到底座挂载 site 上。"""
-    base_spec = _load_spec_or_raise(base_path, "底座模型")
-    base_root = _first_body_or_raise(base_spec, "底座模型")
-    mount_site = _site_or_raise(base_spec, mount_site_name, "底座模型")
+    """Attach the base to worldbody and place the arm root at the base mount site."""
+    base_spec = _load_spec_or_raise(base_path, "base model")
+    base_root = _first_body_or_raise(base_spec, "base model")
+    mount_site = _site_or_raise(base_spec, mount_site_name, "base model")
 
     mount_frame = arm_spec.worldbody.add_frame()
     mount_frame.attach_body(base_root, prefix=BASE_PREFIX, suffix="")
@@ -112,14 +114,14 @@ def _attach_hand_to_arm(
     rot_xyz_deg: RotXyzDeg,
     hand_prefix: str,
 ) -> None:
-    """通过带旋转的 frame，把手模型根节点挂到机械臂指定 body 下。"""
+    """Attach the hand model root under the specified arm body via a rotated frame."""
     try:
         attach_point = arm_spec.body(attach_point_name)
     except KeyError as exc:
         available = [body.name for body in arm_spec.worldbody.bodies()]
         raise ValueError(
-            f"机械臂模型中没有挂载 body '{attach_point_name}'。"
-            f"可用 body: {available}"
+            f"Arm model has no mount body '{attach_point_name}'. "
+            f"Available bodies: {available}"
         ) from exc
 
     attach_frame = attach_point.add_frame()
@@ -129,14 +131,14 @@ def _attach_hand_to_arm(
 
 
 def _configure_solver(spec: mujoco.MjSpec) -> None:
-    """给合并后的多关节模型设置更稳定的求解器参数。"""
+    """Set more stable solver parameters for the merged multi-joint model."""
     spec.option.timestep = 0.001
     spec.option.solver = mujoco.mjtSolver.mjSOL_NEWTON
     spec.option.iterations = 100
 
 
 def _add_default_scene(spec: mujoco.MjSpec) -> None:
-    """添加独立预览用的简单天空、地面和灯光。"""
+    """Add a simple skybox, ground plane, and lights for standalone preview."""
     skybox_tex = spec.add_texture()
     skybox_tex.name = "skybox_tex"
     skybox_tex.type = mujoco.mjtTexture.mjTEXTURE_SKYBOX
@@ -189,30 +191,33 @@ def build_combined_spec(
     hand_prefix: str = DEFAULT_HAND_PREFIX,
 ) -> mujoco.MjSpec:
     """
-    构建未编译的机械臂 + 灵巧手 ``MjSpec``。
+    Build an uncompiled arm + dexterous hand ``MjSpec``.
 
     Args:
-        arm_path: 机械臂 XML 路径；省略时使用 ``DEFAULT_ARM_PATH``。
-        hand_path: 手模型 XML 路径；省略时使用 ``DEFAULT_HAND_PATH``。
-        base_path: 底座 XML 路径；省略时使用 ``DEFAULT_BASE_PATH``。
-        rot_xyz_deg: 手相对 ``attach_point_name`` 的 xyz 欧拉角，单位为度。
-        attach_point_name: 机械臂上用于挂载手模型的 body 名称。
-        base_mount_site_name: 底座 XML 中声明机械臂根节点位置和姿态的 site。
+        arm_path: Path to the arm XML; defaults to ``DEFAULT_ARM_PATH``.
+        hand_path: Path to the hand XML; defaults to ``DEFAULT_HAND_PATH``.
+        base_path: Path to the base XML; defaults to ``DEFAULT_BASE_PATH``.
+        rot_xyz_deg: xyz Euler angles (degrees) of the hand relative to
+            ``attach_point_name``.
+        attach_point_name: Name of the arm body used to mount the hand model.
+        base_mount_site_name: Site in the base XML that declares the arm root
+            position and orientation.
 
     Returns:
-        已合并但尚未编译的 ``MjSpec``，可继续定制或直接编译。
+        A merged but uncompiled ``MjSpec``, ready for further customization or
+        direct compilation.
     """
     arm_path = _resolve_path(arm_path, DEFAULT_ARM_PATH)
     hand_path = _resolve_path(hand_path, DEFAULT_HAND_PATH)
     base_path = _resolve_path(base_path, DEFAULT_BASE_PATH)
 
-    arm_spec = _load_spec_or_raise(arm_path, "机械臂模型")
-    hand_spec = _load_spec_or_raise(hand_path, "手模型")
+    arm_spec = _load_spec_or_raise(arm_path, "arm model")
+    hand_spec = _load_spec_or_raise(hand_path, "hand model")
     _configure_solver(arm_spec)
 
     _mount_arm_on_base(arm_spec, base_path, base_mount_site_name)
 
-    hand_root = _first_body_or_raise(hand_spec, "手模型")
+    hand_root = _first_body_or_raise(hand_spec, "hand model")
     _reset_body_pos(hand_root)
     _attach_hand_to_arm(
         arm_spec=arm_spec,
@@ -236,10 +241,10 @@ def build_combined_model(
     add_scene: bool = True,
 ) -> Tuple[mujoco.MjModel, mujoco.MjData]:
     """
-    构建、按需添加预览场景，并编译合并后的机器人模型。
+    Build, optionally add a preview scene, and compile the merged robot model.
 
-    ``rot_xyz_deg=None`` 表示使用 ``DEFAULT_HAND_ROT_XYZ_DEG``。这样预览入口
-    和 spec 构建入口会共享同一个默认安装姿态。
+    ``rot_xyz_deg=None`` means use ``DEFAULT_HAND_ROT_XYZ_DEG``, so the preview
+    entry and the spec builder share the same default installation pose.
     """
     spec = build_combined_spec(
         arm_path=arm_path,
@@ -260,7 +265,7 @@ def build_combined_model(
 
 
 if __name__ == "__main__":
-    print("--- 独立预览：RM75B + 灵巧手 ---")
+    print("--- Standalone preview: RM75B + Dexterous Hand ---")
     try:
         model, data = build_combined_model()
 
@@ -270,7 +275,7 @@ if __name__ == "__main__":
                 v.sync()
 
     except FileNotFoundError as e:
-        print(f"\n[错误] 文件缺失: {e}")
+        print(f"\n[Error] Missing file: {e}")
     except Exception as e:
-        print(f"\n[错误] 发生未预期异常: {e}")
+        print(f"\n[Error] Unexpected exception: {e}")
         traceback.print_exc()
