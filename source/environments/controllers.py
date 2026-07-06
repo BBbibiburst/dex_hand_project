@@ -66,6 +66,7 @@ class Rm75bDexHandController:
         max_joint_step: float = 0.15,
         max_joint_velocity: float = 2.0,          # 新增：最大关节速度 (rad/s)
         velocity_filter_alpha: float = 0.3,         # 新增：速度滤波系数 (0-1)
+        target_filter_alpha: float = 0.7,
         position_tolerance: float = 1e-4,
         orientation_tolerance: float = 1e-3,
         position_weight: float = 1.0,
@@ -88,6 +89,7 @@ class Rm75bDexHandController:
         self.max_joint_step = max_joint_step
         self.max_joint_velocity = max_joint_velocity
         self.velocity_filter_alpha = velocity_filter_alpha
+        self.target_filter_alpha = target_filter_alpha
         self.position_tolerance = position_tolerance
         self.orientation_tolerance = orientation_tolerance
         self.position_weight = position_weight
@@ -175,6 +177,8 @@ class Rm75bDexHandController:
 
     def set_timestep(self, dt: float) -> None:
         """设置控制周期，用于速度约束计算。"""
+        if dt <= 0.0:
+            raise ValueError(f"Controller timestep must be positive, got {dt}.")
         self._dt = dt
 
     def set_control_mode(self, control_mode: str) -> None:
@@ -186,7 +190,6 @@ class Rm75bDexHandController:
         )
 
     def bind(self, model: mujoco.MjModel, data: mujoco.MjData) -> None:
-        _ = data
         actuator_ids = []
         missing = []
         for name in self.actuator_names:
@@ -230,7 +233,7 @@ class Rm75bDexHandController:
         
         # 初始化平滑状态
         arm_count = len(ARM_POSITION_ACTUATORS)
-        self._prev_target_q = np.zeros(arm_count, dtype=np.float64)
+        self._prev_target_q = data.qpos[self._qpos_addrs[:arm_count]].copy().astype(np.float64)
         self._filtered_velocity = np.zeros(arm_count, dtype=np.float64)
         if self.nullspace_posture is None:
             self.nullspace_posture = 0.5 * (
@@ -349,7 +352,7 @@ class Rm75bDexHandController:
         # 目标预测与平滑（减少突变）
         if self._prev_ee_target is not None:
             # 基于上一步目标进行简单预测和平滑
-            alpha = 0.7  # 跟踪响应 vs 平滑度
+            alpha = np.clip(self.target_filter_alpha, 0.0, 1.0)  # 跟踪响应 vs 平滑度
             target_pos = alpha * target_pos + (1 - alpha) * self._prev_ee_target[:3]
             # 四元数球面插值
             target_quat = self._slerp(self._prev_ee_target[3:7], target_quat, alpha)
@@ -396,6 +399,7 @@ class Rm75bDexHandController:
 
         arm_count = len(ARM_POSITION_ACTUATORS)
         qpos_addrs = self.qpos_addrs[:arm_count]
+        current_q = data.qpos[qpos_addrs].copy().astype(np.float64)
         
         # 使用上一步目标作为初始猜测（热启动）
         if self._prev_target_q is not None:
@@ -407,11 +411,7 @@ class Rm75bDexHandController:
         high = self.ctrl_high[:arm_count].astype(np.float64)
         jacp = np.zeros((3, model.nv), dtype=np.float64)
         jacr = np.zeros((3, model.nv), dtype=np.float64)
-        eye6 = np.eye(6, dtype=np.float64)
         eye_nv = np.eye(arm_count, dtype=np.float64)
-
-        # 零空间投影矩阵预分配
-        null_proj = np.eye(arm_count, dtype=np.float64)
 
         for iteration in range(1, self.ik_iterations + 1):
             tmp.qpos[qpos_addrs] = q
@@ -445,10 +445,23 @@ class Rm75bDexHandController:
                 ]
             )
             
+            try:
+                u, s, vh = np.linalg.svd(jac, full_matrices=False)
+            except np.linalg.LinAlgError:
+                dq = jac.T @ np.linalg.solve(
+                    jac @ jac.T + (self.damping**2) * np.eye(6, dtype=np.float64),
+                    error,
+                )
+                q = np.clip(
+                    q + np.clip(dq, -self.max_joint_step, self.max_joint_step),
+                    low,
+                    high,
+                )
+                continue
+
             # === 核心改进1: 自适应阻尼 ===
             if self.damping_adaptive:
                 # 基于Jacobian条件数调整阻尼
-                s = np.linalg.svd(jac, compute_uv=False)
                 cond = s[0] / (s[-1] + 1e-10)
                 if cond > 1e3 or s[-1] < self.damping_singular_threshold:
                     # 接近奇异点，增大阻尼
@@ -466,26 +479,14 @@ class Rm75bDexHandController:
                 adaptive_damp = self.damping
             
             # === 核心改进2: 带阻尼的伪逆 ===
-            # 使用SVD进行更稳定的求解
-            try:
-                u, s, vh = np.linalg.svd(jac, full_matrices=False)
-                # 截断小奇异值
-                s_inv = np.where(s > self.damping_singular_threshold * s[0], 
-                                1.0 / s, 
-                                0.0)
-                # 自适应阻尼正则化
-                s_damped = s / (s**2 + adaptive_damp**2)
-                dq_primary = vh.T @ (s_damped * (u.T @ error))
-            except np.linalg.LinAlgError:
-                # 回退到标准DLS
-                dq_primary = jac.T @ np.linalg.solve(
-                    jac @ jac.T + (adaptive_damp**2) * eye6, error
-                )
+            # 使用已分解的SVD进行稳定求解，避免每轮重复分解。
+            s_damped = s / (s**2 + adaptive_damp**2)
+            dq_primary = vh.T @ (s_damped * (u.T @ error))
             
             # === 核心改进3: 零空间优化 ===
             if self.use_nullspace:
                 # 计算零空间投影: I - J^+ J
-                s_inv_safe = np.where(s > 1e-6, 1.0 / s, 0.0)
+                s_inv_safe = s / (s**2 + adaptive_damp**2)
                 j_inv = vh.T @ np.diag(s_inv_safe) @ u.T
                 null_proj = eye_nv - j_inv @ jac
                 # 向期望姿态靠近（如关节居中）
@@ -495,39 +496,51 @@ class Rm75bDexHandController:
             else:
                 dq = dq_primary
             
-            # === 核心改进4: 速度滤波与约束 ===
-            # 将步长转换为速度并滤波
-            raw_velocity = dq / self._dt
-            if self._filtered_velocity is not None:
-                self._filtered_velocity = (
-                    self.velocity_filter_alpha * raw_velocity
-                    + (1 - self.velocity_filter_alpha) * self._filtered_velocity
-                )
-            else:
-                self._filtered_velocity = raw_velocity
-            
-            # 应用速度约束
-            max_vel_step = self.max_joint_velocity * self._dt
-            dq_filtered = np.clip(self._filtered_velocity * self._dt, 
-                                  -max_vel_step, max_vel_step)
-            
-            # === 核心改进5: 平滑限位处理 ===
-            # 使用软约束而非硬截断
-            q_new = q + np.clip(dq_filtered, -self.max_joint_step, self.max_joint_step)
-            
-            # 软边界：在限位附近施加恢复力
-            margin = 0.1 * (high - low)  # 10%边界余量
-            for i in range(arm_count):
-                if q_new[i] < low[i] + margin[i]:
-                    q_new[i] += 0.5 * (low[i] + margin[i] - q_new[i])
-                elif q_new[i] > high[i] - margin[i]:
-                    q_new[i] -= 0.5 * (q_new[i] - (high[i] - margin[i]))
-            
-            # 最终硬限位（安全兜底）
-            q = np.clip(q_new, low, high)
+            q = np.clip(
+                q + np.clip(dq, -self.max_joint_step, self.max_joint_step),
+                low,
+                high,
+            )
 
+        q = self._smooth_joint_target(current_q, q, low, high)
+        tmp.qpos[qpos_addrs] = q
+        mujoco.mj_forward(model, tmp)
+        pos_error = target_pos - tmp.site_xpos[self.site_id]
+        current_quat = mat_to_quat(tmp.site_xmat[self.site_id])
+        quat_error = quat_multiply(target_quat, quat_conjugate(current_quat))
+        rot_error = quat_to_rotvec(quat_error)
+        self._last_ik_error = np.concatenate([pos_error, rot_error]).astype(np.float32)
         self._prev_target_q = q.copy()
         return q.astype(np.float32)
+
+    def _smooth_joint_target(
+        self,
+        current_q: np.ndarray,
+        solved_q: np.ndarray,
+        low: np.ndarray,
+        high: np.ndarray,
+    ) -> np.ndarray:
+        """Apply output-rate limiting once per control update."""
+        if self._prev_target_q is None:
+            self._prev_target_q = current_q.copy()
+
+        desired_velocity = (solved_q - self._prev_target_q) / self._dt
+        if self._filtered_velocity is None:
+            self._filtered_velocity = desired_velocity
+        else:
+            alpha = np.clip(self.velocity_filter_alpha, 0.0, 1.0)
+            self._filtered_velocity = (
+                alpha * desired_velocity + (1.0 - alpha) * self._filtered_velocity
+            )
+
+        max_velocity = abs(self.max_joint_velocity)
+        filtered_velocity = np.clip(
+            self._filtered_velocity,
+            -max_velocity,
+            max_velocity,
+        )
+        limited_q = self._prev_target_q + filtered_velocity * self._dt
+        return np.clip(limited_q, low, high)
 
     @staticmethod
     def _slerp(q1: np.ndarray, q2: np.ndarray, t: float) -> np.ndarray:

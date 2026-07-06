@@ -9,14 +9,17 @@ compilation, so the caller can continue adding cameras, objects, task logic,
 or sensors before calling ``spec.compile()``.
 """
 
-import traceback
+import os
 from pathlib import Path
+import traceback
 from typing import Optional, Tuple, Union
 
 import mujoco
 from mujoco import viewer
 import numpy as np
 from scipy.spatial.transform import Rotation as R
+
+from source.environments.tactile_layout import write_augmented_dex_hand_xml
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -48,6 +51,23 @@ def _load_spec_or_raise(path: Path, description: str) -> mujoco.MjSpec:
     if not path.exists():
         raise FileNotFoundError(f"{description} XML file not found: {path}")
     return mujoco.MjSpec.from_file(str(path))
+
+
+def _load_hand_spec_or_raise(path: Path, *, add_tactile: bool) -> mujoco.MjSpec:
+    """Load the dex hand XML, optionally injecting generated touch sensors."""
+    if not path.exists():
+        raise FileNotFoundError(f"hand model XML file not found: {path}")
+    if not add_tactile:
+        return mujoco.MjSpec.from_file(str(path))
+
+    augmented_path = write_augmented_dex_hand_xml(path)
+    try:
+        return mujoco.MjSpec.from_file(str(augmented_path))
+    finally:
+        try:
+            os.unlink(augmented_path)
+        except OSError:
+            pass
 
 
 def _first_body_or_raise(spec: mujoco.MjSpec, description: str) -> mujoco.MjsBody:
@@ -189,6 +209,7 @@ def build_combined_spec(
     attach_point_name: str = DEFAULT_ATTACH_POINT_NAME,
     base_mount_site_name: str = DEFAULT_BASE_ARM_MOUNT_SITE_NAME,
     hand_prefix: str = DEFAULT_HAND_PREFIX,
+    add_tactile_sensors: bool = True,
 ) -> mujoco.MjSpec:
     """
     Build an uncompiled arm + dexterous hand ``MjSpec``.
@@ -212,7 +233,7 @@ def build_combined_spec(
     base_path = _resolve_path(base_path, DEFAULT_BASE_PATH)
 
     arm_spec = _load_spec_or_raise(arm_path, "arm model")
-    hand_spec = _load_spec_or_raise(hand_path, "hand model")
+    hand_spec = _load_hand_spec_or_raise(hand_path, add_tactile=add_tactile_sensors)
     _configure_solver(arm_spec)
 
     _mount_arm_on_base(arm_spec, base_path, base_mount_site_name)
@@ -239,6 +260,7 @@ def build_combined_model(
     base_mount_site_name: str = DEFAULT_BASE_ARM_MOUNT_SITE_NAME,
     hand_prefix: str = DEFAULT_HAND_PREFIX,
     add_scene: bool = True,
+    add_tactile_sensors: bool = True,
 ) -> Tuple[mujoco.MjModel, mujoco.MjData]:
     """
     Build, optionally add a preview scene, and compile the merged robot model.
@@ -254,6 +276,7 @@ def build_combined_model(
         attach_point_name=attach_point_name,
         base_mount_site_name=base_mount_site_name,
         hand_prefix=hand_prefix,
+        add_tactile_sensors=add_tactile_sensors,
     )
 
     if add_scene:

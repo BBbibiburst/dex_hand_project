@@ -20,7 +20,11 @@ import numpy as np
 from source.environments.controllers import Rm75bDexHandController
 from source.environments.overlays import clear_markers, draw_stats_label
 from source.environments.robot_builder import DEFAULT_HAND_PREFIX, build_combined_spec
-from source.environments.tactile_sensors import NullTactileSensor, TactileSensorBase
+from source.environments.tactile_sensors import (
+    DexHandTouchSensor,
+    NullTactileSensor,
+    TactileSensorBase,
+)
 from source.environments.tasks import DexHandTask, NoopTask
 
 
@@ -40,6 +44,7 @@ class RLEnvConfig:
     ee_site_name: str = "right_hand_site"
     include_hand_action: bool = True
     normalized_position: bool = False
+    enable_tactile_sensors: bool = True
 
 
 class DexHandGymEnv(gym.Env):
@@ -70,7 +75,12 @@ class DexHandGymEnv(gym.Env):
             include_hand_action=self.config.include_hand_action,
             normalized_position=self.config.normalized_position,
         )
-        self.tactile_sensor = tactile_sensor or NullTactileSensor()
+        if tactile_sensor is not None:
+            self.tactile_sensor = tactile_sensor
+        elif self.config.enable_tactile_sensors:
+            self.tactile_sensor = DexHandTouchSensor(hand_prefix=self.config.hand_prefix)
+        else:
+            self.tactile_sensor = NullTactileSensor()
         self.render_mode = render_mode
 
         if render_mode is not None and render_mode not in self.metadata["render_modes"]:
@@ -78,7 +88,10 @@ class DexHandGymEnv(gym.Env):
                 f"render_mode must be one of {self.metadata['render_modes']} or None."
             )
 
-        spec = build_combined_spec(hand_prefix=self.config.hand_prefix)
+        spec = build_combined_spec(
+            hand_prefix=self.config.hand_prefix,
+            add_tactile_sensors=self.config.enable_tactile_sensors,
+        )
         self._augment_spec(spec)
         self.model = spec.compile()
         self.data = mujoco.MjData(self.model)
@@ -99,6 +112,7 @@ class DexHandGymEnv(gym.Env):
         self.physics_steps_per_control = max(
             1, int(round(self.config.control_dt / self.model.opt.timestep))
         )
+        self.controller.set_timestep(self.config.control_dt)
         self.elapsed_steps = 0
         self._initial_qpos = self.data.qpos.copy()
         self._initial_qvel = self.data.qvel.copy()
