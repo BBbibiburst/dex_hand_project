@@ -16,6 +16,7 @@ DEX_HAND_TACTILE_SITE_PREFIX = "taxel_"
 DEX_HAND_TACTILE_SENSOR_PREFIX = "touch_"
 DEX_HAND_TACTILE_GROUP = "4"
 DEFAULT_TAXEL_RADIUS = 0.0018
+FINGER_SEGMENT_FIT_SUBDIVISIONS = 4
 
 
 @dataclass(frozen=True)
@@ -37,14 +38,21 @@ class FingerSegmentSurfaceFit:
     section_y: np.ndarray
     axial_low: float
     axial_high: float
-    outer_center: np.ndarray
-    outer_radius_x: float
-    outer_radius_y: float
-    inner_center: np.ndarray
-    inner_radius_x: float
-    inner_radius_y: float
+    surface_center: np.ndarray
+    surface_radius_x: float
+    surface_radius_y: float
     arc_start: float
     arc_end: float
+
+
+@dataclass(frozen=True)
+class TactilePatchPlotData:
+    mesh_name: str
+    rows: int
+    cols: int
+    triangles: np.ndarray
+    samples: np.ndarray
+    fit_surfaces: tuple[np.ndarray, ...]
 
 
 def dex_hand_tactile_patches() -> tuple[TactilePatchSpec, ...]:
@@ -76,6 +84,30 @@ def tactile_sensor_names(prefix: str = "") -> tuple[str, ...]:
             for col in range(patch.cols):
                 names.append(prefix + tactile_sensor_name(patch.mesh_name, row, col))
     return tuple(names)
+
+
+def tactile_patch_grid_shape(mesh_name: str) -> tuple[int, int]:
+    for patch in DEX_HAND_TACTILE_PATCHES:
+        if patch.mesh_name == mesh_name:
+            return patch.rows, patch.cols
+    raise ValueError(f"Unknown tactile skin patch type: {mesh_name!r}.")
+
+
+def tactile_patch_plot_data(path: Path, mesh_name: str) -> TactilePatchPlotData:
+    """Return all computed arrays needed to visualize one tactile patch."""
+    rows, cols = tactile_patch_grid_shape(mesh_name)
+    triangles = _read_stl_triangles(path)
+    vertices = triangles.reshape(-1, 3)
+    samples = _surface_grid_points_from_vertices(vertices, rows, cols, mesh_name=mesh_name)
+    fit_surfaces = _fit_surface_meshes(vertices, mesh_name)
+    return TactilePatchPlotData(
+        mesh_name=mesh_name,
+        rows=rows,
+        cols=cols,
+        triangles=triangles,
+        samples=samples,
+        fit_surfaces=fit_surfaces,
+    )
 
 
 def write_augmented_dex_hand_xml(
@@ -179,19 +211,23 @@ def _body_by_named_geom(root: ET.Element) -> dict[str, tuple[ET.Element, ET.Elem
 
 
 def _read_stl_vertices(path: Path) -> np.ndarray:
+    return _read_stl_triangles(path).reshape(-1, 3)
+
+
+def _read_stl_triangles(path: Path) -> np.ndarray:
     data = path.read_bytes()
     if _looks_like_binary_stl(data):
         tri_count = struct.unpack_from("<I", data, 80)[0]
-        vertices = np.empty((tri_count * 3, 3), dtype=np.float64)
+        triangles = np.empty((tri_count, 3, 3), dtype=np.float64)
         offset = 84
         for tri_idx in range(tri_count):
             offset += 12
             for vertex_idx in range(3):
-                vertices[tri_idx * 3 + vertex_idx] = struct.unpack_from("<3f", data, offset)
+                triangles[tri_idx, vertex_idx] = struct.unpack_from("<3f", data, offset)
                 offset += 12
             offset += 2
-        return vertices
-    return _read_ascii_stl_vertices(data.decode("utf-8", errors="ignore"))
+        return triangles
+    return _read_ascii_stl_triangles(data.decode("utf-8", errors="ignore"))
 
 
 def _looks_like_binary_stl(data: bytes) -> bool:
@@ -202,6 +238,10 @@ def _looks_like_binary_stl(data: bytes) -> bool:
 
 
 def _read_ascii_stl_vertices(text: str) -> np.ndarray:
+    return _read_ascii_stl_triangles(text).reshape(-1, 3)
+
+
+def _read_ascii_stl_triangles(text: str) -> np.ndarray:
     vertices: list[list[float]] = []
     for raw_line in text.splitlines():
         parts = raw_line.strip().split()
@@ -209,7 +249,9 @@ def _read_ascii_stl_vertices(text: str) -> np.ndarray:
             vertices.append([float(parts[1]), float(parts[2]), float(parts[3])])
     if not vertices:
         raise ValueError("STL file contains no vertices.")
-    return np.asarray(vertices, dtype=np.float64)
+    if len(vertices) % 3 != 0:
+        raise ValueError("ASCII STL vertex count is not divisible by 3.")
+    return np.asarray(vertices, dtype=np.float64).reshape(-1, 3, 3)
 
 
 def _surface_grid_points(
@@ -220,11 +262,126 @@ def _surface_grid_points(
     mesh_name: str = "",
 ) -> np.ndarray:
     vertices = _read_stl_vertices(path)
+    return _surface_grid_points_from_vertices(vertices, rows, cols, mesh_name=mesh_name)
+
+
+def _surface_grid_points_from_vertices(
+    vertices: np.ndarray,
+    rows: int,
+    cols: int,
+    *,
+    mesh_name: str = "",
+) -> np.ndarray:
     if mesh_name.endswith("_2_p"):
         return _fingertip_skin_grid_points(vertices, rows, cols)
     if mesh_name == "skin_palm_p":
         return _palm_skin_grid_points(vertices, rows, cols)
     return _finger_segment_skin_grid_points(vertices, rows, cols)
+
+
+def _fit_surface_meshes(vertices: np.ndarray, mesh_name: str) -> tuple[np.ndarray, ...]:
+    if mesh_name == "skin_palm_p":
+        return (_palm_fit_surface(vertices),)
+    if mesh_name.endswith("_2_p"):
+        return (_fingertip_fit_surface(vertices),)
+    return (_finger_segment_fit_surface(vertices),)
+
+
+def _finger_segment_fit_surface(vertices: np.ndarray) -> np.ndarray:
+    fit = _fit_finger_segment_surfaces(vertices)
+    return _segment_surface_from_fit(
+        fit,
+        fit.surface_center,
+        fit.surface_radius_x,
+        fit.surface_radius_y,
+    )
+
+
+def _segment_surface_from_fit(
+    fit: FingerSegmentSurfaceFit,
+    center_2d: np.ndarray,
+    radius_x: float,
+    radius_y: float,
+) -> np.ndarray:
+    z_values = np.linspace(fit.axial_low, fit.axial_high, 32)
+    theta_values = np.linspace(fit.arc_start, fit.arc_end, 48)
+    z_grid, theta_grid = np.meshgrid(z_values, theta_values, indexing="ij")
+    x_grid = center_2d[0] + radius_x * np.cos(theta_grid)
+    y_grid = center_2d[1] + radius_y * np.sin(theta_grid)
+    return (
+        fit.center
+        + z_grid[..., None] * fit.axis
+        + x_grid[..., None] * fit.section_x
+        + y_grid[..., None] * fit.section_y
+    )
+
+
+def _fingertip_fit_surface(vertices: np.ndarray) -> np.ndarray:
+    center = vertices.mean(axis=0)
+    centered = vertices - center
+    _, _, vh = np.linalg.svd(centered, full_matrices=False)
+    axis, section_x, section_y = vh[0], vh[1], vh[2]
+
+    axial = centered @ axis
+    section = np.column_stack([centered @ section_x, centered @ section_y])
+    center_2d = np.median(section, axis=0)
+    rel = section - center_2d
+    radius_x = max(np.percentile(np.abs(rel[:, 0]), 95.0), 1e-9)
+    radius_y = max(np.percentile(np.abs(rel[:, 1]), 95.0), 1e-9)
+    norm_radius = np.sqrt((rel[:, 0] / radius_x) ** 2 + (rel[:, 1] / radius_y) ** 2)
+    outer_mask = norm_radius >= np.percentile(norm_radius, 58.0)
+    outer_rel = rel[outer_mask]
+    outer_angles = np.mod(
+        np.arctan2(outer_rel[:, 1] / radius_y, outer_rel[:, 0] / radius_x),
+        2.0 * np.pi,
+    )
+    arc_start, arc_end = _occupied_angle_arc(outer_angles)
+
+    z_values = np.linspace(*np.percentile(axial, [7.5, 92.5]), 28)
+    theta_values = _ellipse_arc_mid_angles(radius_x, radius_y, 52, arc_start, arc_end)
+    local_scale = _fingertip_radial_scale(axial, norm_radius, z_values)
+
+    z_grid, theta_grid = np.meshgrid(z_values, theta_values, indexing="ij")
+    scale_grid = local_scale[:, None]
+    x_grid = center_2d[0] + scale_grid * radius_x * np.cos(theta_grid)
+    y_grid = center_2d[1] + scale_grid * radius_y * np.sin(theta_grid)
+    return (
+        center
+        + z_grid[..., None] * axis
+        + x_grid[..., None] * section_x
+        + y_grid[..., None] * section_y
+    )
+
+
+def _fingertip_radial_scale(
+    axial: np.ndarray,
+    norm_radius: np.ndarray,
+    z_values: np.ndarray,
+) -> np.ndarray:
+    z_span = max(np.percentile(axial, 92.5) - np.percentile(axial, 7.5), 1e-9)
+    window = 0.18 * z_span
+    scales = []
+    for z_value in z_values:
+        mask = np.abs(axial - z_value) <= window
+        if int(mask.sum()) < 8:
+            mask = np.ones_like(axial, dtype=bool)
+        scales.append(np.percentile(norm_radius[mask], 88.0))
+    return np.asarray(scales, dtype=np.float64)
+
+
+def _palm_fit_surface(vertices: np.ndarray) -> np.ndarray:
+    x_value = np.percentile(vertices[:, 0], 88.0)
+    z_values = np.linspace(*np.percentile(vertices[:, 2], [7.5, 92.5]), 36)
+    y_values = np.linspace(*np.percentile(vertices[:, 1], [7.5, 92.5]), 24)
+    z_grid, y_grid = np.meshgrid(z_values, y_values, indexing="ij")
+    return np.stack(
+        [
+            np.full_like(z_grid, x_value),
+            y_grid,
+            z_grid,
+        ],
+        axis=-1,
+    )
 
 
 def _finger_segment_skin_grid_points(
@@ -240,8 +397,8 @@ def _finger_segment_skin_grid_points(
     """
     fit = _fit_finger_segment_surfaces(vertices)
     theta_values = _ellipse_arc_mid_angles(
-        fit.outer_radius_x,
-        fit.outer_radius_y,
+        fit.surface_radius_x,
+        fit.surface_radius_y,
         cols,
         fit.arc_start,
         fit.arc_end,
@@ -252,8 +409,8 @@ def _finger_segment_skin_grid_points(
     points: list[np.ndarray] = []
     for z_value in axial_values:
         for theta in theta_values:
-            x_value = fit.outer_center[0] + fit.outer_radius_x * np.cos(theta)
-            y_value = fit.outer_center[1] + fit.outer_radius_y * np.sin(theta)
+            x_value = fit.surface_center[0] + fit.surface_radius_x * np.cos(theta)
+            y_value = fit.surface_center[1] + fit.surface_radius_y * np.sin(theta)
             points.append(
                 fit.center
                 + z_value * fit.axis
@@ -264,17 +421,22 @@ def _finger_segment_skin_grid_points(
 
 
 def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFit:
-    """Separate and fit inner/outer partial elliptic cylinders for segment skins."""
-    centered = vertices - vertices.mean(axis=0)
+    """Fit the exposed contact surface of segment skins as a partial elliptic cylinder."""
+    triangles = _vertices_as_triangles(vertices)
+    fit_points = _supersample_triangles(
+        triangles,
+        subdivisions=FINGER_SEGMENT_FIT_SUBDIVISIONS,
+    )
+    fit_center = fit_points.mean(axis=0)
+    centered = fit_points - fit_center
     _, _, vh = np.linalg.svd(centered, full_matrices=False)
     axis = vh[0]
     section_x = vh[1]
     section_y = vh[2]
 
-    triangles = _vertices_as_triangles(vertices)
     face_centers = triangles.mean(axis=1)
     face_normals = _triangle_normals(triangles)
-    face_centered = face_centers - vertices.mean(axis=0)
+    face_centered = face_centers - fit_center
     face_section = np.column_stack([face_centered @ section_x, face_centered @ section_y])
 
     coarse_center = np.median(face_section, axis=0)
@@ -301,39 +463,27 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
     if outer_faces.sum() < 0.05 * len(outer_faces) or (~outer_faces).sum() < 0.05 * len(outer_faces):
         outer_faces = r_norm >= np.percentile(r_norm, 60.0)
 
-    outer_vertices = triangles[outer_faces].reshape(-1, 3)
-    inner_vertices = triangles[~outer_faces].reshape(-1, 3)
-    if len(inner_vertices) == 0:
-        inner_vertices = vertices
-    if len(outer_vertices) == 0:
-        outer_vertices = vertices
-
-    outer_center, outer_radius_x, outer_radius_y = _fit_axis_aligned_section_ellipse(
-        outer_vertices,
-        vertices.mean(axis=0),
-        section_x,
-        section_y,
+    surface_vertices = _supersample_triangles(
+        triangles[outer_faces],
+        subdivisions=FINGER_SEGMENT_FIT_SUBDIVISIONS,
     )
-    inner_center, inner_radius_x, inner_radius_y = _fit_axis_aligned_section_ellipse(
-        inner_vertices,
-        vertices.mean(axis=0),
+    if len(surface_vertices) == 0:
+        surface_vertices = fit_points
+
+    surface_center, surface_radius_x, surface_radius_y = _fit_axis_aligned_section_ellipse(
+        surface_vertices,
+        fit_center,
         section_x,
         section_y,
     )
 
-    if outer_radius_x + outer_radius_y < inner_radius_x + inner_radius_y:
-        outer_center, inner_center = inner_center, outer_center
-        outer_radius_x, inner_radius_x = inner_radius_x, outer_radius_x
-        outer_radius_y, inner_radius_y = inner_radius_y, outer_radius_y
-        outer_vertices, inner_vertices = inner_vertices, outer_vertices
-
-    outer_centered = outer_vertices - vertices.mean(axis=0)
-    outer_section = np.column_stack([outer_centered @ section_x, outer_centered @ section_y])
-    outer_rel = outer_section - outer_center
+    surface_centered = surface_vertices - fit_center
+    surface_section = np.column_stack([surface_centered @ section_x, surface_centered @ section_y])
+    surface_rel = surface_section - surface_center
     angles = np.mod(
         np.arctan2(
-            outer_rel[:, 1] / max(outer_radius_y, 1e-9),
-            outer_rel[:, 0] / max(outer_radius_x, 1e-9),
+            surface_rel[:, 1] / max(surface_radius_y, 1e-9),
+            surface_rel[:, 0] / max(surface_radius_x, 1e-9),
         ),
         2.0 * np.pi,
     )
@@ -342,18 +492,15 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
     axial = centered @ axis
     axial_low, axial_high = np.percentile(axial, [7.5, 92.5])
     return FingerSegmentSurfaceFit(
-        center=vertices.mean(axis=0),
+        center=fit_center,
         axis=axis,
         section_x=section_x,
         section_y=section_y,
         axial_low=float(axial_low),
         axial_high=float(axial_high),
-        outer_center=outer_center,
-        outer_radius_x=float(outer_radius_x),
-        outer_radius_y=float(outer_radius_y),
-        inner_center=inner_center,
-        inner_radius_x=float(inner_radius_x),
-        inner_radius_y=float(inner_radius_y),
+        surface_center=surface_center,
+        surface_radius_x=float(surface_radius_x),
+        surface_radius_y=float(surface_radius_y),
         arc_start=float(arc_start),
         arc_end=float(arc_end),
     )
@@ -379,6 +526,27 @@ def _vertices_as_triangles(vertices: np.ndarray) -> np.ndarray:
     if usable == 0:
         raise ValueError("STL vertices cannot form triangles.")
     return vertices[:usable].reshape(-1, 3, 3)
+
+
+def _supersample_triangles(
+    triangles: np.ndarray,
+    *,
+    subdivisions: int,
+) -> np.ndarray:
+    if len(triangles) == 0:
+        return np.empty((0, 3), dtype=np.float64)
+    subdivisions = max(1, int(subdivisions))
+    barycentric = []
+    for i in range(subdivisions + 1):
+        for j in range(subdivisions + 1 - i):
+            k = subdivisions - i - j
+            barycentric.append((i, j, k))
+    weights = np.asarray(barycentric, dtype=np.float64) / float(subdivisions)
+    return (
+        triangles[:, None, 0, :] * weights[None, :, 0, None]
+        + triangles[:, None, 1, :] * weights[None, :, 1, None]
+        + triangles[:, None, 2, :] * weights[None, :, 2, None]
+    ).reshape(-1, 3)
 
 
 def _triangle_normals(triangles: np.ndarray) -> np.ndarray:
