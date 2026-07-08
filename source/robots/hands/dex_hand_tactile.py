@@ -22,8 +22,9 @@ from source.environments.assets import DEX_HAND_DIR
 from source.environments.tactile_sensors import TactileSensorBase
 from source.robots.hands._surface_fitting import (
     finger_segment_grid_points,
-    fingertip_grid_points,
-    palm_grid_points,
+    fingertip_ellipsoid_grid_points,
+    freeform_rbf_outer_grid_points,
+    mesh_uv_grid_points,
 )
 
 
@@ -37,8 +38,9 @@ DEFAULT_TAXEL_RADIUS = 0.0018
 # surface is shaped.
 _GRID_FN = {
     "segment": finger_segment_grid_points,
-    "fingertip": fingertip_grid_points,
-    "palm": palm_grid_points,
+    "fingertip-ellipsoid": fingertip_ellipsoid_grid_points,
+    "rbf-outer": freeform_rbf_outer_grid_points,
+    "mesh-uv": mesh_uv_grid_points,
 }
 
 
@@ -47,8 +49,8 @@ def _dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
     for finger_id in range(5):
         layout.append((f"skin_{finger_id}_0_p", 7, 8, "segment"))
         layout.append((f"skin_{finger_id}_1_p", 4, 8, "segment"))
-        layout.append((f"skin_{finger_id}_2_p", 4, 8, "fingertip"))
-    layout.append(("skin_palm_p", 7, 16, "palm"))
+        layout.append((f"skin_{finger_id}_2_p", 4, 8, "fingertip-ellipsoid"))
+    layout.append(("skin_palm_p", 7, 16, "mesh-uv"))
     return tuple(layout)
 
 
