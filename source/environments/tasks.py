@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Task interface and built-in task implementations for DexHand env."""
+"""Task interface and built-in task implementations for robot envs."""
 
 from __future__ import annotations
 
@@ -14,11 +14,11 @@ Array = np.ndarray
 Observation = Dict[str, Any]
 
 
-class DexHandTask(ABC):
-    """Abstract task interface for DexHandGymEnv.
+class RobotTask(ABC):
+    """Abstract task interface for RobotGymEnv.
 
-    Implementations define what the robot should do (reach, grasp, etc.)
-    by providing observation augmentation, reward, and termination logic.
+    Implementations define what the robot should do (reach, grasp, etc.) by
+    providing observation augmentation, reward, and termination logic.
     """
 
     @property
@@ -43,11 +43,7 @@ class DexHandTask(ABC):
         """Called at the start of each episode. Returns info dict."""
 
     @abstractmethod
-    def get_observation(
-        self,
-        model: Any,
-        data: Any,
-    ) -> Observation:
+    def get_observation(self, model: Any, data: Any) -> Observation:
         """Current task-specific observation. Must match ``observation_space``."""
 
     @abstractmethod
@@ -70,7 +66,7 @@ class DexHandTask(ABC):
         """Returns (terminated, terminated_info)."""
 
 
-class NoopTask(DexHandTask):
+class NoopTask(RobotTask):
     """Default no-op task: zero reward, never terminates, no extra observations."""
 
     @property

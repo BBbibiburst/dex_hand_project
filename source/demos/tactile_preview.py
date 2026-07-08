@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
-"""Preview generated dex-hand tactile taxel positions in the MuJoCo viewer."""
+"""Preview generated dex-hand tactile taxel positions in the MuJoCo viewer.
+
+This demo is intentionally dex-hand specific: it imports
+``DexHandTouchSensor`` directly rather than going through the generic
+``TactileSensorBase`` interface, because it wants to draw per-patch colors
+by mesh name — a detail only the dex hand's implementation knows about.
+"""
 
 from __future__ import annotations
 
 import argparse
 
+import mujoco
+from mujoco import viewer
 import numpy as np
 
-from source.environments.robot_builder import DEFAULT_HAND_PREFIX, build_combined_model
-from source.environments.tactile_layout import DEX_HAND_TACTILE_PATCHES, tactile_site_name
+from source.environments.overlays import draw_sphere_marker
+from source.environments.robot_builder import build_robot_model
+from source.robots.defaults import DEFAULT_HAND
+from source.robots.hands.dex_hand_tactile import DexHandTouchSensor, site_name
 
 
 def _parse_args() -> argparse.Namespace:
@@ -34,52 +44,37 @@ def _patch_color(mesh_name: str) -> tuple[float, float, float, float]:
     return (1.0, 0.85, 0.05, 0.75)
 
 
-def _add_sphere(handle, pos: np.ndarray, radius: float, rgba) -> None:
-    import mujoco
-
-    if handle.user_scn.ngeom >= handle.user_scn.maxgeom:
-        return
-
-    geom = handle.user_scn.geoms[handle.user_scn.ngeom]
-    mujoco.mjv_initGeom(
-        geom,
-        mujoco.mjtGeom.mjGEOM_SPHERE,
-        np.asarray([radius, radius, radius], dtype=np.float64),
-        np.asarray(pos, dtype=np.float64),
-        np.eye(3, dtype=np.float64).reshape(9),
-        np.asarray(rgba, dtype=np.float32),
-    )
-    handle.user_scn.ngeom += 1
-
-
-def _collect_sites(model, *, prefix: str, patch_filter: str) -> list[tuple[int, str]]:
-    import mujoco
-
+def _collect_sites(
+    model: mujoco.MjModel,
+    sensor: DexHandTouchSensor,
+    *,
+    prefix: str,
+    patch_filter: str,
+) -> list[tuple[int, str]]:
     sites: list[tuple[int, str]] = []
-    for patch in DEX_HAND_TACTILE_PATCHES:
-        if patch_filter and patch.mesh_name != patch_filter:
+    for mesh_name, rows, cols, _kind in sensor.patch_layout:
+        if patch_filter and mesh_name != patch_filter:
             continue
-        for row in range(patch.rows):
-            for col in range(patch.cols):
-                name = prefix + tactile_site_name(patch.mesh_name, row, col)
+        for row in range(rows):
+            for col in range(cols):
+                name = prefix + site_name(mesh_name, row, col)
                 site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, name)
                 if site_id < 0:
                     raise ValueError(f"Missing tactile site {name!r}.")
-                sites.append((site_id, patch.mesh_name))
+                sites.append((site_id, mesh_name))
     return sites
 
 
 def main() -> None:
     args = _parse_args()
-    prefix = "" if args.no_prefix else DEFAULT_HAND_PREFIX
 
-    import mujoco
-    from mujoco import viewer
+    tactile_sensor = DexHandTouchSensor()
+    hand_prefix = "" if args.no_prefix else DEFAULT_HAND.default_prefix
 
-    model, data = build_combined_model(add_scene=True)
+    model, data = build_robot_model(add_scene=True, tactile_sensor=tactile_sensor)
     mujoco.mj_forward(model, data)
 
-    sites = _collect_sites(model, prefix=prefix, patch_filter=args.patch)
+    sites = _collect_sites(model, tactile_sensor, prefix=hand_prefix, patch_filter=args.patch)
     print(f"Drawing {len(sites)} tactile sites.")
     print("Colors: proximal=cyan, middle=green, fingertip=yellow, palm=red")
 
@@ -88,11 +83,11 @@ def main() -> None:
             mujoco.mj_step(model, data)
             handle.user_scn.ngeom = 0
             for site_id, mesh_name in sites:
-                _add_sphere(
+                draw_sphere_marker(
                     handle,
                     data.site_xpos[site_id],
-                    args.radius,
-                    _patch_color(mesh_name),
+                    radius=args.radius,
+                    rgba=_patch_color(mesh_name),
                 )
             handle.sync()
 

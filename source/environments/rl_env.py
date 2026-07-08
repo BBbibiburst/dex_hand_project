@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Gymnasium environment for RM75B + dex hand.
+"""Gymnasium environment for descriptor-driven robot assemblies.
 
-The environment owns timing, rendering, and runtime diagnostics.
-Control logic is delegated to ``Rm75bDexHandController``;
-task logic is delegated to ``DexHandTask`` implementations.
+The environment owns timing, rendering, and runtime diagnostics. Control
+logic is delegated to a descriptor-built composite controller; task logic is
+delegated to ``RobotTask`` implementations; tactile sensing is delegated to
+whatever ``TactileSensorBase`` the end effector's descriptor produces.
 """
 
 from __future__ import annotations
@@ -17,16 +18,14 @@ from gymnasium import spaces
 import mujoco
 from mujoco import viewer
 import numpy as np
-from source.environments.controllers import Rm75bDexHandController
+
+from source.control.controllers import build_robot_controller
 from source.environments.overlays import clear_markers, draw_stats_label
-from source.environments.robot_builder import DEFAULT_HAND_PREFIX, build_combined_spec
+from source.environments.robot_builder import build_robot_spec
 from source.environments.scene import add_basic_scene
-from source.environments.tactile_sensors import (
-    DexHandTouchSensor,
-    NullTactileSensor,
-    TactileSensorBase,
-)
-from source.environments.tasks import DexHandTask, NoopTask
+from source.environments.tactile_sensors import NullTactileSensor, TactileSensorBase
+from source.environments.tasks import NoopTask, RobotTask
+from source.robots.registry import get_arm, get_base, get_hand
 
 
 Array = np.ndarray
@@ -35,25 +34,33 @@ Observation = Dict[str, Any]
 
 @dataclass(frozen=True)
 class RLEnvConfig:
+    arm_name: str = "rm75b"
+    hand_name: str = "dex_hand"
+    base_name: str = "rethink_minimal_mount"
     control_dt: float = 0.05  # 20 Hz controller updates.
     episode_length: int = 500
     add_default_scene: bool = True
     enable_task_objects: bool = False
-    hand_prefix: str = DEFAULT_HAND_PREFIX
+    hand_prefix: Optional[str] = None
     stats_interval: float = 0.5
     control_mode: str = "position"  # "position" or "ik".
-    ee_site_name: str = "right_hand_site"
+    ee_site_name: Optional[str] = None
     include_hand_action: bool = True
     normalized_position: bool = False
     enable_tactile_sensors: bool = True
 
 
-class DexHandGymEnv(gym.Env):
-    """Gymnasium environment for RM75B + dex hand.
+class RobotGymEnv(gym.Env):
+    """Gymnasium environment for a registered arm + end-effector + base.
 
-    Delegates control to ``Rm75bDexHandController`` and task logic to a
-    ``DexHandTask`` instance.  Supports both direct position control and
+    Delegates control to a descriptor-built composite controller and task logic to a
+    ``RobotTask`` instance. Supports both direct position control and
     end-effector IK modes.
+
+    Tactile sensing is resolved from the end-effector descriptor's
+    ``tactile_sensor_factory`` when ``config.enable_tactile_sensors`` is
+    True and the descriptor provides one; otherwise ``NullTactileSensor`` is
+    used. Pass ``tactile_sensor`` explicitly to override either behaviour.
     """
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 60}
@@ -61,36 +68,51 @@ class DexHandGymEnv(gym.Env):
     def __init__(
         self,
         *,
-        task: Optional[DexHandTask] = None,
+        task: Optional[RobotTask] = None,
         tactile_sensor: Optional[TactileSensorBase] = None,
         config: Optional[RLEnvConfig] = None,
         render_mode: Optional[str] = None,
     ) -> None:
         super().__init__()
         self.config = config or RLEnvConfig()
+        self.arm_descriptor = get_arm(self.config.arm_name)
+        self.hand_descriptor = get_hand(self.config.hand_name)
+        self.base_descriptor = get_base(self.config.base_name)
+        self.hand_prefix = (
+            self.hand_descriptor.default_prefix
+            if self.config.hand_prefix is None
+            else self.config.hand_prefix
+        )
         self.task = task or NoopTask()
-        self.controller = Rm75bDexHandController(
-            hand_prefix=self.config.hand_prefix,
+        self.controller = build_robot_controller(
+            arm_descriptor=self.arm_descriptor,
+            hand_descriptor=self.hand_descriptor,
+            hand_prefix=self.hand_prefix,
             control_mode=self.config.control_mode,
-            ee_site_name=self.config.ee_site_name,
+            ee_site_name=self.config.ee_site_name or self.arm_descriptor.ee_site_name,
             include_hand_action=self.config.include_hand_action,
             normalized_position=self.config.normalized_position,
         )
+
         if tactile_sensor is not None:
-            self.tactile_sensor = tactile_sensor
-        elif self.config.enable_tactile_sensors:
-            self.tactile_sensor = DexHandTouchSensor(hand_prefix=self.config.hand_prefix)
+            self.tactile_sensor: TactileSensorBase = tactile_sensor
+        elif self.config.enable_tactile_sensors and self.hand_descriptor.tactile_sensor_factory:
+            self.tactile_sensor = self.hand_descriptor.tactile_sensor_factory()
         else:
             self.tactile_sensor = NullTactileSensor()
-        self.render_mode = render_mode
 
+        self.render_mode = render_mode
         if render_mode is not None and render_mode not in self.metadata["render_modes"]:
             raise ValueError(
                 f"render_mode must be one of {self.metadata['render_modes']} or None."
             )
 
-        spec = build_combined_spec(
-            hand_prefix=self.config.hand_prefix,
+        spec = build_robot_spec(
+            arm_descriptor=self.arm_descriptor,
+            hand_descriptor=self.hand_descriptor,
+            base_descriptor=self.base_descriptor,
+            hand_prefix=self.hand_prefix,
+            tactile_sensor=self.tactile_sensor,
             add_tactile_sensors=self.config.enable_tactile_sensors,
         )
         self._augment_spec(spec)
@@ -121,6 +143,11 @@ class DexHandGymEnv(gym.Env):
         self._viewer: Optional[viewer.Handle] = None
         self._reset_simulation_stats()
 
+    @property
+    def is_rendering(self) -> bool:
+        """Whether a live passive viewer window is currently open."""
+        return self._viewer is not None
+
     def set_control_mode(self, control_mode: str) -> None:
         self.controller.set_control_mode(control_mode)
         self.action_space = self.controller.action_space
@@ -141,14 +168,10 @@ class DexHandGymEnv(gym.Env):
 
         info: Dict[str, Any] = {}
         info.update(
-            self.controller.reset(
-                self.model, self.data, rng=self.np_random, options=options
-            )
+            self.controller.reset(self.model, self.data, rng=self.np_random, options=options)
         )
         info.update(
-            self.tactile_sensor.reset(
-                self.model, self.data, rng=self.np_random, options=options
-            )
+            self.tactile_sensor.reset(self.model, self.data, rng=self.np_random, options=options)
         )
         info.update(self.task.reset(self.model, self.data, rng=self.np_random, options=options))
 
@@ -164,9 +187,7 @@ class DexHandGymEnv(gym.Env):
 
         self.elapsed_steps += 1
         obs = self._get_observation()
-        reward, reward_info = self.task.compute_reward(
-            obs, action, self.model, self.data
-        )
+        reward, reward_info = self.task.compute_reward(obs, action, self.model, self.data)
         terminated, terminated_info = self.task.is_terminated(obs, self.model, self.data)
         truncated = self.elapsed_steps >= self.config.episode_length
 
@@ -180,10 +201,7 @@ class DexHandGymEnv(gym.Env):
     def step_physics(self, physics_steps: int = 1, *, control_updates: int = 0) -> None:
         for _ in range(physics_steps):
             mujoco.mj_step(self.model, self.data)
-        self.record_simulation_steps(
-            physics_steps=physics_steps,
-            control_updates=control_updates,
-        )
+        self.record_simulation_steps(physics_steps=physics_steps, control_updates=control_updates)
 
     def render(self) -> Optional[Array]:
         if self.render_mode is None:
@@ -192,9 +210,7 @@ class DexHandGymEnv(gym.Env):
             self._render_human()
             return None
         if self.render_mode != "rgb_array":
-            raise NotImplementedError(
-                f"render_mode={self.render_mode!r} is not implemented."
-            )
+            raise NotImplementedError(f"render_mode={self.render_mode!r} is not implemented.")
         if self._renderer is None:
             self._renderer = mujoco.Renderer(self.model)
         self._renderer.update_scene(self.data)
@@ -216,9 +232,7 @@ class DexHandGymEnv(gym.Env):
             self._viewer = None
             return
         clear_markers(self._viewer)
-        draw_stats_label(
-            self._viewer, self._simulation_stats, control_label="ctrl"
-        )
+        draw_stats_label(self._viewer, self._simulation_stats, control_label="ctrl")
         self._viewer.sync()
 
     # ------------------------------------------------------------------
@@ -256,9 +270,7 @@ class DexHandGymEnv(gym.Env):
         if elapsed >= self.config.stats_interval:
             sim_elapsed = float(self.data.time) - self._stats_last_sim
             step_elapsed = self._stats_step_count - self._stats_last_step_count
-            control_elapsed = (
-                self._stats_control_count - self._stats_last_control_count
-            )
+            control_elapsed = self._stats_control_count - self._stats_last_control_count
             self._simulation_stats = {
                 "sim_step_hz": step_elapsed / elapsed,
                 "real_time_factor": sim_elapsed / elapsed,
@@ -321,12 +333,12 @@ class DexHandGymEnv(gym.Env):
 
 def make_env(
     *,
-    task: Optional[DexHandTask] = None,
+    task: Optional[RobotTask] = None,
     config: Optional[RLEnvConfig] = None,
     render_mode: Optional[str] = None,
     control_mode: Optional[str] = None,
-) -> DexHandGymEnv:
+) -> RobotGymEnv:
     resolved_config = config or RLEnvConfig()
     if control_mode is not None:
         resolved_config = replace(resolved_config, control_mode=control_mode)
-    return DexHandGymEnv(task=task, config=resolved_config, render_mode=render_mode)
+    return RobotGymEnv(task=task, config=resolved_config, render_mode=render_mode)

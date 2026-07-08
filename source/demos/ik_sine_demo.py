@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Standalone IK circular trajectory demo for DexHandGymEnv.
+"""Standalone IK circular trajectory demo for RobotGymEnv.
 
 Usage::
 
@@ -22,20 +22,20 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--render-fps", type=float, default=60.0)
     parser.add_argument("--no-realtime", action="store_true")
 
-    # 轨迹中心；默认使用当前末端位置
+    # Trajectory center; defaults to the current end-effector position.
     parser.add_argument("--center-x", type=float, default=0.3)
     parser.add_argument("--center-y", type=float, default=0.0)
     parser.add_argument("--center-z", type=float, default=1.0)
 
-    # 轨迹半径 / 幅值
+    # Trajectory radius / amplitude.
     parser.add_argument("--radius-x", type=float, default=0.1)
     parser.add_argument("--radius-y", type=float, default=0.1)
     parser.add_argument("--radius-z", type=float, default=0.00)
 
-    # 是否让手部关节周期运动
+    # Whether the hand joints move periodically as well.
     parser.add_argument("--hand-scale", type=float, default=0.85)
 
-    # 可视化
+    # Visualization.
     parser.add_argument("--no-target-marker", action="store_true")
     parser.add_argument("--target-marker-size", type=float, default=0.018)
 
@@ -49,107 +49,6 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--print-error", action="store_true")
 
     return parser.parse_args()
-
-
-def _add_sphere_marker(
-    handle,
-    pos: np.ndarray,
-    *,
-    radius: float = 0.015,
-    rgba=(0.0, 1.0, 0.0, 1.0),
-) -> None:
-    """Draw a sphere marker in MuJoCo passive viewer."""
-    import mujoco
-
-    if handle.user_scn.ngeom >= handle.user_scn.maxgeom:
-        return
-
-    geom = handle.user_scn.geoms[handle.user_scn.ngeom]
-    mujoco.mjv_initGeom(
-        geom,
-        mujoco.mjtGeom.mjGEOM_SPHERE,
-        np.asarray([radius, 0.0, 0.0], dtype=np.float64),
-        np.asarray(pos, dtype=np.float64),
-        np.eye(3, dtype=np.float64).reshape(-1),
-        np.asarray(rgba, dtype=np.float32),
-    )
-    handle.user_scn.ngeom += 1
-
-
-def _add_line_marker(
-    handle,
-    p1: np.ndarray,
-    p2: np.ndarray,
-    *,
-    width: float = 0.003,
-    rgba=(0.0, 0.3, 1.0, 1.0),
-) -> None:
-    """Draw a line segment marker in MuJoCo passive viewer."""
-    import mujoco
-
-    if handle.user_scn.ngeom >= handle.user_scn.maxgeom:
-        return
-
-    geom = handle.user_scn.geoms[handle.user_scn.ngeom]
-
-    p1 = np.asarray(p1, dtype=np.float64)
-    p2 = np.asarray(p2, dtype=np.float64)
-
-    mujoco.mjv_initGeom(
-        geom,
-        mujoco.mjtGeom.mjGEOM_LINE,
-        np.asarray([width, 0.0, 0.0], dtype=np.float64),
-        np.zeros(3, dtype=np.float64),
-        np.eye(3, dtype=np.float64).reshape(-1),
-        np.asarray(rgba, dtype=np.float32),
-    )
-    mujoco.mjv_connector(
-        geom,
-        mujoco.mjtGeom.mjGEOM_LINE,
-        width,
-        p1,
-        p2,
-    )
-
-    handle.user_scn.ngeom += 1
-
-
-def _add_ellipse_marker(
-    handle,
-    center: np.ndarray,
-    *,
-    radius_x: float,
-    radius_y: float,
-    radius_z: float = 0.0,
-    segments: int = 96,
-    rgba=(0.0, 0.3, 1.0, 1.0),
-) -> None:
-    """Draw the target trajectory as an ellipse / circular path."""
-    center = np.asarray(center, dtype=np.float64)
-
-    segments = max(8, int(segments))
-
-    points = []
-    for i in range(segments):
-        theta = 2.0 * np.pi * i / segments
-        p = center + np.asarray(
-            [
-                radius_x * np.cos(theta),
-                radius_y * np.sin(theta),
-                radius_z * np.sin(2.0 * theta),
-            ],
-            dtype=np.float64,
-        )
-        points.append(p)
-
-    for i in range(segments):
-        _add_line_marker(
-            handle,
-            points[i],
-            points[(i + 1) % segments],
-            width=0.003,
-            rgba=rgba,
-        )
 
 
 def run_ik_sine_demo(
@@ -169,16 +68,24 @@ def run_ik_sine_demo(
     center_marker_size: float = 0.012,
     draw_trajectory_marker: bool = True,
     trajectory_segments: int = 96,
-    draw_stats_label: bool = True,
+    draw_stats_label_flag: bool = True,
     print_error: bool = False,
 ) -> None:
     """Run an interactive IK circular trajectory demo in the passive viewer."""
     import mujoco
     from mujoco import viewer
 
-    from ..environments.overlays import clear_markers, draw_stats_label
+    from source.environments.overlays import (
+        clear_markers,
+        draw_ellipse_marker,
+        draw_sphere_marker,
+        draw_stats_label,
+    )
 
     controller = env.controller
+    # Device-agnostic: never assume a fixed arm DOF count. The controller
+    # already knows exactly how many actuators belong to the arm.
+    arm_dof = controller.arm_actuator_count
 
     previous_mode = controller.control_mode
     if previous_mode != "ik":
@@ -192,24 +99,19 @@ def run_ik_sine_demo(
         center = np.asarray(center, dtype=np.float32)
 
     base_quat = base_action[3:7].copy()
-
     stats_label_pos = center + np.asarray([0.0, -0.16, 0.16], dtype=np.float32)
 
     hand_center = None
     hand_half_range = None
-
     if controller.include_hand_action:
-        hand_low = controller.ctrl_low[7:].astype(np.float32)
-        hand_high = controller.ctrl_high[7:].astype(np.float32)
-
+        hand_low = controller.ctrl_low[arm_dof:].astype(np.float32)
+        hand_high = controller.ctrl_high[arm_dof:].astype(np.float32)
         hand_center = 0.5 * (hand_low + hand_high)
         hand_half_range = 0.5 * (hand_high - hand_low)
 
     render_dt = 1.0 / render_fps
-
     wall_start = time.perf_counter()
     sim_start = float(env.data.time)
-
     last_control_sim_time = -np.inf
     last_print_second = -1
 
@@ -217,10 +119,7 @@ def run_ik_sine_demo(
     action[:3] = center
     action[3:7] = -base_quat
 
-    info: Dict[str, Any] = {
-        "ik_error": np.zeros(6, dtype=np.float32),
-        "ik_iterations": 0,
-    }
+    info: Dict[str, Any] = {"ik_error": np.zeros(6, dtype=np.float32), "ik_iterations": 0}
 
     with viewer.launch_passive(env.model, env.data) as handle:
         while handle.is_running():
@@ -235,32 +134,20 @@ def run_ik_sine_demo(
                     last_control_sim_time = float(env.data.time)
 
                     phase = 2.0 * np.pi * frequency * sim_elapsed
-
                     action = base_action.copy()
 
-                    # ==============================
-                    # 末端目标位置轨迹
-                    # ==============================
+                    # End-effector target position trajectory.
                     action[0] = center[0] + radius_x * np.cos(phase)
                     action[1] = center[1] + radius_y * np.sin(phase)
                     action[2] = center[2] + radius_z * np.sin(2.0 * phase)
 
-                    # ==============================
-                    # 末端朝向固定
-                    # ==============================
+                    # Fixed end-effector orientation.
                     action[3:7] = base_quat
 
-                    # ==============================
-                    # 手部关节周期运动，可按需关闭
-                    # ==============================
+                    # Optional periodic hand joint motion.
                     if hand_center is not None and hand_half_range is not None:
-                        hand_phase = phase + 0.6 * np.arange(
-                            hand_center.size,
-                            dtype=np.float32,
-                        )
-                        action[7:] = hand_center + hand_scale * hand_half_range * np.sin(
-                            hand_phase
-                        )
+                        hand_phase = phase + 0.6 * np.arange(hand_center.size, dtype=np.float32)
+                        action[7:] = hand_center + hand_scale * hand_half_range * np.sin(hand_phase)
 
                     info = controller.apply_action(env.model, env.data, action)
                     frame_control_updates += 1
@@ -269,15 +156,13 @@ def run_ik_sine_demo(
                 frame_steps += 1
 
             env.record_simulation_steps(
-                physics_steps=frame_steps,
-                control_updates=frame_control_updates,
+                physics_steps=frame_steps, control_updates=frame_control_updates
             )
 
             clear_markers(handle)
 
-            # 蓝色轨迹圆 / 椭圆
             if draw_trajectory_marker:
-                _add_ellipse_marker(
+                draw_ellipse_marker(
                     handle,
                     center,
                     radius_x=radius_x,
@@ -287,36 +172,22 @@ def run_ik_sine_demo(
                     rgba=(0.0, 0.3, 1.0, 1.0),
                 )
 
-            # 红色中心点
             if draw_center_marker:
-                _add_sphere_marker(
-                    handle,
-                    center,
-                    radius=center_marker_size,
-                    rgba=(1.0, 0.0, 0.0, 1.0),
+                draw_sphere_marker(
+                    handle, center, radius=center_marker_size, rgba=(1.0, 0.0, 0.0, 1.0)
                 )
 
-            # 绿色当前 IK 目标点
             if draw_target_marker:
-                _add_sphere_marker(
-                    handle,
-                    action[:3],
-                    radius=target_marker_size,
-                    rgba=(0.0, 1.0, 0.0, 1.0),
+                draw_sphere_marker(
+                    handle, action[:3], radius=target_marker_size, rgba=(0.0, 1.0, 0.0, 1.0)
                 )
 
-            if draw_stats_label:
-                draw_stats_label(
-                    handle,
-                    env.simulation_stats,
-                    stats_label_pos,
-                    control_label="IK",
-                )
+            if draw_stats_label_flag:
+                draw_stats_label(handle, env.simulation_stats, stats_label_pos, control_label="IK")
 
             handle.sync()
 
             sim_elapsed = float(env.data.time) - sim_start
-
             if print_error and int(sim_elapsed) != last_print_second:
                 last_print_second = int(sim_elapsed)
                 print(
@@ -344,14 +215,11 @@ def run_ik_sine_demo(
 def main() -> None:
     args = _parse_args()
 
-    from ..environments.rl_env import make_env
+    from source.environments.rl_env import make_env
 
     center = None
     if None not in (args.center_x, args.center_y, args.center_z):
-        center = np.asarray(
-            [args.center_x, args.center_y, args.center_z],
-            dtype=np.float32,
-        )
+        center = np.asarray([args.center_x, args.center_y, args.center_z], dtype=np.float32)
 
     env = make_env(control_mode="ik")
     env.reset(seed=0)
@@ -373,7 +241,7 @@ def main() -> None:
             center_marker_size=args.center_marker_size,
             draw_trajectory_marker=not args.no_trajectory_marker,
             trajectory_segments=args.trajectory_segments,
-            draw_stats_label=not args.no_stats_label,
+            draw_stats_label_flag=not args.no_stats_label,
             print_error=args.print_error,
         )
     finally:

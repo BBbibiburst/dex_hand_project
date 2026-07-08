@@ -41,6 +41,69 @@ def draw_sphere_marker(
     scene.ngeom += 1
 
 
+def draw_line_marker(
+    handle: viewer.Handle,
+    p1: Array,
+    p2: Array,
+    *,
+    width: float = 0.003,
+    rgba: Optional[Sequence[float]] = None,
+) -> None:
+    """Draw a line segment marker between ``p1`` and ``p2``."""
+    scene = handle.user_scn
+    if scene.ngeom >= scene.maxgeom:
+        return
+    color = [0.0, 0.3, 1.0, 1.0] if rgba is None else rgba
+    geom = scene.geoms[scene.ngeom]
+    mujoco.mjv_initGeom(
+        geom,
+        mujoco.mjtGeom.mjGEOM_LINE,
+        np.asarray([width, 0.0, 0.0], dtype=np.float64),
+        np.zeros(3, dtype=np.float64),
+        np.eye(3, dtype=np.float64).reshape(9),
+        np.asarray(color, dtype=np.float32),
+    )
+    mujoco.mjv_connector(
+        geom,
+        mujoco.mjtGeom.mjGEOM_LINE,
+        width,
+        np.asarray(p1, dtype=np.float64),
+        np.asarray(p2, dtype=np.float64),
+    )
+    scene.ngeom += 1
+
+
+def draw_ellipse_marker(
+    handle: viewer.Handle,
+    center: Array,
+    *,
+    radius_x: float,
+    radius_y: float,
+    radius_z: float = 0.0,
+    segments: int = 96,
+    rgba: Optional[Sequence[float]] = None,
+) -> None:
+    """Draw a closed ellipse/circle as a chain of line segments."""
+    center = np.asarray(center, dtype=np.float64)
+    segments = max(8, int(segments))
+    points = []
+    for i in range(segments):
+        theta = 2.0 * np.pi * i / segments
+        points.append(
+            center
+            + np.asarray(
+                [
+                    radius_x * np.cos(theta),
+                    radius_y * np.sin(theta),
+                    radius_z * np.sin(2.0 * theta),
+                ],
+                dtype=np.float64,
+            )
+        )
+    for i in range(segments):
+        draw_line_marker(handle, points[i], points[(i + 1) % segments], rgba=rgba)
+
+
 def draw_label(
     handle: viewer.Handle,
     pos: Array,

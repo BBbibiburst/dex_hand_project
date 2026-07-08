@@ -3,8 +3,6 @@
 
 from __future__ import annotations
 
-from typing import Sequence
-
 import mujoco
 import numpy as np
 

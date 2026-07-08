@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Plot tactile sampling grids for dex-hand skin STL meshes."""
+"""Plot tactile sampling grids for dex-hand skin STL meshes.
+
+Like ``tactile_preview.py``, this tool is intentionally dex-hand specific:
+it reaches into ``source.robots.hands`` directly for the STL fitting
+functions rather than going through any framework-level tactile interface,
+because plotting fit surfaces is a debugging aid for *this hand's*
+implementation, not something the framework needs to know about.
+"""
 
 from __future__ import annotations
 
@@ -8,10 +15,25 @@ import argparse
 import numpy as np
 
 from source.environments.assets import DEX_HAND_MESH_DIR
-from source.environments.tactile_layout import tactile_patch_plot_data
+from source.robots.hands import _surface_fitting as fit
+from source.robots.hands.dex_hand_tactile import DEX_HAND_PATCH_LAYOUT
 
 
 DEFAULT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
+
+_GRID_FN = {
+    "segment": fit.finger_segment_grid_points,
+    "fingertip": fit.fingertip_grid_points,
+    "palm": fit.palm_grid_points,
+}
+_FIT_FN = {
+    "segment": fit.finger_segment_fit_surface,
+    "fingertip": fit.fingertip_fit_surface,
+    "palm": fit.palm_fit_surface,
+}
+_PATCH_INFO = {
+    mesh_name: (rows, cols, kind) for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT
+}
 
 
 def _parse_args() -> argparse.Namespace:
@@ -28,12 +50,21 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _patch_title(mesh_name: str) -> str:
-    if mesh_name == "skin_palm_p":
-        return "Palm pad: 7 x 16"
-    if mesh_name.endswith("_2_p"):
-        return f"{mesh_name}: fingertip 4 x 8"
-    return f"{mesh_name}: segment 7/4 x 8"
+def _patch_title(mesh_name: str, kind: str) -> str:
+    rows, cols, _ = _PATCH_INFO[mesh_name]
+    if kind == "palm":
+        return f"Palm pad: {rows} x {cols}"
+    if kind == "fingertip":
+        return f"{mesh_name}: fingertip {rows} x {cols}"
+    return f"{mesh_name}: segment {rows} x {cols}"
+
+
+def _fit_surface_style(kind: str) -> tuple[str, float]:
+    if kind == "palm":
+        return "tomato", 0.32
+    if kind == "fingertip":
+        return "gold", 0.38
+    return "deepskyblue", 0.42
 
 
 def _set_equal_axes(ax, points: np.ndarray) -> None:
@@ -53,21 +84,13 @@ def _draw_grid(ax, samples: np.ndarray, rows: int, cols: int) -> None:
     grid = samples.reshape(rows, cols, 3)
     for row in range(rows):
         ax.plot(
-            grid[row, :, 0],
-            grid[row, :, 1],
-            grid[row, :, 2],
-            color="black",
-            linewidth=1.0,
-            alpha=0.7,
+            grid[row, :, 0], grid[row, :, 1], grid[row, :, 2],
+            color="black", linewidth=1.0, alpha=0.7,
         )
     for col in range(cols):
         ax.plot(
-            grid[:, col, 0],
-            grid[:, col, 1],
-            grid[:, col, 2],
-            color="dimgray",
-            linewidth=0.8,
-            alpha=0.55,
+            grid[:, col, 0], grid[:, col, 1], grid[:, col, 2],
+            color="dimgray", linewidth=0.8, alpha=0.55,
         )
 
 
@@ -75,77 +98,49 @@ def _plot_stl_surface(ax, triangles: np.ndarray, *, alpha: float) -> None:
     flat_vertices = triangles.reshape(-1, 3)
     tri_indices = np.arange(flat_vertices.shape[0], dtype=np.int32).reshape(-1, 3)
     ax.plot_trisurf(
-        flat_vertices[:, 0],
-        flat_vertices[:, 1],
-        flat_vertices[:, 2],
-        triangles=tri_indices,
-        color="silver",
-        alpha=alpha,
-        linewidth=0.08,
-        edgecolor="gray",
-        shade=True,
-        antialiased=True,
+        flat_vertices[:, 0], flat_vertices[:, 1], flat_vertices[:, 2],
+        triangles=tri_indices, color="silver", alpha=alpha,
+        linewidth=0.08, edgecolor="gray", shade=True, antialiased=True,
     )
 
 
 def _plot_surface_array(ax, surface: np.ndarray, *, color: str, alpha: float) -> None:
     ax.plot_surface(
-        surface[..., 0],
-        surface[..., 1],
-        surface[..., 2],
-        color=color,
-        alpha=alpha,
-        linewidth=0,
-        antialiased=True,
-        shade=False,
+        surface[..., 0], surface[..., 1], surface[..., 2],
+        color=color, alpha=alpha, linewidth=0, antialiased=True, shade=False,
     )
 
 
-def _plot_patch(
-    ax,
-    mesh_name: str,
-    *,
-    surface_alpha: float,
-    point_size: float,
-) -> None:
+def _plot_patch(ax, mesh_name: str, *, surface_alpha: float, point_size: float) -> None:
+    if mesh_name not in _PATCH_INFO:
+        raise ValueError(
+            f"Unknown dex-hand patch {mesh_name!r}. Known: {sorted(_PATCH_INFO)}"
+        )
+    rows, cols, kind = _PATCH_INFO[mesh_name]
     stl_path = DEX_HAND_MESH_DIR / f"{mesh_name}.STL"
-    plot_data = tactile_patch_plot_data(stl_path, mesh_name)
-    rows, cols = plot_data.rows, plot_data.cols
+    plot_data = fit.patch_plot_data(
+        stl_path, mesh_name, rows, cols, _GRID_FN[kind], _FIT_FN[kind]
+    )
     triangles = plot_data.triangles
     vertices = triangles.reshape(-1, 3)
     samples = plot_data.samples
 
     _plot_stl_surface(ax, triangles, alpha=surface_alpha)
-    color, alpha = _fit_surface_style(mesh_name)
+    color, alpha = _fit_surface_style(kind)
     for surface in plot_data.fit_surfaces:
         _plot_surface_array(ax, surface, color=color, alpha=alpha)
 
     colors = np.linspace(0.0, 1.0, rows * cols)
     ax.scatter(
-        samples[:, 0],
-        samples[:, 1],
-        samples[:, 2],
-        s=point_size,
-        c=colors,
-        cmap="turbo",
-        edgecolors="black",
-        linewidths=0.45,
-        depthshade=False,
-        label="taxels",
+        samples[:, 0], samples[:, 1], samples[:, 2],
+        s=point_size, c=colors, cmap="turbo",
+        edgecolors="black", linewidths=0.45, depthshade=False, label="taxels",
     )
     _draw_grid(ax, samples, rows, cols)
 
-    ax.set_title(_patch_title(mesh_name))
+    ax.set_title(_patch_title(mesh_name, kind))
     _set_equal_axes(ax, np.vstack([vertices, samples]))
     ax.view_init(elev=22, azim=-58)
-
-
-def _fit_surface_style(mesh_name: str) -> tuple[str, float]:
-    if mesh_name == "skin_palm_p":
-        return "tomato", 0.32
-    if mesh_name.endswith("_2_p"):
-        return "gold", 0.38
-    return "deepskyblue", 0.42
 
 
 def main() -> None:
@@ -159,12 +154,7 @@ def main() -> None:
 
     for index, mesh_name in enumerate(args.patches, start=1):
         ax = fig.add_subplot(1, patch_count, index, projection="3d")
-        _plot_patch(
-            ax,
-            mesh_name,
-            surface_alpha=args.surface_alpha,
-            point_size=args.point_size,
-        )
+        _plot_patch(ax, mesh_name, surface_alpha=args.surface_alpha, point_size=args.point_size)
 
     plt.tight_layout()
     if args.save:
