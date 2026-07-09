@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """Plot tactile sampling grids for dex-hand skin STL meshes.
 
-Like ``tactile_preview.py``, this tool is intentionally dex-hand specific:
-it reaches into ``source.robots.hands`` directly for the STL fitting
-functions rather than going through any framework-level tactile interface,
-because plotting fit surfaces is a debugging aid for *this hand's*
-implementation, not something the framework needs to know about.
+This tool is intentionally dex-hand specific. It uses the DexHand tactile
+implementation directly because plotting fitted skin surfaces is a debugging
+aid for that sensor model, not a robot-agnostic framework operation.
 """
 
 from __future__ import annotations
@@ -14,9 +12,10 @@ import argparse
 
 import numpy as np
 
+from source.demos.common import add_robot_config_args, load_demo_robot_config, require_hand
 from source.environments.assets import DEX_HAND_MESH_DIR
-from source.robots.hands import _surface_fitting as fit
-from source.robots.hands.dex_hand_tactile import DEX_HAND_PATCH_LAYOUT
+from source.sensors.tactile import _surface_fitting as fit
+from source.sensors.tactile.dex_hand import DEX_HAND_PATCH_LAYOUT
 
 
 DEFAULT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
@@ -66,6 +65,11 @@ def _parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--save", type=str, default="")
+    add_robot_config_args(
+        parser,
+        include_device_overrides=False,
+        include_tactile_toggle=False,
+    )
     return parser.parse_args()
 
 
@@ -197,6 +201,8 @@ def _plot_patch(
 
 def main() -> None:
     args = _parse_args()
+    config = load_demo_robot_config(args)
+    require_hand(config, "dex_hand", demo_name="tactile_sampling_plot")
 
     import matplotlib.pyplot as plt
 

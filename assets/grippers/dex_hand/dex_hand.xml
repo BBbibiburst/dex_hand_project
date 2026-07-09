@@ -112,7 +112,7 @@
         quat="-0.481143 0.510987 0.518632 0.488277">
         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
           diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
-        <joint name="act_root_0_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+        <joint name="act_root_0_j" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14 3.14"
           solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
           mesh="act_root_0_p" name="act_root_0_p" />
@@ -204,7 +204,7 @@
         quat="-0.487443 0.507414 0.512442 0.492274">
         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
           diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
-        <joint name="act_root_1_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+        <joint name="act_root_1_j" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14 3.14"
           solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
           mesh="act_root_1_p" name="act_root_1_p" />
@@ -296,7 +296,7 @@
         quat="-0.493742 0.503735 0.50626 0.496156">
         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
           diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
-        <joint name="act_root_2_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+        <joint name="act_root_2_j" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14 3.14"
           solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
           mesh="act_root_2_p" name="act_root_2_p" />
@@ -389,7 +389,7 @@
         quat="-0.500004 0.499998 0.500002 0.499996">
         <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.000586692"
           diaginertia="1.50276e-08 7.96656e-09 7.96656e-09" />
-        <joint name="act_root_3_j" pos="0 0 0" axis="0 0 -1" limited="true" range="-3.14 3.14"
+        <joint name="act_root_3_j" pos="0 0 0" axis="1 0 0" limited="true" range="-3.14 3.14"
           solimplimit="0.99 0.9999 0.0001 0.5 2.0" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="1 1 1 1"
           mesh="act_root_3_p" name="act_root_3_p" />

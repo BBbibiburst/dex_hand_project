@@ -19,8 +19,13 @@ import mujoco
 from mujoco import viewer
 import numpy as np
 
-from source.control.controllers import build_robot_controller
+from source.control.composite import build_robot_controller
 from source.environments.overlays import clear_markers, draw_stats_label
+from source.environments.robot_config import (
+    apply_config_overrides,
+    dataclass_from_robot_config,
+    load_robot_config,
+)
 from source.environments.robot_builder import build_robot_spec
 from source.environments.scene import add_basic_scene
 from source.environments.tactile_sensors import NullTactileSensor, TactileSensorBase
@@ -37,6 +42,9 @@ class RLEnvConfig:
     arm_name: str = "rm75b"
     hand_name: str = "dex_hand"
     base_name: str = "rethink_minimal_mount"
+    hand_attach_rot_xyz_deg: Optional[Tuple[float, float, float]] = None
+    attach_point_name: Optional[str] = None
+    base_mount_site_name: Optional[str] = None
     control_dt: float = 0.05  # 20 Hz controller updates.
     episode_length: int = 500
     add_default_scene: bool = True
@@ -48,6 +56,15 @@ class RLEnvConfig:
     include_hand_action: bool = True
     normalized_position: bool = False
     enable_tactile_sensors: bool = True
+
+
+def load_env_config(
+    robot_config_path: Optional[str] = None,
+    **overrides: Any,
+) -> RLEnvConfig:
+    """Load ``RLEnvConfig`` from the global robot config JSON."""
+    config_data = apply_config_overrides(load_robot_config(robot_config_path), overrides)
+    return dataclass_from_robot_config(RLEnvConfig, config_data)
 
 
 class RobotGymEnv(gym.Env):
@@ -72,9 +89,10 @@ class RobotGymEnv(gym.Env):
         tactile_sensor: Optional[TactileSensorBase] = None,
         config: Optional[RLEnvConfig] = None,
         render_mode: Optional[str] = None,
+        robot_config_path: Optional[str] = None,
     ) -> None:
         super().__init__()
-        self.config = config or RLEnvConfig()
+        self.config = config or load_env_config(robot_config_path)
         self.arm_descriptor = get_arm(self.config.arm_name)
         self.hand_descriptor = get_hand(self.config.hand_name)
         self.base_descriptor = get_base(self.config.base_name)
@@ -111,6 +129,9 @@ class RobotGymEnv(gym.Env):
             arm_descriptor=self.arm_descriptor,
             hand_descriptor=self.hand_descriptor,
             base_descriptor=self.base_descriptor,
+            rot_xyz_deg=self.config.hand_attach_rot_xyz_deg,
+            attach_point_name=self.config.attach_point_name,
+            base_mount_site_name=self.config.base_mount_site_name,
             hand_prefix=self.hand_prefix,
             tactile_sensor=self.tactile_sensor,
             add_tactile_sensors=self.config.enable_tactile_sensors,
@@ -337,8 +358,10 @@ def make_env(
     config: Optional[RLEnvConfig] = None,
     render_mode: Optional[str] = None,
     control_mode: Optional[str] = None,
+    robot_config_path: Optional[str] = None,
+    **config_overrides: Any,
 ) -> RobotGymEnv:
-    resolved_config = config or RLEnvConfig()
+    resolved_config = config or load_env_config(robot_config_path, **config_overrides)
     if control_mode is not None:
         resolved_config = replace(resolved_config, control_mode=control_mode)
     return RobotGymEnv(task=task, config=resolved_config, render_mode=render_mode)

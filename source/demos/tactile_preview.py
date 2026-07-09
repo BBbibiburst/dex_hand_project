@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """Preview generated dex-hand tactile taxel positions in the MuJoCo viewer.
 
 This demo is intentionally dex-hand specific: it imports
 ``DexHandTouchSensor`` directly rather than going through the generic
 ``TactileSensorBase`` interface, because it wants to draw per-patch colors
-by mesh name — a detail only the dex hand's implementation knows about.
+by mesh name a detail only the dex hand's implementation knows about.
 """
 
 from __future__ import annotations
@@ -15,10 +15,11 @@ import mujoco
 from mujoco import viewer
 import numpy as np
 
+from source.demos.common import add_robot_config_args, load_demo_robot_config, require_hand
 from source.environments.overlays import draw_sphere_marker
-from source.environments.robot_builder import build_robot_model
-from source.robots.defaults import DEFAULT_HAND
-from source.robots.hands.dex_hand_tactile import DexHandTouchSensor, site_name
+from source.environments.robot_builder import build_robot_model_from_config
+from source.robots.registry import get_hand
+from source.sensors.tactile.dex_hand import DexHandTouchSensor, site_name
 
 
 def _parse_args() -> argparse.Namespace:
@@ -31,6 +32,11 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--radius", type=float, default=0.0025)
     parser.add_argument("--no-prefix", action="store_true")
+    add_robot_config_args(
+        parser,
+        include_device_overrides=False,
+        include_tactile_toggle=False,
+    )
     return parser.parse_args()
 
 
@@ -68,10 +74,23 @@ def _collect_sites(
 def main() -> None:
     args = _parse_args()
 
-    tactile_sensor = DexHandTouchSensor()
-    hand_prefix = "" if args.no_prefix else DEFAULT_HAND.default_prefix
+    config = load_demo_robot_config(args)
+    require_hand(config, "dex_hand", demo_name="tactile_preview")
+    hand_name = str(config.get("hand_name", "dex_hand"))
 
-    model, data = build_robot_model(add_scene=True, tactile_sensor=tactile_sensor)
+    tactile_sensor = DexHandTouchSensor()
+    hand_descriptor = get_hand(hand_name)
+    hand_prefix = "" if args.no_prefix else str(config.get("hand_prefix") or hand_descriptor.default_prefix)
+
+    model, data = build_robot_model_from_config(
+        args.robot_config,
+        tactile_sensor=tactile_sensor,
+        arm_name=config.get("arm_name"),
+        hand_name=hand_name,
+        base_name=config.get("base_name"),
+        enable_tactile_sensors=True,
+        add_preview_scene=True,
+    )
     mujoco.mj_forward(model, data)
 
     sites = _collect_sites(model, tactile_sensor, prefix=hand_prefix, patch_filter=args.patch)

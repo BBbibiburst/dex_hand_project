@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """Registry for robot component descriptors.
 
-Adding a new arm / hand / base only requires writing a new descriptor module
-and calling the matching ``register_*`` function at import time (see
-``source/robots/arms/rm75b.py`` for the pattern). No other module needs to
-change.
+Adding a new arm / hand / base only requires writing a descriptor module under
+``source.robots.arms``, ``source.robots.hands``, or ``source.robots.bases`` and
+calling the matching ``register_*`` function at import time.
 """
 
 from __future__ import annotations
+
+import importlib
+import pkgutil
 
 from source.robots.descriptors import ArmDescriptor, BaseDescriptor, EndEffectorDescriptor
 
@@ -18,17 +20,24 @@ _BASES: dict[str, BaseDescriptor] = {}
 _BUILTINS_LOADED = False
 
 
+def _import_descriptor_package(package_name: str) -> None:
+    """Import all public modules in a descriptor package."""
+    package = importlib.import_module(package_name)
+    for module_info in pkgutil.iter_modules(package.__path__):
+        if module_info.name.startswith("_"):
+            continue
+        importlib.import_module(f"{package_name}.{module_info.name}")
+
+
 def load_builtin_descriptors() -> None:
     """Import built-in descriptor modules so their register_* calls run."""
     global _BUILTINS_LOADED
     if _BUILTINS_LOADED:
         return
 
-    from source.robots.arms import rm75b as _rm75b
-    from source.robots.bases import rethink_minimal_mount as _rethink_minimal_mount
-    from source.robots.hands import dex_hand as _dex_hand
-
-    _ = _rm75b, _rethink_minimal_mount, _dex_hand
+    _import_descriptor_package("source.robots.arms")
+    _import_descriptor_package("source.robots.bases")
+    _import_descriptor_package("source.robots.hands")
     _BUILTINS_LOADED = True
 
 

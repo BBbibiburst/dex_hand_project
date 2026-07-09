@@ -1,0 +1,20 @@
+{
+  "arm_name": "rm75b",
+  "hand_name": "dex_hand",
+  "base_name": "rethink_minimal_mount",
+  "control_mode": "position",
+  "control_dt": 0.05,
+  "episode_length": 500,
+  "add_default_scene": true,
+  "enable_task_objects": false,
+  "include_hand_action": true,
+  "normalized_position": false,
+  "enable_tactile_sensors": true,
+  "hand_prefix": null,
+  "ee_site_name": null,
+  "stats_interval": 0.5,
+  "hand_attach_rot_xyz_deg": null,
+  "attach_point_name": null,
+  "base_mount_site_name": null,
+  "add_preview_scene": true
+}

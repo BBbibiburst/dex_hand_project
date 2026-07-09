@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="pika_gripper_description">
+  <compiler angle="radian" meshdir="meshes" autolimits="true" />
+
+  <option iterations="100" timestep="0.001" solver="Newton" gravity="0 0 -9.81" />
+
+  <default>
+    <joint limited="true" damping="0.001" armature="0.001" frictionloss="0.001" />
+    <geom condim="4" contype="1" conaffinity="15" friction="0.9 0.2 0.2" solref="0.001 2" />
+    <motor ctrllimited="true" />
+    <default class="visualgeom">
+      <geom material="white" condim="1" contype="0" conaffinity="0" group="1" density="0" />
+    </default>
+  </default>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0" />
+    <rgba haze="0.15 0.25 0.35 1" />
+    <global azimuth="120" elevation="-20" />
+  </visual>
+
+  <asset>
+    <material name="white" rgba="1 1 1 1" />
+    <mesh name="gripper_base_link" content_type="model/stl" file="gripper_base_link.STL" />
+    <mesh name="gripper_left_link" content_type="model/stl" file="gripper_left_link.STL" />
+    <mesh name="gripper_right_link" content_type="model/stl" file="gripper_right_link.STL" />
+  </asset>
+
+  <worldbody>
+    <body name="gripper_base_link" pos="0 0 0" quat="1 0 0 0">
+      <inertial pos="0.037477 -8.1437e-07 0.0084053" mass="0.18972"
+        fullinertia="0.0002159 0.00014308 0.00011036 3.3333e-08 -2.6278e-06 1.6782e-08" />
+      <geom name="gripper_base_link_visual" type="mesh" mesh="gripper_base_link" class="visualgeom" />
+      <geom name="gripper_base_link_collision" type="mesh" mesh="gripper_base_link" />
+
+      <body name="gripper_left_link" pos="0.0815 0.08851 0.0064182" quat="1 0 0 0">
+        <inertial pos="0.033255 -0.014661 -0.0057614" mass="0.033674"
+          fullinertia="1.5284e-05 3.448e-05 3.9744e-05 1.4473e-05 1.4911e-08 -4.3614e-09" />
+        <joint name="gripper_left_joint" type="slide" pos="0 0 0" axis="0 1 0" range="-0.05 0"
+          actuatorfrcrange="-300 300" />
+        <geom name="gripper_left_link_visual" type="mesh" mesh="gripper_left_link" class="visualgeom" />
+        <geom name="gripper_left_link_collision" type="mesh" mesh="gripper_left_link" />
+      </body>
+
+      <body name="gripper_right_link" pos="0.0815 -0.088529 0.0064182" quat="1 0 0 0">
+        <inertial pos="0.033255 0.014661 -0.0058113" mass="0.033674"
+          fullinertia="1.5284e-05 3.448e-05 3.9744e-05 -1.4473e-05 -1.4956e-08 -4.3614e-09" />
+        <joint name="gripper_right_joint" type="slide" pos="0 0 0" axis="0 1 0" range="0 0.05"
+          actuatorfrcrange="-300 300" />
+        <geom name="gripper_right_link_visual" type="mesh" mesh="gripper_right_link" class="visualgeom" />
+        <geom name="gripper_right_link_collision" type="mesh" mesh="gripper_right_link" />
+      </body>
+
+      <site name="gripper_mount" pos="0 0 0" quat="1 0 0 0" size="0.005" group="3" />
+      <site name="gripper_tcp" pos="0.16 0 0.0064182" quat="1 0 0 0" size="0.005" group="3" />
+    </body>
+  </worldbody>
+
+  <contact>
+    <exclude body1="gripper_base_link" body2="gripper_left_link" />
+    <exclude body1="gripper_base_link" body2="gripper_right_link" />
+  </contact>
+
+  <equality>
+    <joint joint1="gripper_right_joint" joint2="gripper_left_joint" polycoef="0 -1 0 0 0" />
+  </equality>
+
+  <actuator>
+    <position name="gripper_position" joint="gripper_left_joint" kp="5000" dampratio="0.5"
+      ctrllimited="true" ctrlrange="-0.05 0" forcelimited="true" forcerange="-300 300" />
+  </actuator>
+
+  <sensor>
+    <jointpos name="gripper_left_joint_pos" joint="gripper_left_joint" />
+    <jointvel name="gripper_left_joint_vel" joint="gripper_left_joint" />
+    <jointpos name="gripper_right_joint_pos" joint="gripper_right_joint" />
+    <jointvel name="gripper_right_joint_vel" joint="gripper_right_joint" />
+  </sensor>
+</mujoco>

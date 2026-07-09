@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-from source.control.controllers import ArmPositionIkController
-from source.environments.assets import RM75B_XML_PATH
+from source.control.arm import ArmPositionIkController
+from source.environments.assets import asset_path
 from source.robots.descriptors import ArmDescriptor
 from source.robots.registry import register_arm
 
@@ -12,7 +12,7 @@ from source.robots.registry import register_arm
 RM75B_ARM = register_arm(
     ArmDescriptor(
         name="rm75b",
-        xml_path=RM75B_XML_PATH,
+        xml_path=asset_path("robots", "rm75b", "rm75b.xml"),
         position_actuator_names=(
             "pos_joint1",
             "pos_joint2",

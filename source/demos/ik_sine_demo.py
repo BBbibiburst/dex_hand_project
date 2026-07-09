@@ -14,6 +14,8 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
+from source.demos.common import add_robot_config_args, make_demo_env
+
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="IK circular trajectory demo.")
@@ -47,6 +49,7 @@ def _parse_args() -> argparse.Namespace:
 
     parser.add_argument("--no-stats-label", action="store_true")
     parser.add_argument("--print-error", action="store_true")
+    add_robot_config_args(parser)
 
     return parser.parse_args()
 
@@ -83,9 +86,6 @@ def run_ik_sine_demo(
     )
 
     controller = env.controller
-    # Device-agnostic: never assume a fixed arm DOF count. The controller
-    # already knows exactly how many actuators belong to the arm.
-    arm_dof = controller.arm_actuator_count
 
     previous_mode = controller.control_mode
     if previous_mode != "ik":
@@ -104,8 +104,9 @@ def run_ik_sine_demo(
     hand_center = None
     hand_half_range = None
     if controller.include_hand_action:
-        hand_low = controller.ctrl_low[arm_dof:].astype(np.float32)
-        hand_high = controller.ctrl_high[arm_dof:].astype(np.float32)
+        hand_space = controller.hand_controller.action_space
+        hand_low = np.asarray(hand_space.low, dtype=np.float32).reshape(-1)
+        hand_high = np.asarray(hand_space.high, dtype=np.float32).reshape(-1)
         hand_center = 0.5 * (hand_low + hand_high)
         hand_half_range = 0.5 * (hand_high - hand_low)
 
@@ -117,7 +118,7 @@ def run_ik_sine_demo(
 
     action = base_action.copy()
     action[:3] = center
-    action[3:7] = -base_quat
+    action[3:7] = base_quat
 
     info: Dict[str, Any] = {"ik_error": np.zeros(6, dtype=np.float32), "ik_iterations": 0}
 
@@ -215,13 +216,14 @@ def run_ik_sine_demo(
 def main() -> None:
     args = _parse_args()
 
-    from source.environments.rl_env import make_env
-
     center = None
     if None not in (args.center_x, args.center_y, args.center_z):
         center = np.asarray([args.center_x, args.center_y, args.center_z], dtype=np.float32)
 
-    env = make_env(control_mode="ik")
+    env = make_demo_env(
+        args,
+        control_mode="ik",
+    )
     env.reset(seed=0)
 
     try:

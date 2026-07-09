@@ -12,6 +12,7 @@ temporary file involved.
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 import traceback
 from typing import Optional, Tuple
@@ -22,6 +23,12 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 
 from source.environments.assets import PathLike, resolve_path
+from source.environments.robot_config import (
+    apply_config_overrides,
+    descriptors_from_robot_config,
+    load_robot_config,
+    optional_tuple,
+)
 from source.environments.scene import add_preview_scene
 from source.environments.tactile_sensors import TactileSensorBase
 from source.robots.defaults import DEFAULT_ARM, DEFAULT_BASE, DEFAULT_HAND
@@ -246,10 +253,56 @@ def build_robot_model(
     return model, data
 
 
+def build_robot_model_from_config(
+    robot_config_path: Optional[PathLike] = None,
+    tactile_sensor: Optional[TactileSensorBase] = None,
+    **overrides,
+) -> Tuple[mujoco.MjModel, mujoco.MjData]:
+    """Build a robot model from the global robot config JSON."""
+    config = apply_config_overrides(load_robot_config(robot_config_path), overrides)
+    arm_descriptor, hand_descriptor, base_descriptor = descriptors_from_robot_config(config)
+    return build_robot_model(
+        arm_descriptor=arm_descriptor,
+        hand_descriptor=hand_descriptor,
+        base_descriptor=base_descriptor,
+        rot_xyz_deg=optional_tuple(config, "hand_attach_rot_xyz_deg"),
+        attach_point_name=config.get("attach_point_name"),
+        base_mount_site_name=config.get("base_mount_site_name"),
+        hand_prefix=config.get("hand_prefix"),
+        tactile_sensor=tactile_sensor,
+        add_scene=bool(config.get("add_preview_scene", True)),
+        add_tactile_sensors=bool(config.get("enable_tactile_sensors", True)),
+    )
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Preview the configured robot assembly.")
+    parser.add_argument(
+        "--robot-config",
+        type=str,
+        default=None,
+        help="Path to a robot config JSON. Defaults to configs/current_robot.json.",
+    )
+    parser.add_argument("--arm-name", type=str, default=None)
+    parser.add_argument("--hand-name", type=str, default=None)
+    parser.add_argument("--base-name", type=str, default=None)
+    parser.add_argument("--no-scene", action="store_true")
+    parser.add_argument("--no-tactile", action="store_true")
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     print("--- Standalone preview: registered robot assembly ---")
     try:
-        model, data = build_robot_model()
+        args = _parse_args()
+        overrides = {
+            "arm_name": args.arm_name,
+            "hand_name": args.hand_name,
+            "base_name": args.base_name,
+            "add_preview_scene": False if args.no_scene else None,
+            "enable_tactile_sensors": False if args.no_tactile else None,
+        }
+        model, data = build_robot_model_from_config(args.robot_config, **overrides)
 
         with viewer.launch_passive(model, data) as v:
             while v.is_running():

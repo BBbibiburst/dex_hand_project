@@ -1,0 +1,20 @@
+{
+  "arm_name": "rm75b",
+  "hand_name": "pika_gripper",
+  "base_name": "rethink_minimal_mount",
+  "control_mode": "position",
+  "control_dt": 0.05,
+  "episode_length": 500,
+  "add_default_scene": true,
+  "enable_task_objects": false,
+  "include_hand_action": true,
+  "normalized_position": false,
+  "enable_tactile_sensors": false,
+  "hand_prefix": null,
+  "ee_site_name": null,
+  "stats_interval": 0.5,
+  "hand_attach_rot_xyz_deg": [0, 0, 0],
+  "attach_point_name": null,
+  "base_mount_site_name": null,
+  "add_preview_scene": true
+}

@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from source.environments.assets import DEFAULT_BASE_XML_PATH
+from source.environments.assets import asset_path
 from source.robots.descriptors import BaseDescriptor
 from source.robots.registry import register_base
 
@@ -11,7 +11,7 @@ from source.robots.registry import register_base
 RETHINK_MINIMAL_MOUNT = register_base(
     BaseDescriptor(
         name="rethink_minimal_mount",
-        xml_path=DEFAULT_BASE_XML_PATH,
+        xml_path=asset_path("bases", "rethink_minimal_mount.xml"),
         arm_mount_site_name="arm_mount",
     )
 )
