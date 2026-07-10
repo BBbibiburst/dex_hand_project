@@ -229,6 +229,7 @@ robosuite/
 # Demonstration datasets and recorder output
 datasets/
 recordings/
+checkpoints/
 
 # Local validation / interrupted recorder scratch files
 .tmp_*
