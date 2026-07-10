@@ -13,6 +13,7 @@ from source.control.arm import ArmPositionIkController
 from source.control.end_effectors import EndEffectorPositionController
 from source.robots.descriptors import ArmDescriptor, EndEffectorDescriptor
 
+
 class CompositeRobotController:
     """Compose an arm controller and an end-effector controller."""
 
@@ -155,7 +156,7 @@ class CompositeRobotController:
     def _combine_action_spaces(self) -> spaces.Box:
         arm_space = self.arm_controller.action_space
         hand_space = self.hand_controller.action_space
-        return spaces.Box(
+        action_space = spaces.Box(
             low=np.concatenate(
                 [
                     np.asarray(arm_space.low, dtype=np.float32).reshape(-1),
@@ -170,6 +171,15 @@ class CompositeRobotController:
             ),
             dtype=np.float32,
         )
+        expected_size = (
+            self.arm_controller.action_size + self.hand_controller.action_size
+        )
+        if action_space.shape != (expected_size,):
+            raise RuntimeError(
+                "Controller action-space size mismatch: "
+                f"space={action_space.shape}, controllers={(expected_size,)}."
+            )
+        return action_space
 
     def _current_position_target(self, data: mujoco.MjData) -> np.ndarray:
         actuator_ids = np.concatenate(

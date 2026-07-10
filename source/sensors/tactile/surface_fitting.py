@@ -194,6 +194,11 @@ GRID_POINT_FUNCTIONS = {
 }
 
 
+# Accurate public name for the current implementation. The old function name
+# remains available because existing callers may still use it.
+fingertip_swept_shell_grid_points = fingertip_ellipsoid_grid_points
+
+
 def grid_points_for_kind(
     kind: str,
     mesh_path: Path,

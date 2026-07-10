@@ -18,7 +18,7 @@ import numpy as np
 
 from source.assets import DEX_HAND_DIR
 from source.sensors.base import TactileSensorBase
-from source.sensors.tactile._surface_fitting import (
+from source.sensors.tactile.surface_fitting import (
     DEX_HAND_PATCH_LAYOUT,
     grid_points_for_kind,
 )

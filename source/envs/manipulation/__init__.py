@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Extensible manipulation tasks.
+"""Manipulation tasks and environment factories.
 
-Task modules are discovered automatically by :mod:`source.envs.core.registry`.
-Adding a task only requires placing a public module in this package and using
-``@register_task`` on its task class.
+Built-in tasks are imported from an explicit module list. Third-party tasks can
+still register themselves with :func:`register_task`.
 """
 
 from source.envs.core.registry import make_task, register_task, registered_tasks

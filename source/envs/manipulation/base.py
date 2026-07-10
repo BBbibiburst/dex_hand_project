@@ -4,8 +4,6 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Dict, Optional, Tuple
-
 from gymnasium import spaces
 import mujoco
 import numpy as np
@@ -25,17 +23,17 @@ class SingleArmManipulationTask(RobotTask):
     def __init__(
         self,
         *,
-        arena: Optional[TableArena] = None,
-        table_full_size: Tuple[float, float, float] = (0.8, 0.8, 0.05),
-        table_offset: Tuple[float, float, float] = (0.55, 0.0, 0.8),
-        table_friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001),
+        arena: TableArena | None = None,
+        table_full_size: tuple[float, float, float] = (0.8, 0.8, 0.05),
+        table_offset: tuple[float, float, float] = (0.55, 0.0, 0.8),
+        table_friction: tuple[float, float, float] = (1.0, 0.005, 0.0001),
         table_has_legs: bool = True,
         ee_site_name: str = "right_hand_site",
         use_object_obs: bool = True,
-        reward_scale: Optional[float] = 1.0,
+        reward_scale: float | None = 1.0,
         reward_shaping: bool = False,
         terminate_on_success: bool = False,
-        placement_sampler: Optional[UniformTablePlacementSampler] = None,
+        placement_sampler: UniformTablePlacementSampler | None = None,
     ) -> None:
         self.arena = arena or TableArena(
             table_full_size=table_full_size,
@@ -64,11 +62,6 @@ class SingleArmManipulationTask(RobotTask):
         return self._objects
 
     @property
-    def boxes(self) -> tuple[ManipulationObjectSpec, ...]:
-        """Deprecated compatibility alias for older box-only tasks."""
-        return self._objects
-
-    @property
     def table_top_z(self) -> float:
         return self.arena.table_top_z
 
@@ -77,11 +70,11 @@ class SingleArmManipulationTask(RobotTask):
         return self.arena.table_top_pos
 
     @property
-    def observation_space(self) -> Dict[str, spaces.Space]:
+    def observation_space(self) -> dict[str, spaces.Space]:
         if not self.use_object_obs:
             return {}
 
-        result: Dict[str, spaces.Space] = {}
+        result: dict[str, spaces.Space] = {}
         for obj in self.objects:
             result[f"{obj.name}_pos"] = spaces.Box(
                 -np.inf, np.inf, shape=(3,), dtype=np.float32
@@ -95,7 +88,7 @@ class SingleArmManipulationTask(RobotTask):
         result.update(self.extra_observation_space())
         return result
 
-    def extra_observation_space(self) -> Dict[str, spaces.Space]:
+    def extra_observation_space(self) -> dict[str, spaces.Space]:
         return {}
 
     def get_extra_observation(self, model, data, obs) -> dict[str, np.ndarray]:
