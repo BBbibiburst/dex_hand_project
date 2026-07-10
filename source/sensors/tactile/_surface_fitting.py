@@ -11,21 +11,27 @@ free to implement ``TactileSensorBase`` with a completely different strategy
 without ever importing this file.
 
 The public surface consists of the grid strategies currently used by the dex
-hand: fixed-shape segment fitting, ellipsoid-cap fingertip fitting,
-outer-face free-form RBF fitting, and mesh-UV sampling for the palm.
+hand: fixed-shape segment fitting, quarter-ellipsoid fingertip fitting,
+and mesh-UV sampling for the palm.
 """
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 from pathlib import Path
 import struct
 
 import numpy as np
-from scipy.interpolate import RBFInterpolator
 
 
 FINGER_SEGMENT_FIT_SUBDIVISIONS = 4
+FINGERTIP_MAX_PHI = 0.5 * np.pi
+FINGERTIP_MAX_THETA_ARC = np.pi
+FINGERTIP_MIRROR_ACROSS_XY = True
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
+DEFAULT_PLOT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
 
 
 @dataclass(frozen=True)
@@ -51,6 +57,27 @@ class PatchPlotData:
     triangles: np.ndarray
     samples: np.ndarray
     fit_surfaces: tuple[np.ndarray, ...]
+
+
+def dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
+    """Return the dex-hand tactile patch layout and fitting strategy names."""
+    layout: list[tuple[str, int, int, str]] = []
+    for finger_id in range(5):
+        layout.append((f"skin_{finger_id}_0_p", 7, 8, "segment"))
+        layout.append((f"skin_{finger_id}_1_p", 4, 8, "segment"))
+        layout.append((f"skin_{finger_id}_2_p", 4, 8, "fingertip-ellipsoid"))
+    layout.append(("skin_palm_p", 7, 16, "mesh-uv"))
+    return tuple(layout)
+
+
+DEX_HAND_PATCH_LAYOUT = dex_hand_patch_layout()
+
+
+def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
+    return {
+        mesh_name: (rows, cols, kind)
+        for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -150,44 +177,45 @@ def mesh_uv_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
 
 
 def fingertip_ellipsoid_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
-    """Stable ellipsoid-cap style grid for rounded fingertip pads.
+    """Stable quarter-ellipsoid style grid for rounded fingertip pads.
 
     This follows the same spirit as the segment fitter: build a local PCA
     frame, keep likely outer/contact surface samples, detect the occupied
-    angular arc, then sample a smooth grid on elliptical cross-sections. The
-    radial scale is estimated per axial row from the actual mesh, which makes
-    it more tolerant than a single ideal half-ellipsoid while staying much
-    more stable than unconstrained RBF fitting.
+    angular arc, then sample a smooth grid on a concave quarter ellipsoid.
+    ``phi`` is clamped to ``[0, pi/2]`` and the ``theta`` arc is clamped to at
+    most ``pi``, so the model covers a quarter ellipsoid instead of a half
+    ellipsoid. The fingertip patch is concave, so the generated cap is mirrored
+    across the local plane parallel to global xy by ``FINGERTIP_MIRROR_ACROSS_XY``.
+    Local scale is estimated per ``phi`` row from the actual mesh, which makes
+    it more tolerant than a single ideal ellipsoid while staying much more
+    stable than unconstrained free-form fitting.
     """
     triangles = read_stl_triangles(mesh_path)
     return _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
 
 
-def freeform_rbf_outer_grid_points(
+GRID_POINT_FUNCTIONS = {
+    "segment": finger_segment_grid_points,
+    "mesh-uv": mesh_uv_grid_points,
+    "fingertip-ellipsoid": fingertip_ellipsoid_grid_points,
+}
+
+
+def grid_points_for_kind(
+    kind: str,
     mesh_path: Path,
     rows: int,
     cols: int,
-    *,
-    smoothing: float = 1e-7,
-    max_training_points: int = 1200,
-    subdivisions: int = 4,
 ) -> np.ndarray:
-    """Free-form RBF grid fitted only from likely outer/contact faces.
-
-    This keeps the flexible ``S(u, v) -> R3`` surface idea, but first filters
-    thick STL patches down to the exposed side and supersamples those selected
-    triangles. It is an experimental alternative to the fixed-shape segment
-    and fingertip fitters.
-    """
-    triangles = read_stl_triangles(mesh_path)
-    return _freeform_rbf_outer_grid_points_from_triangles(
-        triangles,
-        rows,
-        cols,
-        smoothing=smoothing,
-        max_training_points=max_training_points,
-        subdivisions=subdivisions,
-    )
+    """Compute grid points for one dex-hand fitting strategy."""
+    try:
+        grid_fn = GRID_POINT_FUNCTIONS[kind]
+    except KeyError as exc:
+        raise ValueError(
+            f"Unknown dex-hand tactile fitting strategy {kind!r}. "
+            f"Known: {sorted(GRID_POINT_FUNCTIONS)}"
+        ) from exc
+    return grid_fn(mesh_path, rows, cols)
 
 
 # ---------------------------------------------------------------------------
@@ -254,34 +282,10 @@ def patch_fingertip_ellipsoid_plot_data(
     rows: int,
     cols: int,
 ) -> PatchPlotData:
-    """Plot-data helper for fingertip ellipsoid-cap fitting."""
+    """Plot-data helper for fingertip quarter-ellipsoid fitting."""
     triangles = read_stl_triangles(mesh_path)
     samples = _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
     surface = _fingertip_ellipsoid_surface_from_triangles(triangles)
-    return PatchPlotData(
-        mesh_name=mesh_name,
-        rows=rows,
-        cols=cols,
-        triangles=triangles,
-        samples=samples,
-        fit_surfaces=(surface,),
-    )
-
-
-def patch_freeform_rbf_outer_plot_data(
-    mesh_path: Path,
-    mesh_name: str,
-    rows: int,
-    cols: int,
-) -> PatchPlotData:
-    """Plot-data helper for outer-face supersampled RBF fitting."""
-    triangles = read_stl_triangles(mesh_path)
-    mask = _section_outer_face_mask(triangles)
-    outer_triangles = triangles[mask]
-    samples = _freeform_rbf_outer_grid_points_from_triangles(triangles, rows, cols)
-    surface = _freeform_rbf_surface_from_points(
-        _supersample_triangles(outer_triangles, subdivisions=4)
-    )
     return PatchPlotData(
         mesh_name=mesh_name,
         rows=rows,
@@ -458,16 +462,12 @@ def _fingertip_ellipsoid_grid_points_from_triangles(
     cols: int,
 ) -> np.ndarray:
     fit = _fit_fingertip_ellipsoid_cap(triangles)
+    phi_values = _linspace_interval_midpoints(fit["phi_lo"], fit["phi_hi"], rows)
     theta_values = _ellipse_arc_mid_angles(
-        fit["radius_x"],
-        fit["radius_y"],
-        cols,
-        fit["arc_start"],
-        fit["arc_end"],
+        fit["b"], fit["c"], cols, fit["arc_start"], fit["arc_end"]
     )
-    axial_values = _linspace_midpoints(fit["outer_axial"], rows)
-    scales = _fingertip_row_scales(fit, axial_values)
-    return _fingertip_points_from_fit(fit, axial_values, theta_values, scales)
+    scales = _fingertip_phi_scales(fit, phi_values)
+    return _fingertip_points_from_fit(fit, phi_values, theta_values, scales)
 
 
 def _fingertip_ellipsoid_surface_from_triangles(
@@ -477,74 +477,135 @@ def _fingertip_ellipsoid_surface_from_triangles(
     surface_cols: int = 48,
 ) -> np.ndarray:
     fit = _fit_fingertip_ellipsoid_cap(triangles)
-    axial_values = _linspace_percentile(fit["outer_axial"], surface_rows)
+    phi_values = np.linspace(fit["phi_lo"], fit["phi_hi"], surface_rows)
     theta_values = np.linspace(fit["arc_start"], fit["arc_end"], surface_cols)
-    scales = _fingertip_row_scales(fit, axial_values)
-    points = _fingertip_points_from_fit(fit, axial_values, theta_values, scales)
+    scales = _fingertip_phi_scales(fit, phi_values)
+    points = _fingertip_points_from_fit(fit, phi_values, theta_values, scales)
     return points.reshape(surface_rows, surface_cols, 3)
 
 
 def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray | float]:
     fit_points = _supersample_triangles(triangles, subdivisions=3)
-    center = fit_points.mean(axis=0)
-    centered = fit_points - center
+    pca_center = fit_points.mean(axis=0)
+    centered = fit_points - pca_center
     _, _, vh = np.linalg.svd(centered, full_matrices=False)
     axis, section_x, section_y = vh[0], vh[1], vh[2]
 
-    outer_triangles = triangles[_section_outer_face_mask(triangles)]
+    axial_all = centered @ axis
+    lo_mask = axial_all <= np.percentile(axial_all, 15.0)
+    hi_mask = axial_all >= np.percentile(axial_all, 85.0)
+    lo_spread = np.std(centered[lo_mask] @ section_x) + np.std(centered[lo_mask] @ section_y)
+    hi_spread = np.std(centered[hi_mask] @ section_x) + np.std(centered[hi_mask] @ section_y)
+    if lo_spread < hi_spread:
+        axis = -axis
+
+    outer_triangles = triangles[_fingertip_outer_face_mask(triangles, pca_center, axis)]
     if len(outer_triangles) == 0:
         outer_triangles = triangles
     outer_points = _supersample_triangles(outer_triangles, subdivisions=4)
+    outer_centered_pca = outer_points - pca_center
+    outer_u0 = outer_centered_pca @ axis
+    base_u = np.percentile(outer_u0, 5.0)
+    tip_u = np.percentile(outer_u0, 97.0)
+    center = pca_center + base_u * axis
     outer_centered = outer_points - center
-    outer_axial = outer_centered @ axis
-    outer_section = np.column_stack([outer_centered @ section_x, outer_centered @ section_y])
-    section_center = np.median(outer_section, axis=0)
-    outer_rel = outer_section - section_center
 
-    radius_x = max(np.percentile(np.abs(outer_rel[:, 0]), 92.5), 1e-9)
-    radius_y = max(np.percentile(np.abs(outer_rel[:, 1]), 92.5), 1e-9)
-    norm_radius = np.sqrt((outer_rel[:, 0] / radius_x) ** 2 + (outer_rel[:, 1] / radius_y) ** 2)
-    angles = np.mod(
-        np.arctan2(outer_rel[:, 1] / radius_y, outer_rel[:, 0] / radius_x),
-        2.0 * np.pi,
+    u = outer_centered @ axis
+    v = outer_centered @ section_x
+    w = outer_centered @ section_y
+
+    a = max(tip_u - base_u, np.percentile(np.abs(u), 90.0), 1e-9)
+    b = max(np.percentile(np.abs(v), 92.5), 1e-9)
+    c = max(np.percentile(np.abs(w), 92.5), 1e-9)
+
+    un = np.clip(u / a, -1.0, 1.0)
+    phi = np.arccos(un)
+    theta = np.mod(np.arctan2(w / c, v / b), 2.0 * np.pi)
+
+    phi_hi = min(float(np.percentile(phi, 96.0)), float(FINGERTIP_MAX_PHI))
+    arc_start, arc_end = _occupied_angle_arc_limited(
+        theta,
+        max_width=FINGERTIP_MAX_THETA_ARC,
     )
-    arc_start, arc_end = _occupied_angle_arc(angles)
     return {
         "center": center,
         "axis": axis,
         "section_x": section_x,
         "section_y": section_y,
-        "section_center": section_center,
-        "radius_x": float(radius_x),
-        "radius_y": float(radius_y),
-        "outer_axial": outer_axial,
-        "norm_radius": norm_radius,
+        "a": float(a),
+        "b": float(b),
+        "c": float(c),
+        "phi_lo": 0.0,
+        "phi_hi": phi_hi,
         "arc_start": float(arc_start),
         "arc_end": float(arc_end),
+        "outer_u": u,
+        "outer_v": v,
+        "outer_w": w,
+        "outer_phi": phi,
     }
 
 
-def _fingertip_row_scales(
-    fit: dict[str, np.ndarray | float],
-    axial_values: np.ndarray,
+def _fingertip_outer_face_mask(
+    triangles: np.ndarray,
+    center: np.ndarray,
+    axis: np.ndarray,
 ) -> np.ndarray:
-    outer_axial = np.asarray(fit["outer_axial"], dtype=np.float64)
-    norm_radius = np.asarray(fit["norm_radius"], dtype=np.float64)
-    axial_span = max(np.percentile(outer_axial, 92.5) - np.percentile(outer_axial, 7.5), 1e-9)
-    window = 0.20 * axial_span
+    face_centers = triangles.mean(axis=1)
+    face_normals = _triangle_normals(triangles)
+    face_rel = face_centers - center
+    radial_len = np.linalg.norm(face_rel, axis=1) + 1e-12
+    radial_dir = face_rel / radial_len[:, None]
+    normal_radial_3d = np.sum(face_normals * radial_dir, axis=1)
+
+    normal_axial = face_normals @ axis
+    face_axial = face_rel @ axis
+    axial_low = np.percentile(face_axial, 10.0)
+    is_base_cut = (normal_axial < -0.85) & (face_axial < axial_low)
+
+    r_norm3d = radial_len / max(np.percentile(radial_len, 95.0), 1e-9)
+    if np.std(r_norm3d) < 0.02:
+        mask = normal_radial_3d > 0.0
+    else:
+        pos_vote = (r_norm3d >= np.median(r_norm3d)).astype(np.float64)
+        normal_vote = (normal_radial_3d > 0.0).astype(np.float64)
+        mask = (0.6 * pos_vote + 0.4 * normal_vote) > 0.5
+
+    mask = mask & (~is_base_cut)
+    min_faces = max(8, int(0.1 * len(triangles)))
+    if int(mask.sum()) < min_faces:
+        mask = (r_norm3d >= np.percentile(r_norm3d, 60.0)) & (~is_base_cut)
+    return mask
+
+
+def _fingertip_phi_scales(
+    fit: dict[str, np.ndarray | float],
+    phi_values: np.ndarray,
+) -> np.ndarray:
+    outer_phi = np.asarray(fit["outer_phi"], dtype=np.float64)
+    u = np.asarray(fit["outer_u"], dtype=np.float64)
+    v = np.asarray(fit["outer_v"], dtype=np.float64)
+    w = np.asarray(fit["outer_w"], dtype=np.float64)
+    a = float(fit["a"])
+    b = float(fit["b"])
+    c = float(fit["c"])
+    norm_radius = np.sqrt((u / a) ** 2 + (v / b) ** 2 + (w / c) ** 2)
+
+    phi_span = max(float(fit["phi_hi"]) - float(fit["phi_lo"]), 1e-9)
+    window = 0.15 * phi_span
     scales = []
-    for axial_value in axial_values:
-        mask = np.abs(outer_axial - axial_value) <= window
+    for phi_value in phi_values:
+        mask = np.abs(outer_phi - phi_value) <= window
         if int(mask.sum()) < 8:
-            mask = np.ones_like(outer_axial, dtype=bool)
-        scales.append(np.percentile(norm_radius[mask], 82.0))
+            mask = np.ones_like(outer_phi, dtype=bool)
+        scales.append(np.percentile(norm_radius[mask], 80.0))
     scales_arr = np.asarray(scales, dtype=np.float64)
-    return np.clip(scales_arr, 0.25, 1.15)
+    return np.clip(scales_arr, 0.5, 1.3)
 
 
 def _fingertip_points_from_fit(
     fit: dict[str, np.ndarray | float],
-    axial_values: np.ndarray,
+    phi_values: np.ndarray,
     theta_values: np.ndarray,
     scales: np.ndarray,
 ) -> np.ndarray:
@@ -552,148 +613,28 @@ def _fingertip_points_from_fit(
     axis = np.asarray(fit["axis"], dtype=np.float64)
     section_x = np.asarray(fit["section_x"], dtype=np.float64)
     section_y = np.asarray(fit["section_y"], dtype=np.float64)
-    section_center = np.asarray(fit["section_center"], dtype=np.float64)
-    radius_x = float(fit["radius_x"])
-    radius_y = float(fit["radius_y"])
+    a = float(fit["a"])
+    b = float(fit["b"])
+    c = float(fit["c"])
 
     points: list[np.ndarray] = []
-    for axial_value, scale in zip(axial_values, scales):
+    for phi_value, scale in zip(phi_values, scales):
+        sin_phi = np.sin(phi_value)
         for theta in theta_values:
-            x_value = section_center[0] + scale * radius_x * np.cos(theta)
-            y_value = section_center[1] + scale * radius_y * np.sin(theta)
-            points.append(
+            x_value = scale * a * np.cos(phi_value)
+            y_value = scale * b * sin_phi * np.cos(theta)
+            z_value = scale * c * sin_phi * np.sin(theta)
+            point = (
                 center
-                + axial_value * axis
-                + x_value * section_x
-                + y_value * section_y
+                + x_value * axis
+                + y_value * section_x
+                + z_value * section_y
             )
+            if FINGERTIP_MIRROR_ACROSS_XY:
+                point = point.copy()
+                point[2] = 2.0 * center[2] - point[2]
+            points.append(point)
     return np.asarray(points, dtype=np.float64)
-
-
-def _freeform_rbf_outer_grid_points_from_triangles(
-    triangles: np.ndarray,
-    rows: int,
-    cols: int,
-    *,
-    smoothing: float = 1e-7,
-    max_training_points: int = 1200,
-    subdivisions: int = 4,
-) -> np.ndarray:
-    outer_triangles = triangles[_section_outer_face_mask(triangles)]
-    if len(outer_triangles) == 0:
-        outer_triangles = triangles
-    points = _supersample_triangles(outer_triangles, subdivisions=subdivisions)
-    uv, xyz = _pca_parameter_points_from_vertices(points)
-    rbf = _fit_rbf_surface(uv, xyz, smoothing=smoothing, max_training_points=max_training_points)
-    grid_uv = _regular_uv_midpoint_grid(uv, rows, cols)
-    return rbf(grid_uv).astype(np.float64)
-
-
-def _freeform_rbf_surface_from_points(
-    points: np.ndarray,
-    *,
-    smoothing: float = 1e-7,
-    max_training_points: int = 1200,
-    surface_rows: int = 32,
-    surface_cols: int = 48,
-) -> np.ndarray:
-    uv, xyz = _pca_parameter_points_from_vertices(points)
-    rbf = _fit_rbf_surface(uv, xyz, smoothing=smoothing, max_training_points=max_training_points)
-    grid_uv = _regular_uv_line_grid(uv, surface_rows, surface_cols)
-    return rbf(grid_uv).reshape(surface_rows, surface_cols, 3).astype(np.float64)
-
-
-def _pca_parameter_points_from_vertices(vertices: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    center = vertices.mean(axis=0)
-    centered = vertices - center
-    _, _, vh = np.linalg.svd(centered, full_matrices=False)
-    uv = np.column_stack([centered @ vh[0], centered @ vh[1]])
-    return _normalize_uv(uv), vertices.astype(np.float64)
-
-
-def _section_outer_face_mask(triangles: np.ndarray) -> np.ndarray:
-    """Heuristically select the exposed side of a thick skin patch.
-
-    The selection mirrors the robust idea used by the fixed segment fitter:
-    in a PCA frame, faces farther from the section center and whose normals
-    point radially outward are preferred. If normals are unreliable or the
-    vote degenerates, it falls back to high normalized section radius.
-    """
-    vertices = triangles.reshape(-1, 3)
-    center = vertices.mean(axis=0)
-    centered = vertices - center
-    _, _, vh = np.linalg.svd(centered, full_matrices=False)
-    section_x, section_y = vh[1], vh[2]
-
-    face_centers = triangles.mean(axis=1)
-    face_normals = _triangle_normals(triangles)
-    face_centered = face_centers - center
-    face_section = np.column_stack([face_centered @ section_x, face_centered @ section_y])
-
-    coarse_center = np.median(face_section, axis=0)
-    face_rel = face_section - coarse_center
-    radius_x = max(np.percentile(np.abs(face_rel[:, 0]), 95.0), 1e-9)
-    radius_y = max(np.percentile(np.abs(face_rel[:, 1]), 95.0), 1e-9)
-    r_norm = np.sqrt((face_rel[:, 0] / radius_x) ** 2 + (face_rel[:, 1] / radius_y) ** 2)
-
-    radial_len = np.linalg.norm(face_rel, axis=1) + 1e-12
-    radial = face_rel / radial_len[:, None]
-    normal_section = np.column_stack([face_normals @ section_x, face_normals @ section_y])
-    normal_radial = np.sum(normal_section * radial, axis=1)
-
-    if np.std(r_norm) < 0.02:
-        mask = normal_radial > 0.0
-    else:
-        pos_vote = (r_norm >= np.median(r_norm)).astype(np.float64)
-        normal_vote = (normal_radial > 0.0).astype(np.float64)
-        mask = (0.7 * pos_vote + 0.3 * normal_vote) > 0.5
-
-    min_faces = max(8, int(0.1 * len(triangles)))
-    if int(mask.sum()) < min_faces or int((~mask).sum()) < min_faces:
-        mask = r_norm >= np.percentile(r_norm, 60.0)
-    return mask
-
-
-def _normalize_uv(uv: np.ndarray) -> np.ndarray:
-    center = np.median(uv, axis=0)
-    span = np.percentile(uv, 95.0, axis=0) - np.percentile(uv, 5.0, axis=0)
-    span = np.where(span > 1e-12, span, 1.0)
-    return (uv - center) / span
-
-
-def _fit_rbf_surface(
-    uv: np.ndarray,
-    xyz: np.ndarray,
-    *,
-    smoothing: float,
-    max_training_points: int,
-) -> RBFInterpolator:
-    if len(uv) > max_training_points:
-        rng = np.random.default_rng(42)
-        indices = rng.choice(len(uv), size=max_training_points, replace=False)
-        uv = uv[indices]
-        xyz = xyz[indices]
-    return RBFInterpolator(
-        uv,
-        xyz,
-        kernel="thin_plate_spline",
-        smoothing=smoothing,
-        degree=1,
-    )
-
-
-def _regular_uv_midpoint_grid(uv: np.ndarray, rows: int, cols: int) -> np.ndarray:
-    u_values = _linspace_midpoints(uv[:, 0], cols)
-    v_values = _linspace_midpoints(uv[:, 1], rows)
-    u_grid, v_grid = np.meshgrid(u_values, v_values, indexing="xy")
-    return np.column_stack([u_grid.ravel(), v_grid.ravel()])
-
-
-def _regular_uv_line_grid(uv: np.ndarray, rows: int, cols: int) -> np.ndarray:
-    u_values = _linspace_percentile(uv[:, 0], cols)
-    v_values = _linspace_percentile(uv[:, 1], rows)
-    u_grid, v_grid = np.meshgrid(u_values, v_values, indexing="xy")
-    return np.column_stack([u_grid.ravel(), v_grid.ravel()])
 
 
 def _locate_projected_triangle(
@@ -784,6 +725,28 @@ def _occupied_angle_arc(angles: np.ndarray, *, bins: int = 96) -> tuple[float, f
     return start, end
 
 
+def _occupied_angle_arc_limited(
+    angles: np.ndarray,
+    *,
+    max_width: float,
+    bins: int = 96,
+) -> tuple[float, float]:
+    start, end = _occupied_angle_arc(angles, bins=bins)
+    if end - start <= max_width:
+        return start, end
+
+    hist, _ = np.histogram(angles, bins=bins, range=(0.0, 2.0 * np.pi))
+    bin_width = 2.0 * np.pi / bins
+    window_bins = max(1, min(bins, int(round(max_width / bin_width))))
+    doubled = np.concatenate([hist, hist])
+    prefix = np.concatenate([[0], np.cumsum(doubled)])
+    scores = prefix[window_bins : window_bins + bins] - prefix[:bins]
+    best_start_bin = int(np.argmax(scores))
+    limited_start = best_start_bin * bin_width
+    limited_end = limited_start + window_bins * bin_width
+    return limited_start, limited_end
+
+
 def _ellipse_arc_mid_angles(
     radius_x: float, radius_y: float, count: int, start: float, end: float
 ) -> np.ndarray:
@@ -810,8 +773,247 @@ def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
     return 0.5 * (edges[:-1] + edges[1:])
 
 
+def _linspace_interval_midpoints(low: float, high: float, count: int) -> np.ndarray:
+    if count == 1:
+        return np.asarray([(low + high) * 0.5], dtype=np.float64)
+    edges = np.linspace(low, high, count + 1, dtype=np.float64)
+    return 0.5 * (edges[:-1] + edges[1:])
+
+
 def _linspace_percentile(values: np.ndarray, count: int) -> np.ndarray:
     low, high = np.percentile(values, [7.5, 92.5])
     if count == 1:
         return np.asarray([(low + high) * 0.5], dtype=np.float64)
     return np.linspace(low, high, count, dtype=np.float64)
+
+
+# ---------------------------------------------------------------------------
+# Offline visualization CLI
+# ---------------------------------------------------------------------------
+
+
+FIT_SURFACE_FUNCTIONS = {
+    "segment": finger_segment_fit_surface,
+    "mesh-uv": None,
+    "fingertip-ellipsoid": patch_fingertip_ellipsoid_plot_data,
+}
+
+
+def _parse_plot_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Plot dex-hand tactile STL sampling grids."
+    )
+    parser.add_argument(
+        "--patches",
+        nargs="+",
+        default=list(DEFAULT_PLOT_PATCHES),
+        help="Skin mesh names without .STL, e.g. skin_0_0_p skin_0_2_p skin_palm_p.",
+    )
+    parser.add_argument(
+        "--mesh-dir",
+        type=Path,
+        default=DEFAULT_DEX_HAND_MESH_DIR,
+        help="Directory containing dex-hand skin STL files.",
+    )
+    parser.add_argument("--point-size", type=float, default=42.0)
+    parser.add_argument("--surface-alpha", type=float, default=0.32)
+    parser.add_argument("--save", type=str, default="")
+    return parser.parse_args()
+
+
+def _patch_title(mesh_name: str, kind: str) -> str:
+    rows, cols, _ = dex_hand_patch_info()[mesh_name]
+    if kind == "mesh-uv":
+        return f"Palm pad: {rows} x {cols}"
+    if kind == "fingertip-ellipsoid":
+        return f"{mesh_name}: fingertip {rows} x {cols}"
+    return f"{mesh_name}: segment {rows} x {cols}"
+
+
+def _fit_surface_style(kind: str) -> tuple[str, float]:
+    if kind == "mesh-uv":
+        return "tomato", 0.32
+    if kind == "fingertip-ellipsoid":
+        return "gold", 0.38
+    return "deepskyblue", 0.42
+
+
+def _set_equal_axes(ax, points: np.ndarray) -> None:
+    lower = points.min(axis=0)
+    upper = points.max(axis=0)
+    center = 0.5 * (lower + upper)
+    radius = 0.55 * np.max(upper - lower)
+    ax.set_xlim(center[0] - radius, center[0] + radius)
+    ax.set_ylim(center[1] - radius, center[1] + radius)
+    ax.set_zlim(center[2] - radius, center[2] + radius)
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+
+
+def _draw_grid(ax, samples: np.ndarray, rows: int, cols: int) -> None:
+    grid = samples.reshape(rows, cols, 3)
+    for row in range(rows):
+        ax.plot(
+            grid[row, :, 0],
+            grid[row, :, 1],
+            grid[row, :, 2],
+            color="black",
+            linewidth=1.0,
+            alpha=0.7,
+        )
+    for col in range(cols):
+        ax.plot(
+            grid[:, col, 0],
+            grid[:, col, 1],
+            grid[:, col, 2],
+            color="dimgray",
+            linewidth=0.8,
+            alpha=0.55,
+        )
+
+
+def _plot_stl_surface(ax, triangles: np.ndarray, *, alpha: float) -> None:
+    flat_vertices = triangles.reshape(-1, 3)
+    tri_indices = np.arange(flat_vertices.shape[0], dtype=np.int32).reshape(-1, 3)
+    ax.plot_trisurf(
+        flat_vertices[:, 0],
+        flat_vertices[:, 1],
+        flat_vertices[:, 2],
+        triangles=tri_indices,
+        color="silver",
+        alpha=alpha,
+        linewidth=0.08,
+        edgecolor="gray",
+        shade=True,
+        antialiased=True,
+    )
+
+
+def _plot_surface_array(ax, surface: np.ndarray, *, color: str, alpha: float) -> None:
+    ax.plot_surface(
+        surface[..., 0],
+        surface[..., 1],
+        surface[..., 2],
+        color=color,
+        alpha=alpha,
+        linewidth=0,
+        antialiased=True,
+        shade=False,
+    )
+
+
+def _plot_data_for_kind(
+    stl_path: Path,
+    mesh_name: str,
+    rows: int,
+    cols: int,
+    kind: str,
+) -> PatchPlotData:
+    fit_fn = FIT_SURFACE_FUNCTIONS[kind]
+    if fit_fn is None:
+        return patch_mesh_uv_plot_data(stl_path, mesh_name, rows, cols)
+    if kind == "fingertip-ellipsoid":
+        return patch_fingertip_ellipsoid_plot_data(stl_path, mesh_name, rows, cols)
+    return patch_plot_data(
+        stl_path,
+        mesh_name,
+        rows,
+        cols,
+        GRID_POINT_FUNCTIONS[kind],
+        fit_fn,
+    )
+
+
+def _plot_patch(
+    ax,
+    mesh_name: str,
+    *,
+    mesh_dir: Path,
+    surface_alpha: float,
+    point_size: float,
+) -> None:
+    patch_info = dex_hand_patch_info()
+    if mesh_name not in patch_info:
+        raise ValueError(
+            f"Unknown dex-hand patch {mesh_name!r}. Known: {sorted(patch_info)}"
+        )
+    rows, cols, kind = patch_info[mesh_name]
+    stl_path = mesh_dir / f"{mesh_name}.STL"
+    plot_data = _plot_data_for_kind(stl_path, mesh_name, rows, cols, kind)
+
+    triangles = plot_data.triangles
+    vertices = triangles.reshape(-1, 3)
+    samples = plot_data.samples
+
+    _plot_stl_surface(ax, triangles, alpha=surface_alpha)
+    color, alpha = _fit_surface_style(kind)
+    for surface in plot_data.fit_surfaces:
+        _plot_surface_array(ax, surface, color=color, alpha=alpha)
+
+    colors = np.linspace(0.0, 1.0, rows * cols)
+    ax.scatter(
+        samples[:, 0],
+        samples[:, 1],
+        samples[:, 2],
+        s=point_size,
+        c=colors,
+        cmap="turbo",
+        edgecolors="black",
+        linewidths=0.45,
+        depthshade=False,
+        label="taxels",
+    )
+    _draw_grid(ax, samples, rows, cols)
+
+    ax.set_title(f"{_patch_title(mesh_name, kind)}\n{kind}")
+    _set_equal_axes(ax, np.vstack([vertices, samples]))
+    ax.view_init(elev=22, azim=-58)
+
+
+def plot_tactile_sampling_grids(
+    *,
+    patches: tuple[str, ...] | list[str] = DEFAULT_PLOT_PATCHES,
+    mesh_dir: Path = DEFAULT_DEX_HAND_MESH_DIR,
+    point_size: float = 42.0,
+    surface_alpha: float = 0.32,
+    save: str = "",
+) -> None:
+    """Plot dex-hand tactile sampling grids for algorithm debugging."""
+    import matplotlib.pyplot as plt
+
+    column_count = len(patches)
+    fig = plt.figure(figsize=(6.2 * column_count, 6.0))
+    fig.suptitle("Dex-hand tactile sampling grids", fontsize=13)
+
+    for plot_index, mesh_name in enumerate(patches, start=1):
+        ax = fig.add_subplot(1, column_count, plot_index, projection="3d")
+        _plot_patch(
+            ax,
+            mesh_name,
+            mesh_dir=mesh_dir,
+            surface_alpha=surface_alpha,
+            point_size=point_size,
+        )
+
+    plt.tight_layout()
+    if save:
+        plt.savefig(save, dpi=220)
+        print(f"Saved tactile sampling plot to {save}")
+    else:
+        plt.show()
+
+
+def main() -> None:
+    args = _parse_plot_args()
+    plot_tactile_sampling_grids(
+        patches=args.patches,
+        mesh_dir=args.mesh_dir,
+        point_size=args.point_size,
+        surface_alpha=args.surface_alpha,
+        save=args.save,
+    )
+
+
+if __name__ == "__main__":
+    main()

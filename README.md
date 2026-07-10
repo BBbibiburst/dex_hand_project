@@ -25,7 +25,6 @@ source/
     random_demo.py
     ik_sine_demo.py
     tactile_preview.py               # dex_hand 触觉专用
-    tactile_sampling_plot.py         # dex_hand 触觉专用
   environments/
     robot_config.py                  # profile + overrides 配置解析
     robot_builder.py                 # MjSpec 拼装：底座 + 机械臂 + 末端执行器
@@ -41,7 +40,7 @@ source/
   sensors/
     tactile/
       dex_hand.py                    # dex_hand 触觉实现
-      _surface_fitting.py
+      _surface_fitting.py            # dex_hand 触觉点位计算 + 离线可视化
 ```
 
 ## Robot Config
@@ -76,7 +75,7 @@ python -m source.environments.robot_builder
 python -m source.demos.random_demo
 python -m source.demos.ik_sine_demo
 python -m source.demos.tactile_preview
-python -m source.demos.tactile_sampling_plot
+python -m source.sensors.tactile._surface_fitting
 ```
 
 `robot_builder` 和通用 demos 都读取同一套 robot config。`random_demo`、`ik_sine_demo` 通过 `make_env()` 创建环境，因此会使用和 builder 一致的手爪安装旋转、安装点和底座挂载配置。
@@ -123,5 +122,5 @@ python -m source.environments.robot_builder --no-tactile
 python -m source.demos.random_demo --control-hz 2 --seed 0
 python -m source.demos.ik_sine_demo --radius-x 0.03 --radius-y 0.03 --frequency 0.08
 python -m source.demos.tactile_preview --patch skin_0_0_p --radius 0.0025
-python -m source.demos.tactile_sampling_plot --patches skin_0_0_p skin_palm_p --strategy compare-all --save out.png
+python -m source.sensors.tactile._surface_fitting --patches skin_0_0_p skin_palm_p --save out.png
 ```

@@ -21,10 +21,8 @@ import numpy as np
 from source.environments.assets import DEX_HAND_DIR
 from source.environments.tactile_sensors import TactileSensorBase
 from source.sensors.tactile._surface_fitting import (
-    finger_segment_grid_points,
-    fingertip_ellipsoid_grid_points,
-    freeform_rbf_outer_grid_points,
-    mesh_uv_grid_points,
+    DEX_HAND_PATCH_LAYOUT,
+    grid_points_for_kind,
 )
 
 
@@ -32,30 +30,6 @@ SITE_PREFIX = "taxel_"
 SENSOR_PREFIX = "touch_"
 TACTILE_GROUP = 4
 DEFAULT_TAXEL_RADIUS = 0.0018
-
-# (mesh_name, rows, cols, grid_fn) 鈥?the only place in the whole project that
-# needs to know how many taxels each dex-hand skin patch has and how its
-# surface is shaped.
-_GRID_FN = {
-    "segment": finger_segment_grid_points,
-    "fingertip-ellipsoid": fingertip_ellipsoid_grid_points,
-    "rbf-outer": freeform_rbf_outer_grid_points,
-    "mesh-uv": mesh_uv_grid_points,
-}
-
-
-def _dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
-    layout: list[tuple[str, int, int, str]] = []
-    for finger_id in range(5):
-        layout.append((f"skin_{finger_id}_0_p", 7, 8, "segment"))
-        layout.append((f"skin_{finger_id}_1_p", 4, 8, "segment"))
-        layout.append((f"skin_{finger_id}_2_p", 4, 8, "fingertip-ellipsoid"))
-    layout.append(("skin_palm_p", 7, 16, "mesh-uv"))
-    return tuple(layout)
-
-
-DEX_HAND_PATCH_LAYOUT = _dex_hand_patch_layout()
-
 
 def site_name(mesh_name: str, row: int, col: int) -> str:
     return f"{SITE_PREFIX}{mesh_name}_r{row:02d}_c{col:02d}"
@@ -145,8 +119,12 @@ class DexHandTouchSensor(TactileSensorBase):
             if mesh_file is None:
                 raise ValueError(f"Skin mesh asset {mesh_name!r} was not found in the hand model.")
 
-            grid_fn = _GRID_FN[kind]
-            mesh_points = grid_fn(_resolve_mesh_path(self.mesh_dir, mesh_file), rows, cols)
+            mesh_points = grid_points_for_kind(
+                kind,
+                _resolve_mesh_path(self.mesh_dir, mesh_file),
+                rows,
+                cols,
+            )
             geom = hand_spec.geom(mesh_name)
             body_points = _transform_points(mesh_points, np.asarray(geom.pos), np.asarray(geom.quat))
 
