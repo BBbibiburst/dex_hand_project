@@ -300,16 +300,25 @@ def patch_fingertip_ellipsoid_plot_data(
     rows: int,
     cols: int,
 ) -> PatchPlotData:
-    """Plot-data helper for fingertip quarter-ellipsoid fitting."""
+    """Plot-data helper for the regular fingertip Bezier fit.
+
+    The dense fitted surface is included in ``fit_surfaces`` so the offline
+    visualizer renders it as a translucent overlay on top of the STL mesh.
+    """
     triangles = read_stl_triangles(mesh_path)
     samples = _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
+    fitted_surface = _fingertip_ellipsoid_surface_from_triangles(
+        triangles,
+        surface_rows=36,
+        surface_cols=72,
+    )
     return PatchPlotData(
         mesh_name=mesh_name,
         rows=rows,
         cols=cols,
         triangles=triangles,
         samples=samples,
-        fit_surfaces=(),
+        fit_surfaces=(fitted_surface,),
     )
 
 
@@ -661,10 +670,10 @@ def _fingertip_ellipsoid_grid_points_from_triangles(
     cols: int,
 ) -> np.ndarray:
     """Sample the fingertip as a swept U-shaped shell, not an ellipsoid."""
-    return _fingertip_swept_shell_grid_points(triangles, rows, cols)
+    return _fingertip_regular_surface_grid_points(triangles, rows, cols)
 
 
-def _fingertip_swept_shell_grid_points(
+def _fingertip_swept_shell_raw_grid_points(
     triangles: np.ndarray,
     rows: int,
     cols: int,
@@ -771,33 +780,87 @@ def _fingertip_swept_shell_grid_points(
     envelope_angle = angle[envelope_indices]
     envelope_radius = radius[envelope_indices]
 
-    central = (
-        (envelope_axial >= np.percentile(envelope_axial, 10.0))
-        & (envelope_axial <= np.percentile(envelope_axial, 88.0))
+    # Determine the complete exterior U-shell arc from cross-section support.
+    # A fixed pi-wide window only captures the lowest/bottom part of this STL.
+    # Instead, count whether each angular ray exists in many longitudinal
+    # slices.  Genuine outer-shell directions persist along the finger, while
+    # the opening, inner wall and the small tip-closing region occur in only a
+    # few slices.
+    support_slices = 20
+    support_axial_edges = np.linspace(
+        np.percentile(envelope_axial, 4.0),
+        np.percentile(envelope_axial, 96.0),
+        support_slices + 1,
     )
-    support, _ = np.histogram(
-        envelope_angle[central],
-        bins=angle_bin_count,
-        range=(0.0, 2.0 * np.pi),
-    )
-    support = support.astype(np.float64)
-    support = (
-        0.25 * np.roll(support, 1)
-        + 0.50 * support
-        + 0.25 * np.roll(support, -1)
+    angular_presence = np.zeros(angle_bin_count, dtype=np.float64)
+    usable_slice_count = 0
+    for start_u, end_u in zip(
+        support_axial_edges[:-1], support_axial_edges[1:]
+    ):
+        slice_mask = (envelope_axial >= start_u) & (envelope_axial < end_u)
+        if int(slice_mask.sum()) < 8:
+            continue
+        hist, _ = np.histogram(
+            envelope_angle[slice_mask],
+            bins=angle_bin_count,
+            range=(0.0, 2.0 * np.pi),
+        )
+        angular_presence += (hist > 0).astype(np.float64)
+        usable_slice_count += 1
+
+    if usable_slice_count == 0:
+        angular_presence[:] = 1.0
+        usable_slice_count = 1
+
+    angular_presence = (
+        0.20 * np.roll(angular_presence, 2)
+        + 0.20 * np.roll(angular_presence, 1)
+        + 0.20 * angular_presence
+        + 0.20 * np.roll(angular_presence, -1)
+        + 0.20 * np.roll(angular_presence, -2)
     )
 
-    arc_width = np.pi
+    # Keep directions supported by at least roughly one quarter of the finger
+    # length, then find their longest circular run.  This normally gives the
+    # whole outside of the U: left wall -> rounded underside -> right wall.
+    threshold = max(2.0, 0.24 * usable_slice_count)
+    occupied = angular_presence >= threshold
+    if int(occupied.sum()) < angle_bin_count // 4:
+        threshold = max(1.0, 0.12 * usable_slice_count)
+        occupied = angular_presence >= threshold
+
+    doubled_occupied = np.concatenate([occupied, occupied])
+    best_start = 0
+    best_length = 0
+    current_start = 0
+    current_length = 0
+    for idx, is_occupied in enumerate(doubled_occupied):
+        if is_occupied:
+            if current_length == 0:
+                current_start = idx
+            current_length += 1
+            if current_length > best_length and current_length <= angle_bin_count:
+                best_start = current_start
+                best_length = current_length
+        else:
+            current_length = 0
+
     bin_width = 2.0 * np.pi / angle_bin_count
-    window_bins = int(round(arc_width / bin_width))
-    doubled = np.concatenate([support, support])
-    prefix = np.concatenate([[0.0], np.cumsum(doubled)])
-    scores = (
-        prefix[window_bins : window_bins + angle_bin_count]
-        - prefix[:angle_bin_count]
+    if best_length < angle_bin_count // 4:
+        # Conservative fallback for an unusually sparse mesh.
+        best_length = int(round(1.35 * np.pi / bin_width))
+        best_start = int(np.argmax(angular_presence)) - best_length // 2
+
+    # Include the edge/side-wall directions that may be one or two bins less
+    # persistent because of tessellation and tapering near the fingertip.
+    expansion_bins = max(3, int(round(np.deg2rad(8.0) / bin_width)))
+    best_start -= expansion_bins
+    best_length = min(
+        angle_bin_count - 2,
+        best_length + 2 * expansion_bins,
     )
-    arc_start = int(np.argmax(scores)) * bin_width
-    arc_end = arc_start + window_bins * bin_width
+    arc_start = best_start * bin_width
+    arc_end = arc_start + best_length * bin_width
 
     arc_mid = 0.5 * (arc_start + arc_end)
     unwrapped_angle = (
@@ -816,8 +879,8 @@ def _fingertip_swept_shell_grid_points(
     envelope_points = points[envelope_indices[in_arc]]
 
     row_edges = np.linspace(
-        np.percentile(axial, 7.5),
-        np.percentile(axial, 91.0),
+        np.percentile(axial, 2.0),
+        np.percentile(axial, 98.0),
         rows + 1,
     )
     row_values = 0.5 * (row_edges[:-1] + row_edges[1:])
@@ -871,13 +934,117 @@ def _fingertip_swept_shell_grid_points(
     return np.asarray(result, dtype=np.float64)
 
 
+
+
+def _bernstein_basis(values: np.ndarray, degree: int) -> np.ndarray:
+    """Return Bernstein basis values with shape (N, degree + 1)."""
+    from math import comb
+
+    values = np.clip(np.asarray(values, dtype=np.float64), 0.0, 1.0)
+    basis = np.empty((len(values), degree + 1), dtype=np.float64)
+    one_minus = 1.0 - values
+    for index in range(degree + 1):
+        basis[:, index] = (
+            comb(degree, index)
+            * values**index
+            * one_minus ** (degree - index)
+        )
+    return basis
+
+
+def _fit_bezier_surface(
+    samples: np.ndarray,
+    sample_rows: int,
+    sample_cols: int,
+    *,
+    degree_u: int = 5,
+    degree_v: int = 7,
+    regularization: float = 2.0e-5,
+) -> np.ndarray:
+    """Fit a smooth tensor-product Bezier surface to a regular sample grid.
+
+    ``samples`` may be slightly noisy or uneven because each source sample was
+    selected from the STL shell.  The lower-dimensional Bezier control net
+    removes that nearest-neighbour jitter while preserving the global U-shaped
+    fingertip geometry.
+    """
+    grid = np.asarray(samples, dtype=np.float64).reshape(sample_rows, sample_cols, 3)
+    u_values = (np.arange(sample_rows, dtype=np.float64) + 0.5) / sample_rows
+    v_values = (np.arange(sample_cols, dtype=np.float64) + 0.5) / sample_cols
+    basis_u = _bernstein_basis(u_values, degree_u)
+    basis_v = _bernstein_basis(v_values, degree_v)
+
+    design = np.einsum("ri,cj->rcij", basis_u, basis_v).reshape(
+        sample_rows * sample_cols,
+        (degree_u + 1) * (degree_v + 1),
+    )
+    targets = grid.reshape(-1, 3)
+
+    # Mild Tikhonov regularization is enough because Bernstein bases are
+    # already smooth and non-oscillatory.  Scale it to the data matrix so the
+    # behavior is insensitive to mesh units and sampling resolution.
+    gram = design.T @ design
+    ridge = regularization * max(float(np.trace(gram) / len(gram)), 1e-12)
+    controls = np.linalg.solve(
+        gram + ridge * np.eye(gram.shape[0], dtype=np.float64),
+        design.T @ targets,
+    )
+    return controls.reshape(degree_u + 1, degree_v + 1, 3)
+
+
+def _evaluate_bezier_surface(
+    controls: np.ndarray,
+    u_values: np.ndarray,
+    v_values: np.ndarray,
+) -> np.ndarray:
+    degree_u = controls.shape[0] - 1
+    degree_v = controls.shape[1] - 1
+    basis_u = _bernstein_basis(u_values, degree_u)
+    basis_v = _bernstein_basis(v_values, degree_v)
+    surface = np.einsum("ri,cj,ijk->rck", basis_u, basis_v, controls)
+    return surface.reshape(-1, 3)
+
+
+def _fingertip_regular_surface_grid_points(
+    triangles: np.ndarray,
+    rows: int,
+    cols: int,
+) -> np.ndarray:
+    """Fit a regular smooth surface to the detected outer fingertip shell.
+
+    A denser swept-shell grid first identifies the correct outer contact
+    surface.  A tensor-product Bezier patch is then fitted to those samples,
+    and the requested taxels are sampled at equally spaced parameter-cell
+    centres.  This keeps the grid visually regular without reverting to an
+    inaccurate ellipsoid model.
+    """
+    dense_rows = max(12, rows * 3)
+    dense_cols = max(24, cols * 3)
+    raw_samples = _fingertip_swept_shell_raw_grid_points(
+        triangles,
+        dense_rows,
+        dense_cols,
+    )
+    controls = _fit_bezier_surface(
+        raw_samples,
+        dense_rows,
+        dense_cols,
+        degree_u=min(5, dense_rows - 1),
+        degree_v=min(7, dense_cols - 1),
+    )
+
+    u_values = (np.arange(rows, dtype=np.float64) + 0.5) / rows
+    v_values = (np.arange(cols, dtype=np.float64) + 0.5) / cols
+    return _evaluate_bezier_surface(controls, u_values, v_values)
+
+
 def _fingertip_ellipsoid_surface_from_triangles(
     triangles: np.ndarray,
     *,
     surface_rows: int = 28,
     surface_cols: int = 48,
 ) -> np.ndarray:
-    return _fingertip_swept_shell_grid_points(
+    return _fingertip_regular_surface_grid_points(
         triangles,
         surface_rows,
         surface_cols,
@@ -1255,7 +1422,7 @@ def _patch_title(mesh_name: str, kind: str) -> str:
     if kind == "mesh-uv":
         return f"Palm pad: {rows} x {cols}"
     if kind == "fingertip-ellipsoid":
-        return f"{mesh_name}: fingertip {rows} x {cols}"
+        return f"{mesh_name}: fingertip {rows} x {cols} (Bezier fit)"
     return f"{mesh_name}: segment {rows} x {cols}"
 
 
