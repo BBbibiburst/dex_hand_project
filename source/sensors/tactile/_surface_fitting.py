@@ -69,9 +69,9 @@ def dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
     """Return the dex-hand tactile patch layout and fitting strategy names."""
     layout: list[tuple[str, int, int, str]] = []
     for finger_id in range(5):
-        layout.append((f"skin_{finger_id}_0_p", 7, 8, "segment"))
+        layout.append((f"skin_{finger_id}_0_p", 4, 8, "segment"))
         layout.append((f"skin_{finger_id}_1_p", 4, 8, "segment"))
-        layout.append((f"skin_{finger_id}_2_p", 4, 8, "fingertip-ellipsoid"))
+        layout.append((f"skin_{finger_id}_2_p", 7, 8, "fingertip-ellipsoid"))
     layout.append(("skin_palm_p", 7, 16, "mesh-uv"))
     return tuple(layout)
 
@@ -840,22 +840,64 @@ def _fingertip_swept_shell_raw_grid_points(
     envelope_radius = envelope_radius[in_arc]
     envelope_points = points[envelope_indices[in_arc]]
 
-    row_edges = np.linspace(
-        np.percentile(axial, 2.0),
-        np.percentile(axial, 98.0),
-        rows + 1,
+    # Include the distal tip explicitly.  The previous midpoint-only sampling
+    # never reached the longitudinal boundary, so the fitted Bezier patch was
+    # inevitably truncated before the fingertip nose.
+    axial_start = float(np.percentile(axial, 2.0))
+    axial_tip = float(np.percentile(axial, 99.7))
+    row_parameter = np.linspace(0.0, 1.0, rows, dtype=np.float64)
+    # Slightly concentrate dense source rows near the distal end, where the
+    # shell bends and closes most rapidly.
+    row_values = axial_start + (axial_tip - axial_start) * (
+        1.0 - (1.0 - row_parameter) ** 1.45
     )
-    row_values = 0.5 * (row_edges[:-1] + row_edges[1:])
+    row_edges = np.asarray([axial_start, axial_tip], dtype=np.float64)
     col_values = arc_start + (
         np.arange(cols, dtype=np.float64) + 0.5
     ) * (arc_end - arc_start) / cols
 
     result: list[np.ndarray] = []
-    axial_scale = max(float(row_edges[-1] - row_edges[0]), 1e-9)
+    axial_scale = max(float(axial_tip - axial_start), 1e-9)
     angle_scale = max(float(arc_end - arc_start), 1e-9)
 
-    for target_axial in row_values:
+    # Dedicated distal-cap candidates.  The swept-shell angular envelope gets
+    # sparse where the U-shaped wall closes, so relying on it alone truncates
+    # the surface before the physical nose.
+    all_unwrapped_angle = (
+        arc_mid + (angle - arc_mid + np.pi) % (2.0 * np.pi) - np.pi
+    )
+    tip_threshold = float(np.percentile(axial, 97.5))
+    tip_candidate_mask = (
+        (axial >= tip_threshold)
+        & (all_unwrapped_angle >= arc_start - arc_margin)
+        & (all_unwrapped_angle <= arc_end + arc_margin)
+    )
+    tip_points = points[tip_candidate_mask]
+    tip_axial = axial[tip_candidate_mask]
+    tip_angle = all_unwrapped_angle[tip_candidate_mask]
+    tip_radius = radius[tip_candidate_mask]
+
+    for row_index, target_axial in enumerate(row_values):
         for target_angle in col_values:
+            if row_index == rows - 1 and len(tip_points) >= cols:
+                angular_error = np.abs(
+                    (tip_angle - target_angle + np.pi)
+                    % (2.0 * np.pi)
+                    - np.pi
+                ) / angle_scale
+                axial_error = (axial_tip - tip_axial) / axial_scale
+                score = (angular_error / 0.055) ** 2 + (axial_error / 0.035) ** 2
+                nearby = np.argsort(score)[: max(12, min(48, len(score)))]
+                # Prefer the front-most samples among angularly compatible
+                # candidates, while retaining lateral variation across cols.
+                best_pool = nearby[
+                    tip_axial[nearby] >= np.percentile(tip_axial[nearby], 70.0)
+                ]
+                if len(best_pool) == 0:
+                    best_pool = nearby
+                best = best_pool[int(np.argmin(score[best_pool]))]
+                result.append(tip_points[best])
+                continue
             axial_distance = (
                 np.abs(envelope_axial - target_axial) / axial_scale
             )
@@ -1030,6 +1072,8 @@ def _fit_bezier_surface(
     degree_u: int = 5,
     degree_v: int = 7,
     regularization: float = 2.0e-5,
+    include_u_endpoints: bool = False,
+    boundary_weight: float = 1.0,
 ) -> np.ndarray:
     """Fit a smooth tensor-product Bezier surface to a regular sample grid.
 
@@ -1039,7 +1083,10 @@ def _fit_bezier_surface(
     fingertip geometry.
     """
     grid = np.asarray(samples, dtype=np.float64).reshape(sample_rows, sample_cols, 3)
-    u_values = (np.arange(sample_rows, dtype=np.float64) + 0.5) / sample_rows
+    if include_u_endpoints:
+        u_values = np.linspace(0.0, 1.0, sample_rows, dtype=np.float64)
+    else:
+        u_values = (np.arange(sample_rows, dtype=np.float64) + 0.5) / sample_rows
     v_values = (np.arange(sample_cols, dtype=np.float64) + 0.5) / sample_cols
     basis_u = _bernstein_basis(u_values, degree_u)
     basis_v = _bernstein_basis(v_values, degree_v)
@@ -1050,14 +1097,25 @@ def _fit_bezier_surface(
     )
     targets = grid.reshape(-1, 3)
 
+    # Give the longitudinal boundary rows extra weight for fingertip fits.
+    # Without this, regularization tends to pull the distal boundary inward
+    # and visibly flatten/truncate the nose.
+    weights = np.ones(sample_rows * sample_cols, dtype=np.float64)
+    if include_u_endpoints and boundary_weight > 1.0:
+        weights[:sample_cols] *= boundary_weight
+        weights[-sample_cols:] *= boundary_weight
+    sqrt_weights = np.sqrt(weights)[:, None]
+    weighted_design = design * sqrt_weights
+    weighted_targets = targets * sqrt_weights
+
     # Mild Tikhonov regularization is enough because Bernstein bases are
     # already smooth and non-oscillatory.  Scale it to the data matrix so the
     # behavior is insensitive to mesh units and sampling resolution.
-    gram = design.T @ design
+    gram = weighted_design.T @ weighted_design
     ridge = regularization * max(float(np.trace(gram) / len(gram)), 1e-12)
     controls = np.linalg.solve(
         gram + ridge * np.eye(gram.shape[0], dtype=np.float64),
-        design.T @ targets,
+        weighted_design.T @ weighted_targets,
     )
     return controls.reshape(degree_u + 1, degree_v + 1, 3)
 
@@ -1099,11 +1157,19 @@ def _fingertip_regular_surface_grid_points(
         raw_samples,
         dense_rows,
         dense_cols,
-        degree_u=min(5, dense_rows - 1),
+        degree_u=min(6, dense_rows - 1),
         degree_v=min(7, dense_cols - 1),
+        regularization=8.0e-6,
+        include_u_endpoints=True,
+        boundary_weight=10.0,
     )
 
-    u_values = (np.arange(rows, dtype=np.float64) + 0.5) / rows
+    # Keep the first row slightly inside the base, but place the final row on
+    # the distal boundary so the taxel grid and preview both reach the nose.
+    if rows == 1:
+        u_values = np.asarray([0.5], dtype=np.float64)
+    else:
+        u_values = np.linspace(0.06, 1.0, rows, dtype=np.float64)
     v_values = (np.arange(cols, dtype=np.float64) + 0.5) / cols
     return _evaluate_bezier_surface(controls, u_values, v_values)
 
@@ -1114,11 +1180,26 @@ def _fingertip_ellipsoid_surface_from_triangles(
     surface_rows: int = 28,
     surface_cols: int = 48,
 ) -> np.ndarray:
-    return _fingertip_regular_surface_grid_points(
-        triangles,
-        surface_rows,
-        surface_cols,
-    ).reshape(surface_rows, surface_cols, 3)
+    dense_rows = max(16, surface_rows // 2)
+    dense_cols = max(32, surface_cols // 2)
+    raw_samples = _fingertip_swept_shell_raw_grid_points(
+        triangles, dense_rows, dense_cols
+    )
+    controls = _fit_bezier_surface(
+        raw_samples,
+        dense_rows,
+        dense_cols,
+        degree_u=min(6, dense_rows - 1),
+        degree_v=min(7, dense_cols - 1),
+        regularization=8.0e-6,
+        include_u_endpoints=True,
+        boundary_weight=10.0,
+    )
+    u_values = np.linspace(0.0, 1.0, surface_rows, dtype=np.float64)
+    v_values = np.linspace(0.0, 1.0, surface_cols, dtype=np.float64)
+    return _evaluate_bezier_surface(controls, u_values, v_values).reshape(
+        surface_rows, surface_cols, 3
+    )
 
 
 def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray | float]:

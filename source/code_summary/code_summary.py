@@ -3,22 +3,17 @@ Code File Merger Tool.
 
 This tool merges multiple code files into a single text report,
 facilitating code review, documentation generation, or submission to AI assistants for analysis.
-Supports direct file path input or batch reading from a list file,
-with automatic filtering of binary files and invalid paths.
-
-Features:
-    1. Smart File Filtering: Auto-detects and skips binary files, directories, and non-existent paths
-    2. Dual Input Modes: Supports direct CLI arguments or reading from a text list file
-    3. Structured Output: Numbered file separators and clear header statistics
-    4. Error Handling: Single file read failure does not affect the overall process
-    5. Path Safety: Auto-resolves to absolute paths to avoid relative path confusion
+Supports direct file path input, batch reading from a list file, or auto-discovery.
 
 Usage:
-    # Method 1: Direct arguments
-    python -m source.code_summary.code_summary ./src/main.py ./utils/helper.py ./config.yaml
+    # Method 1: Auto-discover all .py files in the current directory (Default)
+    python -m source.code_summary.code_summary
 
-    # Method 2: Read from list file (supports comment lines with #)
-    python -m source.code_summary.code_summary --list source\\code_summary\\code_list.txt
+    # Method 2: Direct arguments
+    python -m source.code_summary.code_summary ./src/main.py ./utils/helper.py
+
+    # Method 3: Read from list file (supports comment lines with #)
+    python -m source.code_summary.code_summary --list source/code_summary/code_list.txt
 """
 
 import sys
@@ -91,34 +86,55 @@ def process_files(file_paths: list, output_file: Path):
 
 def main():
     """Command-line entry point."""
-    args = sys.argv[1:]
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Merge multiple code files into a single text report."
+    )
+    parser.add_argument(
+        "files", 
+        nargs="*", 
+        help="Direct file paths to merge. If omitted, auto-discovers .py files in the current directory."
+    )
+    parser.add_argument(
+        "--list", 
+        dest="list_file", 
+        help="Read file paths from a text list file (supports # comments)."
+    )
+
+    args = parser.parse_args()
     file_list = []
 
-    if not args:
-        print("Usage:")
-        print("  1. Direct paths: python -m source.code_summary.code_summary ./a.py ./b.py")
-        print("  2. List file:    python -m source.code_summary.code_summary --list paths.txt")
-        return
-
-    if args[0] == "--list":
-        if len(args) < 2:
-            print("Error: Please specify a file containing the path list")
-            return
-
-        list_file = Path(args[1])
-
-        if list_file.exists():
-            with open(list_file, 'r', encoding='utf-8') as f:
+    # Mode 1: Read from a list file
+    if args.list_file:
+        list_path = Path(args.list_file)
+        if list_path.exists():
+            with open(list_path, 'r', encoding='utf-8') as f:
                 file_list = [
                     line.strip()
                     for line in f
                     if line.strip() and not line.startswith('#')
                 ]
         else:
-            print(f"Error: List file {list_file} does not exist")
+            print(f"Error: List file {list_path} does not exist")
             return
+
+    # Mode 2: Direct arguments provided
+    elif args.files:
+        file_list = args.files
+
+    # Mode 3: Default mode - Auto-discover .py files in the current running directory
     else:
-        file_list = args
+        current_dir = Path.cwd()
+        print(f"No arguments provided. Auto-discovering .py files in: {current_dir}")
+        # rglob("*") 会递归搜索当前目录及所有子目录下的 .py 文件
+        discovered_files = sorted([str(p) for p in current_dir.rglob("*.py")])
+        
+        if not discovered_files:
+            print("No .py files found in the current directory.")
+            return
+            
+        file_list = discovered_files
 
     process_files(file_list, OUTPUT_FILENAME)
 
