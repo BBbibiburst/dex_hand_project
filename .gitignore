@@ -222,3 +222,14 @@ MUJOCO_LOG.TXT
 
 # code_summary
 code_summary.txt
+
+# Local reference checkout (assets needed by this project are copied to assets/)
+robosuite/
+
+# Demonstration datasets and recorder output
+datasets/
+recordings/
+
+# Local validation / interrupted recorder scratch files
+.tmp_*
+*.partial
