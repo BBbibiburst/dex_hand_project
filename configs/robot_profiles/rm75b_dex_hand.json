@@ -10,6 +10,23 @@
   "include_hand_action": true,
   "normalized_position": false,
   "enable_tactile_sensors": true,
+  "tactile_backend": "simple_box",
+  "tactile_options": {
+    "taxel_half_depth": 0.004,
+    "taxel_overlap": 1.25,
+    "taxel_min_half_size": 0.0005,
+    "image_force_max": 1.0,
+    "signal_processor": {
+      "deadzone": 0.002,
+      "saturation": 1.0,
+      "nonlinear_exponent": 0.7,
+      "lowpass_alpha": 0.45,
+      "crosstalk": 0.12,
+      "gaussian_sigma": 0.45,
+      "noise_std": 0.0,
+      "normalize": true
+    }
+  },
   "hand_prefix": null,
   "ee_site_name": null,
   "stats_interval": 0.5,

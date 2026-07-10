@@ -56,6 +56,8 @@ class RLEnvConfig:
     include_hand_action: bool = True
     normalized_position: bool = False
     enable_tactile_sensors: bool = True
+    tactile_backend: str = "simple_box"
+    tactile_options: Optional[Dict[str, Any]] = None
 
 
 def load_env_config(
@@ -115,7 +117,20 @@ class RobotGymEnv(gym.Env):
         if tactile_sensor is not None:
             self.tactile_sensor: TactileSensorBase = tactile_sensor
         elif self.config.enable_tactile_sensors and self.hand_descriptor.tactile_sensor_factory:
-            self.tactile_sensor = self.hand_descriptor.tactile_sensor_factory()
+            tactile_options = dict(self.config.tactile_options or {})
+            if self.config.hand_name == "dex_hand":
+                from source.sensors.tactile.dex_hand import create_dex_hand_tactile_sensor
+
+                self.tactile_sensor = create_dex_hand_tactile_sensor(
+                    self.config.tactile_backend,
+                    **tactile_options,
+                )
+            else:
+                if tactile_options:
+                    raise ValueError(
+                        "tactile_options are currently supported only for dex_hand."
+                    )
+                self.tactile_sensor = self.hand_descriptor.tactile_sensor_factory()
         else:
             self.tactile_sensor = NullTactileSensor()
 

@@ -54,4 +54,3 @@ def _empty_box() -> spaces.Box:
         high=np.zeros(0, dtype=np.float32),
         dtype=np.float32,
     )
-

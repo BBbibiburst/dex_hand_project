@@ -25,6 +25,8 @@ CONFIG_ONLY_KEYS = {
     "attach_point_name",
     "base_mount_site_name",
     "add_preview_scene",
+    "tactile_backend",
+    "tactile_options",
 }
 
 T = TypeVar("T")

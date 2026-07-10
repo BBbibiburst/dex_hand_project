@@ -511,5 +511,3 @@ class ArmPositionIkController:
             shape=(self.position_action_size,),
             dtype=np.float32,
         )
-
-

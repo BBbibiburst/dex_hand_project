@@ -12,7 +12,7 @@ from source.control.end_effectors import EndEffectorPositionController
 from source.environments.assets import asset_path
 from source.robots.descriptors import EndEffectorDescriptor
 from source.robots.registry import register_hand
-from source.sensors.tactile.dex_hand import DexHandTouchSensor
+from source.sensors.tactile.dex_hand import create_dex_hand_tactile_sensor
 
 
 DEX_HAND_POSITION_ACTUATORS = (
@@ -31,7 +31,7 @@ DEX_HAND = register_hand(
         xml_path=asset_path("grippers", "dex_hand", "dex_hand.xml"),
         position_actuator_names=DEX_HAND_POSITION_ACTUATORS,
         default_prefix="dexhand_",
-        tactile_sensor_factory=DexHandTouchSensor,
+        tactile_sensor_factory=create_dex_hand_tactile_sensor,
         controller_factory=EndEffectorPositionController,
     )
 )

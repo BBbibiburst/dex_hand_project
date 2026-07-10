@@ -21,12 +21,23 @@ from source.demos.common import (
 )
 from source.environments.robot_builder import build_robot_model_from_config
 from source.robots.registry import get_hand
-from source.sensors.tactile.dex_hand import DexHandTouchSensor, site_name
+from source.sensors.tactile.dex_hand import (
+    SUPPORTED_TACTILE_BACKENDS,
+    DexHandTactileSensorBase,
+    create_dex_hand_tactile_sensor,
+    site_name,
+)
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Preview dex-hand tactile taxel sites."
+    )
+    parser.add_argument(
+        "--backend",
+        choices=SUPPORTED_TACTILE_BACKENDS,
+        default=None,
+        help="Tactile backend. Defaults to tactile_backend in the robot config.",
     )
     parser.add_argument(
         "--patch",
@@ -100,7 +111,7 @@ def _patch_color(
 
 def _collect_sites(
     model: mujoco.MjModel,
-    sensor: DexHandTouchSensor,
+    sensor: DexHandTactileSensorBase,
     *,
     prefix: str,
     patch_filter: str,
@@ -342,7 +353,9 @@ def main() -> None:
     require_hand(config, "dex_hand", demo_name="tactile_preview")
 
     hand_name = str(config.get("hand_name", "dex_hand"))
-    tactile_sensor = DexHandTouchSensor()
+    backend = args.backend or str(config.get("tactile_backend", "simple_box"))
+    tactile_options = dict(config.get("tactile_options") or {})
+    tactile_sensor = create_dex_hand_tactile_sensor(backend, **tactile_options)
     hand_descriptor = get_hand(hand_name)
 
     hand_prefix = (
@@ -379,6 +392,7 @@ def main() -> None:
         for site_id, _mesh_name in sites
     )
 
+    print(f"Backend: {tactile_sensor.backend_name}")
     print(f"Drawing {len(sites)} tactile sites.")
     print(f"Box sites: {box_count}")
     print(

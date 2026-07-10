@@ -305,5 +305,3 @@ class PikaGripperController(EndEffectorPositionController):
 
     def _joint_target_to_opening(self, joint_target: np.ndarray) -> np.ndarray:
         return (2.0 * (joint_target - self.ctrl_low)).astype(np.float32)
-
-

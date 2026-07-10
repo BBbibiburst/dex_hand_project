@@ -261,6 +261,16 @@ def build_robot_model_from_config(
     """Build a robot model from the global robot config JSON."""
     config = apply_config_overrides(load_robot_config(robot_config_path), overrides)
     arm_descriptor, hand_descriptor, base_descriptor = descriptors_from_robot_config(config)
+
+    enable_tactile = bool(config.get("enable_tactile_sensors", True))
+    if tactile_sensor is None and enable_tactile and hand_descriptor.name == "dex_hand":
+        from source.sensors.tactile.dex_hand import create_dex_hand_tactile_sensor
+
+        tactile_sensor = create_dex_hand_tactile_sensor(
+            str(config.get("tactile_backend", "simple_box")),
+            **dict(config.get("tactile_options") or {}),
+        )
+
     return build_robot_model(
         arm_descriptor=arm_descriptor,
         hand_descriptor=hand_descriptor,
@@ -271,7 +281,7 @@ def build_robot_model_from_config(
         hand_prefix=config.get("hand_prefix"),
         tactile_sensor=tactile_sensor,
         add_scene=bool(config.get("add_preview_scene", True)),
-        add_tactile_sensors=bool(config.get("enable_tactile_sensors", True)),
+        add_tactile_sensors=enable_tactile,
     )
 
 

@@ -248,4 +248,3 @@ class RobotPositionIkController(CompositeRobotController):
             arm_controller=composite.arm_controller,
             hand_controller=composite.hand_controller,
         )
-
