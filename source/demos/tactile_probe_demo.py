@@ -23,12 +23,12 @@ from source.demos.common import (
     load_demo_robot_config,
     require_hand,
 )
-from source.environments.robot_builder import build_robot_spec
-from source.environments.robot_config import (
+from source.robots.builder import build_robot_spec
+from source.robots.config import (
     descriptors_from_robot_config,
     optional_tuple,
 )
-from source.environments.scene import add_preview_scene
+from source.robots.scene import add_preview_scene
 from source.sensors.tactile.dex_hand import (
     SUPPORTED_TACTILE_BACKENDS,
     DexHandTactileSensorBase,

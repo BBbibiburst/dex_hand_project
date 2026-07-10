@@ -9,7 +9,7 @@ from typing import Any, Dict
 
 import numpy as np
 
-from source.demos.common import add_robot_config_args, make_demo_env
+from source.demos.common import RealtimePacer, add_robot_config_args, make_demo_env
 
 
 def _parse_args() -> argparse.Namespace:
@@ -63,8 +63,9 @@ def main() -> None:
     target_action = action.copy()
     render_dt = 1.0 / args.render_fps
     next_control_time = float(env.data.time)
-    wall_start = time.perf_counter()
     sim_start = float(env.data.time)
+    pacer = RealtimePacer()
+    pacer.reset(sim_start)
 
     try:
         while True:
@@ -94,16 +95,14 @@ def main() -> None:
                 action = env.controller.current_action(env.model, env.data)
                 target_action = action.copy()
                 next_control_time = float(env.data.time)
-                wall_start = time.perf_counter()
                 sim_start = float(env.data.time)
+                pacer.reset(sim_start)
                 terminated = False
                 truncated = False
 
             if not args.no_realtime:
                 sim_elapsed = float(env.data.time) - sim_start
-                sleep_time = wall_start + sim_elapsed - time.perf_counter()
-                if sleep_time > 0.0:
-                    time.sleep(sleep_time)
+                pacer.sleep_until(float(env.data.time))
     finally:
         env.close()
 

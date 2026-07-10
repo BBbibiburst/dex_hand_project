@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from source.control.arm import ArmPositionIkController
-from source.environments.assets import asset_path
+from source.assets import asset_path
 from source.robots.descriptors import ArmDescriptor
 from source.robots.registry import register_arm
 

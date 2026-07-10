@@ -31,9 +31,6 @@ except ImportError:
 
 
 FINGER_SEGMENT_FIT_SUBDIVISIONS = 4
-FINGERTIP_MAX_PHI = 0.5 * np.pi
-FINGERTIP_THETA_ARC = 0.5 * np.pi
-FINGERTIP_MIRROR_ACROSS_XY = True
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
 DEFAULT_PLOT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
@@ -79,11 +76,19 @@ def dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
 DEX_HAND_PATCH_LAYOUT = dex_hand_patch_layout()
 
 
-def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
+def _build_dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
     return {
         mesh_name: (rows, cols, kind)
         for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT
     }
+
+_DEX_HAND_PATCH_INFO = _build_dex_hand_patch_info()
+
+
+def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
+    """Return immutable-by-convention patch metadata without rebuilding it."""
+    return _DEX_HAND_PATCH_INFO
+
 
 
 # ---------------------------------------------------------------------------
@@ -165,8 +170,8 @@ def mesh_uv_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
 def fingertip_ellipsoid_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
     """Surface-following grid for rounded fingertip pads.
 
-    A local PCA/ellipsoid frame is used only to establish consistent axial
-    and circumferential coordinates. Taxels are then interpolated directly
+    A local PCA frame establishes consistent axial and circumferential
+    coordinates for a swept-shell fit. Taxels are then interpolated directly
     on the real STL triangles, rather than placed on an ideal ellipsoid.
     ``phi`` is clamped to ``[0, pi/2]`` and the ``theta`` arc is centered from
     the outer-surface samples with width ``pi/2``, so the model covers a
@@ -179,7 +184,7 @@ def fingertip_ellipsoid_grid_points(mesh_path: Path, rows: int, cols: int) -> np
     that same regular ellipsoid.
     """
     triangles = read_stl_triangles(mesh_path)
-    return _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
+    return _fingertip_swept_shell_grid_points_from_triangles(triangles, rows, cols)
 
 
 GRID_POINT_FUNCTIONS = {
@@ -268,8 +273,8 @@ def patch_fingertip_ellipsoid_plot_data(
     visualizer renders it as a translucent overlay on top of the STL mesh.
     """
     triangles = read_stl_triangles(mesh_path)
-    samples = _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
-    fitted_surface = _fingertip_ellipsoid_surface_from_triangles(
+    samples = _fingertip_swept_shell_grid_points_from_triangles(triangles, rows, cols)
+    fitted_surface = _fingertip_swept_shell_surface_from_triangles(
         triangles,
         surface_rows=36,
         surface_cols=72,
@@ -785,7 +790,7 @@ def _mesh_uv_grid_points_from_triangles(
     return np.asarray(points, dtype=np.float64)
 
 
-def _fingertip_ellipsoid_grid_points_from_triangles(
+def _fingertip_swept_shell_grid_points_from_triangles(
     triangles: np.ndarray,
     rows: int,
     cols: int,
@@ -1333,7 +1338,7 @@ def _fingertip_regular_surface_grid_points(
     return _evaluate_bezier_surface(controls, u_values, v_values)
 
 
-def _fingertip_ellipsoid_surface_from_triangles(
+def _fingertip_swept_shell_surface_from_triangles(
     triangles: np.ndarray,
     *,
     surface_rows: int = 28,
@@ -1361,133 +1366,10 @@ def _fingertip_ellipsoid_surface_from_triangles(
     )
 
 
-def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray | float]:
-    fit_points = _supersample_triangles(triangles, subdivisions=3)
-    pca_center = fit_points.mean(axis=0)
-    centered = fit_points - pca_center
-    _, _, vh = np.linalg.svd(centered, full_matrices=False)
-    axis, section_x, section_y = vh[0], vh[1], vh[2]
-
-    axial_all = centered @ axis
-    lo_mask = axial_all <= np.percentile(axial_all, 15.0)
-    hi_mask = axial_all >= np.percentile(axial_all, 85.0)
-    lo_spread = np.std(centered[lo_mask] @ section_x) + np.std(centered[lo_mask] @ section_y)
-    hi_spread = np.std(centered[hi_mask] @ section_x) + np.std(centered[hi_mask] @ section_y)
-    if lo_spread < hi_spread:
-        axis = -axis
-
-    outer_triangles = triangles[_fingertip_outer_face_mask(triangles, pca_center, axis)]
-    if len(outer_triangles) == 0:
-        outer_triangles = triangles
-    outer_points = _supersample_triangles(outer_triangles, subdivisions=4)
-    outer_centered_pca = outer_points - pca_center
-    outer_u0 = outer_centered_pca @ axis
-    base_u = np.percentile(outer_u0, 5.0)
-    tip_u = np.percentile(outer_u0, 97.0)
-    center = pca_center + base_u * axis
-    if FINGERTIP_MIRROR_ACROSS_XY:
-        outer_points = outer_points.copy()
-        outer_points[:, 2] = 2.0 * center[2] - outer_points[:, 2]
-    outer_centered = outer_points - center
-
-    u = outer_centered @ axis
-    v = outer_centered @ section_x
-    w = outer_centered @ section_y
-
-    a = max(tip_u - base_u, _robust_high_abs_mean(u), 1e-9)
-    b = max(_robust_high_abs_mean(v), 1e-9)
-    c = max(_robust_high_abs_mean(w), 1e-9)
-
-    un = np.clip(u / a, -1.0, 1.0)
-    phi = np.arccos(un)
-    theta = np.mod(np.arctan2(w / c, v / b), 2.0 * np.pi)
-
-    phi_hi = min(float(np.percentile(phi, 96.0)), float(FINGERTIP_MAX_PHI))
-    arc_start, arc_end = _axis_ray_angle_arc_fixed_width(
-        u,
-        v,
-        w,
-        b,
-        c,
-        width=FINGERTIP_THETA_ARC,
-    )
-    return {
-        "center": center,
-        "axis": axis,
-        "section_x": section_x,
-        "section_y": section_y,
-        "a": float(a),
-        "b": float(b),
-        "c": float(c),
-        "phi_lo": 0.0,
-        "phi_hi": phi_hi,
-        "arc_start": float(arc_start),
-        "arc_end": float(arc_end),
-        "outer_u": u,
-        "outer_v": v,
-        "outer_w": w,
-        "outer_phi": phi,
-        "outer_theta": theta,
-    }
 
 
-def _fingertip_outer_face_mask(
-    triangles: np.ndarray,
-    center: np.ndarray,
-    axis: np.ndarray,
-) -> np.ndarray:
-    face_centers = triangles.mean(axis=1)
-    face_normals = _triangle_normals(triangles)
-    face_rel = face_centers - center
-    radial_len = np.linalg.norm(face_rel, axis=1) + 1e-12
-    radial_dir = face_rel / radial_len[:, None]
-    normal_radial_3d = np.sum(face_normals * radial_dir, axis=1)
-
-    normal_axial = face_normals @ axis
-    face_axial = face_rel @ axis
-    axial_low = np.percentile(face_axial, 10.0)
-    is_base_cut = (normal_axial < -0.85) & (face_axial < axial_low)
-
-    r_norm3d = radial_len / max(np.percentile(radial_len, 95.0), 1e-9)
-    if np.std(r_norm3d) < 0.02:
-        mask = normal_radial_3d > 0.0
-    else:
-        pos_vote = (r_norm3d >= np.median(r_norm3d)).astype(np.float64)
-        normal_vote = (normal_radial_3d > 0.0).astype(np.float64)
-        mask = (0.6 * pos_vote + 0.4 * normal_vote) > 0.5
-
-    mask = mask & (~is_base_cut)
-    min_faces = max(8, int(0.1 * len(triangles)))
-    if int(mask.sum()) < min_faces:
-        mask = (r_norm3d >= np.percentile(r_norm3d, 60.0)) & (~is_base_cut)
-    return mask
 
 
-def _fingertip_points_from_fit(
-    fit: dict[str, np.ndarray | float],
-    phi_values: np.ndarray,
-    theta_values: np.ndarray,
-) -> np.ndarray:
-    center = np.asarray(fit["center"], dtype=np.float64)
-    axis = np.asarray(fit["axis"], dtype=np.float64)
-    section_x = np.asarray(fit["section_x"], dtype=np.float64)
-    section_y = np.asarray(fit["section_y"], dtype=np.float64)
-    a = float(fit["a"])
-    b = float(fit["b"])
-    c = float(fit["c"])
-
-    points: list[np.ndarray] = []
-    for phi_value in phi_values:
-        sin_phi = np.sin(phi_value)
-        for theta in theta_values:
-            point = (
-                center
-                + a * np.cos(phi_value) * axis
-                + b * sin_phi * np.cos(theta) * section_x
-                + c * sin_phi * np.sin(theta) * section_y
-            )
-            points.append(point)
-    return np.asarray(points, dtype=np.float64)
 
 
 def _locate_projected_triangle(
@@ -1578,68 +1460,6 @@ def _occupied_angle_arc(angles: np.ndarray, *, bins: int = 96) -> tuple[float, f
     return start, end
 
 
-def _axis_ray_angle_arc_fixed_width(
-    axial: np.ndarray,
-    section_x_values: np.ndarray,
-    section_y_values: np.ndarray,
-    radius_x: float,
-    radius_y: float,
-    *,
-    width: float,
-    bins: int = 96,
-    axial_slices: int = 7,
-) -> tuple[float, float]:
-    section_x_norm = section_x_values / max(radius_x, 1e-9)
-    section_y_norm = section_y_values / max(radius_y, 1e-9)
-    radial_norm = np.sqrt(section_x_norm**2 + section_y_norm**2)
-    angles = np.mod(np.arctan2(section_y_norm, section_x_norm), 2.0 * np.pi)
-
-    target_width = min(float(width), 2.0 * np.pi)
-    if len(angles) == 0:
-        return 0.0, target_width
-
-    axial_low, axial_high = np.percentile(axial, [8.0, 92.0])
-    radial_floor = np.percentile(radial_norm, 35.0)
-    usable = (
-        (axial >= axial_low)
-        & (axial <= axial_high)
-        & (radial_norm >= radial_floor)
-    )
-    if int(usable.sum()) < 12:
-        usable = radial_norm >= radial_floor
-    if int(usable.sum()) < 12:
-        usable = np.ones_like(radial_norm, dtype=bool)
-
-    bin_width = 2.0 * np.pi / bins
-    support = np.zeros(bins, dtype=np.float64)
-    axial_edges = np.linspace(axial_low, axial_high, axial_slices + 1)
-    for start_u, end_u in zip(axial_edges[:-1], axial_edges[1:]):
-        slice_mask = usable & (axial >= start_u) & (axial <= end_u)
-        if int(slice_mask.sum()) < 4:
-            continue
-        hist, _ = np.histogram(angles[slice_mask], bins=bins, range=(0.0, 2.0 * np.pi))
-        # Count ray directions per axial slice, not raw point density, so one
-        # dense local patch does not dominate the whole angle range.
-        support += (hist > 0).astype(np.float64)
-
-    if not np.any(support):
-        hist, _ = np.histogram(angles[usable], bins=bins, range=(0.0, 2.0 * np.pi))
-        support = hist.astype(np.float64)
-    if not np.any(support):
-        return 0.0, target_width
-
-    support = (
-        0.25 * np.roll(support, 1)
-        + 0.5 * support
-        + 0.25 * np.roll(support, -1)
-    )
-    window_bins = max(1, min(bins, int(round(target_width / bin_width))))
-    doubled = np.concatenate([support, support])
-    prefix = np.concatenate([[0.0], np.cumsum(doubled)])
-    scores = prefix[window_bins : window_bins + bins] - prefix[:bins]
-    start_bin = int(np.argmax(scores))
-    arc_start = start_bin * bin_width
-    return arc_start, arc_start + window_bins * bin_width
 
 
 def _ellipse_arc_mid_angles(
@@ -1656,19 +1476,8 @@ def _ellipse_arc_mid_angles(
     return np.interp(targets, cumulative, samples)
 
 
-def _angle_distance(values: np.ndarray, target: float) -> np.ndarray:
-    return np.abs((values - target + np.pi) % (2.0 * np.pi) - np.pi)
 
 
-def _robust_high_abs_mean(values: np.ndarray) -> float:
-    abs_values = np.abs(np.asarray(values, dtype=np.float64))
-    if len(abs_values) == 0:
-        return 0.0
-    low, high = np.percentile(abs_values, [55.0, 95.0])
-    band = abs_values[(abs_values >= low) & (abs_values <= high)]
-    if len(band) == 0:
-        band = abs_values
-    return float(np.mean(band))
 
 
 def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
@@ -1679,18 +1488,8 @@ def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
     return 0.5 * (edges[:-1] + edges[1:])
 
 
-def _linspace_interval_midpoints(low: float, high: float, count: int) -> np.ndarray:
-    if count == 1:
-        return np.asarray([(low + high) * 0.5], dtype=np.float64)
-    edges = np.linspace(low, high, count + 1, dtype=np.float64)
-    return 0.5 * (edges[:-1] + edges[1:])
 
 
-def _linspace_percentile(values: np.ndarray, count: int) -> np.ndarray:
-    low, high = np.percentile(values, [7.5, 92.5])
-    if count == 1:
-        return np.asarray([(low + high) * 0.5], dtype=np.float64)
-    return np.linspace(low, high, count, dtype=np.float64)
 
 
 # ---------------------------------------------------------------------------

@@ -4,10 +4,33 @@
 from __future__ import annotations
 
 import argparse
+import time
 from typing import Any
 
-from source.environments.rl_env import make_env
-from source.environments.robot_config import load_robot_config
+from source.envs.rl_env import make_env
+from source.robots.config import load_robot_config
+
+
+class RealtimePacer:
+    """Synchronize simulation time to wall-clock time.
+
+    The class deliberately knows nothing about control or rendering frequency;
+    demos retain ownership of those policies.
+    """
+
+    def __init__(self) -> None:
+        self._wall_start = 0.0
+        self._sim_start = 0.0
+
+    def reset(self, sim_time: float) -> None:
+        self._wall_start = time.perf_counter()
+        self._sim_start = float(sim_time)
+
+    def sleep_until(self, sim_time: float) -> None:
+        target_wall_time = self._wall_start + float(sim_time) - self._sim_start
+        delay = target_wall_time - time.perf_counter()
+        if delay > 0.0:
+            time.sleep(delay)
 
 
 def add_robot_config_args(

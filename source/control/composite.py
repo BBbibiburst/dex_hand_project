@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """Composite robot controllers."""
 
 from __future__ import annotations
@@ -211,40 +211,3 @@ def build_robot_controller(
         arm_controller=arm_controller,
         hand_controller=hand_controller,
     )
-
-
-class RobotPositionIkController(CompositeRobotController):
-    """Compatibility wrapper for older code that constructed one controller."""
-
-    def __init__(
-        self,
-        *,
-        arm_descriptor: ArmDescriptor | None = None,
-        hand_descriptor: EndEffectorDescriptor | None = None,
-        hand_prefix: str | None = None,
-        control_mode: str = "position",
-        ee_site_name: str | None = None,
-        include_hand_action: bool = True,
-        normalized_position: bool = False,
-        **arm_controller_kwargs: Any,
-    ) -> None:
-        if arm_descriptor is None or hand_descriptor is None:
-            from source.robots.defaults import DEFAULT_ARM, DEFAULT_HAND
-
-            arm_descriptor = DEFAULT_ARM if arm_descriptor is None else arm_descriptor
-            hand_descriptor = DEFAULT_HAND if hand_descriptor is None else hand_descriptor
-
-        composite = build_robot_controller(
-            arm_descriptor=arm_descriptor,
-            hand_descriptor=hand_descriptor,
-            hand_prefix=hand_prefix,
-            control_mode=control_mode,
-            ee_site_name=ee_site_name,
-            include_hand_action=include_hand_action,
-            normalized_position=normalized_position,
-            **arm_controller_kwargs,
-        )
-        super().__init__(
-            arm_controller=composite.arm_controller,
-            hand_controller=composite.hand_controller,
-        )

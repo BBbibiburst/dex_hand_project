@@ -20,16 +20,16 @@ from mujoco import viewer
 import numpy as np
 
 from source.control.composite import build_robot_controller
-from source.environments.overlays import clear_markers, draw_stats_label
-from source.environments.robot_config import (
+from source.viz.overlays import clear_markers, draw_stats_label
+from source.robots.config import (
     apply_config_overrides,
     dataclass_from_robot_config,
     load_robot_config,
 )
-from source.environments.robot_builder import build_robot_spec
-from source.environments.scene import add_basic_scene
-from source.environments.tactile_sensors import NullTactileSensor, TactileSensorBase
-from source.environments.tasks import NoopTask, RobotTask
+from source.robots.builder import build_robot_spec
+from source.robots.scene import add_basic_scene
+from source.sensors.base import NullTactileSensor, TactileSensorBase
+from source.envs.core.tasks import NoopTask, RobotTask
 from source.robots.registry import get_arm, get_base, get_hand
 
 

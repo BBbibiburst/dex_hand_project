@@ -5,9 +5,9 @@ from __future__ import annotations
 import mujoco
 import numpy as np
 
-from source.environments.core.registry import register_task
-from source.environments.manipulation.base import SingleArmManipulationTask
-from source.environments.manipulation.objects import FreeBoxSpec
+from source.envs.core.registry import register_task
+from source.envs.manipulation.base import SingleArmManipulationTask
+from source.envs.manipulation.objects import FreeBoxSpec
 
 
 @register_task("lift")

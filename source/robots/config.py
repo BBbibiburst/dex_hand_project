@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping, Optional, TypeVar
 
-from source.environments.assets import PROJECT_ROOT
+from source.assets import PROJECT_ROOT
 from source.robots.registry import get_arm, get_base, get_hand
 
 

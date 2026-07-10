@@ -14,7 +14,7 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
-from source.demos.common import add_robot_config_args, make_demo_env
+from source.demos.common import RealtimePacer, add_robot_config_args, make_demo_env
 
 
 def _parse_args() -> argparse.Namespace:
@@ -78,7 +78,7 @@ def run_ik_sine_demo(
     import mujoco
     from mujoco import viewer
 
-    from source.environments.overlays import (
+    from source.viz.overlays import (
         clear_markers,
         draw_ellipse_marker,
         draw_sphere_marker,
@@ -111,8 +111,9 @@ def run_ik_sine_demo(
         hand_half_range = 0.5 * (hand_high - hand_low)
 
     render_dt = 1.0 / render_fps
-    wall_start = time.perf_counter()
     sim_start = float(env.data.time)
+    pacer = RealtimePacer()
+    pacer.reset(sim_start)
     last_control_sim_time = -np.inf
     last_print_second = -1
 
@@ -205,9 +206,7 @@ def run_ik_sine_demo(
                 )
 
             if realtime:
-                sleep_time = wall_start + sim_elapsed - time.perf_counter()
-                if sleep_time > 0.0:
-                    time.sleep(sleep_time)
+                pacer.sleep_until(float(env.data.time))
 
     if previous_mode != "ik":
         env.set_control_mode(previous_mode)

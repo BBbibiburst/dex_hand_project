@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from source.control.end_effectors import PikaGripperController
-from source.environments.assets import asset_path
+from source.assets import asset_path
 from source.robots.descriptors import EndEffectorDescriptor
 from source.robots.registry import register_hand
 

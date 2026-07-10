@@ -1,92 +1,63 @@
 # -*- coding: utf-8 -*-
-"""Registry for robot component descriptors.
-
-Adding a new arm / hand / base only requires writing a descriptor module under
-``source.robots.arms``, ``source.robots.hands``, or ``source.robots.bases`` and
-calling the matching ``register_*`` function at import time.
-"""
+"""Registries and automatic discovery for robot descriptors."""
 
 from __future__ import annotations
 
 import importlib
 import pkgutil
 
+from source.registry import Registry
 from source.robots.descriptors import ArmDescriptor, BaseDescriptor, EndEffectorDescriptor
 
-
-_ARMS: dict[str, ArmDescriptor] = {}
-_HANDS: dict[str, EndEffectorDescriptor] = {}
-_BASES: dict[str, BaseDescriptor] = {}
+_ARMS = Registry[ArmDescriptor]("arm")
+_HANDS = Registry[EndEffectorDescriptor]("hand")
+_BASES = Registry[BaseDescriptor]("base")
 _BUILTINS_LOADED = False
 
 
-def _import_descriptor_package(package_name: str) -> None:
-    """Import all public modules in a descriptor package."""
+def _import_package_modules(package_name: str) -> None:
     package = importlib.import_module(package_name)
     for module_info in pkgutil.iter_modules(package.__path__):
-        if module_info.name.startswith("_"):
-            continue
-        importlib.import_module(f"{package_name}.{module_info.name}")
+        if not module_info.name.startswith("_"):
+            importlib.import_module(f"{package_name}.{module_info.name}")
 
 
 def load_builtin_descriptors() -> None:
-    """Import built-in descriptor modules so their register_* calls run."""
     global _BUILTINS_LOADED
     if _BUILTINS_LOADED:
         return
-
-    _import_descriptor_package("source.robots.arms")
-    _import_descriptor_package("source.robots.bases")
-    _import_descriptor_package("source.robots.hands")
     _BUILTINS_LOADED = True
+    for package_name in (
+        "source.robots.arms",
+        "source.robots.bases",
+        "source.robots.hands",
+    ):
+        _import_package_modules(package_name)
 
 
 def register_arm(descriptor: ArmDescriptor) -> ArmDescriptor:
-    _ARMS[descriptor.name] = descriptor
-    return descriptor
-
+    return _ARMS.register(descriptor.name, descriptor)
 
 def register_hand(descriptor: EndEffectorDescriptor) -> EndEffectorDescriptor:
-    _HANDS[descriptor.name] = descriptor
-    return descriptor
-
+    return _HANDS.register(descriptor.name, descriptor)
 
 def register_base(descriptor: BaseDescriptor) -> BaseDescriptor:
-    _BASES[descriptor.name] = descriptor
-    return descriptor
-
+    return _BASES.register(descriptor.name, descriptor)
 
 def get_arm(name: str) -> ArmDescriptor:
-    load_builtin_descriptors()
-    if name not in _ARMS:
-        raise KeyError(f"Unknown arm {name!r}. Available arms: {sorted(_ARMS)}")
-    return _ARMS[name]
-
+    load_builtin_descriptors(); return _ARMS.get(name)
 
 def get_hand(name: str) -> EndEffectorDescriptor:
-    load_builtin_descriptors()
-    if name not in _HANDS:
-        raise KeyError(f"Unknown hand {name!r}. Available hands: {sorted(_HANDS)}")
-    return _HANDS[name]
-
+    load_builtin_descriptors(); return _HANDS.get(name)
 
 def get_base(name: str) -> BaseDescriptor:
-    load_builtin_descriptors()
-    if name not in _BASES:
-        raise KeyError(f"Unknown base {name!r}. Available bases: {sorted(_BASES)}")
-    return _BASES[name]
-
+    load_builtin_descriptors(); return _BASES.get(name)
 
 def registered_arms() -> tuple[str, ...]:
-    load_builtin_descriptors()
-    return tuple(sorted(_ARMS))
-
+    load_builtin_descriptors(); return _ARMS.names()
 
 def registered_hands() -> tuple[str, ...]:
-    load_builtin_descriptors()
-    return tuple(sorted(_HANDS))
-
+    load_builtin_descriptors(); return _HANDS.names()
 
 def registered_bases() -> tuple[str, ...]:
-    load_builtin_descriptors()
-    return tuple(sorted(_BASES))
+    load_builtin_descriptors(); return _BASES.names()

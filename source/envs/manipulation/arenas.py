@@ -10,7 +10,7 @@ from typing import Any, Optional, Tuple
 import mujoco
 import numpy as np
 
-from source.environments.assets import asset_path
+from source.assets import asset_path
 
 
 @dataclass(frozen=True)

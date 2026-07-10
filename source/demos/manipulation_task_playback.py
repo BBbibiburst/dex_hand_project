@@ -14,15 +14,14 @@ Usage::
 from __future__ import annotations
 
 import argparse
-import time
 from typing import Any, Dict
 
 import numpy as np
 from mujoco import viewer
 
-from source.demos.common import add_robot_config_args
-from source.environments.manipulation import make_manipulation_env, registered_tasks
-from source.environments.overlays import clear_markers, draw_label
+from source.demos.common import RealtimePacer, add_robot_config_args
+from source.envs.manipulation import make_manipulation_env, registered_tasks
+from source.viz.overlays import clear_markers, draw_label
 
 
 def _parse_args() -> argparse.Namespace:
@@ -120,8 +119,9 @@ def run_viewer(args: argparse.Namespace) -> None:
     action = base_action.copy()
 
     render_dt = 1.0 / args.render_fps
-    wall_start = time.perf_counter()
     sim_start = float(env.data.time)
+    pacer = RealtimePacer()
+    pacer.reset(sim_start)
     last_print_second = -1
     reward = 0.0
     reward_info: Dict[str, Any] = {}
@@ -163,14 +163,12 @@ def run_viewer(args: argparse.Namespace) -> None:
                     obs, _info = env.reset(seed=args.seed)
                     base_action = env.controller.current_action(env.model, env.data)
                     action = base_action.copy()
-                    wall_start = time.perf_counter()
                     sim_start = float(env.data.time)
+                    pacer.reset(sim_start)
                     last_print_second = -1
 
                 if not args.no_realtime:
-                    sleep_time = wall_start + sim_elapsed - time.perf_counter()
-                    if sleep_time > 0.0:
-                        time.sleep(sleep_time)
+                    pacer.sleep_until(float(env.data.time))
     finally:
         env.close()
 

@@ -3,14 +3,12 @@
 from __future__ import annotations
 from typing import Any, Mapping
 
-from source.environments.core.registry import make_task
+from source.envs.core.registry import make_task
 # Import built-ins for registration side effects.
-from source.environments.manipulation import lift as _lift  # noqa: F401
-from source.environments.manipulation import stack as _stack  # noqa: F401
 
 
 def make_manipulation_env(task_name: str, *, task_config: Mapping[str,Any] | None=None, **env_kwargs: Any):
-    from source.environments.rl_env import make_env
+    from source.envs.rl_env import make_env
     task=make_task(task_name, **dict(task_config or {}))
     env_kwargs.setdefault("add_default_scene",False)
     return make_env(task=task,**env_kwargs)

@@ -8,7 +8,7 @@ points) — never *how to simulate its sensors*. Tactile / force / any other
 sensing behaviour is intentionally NOT modeled here as structured data
 (patches, rows, cols, mesh names, ...). Instead each end effector supplies a
 ``tactile_sensor_factory``: a zero-argument callable that returns a
-``TactileSensorBase`` instance (see ``source.environments.tactile_sensors``).
+``TactileSensorBase`` instance (see ``source.sensors.base``).
 
 This keeps the framework layer free of any assumption about sensor
 implementation (STL-fit taxel grids, contact-force summation, an external
@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Callable, Optional, Sequence
 
 if TYPE_CHECKING:
-    from source.environments.tactile_sensors import TactileSensorBase
+    from source.sensors.base import TactileSensorBase
 
 
 TactileSensorFactory = Callable[[], "TactileSensorBase"]

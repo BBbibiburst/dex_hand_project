@@ -12,25 +12,22 @@ temporary file involved.
 
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
-import traceback
 from typing import Optional, Tuple
 
 import mujoco
-from mujoco import viewer
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-from source.environments.assets import PathLike, resolve_path
-from source.environments.robot_config import (
+from source.assets import PathLike, resolve_path
+from source.robots.config import (
     apply_config_overrides,
     descriptors_from_robot_config,
     load_robot_config,
     optional_tuple,
 )
-from source.environments.scene import add_preview_scene
-from source.environments.tactile_sensors import TactileSensorBase
+from source.robots.scene import add_preview_scene
+from source.sensors.base import TactileSensorBase
 from source.robots.defaults import DEFAULT_ARM, DEFAULT_BASE, DEFAULT_HAND
 from source.robots.descriptors import ArmDescriptor, BaseDescriptor, EndEffectorDescriptor
 
@@ -283,44 +280,3 @@ def build_robot_model_from_config(
         add_scene=bool(config.get("add_preview_scene", True)),
         add_tactile_sensors=enable_tactile,
     )
-
-
-def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Preview the configured robot assembly.")
-    parser.add_argument(
-        "--robot-config",
-        type=str,
-        default=None,
-        help="Path to a robot config JSON. Defaults to configs/current_robot.json.",
-    )
-    parser.add_argument("--arm-name", type=str, default=None)
-    parser.add_argument("--hand-name", type=str, default=None)
-    parser.add_argument("--base-name", type=str, default=None)
-    parser.add_argument("--no-scene", action="store_true")
-    parser.add_argument("--no-tactile", action="store_true")
-    return parser.parse_args()
-
-
-if __name__ == "__main__":
-    print("--- Standalone preview: registered robot assembly ---")
-    try:
-        args = _parse_args()
-        overrides = {
-            "arm_name": args.arm_name,
-            "hand_name": args.hand_name,
-            "base_name": args.base_name,
-            "add_preview_scene": False if args.no_scene else None,
-            "enable_tactile_sensors": False if args.no_tactile else None,
-        }
-        model, data = build_robot_model_from_config(args.robot_config, **overrides)
-
-        with viewer.launch_passive(model, data) as v:
-            while v.is_running():
-                mujoco.mj_step(model, data)
-                v.sync()
-
-    except FileNotFoundError as e:
-        print(f"\n[Error] Missing file: {e}")
-    except Exception as e:
-        print(f"\n[Error] Unexpected exception: {e}")
-        traceback.print_exc()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Stable task contract used by :mod:`source.environments.rl_env`."""
+"""Stable task contract used by :mod:`source.envs.rl_env`."""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

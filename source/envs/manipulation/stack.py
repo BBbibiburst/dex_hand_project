@@ -7,10 +7,10 @@ from gymnasium import spaces
 import mujoco
 import numpy as np
 
-from source.environments.core.registry import register_task
-from source.environments.manipulation.base import SingleArmManipulationTask
-from source.environments.manipulation.objects import FreeBoxSpec
-from source.environments.manipulation.placement import UniformTablePlacementSampler
+from source.envs.core.registry import register_task
+from source.envs.manipulation.base import SingleArmManipulationTask
+from source.envs.manipulation.objects import FreeBoxSpec
+from source.envs.manipulation.placement import UniformTablePlacementSampler
 
 
 @register_task("stack")
@@ -42,7 +42,9 @@ class StackTask(SingleArmManipulationTask):
         return self.scale_reward(float(reward)), {"reward_reach":reach,"reward_lift":lift,"reward_stack":stack}
 
     def staged_rewards(self, model, data):
-        b=self._require_bindings(); a=self._body_pos(model,data,"cubeA"); c=self._body_pos(model,data,"cubeB")
+        b=self._require_bindings()
+        a=self._body_pos(model,data,"cubeA")
+        c=self._body_pos(model,data,"cubeB")
         ee=np.zeros(3) if b.ee_site_id is None else data.site_xpos[b.ee_site_id]
         reach=.25*(1.0-np.tanh(10.0*float(np.linalg.norm(ee-a))))
         grasp=self._is_robot_touching_object(model,data,"cubeA")

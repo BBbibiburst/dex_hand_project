@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """Preview generated dex-hand tactile taxel sites in the MuJoCo viewer.
 
 The preview reads each compiled site's actual geometry, size, position, and
@@ -19,7 +19,7 @@ from source.demos.common import (
     load_demo_robot_config,
     require_hand,
 )
-from source.environments.robot_builder import build_robot_model_from_config
+from source.robots.builder import build_robot_model_from_config
 from source.robots.registry import get_hand
 from source.sensors.tactile.dex_hand import (
     SUPPORTED_TACTILE_BACKENDS,

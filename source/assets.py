@@ -9,7 +9,7 @@ from typing import Optional, Union
 
 PathLike = Union[str, Path]
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 ASSETS_DIR = PROJECT_ROOT / "assets"
 
 ROBOTS_DIR = ASSETS_DIR / "robots"

@@ -9,7 +9,7 @@ patch layouts, and taxel placement live in ``source.sensors.tactile.dex_hand``.
 from __future__ import annotations
 
 from source.control.end_effectors import EndEffectorPositionController
-from source.environments.assets import asset_path
+from source.assets import asset_path
 from source.robots.descriptors import EndEffectorDescriptor
 from source.robots.registry import register_hand
 from source.sensors.tactile.dex_hand import create_dex_hand_tactile_sensor
