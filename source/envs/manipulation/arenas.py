@@ -254,8 +254,14 @@ class PegsArena(TableArena):
             body.pos = [center[0], center[1], self.table_top_z + self.peg_half_height]
             geom = body.add_geom()
             geom.name = f"peg{index + 1}_geom"
-            geom.type = mujoco.mjtGeom.mjGEOM_BOX if index == 0 else mujoco.mjtGeom.mjGEOM_CYLINDER
-            geom.size = ([self.peg_radius] * 3 if index == 0 else [self.peg_radius, self.peg_half_height, 0.0])
             if index == 0:
-                geom.size = [self.peg_radius, self.peg_radius, self.peg_half_height]
+                geom.type = mujoco.mjtGeom.mjGEOM_BOX
+                geom.size = [
+                    self.peg_radius,
+                    self.peg_radius,
+                    self.peg_half_height,
+                ]
+            else:
+                geom.type = mujoco.mjtGeom.mjGEOM_CYLINDER
+                geom.size = [self.peg_radius, self.peg_half_height, 0.0]
             geom.rgba = [0.25, 0.45, 0.85, 1.0] if index == 0 else [0.85, 0.75, 0.15, 1.0]

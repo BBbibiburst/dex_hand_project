@@ -10,6 +10,7 @@ from source.envs.manipulation.arenas import BinsArena
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.objects import FreeBoxSpec, FreeCylinderSpec
 from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.rewards import staged_multi_object_reward
 
 
 @register_task("pick_place")
@@ -87,18 +88,17 @@ class PickPlaceTask(SingleArmManipulationTask):
         elif not self.reward_shaping:
             reward = float(np.sum(self.objects_in_bins))
         else:
-            active = [o for i, o in enumerate(self.objects) if not self.objects_in_bins[i]]
-            if not active:
-                reward = self.success_reward
-            else:
-                d = min(float(np.linalg.norm(obs[f"gripper_to_{o.name}_pos"])) for o in active)
-                reach = 0.1 * (1 - np.tanh(10 * d))
-                grasp = 0.35 if any(self._is_robot_touching_object(model, data, o.name) for o in active) else 0.0
-                hover = 0.0
-                for o in active:
-                    i = self.objects.index(o)
-                    pos = self._body_pos(model, data, o.name)
-                    hover = max(hover, 0.7 * (1 - np.tanh(10 * np.linalg.norm(pos[:2] - self._target_center(i)[:2]))))
-                reward = float(np.sum(self.objects_in_bins)) + max(reach, grasp, hover)
+            index_by_name = {obj.name: index for index, obj in enumerate(self.objects)}
+            reward = staged_multi_object_reward(
+                object_names=tuple(index_by_name),
+                placed=self.objects_in_bins,
+                gripper_distance=lambda name: float(
+                    np.linalg.norm(obs[f"gripper_to_{name}_pos"])
+                ),
+                is_grasped=lambda name: self._is_robot_touching_object(
+                    model, data, name
+                ),
+                object_position=lambda name: self._body_pos(model, data, name),
+                target_position=lambda name: self._target_center(index_by_name[name]),
+            )
         return self.scale_reward(float(reward)), {"objects_in_bins": self.objects_in_bins.copy()}
-

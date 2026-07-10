@@ -5,6 +5,13 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 
+from source.imitation.schema import (
+    ACTION_KEY,
+    AGENTVIEW_IMAGE_KEY,
+    STATE_KEY,
+    TACTILE_KEY,
+)
+
 
 class LeRobotDiffusionDataset(Dataset):
     def __init__(self, *, repo_id: str, root: str | Path, horizon: int):
@@ -20,10 +27,10 @@ class LeRobotDiffusionDataset(Dataset):
         self.dataset = LeRobotDataset(
             repo_id,
             root=root,
-            delta_timestamps={"action": [step / fps for step in range(horizon)]},
+            delta_timestamps={ACTION_KEY: [step / fps for step in range(horizon)]},
         )
-        self.image_key = "observation.images.agentview"
-        self.has_tactile = "observation.tactile" in self.dataset.features
+        self.image_key = AGENTVIEW_IMAGE_KEY
+        self.has_tactile = TACTILE_KEY in self.dataset.features
 
     def __len__(self):
         return len(self.dataset)
@@ -36,16 +43,16 @@ class LeRobotDiffusionDataset(Dataset):
         if image.max() > 1:
             image = image / 255.0
         tactile = (
-            item["observation.tactile"].float().flatten()
+            item[TACTILE_KEY].float().flatten()
             if self.has_tactile
             else torch.zeros(0, dtype=torch.float32)
         )
-        action = item["action"].float()
+        action = item[ACTION_KEY].float()
         if action.ndim == 1:
             action = action.unsqueeze(0)
         return {
             "image": image,
             "tactile": tactile,
-            "state": item["observation.state"].float(),
+            "state": item[STATE_KEY].float(),
             "action": action,
         }

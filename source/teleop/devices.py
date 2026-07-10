@@ -11,6 +11,8 @@ import time
 
 import numpy as np
 
+from source.geometry import normalize_quat, quat_multiply
+
 
 @dataclass(frozen=True)
 class GloveSample:
@@ -129,13 +131,6 @@ class SineViveTracker:
         q = np.asarray(quaternion_wxyz, dtype=np.float64)
         self._base_quaternion = q / max(np.linalg.norm(q), 1e-9)
 
-    @staticmethod
-    def _multiply(a, b):
-        aw, ax, ay, az = a; bw, bx, by, bz = b
-        return np.asarray([
-            aw*bw-ax*bx-ay*by-az*bz, aw*bx+ax*bw+ay*bz-az*by,
-            aw*by-ax*bz+ay*bw+az*bx, aw*bz+ax*by-ay*bx+az*bw,
-        ])
 
     def read(self) -> ViveSample:
         if self._start is None:
@@ -152,8 +147,7 @@ class SineViveTracker:
             cx*sy*cz + sx*cy*sz,
             cx*cy*sz - sx*sy*cz,
         ])
-        quaternion = self._multiply(delta, self._base_quaternion)
-        quaternion /= max(np.linalg.norm(quaternion), 1e-9)
+        quaternion = normalize_quat(quat_multiply(delta, self._base_quaternion))
         return ViveSample(position.astype(np.float32), quaternion.astype(np.float32), now)
 
     def close(self) -> None:

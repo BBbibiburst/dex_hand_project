@@ -9,6 +9,7 @@ from source.envs.manipulation.arenas import PegsArena
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.objects import XmlNutSpec
 from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.rewards import staged_multi_object_reward
 
 
 @register_task("nut_assembly")
@@ -69,10 +70,16 @@ class NutAssemblyTask(SingleArmManipulationTask):
         elif not self.reward_shaping:
             reward = float(np.sum(self.objects_on_pegs))
         else:
-            active = [o for i, o in enumerate(self.objects) if not self.objects_on_pegs[i]]
-            d = min((float(np.linalg.norm(obs[f"gripper_to_{o.name}_pos"])) for o in active), default=0.0)
-            reach = 0.1 * (1 - np.tanh(10 * d))
-            grasp = 0.35 if any(self._is_robot_touching_object(model, data, o.name) for o in active) else 0.0
-            hover = max((0.7 * (1 - np.tanh(10 * np.linalg.norm(self._body_pos(model, data, o.name)[:2] - self._peg_center(o.name)[:2]))) for o in active), default=0.0)
-            reward = float(np.sum(self.objects_on_pegs)) + max(reach, grasp, hover)
+            reward = staged_multi_object_reward(
+                object_names=tuple(obj.name for obj in self.objects),
+                placed=self.objects_on_pegs,
+                gripper_distance=lambda name: float(
+                    np.linalg.norm(obs[f"gripper_to_{name}_pos"])
+                ),
+                is_grasped=lambda name: self._is_robot_touching_object(
+                    model, data, name
+                ),
+                object_position=lambda name: self._body_pos(model, data, name),
+                target_position=self._peg_center,
+            )
         return self.scale_reward(float(reward)), {"objects_on_pegs": self.objects_on_pegs.copy()}

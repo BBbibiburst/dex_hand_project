@@ -3,20 +3,9 @@ from __future__ import annotations
 
 import numpy as np
 
+from source.geometry import normalize_quat, quat_conjugate, quat_multiply
 from source.teleop.devices import GloveSample, ViveSample
 
-
-def _quat_conjugate(q):
-    q = np.asarray(q, dtype=np.float64)
-    return np.asarray([q[0], -q[1], -q[2], -q[3]])
-
-
-def _quat_multiply(a, b):
-    aw, ax, ay, az = a; bw, bx, by, bz = b
-    return np.asarray([
-        aw*bw-ax*bx-ay*by-az*bz, aw*bx+ax*bw+ay*bz-az*by,
-        aw*by-ax*bz+ay*bw+az*bx, aw*bz+ax*by-ay*bx+az*bw,
-    ])
 
 
 class TeleopMapper:
@@ -44,9 +33,9 @@ class TeleopMapper:
         vp, vq = self._vive_origin
         rp, rq = self._robot_origin
         target_pos = rp + self.position_scale * (vive.position - vp)
-        relative_q = _quat_multiply(vive.quaternion_wxyz, _quat_conjugate(vq))
-        target_q = _quat_multiply(relative_q, rq)
-        target_q /= max(np.linalg.norm(target_q), 1e-9)
+        relative_q = quat_multiply(vive.quaternion_wxyz, quat_conjugate(vq))
+        target_q = quat_multiply(relative_q, rq)
+        target_q = normalize_quat(target_q)
 
         hand = np.asarray(glove.stretch, dtype=np.float32).reshape(-1)
         if hand.shape != (6,):
