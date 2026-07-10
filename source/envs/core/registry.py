@@ -15,6 +15,9 @@ _TASKS = Registry[TaskClass]("task", normalize=str.lower)
 _BUILTIN_TASK_MODULES = (
     "source.envs.manipulation.lift",
     "source.envs.manipulation.stack",
+    "source.envs.manipulation.pick_place",
+    "source.envs.manipulation.nut_assembly",
+    "source.envs.manipulation.door",
 )
 _BUILTINS_LOADED = False
 

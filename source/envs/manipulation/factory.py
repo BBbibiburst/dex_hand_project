@@ -37,3 +37,15 @@ def make_stack_env(
 ):
     """Create the built-in stack environment."""
     return make_manipulation_env("stack", task_config=task_config, **env_kwargs)
+
+
+def make_pick_place_env(*, task_config=None, **env_kwargs):
+    return make_manipulation_env("pick_place", task_config=task_config, **env_kwargs)
+
+
+def make_nut_assembly_env(*, task_config=None, **env_kwargs):
+    return make_manipulation_env("nut_assembly", task_config=task_config, **env_kwargs)
+
+
+def make_door_env(*, task_config=None, **env_kwargs):
+    return make_manipulation_env("door", task_config=task_config, **env_kwargs)

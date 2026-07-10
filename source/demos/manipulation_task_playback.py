@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Environment viewer for migrated Lift / Stack manipulation tasks.
+"""Environment viewer for the migrated single-arm manipulation tasks.
 
 This demo does not solve the task, teleport objects, or drive an oracle robot
 motion. It only runs the environment so task geometry, observations, rewards,
@@ -9,6 +9,9 @@ Usage::
 
     python -m source.demos.manipulation_task_playback --task lift
     python -m source.demos.manipulation_task_playback --task stack
+    python -m source.demos.manipulation_task_playback --task pick_place --single-object can
+    python -m source.demos.manipulation_task_playback --task nut_assembly --single-nut square_nut
+    python -m source.demos.manipulation_task_playback --task door --no-latch
 """
 
 from __future__ import annotations
@@ -26,7 +29,7 @@ from source.viz.overlays import clear_markers, draw_label
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Viewer for migrated LiftTask / StackTask environments."
+        description="Viewer for migrated single-arm manipulation environments."
     )
     parser.add_argument(
         "--task",
@@ -38,7 +41,22 @@ def _parse_args() -> argparse.Namespace:
         "--seed",
         type=int,
         default=0,
-        help="Reset seed controlling initial block placement.",
+        help="Reset seed controlling initial task placement.",
+    )
+    parser.add_argument(
+        "--single-object",
+        choices=("milk", "bread", "cereal", "can"),
+        help="Run PickPlace with only the selected object.",
+    )
+    parser.add_argument(
+        "--single-nut",
+        choices=("square_nut", "round_nut"),
+        help="Run NutAssembly with only the selected nut.",
+    )
+    parser.add_argument(
+        "--no-latch",
+        action="store_true",
+        help="Run Door without the rotatable latch joint.",
     )
     parser.add_argument(
         "--render-fps",
@@ -84,6 +102,12 @@ def _make_env(args: argparse.Namespace):
         raise ValueError(f"--render-fps must be positive, got {args.render_fps}.")
     if args.action_scale < 0.0:
         raise ValueError(f"--action-scale must be non-negative, got {args.action_scale}.")
+    if args.single_object is not None and args.task != "pick_place":
+        raise ValueError("--single-object is only valid with --task pick_place.")
+    if args.single_nut is not None and args.task != "nut_assembly":
+        raise ValueError("--single-nut is only valid with --task nut_assembly.")
+    if args.no_latch and args.task != "door":
+        raise ValueError("--no-latch is only valid with --task door.")
 
     env_kwargs = dict(
         robot_config_path=getattr(args, "robot_config", None),
@@ -93,11 +117,18 @@ def _make_env(args: argparse.Namespace):
         enable_tactile_sensors=False if getattr(args, "no_tactile", False) else None,
         control_mode="ik",
         render_mode=None,
-        reward_shaping=True,
         control_dt=1.0 / args.control_hz,
     )
-    task_config={"reward_shaping": True}
-    env_kwargs.pop("reward_shaping", None)
+    # Avoid passing None as an explicit robot-config override. This lets the
+    # project's current robot profile provide values for omitted CLI options.
+    env_kwargs = {key: value for key, value in env_kwargs.items() if value is not None}
+    task_config: Dict[str, Any] = {"reward_shaping": True}
+    if args.task == "pick_place" and args.single_object is not None:
+        task_config["single_object"] = args.single_object
+    if args.task == "nut_assembly" and args.single_nut is not None:
+        task_config["single_nut"] = args.single_nut
+    if args.task == "door":
+        task_config["use_latch"] = not args.no_latch
     return make_manipulation_env(args.task, task_config=task_config, **env_kwargs)
 
 

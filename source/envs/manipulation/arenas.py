@@ -197,3 +197,65 @@ class TableArena:
             leg.conaffinity = 0
             leg.rgba = [0.35, 0.35, 0.35, 1.0]
             leg.material = "table_legs_metal"
+
+
+@dataclass(frozen=True)
+class BinsArena(TableArena):
+    """Table arena with a source bin and four target compartments."""
+
+    bin_half_size: Tuple[float, float, float] = (0.18, 0.18, 0.06)
+    source_center: Tuple[float, float] = (0.46, -0.20)
+    target_center: Tuple[float, float] = (0.46, 0.20)
+
+    def augment_spec(self, spec: mujoco.MjSpec) -> None:
+        super().augment_spec(spec)
+        for prefix, center in (("source_bin", self.source_center), ("target_bin", self.target_center)):
+            body = spec.worldbody.add_body()
+            body.name = prefix
+            body.pos = [center[0], center[1], self.table_top_z]
+            hx, hy, hz = self.bin_half_size
+            for name, pos, size in (
+                ("bottom", (0, 0, 0.005), (hx, hy, 0.005)),
+                ("left", (0, -hy, hz), (hx, 0.005, hz)),
+                ("right", (0, hy, hz), (hx, 0.005, hz)),
+                ("front", (-hx, 0, hz), (0.005, hy, hz)),
+                ("back", (hx, 0, hz), (0.005, hy, hz)),
+            ):
+                geom = body.add_geom()
+                geom.name = f"{prefix}_{name}"
+                geom.type = mujoco.mjtGeom.mjGEOM_BOX
+                geom.pos, geom.size = list(pos), list(size)
+                geom.rgba = [0.25, 0.35, 0.45, 1.0]
+            if prefix == "target_bin":
+                for axis, pos, size in (
+                    ("x", (0, 0, hz), (0.005, hy, hz)),
+                    ("y", (0, 0, hz), (hx, 0.005, hz)),
+                ):
+                    geom = body.add_geom()
+                    geom.name = f"target_divider_{axis}"
+                    geom.type = mujoco.mjtGeom.mjGEOM_BOX
+                    geom.pos, geom.size = list(pos), list(size)
+                    geom.rgba = [0.25, 0.35, 0.45, 1.0]
+
+
+@dataclass(frozen=True)
+class PegsArena(TableArena):
+    """Table arena with one square and one round peg."""
+
+    peg_centers: Tuple[Tuple[float, float], Tuple[float, float]] = ((0.50, -0.12), (0.50, 0.12))
+    peg_radius: float = 0.012
+    peg_half_height: float = 0.08
+
+    def augment_spec(self, spec: mujoco.MjSpec) -> None:
+        super().augment_spec(spec)
+        for index, center in enumerate(self.peg_centers):
+            body = spec.worldbody.add_body()
+            body.name = f"peg{index + 1}_body"
+            body.pos = [center[0], center[1], self.table_top_z + self.peg_half_height]
+            geom = body.add_geom()
+            geom.name = f"peg{index + 1}_geom"
+            geom.type = mujoco.mjtGeom.mjGEOM_BOX if index == 0 else mujoco.mjtGeom.mjGEOM_CYLINDER
+            geom.size = ([self.peg_radius] * 3 if index == 0 else [self.peg_radius, self.peg_half_height, 0.0])
+            if index == 0:
+                geom.size = [self.peg_radius, self.peg_radius, self.peg_half_height]
+            geom.rgba = [0.25, 0.45, 0.85, 1.0] if index == 0 else [0.85, 0.75, 0.15, 1.0]
