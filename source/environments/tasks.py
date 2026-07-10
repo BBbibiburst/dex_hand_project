@@ -31,6 +31,14 @@ class RobotTask(ABC):
     def observation_space(self) -> Dict[str, spaces.Space]:
         """Additional observation spaces beyond the base robot state."""
 
+    def augment_spec(self, spec: Any) -> None:
+        """Optionally add task-specific bodies, geoms, sites, or assets.
+
+        Called before the combined MuJoCo model is compiled. Tasks that do
+        not need objects can keep the default no-op implementation.
+        """
+        _ = spec
+
     @abstractmethod
     def reset(
         self,

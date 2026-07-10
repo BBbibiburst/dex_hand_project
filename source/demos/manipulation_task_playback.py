@@ -1,0 +1,181 @@
+# -*- coding: utf-8 -*-
+"""Environment viewer for migrated Lift / Stack manipulation tasks.
+
+This demo does not solve the task, teleport objects, or drive an oracle robot
+motion. It only runs the environment so task geometry, observations, rewards,
+contacts, and reset placement can be inspected in the MuJoCo viewer.
+
+Usage::
+
+    python -m source.demos.manipulation_task_playback --task lift
+    python -m source.demos.manipulation_task_playback --task stack
+"""
+
+from __future__ import annotations
+
+import argparse
+import time
+from typing import Any, Dict
+
+import numpy as np
+from mujoco import viewer
+
+from source.demos.common import add_robot_config_args
+from source.environments.manipulation import make_lift_env, make_stack_env
+from source.environments.overlays import clear_markers, draw_label
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Viewer for migrated LiftTask / StackTask environments."
+    )
+    parser.add_argument(
+        "--task",
+        choices=("lift", "stack"),
+        default="lift",
+        help="Task environment to run.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=0,
+        help="Reset seed controlling initial block placement.",
+    )
+    parser.add_argument(
+        "--render-fps",
+        type=float,
+        default=60.0,
+        help="Viewer sync frequency.",
+    )
+    parser.add_argument(
+        "--control-hz",
+        type=float,
+        default=20.0,
+        help="Environment control frequency.",
+    )
+    parser.add_argument(
+        "--random-actions",
+        action="store_true",
+        help="Sample random actions instead of holding the reset action.",
+    )
+    parser.add_argument(
+        "--action-scale",
+        type=float,
+        default=0.20,
+        help="Scale for sampled random actions around the reset action.",
+    )
+    parser.add_argument(
+        "--no-realtime",
+        action="store_true",
+        help="Run as fast as possible instead of wall-clock realtime.",
+    )
+    parser.add_argument(
+        "--print-status",
+        action="store_true",
+        help="Print reward and success once per second.",
+    )
+    add_robot_config_args(parser)
+    return parser.parse_args()
+
+
+def _make_env(args: argparse.Namespace):
+    if args.control_hz <= 0.0:
+        raise ValueError(f"--control-hz must be positive, got {args.control_hz}.")
+    if args.render_fps <= 0.0:
+        raise ValueError(f"--render-fps must be positive, got {args.render_fps}.")
+    if args.action_scale < 0.0:
+        raise ValueError(f"--action-scale must be non-negative, got {args.action_scale}.")
+
+    env_kwargs = dict(
+        robot_config_path=getattr(args, "robot_config", None),
+        arm_name=getattr(args, "arm_name", None),
+        hand_name=getattr(args, "hand_name", None),
+        base_name=getattr(args, "base_name", None),
+        enable_tactile_sensors=False if getattr(args, "no_tactile", False) else None,
+        control_mode="ik",
+        render_mode=None,
+        reward_shaping=True,
+        control_dt=1.0 / args.control_hz,
+    )
+    return make_lift_env(**env_kwargs) if args.task == "lift" else make_stack_env(**env_kwargs)
+
+
+def _sample_action(env, base_action: np.ndarray, rng: np.random.Generator, scale: float) -> np.ndarray:
+    low = np.asarray(env.action_space.low, dtype=np.float32).reshape(-1)
+    high = np.asarray(env.action_space.high, dtype=np.float32).reshape(-1)
+    noise = rng.uniform(-scale, scale, size=base_action.shape).astype(np.float32)
+    action = base_action + noise
+    finite = np.isfinite(low) & np.isfinite(high)
+    action[finite] = np.clip(action[finite], low[finite], high[finite])
+    return action.astype(np.float32)
+
+
+def run_viewer(args: argparse.Namespace) -> None:
+    env = _make_env(args)
+    rng = np.random.default_rng(args.seed)
+    obs, _info = env.reset(seed=args.seed)
+    base_action = env.controller.current_action(env.model, env.data)
+    action = base_action.copy()
+
+    render_dt = 1.0 / args.render_fps
+    wall_start = time.perf_counter()
+    sim_start = float(env.data.time)
+    last_print_second = -1
+    reward = 0.0
+    reward_info: Dict[str, Any] = {}
+
+    try:
+        with viewer.launch_passive(env.model, env.data) as handle:
+            while handle.is_running():
+                sim_elapsed = float(env.data.time) - sim_start
+
+                if args.random_actions:
+                    action = _sample_action(env, base_action, rng, args.action_scale)
+
+                obs, reward, terminated, truncated, info = env.step(action)
+                reward_info = {
+                    key: value
+                    for key, value in info.items()
+                    if key.startswith("reward_") or key == "task_success"
+                }
+
+                clear_markers(handle)
+                draw_label(
+                    handle,
+                    np.asarray([0.0, -0.32, 1.15], dtype=np.float32),
+                    (
+                        f"{args.task} env | reward {reward:.3f} | "
+                        f"success {bool(info.get('task_success', False))}"
+                    ),
+                )
+                handle.sync()
+
+                if args.print_status and int(sim_elapsed) != last_print_second:
+                    last_print_second = int(sim_elapsed)
+                    print(
+                        f"t={sim_elapsed:5.2f} reward={reward:.3f} "
+                        f"terminated={terminated} truncated={truncated} info={reward_info}"
+                    )
+
+                if terminated or truncated:
+                    obs, _info = env.reset(seed=args.seed)
+                    base_action = env.controller.current_action(env.model, env.data)
+                    action = base_action.copy()
+                    wall_start = time.perf_counter()
+                    sim_start = float(env.data.time)
+                    last_print_second = -1
+
+                if not args.no_realtime:
+                    sleep_time = wall_start + sim_elapsed - time.perf_counter()
+                    if sleep_time > 0.0:
+                        time.sleep(sleep_time)
+    finally:
+        env.close()
+
+
+def main() -> None:
+    run_viewer(_parse_args())
+
+
+if __name__ == "__main__":
+    main()
