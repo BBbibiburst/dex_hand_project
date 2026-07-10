@@ -137,34 +137,9 @@ def _read_ascii_stl_triangles(text: str) -> np.ndarray:
 
 
 def finger_segment_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
-    """Taxel grid for a finger-segment skin pad (thick partial elliptic
-    cylinder: one axis along the segment, the other around the exposed arc).
-    """
-    vertices = read_stl_vertices(mesh_path)
-    fit = _fit_finger_segment_surfaces(vertices)
-    theta_values = _ellipse_arc_mid_angles(
-        fit.surface_radius_x, fit.surface_radius_y, cols, fit.arc_start, fit.arc_end
-    )
-    axial_edges = np.linspace(fit.axial_low, fit.axial_high, rows + 1, dtype=np.float64)
-    axial_values = 0.5 * (axial_edges[:-1] + axial_edges[1:])
-
-    points: list[np.ndarray] = []
-    for z_value in axial_values:
-        for theta in theta_values:
-            x_value, y_value = _rotated_ellipse_point(
-                fit.surface_center,
-                fit.surface_radius_x,
-                fit.surface_radius_y,
-                fit.surface_angle,
-                theta,
-            )
-            points.append(
-                fit.center
-                + z_value * fit.axis
-                + x_value * fit.section_x
-                + y_value * fit.section_y
-            )
-    return np.asarray(points, dtype=np.float64)
+    """Regular grid fitted to the real outer shell of a finger segment."""
+    triangles = read_stl_triangles(mesh_path)
+    return _finger_segment_regular_surface_grid_points(triangles, rows, cols)
 
 
 def mesh_uv_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
@@ -237,23 +212,10 @@ def grid_points_for_kind(
 
 
 def finger_segment_fit_surface(vertices: np.ndarray) -> np.ndarray:
-    fit = _fit_finger_segment_surfaces(vertices)
-    z_values = np.linspace(fit.axial_low, fit.axial_high, 32)
-    theta_values = np.linspace(fit.arc_start, fit.arc_end, 48)
-    z_grid, theta_grid = np.meshgrid(z_values, theta_values, indexing="ij")
-    x_grid, y_grid = _rotated_ellipse_point(
-        fit.surface_center,
-        fit.surface_radius_x,
-        fit.surface_radius_y,
-        fit.surface_angle,
-        theta_grid,
-    )
-    return (
-        fit.center
-        + z_grid[..., None] * fit.axis
-        + x_grid[..., None] * fit.section_x
-        + y_grid[..., None] * fit.section_y
-    )
+    triangles = _vertices_as_triangles(vertices)
+    return _finger_segment_regular_surface_grid_points(
+        triangles, 32, 64
+    ).reshape(32, 64, 3)
 
 
 def patch_plot_data(
@@ -936,6 +898,114 @@ def _fingertip_swept_shell_raw_grid_points(
 
 
 
+
+def _finger_segment_raw_shell_grid_points(
+    triangles: np.ndarray,
+    rows: int,
+    cols: int,
+) -> np.ndarray:
+    """Select a regular grid from the true outer shell of a segment STL."""
+    vertices = triangles.reshape(-1, 3)
+    fit = _fit_finger_segment_surfaces(vertices)
+    points = _supersample_triangles(triangles, subdivisions=5)
+
+    rel = points - fit.center
+    axial = rel @ fit.axis
+    sx = rel @ fit.section_x
+    sy = rel @ fit.section_y
+    dx = sx - fit.surface_center[0]
+    dy = sy - fit.surface_center[1]
+    ca = np.cos(fit.surface_angle)
+    sa = np.sin(fit.surface_angle)
+    eu = dx * ca + dy * sa
+    ev = -dx * sa + dy * ca
+    rx = max(fit.surface_radius_x, 1e-9)
+    ry = max(fit.surface_radius_y, 1e-9)
+    radius_norm = np.sqrt((eu / rx) ** 2 + (ev / ry) ** 2)
+    theta = np.arctan2(ev / ry, eu / rx)
+
+    arc_start = float(fit.arc_start)
+    arc_end = float(fit.arc_end)
+    while arc_end <= arc_start:
+        arc_end += 2.0 * np.pi
+    arc_mid = 0.5 * (arc_start + arc_end)
+    theta = arc_mid + (theta - arc_mid + np.pi) % (2.0 * np.pi) - np.pi
+
+    axial_low = float(fit.axial_low)
+    axial_high = float(fit.axial_high)
+    axial_span = max(axial_high - axial_low, 1e-9)
+    angle_span = max(arc_end - arc_start, 1e-9)
+    margin = np.deg2rad(8.0)
+    usable = (
+        (axial >= axial_low - 0.04 * axial_span)
+        & (axial <= axial_high + 0.04 * axial_span)
+        & (theta >= arc_start - margin)
+        & (theta <= arc_end + margin)
+    )
+    if int(usable.sum()) < max(32, rows * cols):
+        usable = np.ones(len(points), dtype=bool)
+
+    points = points[usable]
+    axial = axial[usable]
+    theta = theta[usable]
+    radius_norm = radius_norm[usable]
+
+    axial_bins = max(28, rows * 4)
+    angle_bins = max(96, cols * 8)
+    ai = np.clip(((axial - axial_low) / axial_span * axial_bins).astype(np.int32), 0, axial_bins - 1)
+    ti = np.clip(((theta - arc_start) / angle_span * angle_bins).astype(np.int32), 0, angle_bins - 1)
+    key = ai * angle_bins + ti
+    order = np.lexsort((-radius_norm, key))
+    _, first = np.unique(key[order], return_index=True)
+    envelope = order[first]
+    env_points = points[envelope]
+    env_axial = axial[envelope]
+    env_theta = theta[envelope]
+    env_radius = radius_norm[envelope]
+
+    axial_edges = np.linspace(axial_low, axial_high, rows + 1)
+    axial_values = 0.5 * (axial_edges[:-1] + axial_edges[1:])
+    theta_values = _ellipse_arc_mid_angles(rx, ry, cols, arc_start, arc_end)
+
+    result = []
+    for target_axial in axial_values:
+        for target_theta in theta_values:
+            da = np.abs(env_axial - target_axial) / axial_span
+            dt = np.abs(env_theta - target_theta) / angle_span
+            local = np.flatnonzero((da <= 0.10) & (dt <= 0.10))
+            if len(local) < 5:
+                local = np.argsort((da / 0.055) ** 2 + (dt / 0.055) ** 2)[:32]
+            local_r = env_radius[local]
+            outer = local[local_r >= np.percentile(local_r, 60.0)]
+            if len(outer) == 0:
+                outer = local
+            score = (da[outer] / 0.050) ** 2 + (dt[outer] / 0.050) ** 2
+            result.append(env_points[outer[int(np.argmin(score))]])
+    return np.asarray(result, dtype=np.float64)
+
+
+def _finger_segment_regular_surface_grid_points(
+    triangles: np.ndarray,
+    rows: int,
+    cols: int,
+) -> np.ndarray:
+    """Fit a smooth Bezier patch to a segment's detected outer shell."""
+    dense_rows = max(18, rows * 4)
+    dense_cols = max(32, cols * 4)
+    raw = _finger_segment_raw_shell_grid_points(triangles, dense_rows, dense_cols)
+    controls = _fit_bezier_surface(
+        raw,
+        dense_rows,
+        dense_cols,
+        degree_u=min(5, dense_rows - 1),
+        degree_v=min(7, dense_cols - 1),
+        regularization=5.0e-5,
+    )
+    u_values = (np.arange(rows, dtype=np.float64) + 0.5) / rows
+    v_values = (np.arange(cols, dtype=np.float64) + 0.5) / cols
+    return _evaluate_bezier_surface(controls, u_values, v_values)
+
+
 def _bernstein_basis(values: np.ndarray, degree: int) -> np.ndarray:
     """Return Bernstein basis values with shape (N, degree + 1)."""
     from math import comb
@@ -1423,7 +1493,7 @@ def _patch_title(mesh_name: str, kind: str) -> str:
         return f"Palm pad: {rows} x {cols}"
     if kind == "fingertip-ellipsoid":
         return f"{mesh_name}: fingertip {rows} x {cols} (Bezier fit)"
-    return f"{mesh_name}: segment {rows} x {cols}"
+    return f"{mesh_name}: segment {rows} x {cols} (Bezier shell fit)"
 
 
 def _fit_surface_style(kind: str) -> tuple[str, float]:
