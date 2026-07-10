@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Base classes for robosuite-style single-arm manipulation tasks."""
-
+"""Reusable base for single-arm table manipulation tasks."""
 from __future__ import annotations
 
 from abc import abstractmethod
@@ -11,251 +10,131 @@ import mujoco
 import numpy as np
 
 from source.environments.manipulation.arenas import TableArena
-from source.environments.manipulation.objects import FreeBoxSpec
+from source.environments.manipulation.bindings import ObjectBinding, TaskBindings
+from source.environments.manipulation.objects import ManipulationObjectSpec
 from source.environments.manipulation.placement import UniformTablePlacementSampler
-from source.environments.tasks import Observation, RobotTask
+from source.environments.tasks import Observation, RobotTask, TaskStepResult
 
 
 class SingleArmManipulationTask(RobotTask):
-    """Base class for robosuite-style single-arm table manipulation tasks."""
+    success_reward: float = 1.0
 
-    def __init__(
-        self,
-        *,
-        arena: Optional[TableArena] = None,
-        table_full_size: Tuple[float, float, float] = (0.8, 0.8, 0.05),
-        table_offset: Tuple[float, float, float] = (0.55, 0.0, 0.8),
-        table_friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001),
-        table_has_legs: bool = True,
-        ee_site_name: str = "right_hand_site",
-        use_object_obs: bool = True,
-        reward_scale: Optional[float] = 1.0,
-        reward_shaping: bool = False,
-        terminate_on_success: bool = False,
-        placement_sampler: Optional[UniformTablePlacementSampler] = None,
-    ) -> None:
-        self.arena = arena or TableArena(
-            table_full_size=table_full_size,
-            table_offset=table_offset,
-            table_friction=table_friction,
-            table_has_legs=table_has_legs,
-        )
-        self.ee_site_name = ee_site_name
-        self.use_object_obs = use_object_obs
-        self.reward_scale = reward_scale
-        self.reward_shaping = reward_shaping
-        self.terminate_on_success = terminate_on_success
-        self.placement_sampler = placement_sampler or UniformTablePlacementSampler(
-            x_range=(-0.08, 0.08),
-            y_range=(-0.08, 0.08),
-        )
-        self._body_ids: dict[str, int] = {}
-        self._joint_qpos_addrs: dict[str, int] = {}
-        self._joint_qvel_addrs: dict[str, int] = {}
-        self._geom_ids: dict[str, set[int]] = {}
-        self._ee_site_id: Optional[int] = None
+    def __init__(self, *, arena: Optional[TableArena] = None,
+                 table_full_size: Tuple[float,float,float]=(0.8,0.8,0.05),
+                 table_offset: Tuple[float,float,float]=(0.55,0.0,0.8),
+                 table_friction: Tuple[float,float,float]=(1.0,0.005,0.0001),
+                 table_has_legs: bool=True, ee_site_name: str="right_hand_site",
+                 use_object_obs: bool=True, reward_scale: Optional[float]=1.0,
+                 reward_shaping: bool=False, terminate_on_success: bool=False,
+                 placement_sampler: Optional[UniformTablePlacementSampler]=None) -> None:
+        self.arena = arena or TableArena(table_full_size=table_full_size, table_offset=table_offset,
+                                         table_friction=table_friction, table_has_legs=table_has_legs)
+        self.ee_site_name=ee_site_name; self.use_object_obs=use_object_obs
+        self.reward_scale=reward_scale; self.reward_shaping=reward_shaping
+        self.terminate_on_success=terminate_on_success
+        self.placement_sampler = placement_sampler or UniformTablePlacementSampler(x_range=(-.08,.08), y_range=(-.08,.08))
+        self._objects = tuple(self.create_objects())
+        self.bindings: TaskBindings | None = None
 
-    @property
-    def table_top_z(self) -> float:
-        return self.arena.table_top_z
-
-    @property
-    def table_offset(self) -> np.ndarray:
-        """World position of the table top center."""
-        return self.arena.table_top_pos
-
-    @property
     @abstractmethod
-    def boxes(self) -> Tuple[FreeBoxSpec, ...]:
-        """Free block objects owned by this task."""
+    def create_objects(self) -> tuple[ManipulationObjectSpec, ...]: ...
+
+    @property
+    def objects(self): return self._objects
+    @property
+    def boxes(self): return self._objects  # compatibility
+    @property
+    def table_top_z(self): return self.arena.table_top_z
+    @property
+    def table_offset(self): return self.arena.table_top_pos
 
     @property
     def observation_space(self) -> Dict[str, spaces.Space]:
-        if not self.use_object_obs:
-            return {}
-        obs_spaces: Dict[str, spaces.Space] = {}
-        for box in self.boxes:
-            obs_spaces[f"{box.name}_pos"] = spaces.Box(
-                -np.inf, np.inf, shape=(3,), dtype=np.float32
-            )
-            obs_spaces[f"{box.name}_quat"] = spaces.Box(
-                -np.inf, np.inf, shape=(4,), dtype=np.float32
-            )
-            obs_spaces[f"gripper_to_{box.name}_pos"] = spaces.Box(
-                -np.inf, np.inf, shape=(3,), dtype=np.float32
-            )
-        return obs_spaces
+        if not self.use_object_obs: return {}
+        result = {}
+        for obj in self.objects:
+            result[f"{obj.name}_pos"] = spaces.Box(-np.inf,np.inf,shape=(3,),dtype=np.float32)
+            result[f"{obj.name}_quat"] = spaces.Box(-np.inf,np.inf,shape=(4,),dtype=np.float32)
+            result[f"gripper_to_{obj.name}_pos"] = spaces.Box(-np.inf,np.inf,shape=(3,),dtype=np.float32)
+        result.update(self.extra_observation_space())
+        return result
+
+    def extra_observation_space(self): return {}
+    def get_extra_observation(self, model, data, obs): return {}
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         self.arena.augment_spec(spec)
-        for box in self.boxes:
-            self._add_free_box(spec, box)
+        for obj in self.objects:
+            initial = np.asarray([self.table_offset[0], self.table_offset[1], self.table_top_z + obj.bottom_offset + .002])
+            obj.add_to_spec(spec, initial)
 
-    def reset(
-        self,
-        model: mujoco.MjModel,
-        data: mujoco.MjData,
-        *,
-        rng: np.random.Generator,
-        options: Optional[dict],
-    ) -> Dict[str, Any]:
-        _ = options
-        self._bind(model)
-        placements = self.placement_sampler.sample(
-            self.boxes,
-            rng=rng,
-            reference_pos=self.table_offset,
-        )
+    def bind(self, model: mujoco.MjModel) -> None:
+        object_bindings = {}
+        object_geom_ids: set[int] = set()
+        for obj in self.objects:
+            body_id=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_BODY,obj.body_name)
+            joint_id=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_JOINT,obj.joint_name)
+            geom_ids={mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_GEOM,n) for n in obj.geom_names}
+            if body_id < 0 or joint_id < 0 or min(geom_ids, default=-1) < 0:
+                raise ValueError(f"Task object {obj.name!r} was not compiled correctly.")
+            geom_ids={int(x) for x in geom_ids}; object_geom_ids.update(geom_ids)
+            object_bindings[obj.name]=ObjectBinding(int(body_id),int(joint_id),int(model.jnt_qposadr[joint_id]),
+                                                    int(model.jnt_dofadr[joint_id]),frozenset(geom_ids))
+        ee=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_SITE,self.ee_site_name)
+        environment_ids=set(object_geom_ids)
+        for name in (self.arena.table_geom_name,"floor"):
+            gid=mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_GEOM,name)
+            if gid>=0: environment_ids.add(int(gid))
+        robot_ids=frozenset(i for i in range(model.ngeom) if i not in environment_ids)
+        self.bindings=TaskBindings(object_bindings, int(ee) if ee>=0 else None, robot_ids, frozenset(environment_ids))
 
-        for box in self.boxes:
-            pos, quat = placements[box.name]
-            qpos_addr = self._joint_qpos_addrs[box.name]
-            qvel_addr = self._joint_qvel_addrs[box.name]
-            data.qpos[qpos_addr:qpos_addr + 3] = pos
-            data.qpos[qpos_addr + 3:qpos_addr + 7] = quat
-            data.qvel[qvel_addr:qvel_addr + 6] = 0.0
+    def _require_bindings(self):
+        if self.bindings is None: raise RuntimeError("Task.bind(model) must be called before use.")
+        return self.bindings
 
-        return {
-            "task": self.name,
-            "task_objects": tuple(box.name for box in self.boxes),
-        }
+    def reset(self, model, data, *, rng, options):
+        _=options
+        if self.bindings is None: self.bind(model)
+        b=self._require_bindings(); placements=self.placement_sampler.sample(self.objects,rng=rng,reference_pos=self.table_offset)
+        for obj in self.objects:
+            pos,quat=placements[obj.name]; ob=b.objects[obj.name]
+            data.qpos[ob.qpos_adr:ob.qpos_adr+3]=pos; data.qpos[ob.qpos_adr+3:ob.qpos_adr+7]=quat
+            data.qvel[ob.qvel_adr:ob.qvel_adr+6]=0.0
+        return {"task":self.name,"task_objects":tuple(o.name for o in self.objects)}
 
-    def get_observation(self, model: mujoco.MjModel, data: mujoco.MjData) -> Observation:
-        self._bind(model)
-        ee_pos = (
-            data.site_xpos[self._ee_site_id]
-            if self._ee_site_id is not None
-            else np.zeros(3, dtype=np.float64)
-        )
-        obs: Observation = {}
-        if not self.use_object_obs:
-            return obs
-        for box in self.boxes:
-            body_id = self._body_ids[box.name]
-            box_pos = data.xpos[body_id].astype(np.float32).copy()
-            obs[f"{box.name}_pos"] = box_pos
-            obs[f"{box.name}_quat"] = data.xquat[body_id].astype(np.float32).copy()
-            obs[f"gripper_to_{box.name}_pos"] = (
-                box_pos - ee_pos.astype(np.float32)
-            ).astype(np.float32)
-        return obs
+    def get_observation(self, model, data):
+        _=model
+        if not self.use_object_obs: return {}
+        b=self._require_bindings(); ee=np.zeros(3) if b.ee_site_id is None else data.site_xpos[b.ee_site_id]
+        obs={}
+        for obj in self.objects:
+            ob=b.objects[obj.name]; pos=data.xpos[ob.body_id].astype(np.float32).copy()
+            obs[f"{obj.name}_pos"]=pos; obs[f"{obj.name}_quat"]=data.xquat[ob.body_id].astype(np.float32).copy()
+            obs[f"gripper_to_{obj.name}_pos"]=(pos-ee.astype(np.float32)).astype(np.float32)
+        obs.update(self.get_extra_observation(model,data,obs)); return obs
 
-    def is_terminated(
-        self,
-        obs: Observation,
-        model: mujoco.MjModel,
-        data: mujoco.MjData,
-    ) -> Tuple[bool, Dict[str, Any]]:
-        success = self.check_success(model, data)
-        return bool(self.terminate_on_success and success), {"success": bool(success)}
+    def evaluate(self, obs, action, model, data):
+        success=bool(self.check_success(model,data)); reward, info=self.compute_task_reward(obs,action,model,data,success)
+        return TaskStepResult(float(reward), success, bool(self.terminate_on_success and success),
+                              {"task_success":success, **info})
 
     @abstractmethod
-    def check_success(self, model: mujoco.MjModel, data: mujoco.MjData) -> bool:
-        """Return whether the task is solved."""
+    def compute_task_reward(self, obs, action, model, data, success: bool): ...
+    @abstractmethod
+    def check_success(self, model, data) -> bool: ...
 
-    def _add_free_box(self, spec: mujoco.MjSpec, box: FreeBoxSpec) -> None:
-        body = spec.worldbody.add_body()
-        body.name = box.body_name
-        body.pos = [
-            float(self.table_offset[0]),
-            float(self.table_offset[1]),
-            self.table_top_z + box.half_size[2] + 0.002,
-        ]
+    def scale_reward(self, reward: float) -> float:
+        return reward if self.reward_scale is None else reward * self.reward_scale / self.success_reward
 
-        joint = body.add_joint()
-        joint.name = box.joint_name
-        joint.type = mujoco.mjtJoint.mjJNT_FREE
-
-        geom = body.add_geom()
-        geom.name = box.geom_name
-        geom.type = mujoco.mjtGeom.mjGEOM_BOX
-        geom.size = list(box.half_size)
-        geom.density = box.density
-        geom.friction = list(box.friction)
-        geom.rgba = list(box.rgba)
-        geom.condim = 3
-        geom.contype = 1
-        geom.conaffinity = 1
-
-        if box.duplicate_collision_geoms:
-            visual = body.add_geom()
-            visual.name = f"{box.name}_visual"
-            visual.type = mujoco.mjtGeom.mjGEOM_BOX
-            visual.size = list(box.half_size)
-            visual.contype = 0
-            visual.conaffinity = 0
-            visual.rgba = list(box.rgba)
-
-    def _bind(self, model: mujoco.MjModel) -> None:
-        if len(self._body_ids) == len(self.boxes):
-            return
-
-        self._body_ids.clear()
-        self._joint_qpos_addrs.clear()
-        self._joint_qvel_addrs.clear()
-        self._geom_ids.clear()
-
-        for box in self.boxes:
-            body_id = mujoco.mj_name2id(
-                model, mujoco.mjtObj.mjOBJ_BODY, box.body_name
-            )
-            joint_id = mujoco.mj_name2id(
-                model, mujoco.mjtObj.mjOBJ_JOINT, box.joint_name
-            )
-            geom_id = mujoco.mj_name2id(
-                model, mujoco.mjtObj.mjOBJ_GEOM, box.geom_name
-            )
-            if min(body_id, joint_id, geom_id) < 0:
-                raise ValueError(f"Task object {box.name!r} was not compiled.")
-            self._body_ids[box.name] = int(body_id)
-            self._joint_qpos_addrs[box.name] = int(model.jnt_qposadr[joint_id])
-            self._joint_qvel_addrs[box.name] = int(model.jnt_dofadr[joint_id])
-            self._geom_ids[box.name] = {int(geom_id)}
-
-        site_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name
-        )
-        self._ee_site_id = int(site_id) if site_id >= 0 else None
-
-    def _body_pos(self, model: mujoco.MjModel, data: mujoco.MjData, name: str) -> np.ndarray:
-        self._bind(model)
-        return data.xpos[self._body_ids[name]]
-
-    def _is_robot_touching_object(
-        self,
-        model: mujoco.MjModel,
-        data: mujoco.MjData,
-        object_name: str,
-    ) -> bool:
-        object_geoms = self._geom_ids[object_name]
-        ignored = set().union(*(ids for ids in self._geom_ids.values()))
-        table_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_GEOM, self.arena.table_geom_name
-        )
-        floor_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
-        ignored.update(idx for idx in (table_id, floor_id) if idx >= 0)
-
-        for contact_index in range(data.ncon):
-            contact = data.contact[contact_index]
-            pair = {int(contact.geom1), int(contact.geom2)}
-            if not pair.intersection(object_geoms):
-                continue
-            other = next(iter(pair - object_geoms), -1)
-            if other not in ignored:
-                return True
+    def _body_pos(self, model, data, name):
+        _=model; return data.xpos[self._require_bindings().objects[name].body_id]
+    def _is_robot_touching_object(self, model, data, object_name):
+        _=model; b=self._require_bindings(); object_geoms=b.objects[object_name].geom_ids
+        for i in range(data.ncon):
+            pair={int(data.contact[i].geom1),int(data.contact[i].geom2)}
+            if pair.intersection(object_geoms) and pair.intersection(b.robot_geom_ids): return True
         return False
-
-    def _objects_touching(
-        self,
-        data: mujoco.MjData,
-        first_name: str,
-        second_name: str,
-    ) -> bool:
-        first_geoms = self._geom_ids[first_name]
-        second_geoms = self._geom_ids[second_name]
-        for contact_index in range(data.ncon):
-            contact = data.contact[contact_index]
-            pair = {int(contact.geom1), int(contact.geom2)}
-            if pair.intersection(first_geoms) and pair.intersection(second_geoms):
-                return True
-        return False
+    def _objects_touching(self, data, first_name, second_name):
+        b=self._require_bindings(); first=b.objects[first_name].geom_ids; second=b.objects[second_name].geom_ids
+        return any(({int(data.contact[i].geom1),int(data.contact[i].geom2)}.intersection(first) and
+                    {int(data.contact[i].geom1),int(data.contact[i].geom2)}.intersection(second)) for i in range(data.ncon))

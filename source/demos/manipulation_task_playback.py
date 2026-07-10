@@ -21,7 +21,7 @@ import numpy as np
 from mujoco import viewer
 
 from source.demos.common import add_robot_config_args
-from source.environments.manipulation import make_lift_env, make_stack_env
+from source.environments.manipulation import make_manipulation_env, registered_tasks
 from source.environments.overlays import clear_markers, draw_label
 
 
@@ -31,7 +31,7 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--task",
-        choices=("lift", "stack"),
+        choices=registered_tasks(),
         default="lift",
         help="Task environment to run.",
     )
@@ -97,7 +97,9 @@ def _make_env(args: argparse.Namespace):
         reward_shaping=True,
         control_dt=1.0 / args.control_hz,
     )
-    return make_lift_env(**env_kwargs) if args.task == "lift" else make_stack_env(**env_kwargs)
+    task_config={"reward_shaping": True}
+    env_kwargs.pop("reward_shaping", None)
+    return make_manipulation_env(args.task, task_config=task_config, **env_kwargs)
 
 
 def _sample_action(env, base_action: np.ndarray, rng: np.random.Generator, scale: float) -> np.ndarray:

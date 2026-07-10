@@ -1,43 +1,51 @@
 # -*- coding: utf-8 -*-
-"""Task interface and built-in task implementations for robot envs."""
-
+"""Stable task contract used by :mod:`source.environments.rl_env`."""
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, Tuple
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional
 
 from gymnasium import spaces
 import numpy as np
-
 
 Array = np.ndarray
 Observation = Dict[str, Any]
 
 
-class RobotTask(ABC):
-    """Abstract task interface for RobotGymEnv.
+@dataclass(frozen=True)
+class TaskStepResult:
+    """Complete result of evaluating one task step."""
 
-    Implementations define what the robot should do (reach, grasp, etc.) by
-    providing observation augmentation, reward, and termination logic.
+    reward: float
+    success: bool = False
+    terminated: bool = False
+    info: Dict[str, Any] = field(default_factory=dict)
+
+
+class RobotTask(ABC):
+    """Task plug-in interface.
+
+    Environments own simulation and controllers; tasks own scene additions,
+    reset randomisation, observations, reward and task termination.
     """
 
     @property
     @abstractmethod
     def name(self) -> str:
-        """Human-readable task name for logging/debugging."""
+        ...
 
     @property
     @abstractmethod
     def observation_space(self) -> Dict[str, spaces.Space]:
-        """Additional observation spaces beyond the base robot state."""
+        ...
 
     def augment_spec(self, spec: Any) -> None:
-        """Optionally add task-specific bodies, geoms, sites, or assets.
-
-        Called before the combined MuJoCo model is compiled. Tasks that do
-        not need objects can keep the default no-op implementation.
-        """
         _ = spec
+
+    def bind(self, model: Any) -> None:
+        """Cache compiled model identifiers. Called once after compilation."""
+        _ = model
 
     @abstractmethod
     def reset(
@@ -48,35 +56,24 @@ class RobotTask(ABC):
         rng: np.random.Generator,
         options: Optional[dict],
     ) -> Dict[str, Any]:
-        """Called at the start of each episode. Returns info dict."""
+        ...
 
     @abstractmethod
     def get_observation(self, model: Any, data: Any) -> Observation:
-        """Current task-specific observation. Must match ``observation_space``."""
+        ...
 
     @abstractmethod
-    def compute_reward(
+    def evaluate(
         self,
         obs: Observation,
         action: Array,
         model: Any,
         data: Any,
-    ) -> Tuple[float, Dict[str, Any]]:
-        """Returns (reward, reward_info)."""
-
-    @abstractmethod
-    def is_terminated(
-        self,
-        obs: Observation,
-        model: Any,
-        data: Any,
-    ) -> Tuple[bool, Dict[str, Any]]:
-        """Returns (terminated, terminated_info)."""
+    ) -> TaskStepResult:
+        ...
 
 
 class NoopTask(RobotTask):
-    """Default no-op task: zero reward, never terminates, no extra observations."""
-
     @property
     def name(self) -> str:
         return "noop"
@@ -85,36 +82,14 @@ class NoopTask(RobotTask):
     def observation_space(self) -> Dict[str, spaces.Space]:
         return {}
 
-    def reset(
-        self,
-        model: Any,
-        data: Any,
-        *,
-        rng: np.random.Generator,
-        options: Optional[dict],
-    ) -> Dict[str, Any]:
+    def reset(self, model, data, *, rng, options):
         _ = model, data, rng, options
         return {"task": self.name}
 
-    def get_observation(self, model: Any, data: Any) -> Observation:
+    def get_observation(self, model, data) -> Observation:
         _ = model, data
         return {}
 
-    def compute_reward(
-        self,
-        obs: Observation,
-        action: Array,
-        model: Any,
-        data: Any,
-    ) -> Tuple[float, Dict[str, Any]]:
+    def evaluate(self, obs, action, model, data) -> TaskStepResult:
         _ = obs, action, model, data
-        return 0.0, {}
-
-    def is_terminated(
-        self,
-        obs: Observation,
-        model: Any,
-        data: Any,
-    ) -> Tuple[bool, Dict[str, Any]]:
-        _ = obs, model, data
-        return False, {}
+        return TaskStepResult(reward=0.0)

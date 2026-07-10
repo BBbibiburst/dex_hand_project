@@ -1,29 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Compatibility imports for manipulation tasks.
-
-New code should import from ``source.environments.manipulation``. This module
-is kept so older demos and scripts using ``source.environments.manipulation_tasks``
-continue to work.
-"""
-
+"""Compatibility exports for the manipulation package."""
 from source.environments.manipulation import (
     FreeBoxSpec,
     LiftTask,
+    ManipulationObjectSpec,
     SingleArmManipulationTask,
     StackTask,
     TableArena,
     UniformTablePlacementSampler,
     make_lift_env,
+    make_manipulation_env,
     make_stack_env,
+    make_task,
+    register_task,
+    registered_tasks,
 )
 
-__all__ = [
-    "FreeBoxSpec",
-    "LiftTask",
-    "SingleArmManipulationTask",
-    "StackTask",
-    "TableArena",
-    "UniformTablePlacementSampler",
-    "make_lift_env",
-    "make_stack_env",
-]
+__all__ = [name for name in globals() if not name.startswith("_")]

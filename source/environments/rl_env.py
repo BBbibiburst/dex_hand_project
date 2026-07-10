@@ -157,6 +157,7 @@ class RobotGymEnv(gym.Env):
 
         self.controller.bind(self.model, self.data)
         self.tactile_sensor.bind(self.model, self.data)
+        self.task.bind(self.model)
 
         self.action_space = self.controller.action_space
         obs_spaces = {
@@ -223,12 +224,13 @@ class RobotGymEnv(gym.Env):
 
         self.elapsed_steps += 1
         obs = self._get_observation()
-        reward, reward_info = self.task.compute_reward(obs, action, self.model, self.data)
-        terminated, terminated_info = self.task.is_terminated(obs, self.model, self.data)
+        task_result = self.task.evaluate(obs, np.asarray(action), self.model, self.data)
+        reward = task_result.reward
+        terminated = task_result.terminated
         truncated = self.elapsed_steps >= self.config.episode_length
 
-        info.update(reward_info)
-        info.update(terminated_info)
+        info.update(task_result.info)
+        info["task_success"] = task_result.success
         info.update(self._get_info(obs))
         if self.render_mode == "human":
             self.render()
