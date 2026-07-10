@@ -24,10 +24,15 @@ import struct
 
 import numpy as np
 
+try:
+    from scipy.optimize import minimize
+except ImportError:
+    minimize = None
+
 
 FINGER_SEGMENT_FIT_SUBDIVISIONS = 4
 FINGERTIP_MAX_PHI = 0.5 * np.pi
-FINGERTIP_MAX_THETA_ARC = np.pi
+FINGERTIP_THETA_ARC = 0.5 * np.pi
 FINGERTIP_MIRROR_ACROSS_XY = True
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
@@ -45,6 +50,7 @@ class FingerSegmentSurfaceFit:
     surface_center: np.ndarray
     surface_radius_x: float
     surface_radius_y: float
+    surface_angle: float
     arc_start: float
     arc_end: float
 
@@ -145,8 +151,13 @@ def finger_segment_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndar
     points: list[np.ndarray] = []
     for z_value in axial_values:
         for theta in theta_values:
-            x_value = fit.surface_center[0] + fit.surface_radius_x * np.cos(theta)
-            y_value = fit.surface_center[1] + fit.surface_radius_y * np.sin(theta)
+            x_value, y_value = _rotated_ellipse_point(
+                fit.surface_center,
+                fit.surface_radius_x,
+                fit.surface_radius_y,
+                fit.surface_angle,
+                theta,
+            )
             points.append(
                 fit.center
                 + z_value * fit.axis
@@ -177,18 +188,20 @@ def mesh_uv_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
 
 
 def fingertip_ellipsoid_grid_points(mesh_path: Path, rows: int, cols: int) -> np.ndarray:
-    """Stable quarter-ellipsoid style grid for rounded fingertip pads.
+    """Surface-following grid for rounded fingertip pads.
 
-    This follows the same spirit as the segment fitter: build a local PCA
-    frame, keep likely outer/contact surface samples, detect the occupied
-    angular arc, then sample a smooth grid on a concave quarter ellipsoid.
-    ``phi`` is clamped to ``[0, pi/2]`` and the ``theta`` arc is clamped to at
-    most ``pi``, so the model covers a quarter ellipsoid instead of a half
-    ellipsoid. The fingertip patch is concave, so the generated cap is mirrored
-    across the local plane parallel to global xy by ``FINGERTIP_MIRROR_ACROSS_XY``.
-    Local scale is estimated per ``phi`` row from the actual mesh, which makes
-    it more tolerant than a single ideal ellipsoid while staying much more
-    stable than unconstrained free-form fitting.
+    A local PCA/ellipsoid frame is used only to establish consistent axial
+    and circumferential coordinates. Taxels are then interpolated directly
+    on the real STL triangles, rather than placed on an ideal ellipsoid.
+    ``phi`` is clamped to ``[0, pi/2]`` and the ``theta`` arc is centered from
+    the outer-surface samples with width ``pi/2``, so the model covers a
+    quarter ellipsoid instead of a half ellipsoid. The fingertip patch is concave, so the outer-surface sample
+    cloud can be mirrored across the local plane parallel to global xy by
+    ``FINGERTIP_MIRROR_ACROSS_XY`` before the ellipsoid axes and angular range
+    are estimated.
+    The mirrored outer-surface cloud is used to estimate one robust average
+    ``a, b, c`` and a valid ``phi/theta`` range; every taxel is then sampled on
+    that same regular ellipsoid.
     """
     triangles = read_stl_triangles(mesh_path)
     return _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
@@ -228,8 +241,13 @@ def finger_segment_fit_surface(vertices: np.ndarray) -> np.ndarray:
     z_values = np.linspace(fit.axial_low, fit.axial_high, 32)
     theta_values = np.linspace(fit.arc_start, fit.arc_end, 48)
     z_grid, theta_grid = np.meshgrid(z_values, theta_values, indexing="ij")
-    x_grid = fit.surface_center[0] + fit.surface_radius_x * np.cos(theta_grid)
-    y_grid = fit.surface_center[1] + fit.surface_radius_y * np.sin(theta_grid)
+    x_grid, y_grid = _rotated_ellipse_point(
+        fit.surface_center,
+        fit.surface_radius_x,
+        fit.surface_radius_y,
+        fit.surface_angle,
+        theta_grid,
+    )
     return (
         fit.center
         + z_grid[..., None] * fit.axis
@@ -285,14 +303,13 @@ def patch_fingertip_ellipsoid_plot_data(
     """Plot-data helper for fingertip quarter-ellipsoid fitting."""
     triangles = read_stl_triangles(mesh_path)
     samples = _fingertip_ellipsoid_grid_points_from_triangles(triangles, rows, cols)
-    surface = _fingertip_ellipsoid_surface_from_triangles(triangles)
     return PatchPlotData(
         mesh_name=mesh_name,
         rows=rows,
         cols=cols,
         triangles=triangles,
         samples=samples,
-        fit_surfaces=(surface,),
+        fit_surfaces=(),
     )
 
 
@@ -345,7 +362,12 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
     if len(surface_vertices) == 0:
         surface_vertices = fit_points
 
-    surface_center, surface_radius_x, surface_radius_y = _fit_axis_aligned_section_ellipse(
+    (
+        surface_center,
+        surface_radius_x,
+        surface_radius_y,
+        surface_angle,
+    ) = _fit_rotated_section_ellipse(
         surface_vertices, fit_center, section_x, section_y
     )
 
@@ -354,10 +376,14 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
         [surface_centered @ section_x, surface_centered @ section_y]
     )
     surface_rel = surface_section - surface_center
+    surface_cos = np.cos(surface_angle)
+    surface_sin = np.sin(surface_angle)
+    ellipse_u = surface_rel[:, 0] * surface_cos + surface_rel[:, 1] * surface_sin
+    ellipse_v = -surface_rel[:, 0] * surface_sin + surface_rel[:, 1] * surface_cos
     angles = np.mod(
         np.arctan2(
-            surface_rel[:, 1] / max(surface_radius_y, 1e-9),
-            surface_rel[:, 0] / max(surface_radius_x, 1e-9),
+            ellipse_v / max(surface_radius_y, 1e-9),
+            ellipse_u / max(surface_radius_x, 1e-9),
         ),
         2.0 * np.pi,
     )
@@ -375,21 +401,193 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
         surface_center=surface_center,
         surface_radius_x=float(surface_radius_x),
         surface_radius_y=float(surface_radius_y),
+        surface_angle=float(surface_angle),
         arc_start=float(arc_start),
         arc_end=float(arc_end),
     )
 
 
-def _fit_axis_aligned_section_ellipse(
-    points: np.ndarray, center: np.ndarray, section_x: np.ndarray, section_y: np.ndarray
-) -> tuple[np.ndarray, float, float]:
+def _fit_rotated_section_ellipse(
+    points: np.ndarray,
+    center: np.ndarray,
+    section_x: np.ndarray,
+    section_y: np.ndarray,
+) -> tuple[np.ndarray, float, float, float]:
     centered = points - center
     section = np.column_stack([centered @ section_x, centered @ section_y])
+    result, _ = _fit_ellipse_ransac(section)
+    if result is not None:
+        cx, cy, radius_x, radius_y, angle = result
+        return (
+            np.asarray([cx, cy], dtype=np.float64),
+            float(radius_x),
+            float(radius_y),
+            float(angle),
+        )
+
     ellipse_center = np.median(section, axis=0)
     rel = section - ellipse_center
     radius_x = max(np.percentile(np.abs(rel[:, 0]), 95.0), 1e-9)
     radius_y = max(np.percentile(np.abs(rel[:, 1]), 95.0), 1e-9)
-    return ellipse_center, radius_x, radius_y
+    return ellipse_center, radius_x, radius_y, 0.0
+
+
+def _rotated_ellipse_point(
+    center: np.ndarray,
+    radius_x: float,
+    radius_y: float,
+    angle: float,
+    theta: np.ndarray | float,
+) -> tuple[np.ndarray, np.ndarray]:
+    ellipse_u = radius_x * np.cos(theta)
+    ellipse_v = radius_y * np.sin(theta)
+    cos_angle = np.cos(angle)
+    sin_angle = np.sin(angle)
+    x_value = center[0] + ellipse_u * cos_angle - ellipse_v * sin_angle
+    y_value = center[1] + ellipse_u * sin_angle + ellipse_v * cos_angle
+    return x_value, y_value
+
+
+def _ellipse_sampson_objective(params: np.ndarray, points_2d: np.ndarray) -> float:
+    center_x, center_y, radius_x, radius_y, angle = params
+    if radius_x <= 0.0 or radius_y <= 0.0:
+        return 1e12
+
+    cos_angle = np.cos(angle)
+    sin_angle = np.sin(angle)
+    dx = points_2d[:, 0] - center_x
+    dy = points_2d[:, 1] - center_y
+    ellipse_u = dx * cos_angle + dy * sin_angle
+    ellipse_v = -dx * sin_angle + dy * cos_angle
+    residual = (ellipse_u / radius_x) ** 2 + (ellipse_v / radius_y) ** 2 - 1.0
+    grad_u = 2.0 * ellipse_u / (radius_x**2)
+    grad_v = 2.0 * ellipse_v / (radius_y**2)
+    denom = grad_u**2 + grad_v**2 + 1e-12
+    return float(np.sum((residual**2) / denom))
+
+
+def _initial_ellipse_params(points_2d: np.ndarray) -> list[float]:
+    center = np.median(points_2d, axis=0)
+    centered = points_2d - center
+    if len(points_2d) >= 3:
+        _, _, vh = np.linalg.svd(centered, full_matrices=False)
+        angle = float(np.arctan2(vh[0, 1], vh[0, 0]))
+        axes = centered @ vh[:2].T
+    else:
+        angle = 0.0
+        axes = centered
+    radius_x = max(0.5 * np.ptp(axes[:, 0]), 1e-9)
+    radius_y = max(0.5 * np.ptp(axes[:, 1]), 1e-9)
+    if radius_x < radius_y:
+        radius_x, radius_y = radius_y, radius_x
+        angle += 0.5 * np.pi
+    angle = (angle + 0.5 * np.pi) % np.pi - 0.5 * np.pi
+    return [float(center[0]), float(center[1]), float(radius_x), float(radius_y), angle]
+
+
+def _fit_ellipse_geometric(
+    points_2d: np.ndarray,
+    init_params: list[float] | None = None,
+) -> tuple[float, float, float, float, float] | None:
+    if len(points_2d) < 10:
+        return None
+    if init_params is None:
+        init_params = _initial_ellipse_params(points_2d)
+    if minimize is None:
+        return tuple(init_params)  # type: ignore[return-value]
+
+    ref = max(np.ptp(points_2d[:, 0]), np.ptp(points_2d[:, 1]), 1e-9)
+    bounds = [
+        (init_params[0] - ref, init_params[0] + ref),
+        (init_params[1] - ref, init_params[1] + ref),
+        (ref * 0.02, ref * 5.0),
+        (ref * 0.02, ref * 5.0),
+        (-0.5 * np.pi, 0.5 * np.pi),
+    ]
+    result = minimize(
+        lambda params: _ellipse_sampson_objective(params, points_2d),
+        init_params,
+        method="L-BFGS-B",
+        bounds=bounds,
+        options={"maxiter": 180, "ftol": 1e-11},
+    )
+    if not result.success and result.fun > 1e6:
+        return None
+
+    center_x, center_y, radius_x, radius_y, angle = map(float, result.x)
+    if radius_x < radius_y:
+        radius_x, radius_y = radius_y, radius_x
+        angle += 0.5 * np.pi
+    angle = (angle + 0.5 * np.pi) % np.pi - 0.5 * np.pi
+    return center_x, center_y, radius_x, radius_y, angle
+
+
+def _ellipse_point_distances(
+    points_2d: np.ndarray,
+    params: tuple[float, float, float, float, float],
+) -> np.ndarray:
+    center_x, center_y, radius_x, radius_y, angle = params
+    cos_angle = np.cos(angle)
+    sin_angle = np.sin(angle)
+    dx = points_2d[:, 0] - center_x
+    dy = points_2d[:, 1] - center_y
+    ellipse_u = dx * cos_angle + dy * sin_angle
+    ellipse_v = -dx * sin_angle + dy * cos_angle
+    normalized_radius = np.sqrt((ellipse_u / radius_x) ** 2 + (ellipse_v / radius_y) ** 2)
+    normalized_radius = np.maximum(normalized_radius, 1e-9)
+    euclidean_radius = np.sqrt(ellipse_u**2 + ellipse_v**2)
+    return np.abs(normalized_radius - 1.0) * euclidean_radius / normalized_radius
+
+
+def _fit_ellipse_ransac(
+    points_2d: np.ndarray,
+    *,
+    iterations: int = 32,
+    inlier_tol: float = 0.10,
+    min_inliers: int = 15,
+) -> tuple[tuple[float, float, float, float, float] | None, np.ndarray]:
+    if len(points_2d) < min_inliers:
+        result = _fit_ellipse_geometric(points_2d)
+        return result, np.ones(len(points_2d), dtype=bool)
+
+    ref = max(np.ptp(points_2d[:, 0]), np.ptp(points_2d[:, 1]), 1e-9)
+    tolerance = inlier_tol * ref
+    rng = np.random.default_rng(42)
+    best_result = None
+    best_inliers = np.zeros(len(points_2d), dtype=bool)
+    best_count = 0
+
+    for _ in range(iterations):
+        sample_size = int(
+            rng.integers(
+                max(min_inliers, len(points_2d) // 4),
+                max(min_inliers + 1, len(points_2d) // 2),
+            )
+        )
+        sample_indices = rng.choice(
+            len(points_2d),
+            size=min(sample_size, len(points_2d)),
+            replace=False,
+        )
+        result = _fit_ellipse_geometric(points_2d[sample_indices])
+        if result is None:
+            continue
+        inliers = _ellipse_point_distances(points_2d, result) < tolerance
+        count = int(inliers.sum())
+        if count > best_count:
+            best_result = result
+            best_inliers = inliers
+            best_count = count
+
+    if best_result is None or best_count < min_inliers:
+        best_result = _fit_ellipse_geometric(points_2d)
+        best_inliers = np.ones(len(points_2d), dtype=bool)
+    elif best_inliers.any():
+        refined = _fit_ellipse_geometric(points_2d[best_inliers], list(best_result))
+        if refined is not None:
+            best_result = refined
+
+    return best_result, best_inliers
 
 
 def _vertices_as_triangles(vertices: np.ndarray) -> np.ndarray:
@@ -456,18 +654,221 @@ def _mesh_uv_grid_points_from_triangles(
     return np.asarray(points, dtype=np.float64)
 
 
+
 def _fingertip_ellipsoid_grid_points_from_triangles(
     triangles: np.ndarray,
     rows: int,
     cols: int,
 ) -> np.ndarray:
-    fit = _fit_fingertip_ellipsoid_cap(triangles)
-    phi_values = _linspace_interval_midpoints(fit["phi_lo"], fit["phi_hi"], rows)
-    theta_values = _ellipse_arc_mid_angles(
-        fit["b"], fit["c"], cols, fit["arc_start"], fit["arc_end"]
+    """Sample the fingertip as a swept U-shaped shell, not an ellipsoid."""
+    return _fingertip_swept_shell_grid_points(triangles, rows, cols)
+
+
+def _fingertip_swept_shell_grid_points(
+    triangles: np.ndarray,
+    rows: int,
+    cols: int,
+) -> np.ndarray:
+    points = _supersample_triangles(triangles, subdivisions=5)
+    if len(points) == 0:
+        raise ValueError("Fingertip STL contains no usable surface points.")
+
+    center = points.mean(axis=0)
+    centered = points - center
+    _, _, vh = np.linalg.svd(centered, full_matrices=False)
+    axis = vh[0].copy()
+    section_x = vh[1].copy()
+
+    axial_probe = centered @ axis
+    low_mask = axial_probe <= np.percentile(axial_probe, 15.0)
+    high_mask = axial_probe >= np.percentile(axial_probe, 85.0)
+
+    def section_spread(mask: np.ndarray) -> float:
+        local = centered[mask]
+        section_y_probe = vh[2]
+        return float(
+            np.std(local @ section_x)
+            + np.std(local @ section_y_probe)
+        )
+
+    if section_spread(low_mask) < section_spread(high_mask):
+        axis = -axis
+
+    section_x = section_x - axis * float(section_x @ axis)
+    section_x /= max(np.linalg.norm(section_x), 1e-12)
+    section_y = np.cross(axis, section_x)
+    section_y /= max(np.linalg.norm(section_y), 1e-12)
+
+    local = points - center
+    axial = local @ axis
+    section_u = local @ section_x
+    section_v = local @ section_y
+
+    axial_low, axial_high = np.percentile(axial, [3.0, 97.0])
+    axial_span = max(float(axial_high - axial_low), 1e-9)
+
+    slice_count = 32
+    slice_edges = np.linspace(axial_low, axial_high, slice_count + 1)
+    slice_centres = 0.5 * (slice_edges[:-1] + slice_edges[1:])
+    centre_u = np.full(slice_count, np.nan, dtype=np.float64)
+    centre_v = np.full(slice_count, np.nan, dtype=np.float64)
+
+    for idx, (start, end) in enumerate(zip(slice_edges[:-1], slice_edges[1:])):
+        mask = (axial >= start) & (axial < end)
+        if int(mask.sum()) < 20:
+            continue
+        centre_u[idx] = 0.5 * (
+            np.percentile(section_u[mask], 2.0)
+            + np.percentile(section_u[mask], 98.0)
+        )
+        centre_v[idx] = 0.5 * (
+            np.percentile(section_v[mask], 2.0)
+            + np.percentile(section_v[mask], 98.0)
+        )
+
+    valid = np.isfinite(centre_u) & np.isfinite(centre_v)
+    if int(valid.sum()) < 2:
+        centre_u[:] = np.median(section_u)
+        centre_v[:] = np.median(section_v)
+    else:
+        centre_u = np.interp(
+            slice_centres,
+            slice_centres[valid],
+            centre_u[valid],
+        )
+        centre_v = np.interp(
+            slice_centres,
+            slice_centres[valid],
+            centre_v[valid],
+        )
+
+    point_centre_u = np.interp(axial, slice_centres, centre_u)
+    point_centre_v = np.interp(axial, slice_centres, centre_v)
+    radial_u = section_u - point_centre_u
+    radial_v = section_v - point_centre_v
+    radius = np.hypot(radial_u, radial_v)
+    angle = np.mod(np.arctan2(radial_v, radial_u), 2.0 * np.pi)
+
+    axial_bin_count = 28
+    angle_bin_count = 144
+    axial_bin = np.clip(
+        ((axial - axial_low) / axial_span * axial_bin_count).astype(np.int32),
+        0,
+        axial_bin_count - 1,
     )
-    scales = _fingertip_phi_scales(fit, phi_values)
-    return _fingertip_points_from_fit(fit, phi_values, theta_values, scales)
+    angle_bin = np.clip(
+        (angle / (2.0 * np.pi) * angle_bin_count).astype(np.int32),
+        0,
+        angle_bin_count - 1,
+    )
+    bin_key = axial_bin * angle_bin_count + angle_bin
+
+    order = np.lexsort((-radius, bin_key))
+    _, first = np.unique(bin_key[order], return_index=True)
+    envelope_indices = order[first]
+
+    envelope_axial = axial[envelope_indices]
+    envelope_angle = angle[envelope_indices]
+    envelope_radius = radius[envelope_indices]
+
+    central = (
+        (envelope_axial >= np.percentile(envelope_axial, 10.0))
+        & (envelope_axial <= np.percentile(envelope_axial, 88.0))
+    )
+    support, _ = np.histogram(
+        envelope_angle[central],
+        bins=angle_bin_count,
+        range=(0.0, 2.0 * np.pi),
+    )
+    support = support.astype(np.float64)
+    support = (
+        0.25 * np.roll(support, 1)
+        + 0.50 * support
+        + 0.25 * np.roll(support, -1)
+    )
+
+    arc_width = np.pi
+    bin_width = 2.0 * np.pi / angle_bin_count
+    window_bins = int(round(arc_width / bin_width))
+    doubled = np.concatenate([support, support])
+    prefix = np.concatenate([[0.0], np.cumsum(doubled)])
+    scores = (
+        prefix[window_bins : window_bins + angle_bin_count]
+        - prefix[:angle_bin_count]
+    )
+    arc_start = int(np.argmax(scores)) * bin_width
+    arc_end = arc_start + window_bins * bin_width
+
+    arc_mid = 0.5 * (arc_start + arc_end)
+    unwrapped_angle = (
+        arc_mid
+        + (envelope_angle - arc_mid + np.pi) % (2.0 * np.pi)
+        - np.pi
+    )
+    arc_margin = np.deg2rad(8.0)
+    in_arc = (
+        (unwrapped_angle >= arc_start - arc_margin)
+        & (unwrapped_angle <= arc_end + arc_margin)
+    )
+    envelope_axial = envelope_axial[in_arc]
+    envelope_angle = unwrapped_angle[in_arc]
+    envelope_radius = envelope_radius[in_arc]
+    envelope_points = points[envelope_indices[in_arc]]
+
+    row_edges = np.linspace(
+        np.percentile(axial, 7.5),
+        np.percentile(axial, 91.0),
+        rows + 1,
+    )
+    row_values = 0.5 * (row_edges[:-1] + row_edges[1:])
+    col_values = arc_start + (
+        np.arange(cols, dtype=np.float64) + 0.5
+    ) * (arc_end - arc_start) / cols
+
+    result: list[np.ndarray] = []
+    axial_scale = max(float(row_edges[-1] - row_edges[0]), 1e-9)
+    angle_scale = max(float(arc_end - arc_start), 1e-9)
+
+    for target_axial in row_values:
+        for target_angle in col_values:
+            axial_distance = (
+                np.abs(envelope_axial - target_axial) / axial_scale
+            )
+            angular_distance = (
+                np.abs(
+                    (envelope_angle - target_angle + np.pi)
+                    % (2.0 * np.pi)
+                    - np.pi
+                )
+                / angle_scale
+            )
+
+            local_mask = (
+                (axial_distance <= 0.11)
+                & (angular_distance <= 0.11)
+            )
+            local_indices = np.flatnonzero(local_mask)
+            if len(local_indices) < 4:
+                score = (
+                    (axial_distance / 0.065) ** 2
+                    + (angular_distance / 0.065) ** 2
+                )
+                local_indices = np.argsort(score)[:24]
+
+            local_radii = envelope_radius[local_indices]
+            radial_threshold = np.percentile(local_radii, 65.0)
+            outer_local = local_indices[local_radii >= radial_threshold]
+            if len(outer_local) == 0:
+                outer_local = local_indices
+
+            score = (
+                (axial_distance[outer_local] / 0.060) ** 2
+                + (angular_distance[outer_local] / 0.060) ** 2
+            )
+            best = outer_local[int(np.argmin(score))]
+            result.append(envelope_points[best])
+
+    return np.asarray(result, dtype=np.float64)
 
 
 def _fingertip_ellipsoid_surface_from_triangles(
@@ -476,12 +877,11 @@ def _fingertip_ellipsoid_surface_from_triangles(
     surface_rows: int = 28,
     surface_cols: int = 48,
 ) -> np.ndarray:
-    fit = _fit_fingertip_ellipsoid_cap(triangles)
-    phi_values = np.linspace(fit["phi_lo"], fit["phi_hi"], surface_rows)
-    theta_values = np.linspace(fit["arc_start"], fit["arc_end"], surface_cols)
-    scales = _fingertip_phi_scales(fit, phi_values)
-    points = _fingertip_points_from_fit(fit, phi_values, theta_values, scales)
-    return points.reshape(surface_rows, surface_cols, 3)
+    return _fingertip_swept_shell_grid_points(
+        triangles,
+        surface_rows,
+        surface_cols,
+    ).reshape(surface_rows, surface_cols, 3)
 
 
 def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray | float]:
@@ -508,24 +908,31 @@ def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray 
     base_u = np.percentile(outer_u0, 5.0)
     tip_u = np.percentile(outer_u0, 97.0)
     center = pca_center + base_u * axis
+    if FINGERTIP_MIRROR_ACROSS_XY:
+        outer_points = outer_points.copy()
+        outer_points[:, 2] = 2.0 * center[2] - outer_points[:, 2]
     outer_centered = outer_points - center
 
     u = outer_centered @ axis
     v = outer_centered @ section_x
     w = outer_centered @ section_y
 
-    a = max(tip_u - base_u, np.percentile(np.abs(u), 90.0), 1e-9)
-    b = max(np.percentile(np.abs(v), 92.5), 1e-9)
-    c = max(np.percentile(np.abs(w), 92.5), 1e-9)
+    a = max(tip_u - base_u, _robust_high_abs_mean(u), 1e-9)
+    b = max(_robust_high_abs_mean(v), 1e-9)
+    c = max(_robust_high_abs_mean(w), 1e-9)
 
     un = np.clip(u / a, -1.0, 1.0)
     phi = np.arccos(un)
     theta = np.mod(np.arctan2(w / c, v / b), 2.0 * np.pi)
 
     phi_hi = min(float(np.percentile(phi, 96.0)), float(FINGERTIP_MAX_PHI))
-    arc_start, arc_end = _occupied_angle_arc_limited(
-        theta,
-        max_width=FINGERTIP_MAX_THETA_ARC,
+    arc_start, arc_end = _axis_ray_angle_arc_fixed_width(
+        u,
+        v,
+        w,
+        b,
+        c,
+        width=FINGERTIP_THETA_ARC,
     )
     return {
         "center": center,
@@ -543,6 +950,7 @@ def _fit_fingertip_ellipsoid_cap(triangles: np.ndarray) -> dict[str, np.ndarray 
         "outer_v": v,
         "outer_w": w,
         "outer_phi": phi,
+        "outer_theta": theta,
     }
 
 
@@ -578,36 +986,10 @@ def _fingertip_outer_face_mask(
     return mask
 
 
-def _fingertip_phi_scales(
-    fit: dict[str, np.ndarray | float],
-    phi_values: np.ndarray,
-) -> np.ndarray:
-    outer_phi = np.asarray(fit["outer_phi"], dtype=np.float64)
-    u = np.asarray(fit["outer_u"], dtype=np.float64)
-    v = np.asarray(fit["outer_v"], dtype=np.float64)
-    w = np.asarray(fit["outer_w"], dtype=np.float64)
-    a = float(fit["a"])
-    b = float(fit["b"])
-    c = float(fit["c"])
-    norm_radius = np.sqrt((u / a) ** 2 + (v / b) ** 2 + (w / c) ** 2)
-
-    phi_span = max(float(fit["phi_hi"]) - float(fit["phi_lo"]), 1e-9)
-    window = 0.15 * phi_span
-    scales = []
-    for phi_value in phi_values:
-        mask = np.abs(outer_phi - phi_value) <= window
-        if int(mask.sum()) < 8:
-            mask = np.ones_like(outer_phi, dtype=bool)
-        scales.append(np.percentile(norm_radius[mask], 80.0))
-    scales_arr = np.asarray(scales, dtype=np.float64)
-    return np.clip(scales_arr, 0.5, 1.3)
-
-
 def _fingertip_points_from_fit(
     fit: dict[str, np.ndarray | float],
     phi_values: np.ndarray,
     theta_values: np.ndarray,
-    scales: np.ndarray,
 ) -> np.ndarray:
     center = np.asarray(fit["center"], dtype=np.float64)
     axis = np.asarray(fit["axis"], dtype=np.float64)
@@ -618,21 +1000,15 @@ def _fingertip_points_from_fit(
     c = float(fit["c"])
 
     points: list[np.ndarray] = []
-    for phi_value, scale in zip(phi_values, scales):
+    for phi_value in phi_values:
         sin_phi = np.sin(phi_value)
         for theta in theta_values:
-            x_value = scale * a * np.cos(phi_value)
-            y_value = scale * b * sin_phi * np.cos(theta)
-            z_value = scale * c * sin_phi * np.sin(theta)
             point = (
                 center
-                + x_value * axis
-                + y_value * section_x
-                + z_value * section_y
+                + a * np.cos(phi_value) * axis
+                + b * sin_phi * np.cos(theta) * section_x
+                + c * sin_phi * np.sin(theta) * section_y
             )
-            if FINGERTIP_MIRROR_ACROSS_XY:
-                point = point.copy()
-                point[2] = 2.0 * center[2] - point[2]
             points.append(point)
     return np.asarray(points, dtype=np.float64)
 
@@ -725,26 +1101,68 @@ def _occupied_angle_arc(angles: np.ndarray, *, bins: int = 96) -> tuple[float, f
     return start, end
 
 
-def _occupied_angle_arc_limited(
-    angles: np.ndarray,
+def _axis_ray_angle_arc_fixed_width(
+    axial: np.ndarray,
+    section_x_values: np.ndarray,
+    section_y_values: np.ndarray,
+    radius_x: float,
+    radius_y: float,
     *,
-    max_width: float,
+    width: float,
     bins: int = 96,
+    axial_slices: int = 7,
 ) -> tuple[float, float]:
-    start, end = _occupied_angle_arc(angles, bins=bins)
-    if end - start <= max_width:
-        return start, end
+    section_x_norm = section_x_values / max(radius_x, 1e-9)
+    section_y_norm = section_y_values / max(radius_y, 1e-9)
+    radial_norm = np.sqrt(section_x_norm**2 + section_y_norm**2)
+    angles = np.mod(np.arctan2(section_y_norm, section_x_norm), 2.0 * np.pi)
 
-    hist, _ = np.histogram(angles, bins=bins, range=(0.0, 2.0 * np.pi))
+    target_width = min(float(width), 2.0 * np.pi)
+    if len(angles) == 0:
+        return 0.0, target_width
+
+    axial_low, axial_high = np.percentile(axial, [8.0, 92.0])
+    radial_floor = np.percentile(radial_norm, 35.0)
+    usable = (
+        (axial >= axial_low)
+        & (axial <= axial_high)
+        & (radial_norm >= radial_floor)
+    )
+    if int(usable.sum()) < 12:
+        usable = radial_norm >= radial_floor
+    if int(usable.sum()) < 12:
+        usable = np.ones_like(radial_norm, dtype=bool)
+
     bin_width = 2.0 * np.pi / bins
-    window_bins = max(1, min(bins, int(round(max_width / bin_width))))
-    doubled = np.concatenate([hist, hist])
-    prefix = np.concatenate([[0], np.cumsum(doubled)])
+    support = np.zeros(bins, dtype=np.float64)
+    axial_edges = np.linspace(axial_low, axial_high, axial_slices + 1)
+    for start_u, end_u in zip(axial_edges[:-1], axial_edges[1:]):
+        slice_mask = usable & (axial >= start_u) & (axial <= end_u)
+        if int(slice_mask.sum()) < 4:
+            continue
+        hist, _ = np.histogram(angles[slice_mask], bins=bins, range=(0.0, 2.0 * np.pi))
+        # Count ray directions per axial slice, not raw point density, so one
+        # dense local patch does not dominate the whole angle range.
+        support += (hist > 0).astype(np.float64)
+
+    if not np.any(support):
+        hist, _ = np.histogram(angles[usable], bins=bins, range=(0.0, 2.0 * np.pi))
+        support = hist.astype(np.float64)
+    if not np.any(support):
+        return 0.0, target_width
+
+    support = (
+        0.25 * np.roll(support, 1)
+        + 0.5 * support
+        + 0.25 * np.roll(support, -1)
+    )
+    window_bins = max(1, min(bins, int(round(target_width / bin_width))))
+    doubled = np.concatenate([support, support])
+    prefix = np.concatenate([[0.0], np.cumsum(doubled)])
     scores = prefix[window_bins : window_bins + bins] - prefix[:bins]
-    best_start_bin = int(np.argmax(scores))
-    limited_start = best_start_bin * bin_width
-    limited_end = limited_start + window_bins * bin_width
-    return limited_start, limited_end
+    start_bin = int(np.argmax(scores))
+    arc_start = start_bin * bin_width
+    return arc_start, arc_start + window_bins * bin_width
 
 
 def _ellipse_arc_mid_angles(
@@ -763,6 +1181,17 @@ def _ellipse_arc_mid_angles(
 
 def _angle_distance(values: np.ndarray, target: float) -> np.ndarray:
     return np.abs((values - target + np.pi) % (2.0 * np.pi) - np.pi)
+
+
+def _robust_high_abs_mean(values: np.ndarray) -> float:
+    abs_values = np.abs(np.asarray(values, dtype=np.float64))
+    if len(abs_values) == 0:
+        return 0.0
+    low, high = np.percentile(abs_values, [55.0, 95.0])
+    band = abs_values[(abs_values >= low) & (abs_values <= high)]
+    if len(band) == 0:
+        band = abs_values
+    return float(np.mean(band))
 
 
 def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
