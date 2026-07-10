@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Composable task-object specifications."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

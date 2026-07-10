@@ -4,15 +4,16 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from gymnasium import spaces
+
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
+from source.envs.core.tasks import RobotTask, TaskStepResult
 from source.envs.manipulation.arenas import TableArena
 from source.envs.manipulation.bindings import ObjectBinding, TaskBindings
 from source.envs.manipulation.objects import ManipulationObjectSpec
 from source.envs.manipulation.placement import UniformTablePlacementSampler
-from source.envs.core.tasks import RobotTask, TaskStepResult
 
 
 class SingleArmManipulationTask(RobotTask):
@@ -76,12 +77,8 @@ class SingleArmManipulationTask(RobotTask):
 
         result: dict[str, spaces.Space] = {}
         for obj in self.objects:
-            result[f"{obj.name}_pos"] = spaces.Box(
-                -np.inf, np.inf, shape=(3,), dtype=np.float32
-            )
-            result[f"{obj.name}_quat"] = spaces.Box(
-                -np.inf, np.inf, shape=(4,), dtype=np.float32
-            )
+            result[f"{obj.name}_pos"] = spaces.Box(-np.inf, np.inf, shape=(3,), dtype=np.float32)
+            result[f"{obj.name}_quat"] = spaces.Box(-np.inf, np.inf, shape=(4,), dtype=np.float32)
             result[f"gripper_to_{obj.name}_pos"] = spaces.Box(
                 -np.inf, np.inf, shape=(3,), dtype=np.float32
             )
@@ -112,15 +109,10 @@ class SingleArmManipulationTask(RobotTask):
         object_geom_ids: set[int] = set()
 
         for obj in self.objects:
-            body_id = mujoco.mj_name2id(
-                model, mujoco.mjtObj.mjOBJ_BODY, obj.body_name
-            )
-            joint_id = mujoco.mj_name2id(
-                model, mujoco.mjtObj.mjOBJ_JOINT, obj.joint_name
-            )
+            body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, obj.body_name)
+            joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, obj.joint_name)
             geom_ids = {
-                mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, name)
-                for name in obj.geom_names
+                mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, name) for name in obj.geom_names
             }
             if body_id < 0 or joint_id < 0 or min(geom_ids, default=-1) < 0:
                 raise ValueError(f"Task object {obj.name!r} was not compiled correctly.")
@@ -135,9 +127,7 @@ class SingleArmManipulationTask(RobotTask):
                 geom_ids=frozenset(valid_geom_ids),
             )
 
-        ee_site_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name
-        )
+        ee_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name)
         environment_ids = set(object_geom_ids)
         for name in (self.arena.table_geom_name, "floor"):
             geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, name)
@@ -198,21 +188,15 @@ class SingleArmManipulationTask(RobotTask):
             binding = bindings.objects[obj.name]
             position = data.xpos[binding.body_id].astype(np.float32).copy()
             observation[f"{obj.name}_pos"] = position
-            observation[f"{obj.name}_quat"] = (
-                data.xquat[binding.body_id].astype(np.float32).copy()
-            )
-            observation[f"gripper_to_{obj.name}_pos"] = (
-                position - ee_position
-            ).astype(np.float32)
+            observation[f"{obj.name}_quat"] = data.xquat[binding.body_id].astype(np.float32).copy()
+            observation[f"gripper_to_{obj.name}_pos"] = (position - ee_position).astype(np.float32)
 
         observation.update(self.get_extra_observation(model, data, observation))
         return observation
 
     def evaluate(self, obs, action, model, data) -> TaskStepResult:
         success = bool(self.check_success(model, data))
-        reward, task_info = self.compute_task_reward(
-            obs, action, model, data, success
-        )
+        reward, task_info = self.compute_task_reward(obs, action, model, data, success)
         return TaskStepResult(
             reward=float(reward),
             success=success,
@@ -247,9 +231,7 @@ class SingleArmManipulationTask(RobotTask):
                 int(data.contact[index].geom1),
                 int(data.contact[index].geom2),
             }
-            if pair.intersection(object_geoms) and pair.intersection(
-                bindings.robot_geom_ids
-            ):
+            if pair.intersection(object_geoms) and pair.intersection(bindings.robot_geom_ids):
                 return True
         return False
 

@@ -11,8 +11,8 @@ from __future__ import annotations
 import argparse
 
 import mujoco
-from mujoco import viewer
 import numpy as np
+from mujoco import viewer
 
 from source.demos.common import (
     add_robot_config_args,
@@ -30,9 +30,7 @@ from source.sensors.tactile.dex_hand import (
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Preview dex-hand tactile taxel sites."
-    )
+    parser = argparse.ArgumentParser(description="Preview dex-hand tactile taxel sites.")
     parser.add_argument(
         "--backend",
         choices=SUPPORTED_TACTILE_BACKENDS,
@@ -43,19 +41,13 @@ def _parse_args() -> argparse.Namespace:
         "--patch",
         type=str,
         default="",
-        help=(
-            "Only draw one skin patch, for example "
-            "skin_0_0_p, skin_4_2_p, or skin_palm_p."
-        ),
+        help=("Only draw one skin patch, for example skin_0_0_p, skin_4_2_p, or skin_palm_p."),
     )
     parser.add_argument(
         "--scale",
         type=float,
         default=1.0,
-        help=(
-            "Visualization-only size multiplier. "
-            "Does not change the actual touch sensor."
-        ),
+        help=("Visualization-only size multiplier. Does not change the actual touch sensor."),
     )
     parser.add_argument(
         "--alpha",
@@ -72,10 +64,7 @@ def _parse_args() -> argparse.Namespace:
         "--normal-length",
         type=float,
         default=0.0,
-        help=(
-            "Draw each taxel's local +Z normal with this length in meters. "
-            "Set to 0 to disable."
-        ),
+        help=("Draw each taxel's local +Z normal with this length in meters. Set to 0 to disable."),
     )
     parser.add_argument(
         "--no-prefix",
@@ -345,9 +334,7 @@ def main() -> None:
         raise ValueError(f"--alpha must be in [0, 1], got {args.alpha}.")
 
     if args.normal_length < 0.0:
-        raise ValueError(
-            f"--normal-length must be non-negative, got {args.normal_length}."
-        )
+        raise ValueError(f"--normal-length must be non-negative, got {args.normal_length}.")
 
     config = load_demo_robot_config(args)
     require_hand(config, "dex_hand", demo_name="tactile_preview")
@@ -359,12 +346,7 @@ def main() -> None:
     hand_descriptor = get_hand(hand_name)
 
     hand_prefix = (
-        ""
-        if args.no_prefix
-        else str(
-            config.get("hand_prefix")
-            or hand_descriptor.default_prefix
-        )
+        "" if args.no_prefix else str(config.get("hand_prefix") or hand_descriptor.default_prefix)
     )
 
     model, data = build_robot_model_from_config(
@@ -387,18 +369,14 @@ def main() -> None:
     )
 
     box_count = sum(
-        int(model.site_type[site_id])
-        == int(mujoco.mjtGeom.mjGEOM_BOX)
+        int(model.site_type[site_id]) == int(mujoco.mjtGeom.mjGEOM_BOX)
         for site_id, _mesh_name in sites
     )
 
     print(f"Backend: {tactile_sensor.backend_name}")
     print(f"Drawing {len(sites)} tactile sites.")
     print(f"Box sites: {box_count}")
-    print(
-        "Colors: proximal=cyan, middle=green, "
-        "fingertip=yellow, palm=red"
-    )
+    print("Colors: proximal=cyan, middle=green, fingertip=yellow, palm=red")
 
     with viewer.launch_passive(model, data) as handle:
         while handle.is_running():

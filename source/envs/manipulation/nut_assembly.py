@@ -1,7 +1,9 @@
 """Square and round nut assembly task without robosuite runtime dependencies."""
+
 from __future__ import annotations
 
 from typing import Any
+
 import numpy as np
 
 from source.envs.core.registry import register_task
@@ -22,12 +24,15 @@ class NutAssemblyTask(SingleArmManipulationTask):
             raise ValueError(f"single_nut must be one of {self.nut_names!r}")
         self.single_nut = single_nut
         arena = kwargs.pop("arena", PegsArena())
-        sampler = kwargs.pop("placement_sampler", UniformTablePlacementSampler(
-            x_range=(-0.13, 0.13),
-            y_range=(-0.16, 0.16),
-            ensure_object_boundary_in_range=False,
-            min_separation=0.10,
-        ))
+        sampler = kwargs.pop(
+            "placement_sampler",
+            UniformTablePlacementSampler(
+                x_range=(-0.13, 0.13),
+                y_range=(-0.16, 0.16),
+                ensure_object_boundary_in_range=False,
+                min_separation=0.10,
+            ),
+        )
         super().__init__(arena=arena, placement_sampler=sampler, **kwargs)
         self.objects_on_pegs = np.zeros(len(self.objects), dtype=bool)
 
@@ -60,7 +65,11 @@ class NutAssemblyTask(SingleArmManipulationTask):
             pos = self._body_pos(model, data, obj.name)
             peg = self._peg_center(obj.name)
             released = ee is None or np.linalg.norm(ee - pos) > 0.05
-            self.objects_on_pegs[i] = np.linalg.norm(pos[:2] - peg[:2]) < 0.018 and pos[2] < self.table_top_z + 0.10 and released
+            self.objects_on_pegs[i] = (
+                np.linalg.norm(pos[:2] - peg[:2]) < 0.018
+                and pos[2] < self.table_top_z + 0.10
+                and released
+            )
         return bool(np.all(self.objects_on_pegs))
 
     def compute_task_reward(self, obs, action, model, data, success):
@@ -73,12 +82,8 @@ class NutAssemblyTask(SingleArmManipulationTask):
             reward = staged_multi_object_reward(
                 object_names=tuple(obj.name for obj in self.objects),
                 placed=self.objects_on_pegs,
-                gripper_distance=lambda name: float(
-                    np.linalg.norm(obs[f"gripper_to_{name}_pos"])
-                ),
-                is_grasped=lambda name: self._is_robot_touching_object(
-                    model, data, name
-                ),
+                gripper_distance=lambda name: float(np.linalg.norm(obs[f"gripper_to_{name}_pos"])),
+                is_grasped=lambda name: self._is_robot_touching_object(model, data, name),
                 object_position=lambda name: self._body_pos(model, data, name),
                 target_position=self._peg_center,
             )

@@ -12,12 +12,17 @@ from abc import abstractmethod
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 from source.assets import DEX_HAND_DIR
 from source.sensors.base import TactileSensorBase
+from source.sensors.tactile.signal_processing import (
+    TactileSignalProcessor,
+    TactileSignalProcessorConfig,
+    TaxelPatch,
+)
 from source.sensors.tactile.surface_fitting import (
     DEX_HAND_PATCH_LAYOUT,
     grid_points_for_kind,
@@ -126,7 +131,9 @@ def _taxel_frame(grid: np.ndarray, row: int, col: int) -> np.ndarray:
     return np.column_stack((tangent_x, tangent_y, normal))
 
 
-def _orient_frame_outward(frame: np.ndarray, point: np.ndarray, patch_center: np.ndarray) -> np.ndarray:
+def _orient_frame_outward(
+    frame: np.ndarray, point: np.ndarray, patch_center: np.ndarray
+) -> np.ndarray:
     """Choose a consistent outward normal using the body origin, then patch centre.
 
     Skin mesh points are expressed in the owning body's coordinates.  The body
@@ -157,9 +164,9 @@ def _quat_to_mat(quat: np.ndarray) -> np.ndarray:
     w, x, y, z = np.asarray(quat, dtype=np.float64)
     return np.asarray(
         [
-            [1.0 - 2.0 * (y*y + z*z), 2.0 * (x*y - z*w), 2.0 * (x*z + y*w)],
-            [2.0 * (x*y + z*w), 1.0 - 2.0 * (x*x + z*z), 2.0 * (y*z - x*w)],
-            [2.0 * (x*z - y*w), 2.0 * (y*z + x*w), 1.0 - 2.0 * (x*x + y*y)],
+            [1.0 - 2.0 * (y * y + z * z), 2.0 * (x * y - z * w), 2.0 * (x * z + y * w)],
+            [2.0 * (x * y + z * w), 1.0 - 2.0 * (x * x + z * z), 2.0 * (y * z - x * w)],
+            [2.0 * (x * z - y * w), 2.0 * (y * z + x * w), 1.0 - 2.0 * (x * x + y * y)],
         ],
         dtype=np.float64,
     )
@@ -168,12 +175,6 @@ def _quat_to_mat(quat: np.ndarray) -> np.ndarray:
 def _transform_points(points: np.ndarray, pos: np.ndarray, quat: np.ndarray) -> np.ndarray:
     return np.asarray(points, dtype=np.float64) @ _quat_to_mat(quat).T + np.asarray(pos)
 
-
-from source.sensors.tactile.signal_processing import (
-    TaxelPatch,
-    TactileSignalProcessor,
-    TactileSignalProcessorConfig,
-)
 
 class DexHandTactileSensorBase(TactileSensorBase):
     """Shared geometry, naming, binding, and readout for dex-hand backends."""
@@ -204,9 +205,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
             count = rows * cols
             patches.append(TaxelPatch(mesh_name, rows, cols, kind, offset, offset + count))
             names.extend(
-                sensor_name(mesh_name, row, col)
-                for row in range(rows)
-                for col in range(cols)
+                sensor_name(mesh_name, row, col) for row in range(rows) for col in range(cols)
             )
             offset += count
         self.patches = tuple(patches)
@@ -369,7 +368,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
     def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Dict[str, np.ndarray]:
         flat = self.read(model, data)
         return {
-            patch.name: flat[patch.start:patch.stop].reshape(patch.shape)
+            patch.name: flat[patch.start : patch.stop].reshape(patch.shape)
             for patch in self.patches
         }
 
@@ -453,8 +452,9 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
         self.site_group = int(site_group)
         self.sensor_noise = float(sensor_noise)
 
-    def _add_taxel(self, *, hand_spec, parent_body, mesh_name, row, col, point,
-                   frame, row_spacing, col_spacing) -> None:
+    def _add_taxel(
+        self, *, hand_spec, parent_body, mesh_name, row, col, point, frame, row_spacing, col_spacing
+    ) -> None:
         half_x = max(self.taxel_min_half_size, 0.5 * col_spacing * self.taxel_overlap)
         half_y = max(self.taxel_min_half_size, 0.5 * row_spacing * self.taxel_overlap)
         name = site_name(mesh_name, row, col)

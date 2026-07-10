@@ -9,7 +9,6 @@ import numpy as np
 
 from source.envs.manipulation.objects import ManipulationObjectSpec
 
-
 Placement = tuple[np.ndarray, np.ndarray]
 
 
@@ -71,9 +70,7 @@ class UniformTablePlacementSampler:
 
         reference_pos = np.asarray(reference_pos, dtype=np.float64)
         if reference_pos.shape != (3,):
-            raise ValueError(
-                f"reference_pos must have shape (3,), got {reference_pos.shape}."
-            )
+            raise ValueError(f"reference_pos must have shape (3,), got {reference_pos.shape}.")
 
         if not objects:
             return {}
@@ -138,8 +135,7 @@ class UniformTablePlacementSampler:
                 dtype=np.float64,
             )
             if not self.ensure_valid_placement or all(
-                np.linalg.norm(xy - previous) >= self.min_separation
-                for previous in previous_points
+                np.linalg.norm(xy - previous) >= self.min_separation for previous in previous_points
             ):
                 return xy
         return None
@@ -165,7 +161,6 @@ class UniformTablePlacementSampler:
         high = value_range[1] - radius
         if low > high:
             raise ValueError(
-                f"Object radius {radius:.6f} does not fit inside range "
-                f"{value_range!r}."
+                f"Object radius {radius:.6f} does not fit inside range {value_range!r}."
             )
         return low, high

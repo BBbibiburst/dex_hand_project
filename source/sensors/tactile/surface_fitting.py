@@ -18,9 +18,9 @@ and mesh-UV sampling for the palm.
 from __future__ import annotations
 
 import argparse
+import struct
 from dataclasses import dataclass
 from pathlib import Path
-import struct
 
 import numpy as np
 
@@ -77,10 +77,8 @@ DEX_HAND_PATCH_LAYOUT = dex_hand_patch_layout()
 
 
 def _build_dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
-    return {
-        mesh_name: (rows, cols, kind)
-        for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT
-    }
+    return {mesh_name: (rows, cols, kind) for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT}
+
 
 _DEX_HAND_PATCH_INFO = _build_dex_hand_patch_info()
 
@@ -88,7 +86,6 @@ _DEX_HAND_PATCH_INFO = _build_dex_hand_patch_info()
 def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
     """Return immutable-by-convention patch metadata without rebuilding it."""
     return _DEX_HAND_PATCH_INFO
-
 
 
 # ---------------------------------------------------------------------------
@@ -223,9 +220,7 @@ def grid_points_for_kind(
 
 def finger_segment_fit_surface(vertices: np.ndarray) -> np.ndarray:
     triangles = _vertices_as_triangles(vertices)
-    return _finger_segment_regular_surface_grid_points(
-        triangles, 32, 64
-    ).reshape(32, 64, 3)
+    return _finger_segment_regular_surface_grid_points(triangles, 32, 64).reshape(32, 64, 3)
 
 
 def patch_plot_data(
@@ -334,7 +329,9 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
         normal_vote = (normal_radial > 0.0).astype(np.float64)
         outer_faces = (0.6 * pos_vote + 0.4 * normal_vote) > 0.5
 
-    if outer_faces.sum() < 0.05 * len(outer_faces) or (~outer_faces).sum() < 0.05 * len(outer_faces):
+    if outer_faces.sum() < 0.05 * len(outer_faces) or (~outer_faces).sum() < 0.05 * len(
+        outer_faces
+    ):
         outer_faces = r_norm >= np.percentile(r_norm, 60.0)
 
     surface_vertices = _supersample_triangles(
@@ -348,14 +345,10 @@ def _fit_finger_segment_surfaces(vertices: np.ndarray) -> FingerSegmentSurfaceFi
         surface_radius_x,
         surface_radius_y,
         surface_angle,
-    ) = _fit_rotated_section_ellipse(
-        surface_vertices, fit_center, section_x, section_y
-    )
+    ) = _fit_rotated_section_ellipse(surface_vertices, fit_center, section_x, section_y)
 
     surface_centered = surface_vertices - fit_center
-    surface_section = np.column_stack(
-        [surface_centered @ section_x, surface_centered @ section_y]
-    )
+    surface_section = np.column_stack([surface_centered @ section_x, surface_centered @ section_y])
     surface_rel = surface_section - surface_center
     surface_cos = np.cos(surface_angle)
     surface_sin = np.sin(surface_angle)
@@ -623,23 +616,14 @@ def _barycentric_coordinates_2d(
     v1 = c - a
     v2 = point - a
 
-    denominator = (
-        v0[0] * v1[1]
-        - v1[0] * v0[1]
-    )
+    denominator = v0[0] * v1[1] - v1[0] * v0[1]
 
     if abs(denominator) < 1e-12:
         return None
 
-    beta = (
-        v2[0] * v1[1]
-        - v1[0] * v2[1]
-    ) / denominator
+    beta = (v2[0] * v1[1] - v1[0] * v2[1]) / denominator
 
-    gamma = (
-        v0[0] * v2[1]
-        - v2[0] * v0[1]
-    ) / denominator
+    gamma = (v0[0] * v2[1] - v2[0] * v0[1]) / denominator
 
     alpha = 1.0 - beta - gamma
 
@@ -681,9 +665,7 @@ def _projected_surface_candidates(
             bary,
         )
 
-        candidates.append(
-            (tri_index, bary, point_3d)
-        )
+        candidates.append((tri_index, bary, point_3d))
 
     return candidates
 
@@ -779,18 +761,14 @@ def _mesh_uv_grid_points_from_triangles(
                 dtype=np.float64,
             )
 
-            heights = (
-                candidate_points - center
-            ) @ normal_axis
+            heights = (candidate_points - center) @ normal_axis
 
             if outer_sign > 0.0:
                 selected_index = int(np.argmax(heights))
             else:
                 selected_index = int(np.argmin(heights))
 
-            points.append(
-                candidate_points[selected_index]
-            )
+            points.append(candidate_points[selected_index])
 
     return np.asarray(points, dtype=np.float64)
 
@@ -826,10 +804,7 @@ def _fingertip_swept_shell_raw_grid_points(
     def section_spread(mask: np.ndarray) -> float:
         local = centered[mask]
         section_y_probe = vh[2]
-        return float(
-            np.std(local @ section_x)
-            + np.std(local @ section_y_probe)
-        )
+        return float(np.std(local @ section_x) + np.std(local @ section_y_probe))
 
     if section_spread(low_mask) < section_spread(high_mask):
         axis = -axis
@@ -858,12 +833,10 @@ def _fingertip_swept_shell_raw_grid_points(
         if int(mask.sum()) < 20:
             continue
         centre_u[idx] = 0.5 * (
-            np.percentile(section_u[mask], 2.0)
-            + np.percentile(section_u[mask], 98.0)
+            np.percentile(section_u[mask], 2.0) + np.percentile(section_u[mask], 98.0)
         )
         centre_v[idx] = 0.5 * (
-            np.percentile(section_v[mask], 2.0)
-            + np.percentile(section_v[mask], 98.0)
+            np.percentile(section_v[mask], 2.0) + np.percentile(section_v[mask], 98.0)
         )
 
     valid = np.isfinite(centre_u) & np.isfinite(centre_v)
@@ -925,9 +898,7 @@ def _fingertip_swept_shell_raw_grid_points(
     )
     angular_presence = np.zeros(angle_bin_count, dtype=np.float64)
     usable_slice_count = 0
-    for start_u, end_u in zip(
-        support_axial_edges[:-1], support_axial_edges[1:]
-    ):
+    for start_u, end_u in zip(support_axial_edges[:-1], support_axial_edges[1:]):
         slice_mask = (envelope_axial >= start_u) & (envelope_axial < end_u)
         if int(slice_mask.sum()) < 8:
             continue
@@ -994,16 +965,9 @@ def _fingertip_swept_shell_raw_grid_points(
     arc_end = arc_start + best_length * bin_width
 
     arc_mid = 0.5 * (arc_start + arc_end)
-    unwrapped_angle = (
-        arc_mid
-        + (envelope_angle - arc_mid + np.pi) % (2.0 * np.pi)
-        - np.pi
-    )
+    unwrapped_angle = arc_mid + (envelope_angle - arc_mid + np.pi) % (2.0 * np.pi) - np.pi
     arc_margin = np.deg2rad(8.0)
-    in_arc = (
-        (unwrapped_angle >= arc_start - arc_margin)
-        & (unwrapped_angle <= arc_end + arc_margin)
-    )
+    in_arc = (unwrapped_angle >= arc_start - arc_margin) & (unwrapped_angle <= arc_end + arc_margin)
     envelope_axial = envelope_axial[in_arc]
     envelope_angle = unwrapped_angle[in_arc]
     envelope_radius = envelope_radius[in_arc]
@@ -1017,13 +981,10 @@ def _fingertip_swept_shell_raw_grid_points(
     row_parameter = np.linspace(0.0, 1.0, rows, dtype=np.float64)
     # Slightly concentrate dense source rows near the distal end, where the
     # shell bends and closes most rapidly.
-    row_values = axial_start + (axial_tip - axial_start) * (
-        1.0 - (1.0 - row_parameter) ** 1.45
+    row_values = axial_start + (axial_tip - axial_start) * (1.0 - (1.0 - row_parameter) ** 1.45)
+    col_values = (
+        arc_start + (np.arange(cols, dtype=np.float64) + 0.5) * (arc_end - arc_start) / cols
     )
-    row_edges = np.asarray([axial_start, axial_tip], dtype=np.float64)
-    col_values = arc_start + (
-        np.arange(cols, dtype=np.float64) + 0.5
-    ) * (arc_end - arc_start) / cols
 
     result: list[np.ndarray] = []
     axial_scale = max(float(axial_tip - axial_start), 1e-9)
@@ -1032,9 +993,7 @@ def _fingertip_swept_shell_raw_grid_points(
     # Dedicated distal-cap candidates.  The swept-shell angular envelope gets
     # sparse where the U-shaped wall closes, so relying on it alone truncates
     # the surface before the physical nose.
-    all_unwrapped_angle = (
-        arc_mid + (angle - arc_mid + np.pi) % (2.0 * np.pi) - np.pi
-    )
+    all_unwrapped_angle = arc_mid + (angle - arc_mid + np.pi) % (2.0 * np.pi) - np.pi
     tip_threshold = float(np.percentile(axial, 97.5))
     tip_candidate_mask = (
         (axial >= tip_threshold)
@@ -1044,51 +1003,34 @@ def _fingertip_swept_shell_raw_grid_points(
     tip_points = points[tip_candidate_mask]
     tip_axial = axial[tip_candidate_mask]
     tip_angle = all_unwrapped_angle[tip_candidate_mask]
-    tip_radius = radius[tip_candidate_mask]
 
     for row_index, target_axial in enumerate(row_values):
         for target_angle in col_values:
             if row_index == rows - 1 and len(tip_points) >= cols:
-                angular_error = np.abs(
-                    (tip_angle - target_angle + np.pi)
-                    % (2.0 * np.pi)
-                    - np.pi
-                ) / angle_scale
+                angular_error = (
+                    np.abs((tip_angle - target_angle + np.pi) % (2.0 * np.pi) - np.pi) / angle_scale
+                )
                 axial_error = (axial_tip - tip_axial) / axial_scale
                 score = (angular_error / 0.055) ** 2 + (axial_error / 0.035) ** 2
                 nearby = np.argsort(score)[: max(12, min(48, len(score)))]
                 # Prefer the front-most samples among angularly compatible
                 # candidates, while retaining lateral variation across cols.
-                best_pool = nearby[
-                    tip_axial[nearby] >= np.percentile(tip_axial[nearby], 70.0)
-                ]
+                best_pool = nearby[tip_axial[nearby] >= np.percentile(tip_axial[nearby], 70.0)]
                 if len(best_pool) == 0:
                     best_pool = nearby
                 best = best_pool[int(np.argmin(score[best_pool]))]
                 result.append(tip_points[best])
                 continue
-            axial_distance = (
-                np.abs(envelope_axial - target_axial) / axial_scale
-            )
+            axial_distance = np.abs(envelope_axial - target_axial) / axial_scale
             angular_distance = (
-                np.abs(
-                    (envelope_angle - target_angle + np.pi)
-                    % (2.0 * np.pi)
-                    - np.pi
-                )
+                np.abs((envelope_angle - target_angle + np.pi) % (2.0 * np.pi) - np.pi)
                 / angle_scale
             )
 
-            local_mask = (
-                (axial_distance <= 0.11)
-                & (angular_distance <= 0.11)
-            )
+            local_mask = (axial_distance <= 0.11) & (angular_distance <= 0.11)
             local_indices = np.flatnonzero(local_mask)
             if len(local_indices) < 4:
-                score = (
-                    (axial_distance / 0.065) ** 2
-                    + (angular_distance / 0.065) ** 2
-                )
+                score = (axial_distance / 0.065) ** 2 + (angular_distance / 0.065) ** 2
                 local_indices = np.argsort(score)[:24]
 
             local_radii = envelope_radius[local_indices]
@@ -1097,17 +1039,13 @@ def _fingertip_swept_shell_raw_grid_points(
             if len(outer_local) == 0:
                 outer_local = local_indices
 
-            score = (
-                (axial_distance[outer_local] / 0.060) ** 2
-                + (angular_distance[outer_local] / 0.060) ** 2
-            )
+            score = (axial_distance[outer_local] / 0.060) ** 2 + (
+                angular_distance[outer_local] / 0.060
+            ) ** 2
             best = outer_local[int(np.argmin(score))]
             result.append(envelope_points[best])
 
     return np.asarray(result, dtype=np.float64)
-
-
-
 
 
 def _finger_segment_raw_shell_grid_points(
@@ -1163,8 +1101,12 @@ def _finger_segment_raw_shell_grid_points(
 
     axial_bins = max(28, rows * 4)
     angle_bins = max(96, cols * 8)
-    ai = np.clip(((axial - axial_low) / axial_span * axial_bins).astype(np.int32), 0, axial_bins - 1)
-    ti = np.clip(((theta - arc_start) / angle_span * angle_bins).astype(np.int32), 0, angle_bins - 1)
+    ai = np.clip(
+        ((axial - axial_low) / axial_span * axial_bins).astype(np.int32), 0, axial_bins - 1
+    )
+    ti = np.clip(
+        ((theta - arc_start) / angle_span * angle_bins).astype(np.int32), 0, angle_bins - 1
+    )
     key = ai * angle_bins + ti
     order = np.lexsort((-radius_norm, key))
     _, first = np.unique(key[order], return_index=True)
@@ -1225,11 +1167,7 @@ def _bernstein_basis(values: np.ndarray, degree: int) -> np.ndarray:
     basis = np.empty((len(values), degree + 1), dtype=np.float64)
     one_minus = 1.0 - values
     for index in range(degree + 1):
-        basis[:, index] = (
-            comb(degree, index)
-            * values**index
-            * one_minus ** (degree - index)
-        )
+        basis[:, index] = comb(degree, index) * values**index * one_minus ** (degree - index)
     return basis
 
 
@@ -1351,9 +1289,7 @@ def _fingertip_swept_shell_surface_from_triangles(
 ) -> np.ndarray:
     dense_rows = max(16, surface_rows // 2)
     dense_cols = max(32, surface_cols // 2)
-    raw_samples = _fingertip_swept_shell_raw_grid_points(
-        triangles, dense_rows, dense_cols
-    )
+    raw_samples = _fingertip_swept_shell_raw_grid_points(triangles, dense_rows, dense_cols)
     controls = _fit_bezier_surface(
         raw_samples,
         dense_rows,
@@ -1369,12 +1305,6 @@ def _fingertip_swept_shell_surface_from_triangles(
     return _evaluate_bezier_surface(controls, u_values, v_values).reshape(
         surface_rows, surface_cols, 3
     )
-
-
-
-
-
-
 
 
 def _locate_projected_triangle(
@@ -1465,8 +1395,6 @@ def _occupied_angle_arc(angles: np.ndarray, *, bins: int = 96) -> tuple[float, f
     return start, end
 
 
-
-
 def _ellipse_arc_mid_angles(
     radius_x: float, radius_y: float, count: int, start: float, end: float
 ) -> np.ndarray:
@@ -1481,20 +1409,12 @@ def _ellipse_arc_mid_angles(
     return np.interp(targets, cumulative, samples)
 
 
-
-
-
-
 def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
     low, high = np.percentile(values, [7.5, 92.5])
     if count == 1:
         return np.asarray([(low + high) * 0.5], dtype=np.float64)
     edges = np.linspace(low, high, count + 1, dtype=np.float64)
     return 0.5 * (edges[:-1] + edges[1:])
-
-
-
-
 
 
 # ---------------------------------------------------------------------------
@@ -1510,9 +1430,7 @@ FIT_SURFACE_FUNCTIONS = {
 
 
 def _parse_plot_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Plot dex-hand tactile STL sampling grids."
-    )
+    parser = argparse.ArgumentParser(description="Plot dex-hand tactile STL sampling grids.")
     parser.add_argument(
         "--patches",
         nargs="+",
@@ -1645,9 +1563,7 @@ def _plot_patch(
 ) -> None:
     patch_info = dex_hand_patch_info()
     if mesh_name not in patch_info:
-        raise ValueError(
-            f"Unknown dex-hand patch {mesh_name!r}. Known: {sorted(patch_info)}"
-        )
+        raise ValueError(f"Unknown dex-hand patch {mesh_name!r}. Known: {sorted(patch_info)}")
     rows, cols, kind = patch_info[mesh_name]
     stl_path = mesh_dir / f"{mesh_name}.STL"
     plot_data = _plot_data_for_kind(stl_path, mesh_name, rows, cols, kind)

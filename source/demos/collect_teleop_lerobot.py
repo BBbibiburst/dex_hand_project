@@ -3,6 +3,7 @@
 The default mock devices make the full control loop testable before hardware
 drivers are implemented. Use ``--dry-run`` to skip the LeRobot dependency.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -10,8 +11,8 @@ import time
 from pathlib import Path
 
 import mujoco
-from mujoco import viewer
 import numpy as np
+from mujoco import viewer
 
 from source.demos.common import add_robot_config_args
 from source.envs.manipulation import make_manipulation_env, registered_tasks
@@ -48,8 +49,12 @@ def parse_args():
         help="Input source: hardware uses device APIs; sine/mock are test inputs.",
     )
     parser.add_argument("--glove-inverted", action="store_true")
-    parser.add_argument("--dry-run", action="store_true", help="Control and render without writing data.")
-    parser.add_argument("--no-video", action="store_true", help="Store images instead of encoded MP4.")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Control and render without writing data."
+    )
+    parser.add_argument(
+        "--no-video", action="store_true", help="Store images instead of encoded MP4."
+    )
     add_robot_config_args(parser)
     return parser.parse_args()
 
@@ -97,8 +102,9 @@ def run(args) -> None:
         observation, _ = env.reset(seed=0)
         initial_action = env.controller.current_ik_action(env.model, env.data)
         vive.set_pose(initial_action[:3], initial_action[3:7])
-        mapper = TeleopMapper(env, position_scale=args.position_scale,
-                              glove_inverted=args.glove_inverted)
+        mapper = TeleopMapper(
+            env, position_scale=args.position_scale, glove_inverted=args.glove_inverted
+        )
         mapper.calibrate(vive.read())
         view_handle = viewer.launch_passive(env.model, env.data, key_callback=ui.handle_key)
 
@@ -123,8 +129,10 @@ def run(args) -> None:
             vive.set_pose(initial_action[:3], initial_action[3:7])
             mapper.calibrate(vive.read())
 
-        print("Controls: SPACE record/pause | N save episode | R discard/reset | "
-              "C recalibrate | Q quit")
+        print(
+            "Controls: SPACE record/pause | N save episode | R discard/reset | "
+            "C recalibrate | Q quit"
+        )
         period = 1.0 / args.fps
         deadline = time.monotonic()
         episode = 0

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import time
 from typing import Any, Dict
 
 import numpy as np
@@ -75,9 +74,7 @@ def main() -> None:
                 next_control_time += env.config.control_dt
                 control_updates = 1
 
-            action = (
-                action + args.action_filter * (target_action - action)
-            ).astype(np.float32)
+            action = (action + args.action_filter * (target_action - action)).astype(np.float32)
             info = env.controller.apply_action(env.model, env.data, action)
 
             physics_steps = max(1, int(round(render_dt / env.model.opt.timestep)))
@@ -101,7 +98,6 @@ def main() -> None:
                 truncated = False
 
             if not args.no_realtime:
-                sim_elapsed = float(env.data.time) - sim_start
                 pacer.sleep_until(float(env.data.time))
     finally:
         env.close()

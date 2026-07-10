@@ -8,6 +8,7 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 
 import numpy as np
 
+
 def _validate_nonnegative(name: str, value: float) -> float:
     value = float(value)
     if value < 0.0:
@@ -176,12 +177,12 @@ class TactileSignalProcessor:
         cfg = self.config
         result = values.copy()
         for patch in patches:
-            image = values[patch.start:patch.stop].reshape(patch.shape)
+            image = values[patch.start : patch.stop].reshape(patch.shape)
             if cfg.crosstalk > 0.0:
                 image = _neighbor_crosstalk(image, cfg.crosstalk)
             if cfg.gaussian_sigma > 0.0:
                 image = _gaussian_blur(image, cfg.gaussian_sigma)
-            result[patch.start:patch.stop] = image.reshape(-1)
+            result[patch.start : patch.stop] = image.reshape(-1)
         return np.clip(result, 0.0, cfg.saturation)
 
     def metadata(self) -> Dict[str, Any]:
@@ -197,5 +198,3 @@ class TactileSignalProcessor:
             "normalize": cfg.normalize,
             "seed": cfg.seed,
         }
-
-

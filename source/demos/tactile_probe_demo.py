@@ -10,13 +10,13 @@ grab and move the free probe sphere.
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
 import time
-from typing import Any, Optional
+from dataclasses import dataclass
+from typing import Any, Dict, Optional
 
 import mujoco
-from mujoco import viewer
 import numpy as np
+from mujoco import viewer
 
 from source.demos.common import (
     add_robot_config_args,
@@ -35,7 +35,6 @@ from source.sensors.tactile.dex_hand import (
     create_dex_hand_tactile_sensor,
     site_name,
 )
-
 
 PROBE_BODY_NAME = "tactile_probe"
 PROBE_JOINT_NAME = "tactile_probe_freejoint"
@@ -223,9 +222,9 @@ def _set_probe_pose(
         raise RuntimeError(f"Probe joint {PROBE_JOINT_NAME!r} was not compiled.")
     qpos_adr = int(model.jnt_qposadr[joint_id])
     qvel_adr = int(model.jnt_dofadr[joint_id])
-    data.qpos[qpos_adr:qpos_adr + 3] = np.asarray(pos, dtype=np.float64)
-    data.qpos[qpos_adr + 3:qpos_adr + 7] = np.asarray(quat, dtype=np.float64)
-    data.qvel[qvel_adr:qvel_adr + 6] = 0.0
+    data.qpos[qpos_adr : qpos_adr + 3] = np.asarray(pos, dtype=np.float64)
+    data.qpos[qpos_adr + 3 : qpos_adr + 7] = np.asarray(quat, dtype=np.float64)
+    data.qvel[qvel_adr : qvel_adr + 6] = 0.0
 
 
 def _probe_joint_addresses(model: mujoco.MjModel) -> tuple[int, int]:
@@ -475,7 +474,9 @@ def _compose_heatmap_panel(
             height=finger_panel.shape[0],
             width=palm_tile.shape[1],
         )
-        panel = np.hstack([finger_panel, np.full((finger_panel.shape[0], gap, 3), 24, dtype=np.uint8), palm_tile])
+        panel = np.hstack(
+            [finger_panel, np.full((finger_panel.shape[0], gap, 3), 24, dtype=np.uint8), palm_tile]
+        )
     else:
         panel = finger_panel
 

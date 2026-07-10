@@ -26,11 +26,10 @@ from source.robots.config import (
     load_robot_config,
     optional_tuple,
 )
-from source.robots.scene import add_preview_scene
-from source.sensors.base import TactileSensorBase
 from source.robots.defaults import DEFAULT_ARM, DEFAULT_BASE, DEFAULT_HAND
 from source.robots.descriptors import ArmDescriptor, BaseDescriptor, EndEffectorDescriptor
-
+from source.robots.scene import add_preview_scene
+from source.sensors.base import TactileSensorBase
 
 RotXyzDeg = Tuple[float, float, float]
 
@@ -188,9 +187,7 @@ def build_robot_spec(
     hand_spec = _load_spec_or_raise(hand_path, "hand model")
     _configure_solver(arm_spec)
 
-    _mount_arm_on_base(
-        arm_spec, base_path, base_mount_site_name, base_descriptor.mount_prefix
-    )
+    _mount_arm_on_base(arm_spec, base_path, base_mount_site_name, base_descriptor.mount_prefix)
 
     if tactile_sensor is not None:
         # Operate directly on the loaded MjSpec; no XML text round-trip.

@@ -1,8 +1,9 @@
 """Four-object pick-and-place task, implemented without robosuite imports."""
+
 from __future__ import annotations
 
 from typing import Any
-import mujoco
+
 import numpy as np
 
 from source.envs.core.registry import register_task
@@ -23,9 +24,12 @@ class PickPlaceTask(SingleArmManipulationTask):
             raise ValueError(f"single_object must be one of {self.object_names!r}")
         self.single_object = single_object
         arena = kwargs.pop("arena", BinsArena())
-        sampler = kwargs.pop("placement_sampler", UniformTablePlacementSampler(
-            x_range=(-0.13, 0.13), y_range=(-0.13, 0.13), min_separation=0.075
-        ))
+        sampler = kwargs.pop(
+            "placement_sampler",
+            UniformTablePlacementSampler(
+                x_range=(-0.13, 0.13), y_range=(-0.13, 0.13), min_separation=0.075
+            ),
+        )
         super().__init__(arena=arena, placement_sampler=sampler, **kwargs)
         self.objects_in_bins = np.zeros(len(self.objects), dtype=bool)
 
@@ -63,14 +67,18 @@ class PickPlaceTask(SingleArmManipulationTask):
         offsets = ((-dx, -dy), (-dx, dy), (dx, -dy), (dx, dy))
         global_index = self.object_names.index(self.objects[index].name)
         ox, oy = offsets[global_index]
-        return np.asarray((arena.target_center[0] + ox, arena.target_center[1] + oy, arena.table_top_z))
+        return np.asarray(
+            (arena.target_center[0] + ox, arena.target_center[1] + oy, arena.table_top_z)
+        )
 
     def _in_target(self, pos: np.ndarray, index: int) -> bool:
         arena: BinsArena = self.arena  # type: ignore[assignment]
         center = self._target_center(index)
-        return bool(abs(pos[0] - center[0]) < arena.bin_half_size[0] * 0.48 and
-                    abs(pos[1] - center[1]) < arena.bin_half_size[1] * 0.48 and
-                    arena.table_top_z < pos[2] < arena.table_top_z + 0.18)
+        return bool(
+            abs(pos[0] - center[0]) < arena.bin_half_size[0] * 0.48
+            and abs(pos[1] - center[1]) < arena.bin_half_size[1] * 0.48
+            and arena.table_top_z < pos[2] < arena.table_top_z + 0.18
+        )
 
     def check_success(self, model, data) -> bool:
         bindings = self._require_bindings()
@@ -92,12 +100,8 @@ class PickPlaceTask(SingleArmManipulationTask):
             reward = staged_multi_object_reward(
                 object_names=tuple(index_by_name),
                 placed=self.objects_in_bins,
-                gripper_distance=lambda name: float(
-                    np.linalg.norm(obs[f"gripper_to_{name}_pos"])
-                ),
-                is_grasped=lambda name: self._is_robot_touching_object(
-                    model, data, name
-                ),
+                gripper_distance=lambda name: float(np.linalg.norm(obs[f"gripper_to_{name}_pos"])),
+                is_grasped=lambda name: self._is_robot_touching_object(model, data, name),
                 object_position=lambda name: self._body_pos(model, data, name),
                 target_position=lambda name: self._target_center(index_by_name[name]),
             )

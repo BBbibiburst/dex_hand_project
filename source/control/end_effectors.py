@@ -5,12 +5,13 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 from source.control.common import _actuator_ids_or_raise, _empty_box, prefixed_names
 from source.robots.descriptors import EndEffectorDescriptor
+
 
 class EndEffectorPositionController:
     """Direct position controller for a hand/gripper descriptor."""
@@ -25,17 +26,13 @@ class EndEffectorPositionController:
         reset_to_current_position: bool = True,
     ) -> None:
         self.hand_descriptor = hand_descriptor
-        self.hand_prefix = (
-            hand_descriptor.default_prefix if hand_prefix is None else hand_prefix
-        )
+        self.hand_prefix = hand_descriptor.default_prefix if hand_prefix is None else hand_prefix
         self.include_action = include_action
         self.normalized_position = normalized_position
         self.reset_to_current_position = reset_to_current_position
         self.local_action_names = tuple(hand_descriptor.position_actuator_names)
         self.actuator_names = (
-            prefixed_names(self.local_action_names, self.hand_prefix)
-            if include_action
-            else ()
+            prefixed_names(self.local_action_names, self.hand_prefix) if include_action else ()
         )
 
         self._actuator_ids: Optional[np.ndarray] = None

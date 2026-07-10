@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """Stable task contract used by :mod:`source.envs.rl_env`."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from gymnasium import spaces
 import numpy as np
+from gymnasium import spaces
 
 Array = np.ndarray
 Observation = Dict[str, Any]
@@ -32,13 +33,11 @@ class RobotTask(ABC):
 
     @property
     @abstractmethod
-    def name(self) -> str:
-        ...
+    def name(self) -> str: ...
 
     @property
     @abstractmethod
-    def observation_space(self) -> Dict[str, spaces.Space]:
-        ...
+    def observation_space(self) -> Dict[str, spaces.Space]: ...
 
     def augment_spec(self, spec: Any) -> None:
         _ = spec
@@ -55,12 +54,10 @@ class RobotTask(ABC):
         *,
         rng: np.random.Generator,
         options: Optional[dict],
-    ) -> Dict[str, Any]:
-        ...
+    ) -> Dict[str, Any]: ...
 
     @abstractmethod
-    def get_observation(self, model: Any, data: Any) -> Observation:
-        ...
+    def get_observation(self, model: Any, data: Any) -> Observation: ...
 
     @abstractmethod
     def evaluate(
@@ -69,8 +66,7 @@ class RobotTask(ABC):
         action: Array,
         model: Any,
         data: Any,
-    ) -> TaskStepResult:
-        ...
+    ) -> TaskStepResult: ...
 
 
 class NoopTask(RobotTask):

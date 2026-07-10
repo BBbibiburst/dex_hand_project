@@ -9,14 +9,13 @@ either a full robot config, or a small pointer to a reusable profile:
 
 from __future__ import annotations
 
-from dataclasses import fields, replace
 import json
+from dataclasses import fields, replace
 from pathlib import Path
 from typing import Any, Mapping, Optional, TypeVar
 
 from source.assets import PROJECT_ROOT
 from source.robots.registry import get_arm, get_base, get_hand
-
 
 DEFAULT_ROBOT_CONFIG_PATH = PROJECT_ROOT / "configs" / "current_robot.json"
 
@@ -106,9 +105,7 @@ def dataclass_from_robot_config(cls: type[T], config: Mapping[str, Any]) -> T:
     kwargs = {key: value for key, value in config.items() if key in allowed}
     unknown = set(config) - allowed - CONFIG_ONLY_KEYS
     if unknown:
-        raise ValueError(
-            f"Unknown robot config key(s) for {cls.__name__}: {sorted(unknown)}"
-        )
+        raise ValueError(f"Unknown robot config key(s) for {cls.__name__}: {sorted(unknown)}")
     return cls(**kwargs)
 
 

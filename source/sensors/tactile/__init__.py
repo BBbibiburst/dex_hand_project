@@ -2,9 +2,9 @@
 """Tactile array processing and concrete sensor implementations."""
 
 from source.sensors.tactile.signal_processing import (
-    TaxelPatch,
     TactileSignalProcessor,
     TactileSignalProcessorConfig,
+    TaxelPatch,
 )
 
 _DEX_HAND_EXPORTS = {

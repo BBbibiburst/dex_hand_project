@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 from source.control.arm import ArmPositionIkController
 from source.control.end_effectors import EndEffectorPositionController
@@ -56,9 +56,9 @@ class CompositeRobotController:
     @property
     def ctrl_low(self) -> np.ndarray:
         """Combined actuator lower bounds in arm-then-hand order."""
-        return np.concatenate(
-            [self.arm_controller.ctrl_low, self.hand_controller.ctrl_low]
-        ).astype(np.float32)
+        return np.concatenate([self.arm_controller.ctrl_low, self.hand_controller.ctrl_low]).astype(
+            np.float32
+        )
 
     @property
     def ctrl_high(self) -> np.ndarray:
@@ -101,7 +101,9 @@ class CompositeRobotController:
                             self.hand_controller.actuator_ids,
                         ]
                     )
-                ].astype(np.float32).copy(),
+                ]
+                .astype(np.float32)
+                .copy(),
                 "ik_action_layout": self.ik_action_layout(),
             }
         )
@@ -171,9 +173,7 @@ class CompositeRobotController:
             ),
             dtype=np.float32,
         )
-        expected_size = (
-            self.arm_controller.action_size + self.hand_controller.action_size
-        )
+        expected_size = self.arm_controller.action_size + self.hand_controller.action_size
         if action_space.shape != (expected_size,):
             raise RuntimeError(
                 "Controller action-space size mismatch: "

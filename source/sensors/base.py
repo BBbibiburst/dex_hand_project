@@ -25,9 +25,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 
 class TactileSensorBase(ABC):

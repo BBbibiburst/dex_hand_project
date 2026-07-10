@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Compiled MuJoCo identifiers owned by a manipulation task."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

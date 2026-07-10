@@ -91,17 +91,15 @@ class LeRobotEpisodeRecorder:
         frame = {
             STATE_KEY: state,
             OPERATOR_GLOVE_KEY: np.asarray(glove.stretch, dtype=np.float32),
-            OPERATOR_VIVE_POSE_KEY: np.concatenate(
-                [vive.position, vive.quaternion_wxyz]
-            ).astype(np.float32),
+            OPERATOR_VIVE_POSE_KEY: np.concatenate([vive.position, vive.quaternion_wxyz]).astype(
+                np.float32
+            ),
             AGENTVIEW_IMAGE_KEY: np.asarray(image, dtype=np.uint8),
             ACTION_KEY: np.asarray(action, dtype=np.float32),
             TASK_KEY: task,
         }
         if self.has_tactile:
-            frame[TACTILE_KEY] = np.asarray(
-                observation["tactile"], dtype=np.float32
-            )
+            frame[TACTILE_KEY] = np.asarray(observation["tactile"], dtype=np.float32)
         self.dataset.add_frame(frame)
         self.frame_count += 1
 

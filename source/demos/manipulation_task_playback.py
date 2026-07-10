@@ -132,7 +132,9 @@ def _make_env(args: argparse.Namespace):
     return make_manipulation_env(args.task, task_config=task_config, **env_kwargs)
 
 
-def _sample_action(env, base_action: np.ndarray, rng: np.random.Generator, scale: float) -> np.ndarray:
+def _sample_action(
+    env, base_action: np.ndarray, rng: np.random.Generator, scale: float
+) -> np.ndarray:
     low = np.asarray(env.action_space.low, dtype=np.float32).reshape(-1)
     high = np.asarray(env.action_space.high, dtype=np.float32).reshape(-1)
     noise = rng.uniform(-scale, scale, size=base_action.shape).astype(np.float32)
@@ -149,7 +151,6 @@ def run_viewer(args: argparse.Namespace) -> None:
     base_action = env.controller.current_action(env.model, env.data)
     action = base_action.copy()
 
-    render_dt = 1.0 / args.render_fps
     sim_start = float(env.data.time)
     pacer = RealtimePacer()
     pacer.reset(sim_start)

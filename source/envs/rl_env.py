@@ -9,29 +9,28 @@ whatever ``TactileSensorBase`` the end effector's descriptor produces.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
 import time
+from dataclasses import dataclass, replace
 from typing import Any, Dict, Optional, Tuple
 
 import gymnasium as gym
-from gymnasium import spaces
 import mujoco
-from mujoco import viewer
 import numpy as np
+from gymnasium import spaces
+from mujoco import viewer
 
 from source.control.composite import build_robot_controller
-from source.viz.overlays import clear_markers, draw_stats_label
+from source.envs.core.tasks import NoopTask, RobotTask
+from source.robots.builder import build_robot_spec
 from source.robots.config import (
     apply_config_overrides,
     dataclass_from_robot_config,
     load_robot_config,
 )
-from source.robots.builder import build_robot_spec
+from source.robots.registry import get_arm, get_base, get_hand
 from source.robots.scene import add_basic_scene
 from source.sensors.base import NullTactileSensor, TactileSensorBase
-from source.envs.core.tasks import NoopTask, RobotTask
-from source.robots.registry import get_arm, get_base, get_hand
-
+from source.viz.overlays import clear_markers, draw_stats_label
 
 Array = np.ndarray
 Observation = Dict[str, Any]
@@ -127,18 +126,14 @@ class RobotGymEnv(gym.Env):
                 )
             else:
                 if tactile_options:
-                    raise ValueError(
-                        "tactile_options are currently supported only for dex_hand."
-                    )
+                    raise ValueError("tactile_options are currently supported only for dex_hand.")
                 self.tactile_sensor = self.hand_descriptor.tactile_sensor_factory()
         else:
             self.tactile_sensor = NullTactileSensor()
 
         self.render_mode = render_mode
         if render_mode is not None and render_mode not in self.metadata["render_modes"]:
-            raise ValueError(
-                f"render_mode must be one of {self.metadata['render_modes']} or None."
-            )
+            raise ValueError(f"render_mode must be one of {self.metadata['render_modes']} or None.")
 
         spec = build_robot_spec(
             arm_descriptor=self.arm_descriptor,

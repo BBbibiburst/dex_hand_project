@@ -3,11 +3,12 @@
 Replace only ``connect`` / ``read`` / ``close`` in the real drivers. The
 collector and action mapping deliberately depend on these small protocols.
 """
+
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Protocol
-import time
 
 import numpy as np
 
@@ -68,9 +69,7 @@ class MockViveTracker:
         self.quaternion_wxyz = np.asarray(quaternion_wxyz, dtype=np.float32).copy()
 
     def read(self) -> ViveSample:
-        return ViveSample(
-            self.position.copy(), self.quaternion_wxyz.copy(), time.monotonic()
-        )
+        return ViveSample(self.position.copy(), self.quaternion_wxyz.copy(), time.monotonic())
 
     def close(self) -> None:
         pass
@@ -131,22 +130,24 @@ class SineViveTracker:
         q = np.asarray(quaternion_wxyz, dtype=np.float64)
         self._base_quaternion = q / max(np.linalg.norm(q), 1e-9)
 
-
     def read(self) -> ViveSample:
         if self._start is None:
             raise RuntimeError("SineViveTracker.connect() must be called first.")
         now = time.monotonic()
         phase = 2 * np.pi * self.frequency_hz * (now - self._start)
-        waves = np.sin(phase + np.asarray([0, 2*np.pi/3, 4*np.pi/3]))
+        waves = np.sin(phase + np.asarray([0, 2 * np.pi / 3, 4 * np.pi / 3]))
         position = self._base_position + self.translation_amplitude * waves
         angles = self.rotation_amplitude * waves
-        cx, cy, cz = np.cos(angles / 2); sx, sy, sz = np.sin(angles / 2)
-        delta = np.asarray([
-            cx*cy*cz + sx*sy*sz,
-            sx*cy*cz - cx*sy*sz,
-            cx*sy*cz + sx*cy*sz,
-            cx*cy*sz - sx*sy*cz,
-        ])
+        cx, cy, cz = np.cos(angles / 2)
+        sx, sy, sz = np.sin(angles / 2)
+        delta = np.asarray(
+            [
+                cx * cy * cz + sx * sy * sz,
+                sx * cy * cz - cx * sy * sz,
+                cx * sy * cz + sx * cy * sz,
+                cx * cy * sz - sx * sy * cz,
+            ]
+        )
         quaternion = normalize_quat(quat_multiply(delta, self._base_quaternion))
         return ViveSample(position.astype(np.float32), quaternion.astype(np.float32), now)
 

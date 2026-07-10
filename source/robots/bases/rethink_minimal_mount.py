@@ -7,7 +7,6 @@ from source.assets import asset_path
 from source.robots.descriptors import BaseDescriptor
 from source.robots.registry import register_base
 
-
 RETHINK_MINIMAL_MOUNT = register_base(
     BaseDescriptor(
         name="rethink_minimal_mount",

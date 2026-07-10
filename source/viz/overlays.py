@@ -6,9 +6,8 @@ from __future__ import annotations
 from typing import Dict, Optional, Sequence
 
 import mujoco
-from mujoco import viewer
 import numpy as np
-
+from mujoco import viewer
 
 Array = np.ndarray
 

@@ -1,11 +1,11 @@
 """Calibrated Vive/glove samples to the project's absolute IK action."""
+
 from __future__ import annotations
 
 import numpy as np
 
 from source.geometry import normalize_quat, quat_conjugate, quat_multiply
 from source.teleop.devices import GloveSample, ViveSample
-
 
 
 class TeleopMapper:

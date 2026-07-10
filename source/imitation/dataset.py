@@ -1,7 +1,9 @@
 """LeRobot sequence adapter for vision-tactile diffusion policy training."""
+
 from __future__ import annotations
 
 from pathlib import Path
+
 import torch
 from torch.utils.data import Dataset
 

@@ -27,9 +27,7 @@ def staged_multi_object_reward(
     the best active stage is added, matching the original PickPlace and
     NutAssembly behavior.
     """
-    active_names = [
-        name for name, is_placed in zip(object_names, placed) if not is_placed
-    ]
+    active_names = [name for name, is_placed in zip(object_names, placed) if not is_placed]
     placed_count = float(np.count_nonzero(placed))
     if not active_names:
         return placed_count
@@ -45,9 +43,7 @@ def staged_multi_object_reward(
             1.0
             - np.tanh(
                 distance_gain
-                * np.linalg.norm(
-                    object_position(name)[:2] - target_position(name)[:2]
-                )
+                * np.linalg.norm(object_position(name)[:2] - target_position(name)[:2])
             )
         )
         for name in active_names

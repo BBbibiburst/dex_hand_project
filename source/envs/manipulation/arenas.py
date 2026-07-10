@@ -209,7 +209,10 @@ class BinsArena(TableArena):
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         super().augment_spec(spec)
-        for prefix, center in (("source_bin", self.source_center), ("target_bin", self.target_center)):
+        for prefix, center in (
+            ("source_bin", self.source_center),
+            ("target_bin", self.target_center),
+        ):
             body = spec.worldbody.add_body()
             body.name = prefix
             body.pos = [center[0], center[1], self.table_top_z]

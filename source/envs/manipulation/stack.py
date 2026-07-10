@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 from source.envs.core.registry import register_task
 from source.envs.manipulation.base import SingleArmManipulationTask
@@ -63,11 +63,7 @@ class StackTask(SingleArmManipulationTask):
     def get_extra_observation(self, model, data, obs) -> dict[str, np.ndarray]:
         _ = model
         _ = data
-        return {
-            "cubeA_to_cubeB_pos": (
-                obs["cubeB_pos"] - obs["cubeA_pos"]
-            ).astype(np.float32)
-        }
+        return {"cubeA_to_cubeB_pos": (obs["cubeB_pos"] - obs["cubeA_pos"]).astype(np.float32)}
 
     def compute_task_reward(self, obs, action, model, data, success: bool):
         _ = obs
@@ -100,9 +96,7 @@ class StackTask(SingleArmManipulationTask):
             else data.site_xpos[bindings.ee_site_id]
         )
 
-        reach = 0.25 * (
-            1.0 - np.tanh(10.0 * float(np.linalg.norm(ee_pos - cube_a_pos)))
-        )
+        reach = 0.25 * (1.0 - np.tanh(10.0 * float(np.linalg.norm(ee_pos - cube_a_pos))))
         grasping = self._is_robot_touching_object(model, data, "cubeA")
         if grasping:
             reach += 0.25
@@ -110,16 +104,10 @@ class StackTask(SingleArmManipulationTask):
         lifted = cube_a_pos[2] > self.table_top_z + 0.04
         lift = 1.0 if lifted else 0.0
         if lifted:
-            horizontal_distance = float(
-                np.linalg.norm(cube_a_pos[:2] - cube_b_pos[:2])
-            )
+            horizontal_distance = float(np.linalg.norm(cube_a_pos[:2] - cube_b_pos[:2]))
             lift += 0.5 * (1.0 - np.tanh(horizontal_distance))
 
-        stacked = (
-            not grasping
-            and lifted
-            and self._objects_touching(data, "cubeA", "cubeB")
-        )
+        stacked = not grasping and lifted and self._objects_touching(data, "cubeA", "cubeB")
         stack = self.success_reward if stacked else 0.0
         return float(reach), float(lift), float(stack)
 

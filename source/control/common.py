@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from typing import Sequence
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 CONTROL_MODES = ("position", "ik")
 IK_ACTION_LAYOUT = ("x", "y", "z", "qw", "qx", "qy", "qz")
@@ -40,10 +40,11 @@ def _actuator_ids_or_raise(
 
     if missing:
         available = [
-            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_ACTUATOR, idx)
-            for idx in range(model.nu)
+            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_ACTUATOR, idx) for idx in range(model.nu)
         ]
-        raise ValueError(f"{owner} missing actuator(s): {missing}. Available actuators: {available}")
+        raise ValueError(
+            f"{owner} missing actuator(s): {missing}. Available actuators: {available}"
+        )
 
     return np.asarray(actuator_ids, dtype=np.int32)
 

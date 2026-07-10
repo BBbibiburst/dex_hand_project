@@ -8,8 +8,8 @@ from source.teleop.devices import (
     SineViveTracker,
     ViveSample,
 )
-from source.teleop.mapping import TeleopMapper
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
+from source.teleop.mapping import TeleopMapper
 
 __all__ = [
     "GloveSample",

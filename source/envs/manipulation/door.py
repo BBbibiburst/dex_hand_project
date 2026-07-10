@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from gymnasium import spaces
 import mujoco
 import numpy as np
+from gymnasium import spaces
 
 from source.assets import asset_path
 from source.envs.core.registry import register_task
@@ -55,14 +55,10 @@ class DoorTask(RobotTask):
             "door_pos": spaces.Box(-np.inf, np.inf, (3,), dtype=np.float32),
             "handle_pos": spaces.Box(-np.inf, np.inf, (3,), dtype=np.float32),
             "hinge_qpos": spaces.Box(-np.inf, np.inf, (1,), dtype=np.float32),
-            "handle_to_gripper_pos": spaces.Box(
-                -np.inf, np.inf, (3,), dtype=np.float32
-            ),
+            "handle_to_gripper_pos": spaces.Box(-np.inf, np.inf, (3,), dtype=np.float32),
         }
         if self.use_latch:
-            result["handle_qpos"] = spaces.Box(
-                -np.inf, np.inf, (1,), dtype=np.float32
-            )
+            result["handle_qpos"] = spaces.Box(-np.inf, np.inf, (1,), dtype=np.float32)
         return result
 
     def augment_spec(self, spec) -> None:
@@ -83,33 +79,21 @@ class DoorTask(RobotTask):
         attach_frame.attach_body(object_body, prefix="Door_", suffix="")
 
     def bind(self, model: mujoco.MjModel) -> None:
-        hinge_id = self._id_or_raise(
-            model, mujoco.mjtObj.mjOBJ_JOINT, "Door_hinge"
-        )
+        hinge_id = self._id_or_raise(model, mujoco.mjtObj.mjOBJ_JOINT, "Door_hinge")
         hinge_dof_adr = int(model.jnt_dofadr[hinge_id])
         model.dof_frictionloss[hinge_dof_adr] = 0.0
         model.dof_damping[hinge_dof_adr] = 0.1
 
-        ee_site_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name
-        )
+        ee_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name)
         latch_qpos_adr = None
         if self.use_latch:
-            latch_joint_id = self._id_or_raise(
-                model, mujoco.mjtObj.mjOBJ_JOINT, "Door_latch_joint"
-            )
+            latch_joint_id = self._id_or_raise(model, mujoco.mjtObj.mjOBJ_JOINT, "Door_latch_joint")
             latch_qpos_adr = int(model.jnt_qposadr[latch_joint_id])
 
         self._bindings = DoorBindings(
-            root_body_id=self._id_or_raise(
-                model, mujoco.mjtObj.mjOBJ_BODY, "Door_object"
-            ),
-            door_body_id=self._id_or_raise(
-                model, mujoco.mjtObj.mjOBJ_BODY, "Door_door"
-            ),
-            handle_site_id=self._id_or_raise(
-                model, mujoco.mjtObj.mjOBJ_SITE, "Door_handle"
-            ),
+            root_body_id=self._id_or_raise(model, mujoco.mjtObj.mjOBJ_BODY, "Door_object"),
+            door_body_id=self._id_or_raise(model, mujoco.mjtObj.mjOBJ_BODY, "Door_door"),
+            handle_site_id=self._id_or_raise(model, mujoco.mjtObj.mjOBJ_SITE, "Door_handle"),
             hinge_qpos_adr=int(model.jnt_qposadr[hinge_id]),
             ee_site_id=None if ee_site_id < 0 else int(ee_site_id),
             latch_qpos_adr=latch_qpos_adr,
@@ -147,9 +131,7 @@ class DoorTask(RobotTask):
         result = {
             "door_pos": data.xpos[bindings.door_body_id].astype(np.float32).copy(),
             "handle_pos": handle,
-            "hinge_qpos": np.asarray(
-                [data.qpos[bindings.hinge_qpos_adr]], dtype=np.float32
-            ),
+            "hinge_qpos": np.asarray([data.qpos[bindings.hinge_qpos_adr]], dtype=np.float32),
             "handle_to_gripper_pos": (handle - ee).astype(np.float32),
         }
         if bindings.latch_qpos_adr is not None:
