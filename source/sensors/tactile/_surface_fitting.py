@@ -594,36 +594,195 @@ def _triangle_normals(triangles: np.ndarray) -> np.ndarray:
     return normals
 
 
+def _barycentric_coordinates_2d(
+    triangle: np.ndarray,
+    point: np.ndarray,
+    *,
+    tolerance: float = 1e-9,
+) -> np.ndarray | None:
+    """Return barycentric coordinates when point lies inside a 2D triangle."""
+
+    triangle = np.asarray(triangle, dtype=np.float64)
+    point = np.asarray(point, dtype=np.float64)
+
+    a = triangle[0]
+    b = triangle[1]
+    c = triangle[2]
+
+    v0 = b - a
+    v1 = c - a
+    v2 = point - a
+
+    denominator = (
+        v0[0] * v1[1]
+        - v1[0] * v0[1]
+    )
+
+    if abs(denominator) < 1e-12:
+        return None
+
+    beta = (
+        v2[0] * v1[1]
+        - v1[0] * v2[1]
+    ) / denominator
+
+    gamma = (
+        v0[0] * v2[1]
+        - v2[0] * v0[1]
+    ) / denominator
+
+    alpha = 1.0 - beta - gamma
+
+    bary = np.asarray([alpha, beta, gamma], dtype=np.float64)
+
+    if np.all(bary >= -tolerance) and np.all(bary <= 1.0 + tolerance):
+        return bary
+
+    return None
+
+
+def _projected_surface_candidates(
+    triangles: np.ndarray,
+    tri_uv: np.ndarray,
+    uv: np.ndarray,
+) -> list[tuple[int, np.ndarray, np.ndarray]]:
+    """Find every 3D triangle whose 2D projection contains uv."""
+
+    candidates: list[tuple[int, np.ndarray, np.ndarray]] = []
+
+    for tri_index, projected_triangle in enumerate(tri_uv):
+        # Cheap bounding-box rejection.
+        uv_min = projected_triangle.min(axis=0)
+        uv_max = projected_triangle.max(axis=0)
+
+        if np.any(uv < uv_min - 1e-9) or np.any(uv > uv_max + 1e-9):
+            continue
+
+        bary = _barycentric_coordinates_2d(
+            projected_triangle,
+            uv,
+        )
+
+        if bary is None:
+            continue
+
+        point_3d = _barycentric_interpolate(
+            triangles[tri_index],
+            bary,
+        )
+
+        candidates.append(
+            (tri_index, bary, point_3d)
+        )
+
+    return candidates
+
+
 def _mesh_uv_grid_points_from_triangles(
     triangles: np.ndarray,
     rows: int,
     cols: int,
 ) -> np.ndarray:
+    """Sample a regular grid on the palm's outer surface."""
+
+    triangles = np.asarray(triangles, dtype=np.float64)
     vertices = triangles.reshape(-1, 3)
+
     center = vertices.mean(axis=0)
     centered = vertices - center
-    _, _, vh = np.linalg.svd(centered, full_matrices=False)
-    u_axis, v_axis = vh[0], vh[1]
+
+    _, _, vh = np.linalg.svd(
+        centered,
+        full_matrices=False,
+    )
+
+    u_axis = vh[0].copy()
+    v_axis = vh[1].copy()
+    normal_axis = vh[2].copy()
+
+    # Keep a right-handed local coordinate frame.
+    if np.dot(np.cross(u_axis, v_axis), normal_axis) < 0.0:
+        normal_axis *= -1.0
+
+    local_triangles = triangles - center
 
     tri_uv = np.stack(
         [
-            (triangles - center) @ u_axis,
-            (triangles - center) @ v_axis,
+            local_triangles @ u_axis,
+            local_triangles @ v_axis,
         ],
         axis=-1,
     )
+
     vertex_uv = tri_uv.reshape(-1, 2)
-    u_values = _linspace_midpoints(vertex_uv[:, 0], cols)
-    v_values = _linspace_midpoints(vertex_uv[:, 1], rows)
+
+    # Retain the existing regular interior sampling.
+    u_values = _linspace_midpoints(
+        vertex_uv[:, 0],
+        cols,
+    )
+    v_values = _linspace_midpoints(
+        vertex_uv[:, 1],
+        rows,
+    )
+
+    # Determine which normal side is the tactile outer surface.
+    #
+    # For a closed shell the two major surfaces lie on opposite sides of
+    # the PCA centre. The side with more outward-facing triangle normals
+    # is selected below. If your STL winding is unreliable, the fallback
+    # is controlled by PALM_OUTER_SIGN.
+    outer_sign = -1.0
 
     points: list[np.ndarray] = []
+
     for v_value in v_values:
         for u_value in u_values:
-            uv = np.asarray([u_value, v_value], dtype=np.float64)
-            tri_index, bary = _locate_projected_triangle(tri_uv, uv)
-            points.append(_barycentric_interpolate(triangles[tri_index], bary))
-    return np.asarray(points, dtype=np.float64)
+            uv = np.asarray(
+                [u_value, v_value],
+                dtype=np.float64,
+            )
 
+            candidates = _projected_surface_candidates(
+                triangles,
+                tri_uv,
+                uv,
+            )
+
+            if not candidates:
+                # Preserve the old nearest-triangle fallback around mesh edges.
+                tri_index, bary = _locate_projected_triangle(
+                    tri_uv,
+                    uv,
+                )
+
+                point = _barycentric_interpolate(
+                    triangles[tri_index],
+                    bary,
+                )
+
+                points.append(point)
+                continue
+
+            candidate_points = np.asarray(
+                [candidate[2] for candidate in candidates],
+                dtype=np.float64,
+            )
+
+            heights = (
+                candidate_points - center
+            ) @ normal_axis
+
+            if outer_sign > 0.0:
+                selected_index = int(np.argmax(heights))
+            else:
+                selected_index = int(np.argmin(heights))
+
+            points.append(
+                candidate_points[selected_index]
+            )
+
+    return np.asarray(points, dtype=np.float64)
 
 
 def _fingertip_ellipsoid_grid_points_from_triangles(

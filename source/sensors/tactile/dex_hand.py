@@ -25,11 +25,15 @@ from source.sensors.tactile._surface_fitting import (
     grid_points_for_kind,
 )
 
-
 SITE_PREFIX = "taxel_"
 SENSOR_PREFIX = "touch_"
 TACTILE_GROUP = 4
-DEFAULT_TAXEL_RADIUS = 0.0018
+
+# 1. 修改参数
+DEFAULT_TAXEL_HALF_DEPTH = 0.0015
+DEFAULT_TAXEL_OVERLAP = 1.08
+DEFAULT_TAXEL_MIN_HALF_SIZE = 0.0005
+
 
 def site_name(mesh_name: str, row: int, col: int) -> str:
     return f"{SITE_PREFIX}{mesh_name}_r{row:02d}_c{col:02d}"
@@ -73,14 +77,26 @@ def _resolve_mesh_path(mesh_root, mesh_file: str):
 class DexHandTouchSensor(TactileSensorBase):
     """Touch-sensor array generated from the dex hand's STL skin meshes."""
 
+    # 2. 修改 DexHandTouchSensor.__init__
     def __init__(
         self,
         *,
-        taxel_radius: float = DEFAULT_TAXEL_RADIUS,
+        taxel_half_depth: float = DEFAULT_TAXEL_HALF_DEPTH,
+        taxel_overlap: float = DEFAULT_TAXEL_OVERLAP,
+        taxel_min_half_size: float = DEFAULT_TAXEL_MIN_HALF_SIZE,
         patch_layout: Sequence[tuple[str, int, int, str]] = DEX_HAND_PATCH_LAYOUT,
         mesh_dir=DEX_HAND_DIR,
     ) -> None:
-        self.taxel_radius = taxel_radius
+        if taxel_half_depth <= 0.0:
+            raise ValueError("taxel_half_depth must be positive.")
+        if taxel_overlap <= 0.0:
+            raise ValueError("taxel_overlap must be positive.")
+        if taxel_min_half_size <= 0.0:
+            raise ValueError("taxel_min_half_size must be positive.")
+            
+        self.taxel_half_depth = float(taxel_half_depth)
+        self.taxel_overlap = float(taxel_overlap)
+        self.taxel_min_half_size = float(taxel_min_half_size)
         self.patch_layout = tuple(patch_layout)
         self.mesh_dir = mesh_dir
         self.sensor_names: tuple[str, ...] = tuple(
@@ -89,9 +105,6 @@ class DexHandTouchSensor(TactileSensorBase):
             for row in range(rows)
             for col in range(cols)
         )
-        # Set by the environment before bind(); mirrors the prefix applied to
-        # everything under the attached hand subtree (``attach_body`` renames
-        # all named children with this prefix).
         self.name_prefix: str = ""
         self._sensor_adrs: Optional[np.ndarray] = None
 
@@ -103,8 +116,98 @@ class DexHandTouchSensor(TactileSensorBase):
         self.name_prefix = prefix
 
     # ------------------------------------------------------------------
-    # Spec augmentation 鈥?runs before the hand is attached to the arm.
+    # Spec augmentation runs before the hand is attached to the arm.
     # ------------------------------------------------------------------
+
+    # 3. 添加网格局部坐标系计算辅助函数
+    def _normalize(self, vector: np.ndarray, *, eps: float = 1e-12) -> np.ndarray:
+        vector = np.asarray(vector, dtype=np.float64)
+        norm = np.linalg.norm(vector)
+        if norm < eps:
+            raise ValueError("Cannot normalize a near-zero vector.")
+        return vector / norm
+
+    def _grid_difference(
+        self, grid: np.ndarray, row: int, col: int, *, axis: int,
+    ) -> np.ndarray:
+        """Estimate a tangent using centered or one-sided finite differences."""
+        rows, cols, _ = grid.shape
+        if axis == 0: # Row direction.
+            if row == 0:
+                return grid[row + 1, col] - grid[row, col]
+            if row == rows - 1:
+                return grid[row, col] - grid[row - 1, col]
+            return grid[row + 1, col] - grid[row - 1, col]
+        if axis == 1: # Column direction.
+            if col == 0:
+                return grid[row, col + 1] - grid[row, col]
+            if col == cols - 1:
+                return grid[row, col] - grid[row, col - 1]
+            return grid[row, col + 1] - grid[row, col - 1]
+        raise ValueError(f"Unsupported grid axis: {axis}")
+
+    def _neighbor_spacing(
+        self, grid: np.ndarray, row: int, col: int, *, axis: int,
+    ) -> float:
+        """Estimate center-to-center spacing around one taxel."""
+        rows, cols, _ = grid.shape
+        distances: list[float] = []
+        if axis == 0:
+            if row > 0:
+                distances.append(
+                    float(np.linalg.norm(grid[row, col] - grid[row - 1, col]))
+                )
+            if row + 1 < rows:
+                distances.append(
+                    float(np.linalg.norm(grid[row + 1, col] - grid[row, col]))
+                )
+        elif axis == 1:
+            if col > 0:
+                distances.append(
+                    float(np.linalg.norm(grid[row, col] - grid[row, col - 1]))
+                )
+            if col + 1 < cols:
+                distances.append(
+                    float(np.linalg.norm(grid[row, col + 1] - grid[row, col]))
+                )
+        else:
+            raise ValueError(f"Unsupported grid axis: {axis}")
+        if not distances:
+            raise ValueError(
+                f"Cannot estimate taxel spacing at row={row}, col={col}, axis={axis}."
+            )
+        return float(np.mean(distances))
+
+    def _taxel_frame(
+        self, grid: np.ndarray, row: int, col: int,
+    ) -> np.ndarray:
+        """Return a local-to-body rotation matrix for one box taxel.
+        Local X: grid column direction
+        Local Y: grid row direction
+        Local Z: surface normal
+        """
+        tangent_x = self._normalize(self._grid_difference(grid, row, col, axis=1))
+        tangent_y_raw = self._grid_difference(grid, row, col, axis=0)
+        # Gram-Schmidt: remove the tangent_x component so the box axes
+        # remain orthogonal even if the fitted grid is skewed.
+        tangent_y_raw = tangent_y_raw - np.dot(
+            tangent_y_raw, tangent_x
+        ) * tangent_x
+        tangent_y = self._normalize(tangent_y_raw)
+        normal = self._normalize(np.cross(tangent_x, tangent_y))
+        # Columns are the box's local axes expressed in body coordinates.
+        return np.column_stack((tangent_x, tangent_y, normal))
+
+    def _rotation_matrix_to_quat(self, matrix: np.ndarray) -> np.ndarray:
+        """Convert a 3x3 local-to-body matrix to MuJoCo wxyz quaternion."""
+        matrix = np.asarray(matrix, dtype=np.float64)
+        if matrix.shape != (3, 3):
+            raise ValueError(
+                f"Rotation matrix must have shape (3, 3), got {matrix.shape}."
+            )
+        quat = np.empty(4, dtype=np.float64)
+        mujoco.mju_mat2Quat(quat, matrix.reshape(9))
+        return quat
 
     def augment_spec(self, hand_spec: mujoco.MjSpec) -> None:
         body_by_geom = _body_by_geom_name(hand_spec)
@@ -127,19 +230,48 @@ class DexHandTouchSensor(TactileSensorBase):
             )
             geom = hand_spec.geom(mesh_name)
             body_points = _transform_points(mesh_points, np.asarray(geom.pos), np.asarray(geom.quat))
+            
+            # Restore the regular row-column structure.
+            point_grid = body_points.reshape(rows, cols, 3)
 
             for row in range(rows):
                 for col in range(cols):
-                    idx = row * cols + col
+                    point = point_grid[row, col]
                     taxel_site_name = site_name(mesh_name, row, col)
                     taxel_sensor_name = sensor_name(mesh_name, row, col)
 
+                    # Local dimensions are determined from neighboring
+                    # center-to-center spacing.
+                    col_spacing = self._neighbor_spacing(
+                        point_grid, row, col, axis=1,
+                    )
+                    row_spacing = self._neighbor_spacing(
+                        point_grid, row, col, axis=0,
+                    )
+                    half_x = max(
+                        self.taxel_min_half_size,
+                        0.5 * col_spacing * self.taxel_overlap,
+                    )
+                    half_y = max(
+                        self.taxel_min_half_size,
+                        0.5 * row_spacing * self.taxel_overlap,
+                    )
+                    
+                    rotation = self._taxel_frame(point_grid, row, col)
+                    quat = self._rotation_matrix_to_quat(rotation)
+
                     site = body.add_site()
                     site.name = taxel_site_name
-                    site.type = mujoco.mjtGeom.mjGEOM_SPHERE
-                    site.size = [self.taxel_radius, 0.0, 0.0]
-                    site.pos = body_points[idx].tolist()
-                    site.rgba = [0.0, 0.8, 1.0, 0.35]
+                    site.type = mujoco.mjtGeom.mjGEOM_BOX
+                    # MuJoCo box size uses half-lengths.
+                    site.size = [
+                        half_x,
+                        half_y,
+                        self.taxel_half_depth,
+                    ]
+                    site.pos = point.tolist()
+                    site.quat = quat.tolist()
+                    site.rgba = [0.0, 0.8, 1.0, 0.25]
                     site.group = TACTILE_GROUP
 
                     sensor = hand_spec.add_sensor()
