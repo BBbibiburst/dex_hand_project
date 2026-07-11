@@ -1,0 +1,14 @@
+库安装指令
+pip install git+https://github.com/pybluez/pybluez.git#egg=pybluez
+
+参考安装教程（基本用不到，安装库就行）：
+https://blog.csdn.net/u013564470/article/details/133274134
+
+手套设备基于经典蓝牙，只要与手套建立蓝牙连接，手套端就会持续发送11维数据（5维拉伸+6维IMU），无需额外配置SDK
+
+手套最右侧按键长按开关机，中间的按键按下后开始传输数据，左边的按键暂时用不到，推荐先在电脑系统里配对设备，再在代码里连接，设备名称应该是HC-06
+
+将代码里的sock.connect(("20:20:11:11:16:22", 1))，中的地址替换为手套控制盒贴纸上写的MAC地址即可
+
+Classic Bluetooth.py：连接设备后先握拳、开掌标定，实时输出归一化后的5维拉伸
+Classic Bluetooth All.py：连接设备后实时接收数据：5维拉伸+6维IMU

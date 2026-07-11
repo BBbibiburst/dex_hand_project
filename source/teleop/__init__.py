@@ -6,6 +6,8 @@ from source.teleop.devices import (
     MockViveTracker,
     SineStretchGlove,
     SineViveTracker,
+    StretchGloveApiDevice,
+    ViveApiTracker,
     ViveSample,
 )
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
@@ -18,6 +20,8 @@ __all__ = [
     "MockViveTracker",
     "SineStretchGlove",
     "SineViveTracker",
+    "StretchGloveApiDevice",
+    "ViveApiTracker",
     "TeleopMapper",
     "LeRobotEpisodeRecorder",
 ]

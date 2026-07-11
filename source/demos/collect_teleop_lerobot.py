@@ -49,6 +49,11 @@ def parse_args():
         help="Input source: hardware uses device APIs; sine/mock are test inputs.",
     )
     parser.add_argument("--glove-inverted", action="store_true")
+    parser.add_argument("--glove-mac", help="Classic-Bluetooth glove MAC address.")
+    parser.add_argument("--glove-channel", type=int, default=1, help="Glove RFCOMM channel.")
+    parser.add_argument("--glove-calibration-seconds", type=float, default=3.0)
+    parser.add_argument("--vive-device-index", type=int)
+    parser.add_argument("--vive-serial", help="Select a Vive tracker by serial number.")
     parser.add_argument(
         "--dry-run", action="store_true", help="Control and render without writing data."
     )
@@ -86,7 +91,14 @@ def run(args) -> None:
         raise ValueError("fps, episodes and episode-frames must be positive.")
     env = _make_env(args)
     if args.device == "hardware":
-        glove, vive = StretchGloveApiDevice(), ViveApiTracker()
+        if not args.glove_mac:
+            raise ValueError("--glove-mac is required when --device hardware is used.")
+        glove = StretchGloveApiDevice(
+            args.glove_mac,
+            channel=args.glove_channel,
+            calibration_seconds=args.glove_calibration_seconds,
+        )
+        vive = ViveApiTracker(device_index=args.vive_device_index, serial=args.vive_serial)
     elif args.device == "sine":
         glove, vive = SineStretchGlove(), SineViveTracker()
     else:
@@ -99,13 +111,23 @@ def run(args) -> None:
     try:
         glove.connect()
         vive.connect()
+
+        def read_valid_vive(timeout: float = 10.0):
+            deadline = time.monotonic() + timeout
+            while time.monotonic() < deadline:
+                sample = vive.read()
+                if sample.valid:
+                    return sample
+                time.sleep(0.05)
+            raise RuntimeError("Vive did not provide a valid tracked pose within 10 seconds.")
+
         observation, _ = env.reset(seed=0)
         initial_action = env.controller.current_ik_action(env.model, env.data)
         vive.set_pose(initial_action[:3], initial_action[3:7])
         mapper = TeleopMapper(
             env, position_scale=args.position_scale, glove_inverted=args.glove_inverted
         )
-        mapper.calibrate(vive.read())
+        mapper.calibrate(read_valid_vive())
         view_handle = viewer.launch_passive(env.model, env.data, key_callback=ui.handle_key)
 
         renderer.update_scene(env.data, camera=args.camera)
@@ -127,7 +149,7 @@ def run(args) -> None:
             observation, _ = env.reset(seed=seed)
             initial_action = env.controller.current_ik_action(env.model, env.data)
             vive.set_pose(initial_action[:3], initial_action[3:7])
-            mapper.calibrate(vive.read())
+            mapper.calibrate(read_valid_vive())
 
         print(
             "Controls: SPACE record/pause | N save episode | R discard/reset | "
@@ -144,7 +166,7 @@ def run(args) -> None:
                 print("viewer closed; stopping collection")
                 break
             if ui.consume_calibration_request():
-                mapper.calibrate(vive.read())
+                mapper.calibrate(read_valid_vive())
                 print("Vive pose recalibrated")
             if ui.consume_discard_request():
                 if recorder is not None:
@@ -170,6 +192,10 @@ def run(args) -> None:
                     continue
 
             vive_sample = vive.read()
+            if not vive_sample.valid:
+                deadline += period
+                time.sleep(max(0.0, deadline - time.monotonic()))
+                continue
             glove_sample = glove.read()
             action = mapper.action(vive_sample, glove_sample)
             observation, reward, terminated, truncated, info = env.step(action)

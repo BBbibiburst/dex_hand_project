@@ -56,6 +56,24 @@ Viewer 操作：
 
 真实设备接入后使用 `--device hardware`。厂商 API 的适配点位于 [devices.py](source/teleop/devices.py)。设备驱动只需实现 `connect()`、`read()` 和 `close()`。
 
+经典蓝牙手套与 Vive OpenVR 已接入：
+
+```powershell
+pip install openvr
+pip install git+https://github.com/pybluez/pybluez.git#egg=pybluez
+python -m source.demos.collect_teleop_lerobot `
+  --task lift `
+  --device hardware `
+  --glove-mac 20:20:11:11:16:22 `
+  --vive-serial YOUR_TRACKER_SERIAL `
+  --dry-run
+```
+
+启动时按提示先握拳、再张开手完成手套标定。手套的 5 路顺序按
+`拇指、食指、中指、无名指、小指` 处理；Dex Hand 有 6 个执行器，因此同一个拇指值同时
+驱动拇指旋转与抓握，无法用这款手套独立控制这两个自由度。当前 Vive 驱动读取 OpenVR，
+使用 PC 接收器时需要先启动 VIVE Hub 和 SteamVR。
+
 每帧记录：
 
 - `observation.images.agentview`：RGB
