@@ -326,9 +326,9 @@ class RobotGymEnv(gym.Env):
     # ------------------------------------------------------------------
 
     def _augment_spec(self, spec: mujoco.MjSpec) -> None:
-        if self.config.add_default_scene:
-            add_basic_scene(spec)
         self.task.augment_spec(spec)
+        if self.config.add_default_scene and spec.geom("floor") is None:
+            add_basic_scene(spec)
         if self.config.enable_task_objects:
             self._add_placeholder_task_objects(spec)
 

@@ -17,23 +17,46 @@ and mesh-UV sampling for the palm.
 
 from __future__ import annotations
 
-import argparse
-import struct
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+
+from source.sensors.tactile.fitting.bezier import (
+    evaluate_bezier_surface as _evaluate_bezier_surface,
+    fit_bezier_surface as _fit_bezier_surface,
+)
+from source.sensors.tactile.fitting.layout import (
+    DEFAULT_DEX_HAND_MESH_DIR,
+    DEFAULT_PLOT_PATCHES,
+    DEX_HAND_PATCH_LAYOUT,
+    dex_hand_patch_info,
+    dex_hand_patch_layout,
+)
+from source.sensors.tactile.fitting.stl import read_stl_triangles
 
 try:
     from scipy.optimize import minimize
 except ImportError:
     minimize = None
 
+__all__ = [
+    "DEFAULT_DEX_HAND_MESH_DIR",
+    "DEFAULT_PLOT_PATCHES",
+    "DEX_HAND_PATCH_LAYOUT",
+    "dex_hand_patch_info",
+    "dex_hand_patch_layout",
+    "finger_segment_grid_points",
+    "fingertip_ellipsoid_grid_points",
+    "fingertip_swept_shell_grid_points",
+    "grid_points_for_kind",
+    "mesh_uv_grid_points",
+    "plot_tactile_sampling_grids",
+    "read_stl_triangles",
+]
+
 
 FINGER_SEGMENT_FIT_SUBDIVISIONS = 4
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
-DEFAULT_PLOT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
 
 
 @dataclass(frozen=True)
@@ -60,73 +83,6 @@ class PatchPlotData:
     triangles: np.ndarray
     samples: np.ndarray
     fit_surfaces: tuple[np.ndarray, ...]
-
-
-def dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
-    """Return the dex-hand tactile patch layout and fitting strategy names."""
-    layout: list[tuple[str, int, int, str]] = []
-    for finger_id in range(5):
-        layout.append((f"skin_{finger_id}_0_p", 4, 8, "segment"))
-        layout.append((f"skin_{finger_id}_1_p", 4, 8, "segment"))
-        layout.append((f"skin_{finger_id}_2_p", 7, 8, "fingertip-ellipsoid"))
-    layout.append(("skin_palm_p", 7, 16, "mesh-uv"))
-    return tuple(layout)
-
-
-DEX_HAND_PATCH_LAYOUT = dex_hand_patch_layout()
-
-
-def _build_dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
-    return {mesh_name: (rows, cols, kind) for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT}
-
-
-_DEX_HAND_PATCH_INFO = _build_dex_hand_patch_info()
-
-
-def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
-    """Return immutable-by-convention patch metadata without rebuilding it."""
-    return _DEX_HAND_PATCH_INFO
-
-
-# ---------------------------------------------------------------------------
-# STL I/O
-# ---------------------------------------------------------------------------
-
-
-def read_stl_triangles(path: Path) -> np.ndarray:
-    data = path.read_bytes()
-    if _looks_like_binary_stl(data):
-        tri_count = struct.unpack_from("<I", data, 80)[0]
-        triangles = np.empty((tri_count, 3, 3), dtype=np.float64)
-        offset = 84
-        for tri_idx in range(tri_count):
-            offset += 12
-            for vertex_idx in range(3):
-                triangles[tri_idx, vertex_idx] = struct.unpack_from("<3f", data, offset)
-                offset += 12
-            offset += 2
-        return triangles
-    return _read_ascii_stl_triangles(data.decode("utf-8", errors="ignore"))
-
-
-def _looks_like_binary_stl(data: bytes) -> bool:
-    if len(data) < 84:
-        return False
-    tri_count = struct.unpack_from("<I", data, 80)[0]
-    return 84 + tri_count * 50 == len(data)
-
-
-def _read_ascii_stl_triangles(text: str) -> np.ndarray:
-    vertices: list[list[float]] = []
-    for raw_line in text.splitlines():
-        parts = raw_line.strip().split()
-        if len(parts) == 4 and parts[0].lower() == "vertex":
-            vertices.append([float(parts[1]), float(parts[2]), float(parts[3])])
-    if not vertices:
-        raise ValueError("STL file contains no vertices.")
-    if len(vertices) % 3 != 0:
-        raise ValueError("ASCII STL vertex count is not divisible by 3.")
-    return np.asarray(vertices, dtype=np.float64).reshape(-1, 3, 3)
 
 
 # ---------------------------------------------------------------------------
@@ -1155,87 +1111,6 @@ def _finger_segment_regular_surface_grid_points(
     return _evaluate_bezier_surface(controls, u_values, v_values)
 
 
-def _bernstein_basis(values: np.ndarray, degree: int) -> np.ndarray:
-    """Return Bernstein basis values with shape (N, degree + 1)."""
-    from math import comb
-
-    values = np.clip(np.asarray(values, dtype=np.float64), 0.0, 1.0)
-    basis = np.empty((len(values), degree + 1), dtype=np.float64)
-    one_minus = 1.0 - values
-    for index in range(degree + 1):
-        basis[:, index] = comb(degree, index) * values**index * one_minus ** (degree - index)
-    return basis
-
-
-def _fit_bezier_surface(
-    samples: np.ndarray,
-    sample_rows: int,
-    sample_cols: int,
-    *,
-    degree_u: int = 5,
-    degree_v: int = 7,
-    regularization: float = 2.0e-5,
-    include_u_endpoints: bool = False,
-    boundary_weight: float = 1.0,
-) -> np.ndarray:
-    """Fit a smooth tensor-product Bezier surface to a regular sample grid.
-
-    ``samples`` may be slightly noisy or uneven because each source sample was
-    selected from the STL shell.  The lower-dimensional Bezier control net
-    removes that nearest-neighbour jitter while preserving the global U-shaped
-    fingertip geometry.
-    """
-    grid = np.asarray(samples, dtype=np.float64).reshape(sample_rows, sample_cols, 3)
-    if include_u_endpoints:
-        u_values = np.linspace(0.0, 1.0, sample_rows, dtype=np.float64)
-    else:
-        u_values = (np.arange(sample_rows, dtype=np.float64) + 0.5) / sample_rows
-    v_values = (np.arange(sample_cols, dtype=np.float64) + 0.5) / sample_cols
-    basis_u = _bernstein_basis(u_values, degree_u)
-    basis_v = _bernstein_basis(v_values, degree_v)
-
-    design = np.einsum("ri,cj->rcij", basis_u, basis_v).reshape(
-        sample_rows * sample_cols,
-        (degree_u + 1) * (degree_v + 1),
-    )
-    targets = grid.reshape(-1, 3)
-
-    # Give the longitudinal boundary rows extra weight for fingertip fits.
-    # Without this, regularization tends to pull the distal boundary inward
-    # and visibly flatten/truncate the nose.
-    weights = np.ones(sample_rows * sample_cols, dtype=np.float64)
-    if include_u_endpoints and boundary_weight > 1.0:
-        weights[:sample_cols] *= boundary_weight
-        weights[-sample_cols:] *= boundary_weight
-    sqrt_weights = np.sqrt(weights)[:, None]
-    weighted_design = design * sqrt_weights
-    weighted_targets = targets * sqrt_weights
-
-    # Mild Tikhonov regularization is enough because Bernstein bases are
-    # already smooth and non-oscillatory.  Scale it to the data matrix so the
-    # behavior is insensitive to mesh units and sampling resolution.
-    gram = weighted_design.T @ weighted_design
-    ridge = regularization * max(float(np.trace(gram) / len(gram)), 1e-12)
-    controls = np.linalg.solve(
-        gram + ridge * np.eye(gram.shape[0], dtype=np.float64),
-        weighted_design.T @ weighted_targets,
-    )
-    return controls.reshape(degree_u + 1, degree_v + 1, 3)
-
-
-def _evaluate_bezier_surface(
-    controls: np.ndarray,
-    u_values: np.ndarray,
-    v_values: np.ndarray,
-) -> np.ndarray:
-    degree_u = controls.shape[0] - 1
-    degree_v = controls.shape[1] - 1
-    basis_u = _bernstein_basis(u_values, degree_u)
-    basis_v = _bernstein_basis(v_values, degree_v)
-    surface = np.einsum("ri,cj,ijk->rck", basis_u, basis_v, controls)
-    return surface.reshape(-1, 3)
-
-
 def _fingertip_regular_surface_grid_points(
     triangles: np.ndarray,
     rows: int,
@@ -1413,186 +1288,6 @@ def _linspace_midpoints(values: np.ndarray, count: int) -> np.ndarray:
     return 0.5 * (edges[:-1] + edges[1:])
 
 
-# ---------------------------------------------------------------------------
-# Offline visualization CLI
-# ---------------------------------------------------------------------------
-
-
-FIT_SURFACE_FUNCTIONS = {
-    "segment": finger_segment_fit_surface,
-    "mesh-uv": None,
-    "fingertip-ellipsoid": patch_fingertip_ellipsoid_plot_data,
-}
-
-
-def _parse_plot_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Plot dex-hand tactile STL sampling grids.")
-    parser.add_argument(
-        "--patches",
-        nargs="+",
-        default=list(DEFAULT_PLOT_PATCHES),
-        help="Skin mesh names without .STL, e.g. skin_0_0_p skin_0_2_p skin_palm_p.",
-    )
-    parser.add_argument(
-        "--mesh-dir",
-        type=Path,
-        default=DEFAULT_DEX_HAND_MESH_DIR,
-        help="Directory containing dex-hand skin STL files.",
-    )
-    parser.add_argument("--point-size", type=float, default=42.0)
-    parser.add_argument("--surface-alpha", type=float, default=0.32)
-    parser.add_argument("--save", type=str, default="")
-    return parser.parse_args()
-
-
-def _patch_title(mesh_name: str, kind: str) -> str:
-    rows, cols, _ = dex_hand_patch_info()[mesh_name]
-    if kind == "mesh-uv":
-        return f"Palm pad: {rows} x {cols}"
-    if kind == "fingertip-ellipsoid":
-        return f"{mesh_name}: fingertip {rows} x {cols} (Bezier fit)"
-    return f"{mesh_name}: segment {rows} x {cols} (Bezier shell fit)"
-
-
-def _fit_surface_style(kind: str) -> tuple[str, float]:
-    if kind == "mesh-uv":
-        return "tomato", 0.32
-    if kind == "fingertip-ellipsoid":
-        return "gold", 0.38
-    return "deepskyblue", 0.42
-
-
-def _set_equal_axes(ax, points: np.ndarray) -> None:
-    lower = points.min(axis=0)
-    upper = points.max(axis=0)
-    center = 0.5 * (lower + upper)
-    radius = 0.55 * np.max(upper - lower)
-    ax.set_xlim(center[0] - radius, center[0] + radius)
-    ax.set_ylim(center[1] - radius, center[1] + radius)
-    ax.set_zlim(center[2] - radius, center[2] + radius)
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_zlabel("Z")
-
-
-def _draw_grid(ax, samples: np.ndarray, rows: int, cols: int) -> None:
-    grid = samples.reshape(rows, cols, 3)
-    for row in range(rows):
-        ax.plot(
-            grid[row, :, 0],
-            grid[row, :, 1],
-            grid[row, :, 2],
-            color="black",
-            linewidth=1.0,
-            alpha=0.7,
-        )
-    for col in range(cols):
-        ax.plot(
-            grid[:, col, 0],
-            grid[:, col, 1],
-            grid[:, col, 2],
-            color="dimgray",
-            linewidth=0.8,
-            alpha=0.55,
-        )
-
-
-def _plot_stl_surface(ax, triangles: np.ndarray, *, alpha: float) -> None:
-    flat_vertices = triangles.reshape(-1, 3)
-    tri_indices = np.arange(flat_vertices.shape[0], dtype=np.int32).reshape(-1, 3)
-    ax.plot_trisurf(
-        flat_vertices[:, 0],
-        flat_vertices[:, 1],
-        flat_vertices[:, 2],
-        triangles=tri_indices,
-        color="silver",
-        alpha=alpha,
-        linewidth=0.08,
-        edgecolor="gray",
-        shade=True,
-        antialiased=True,
-    )
-
-
-def _plot_surface_array(ax, surface: np.ndarray, *, color: str, alpha: float) -> None:
-    ax.plot_surface(
-        surface[..., 0],
-        surface[..., 1],
-        surface[..., 2],
-        color=color,
-        alpha=alpha,
-        linewidth=0,
-        antialiased=True,
-        shade=False,
-    )
-
-
-def _plot_data_for_kind(
-    stl_path: Path,
-    mesh_name: str,
-    rows: int,
-    cols: int,
-    kind: str,
-) -> PatchPlotData:
-    fit_fn = FIT_SURFACE_FUNCTIONS[kind]
-    if fit_fn is None:
-        return patch_mesh_uv_plot_data(stl_path, mesh_name, rows, cols)
-    if kind == "fingertip-ellipsoid":
-        return patch_fingertip_ellipsoid_plot_data(stl_path, mesh_name, rows, cols)
-    return patch_plot_data(
-        stl_path,
-        mesh_name,
-        rows,
-        cols,
-        GRID_POINT_FUNCTIONS[kind],
-        fit_fn,
-    )
-
-
-def _plot_patch(
-    ax,
-    mesh_name: str,
-    *,
-    mesh_dir: Path,
-    surface_alpha: float,
-    point_size: float,
-) -> None:
-    patch_info = dex_hand_patch_info()
-    if mesh_name not in patch_info:
-        raise ValueError(f"Unknown dex-hand patch {mesh_name!r}. Known: {sorted(patch_info)}")
-    rows, cols, kind = patch_info[mesh_name]
-    stl_path = mesh_dir / f"{mesh_name}.STL"
-    plot_data = _plot_data_for_kind(stl_path, mesh_name, rows, cols, kind)
-
-    triangles = plot_data.triangles
-    vertices = triangles.reshape(-1, 3)
-    samples = plot_data.samples
-
-    _plot_stl_surface(ax, triangles, alpha=surface_alpha)
-    color, alpha = _fit_surface_style(kind)
-    for surface in plot_data.fit_surfaces:
-        _plot_surface_array(ax, surface, color=color, alpha=alpha)
-
-    colors = np.linspace(0.0, 1.0, rows * cols)
-    ax.scatter(
-        samples[:, 0],
-        samples[:, 1],
-        samples[:, 2],
-        s=point_size,
-        c=colors,
-        cmap="turbo",
-        edgecolors="black",
-        linewidths=0.45,
-        depthshade=False,
-        label="taxels",
-    )
-    _draw_grid(ax, samples, rows, cols)
-
-    ax.set_title(f"{_patch_title(mesh_name, kind)}\n{kind}")
-    _set_equal_axes(ax, np.vstack([vertices, samples]))
-    ax.view_init(elev=22, azim=-58)
-
-
 def plot_tactile_sampling_grids(
     *,
     patches: tuple[str, ...] | list[str] = DEFAULT_PLOT_PATCHES,
@@ -1601,40 +1296,23 @@ def plot_tactile_sampling_grids(
     surface_alpha: float = 0.32,
     save: str = "",
 ) -> None:
-    """Plot dex-hand tactile sampling grids for algorithm debugging."""
-    import matplotlib.pyplot as plt
+    """Compatibility wrapper for the offline visualization demo."""
+    from source.demos.tactile_surface_fitting import plot_tactile_sampling_grids as plot
 
-    column_count = len(patches)
-    fig = plt.figure(figsize=(6.2 * column_count, 6.0))
-    fig.suptitle("Dex-hand tactile sampling grids", fontsize=13)
-
-    for plot_index, mesh_name in enumerate(patches, start=1):
-        ax = fig.add_subplot(1, column_count, plot_index, projection="3d")
-        _plot_patch(
-            ax,
-            mesh_name,
-            mesh_dir=mesh_dir,
-            surface_alpha=surface_alpha,
-            point_size=point_size,
-        )
-
-    plt.tight_layout()
-    if save:
-        plt.savefig(save, dpi=220)
-        print(f"Saved tactile sampling plot to {save}")
-    else:
-        plt.show()
+    plot(
+        patches=patches,
+        mesh_dir=mesh_dir,
+        point_size=point_size,
+        surface_alpha=surface_alpha,
+        save=save,
+    )
 
 
 def main() -> None:
-    args = _parse_plot_args()
-    plot_tactile_sampling_grids(
-        patches=args.patches,
-        mesh_dir=args.mesh_dir,
-        point_size=args.point_size,
-        surface_alpha=args.surface_alpha,
-        save=args.save,
-    )
+    """Keep the historical module CLI working after moving plotting to demos."""
+    from source.demos.tactile_surface_fitting import main as visualization_main
+
+    visualization_main()
 
 
 if __name__ == "__main__":

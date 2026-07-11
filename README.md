@@ -46,13 +46,13 @@ python -m source.demos.collect_teleop_lerobot `
 
 Viewer 操作：
 
-| 按键 | 功能 |
-|---|---|
-| `Space` | 开始/暂停记录帧 |
-| `C` | 校准 Vive 相对零位 |
-| `N` | 确认并保存当前 episode |
-| `R` | 丢弃当前 episode 并重置 |
-| `Q` | 退出；未确认帧会被丢弃 |
+| 按键    | 功能                    |
+| ------- | ----------------------- |
+| `Space` | 开始/暂停记录帧         |
+| `C`     | 校准 Vive 相对零位      |
+| `N`     | 确认并保存当前 episode  |
+| `R`     | 丢弃当前 episode 并重置 |
+| `Q`     | 退出；未确认帧会被丢弃  |
 
 真实设备接入后使用 `--device hardware`。厂商 API 的适配点位于 [devices.py](source/teleop/devices.py)。设备驱动只需实现 `connect()`、`read()` 和 `close()`。
 
