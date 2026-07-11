@@ -254,9 +254,12 @@ def _openvr_matrix_to_quat(matrix) -> np.ndarray:
     trace = float(np.trace(rotation))
     if trace > 0:
         scale = np.sqrt(trace + 1.0) * 2
-        quat = [0.25 * scale, (rotation[2, 1] - rotation[1, 2]) / scale,
-                (rotation[0, 2] - rotation[2, 0]) / scale,
-                (rotation[1, 0] - rotation[0, 1]) / scale]
+        quat = [
+            0.25 * scale,
+            (rotation[2, 1] - rotation[1, 2]) / scale,
+            (rotation[0, 2] - rotation[2, 0]) / scale,
+            (rotation[1, 0] - rotation[0, 1]) / scale,
+        ]
     else:
         index = int(np.argmax(np.diag(rotation)))
         j, k = (index + 1) % 3, (index + 2) % 3
@@ -289,7 +292,10 @@ class ViveApiTracker:
         self._system = openvr.VRSystem()
         candidates = []
         for index in range(openvr.k_unMaxTrackedDeviceCount):
-            if self._system.getTrackedDeviceClass(index) != openvr.TrackedDeviceClass_GenericTracker:
+            if (
+                self._system.getTrackedDeviceClass(index)
+                != openvr.TrackedDeviceClass_GenericTracker
+            ):
                 continue
             device_serial = self._system.getStringTrackedDeviceProperty(
                 index, openvr.Prop_SerialNumber_String

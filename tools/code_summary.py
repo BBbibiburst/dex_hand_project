@@ -5,18 +5,17 @@ This tool merges multiple code files into a single text report,
 facilitating code review, documentation generation, or submission to AI assistants for analysis.
 Supports direct file path input, batch reading from a list file, or auto-discovery.
 
-Usage:
-    # Method 1: Auto-discover all .py files in the current directory (Default)
-    python -m source.code_summary.code_summary
+Usage (from the repository root):
+    # Method 1: Auto-discover all .py files in the current directory (default)
+    python tools/code_summary.py
 
     # Method 2: Direct arguments
-    python -m source.code_summary.code_summary ./src/main.py ./utils/helper.py
+    python tools/code_summary.py ./source/geometry.py ./source/assets.py
 
     # Method 3: Read from list file (supports comment lines with #)
-    python -m source.code_summary.code_summary --list source/code_summary/code_list.txt
+    python tools/code_summary.py --list code_list.txt
 """
 
-import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent

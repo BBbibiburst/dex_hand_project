@@ -10,7 +10,7 @@ either a full robot config, or a small pointer to a reusable profile:
 from __future__ import annotations
 
 import json
-from dataclasses import fields, replace
+from dataclasses import fields
 from pathlib import Path
 from typing import Any, Mapping, Optional, TypeVar
 
@@ -107,13 +107,6 @@ def dataclass_from_robot_config(cls: type[T], config: Mapping[str, Any]) -> T:
     if unknown:
         raise ValueError(f"Unknown robot config key(s) for {cls.__name__}: {sorted(unknown)}")
     return cls(**kwargs)
-
-
-def replace_from_robot_config(instance: T, config: Mapping[str, Any]) -> T:
-    """Replace matching dataclass fields from config."""
-    allowed = {field.name for field in fields(instance)}
-    kwargs = {key: value for key, value in config.items() if key in allowed}
-    return replace(instance, **kwargs)
 
 
 def descriptors_from_robot_config(config: Mapping[str, Any]):

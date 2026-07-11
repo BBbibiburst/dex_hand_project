@@ -48,10 +48,3 @@ def mat_to_quat(mat: np.ndarray) -> np.ndarray:
     quat = np.empty(4, dtype=np.float64)
     mujoco.mju_mat2Quat(quat, mat.reshape(9))
     return normalize_quat(quat)
-
-
-def axis_angle_quat(axis: np.ndarray, angle: float) -> np.ndarray:
-    axis = np.asarray(axis, dtype=np.float32)
-    axis /= np.linalg.norm(axis)
-    half = 0.5 * angle
-    return np.concatenate([[np.cos(half)], np.sin(half) * axis]).astype(np.float32)

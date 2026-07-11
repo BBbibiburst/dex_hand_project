@@ -109,10 +109,6 @@ def read_stl_triangles(path: Path) -> np.ndarray:
     return _read_ascii_stl_triangles(data.decode("utf-8", errors="ignore"))
 
 
-def read_stl_vertices(path: Path) -> np.ndarray:
-    return read_stl_triangles(path).reshape(-1, 3)
-
-
 def _looks_like_binary_stl(data: bytes) -> bool:
     if len(data) < 84:
         return False
