@@ -252,9 +252,15 @@ class PikaGripperTactileSensor(TactileSensorBase):
         values = self.signal_processor.process(self.read_raw(model, data), self.patches)
         return values.reshape(2, ROWS, COLS)
 
+    def diagnostic_values(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+        return self.read_raw(model, data)
+
     def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Dict[str, np.ndarray]:
-        values = self.read(model, data)
-        return {side: values[index] for index, side in enumerate(SIDES)}
+        return self.patches_from_values(self.read(model, data))
+
+    def patches_from_values(self, values: Any) -> Dict[str, np.ndarray]:
+        matrices = np.asarray(values, dtype=np.float32).reshape(2, ROWS, COLS)
+        return {side: matrices[index] for index, side in enumerate(SIDES)}
 
 
 def create_pika_gripper_tactile_sensor(

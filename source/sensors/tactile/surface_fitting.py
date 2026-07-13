@@ -1142,12 +1142,15 @@ def _fingertip_regular_surface_grid_points(
         boundary_weight=10.0,
     )
 
-    # Keep the first row slightly inside the base, but place the final row on
-    # the distal boundary so the taxel grid and preview both reach the nose.
+    # Sample parameter-cell centres. Placing the final row exactly at u=1
+    # collapses its columns at the fingertip pole, producing multiple touch
+    # sites for effectively the same contact point. The last cell centre still
+    # reaches the distal cap without creating that singular row.
     if rows == 1:
         u_values = np.asarray([0.5], dtype=np.float64)
     else:
-        u_values = np.linspace(0.06, 1.0, rows, dtype=np.float64)
+        u_edges = np.linspace(0.06, 1.0, rows + 1, dtype=np.float64)
+        u_values = 0.5 * (u_edges[:-1] + u_edges[1:])
     v_values = (np.arange(cols, dtype=np.float64) + 0.5) / cols
     return _evaluate_bezier_surface(controls, u_values, v_values)
 

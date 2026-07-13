@@ -6,7 +6,7 @@
 
 - 单臂任务：`lift`、`stack`、`pick_place`、`nut_assembly`、`door`
 - 末端执行器：六维 Dex Hand、一维 Pika 平行夹爪
-- 触觉：Dex Hand taxel 阵列
+- 触觉：末端执行器注册的 taxel 阵列（Dex Hand、Pika 夹爪等）
 - 遥操作：Vive 六维位姿 + 六维拉伸手套
 - 数据：LeRobotDataset v3（Parquet + MP4）
 - 模仿学习：RGB、触觉、机械状态融合的条件扩散动作策略
@@ -77,12 +77,33 @@ python -m source.demos.collect_teleop_lerobot `
 每帧记录：
 
 - `observation.images.agentview`：RGB
-- `observation.tactile`：Dex Hand 触觉数组
+- `observation.tactile`：当前末端执行器的触觉数组
 - `observation.state`：完整 `qpos + qvel + ctrl`
 - `observation.operator.glove`：六维原始手套值
 - `observation.operator.vive_pose`：原始 Vive `[xyz, quaternion_wxyz]`
 - `action`：实际下发的末端目标位姿与手部动作
 - `task`：任务文本
+
+## 自动触点检测
+
+通用检测程序会逐个沿 taxel 法向放置探针，依次检查瞬时压力、持续压力、邻点串扰和释放残留；没有底层碰撞面的裁角点会记录为 `inactive`。完整检测 Pika 夹爪：
+
+```powershell
+python -m source.demos.tactile_contact_validation `
+  --robot-config configs/robot_profiles/rm75b_pika_gripper.json
+```
+
+也可以分 patch 或分段检测：
+
+```powershell
+python -m source.demos.tactile_contact_validation `
+  --robot-config configs/robot_profiles/rm75b_pika_gripper.json `
+  --patch left `
+  --start-index 0 `
+  --max-taxels 100
+```
+
+程序默认只打开按真实坐标绘制的 3D 触点云，不保存文件：颜色表示 `pass`、`inactive`、`no_response`、`unstable_hold`、`crosstalk` 或 `release_residual`，点大小表示瞬时压力。需要图片时显式传入 `--plot tactile_validation.png`；无界面批处理或 CI 使用 `--no-show`；只有需要原始指标时才传入 `--csv tactile_validation.csv`。出现实际失败时返回非零退出码，可直接接入 CI 或硬件验收流程。
 
 ## Diffusion Policy
 

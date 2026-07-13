@@ -16,7 +16,7 @@ import mujoco
 import numpy as np
 from gymnasium import spaces
 
-from source.assets import DEX_HAND_MESH_DIR
+from source.assets import DEX_HAND_DIR
 from source.sensors.base import TactileSensorBase, TactileSiteRef, TactileSurfacePlotData
 from source.sensors.tactile.signal_processing import (
     TactileSignalProcessor,
@@ -118,7 +118,11 @@ def _neighbor_spacing(grid: np.ndarray, row: int, col: int, *, axis: int) -> flo
         raise ValueError(f"Unsupported grid axis: {axis}")
     if not distances:
         raise ValueError(f"Cannot estimate spacing at row={row}, col={col}, axis={axis}.")
-    return float(np.mean(distances))
+    # A symmetric box cannot represent different distances on its two sides.
+    # Using the mean makes it cross the nearer Voronoi boundary on non-uniform
+    # fingertip grids, so adjacent touch sites can report exactly the same
+    # contact. The nearest spacing keeps each site inside that boundary.
+    return float(np.min(distances))
 
 
 def _taxel_frame(grid: np.ndarray, row: int, col: int) -> np.ndarray:
@@ -185,7 +189,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         self,
         *,
         patch_layout: Sequence[tuple[str, int, int, str]] = DEX_HAND_PATCH_LAYOUT,
-        mesh_dir=DEX_HAND_MESH_DIR,
+        mesh_dir=DEX_HAND_DIR,
         image_force_max: float = 5.0,
         signal_processor: Optional[Mapping[str, Any]] = None,
     ) -> None:
@@ -242,6 +246,9 @@ class DexHandTactileSensorBase(TactileSensorBase):
     def surface_patch_names(self) -> tuple[str, ...]:
         return tuple(patch.name for patch in self.patches)
 
+    def default_surface_patch_names(self) -> tuple[str, ...]:
+        return ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
+
     def surface_plot_data(self, patch_name: str) -> TactileSurfacePlotData:
         from source.sensors.tactile.surface_fitting import (
             GRID_POINT_FUNCTIONS,
@@ -257,7 +264,9 @@ class DexHandTactileSensorBase(TactileSensorBase):
             raise ValueError(
                 f"Unknown tactile patch {patch_name!r}; known: {list(self.surface_patch_names())}."
             ) from exc
-        stl_path = self.mesh_dir / f"{patch.name}.STL"
+        filename = f"{patch.name}.STL"
+        direct_path = self.mesh_dir / filename
+        stl_path = direct_path if direct_path.is_file() else self.mesh_dir / "meshes" / filename
         if patch.kind == "mesh-uv":
             data = patch_mesh_uv_plot_data(stl_path, patch.name, patch.rows, patch.cols)
         elif patch.kind == "fingertip-ellipsoid":
@@ -419,11 +428,17 @@ class DexHandTactileSensorBase(TactileSensorBase):
     def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
         return self.signal_processor.process(self.read_raw(model, data), self.patches)
 
+    def diagnostic_values(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+        return self.read_raw(model, data)
+
     def read_concat(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
         return self.read(model, data)
 
     def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Dict[str, np.ndarray]:
-        flat = self.read(model, data)
+        return self.patches_from_values(self.read(model, data))
+
+    def patches_from_values(self, values: Any) -> Dict[str, np.ndarray]:
+        flat = np.asarray(values, dtype=np.float32).reshape(-1)
         return {
             patch.name: flat[patch.start : patch.stop].reshape(patch.shape)
             for patch in self.patches
@@ -488,7 +503,7 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
         self,
         *,
         taxel_half_depth: float = 0.0015,
-        taxel_overlap: float = 1.08,
+        taxel_overlap: float = 1.0,
         taxel_min_half_size: float = 0.0005,
         site_rgba: Sequence[float] = (0.0, 0.8, 1.0, 0.25),
         site_group: int = TACTILE_GROUP,

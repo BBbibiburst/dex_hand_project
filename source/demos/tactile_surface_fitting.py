@@ -111,7 +111,7 @@ def plot_tactile_sampling_grids(
         raise ValueError(
             f"Tactile backend {type(sensor).__name__!r} does not expose surface sampling data."
         )
-    selected = tuple(patches) if patches else available[:3]
+    selected = tuple(patches) if patches else tuple(sensor.default_surface_patch_names())
     unknown = sorted(set(selected) - set(available))
     if unknown:
         raise ValueError(f"Unknown patch(es) {unknown}; available: {list(available)}.")

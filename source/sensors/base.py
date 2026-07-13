@@ -83,11 +83,28 @@ class TactileSensorBase(ABC):
         self, model: mujoco.MjModel, data: mujoco.MjData
     ) -> Mapping[str, np.ndarray]:
         """Return named 2-D tactile arrays for diagnostics and visualization."""
+        return self.patches_from_values(self.read(model, data))
+
+    def patches_from_values(self, values: Any) -> Mapping[str, np.ndarray]:
+        """Split one already-read observation without advancing signal state."""
         raise NotImplementedError(f"{type(self).__name__} does not expose tactile patches.")
+
+    def diagnostic_values(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+        """Return a flat signal vector for automated point diagnostics.
+
+        Backends may override this to bypass temporal filtering and noise. The
+        default keeps non-site or external sensors compatible by flattening
+        their regular observation.
+        """
+        return np.asarray(self.read(model, data), dtype=np.float32).reshape(-1)
 
     def surface_patch_names(self) -> Sequence[str]:
         """Return patches supported by the optional offline surface demo."""
         return ()
+
+    def default_surface_patch_names(self) -> Sequence[str]:
+        """Return a representative default subset for surface visualization."""
+        return tuple(self.surface_patch_names())[:3]
 
     def surface_plot_data(self, patch_name: str) -> TactileSurfacePlotData:
         """Return backend-specific surface geometry through a common data model."""

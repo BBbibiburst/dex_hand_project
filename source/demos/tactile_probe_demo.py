@@ -67,7 +67,18 @@ def _parse_args() -> argparse.Namespace:
         metavar=("X", "Y", "Z"),
         help="Initial probe world position. Defaults near the selected patch.",
     )
-    parser.add_argument("--force-max", type=float, default=1.0)
+    parser.add_argument(
+        "--force-max",
+        type=float,
+        default=0.0,
+        help="Heatmap upper limit; 0 enables per-frame auto scaling.",
+    )
+    parser.add_argument(
+        "--heatmap-gamma",
+        type=float,
+        default=0.5,
+        help="Display-only gamma below 1 brightens low-amplitude neighboring taxels.",
+    )
     parser.add_argument("--fps", type=float, default=60.0)
     parser.add_argument("--heatmap-interval", type=float, default=0.05)
     parser.add_argument("--heatmap-cell-size", type=int, default=32)
@@ -321,6 +332,7 @@ def _create_heatmap_window(
     patch_filter: str,
     force_max: float,
     cell_size: int,
+    heatmap_gamma: float,
 ):
     import cv2
 
@@ -331,6 +343,8 @@ def _create_heatmap_window(
         "window": window,
         "patch_filter": patch_filter,
         "force_max": force_max,
+        "display_max": max(force_max, 1e-6),
+        "gamma": heatmap_gamma,
         "cell_size": max(8, int(cell_size)),
     }
 
@@ -346,9 +360,11 @@ def _heatmap_tile(
     title: str,
     force_max: float,
     cell_size: int,
+    gamma: float,
     min_width: int = 0,
 ) -> np.ndarray:
     normalized = np.clip(values / max(force_max, 1e-9), 0.0, 1.0)
+    normalized = normalized ** max(float(gamma), 1e-6)
     image = np.rint(np.flipud(normalized) * 255.0).astype(np.uint8)
     height = max(1, int(values.shape[0]) * cell_size)
     width = max(1, int(values.shape[1]) * cell_size)
@@ -416,6 +432,7 @@ def _compose_heatmap_panel(
     patch_filter: str,
     force_max: float,
     cell_size: int,
+    gamma: float,
 ) -> np.ndarray:
     if patch_filter:
         if patch_filter not in patches:
@@ -428,6 +445,7 @@ def _compose_heatmap_panel(
             title=patch_filter,
             force_max=force_max,
             cell_size=cell_size,
+            gamma=gamma,
         )
 
     if not patches:
@@ -443,6 +461,7 @@ def _compose_heatmap_panel(
             title=name,
             force_max=force_max,
             cell_size=effective_cell,
+            gamma=gamma,
         )
         for name, values in patches.items()
     ]
@@ -472,21 +491,33 @@ def _compose_heatmap_panel(
     return panel
 
 
-def _update_heatmaps(sensor, model, data, heatmap) -> None:
+def _update_heatmaps(sensor, values: np.ndarray, heatmap) -> None:
     cv2_module = heatmap["cv2"]
-    patches = sensor.read_patches(model, data)
+    patches = sensor.patches_from_values(values)
+    configured_max = float(heatmap["force_max"])
+    if configured_max > 0.0:
+        display_max = configured_max
+    else:
+        current_max = max(float(np.max(values, initial=0.0)), 1e-6)
+        display_max = max(current_max, 0.95 * float(heatmap["display_max"]))
+        heatmap["display_max"] = display_max
     panel = _compose_heatmap_panel(
         cv2_module,
         patches,
         patch_filter=heatmap["patch_filter"],
-        force_max=heatmap["force_max"],
+        force_max=display_max,
         cell_size=heatmap["cell_size"],
+        gamma=heatmap["gamma"],
     )
     cv2_module.imshow(heatmap["window"], panel)
     cv2_module.waitKey(1)
 
 
 def run_demo(args: argparse.Namespace) -> None:
+    if args.force_max < 0.0:
+        raise ValueError("--force-max must be non-negative; use 0 for auto scaling.")
+    if args.heatmap_gamma <= 0.0:
+        raise ValueError("--heatmap-gamma must be positive.")
     model, data, sensor, config = _build_model_with_probe(args)
     mujoco.mj_forward(model, data)
     taxels = _collect_taxel_sites(model, sensor, patch_filter=args.patch)
@@ -514,6 +545,7 @@ def run_demo(args: argparse.Namespace) -> None:
                 patch_filter=args.patch,
                 force_max=args.force_max,
                 cell_size=args.heatmap_cell_size,
+                heatmap_gamma=args.heatmap_gamma,
             )
         except ImportError as exc:
             print(f"OpenCV unavailable; continuing without heatmap: {exc}")
@@ -538,13 +570,18 @@ def run_demo(args: argparse.Namespace) -> None:
 
                 handle.user_scn.ngeom = 0
                 if args.show_scene_heat:
+                    scene_force_max = (
+                        args.force_max
+                        if args.force_max > 0.0
+                        else max(float(np.max(values, initial=0.0)), 1e-6)
+                    )
                     _draw_heat_taxels(
                         handle,
                         model,
                         data,
                         taxels,
                         values,
-                        force_max=args.force_max,
+                        force_max=scene_force_max,
                         radius=args.probe_radius,
                     )
                 handle.sync()
@@ -554,7 +591,7 @@ def run_demo(args: argparse.Namespace) -> None:
                     last_debug = now
 
                 if heatmap is not None and now - last_heatmap >= args.heatmap_interval:
-                    _update_heatmaps(sensor, model, data, heatmap)
+                    _update_heatmaps(sensor, values, heatmap)
                     last_heatmap = now
 
                 sleep_time = render_dt - (time.perf_counter() - loop_start)

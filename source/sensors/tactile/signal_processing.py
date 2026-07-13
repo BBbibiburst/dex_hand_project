@@ -49,6 +49,7 @@ def _gaussian_blur(values: np.ndarray, sigma: float) -> np.ndarray:
 
 
 def _neighbor_crosstalk(values: np.ndarray, amount: float) -> np.ndarray:
+    """Diffuse ``amount`` equally across the available 8-neighborhood."""
     if amount <= 0.0:
         return values.copy()
     amount = float(np.clip(amount, 0.0, 1.0))
@@ -57,16 +58,16 @@ def _neighbor_crosstalk(values: np.ndarray, amount: float) -> np.ndarray:
     neighbor_sum = np.zeros_like(values, dtype=np.float64)
     neighbor_count = np.zeros_like(values, dtype=np.float64)
 
-    if rows > 1:
-        neighbor_sum[1:, :] += values[:-1, :]
-        neighbor_count[1:, :] += 1.0
-        neighbor_sum[:-1, :] += values[1:, :]
-        neighbor_count[:-1, :] += 1.0
-    if cols > 1:
-        neighbor_sum[:, 1:] += values[:, :-1]
-        neighbor_count[:, 1:] += 1.0
-        neighbor_sum[:, :-1] += values[:, 1:]
-        neighbor_count[:, :-1] += 1.0
+    for row_offset in (-1, 0, 1):
+        for col_offset in (-1, 0, 1):
+            if row_offset == 0 and col_offset == 0:
+                continue
+            target_rows = slice(max(0, row_offset), rows + min(0, row_offset))
+            target_cols = slice(max(0, col_offset), cols + min(0, col_offset))
+            source_rows = slice(max(0, -row_offset), rows - max(0, row_offset))
+            source_cols = slice(max(0, -col_offset), cols - max(0, col_offset))
+            neighbor_sum[target_rows, target_cols] += values[source_rows, source_cols]
+            neighbor_count[target_rows, target_cols] += 1.0
 
     valid = neighbor_count > 0.0
     result[valid] += amount * neighbor_sum[valid] / neighbor_count[valid]
@@ -193,6 +194,7 @@ class TactileSignalProcessor:
             "nonlinear_exponent": cfg.nonlinear_exponent,
             "lowpass_alpha": cfg.lowpass_alpha,
             "crosstalk": cfg.crosstalk,
+            "crosstalk_neighbors": 8,
             "gaussian_sigma": cfg.gaussian_sigma,
             "noise_std": cfg.noise_std,
             "normalize": cfg.normalize,
