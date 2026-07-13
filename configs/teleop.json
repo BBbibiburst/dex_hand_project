@@ -1,0 +1,32 @@
+{
+  "glove_mac": "20:19:08:21:31:03",
+  "glove_pin": "1234",
+  "glove_serial_port": null,
+  "glove_baudrate": 9600,
+  "glove_channel": 1,
+  "glove_calibration_seconds": 3.0,
+  "glove_calibration": {
+    "channel_order": [
+      "thumb",
+      "index",
+      "middle",
+      "ring",
+      "pinky"
+    ],
+    "open_minimum": [
+      248.0,
+      330.0,
+      321.0,
+      330.0,
+      254.0
+    ],
+    "fist_maximum": [
+      256.0,
+      346.0,
+      336.0,
+      354.0,
+      266.0
+    ],
+    "validated_at": "2026-07-13T20:46:38+08:00"
+  }
+}

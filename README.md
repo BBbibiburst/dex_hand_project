@@ -77,6 +77,25 @@ Viewer 操作：
 
 经典蓝牙手套与 Vive OpenVR 已接入：
 
+首次测试手套时，建议先运行不依赖 MuJoCo、Vive 和机械臂的独立诊断：
+
+```powershell
+python -m source.demos.bluetooth_glove_test
+```
+
+程序会引导完成系统配对确认、握拳/张手校准，只采集一次全张手基线，再把拇指、食指、
+中指、无名指、小指和完整握拳拆成六个确认姿势逐项测试，输出每项的目标通道变化、
+其他通道变化与接收频率。
+最后两路均为同一个拇指传感器，这是五维手套映射到
+Dex Hand 六维动作的预期行为。配对 PIN 为 `1234`。程序默认使用实机验证过的
+PyBluez RFCOMM，并在退出时执行 `shutdown` 和 `close`；Windows COM 自动发现仍可作为
+备用，因此重新配对导致 COM 号改变也无需修改配置。默认 MAC、PIN、传输方式、波特率和校准时长配置在
+[configs/teleop.json](configs/teleop.json)，命令行参数仍可临时覆盖。
+
+独立测试全部通过后，会把五路原始张手/握拳校准边界自动写回同一配置。正式遥操作会
+直接加载它们，不再重复要求握拳和张手；需要重新校准时再次运行测试即可，临时测试但
+不覆盖配置可传入 `--no-save`。
+
 ```powershell
 pip install openvr
 pip install git+https://github.com/pybluez/pybluez.git#egg=pybluez

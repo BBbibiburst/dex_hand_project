@@ -16,6 +16,7 @@ from mujoco import viewer
 
 from source.demos.common import add_robot_config_args
 from source.envs.manipulation import make_manipulation_env, registered_tasks
+from source.teleop.config import load_teleop_config
 from source.teleop.devices import (
     MockStretchGlove,
     MockViveTracker,
@@ -31,6 +32,8 @@ from source.viz.overlays import clear_markers, draw_label
 
 
 def parse_args():
+    teleop_config = load_teleop_config()
+    glove_calibration = dict(teleop_config.get("glove_calibration") or {})
     parser = argparse.ArgumentParser(description="Collect teleoperated LeRobot demonstrations.")
     parser.add_argument("--task", choices=registered_tasks(), default="lift")
     parser.add_argument("--repo-id", default="local/dex-hand-demonstrations")
@@ -49,9 +52,32 @@ def parse_args():
         help="Input source: hardware uses device APIs; sine/mock are test inputs.",
     )
     parser.add_argument("--glove-inverted", action="store_true")
-    parser.add_argument("--glove-mac", help="Classic-Bluetooth glove MAC address.")
-    parser.add_argument("--glove-channel", type=int, default=1, help="Glove RFCOMM channel.")
-    parser.add_argument("--glove-calibration-seconds", type=float, default=3.0)
+    parser.add_argument(
+        "--glove-mac",
+        default=teleop_config.get("glove_mac"),
+        help="Classic-Bluetooth glove MAC address (default: configs/teleop.json).",
+    )
+    parser.add_argument(
+        "--glove-channel",
+        type=int,
+        default=int(teleop_config.get("glove_channel", 1)),
+        help="Glove RFCOMM channel.",
+    )
+    parser.add_argument(
+        "--glove-serial-port",
+        default=teleop_config.get("glove_serial_port"),
+        help="Windows HC-06 outgoing COM port; preferred over direct RFCOMM.",
+    )
+    parser.add_argument(
+        "--glove-baudrate",
+        type=int,
+        default=int(teleop_config.get("glove_baudrate", 9600)),
+    )
+    parser.add_argument(
+        "--glove-calibration-seconds",
+        type=float,
+        default=float(teleop_config.get("glove_calibration_seconds", 3.0)),
+    )
     parser.add_argument("--vive-device-index", type=int)
     parser.add_argument("--vive-serial", help="Select a Vive tracker by serial number.")
     parser.add_argument(
@@ -61,6 +87,10 @@ def parse_args():
         "--no-video", action="store_true", help="Store images instead of encoded MP4."
     )
     add_robot_config_args(parser)
+    parser.set_defaults(
+        glove_calibration_minimum=glove_calibration.get("open_minimum"),
+        glove_calibration_maximum=glove_calibration.get("fist_maximum"),
+    )
     return parser.parse_args()
 
 
@@ -96,7 +126,11 @@ def run(args) -> None:
         glove = StretchGloveApiDevice(
             args.glove_mac,
             channel=args.glove_channel,
+            serial_port=args.glove_serial_port,
+            baudrate=args.glove_baudrate,
             calibration_seconds=args.glove_calibration_seconds,
+            calibration_minimum=args.glove_calibration_minimum,
+            calibration_maximum=args.glove_calibration_maximum,
         )
         vive = ViveApiTracker(device_index=args.vive_device_index, serial=args.vive_serial)
     elif args.device == "sine":

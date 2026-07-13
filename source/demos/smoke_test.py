@@ -147,6 +147,7 @@ def _check_tactile_diffusion() -> str:
 
 def _check_imports() -> str:
     modules = (
+        "source.demos.bluetooth_glove_test",
         "source.demos.robot_preview_demo",
         "source.demos.random_demo",
         "source.demos.ik_sine_demo",

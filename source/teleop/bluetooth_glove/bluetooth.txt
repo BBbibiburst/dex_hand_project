@@ -8,9 +8,17 @@ https://blog.csdn.net/u013564470/article/details/133274134
 
 手套最右侧按键长按开关机，中间的按键按下后开始传输数据，左边的按键暂时用不到，推荐先在电脑系统里配对设备，再在代码里连接，设备名称应该是HC-06
 
-项目正式驱动位于 source/teleop/devices.py，不在源码中硬编码 MAC 地址。运行示例：
+Windows 首次配对 PIN：1234。PIN 只在系统蓝牙配对时输入，RFCOMM 测试和采集命令不需要再次输入。
 
-python -m source.demos.collect_teleop_lerobot --device hardware --glove-mac 20:20:11:11:16:22 --dry-run
+Windows 会为 HC-06 分配出站串口，重新配对后 COM 号可能改变（程序可以按 MAC 自动发现）。但当前手套已实机验证 PyBluez RFCOMM channel 1 可以连接，且直接 socket 的 shutdown/close 比 Windows 虚拟 COM 更适合反复运行，所以它是默认传输方式。需要测试串口备用路径时可传 --serial-port auto。“已配对”只代表系统保存了设备，不代表远端已经接受 SPP 连接。
+
+项目正式驱动位于 source/teleop/devices.py，默认 MAC 地址位于 configs/teleop.json。运行示例：
+
+python -m source.demos.bluetooth_glove_test
+
+正式采集时也会读取同一配置：
+
+python -m source.demos.collect_teleop_lerobot --device hardware --dry-run
 
 启动时程序会提示握拳、开掌，随后把5维拉伸值归一化并映射到 Dex Hand 的6个执行器。
 当前遥操作不使用手套的6维 IMU；机械臂末端位姿由 Vive Tracker 提供。
