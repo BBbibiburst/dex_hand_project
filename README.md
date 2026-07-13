@@ -22,6 +22,25 @@ pip install mujoco gymnasium numpy scipy torch torchvision "lerobot>=0.4"
 
 当前机器人由 [configs/current_robot.json](configs/current_robot.json) 选择。
 
+## 自动无渲染测试
+
+每次修改代码后运行一个命令即可检查核心仿真路径：
+
+```powershell
+python -m source.demos.smoke_test
+```
+
+测试不会打开 MuJoCo Viewer、OpenCV 或 Matplotlib 窗口，默认检查 Dex Hand 与 Pika
+模型编译、position/IK 控制、触觉观测与曲面点位、八邻域信号扩散，以及所有已注册操作任务的
+reset/step。任一项失败会打印 traceback 并返回非零退出码。它不测试相机、蓝牙手套、Vive、
+真实机械臂、数据集或训练流程；这些路径仍需相应硬件或数据做集成测试。
+
+开发时只想快速检查机器人与触觉，不编译任务场景：
+
+```powershell
+python -m source.demos.smoke_test --skip-tasks
+```
+
 ## 查看任务
 
 ```powershell

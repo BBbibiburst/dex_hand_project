@@ -55,23 +55,39 @@ def _neighbor_crosstalk(values: np.ndarray, amount: float) -> np.ndarray:
     amount = float(np.clip(amount, 0.0, 1.0))
     rows, cols = values.shape
     result = (1.0 - amount) * values
-    neighbor_sum = np.zeros_like(values, dtype=np.float64)
-    neighbor_count = np.zeros_like(values, dtype=np.float64)
+    received = np.zeros_like(values, dtype=np.float64)
 
-    for row_offset in (-1, 0, 1):
-        for col_offset in (-1, 0, 1):
-            if row_offset == 0 and col_offset == 0:
-                continue
-            target_rows = slice(max(0, row_offset), rows + min(0, row_offset))
-            target_cols = slice(max(0, col_offset), cols + min(0, col_offset))
-            source_rows = slice(max(0, -row_offset), rows - max(0, row_offset))
-            source_cols = slice(max(0, -col_offset), cols - max(0, col_offset))
-            neighbor_sum[target_rows, target_cols] += values[source_rows, source_cols]
-            neighbor_count[target_rows, target_cols] += 1.0
+    # Normalize at the source, not the destination.  A taxel therefore sends
+    # an equal share to each of its available neighbors; in the interior this
+    # is exactly amount / 8 for all eight surrounding cells.
+    source_neighbor_count = np.zeros((rows, cols), dtype=np.float64)
+    offsets = tuple(
+        (row_offset, col_offset)
+        for row_offset in (-1, 0, 1)
+        for col_offset in (-1, 0, 1)
+        if (row_offset, col_offset) != (0, 0)
+    )
+    for row_offset, col_offset in offsets:
+        source_rows = slice(max(0, -row_offset), rows - max(0, row_offset))
+        source_cols = slice(max(0, -col_offset), cols - max(0, col_offset))
+        source_neighbor_count[source_rows, source_cols] += 1.0
 
-    valid = neighbor_count > 0.0
-    result[valid] += amount * neighbor_sum[valid] / neighbor_count[valid]
-    result[~valid] = values[~valid]
+    for row_offset, col_offset in offsets:
+        target_rows = slice(max(0, row_offset), rows + min(0, row_offset))
+        target_cols = slice(max(0, col_offset), cols + min(0, col_offset))
+        source_rows = slice(max(0, -row_offset), rows - max(0, row_offset))
+        source_cols = slice(max(0, -col_offset), cols - max(0, col_offset))
+        source_values = values[source_rows, source_cols]
+        counts = source_neighbor_count[source_rows, source_cols]
+        received[target_rows, target_cols] += np.divide(
+            source_values,
+            counts,
+            out=np.zeros_like(source_values, dtype=np.float64),
+            where=counts > 0.0,
+        )
+
+    result += amount * received
+    result[source_neighbor_count == 0.0] = values[source_neighbor_count == 0.0]
     return result
 
 
