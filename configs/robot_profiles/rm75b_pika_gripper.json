@@ -9,7 +9,11 @@
   "enable_task_objects": false,
   "include_hand_action": true,
   "normalized_position": false,
-  "enable_tactile_sensors": false,
+  "enable_tactile_sensors": true,
+  "tactile_backend": "simple_box",
+  "tactile_options": {
+    "surface_embed": 0.0002
+  },
   "hand_prefix": null,
   "ee_site_name": null,
   "stats_interval": 0.5,

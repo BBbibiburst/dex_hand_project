@@ -16,8 +16,8 @@ import mujoco
 import numpy as np
 from gymnasium import spaces
 
-from source.assets import DEX_HAND_DIR
-from source.sensors.base import TactileSensorBase
+from source.assets import DEX_HAND_MESH_DIR
+from source.sensors.base import TactileSensorBase, TactileSiteRef, TactileSurfacePlotData
 from source.sensors.tactile.signal_processing import (
     TactileSignalProcessor,
     TactileSignalProcessorConfig,
@@ -185,7 +185,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         self,
         *,
         patch_layout: Sequence[tuple[str, int, int, str]] = DEX_HAND_PATCH_LAYOUT,
-        mesh_dir=DEX_HAND_DIR,
+        mesh_dir=DEX_HAND_MESH_DIR,
         image_force_max: float = 5.0,
         signal_processor: Optional[Mapping[str, Any]] = None,
     ) -> None:
@@ -226,6 +226,63 @@ class DexHandTactileSensorBase(TactileSensorBase):
 
     def set_name_prefix(self, prefix: str) -> None:
         self.name_prefix = prefix
+
+    def visualization_sites(self) -> tuple[TactileSiteRef, ...]:
+        return tuple(
+            TactileSiteRef(
+                site_name(patch.name, row, col),
+                patch.name,
+                patch.start + row * patch.cols + col,
+            )
+            for patch in self.patches
+            for row in range(patch.rows)
+            for col in range(patch.cols)
+        )
+
+    def surface_patch_names(self) -> tuple[str, ...]:
+        return tuple(patch.name for patch in self.patches)
+
+    def surface_plot_data(self, patch_name: str) -> TactileSurfacePlotData:
+        from source.sensors.tactile.surface_fitting import (
+            GRID_POINT_FUNCTIONS,
+            finger_segment_fit_surface,
+            patch_fingertip_ellipsoid_plot_data,
+            patch_mesh_uv_plot_data,
+            patch_plot_data,
+        )
+
+        try:
+            patch = next(item for item in self.patches if item.name == patch_name)
+        except StopIteration as exc:
+            raise ValueError(
+                f"Unknown tactile patch {patch_name!r}; known: {list(self.surface_patch_names())}."
+            ) from exc
+        stl_path = self.mesh_dir / f"{patch.name}.STL"
+        if patch.kind == "mesh-uv":
+            data = patch_mesh_uv_plot_data(stl_path, patch.name, patch.rows, patch.cols)
+        elif patch.kind == "fingertip-ellipsoid":
+            data = patch_fingertip_ellipsoid_plot_data(
+                stl_path, patch.name, patch.rows, patch.cols
+            )
+        else:
+            data = patch_plot_data(
+                stl_path,
+                patch.name,
+                patch.rows,
+                patch.cols,
+                GRID_POINT_FUNCTIONS[patch.kind],
+                finger_segment_fit_surface,
+            )
+        return TactileSurfacePlotData(
+            patch.name,
+            patch.rows,
+            patch.cols,
+            patch.kind,
+            data.samples,
+            data.triangles,
+            tuple(data.fit_surfaces),
+            f"{patch.name}: {patch.rows} x {patch.cols} ({patch.kind})",
+        )
 
     def augment_spec(self, hand_spec: mujoco.MjSpec) -> None:
         body_by_geom = _body_by_geom_name(hand_spec)

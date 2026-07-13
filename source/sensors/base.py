@@ -23,11 +23,35 @@ implementation. The framework does not know and does not need to know.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Any, Dict, Mapping, Optional, Sequence
 
 import mujoco
 import numpy as np
 from gymnasium import spaces
+
+
+@dataclass(frozen=True)
+class TactileSiteRef:
+    """One generated site exposed to device-independent visualization tools."""
+
+    name: str
+    patch: str
+    flat_index: int
+
+
+@dataclass(frozen=True)
+class TactileSurfacePlotData:
+    """Backend-provided geometry for the generic surface-sampling demo."""
+
+    name: str
+    rows: int
+    cols: int
+    kind: str
+    samples: np.ndarray
+    triangles: np.ndarray
+    fit_surfaces: tuple[np.ndarray, ...] = ()
+    title: str = ""
 
 
 class TactileSensorBase(ABC):
@@ -46,6 +70,30 @@ class TactileSensorBase(ABC):
         store the prefix here. Default: no-op.
         """
         _ = prefix
+
+    def visualization_sites(self) -> Sequence[TactileSiteRef]:
+        """Return generated sites that generic visualization tools may draw.
+
+        Backends that do not represent sensing with MuJoCo sites can keep the
+        default empty result and remain fully valid tactile implementations.
+        """
+        return ()
+
+    def read_patches(
+        self, model: mujoco.MjModel, data: mujoco.MjData
+    ) -> Mapping[str, np.ndarray]:
+        """Return named 2-D tactile arrays for diagnostics and visualization."""
+        raise NotImplementedError(f"{type(self).__name__} does not expose tactile patches.")
+
+    def surface_patch_names(self) -> Sequence[str]:
+        """Return patches supported by the optional offline surface demo."""
+        return ()
+
+    def surface_plot_data(self, patch_name: str) -> TactileSurfacePlotData:
+        """Return backend-specific surface geometry through a common data model."""
+        raise NotImplementedError(
+            f"{type(self).__name__} does not provide surface plot data for {patch_name!r}."
+        )
 
     @property
     @abstractmethod

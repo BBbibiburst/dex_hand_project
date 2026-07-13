@@ -1298,10 +1298,11 @@ def plot_tactile_sampling_grids(
 ) -> None:
     """Compatibility wrapper for the offline visualization demo."""
     from source.demos.tactile_surface_fitting import plot_tactile_sampling_grids as plot
+    from source.sensors.tactile.dex_hand import SimpleBoxTactileSensor
 
     plot(
+        SimpleBoxTactileSensor(mesh_dir=mesh_dir),
         patches=patches,
-        mesh_dir=mesh_dir,
         point_size=point_size,
         surface_alpha=surface_alpha,
         save=save,

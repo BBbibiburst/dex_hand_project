@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Interactive probe demo for dex-hand tactile taxel matrices.
+"""Interactive probe demo for any site-based tactile sensor backend.
 
 The demo builds the configured robot, injects a small free probe sphere before
 model compilation, and shows tactile readings both in the MuJoCo viewer and as
@@ -21,7 +21,6 @@ from mujoco import viewer
 from source.demos.common import (
     add_robot_config_args,
     load_demo_robot_config,
-    require_hand,
 )
 from source.robots.builder import build_robot_spec
 from source.robots.config import (
@@ -29,12 +28,7 @@ from source.robots.config import (
     optional_tuple,
 )
 from source.robots.scene import add_preview_scene
-from source.sensors.tactile.dex_hand import (
-    SUPPORTED_TACTILE_BACKENDS,
-    DexHandTactileSensorBase,
-    create_dex_hand_tactile_sensor,
-    site_name,
-)
+from source.sensors.base import TactileSensorBase
 
 PROBE_BODY_NAME = "tactile_probe"
 PROBE_JOINT_NAME = "tactile_probe_freejoint"
@@ -50,11 +44,10 @@ class TaxelSite:
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Test dex-hand tactile matrices with a movable probe."
+        description="Test tactile matrices with a movable probe."
     )
     parser.add_argument(
         "--backend",
-        choices=SUPPORTED_TACTILE_BACKENDS,
         default=None,
         help="Tactile backend. Defaults to tactile_backend in the robot config.",
     )
@@ -62,7 +55,7 @@ def _parse_args() -> argparse.Namespace:
         "--patch",
         type=str,
         default="",
-        help="Only display/test one patch, e.g. skin_0_0_p, skin_4_2_p, skin_palm_p.",
+        help="Only display/test one patch exposed by the configured tactile backend.",
     )
     parser.add_argument("--probe-radius", type=float, default=0.006)
     parser.add_argument("--no-probe-gravity-comp", action="store_true")
@@ -129,18 +122,19 @@ def _add_probe_to_spec(
 
 def _build_model_with_probe(
     args: argparse.Namespace,
-) -> tuple[mujoco.MjModel, mujoco.MjData, DexHandTactileSensorBase, dict[str, Any]]:
+) -> tuple[mujoco.MjModel, mujoco.MjData, TactileSensorBase, dict[str, Any]]:
     config = load_demo_robot_config(args)
-    require_hand(config, "dex_hand", demo_name="tactile_probe_demo")
     config["enable_tactile_sensors"] = True
     if args.backend is not None:
         config["tactile_backend"] = args.backend
 
-    tactile_sensor = create_dex_hand_tactile_sensor(
+    arm_descriptor, hand_descriptor, base_descriptor = descriptors_from_robot_config(config)
+    if hand_descriptor.tactile_sensor_factory is None:
+        raise ValueError(f"End effector {hand_descriptor.name!r} has no tactile backend.")
+    tactile_sensor = hand_descriptor.tactile_sensor_factory(
         str(config.get("tactile_backend", "simple_box")),
         **dict(config.get("tactile_options") or {}),
     )
-    arm_descriptor, hand_descriptor, base_descriptor = descriptors_from_robot_config(config)
 
     spec = build_robot_spec(
         arm_descriptor=arm_descriptor,
@@ -172,23 +166,20 @@ def _build_model_with_probe(
 
 def _collect_taxel_sites(
     model: mujoco.MjModel,
-    sensor: DexHandTactileSensorBase,
+    sensor: TactileSensorBase,
     *,
     patch_filter: str,
 ) -> list[TaxelSite]:
     taxels: list[TaxelSite] = []
-    for patch in sensor.patches:
-        if patch_filter and patch.name != patch_filter:
+    refs = sensor.visualization_sites()
+    for ref in refs:
+        if patch_filter and ref.patch != patch_filter:
             continue
-        flat_index = patch.start
-        for row in range(patch.rows):
-            for col in range(patch.cols):
-                full_name = sensor.name_prefix + site_name(patch.name, row, col)
-                site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, full_name)
-                if site_id < 0:
-                    raise ValueError(f"Missing tactile site {full_name!r}.")
-                taxels.append(TaxelSite(site_id, flat_index, patch.name))
-                flat_index += 1
+        full_name = getattr(sensor, "name_prefix", "") + ref.name
+        site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, full_name)
+        if site_id < 0:
+            raise ValueError(f"Missing tactile site {full_name!r}.")
+        taxels.append(TaxelSite(site_id, ref.flat_index, ref.patch))
     if not taxels:
         raise ValueError(f"No tactile taxels matched patch filter {patch_filter!r}.")
     return taxels
@@ -205,9 +196,22 @@ def _initial_probe_position(
     if explicit_pos is not None:
         return np.asarray(explicit_pos, dtype=np.float64)
 
-    positions = np.asarray([data.site_xpos[item.site_id] for item in taxels], dtype=np.float64)
+    first_patch = taxels[0].patch_name
+    placement_taxels = [item for item in taxels if item.patch_name == first_patch]
+    positions = np.asarray(
+        [data.site_xpos[item.site_id] for item in placement_taxels], dtype=np.float64
+    )
     center = positions.mean(axis=0)
-    return center + np.asarray([0.0, 0.0, max(5.0 * radius, 0.035)], dtype=np.float64)
+    normals = np.asarray(
+        [data.site_xmat[item.site_id].reshape(3, 3)[:, 2] for item in placement_taxels]
+    )
+    normal = normals.mean(axis=0)
+    norm = float(np.linalg.norm(normal))
+    if norm < 1e-8:
+        normal = normals[0]
+    else:
+        normal /= norm
+    return center + max(5.0 * radius, 0.035) * normal
 
 
 def _set_probe_pose(
@@ -243,10 +247,12 @@ def _debug_tactile_contacts(
     model: mujoco.MjModel,
     data: mujoco.MjData,
     values: np.ndarray,
+    taxels: list[TaxelSite],
 ) -> str:
     probe_geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, PROBE_GEOM_NAME)
     probe_contacts = 0
-    skin_contacts = 0
+    tactile_body_contacts = 0
+    tactile_body_ids = {int(model.site_bodyid[item.site_id]) for item in taxels}
     min_dist = np.inf
     other_names: list[str] = []
 
@@ -258,8 +264,8 @@ def _debug_tactile_contacts(
         other_id = contact.geom2 if contact.geom1 == probe_geom_id else contact.geom1
         other_name = _geom_name(model, int(other_id))
         other_names.append(other_name)
-        if "skin_" in other_name:
-            skin_contacts += 1
+        if int(model.geom_bodyid[other_id]) in tactile_body_ids:
+            tactile_body_contacts += 1
         min_dist = min(min_dist, float(contact.dist))
 
     min_text = "none" if not np.isfinite(min_dist) else f"{min_dist:.6g}"
@@ -267,7 +273,7 @@ def _debug_tactile_contacts(
     return (
         f"max_tactile={float(np.max(values)):.6g} "
         f"contacts={data.ncon} probe_contacts={probe_contacts} "
-        f"skin_contacts={skin_contacts} "
+        f"tactile_body_contacts={tactile_body_contacts} "
         f"min_probe_dist={min_text} other=[{sample_names}]"
     )
 
@@ -310,7 +316,7 @@ def _draw_heat_taxels(
 
 
 def _create_heatmap_window(
-    sensor: DexHandTactileSensorBase,
+    sensor: TactileSensorBase,
     *,
     patch_filter: str,
     force_max: float,
@@ -318,7 +324,7 @@ def _create_heatmap_window(
 ):
     import cv2
 
-    window = "Dex-hand tactile heatmap"
+    window = f"{type(sensor).__name__} tactile heatmap"
     cv2.namedWindow(window, cv2.WINDOW_NORMAL)
     return {
         "cv2": cv2,
@@ -412,6 +418,10 @@ def _compose_heatmap_panel(
     cell_size: int,
 ) -> np.ndarray:
     if patch_filter:
+        if patch_filter not in patches:
+            raise ValueError(
+                f"Unknown tactile patch {patch_filter!r}; available: {sorted(patches)}."
+            )
         return _heatmap_tile(
             cv2_module,
             patches[patch_filter],
@@ -420,78 +430,46 @@ def _compose_heatmap_panel(
             cell_size=cell_size,
         )
 
-    gap = 10
-    title_height = 34
-    segment_tile_width = 8 * cell_size
-    rows: list[np.ndarray] = []
-    for segment_id in range(3):
-        row_tiles = []
-        for finger_id in range(5):
-            patch_name = f"skin_{finger_id}_{segment_id}_p"
-            values = patches.get(patch_name)
-            if values is None:
-                values = np.zeros((1, 1), dtype=np.float32)
-            row_tiles.append(
-                _heatmap_tile(
-                    cv2_module,
-                    values,
-                    title=f"F{finger_id} S{segment_id}",
-                    force_max=force_max,
-                    cell_size=cell_size,
-                    min_width=segment_tile_width,
-                )
-            )
-        row_height = max(tile.shape[0] for tile in row_tiles)
-        padded = [
-            _pad_to_shape(cv2_module, tile, height=row_height, width=tile.shape[1])
-            for tile in row_tiles
-        ]
-        separator = np.full((row_height, gap, 3), 24, dtype=np.uint8)
-        row = padded[0]
-        for tile in padded[1:]:
-            row = np.hstack([row, separator, tile])
-        rows.append(row)
+    if not patches:
+        return np.full((64, 320, 3), 24, dtype=np.uint8)
 
-    body_width = max(row.shape[1] for row in rows)
-    rows = [_pad_to_shape(cv2_module, row, height=row.shape[0], width=body_width) for row in rows]
-    v_separator = np.full((gap, body_width, 3), 24, dtype=np.uint8)
-    finger_panel = rows[0]
-    for row in rows[1:]:
-        finger_panel = np.vstack([finger_panel, v_separator, row])
-
-    palm = patches.get("skin_palm_p")
-    if palm is not None:
-        palm_tile = _heatmap_tile(
+    # Keep dense films usable without making sparse arrays microscopic.
+    largest_dimension = max(max(values.shape) for values in patches.values())
+    effective_cell = max(2, min(cell_size, 720 // max(1, largest_dimension)))
+    tiles = [
+        _heatmap_tile(
             cv2_module,
-            palm,
-            title="Palm",
+            values,
+            title=name,
             force_max=force_max,
-            cell_size=max(16, int(cell_size * 0.7)),
+            cell_size=effective_cell,
         )
-        palm_tile = _pad_to_shape(
-            cv2_module,
-            palm_tile,
-            height=finger_panel.shape[0],
-            width=palm_tile.shape[1],
-        )
-        panel = np.hstack(
-            [finger_panel, np.full((finger_panel.shape[0], gap, 3), 24, dtype=np.uint8), palm_tile]
-        )
-    else:
-        panel = finger_panel
-
-    title = np.full((title_height, panel.shape[1], 3), 18, dtype=np.uint8)
-    cv2_module.putText(
-        title,
-        "Dex-hand tactile heatmap: rows=skin_*_0/1/2_p, columns=fingers 0..4, right=palm",
-        (8, 23),
-        cv2_module.FONT_HERSHEY_SIMPLEX,
-        0.55,
-        (235, 235, 235),
-        1,
-        cv2_module.LINE_AA,
-    )
-    return np.vstack([title, panel])
+        for name, values in patches.items()
+    ]
+    columns = max(1, int(np.ceil(np.sqrt(len(tiles)))))
+    rows = int(np.ceil(len(tiles) / columns))
+    tile_height = max(tile.shape[0] for tile in tiles)
+    tile_width = max(tile.shape[1] for tile in tiles)
+    gap = 10
+    blank = np.full((tile_height, tile_width, 3), 24, dtype=np.uint8)
+    padded = [
+        _pad_to_shape(cv2_module, tile, height=tile_height, width=tile_width)
+        for tile in tiles
+    ]
+    padded.extend(blank.copy() for _ in range(rows * columns - len(padded)))
+    row_images = []
+    separator = np.full((tile_height, gap, 3), 24, dtype=np.uint8)
+    for row_index in range(rows):
+        row_tiles = padded[row_index * columns : (row_index + 1) * columns]
+        row_image = row_tiles[0]
+        for tile in row_tiles[1:]:
+            row_image = np.hstack((row_image, separator, tile))
+        row_images.append(row_image)
+    panel = row_images[0]
+    horizontal = np.full((gap, panel.shape[1], 3), 24, dtype=np.uint8)
+    for row_image in row_images[1:]:
+        panel = np.vstack((panel, horizontal, row_image))
+    return panel
 
 
 def _update_heatmaps(sensor, model, data, heatmap) -> None:
@@ -555,7 +533,7 @@ def run_demo(args: argparse.Namespace) -> None:
             while handle.is_running():
                 loop_start = time.perf_counter()
                 mujoco.mj_step(model, data)
-                values = sensor.read(model, data)
+                values = np.asarray(sensor.read(model, data), dtype=np.float32).reshape(-1)
                 now = time.perf_counter()
 
                 handle.user_scn.ngeom = 0
@@ -572,7 +550,7 @@ def run_demo(args: argparse.Namespace) -> None:
                 handle.sync()
 
                 if args.debug_tactile and now - last_debug >= args.debug_interval:
-                    print(_debug_tactile_contacts(model, data, values))
+                    print(_debug_tactile_contacts(model, data, values, taxels))
                     last_debug = now
 
                 if heatmap is not None and now - last_heatmap >= args.heatmap_interval:

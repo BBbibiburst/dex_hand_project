@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from source.sensors.base import TactileSensorBase
 
 
-TactileSensorFactory = Callable[[], "TactileSensorBase"]
+TactileSensorFactory = Callable[..., "TactileSensorBase"]
 ControllerFactory = Callable[..., object]
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Preview generated dex-hand tactile taxel sites in the MuJoCo viewer.
+"""Preview generated end-effector tactile taxel sites in the MuJoCo viewer.
 
 The preview reads each compiled site's actual geometry, size, position, and
 orientation. Therefore box-shaped tactile sites are displayed as real boxes
@@ -17,23 +17,16 @@ from mujoco import viewer
 from source.demos.common import (
     add_robot_config_args,
     load_demo_robot_config,
-    require_hand,
 )
 from source.robots.builder import build_robot_model_from_config
 from source.robots.registry import get_hand
-from source.sensors.tactile.dex_hand import (
-    SUPPORTED_TACTILE_BACKENDS,
-    DexHandTactileSensorBase,
-    create_dex_hand_tactile_sensor,
-    site_name,
-)
+from source.sensors.base import TactileSensorBase
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Preview dex-hand tactile taxel sites.")
+    parser = argparse.ArgumentParser(description="Preview tactile taxel sites.")
     parser.add_argument(
         "--backend",
-        choices=SUPPORTED_TACTILE_BACKENDS,
         default=None,
         help="Tactile backend. Defaults to tactile_backend in the robot config.",
     )
@@ -41,7 +34,7 @@ def _parse_args() -> argparse.Namespace:
         "--patch",
         type=str,
         default="",
-        help=("Only draw one skin patch, for example skin_0_0_p, skin_4_2_p, or skin_palm_p."),
+        help="Only draw one patch exposed by the configured tactile backend.",
     )
     parser.add_argument(
         "--scale",
@@ -84,23 +77,18 @@ def _patch_color(
     mesh_name: str,
     alpha: float,
 ) -> tuple[float, float, float, float]:
-    """Return a distinct color for each skin patch kind."""
+    """Return a stable distinct color without knowing backend patch semantics."""
+    seed = sum((index + 1) * ord(character) for index, character in enumerate(mesh_name))
+    hue = (seed * 0.618033988749895) % 1.0
+    import colorsys
 
-    if mesh_name == "skin_palm_p":
-        return (1.0, 0.2, 0.1, alpha)
-
-    if mesh_name.endswith("_0_p"):
-        return (0.0, 0.9, 1.0, alpha)
-
-    if mesh_name.endswith("_1_p"):
-        return (0.1, 1.0, 0.25, alpha)
-
-    return (1.0, 0.85, 0.05, alpha)
+    red, green, blue = colorsys.hsv_to_rgb(hue, 0.78, 1.0)
+    return (red, green, blue, alpha)
 
 
 def _collect_sites(
     model: mujoco.MjModel,
-    sensor: DexHandTactileSensorBase,
+    sensor: TactileSensorBase,
     *,
     prefix: str,
     patch_filter: str,
@@ -109,24 +97,28 @@ def _collect_sites(
 
     sites: list[tuple[int, str]] = []
 
-    for mesh_name, rows, cols, _kind in sensor.patch_layout:
-        if patch_filter and mesh_name != patch_filter:
+    refs = sensor.visualization_sites()
+    if not refs:
+        raise ValueError(
+            f"Tactile backend {type(sensor).__name__!r} does not expose MuJoCo sites to preview."
+        )
+
+    for ref in refs:
+        if patch_filter and ref.patch != patch_filter:
             continue
 
-        for row in range(rows):
-            for col in range(cols):
-                name = prefix + site_name(mesh_name, row, col)
+        name = prefix + ref.name
 
-                site_id = mujoco.mj_name2id(
-                    model,
-                    mujoco.mjtObj.mjOBJ_SITE,
-                    name,
-                )
+        site_id = mujoco.mj_name2id(
+            model,
+            mujoco.mjtObj.mjOBJ_SITE,
+            name,
+        )
 
-                if site_id < 0:
-                    raise ValueError(f"Missing tactile site {name!r}.")
+        if site_id < 0:
+            raise ValueError(f"Missing tactile site {name!r}.")
 
-                sites.append((site_id, mesh_name))
+        sites.append((site_id, ref.patch))
 
     return sites
 
@@ -337,13 +329,13 @@ def main() -> None:
         raise ValueError(f"--normal-length must be non-negative, got {args.normal_length}.")
 
     config = load_demo_robot_config(args)
-    require_hand(config, "dex_hand", demo_name="tactile_preview")
-
-    hand_name = str(config.get("hand_name", "dex_hand"))
+    hand_name = str(config["hand_name"])
     backend = args.backend or str(config.get("tactile_backend", "simple_box"))
     tactile_options = dict(config.get("tactile_options") or {})
-    tactile_sensor = create_dex_hand_tactile_sensor(backend, **tactile_options)
     hand_descriptor = get_hand(hand_name)
+    if hand_descriptor.tactile_sensor_factory is None:
+        raise ValueError(f"End effector {hand_name!r} does not provide tactile sensing.")
+    tactile_sensor = hand_descriptor.tactile_sensor_factory(backend, **tactile_options)
 
     hand_prefix = (
         "" if args.no_prefix else str(config.get("hand_prefix") or hand_descriptor.default_prefix)
@@ -376,7 +368,7 @@ def main() -> None:
     print(f"Backend: {tactile_sensor.backend_name}")
     print(f"Drawing {len(sites)} tactile sites.")
     print(f"Box sites: {box_count}")
-    print("Colors: proximal=cyan, middle=green, fingertip=yellow, palm=red")
+    print("Colors are assigned deterministically by patch name.")
 
     with viewer.launch_passive(model, data) as handle:
         while handle.is_running():

@@ -257,10 +257,8 @@ def build_robot_model_from_config(
     arm_descriptor, hand_descriptor, base_descriptor = descriptors_from_robot_config(config)
 
     enable_tactile = bool(config.get("enable_tactile_sensors", True))
-    if tactile_sensor is None and enable_tactile and hand_descriptor.name == "dex_hand":
-        from source.sensors.tactile.dex_hand import create_dex_hand_tactile_sensor
-
-        tactile_sensor = create_dex_hand_tactile_sensor(
+    if tactile_sensor is None and enable_tactile and hand_descriptor.tactile_sensor_factory:
+        tactile_sensor = hand_descriptor.tactile_sensor_factory(
             str(config.get("tactile_backend", "simple_box")),
             **dict(config.get("tactile_options") or {}),
         )

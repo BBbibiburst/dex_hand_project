@@ -90,14 +90,3 @@ def load_demo_robot_config(args: argparse.Namespace) -> dict[str, Any]:
         if value is not None:
             config[key] = value
     return config
-
-
-def require_hand(config: dict[str, Any], hand_name: str, *, demo_name: str) -> None:
-    """Raise a clear error if a device-specific demo is run with another hand."""
-    current = str(config.get("hand_name", "dex_hand"))
-    if current != hand_name:
-        raise ValueError(
-            f"{demo_name} is specific to {hand_name!r}, but robot config selects "
-            f"{current!r}. Use --robot-config with a {hand_name} profile or override "
-            f"--hand-name {hand_name}."
-        )
