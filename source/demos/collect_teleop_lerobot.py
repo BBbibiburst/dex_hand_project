@@ -26,6 +26,7 @@ from source.teleop.devices import (
     ViveApiTracker,
 )
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
+from source.teleop.glove_processing import read_latest_glove
 from source.teleop.mapping import TeleopMapper
 from source.teleop.ui import TeleopUIState
 from source.viz.overlays import clear_markers, draw_label
@@ -52,6 +53,8 @@ def parse_args():
         help="Input source: hardware uses device APIs; sine/mock are test inputs.",
     )
     parser.add_argument("--glove-inverted", action="store_true")
+    parser.add_argument("--glove-smoothing", type=float, default=0.70)
+    parser.add_argument("--glove-deadzone", type=float, default=0.03)
     parser.add_argument(
         "--glove-mac",
         default=teleop_config.get("glove_mac"),
@@ -159,7 +162,11 @@ def run(args) -> None:
         initial_action = env.controller.current_ik_action(env.model, env.data)
         vive.set_pose(initial_action[:3], initial_action[3:7])
         mapper = TeleopMapper(
-            env, position_scale=args.position_scale, glove_inverted=args.glove_inverted
+            env,
+            position_scale=args.position_scale,
+            glove_inverted=args.glove_inverted,
+            glove_smoothing=args.glove_smoothing,
+            glove_deadzone=args.glove_deadzone,
         )
         mapper.calibrate(read_valid_vive())
         view_handle = viewer.launch_passive(env.model, env.data, key_callback=ui.handle_key)
@@ -230,7 +237,7 @@ def run(args) -> None:
                 deadline += period
                 time.sleep(max(0.0, deadline - time.monotonic()))
                 continue
-            glove_sample = glove.read()
+            glove_sample = read_latest_glove(glove) if args.device == "hardware" else glove.read()
             action = mapper.action(vive_sample, glove_sample)
             observation, reward, terminated, truncated, info = env.step(action)
             success = bool(info.get("task_success", False))

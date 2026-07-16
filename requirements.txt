@@ -1,0 +1,25 @@
+# Core simulation and numerical stack
+numpy
+scipy
+mujoco
+gymnasium
+
+# Visualization and tactile-camera demos
+matplotlib
+opencv-python
+
+# Imitation learning and LeRobot datasets
+torch
+torchvision
+torchcodec
+lerobot>=0.4
+
+# Vive / SteamVR hardware
+openvr
+
+# Bluetooth glove (Windows COM/SPP and direct RFCOMM support)
+pyserial
+PyBluez @ git+https://github.com/pybluez/pybluez.git
+
+# Development checks used by pyproject.toml
+ruff

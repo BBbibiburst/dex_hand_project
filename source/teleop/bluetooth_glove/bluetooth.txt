@@ -14,7 +14,7 @@ Windows 会为 HC-06 分配出站串口，重新配对后 COM 号可能改变（
 
 项目正式驱动位于 source/teleop/devices.py，默认 MAC 地址位于 configs/teleop.json。运行示例：
 
-python -m source.demos.bluetooth_glove_test
+python -m source.teleop.bluetooth_glove.bluetooth_glove_test
 
 正式采集时也会读取同一配置：
 

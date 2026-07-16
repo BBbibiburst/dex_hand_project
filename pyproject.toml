@@ -1,3 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dex-hand-project"
+version = "0.1.0"
+description = "MuJoCo RM75B and dexterous-hand manipulation environments"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "mujoco",
+    "gymnasium",
+    "matplotlib",
+    "opencv-python",
+]
+
+[project.optional-dependencies]
+hardware = ["openvr", "pyserial"]
+learning = ["torch", "torchvision", "torchcodec", "lerobot>=0.4"]
+dev = ["ruff", "pytest"]
+
+[project.scripts]
+dex-smoke-test = "source.demos.smoke_test:main"
+dex-vive-test = "source.teleop.vive.vive_link_test:main"
+dex-vive-glove = "source.teleop.vive.vive_glove_hand_control:main"
+dex-collect-teleop = "source.demos.collect_teleop_lerobot:main"
+
+[tool.setuptools.packages.find]
+include = ["source*"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"

@@ -4,19 +4,33 @@ from __future__ import annotations
 
 import numpy as np
 
-from source.geometry import normalize_quat, quat_conjugate, quat_multiply
 from source.teleop.devices import GloveSample, ViveSample
+from source.teleop.glove_processing import GloveValueFilter
+from source.teleop.vive.coordinates import (
+    quaternion_to_rotation_matrix,
+    remap_pose,
+    rotation_matrix_to_quaternion_wxyz,
+)
 
 
 class TeleopMapper:
     """Relative Vive motion anchored to the robot EE pose at calibration."""
 
-    def __init__(self, env, *, position_scale=1.0, glove_inverted=False):
+    def __init__(
+        self,
+        env,
+        *,
+        position_scale=1.0,
+        glove_inverted=False,
+        glove_smoothing=0.70,
+        glove_deadzone=0.03,
+    ):
         if env.controller.control_mode != "ik":
             raise ValueError("TeleopMapper requires env control_mode='ik'.")
         self.env = env
         self.position_scale = float(position_scale)
         self.glove_inverted = glove_inverted
+        self.glove_filter = GloveValueFilter(glove_smoothing, glove_deadzone)
         self._vive_origin = None
         self._robot_origin = None
 
@@ -24,25 +38,30 @@ class TeleopMapper:
         if not vive.valid:
             raise ValueError("Cannot calibrate from an invalid Vive pose.")
         action = self.env.controller.current_ik_action(self.env.model, self.env.data)
-        self._vive_origin = (vive.position.astype(float), vive.quaternion_wxyz.astype(float))
+        vive_position, vive_rotation = remap_pose(vive.position, vive.quaternion_wxyz)
+        self._vive_origin = (vive_position, vive_rotation)
         self._robot_origin = (action[:3].astype(float), action[3:7].astype(float))
+        self.glove_filter.reset()
 
     def action(self, vive: ViveSample, glove: GloveSample) -> np.ndarray:
         if self._vive_origin is None or self._robot_origin is None:
             self.calibrate(vive)
-        vp, vq = self._vive_origin
+        vp, vive_origin_rotation = self._vive_origin
         rp, rq = self._robot_origin
-        target_pos = rp + self.position_scale * (vive.position - vp)
-        relative_q = quat_multiply(vive.quaternion_wxyz, quat_conjugate(vq))
-        target_q = quat_multiply(relative_q, rq)
-        target_q = normalize_quat(target_q)
+        vive_position, vive_rotation = remap_pose(vive.position, vive.quaternion_wxyz)
+        target_pos = rp + self.position_scale * (vive_position - vp)
+        robot_origin_rotation = quaternion_to_rotation_matrix(rq)
+        relative_rotation = vive_rotation @ vive_origin_rotation.T
+        target_q = rotation_matrix_to_quaternion_wxyz(
+            relative_rotation @ robot_origin_rotation
+        )
 
         hand = np.asarray(glove.stretch, dtype=np.float32).reshape(-1)
         if hand.shape != (6,):
             raise ValueError(f"Glove sample must have six channels, got {hand.shape}.")
-        # Device convention is 0=stretched/open and 1=flexed/closed.
-        # Controller position ranges conventionally increase towards open.
-        if not self.glove_inverted:
+        hand = self.glove_filter.update(hand)
+        # Device and dex-hand conventions both use 0=open and 1=flexed.
+        if self.glove_inverted:
             hand = 1.0 - hand
         controller = self.env.controller.hand_controller
         count = controller.action_size

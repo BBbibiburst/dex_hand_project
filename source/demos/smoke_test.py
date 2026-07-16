@@ -147,7 +147,14 @@ def _check_tactile_diffusion() -> str:
 
 def _check_imports() -> str:
     modules = (
-        "source.demos.bluetooth_glove_test",
+        "source.teleop.bluetooth_glove.bluetooth_glove_test",
+        "source.teleop.glove_processing",
+        "source.teleop.mapping",
+        "source.teleop.vive.coordinates",
+        "source.teleop.vive.hand_skeleton",
+        "source.teleop.vive.vive_link_test",
+        "source.teleop.vive.vive_glove_hand_control",
+        "source.demos.collect_teleop_lerobot",
         "source.demos.robot_preview_demo",
         "source.demos.random_demo",
         "source.demos.ik_sine_demo",

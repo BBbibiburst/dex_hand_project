@@ -80,7 +80,10 @@ Viewer 操作：
 首次测试手套时，建议先运行不依赖 MuJoCo、Vive 和机械臂的独立诊断：
 
 ```powershell
-python -m source.demos.bluetooth_glove_test
+python -m source.teleop.bluetooth_glove.bluetooth_glove_test
+
+# Vive 控制手的六维位姿，蓝牙手套控制五指弯曲
+python -m source.teleop.vive.vive_glove_hand_control
 ```
 
 程序会引导完成系统配对确认、握拳/张手校准，只采集一次全张手基线，再把拇指、食指、
