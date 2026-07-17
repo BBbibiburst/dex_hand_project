@@ -22,6 +22,28 @@ pip install mujoco gymnasium numpy scipy torch torchvision "lerobot>=0.4"
 
 当前机器人由 [configs/current_robot.json](configs/current_robot.json) 选择。
 
+### 下载 ManiSkill 物体资产
+
+项目提供一个可重复运行的资产工具：通过 ManiSkill 下载全部可用 YCB 真实扫描日常
+物体，并从 EGAD 官方资源下载完整的 7×7 评测子集（A0–G6，共 49 个），统一整理供
+抓取实验使用。脚本会校验 EGAD 的 49 个 OBJ，不会用其他模型补齐。ManiSkill 版本间
+YCB 模型目录可能是 77 或 78 个，因此最终总数以清单记录的实际数量为准，不会静默
+删除一个模型来硬凑 126。大型原始缓存和整理后的模型不会提交到 Git。
+
+```powershell
+python -m pip install --upgrade mani_skill
+python tools/download_maniskill_objects.py
+```
+
+YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
+`assets/maniskill/egad/models/`，统一对象位于 `assets/maniskill/models/`；实际选择
+分别写入 `configs/ycb_objects.lock.txt` 和 `configs/egad_objects.lock.txt`，最终来源
+和模型文件索引写入 `assets/maniskill/manifest.json`。原始压缩包统一放在
+`assets/maniskill/downloads/`。Windows 默认复制文件；Linux 可传
+`--mode symlink` 节省空间。已有原始缓存后可用 `--dry-run` 只查看固定选择、不复制或
+下载。ManiSkill 文档说明其分发资产采用 CC BY-NC 4.0，商业使用或再分发前应再次核对
+各原始数据集许可。
+
 ## 自动无渲染测试
 
 每次修改代码后运行一个命令即可检查核心仿真路径：

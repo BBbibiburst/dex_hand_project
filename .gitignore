@@ -231,6 +231,11 @@ datasets/
 recordings/
 checkpoints/
 
+# Downloaded ManiSkill assets (large and separately licensed)
+assets/maniskill/
+assets/ycb/
+assets/combined/
+
 # Local validation / interrupted recorder scratch files
 .tmp_*
 *.partial
