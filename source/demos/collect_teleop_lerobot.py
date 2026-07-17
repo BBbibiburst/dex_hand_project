@@ -329,6 +329,36 @@ def run(args) -> None:
         ) -> np.ndarray:
             renderer.update_scene(env.data, camera=args.camera)
             image = renderer.render().copy()
+            diagnostic_values = getattr(
+                env.tactile_sensor, "diagnostic_values", None
+            )
+            raw_tactile = (
+                diagnostic_values(env.model, env.data)
+                if callable(diagnostic_values)
+                else observation["tactile"]
+            )
+            grasp_contacts = 0
+            for contact_index in range(env.data.ncon):
+                contact = env.data.contact[contact_index]
+                names = (
+                    mujoco.mj_id2name(
+                        env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom1)
+                    )
+                    or "",
+                    mujoco.mj_id2name(
+                        env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom2)
+                    )
+                    or "",
+                )
+                if (
+                    any("cube" in name for name in names)
+                    and any(
+                        "gripper_left_link_collision" in name
+                        or "gripper_right_link_collision" in name
+                        for name in names
+                    )
+                ):
+                    grasp_contacts += 1
             key = dashboard.update(
                 image,
                 observation["tactile"],
@@ -341,6 +371,8 @@ def run(args) -> None:
                 message=message,
                 target_position=target_position,
                 hand_values=hand_values,
+                raw_tactile_values=raw_tactile,
+                grasp_contacts=grasp_contacts,
             )
             if key not in (-1, 255):
                 ui.handle_key(key)

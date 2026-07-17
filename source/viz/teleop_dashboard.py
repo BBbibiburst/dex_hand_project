@@ -55,6 +55,8 @@ class TeleopDashboard:
         message: str = "",
         target_position: Any = None,
         hand_values: Any = None,
+        raw_tactile_values: Any = None,
+        grasp_contacts: int = 0,
     ) -> int:
         """Draw one frame and return an ASCII key code, or -1."""
         camera = np.asarray(camera_rgb, dtype=np.uint8)
@@ -79,9 +81,19 @@ class TeleopDashboard:
 
         color = "#ff5252" if state == "REC" else "#ffd54f"
         self._status_text.set_color(color)
+        tactile_max = float(np.max(tactile, initial=0.0))
+        tactile_active = int(np.count_nonzero(tactile > 0.0))
+        raw_tactile_max = (
+            tactile_max
+            if raw_tactile_values is None
+            else float(np.max(np.asarray(raw_tactile_values), initial=0.0))
+        )
         self._status_text.set_text(
             f"{state}  |  episode {episode}/{episodes}  |  "
-            f"frames {frames}/{frame_limit}  |  success {success}"
+            f"frames {frames}/{frame_limit}  |  success {success}\n"
+            f"grasp contacts {int(grasp_contacts)}  |  tactile raw max "
+            f"{raw_tactile_max:.3g}  |  processed max {tactile_max:.3g}  "
+            f"({tactile_active} active)"
         )
         target_text = ""
         if target_position is not None:

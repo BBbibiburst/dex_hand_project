@@ -128,6 +128,7 @@ class TeleopMapper:
         # The linkage moves much more visibly in the first part of its pushrod
         # travel. Shape flexion commands so the operator gets finer control
         # near the open pose and more useful travel in the second half.
+        linear_hand = hand.copy()
         hand = hand.copy()
         hand[[0, 1, 2, 3, 5]] = np.power(
             hand[[0, 1, 2, 3, 5]], self.finger_curve_gamma
@@ -138,12 +139,13 @@ class TeleopMapper:
         count = controller.action_size
         if count == 1:
             # The Pika position actuator uses the opposite convention from
-            # glove flexion: actuator low is closed and high is open. Average
-            # the five physical fingers for stable whole-hand control; channel
-            # 4 is the duplicated thumb-rotation signal, so use thumb flexion
-            # from channel 5 exactly once.
-            whole_hand_flexion = float(np.mean(hand[[0, 1, 2, 3, 5]]))
-            normalized = np.asarray([1.0 - whole_hand_flexion], dtype=np.float32)
+            # glove flexion: actuator low is closed and high is open. Control
+            # it from the glove's thumb-flex channel (5); channel 4 is the
+            # duplicated/fixed thumb-opposition signal used only by Dex Hand.
+            thumb_flexion = float(linear_hand[5])
+            normalized = np.asarray([1.0 - thumb_flexion], dtype=np.float32)
+            self.last_hand_values = linear_hand.copy()
+            self.last_hand_values[4] = self.dex_thumb_rotation
         elif count == 6:
             # GloveSample: index, middle, ring, pinky, thumb rotate, thumb grasp.
             # The glove and this Dex Hand use opposite four-finger actuator

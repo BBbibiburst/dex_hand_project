@@ -15,7 +15,7 @@
     "surface_embed": 0.0002,
     "signal_processor": {
       "crosstalk": 0.12,
-      "gaussian_sigma": 0.0
+      "gaussian_sigma": 2.0
     }
   },
   "hand_prefix": null,

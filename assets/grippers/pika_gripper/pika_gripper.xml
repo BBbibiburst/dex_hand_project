@@ -39,7 +39,8 @@
         <joint name="gripper_left_joint" type="slide" pos="0 0 0" axis="0 1 0" range="-0.05 0"
           actuatorfrcrange="-300 300" />
         <geom name="gripper_left_link_visual" type="mesh" mesh="gripper_left_link" class="visualgeom" />
-        <geom name="gripper_left_link_collision" type="mesh" mesh="gripper_left_link" />
+        <geom name="gripper_left_link_collision" type="mesh" mesh="gripper_left_link"
+          friction="2.0 0.05 0.001" />
       </body>
 
       <body name="gripper_right_link" pos="0.0815 -0.088529 0.0064182" quat="1 0 0 0">
@@ -48,7 +49,8 @@
         <joint name="gripper_right_joint" type="slide" pos="0 0 0" axis="0 1 0" range="0 0.05"
           actuatorfrcrange="-300 300" />
         <geom name="gripper_right_link_visual" type="mesh" mesh="gripper_right_link" class="visualgeom" />
-        <geom name="gripper_right_link_collision" type="mesh" mesh="gripper_right_link" />
+        <geom name="gripper_right_link_collision" type="mesh" mesh="gripper_right_link"
+          friction="2.0 0.05 0.001" />
       </body>
 
       <site name="gripper_mount" pos="0 0 0" quat="1 0 0 0" size="0.005" group="3" />
