@@ -72,6 +72,53 @@ def draw_line_marker(
     scene.ngeom += 1
 
 
+def draw_pose_frame(
+    handle: viewer.Handle,
+    pos: Array,
+    quat_wxyz: Array,
+    *,
+    axis_length: float = 0.08,
+    line_width: float = 0.004,
+    label: str | None = None,
+) -> None:
+    """Draw an RGB coordinate frame for a world-space pose."""
+    position = np.asarray(pos, dtype=np.float64).reshape(3)
+    quaternion = np.asarray(quat_wxyz, dtype=np.float64).reshape(4)
+    norm = float(np.linalg.norm(quaternion))
+    if not np.isfinite(norm) or norm <= 0.0:
+        return
+    quaternion /= norm
+    rotation = np.empty(9, dtype=np.float64)
+    mujoco.mju_quat2Mat(rotation, quaternion)
+    rotation = rotation.reshape(3, 3)
+    colors = (
+        (1.0, 0.15, 0.15, 1.0),
+        (0.15, 1.0, 0.25, 1.0),
+        (0.20, 0.45, 1.0, 1.0),
+    )
+    draw_sphere_marker(
+        handle,
+        position,
+        radius=axis_length * 0.09,
+        rgba=(1.0, 0.9, 0.1, 0.8),
+    )
+    for axis, color in zip(rotation.T, colors):
+        draw_line_marker(
+            handle,
+            position,
+            position + axis_length * axis,
+            width=line_width,
+            rgba=color,
+        )
+    if label:
+        draw_label(
+            handle,
+            position + np.asarray([0.0, 0.0, axis_length * 0.25]),
+            label,
+            rgba=(1.0, 0.9, 0.1, 1.0),
+        )
+
+
 def draw_ellipse_marker(
     handle: viewer.Handle,
     center: Array,

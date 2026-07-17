@@ -22,7 +22,13 @@ class LiveGloveHandPlot:
     """Dark live dashboard combining tracked pose and finger flexion."""
 
     def __init__(
-        self, axis_range: float, trail_length: int, smoothing: float, deadzone: float
+        self,
+        axis_range: float,
+        trail_length: int,
+        smoothing: float,
+        deadzone: float,
+        closed_deadzone: float,
+        thumb_rotation: float,
     ):
         try:
             import matplotlib.pyplot as plt
@@ -34,8 +40,16 @@ class LiveGloveHandPlot:
         self.axis_range = axis_range
         self.trail = deque(maxlen=trail_length)
         self.origin = None
-        self.glove_filter = GloveValueFilter(smoothing=smoothing, deadzone=deadzone)
+        self.thumb_rotation = float(thumb_rotation)
+        self._calibration_confirmed = False
+        self._calibration_pose_index = 0
+        self.glove_filter = GloveValueFilter(
+            smoothing=smoothing,
+            deadzone=deadzone,
+            closed_deadzone=closed_deadzone,
+        )
         self.figure = plt.figure("Vive + Glove Control", figsize=(14, 8), facecolor=BG)
+        self.figure.canvas.mpl_connect("key_press_event", self._on_key)
         self.figure.suptitle(
             "◆  VIVE + BLUETOOTH GLOVE  ·  LIVE HAND CONTROL",
             fontsize=13, fontweight="bold",
@@ -82,35 +96,51 @@ class LiveGloveHandPlot:
 
     def wait_for_calibration_pose(self, pose: str) -> None:
         """Show calibration instructions in the dashboard instead of the terminal."""
+        prompts = (
+            "CLOSE YOUR HAND INTO A FIST",
+            "OPEN AND FLATTEN ALL FINGERS",
+        )
+        if self._calibration_pose_index < len(prompts):
+            pose = prompts[self._calibration_pose_index]
+        self._calibration_pose_index += 1
+        self._calibration_confirmed = False
         self.pose_text.set_text(
             "GLOVE CALIBRATION\n\n"
-            f"请保持：{pose}\n\n"
-            "准备好后在此窗口按任意键\n"
-            "或点击鼠标开始采集"
+            f"{pose}\n\n"
+            "Hold the pose steady,\n"
+            "then press C to start sampling."
         )
-        self.glove_text.set_text("等待操作…")
+        self.glove_text.set_text("WAITING FOR C")
         self.figure.canvas.draw_idle()
         self.figure.canvas.flush_events()
-        self.plt.waitforbuttonpress(timeout=-1)
+        while self.is_open and not self._calibration_confirmed:
+            self.plt.pause(0.03)
         if not self.is_open:
             raise KeyboardInterrupt
-        self.pose_text.set_text(f"正在采集：{pose}\n\n请保持姿势稳定…")
+        self.pose_text.set_text(f"SAMPLING\n\n{pose}\n\nHOLD STEADY...")
         self.glove_text.set_text("CALIBRATING")
         self.figure.canvas.draw_idle()
         self.figure.canvas.flush_events()
         self.plt.pause(0.05)
 
     def show_calibration_saved(self, path) -> None:
-        self.pose_text.set_text("校准完成\n\n即将连接 Vive Tracker…")
+        self.pose_text.set_text("CALIBRATION SAVED\n\nCONNECTING VIVE TRACKER...")
         self.glove_text.set_text(f"SAVED\n{path}")
         self.figure.canvas.draw_idle()
         self.figure.canvas.flush_events()
         self.plt.pause(0.4)
 
+    def _on_key(self, event) -> None:
+        if str(event.key or "").lower() == "c":
+            self._calibration_confirmed = True
+
     def update(self, position, rotation, glove_values) -> None:
         position = np.asarray(position, dtype=float)
         raw_values = np.clip(np.asarray(glove_values, dtype=float), 0, 1)
         glove_values = self.glove_filter.update(raw_values)
+        glove_values[4] = self.thumb_rotation
+        display_raw = np.concatenate((raw_values[:4], raw_values[5:6]))
+        display_values = np.concatenate((glove_values[:4], glove_values[5:6]))
         if self.origin is None:
             self.origin = position.copy()
             style_3d_axis(self.axes, self.origin, self.axis_range)
@@ -123,7 +153,7 @@ class LiveGloveHandPlot:
             artist.set_data_3d(line[:, 0], line[:, 1], line[:, 2])
         self.trajectory.set_data_3d(trail[:, 0], trail[:, 1], trail[:, 2])
         update_frame_axes(self.axes, self.frame_axes, position, rotation, self.axis_range * 0.16)
-        for bar, value in zip(self.finger_bars, glove_values[:5]):
+        for bar, value in zip(self.finger_bars, display_values):
             bar.set_width(value)
         roll, pitch, yaw = rotation_matrix_to_rpy_degrees(rotation)
         self.pose_text.set_text(
@@ -136,16 +166,17 @@ class LiveGloveHandPlot:
             + "   ".join(
                 f"{name[:2].upper()} {raw:.2f}/{filtered:.2f}"
                 for name, raw, filtered in zip(
-                    FINGER_NAMES[:3], raw_values[:3], glove_values[:3]
+                    FINGER_NAMES[:3], display_raw[:3], display_values[:3]
                 )
             )
             + "\n"
             + "   ".join(
                 f"{name[:2].upper()} {raw:.2f}/{filtered:.2f}"
                 for name, raw, filtered in zip(
-                    FINGER_NAMES[3:], raw_values[3:5], glove_values[3:5]
+                    FINGER_NAMES[3:], display_raw[3:], display_values[3:]
                 )
             )
+            + f"\nTHUMB ROTATION FIXED {self.thumb_rotation:.2f}"
         )
         self.figure.canvas.draw_idle()
         self.figure.canvas.flush_events()
@@ -188,8 +219,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--glove-deadzone",
         type=float,
-        default=0.03,
-        help="Normalized dead-zone at both open and closed endpoints.",
+        default=float(config.get("glove_open_deadzone", 0.10)),
+        help="Normalized open-end interval mapped exactly to 0.",
+    )
+    parser.add_argument(
+        "--glove-closed-deadzone",
+        type=float,
+        default=float(config.get("glove_closed_deadzone", 0.10)),
+        help="Normalized closed-end interval mapped exactly to 1.",
+    )
+    parser.add_argument(
+        "--thumb-rotation",
+        type=float,
+        default=float(config.get("teleop_thumb_rotation", 0.25)),
+        help="Fixed normalized thumb-opposition value in [0, 1].",
     )
     parser.set_defaults(
         glove_calibration_minimum=calibration.get("open_minimum"),
@@ -206,8 +249,14 @@ def main() -> None:
         raise ValueError("interval, axis-range and trail-length must be positive.")
     if not 0 < args.glove_smoothing <= 1:
         raise ValueError("--glove-smoothing must be in (0, 1].")
-    if not 0 <= args.glove_deadzone < 0.5:
-        raise ValueError("--glove-deadzone must be in [0, 0.5).")
+    if (
+        args.glove_deadzone < 0
+        or args.glove_closed_deadzone < 0
+        or args.glove_deadzone + args.glove_closed_deadzone >= 1
+    ):
+        raise ValueError("Glove endpoint deadzones must be non-negative and sum to < 1.")
+    if not 0 <= args.thumb_rotation <= 1:
+        raise ValueError("--thumb-rotation must be in [0, 1].")
 
     calibration_minimum = None if args.recalibrate_glove else args.glove_calibration_minimum
     calibration_maximum = None if args.recalibrate_glove else args.glove_calibration_maximum
@@ -231,6 +280,8 @@ def main() -> None:
         args.trail_length,
         smoothing=args.glove_smoothing,
         deadzone=args.glove_deadzone,
+        closed_deadzone=args.glove_closed_deadzone,
+        thumb_rotation=args.thumb_rotation,
     )
     try:
         print("正在连接蓝牙手套……")
@@ -266,5 +317,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-

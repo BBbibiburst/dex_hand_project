@@ -27,18 +27,34 @@ def _bend_finger(base, lengths, flex) -> np.ndarray:
     return np.asarray(points)
 
 
-def _bend_thumb(flex) -> np.ndarray:
+def _bend_thumb(opposition, flex) -> np.ndarray:
+    opposition = float(np.clip(opposition, 0.0, 1.0))
     flex = float(np.clip(flex, 0.0, 1.0))
     flex = flex * flex * (3.0 - 2.0 * flex)
-    opened = np.asarray(
-        [[0.045, 0.035, 0.000], [0.075, 0.052, 0.000],
-         [0.096, 0.075, 0.002], [0.108, 0.098, 0.003]]
+    base = np.asarray([0.045, 0.035, 0.000])
+    # At opposition=0 the thumb points along local +X (0 degrees). It then
+    # rotates toward local +Y, reaching exactly 90 degrees at opposition=1.
+    extended_relative = np.asarray(
+        [[0.000, 0.000, 0.000], [0.034, 0.000, 0.000],
+         [0.065, 0.000, 0.002], [0.090, 0.000, 0.003]]
     )
-    opposed = np.asarray(
-        [[0.045, 0.035, 0.000], [0.036, 0.055, 0.018],
-         [0.017, 0.070, 0.035], [-0.004, 0.078, 0.043]]
+    # Flexion shortens the thumb in the palm plane and raises it out of that
+    # plane, but deliberately preserves its azimuth. Opposition is handled by
+    # the explicit rotation below, so it cannot accidentally exceed 90 deg.
+    flexed_relative = np.asarray(
+        [[0.000, 0.000, 0.000], [0.025, 0.000, 0.018],
+         [0.035, 0.000, 0.035], [0.040, 0.000, 0.043]]
     )
-    return opened + flex * (opposed - opened)
+    relative = extended_relative + flex * (flexed_relative - extended_relative)
+    angle = opposition * (0.5 * math.pi)
+    rotation = np.asarray(
+        [
+            [math.cos(angle), -math.sin(angle), 0.0],
+            [math.sin(angle), math.cos(angle), 0.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+    return base + relative @ rotation.T
 
 
 def make_hand_lines(flex_values=None) -> list[np.ndarray]:
@@ -62,4 +78,6 @@ def make_hand_lines(flex_values=None) -> list[np.ndarray]:
         ((-0.040, 0.090, 0.000), (0.032, 0.025, 0.020), values[3]),
     )
     fingers = [_bend_finger(base, lengths, flex) for base, lengths, flex in specs]
-    return [palm, wrist, *fingers, _bend_thumb(values[4])]
+    thumb_opposition = values[4]
+    thumb_flex = values[4] if values.shape == (5,) else values[5]
+    return [palm, wrist, *fingers, _bend_thumb(thumb_opposition, thumb_flex)]

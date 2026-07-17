@@ -297,12 +297,16 @@ class StretchGloveApiDevice:
     def _calibrate(self) -> None:
         fist = self._collect_calibration("握紧拳头", self.calibration_seconds)
         opened = self._collect_calibration("完全张开手掌", self.calibration_seconds)
-        self._maximum = np.max(fist, axis=0)
-        self._minimum = np.min(opened, axis=0)
+        # Raw extrema are dominated by sensor noise.  In particular,
+        # min(opened) makes a normally held flat hand remain well above zero.
+        # Inner percentiles describe stable poses the operator can reproduce.
+        self._minimum = np.percentile(opened, 90.0, axis=0).astype(np.float32)
+        self._maximum = np.percentile(fist, 10.0, axis=0).astype(np.float32)
         if np.any(self._maximum <= self._minimum):
             self.close()
             raise RuntimeError(
-                "Glove calibration failed: every fist value must exceed its open-hand value."
+                "Glove calibration failed: stable fist values must exceed "
+                "stable open-hand values on every channel."
             )
         print(f"Glove calibration open={self._minimum.tolist()} fist={self._maximum.tolist()}")
 

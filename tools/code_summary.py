@@ -6,13 +6,17 @@ facilitating code review, documentation generation, or submission to AI assistan
 Supports direct file path input, batch reading from a list file, or auto-discovery.
 
 Usage (from the repository root):
-    # Method 1: Auto-discover all .py files in the current directory (default)
+    # Method 1: Auto-discover files matching DEFAULT_EXTENSIONS
     python tools/code_summary.py
 
-    # Method 2: Direct arguments
+    # Method 2: Auto-discover selected file types
+    python tools/code_summary.py --extensions py js ts json
+    python tools/code_summary.py --extensions .py,.md,.yaml
+
+    # Method 3: Direct arguments
     python tools/code_summary.py ./source/geometry.py ./source/assets.py
 
-    # Method 3: Read from list file (supports comment lines with #)
+    # Method 4: Read from list file (supports comment lines with #)
     python tools/code_summary.py --list code_list.txt
 """
 
@@ -21,6 +25,32 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT_FILENAME = SCRIPT_DIR / "code_summary.txt"
 SEPARATOR_LINE = "=" * 80
+
+# File types used by auto-discovery when --extensions is not provided.
+# Add or remove extensions here to customize the project default.
+DEFAULT_EXTENSIONS = (
+    ".py",
+    ".xml",
+    ".json",
+)
+
+
+def normalize_extensions(values: list[str]) -> tuple[str, ...]:
+    """Normalize extension arguments such as 'py', '.py', or 'py,js'."""
+    extensions = []
+    for value in values:
+        for item in value.split(","):
+            item = item.strip().lower()
+            if not item:
+                continue
+            extension = item if item.startswith(".") else f".{item}"
+            if extension not in extensions:
+                extensions.append(extension)
+
+    if not extensions:
+        raise ValueError("At least one non-empty file extension is required.")
+
+    return tuple(extensions)
 
 
 def is_binary_file(file_path: Path) -> bool:
@@ -93,12 +123,22 @@ def main():
     parser.add_argument(
         "files", 
         nargs="*", 
-        help="Direct file paths to merge. If omitted, auto-discovers .py files in the current directory."
+        help="Direct file paths to merge. If omitted, auto-discovers configured file types."
     )
     parser.add_argument(
         "--list", 
         dest="list_file", 
         help="Read file paths from a text list file (supports # comments)."
+    )
+    parser.add_argument(
+        "-e",
+        "--extensions",
+        nargs="+",
+        metavar="EXT",
+        help=(
+            "File types for auto-discovery, separated by spaces or commas "
+            f"(default: {' '.join(DEFAULT_EXTENSIONS)})."
+        ),
     )
 
     args = parser.parse_args()
@@ -122,15 +162,27 @@ def main():
     elif args.files:
         file_list = args.files
 
-    # Mode 3: Default mode - Auto-discover .py files in the current running directory
+    # Mode 3: Auto-discover configured file types in the current directory
     else:
         current_dir = Path.cwd()
-        print(f"No arguments provided. Auto-discovering .py files in: {current_dir}")
-        # rglob("*") 会递归搜索当前目录及所有子目录下的 .py 文件
-        discovered_files = sorted([str(p) for p in current_dir.rglob("*.py")])
+        try:
+            extensions = normalize_extensions(args.extensions or list(DEFAULT_EXTENSIONS))
+        except ValueError as exc:
+            parser.error(str(exc))
+
+        print(
+            f"No file paths provided. Auto-discovering "
+            f"{', '.join(extensions)} files in: {current_dir}"
+        )
+        # Match suffixes in one recursive traversal so multiple types are supported.
+        discovered_files = sorted(
+            str(path)
+            for path in current_dir.rglob("*")
+            if path.is_file() and path.suffix.lower() in extensions
+        )
         
         if not discovered_files:
-            print("No .py files found in the current directory.")
+            print(f"No files matching {', '.join(extensions)} were found.")
             return
             
         file_list = discovered_files

@@ -13,6 +13,19 @@ import numpy as np
 from source.assets import asset_path
 
 
+def _configure_free_joint(joint: mujoco.MjsJoint, name: str) -> None:
+    """Configure a task-object free joint without robot-joint defaults."""
+    joint.name = name
+    joint.type = mujoco.mjtJoint.mjJNT_FREE
+    # Objects are attached to the arm's merged MjSpec and would otherwise
+    # inherit its joint damping, dry friction, and armature. Those values are
+    # appropriate for powered robot joints but can freeze small free objects
+    # in physically unstable poses.
+    joint.damping = np.zeros(3, dtype=np.float64)
+    joint.frictionloss = 0.0
+    joint.armature = 0.0
+
+
 class ManipulationObjectSpec(ABC):
     name: str
 
@@ -80,8 +93,7 @@ class FreeBoxSpec(ManipulationObjectSpec):
         body.name = self.body_name
         body.pos = np.asarray(initial_pos, dtype=float).tolist()
         joint = body.add_joint()
-        joint.name = self.joint_name
-        joint.type = mujoco.mjtJoint.mjJNT_FREE
+        _configure_free_joint(joint, self.joint_name)
         geom = body.add_geom()
         geom.name = self.geom_name
         geom.type = mujoco.mjtGeom.mjGEOM_BOX
@@ -99,6 +111,7 @@ class FreeBoxSpec(ManipulationObjectSpec):
             visual.size = list(self.half_size)
             visual.contype = 0
             visual.conaffinity = 0
+            visual.density = 0.0
             visual.rgba = list(self.rgba)
 
 
@@ -137,8 +150,7 @@ class FreeCylinderSpec(ManipulationObjectSpec):
         body.name = self.body_name
         body.pos = np.asarray(initial_pos, dtype=float).tolist()
         joint = body.add_joint()
-        joint.name = self.joint_name
-        joint.type = mujoco.mjtJoint.mjJNT_FREE
+        _configure_free_joint(joint, self.joint_name)
         geom = body.add_geom()
         geom.name = self.geom_names[0]
         geom.type = mujoco.mjtGeom.mjGEOM_CYLINDER
@@ -183,8 +195,7 @@ class FreeNutSpec(ManipulationObjectSpec):
         body.name = self.body_name
         body.pos = np.asarray(initial_pos, dtype=float).tolist()
         joint = body.add_joint()
-        joint.name = self.joint_name
-        joint.type = mujoco.mjtJoint.mjJNT_FREE
+        _configure_free_joint(joint, self.joint_name)
         thickness = 0.5 * (self.outer_radius - self.inner_radius)
         center = 0.5 * (self.outer_radius + self.inner_radius)
         half_length = self.outer_radius
@@ -254,8 +265,7 @@ class XmlNutSpec(ManipulationObjectSpec):
         object_body.pos = np.asarray(initial_pos, dtype=float).tolist()
 
         joint = object_body.add_joint()
-        joint.name = self.joint_name
-        joint.type = mujoco.mjtJoint.mjJNT_FREE
+        _configure_free_joint(joint, self.joint_name)
         for geom, name in zip(object_body.geoms, self.geom_names):
             geom.name = name
         for site in object_body.sites:

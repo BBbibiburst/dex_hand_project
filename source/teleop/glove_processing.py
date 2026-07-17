@@ -8,13 +8,24 @@ from source.teleop.devices import GloveSample
 
 
 class GloveValueFilter:
-    def __init__(self, smoothing: float = 0.70, deadzone: float = 0.03):
+    def __init__(
+        self,
+        smoothing: float = 0.70,
+        deadzone: float = 0.10,
+        closed_deadzone: float | None = None,
+    ):
         if not 0 < smoothing <= 1:
             raise ValueError("smoothing must be in (0, 1].")
-        if not 0 <= deadzone < 0.5:
-            raise ValueError("deadzone must be in [0, 0.5).")
+        closed_deadzone = deadzone if closed_deadzone is None else closed_deadzone
+        if not 0 <= deadzone < 1:
+            raise ValueError("open deadzone must be in [0, 1).")
+        if not 0 <= closed_deadzone < 1:
+            raise ValueError("closed deadzone must be in [0, 1).")
+        if deadzone + closed_deadzone >= 1:
+            raise ValueError("open and closed deadzones must sum to less than 1.")
         self.smoothing = float(smoothing)
-        self.deadzone = float(deadzone)
+        self.open_deadzone = float(deadzone)
+        self.closed_deadzone = float(closed_deadzone)
         self.value = None
 
     def reset(self) -> None:
@@ -24,8 +35,8 @@ class GloveValueFilter:
         values = np.clip(np.asarray(values, dtype=np.float32).reshape(-1), 0, 1)
         if values.shape != (6,):
             raise ValueError(f"Glove sample must have six channels, got {values.shape}.")
-        if self.deadzone:
-            values = np.clip((values - self.deadzone) / (1 - 2 * self.deadzone), 0, 1)
+        usable_range = 1.0 - self.open_deadzone - self.closed_deadzone
+        values = np.clip((values - self.open_deadzone) / usable_range, 0, 1)
         if self.value is None:
             self.value = values.copy()
         else:

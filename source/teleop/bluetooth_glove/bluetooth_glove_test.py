@@ -60,6 +60,12 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--display-hz", type=float, default=8.0)
     parser.add_argument(
+        "--history-weight",
+        type=float,
+        default=float(config.get("glove_calibration_history_weight", 0.75)),
+        help="保存校准时历史结果的权重，范围 0 到 1（默认 0.75）。",
+    )
+    parser.add_argument(
         "--no-prompt", action="store_true", help="不等待 Enter，适用于已经准备好的设备。"
     )
     parser.add_argument("--no-save", action="store_true", help="测试通过后不保存校准结果。")
@@ -190,6 +196,8 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("未配置手套 MAC 或串口；请设置 configs/teleop.json。")
     if args.duration <= 0 or args.display_hz <= 0:
         raise ValueError("--duration and --display-hz must be positive.")
+    if not 0.0 <= args.history_weight <= 1.0:
+        raise ValueError("--history-weight must be between 0 and 1.")
     _print_preflight(args)
     glove = StretchGloveApiDevice(
         args.mac,
@@ -244,8 +252,16 @@ def run(args: argparse.Namespace) -> int:
         passed = _diagnose(opened, opened_elapsed, stage_samples)
         if passed and not args.no_save:
             minimum, maximum = glove.calibration_bounds()
-            saved_path = save_glove_calibration(minimum.tolist(), maximum.tolist())
+            saved_path = save_glove_calibration(
+                minimum.tolist(),
+                maximum.tolist(),
+                history_weight=args.history_weight,
+            )
             print(f"校准结果已保存：{saved_path}")
+            print(
+                f"校准融合权重：历史={args.history_weight:.2f}，"
+                f"本次={1.0 - args.history_weight:.2f}"
+            )
             print("后续正式遥操作会直接加载该结果，不再要求重新握拳/张手校准。")
         return 0 if passed else 1
     except KeyboardInterrupt:

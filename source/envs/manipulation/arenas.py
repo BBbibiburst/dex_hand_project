@@ -52,6 +52,28 @@ class TableArena:
         arena_spec = mujoco.MjSpec.from_file(str(arena_path))
         self._merge_arena_spec(spec, arena_spec, Path(arena_path).parent)
         self._configure_table_from_robosuite_template(spec)
+        self._configure_agentview_camera(spec)
+
+    def _configure_agentview_camera(self, spec: mujoco.MjSpec) -> None:
+        """Aim agentview at the table workspace instead of the arm column."""
+        camera = spec.camera("agentview")
+        if camera is None:
+            return
+        target = self.table_top_pos + np.asarray([0.0, 0.0, 0.08])
+        # Stay on the table/robot centerline (Y=0) to avoid introducing a
+        # misleading left/right perspective into recorded demonstrations.
+        position = self.table_top_pos + np.asarray([0.85, 0.0, 0.75])
+        view = target - position
+        view /= np.linalg.norm(view)
+        local_z = -view
+        local_x = np.cross(np.asarray([0.0, 0.0, 1.0]), local_z)
+        local_x /= np.linalg.norm(local_x)
+        local_y = np.cross(local_z, local_x)
+        rotation = np.column_stack((local_x, local_y, local_z))
+        quaternion = np.empty(4, dtype=np.float64)
+        mujoco.mju_mat2Quat(quaternion, rotation.reshape(9))
+        camera.pos = position.tolist()
+        camera.quat = quaternion.tolist()
 
     def _merge_arena_spec(
         self,

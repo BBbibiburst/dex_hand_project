@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
@@ -74,14 +76,66 @@ class LeRobotEpisodeRecorder:
                 "names": None,
             }
 
-        self.dataset = LeRobotDataset.create(
-            repo_id=repo_id,
-            root=Path(root),
-            fps=fps,
-            robot_type=robot_type,
-            features=features,
-            use_videos=use_videos,
-        )
+        root = Path(root)
+        if root.exists():
+            info_path = root / "meta" / "info.json"
+            if info_path.exists():
+                info = json.loads(info_path.read_text(encoding="utf-8"))
+                total_episodes = int(info.get("total_episodes", 0))
+                total_frames = int(info.get("total_frames", 0))
+                if total_episodes == 0 and total_frames == 0:
+                    archived = _archive_incomplete_dataset(root)
+                    print(
+                        "Archived an incomplete zero-frame LeRobot dataset: "
+                        f"{archived}"
+                    )
+                    self.dataset = _create_dataset(
+                        LeRobotDataset,
+                        repo_id=repo_id,
+                        root=root,
+                        fps=fps,
+                        robot_type=robot_type,
+                        features=features,
+                        use_videos=use_videos,
+                    )
+                else:
+                    self.dataset = LeRobotDataset(repo_id=repo_id, root=root)
+                    _validate_dataset_compatibility(
+                        self.dataset,
+                        fps=fps,
+                        features=features,
+                    )
+                    print(
+                        f"Resuming LeRobot dataset at {root}: "
+                        f"{self.dataset.meta.total_episodes} existing episodes"
+                    )
+            elif any(root.iterdir()):
+                raise RuntimeError(
+                    f"Dataset output directory exists but has no LeRobot metadata: {root}. "
+                    "Choose another --output path."
+                )
+            else:
+                archived = _archive_incomplete_dataset(root)
+                print(f"Archived an empty dataset directory: {archived}")
+                self.dataset = _create_dataset(
+                    LeRobotDataset,
+                    repo_id=repo_id,
+                    root=root,
+                    fps=fps,
+                    robot_type=robot_type,
+                    features=features,
+                    use_videos=use_videos,
+                )
+        else:
+            self.dataset = _create_dataset(
+                LeRobotDataset,
+                repo_id=repo_id,
+                root=root,
+                fps=fps,
+                robot_type=robot_type,
+                features=features,
+                use_videos=use_videos,
+            )
         self.frame_count = 0
 
     def add_frame(self, *, observation, image, action, glove, vive, task: str) -> None:
@@ -119,3 +173,43 @@ class LeRobotEpisodeRecorder:
         finalize = getattr(self.dataset, "finalize", None)
         if finalize is not None:
             finalize()
+
+
+def _create_dataset(dataset_type, **kwargs):
+    """Create a new dataset while keeping constructor details in one place."""
+    return dataset_type.create(**kwargs)
+
+
+def _archive_incomplete_dataset(root: Path) -> Path:
+    """Preserve a zero-frame partial dataset before recreating its output path."""
+    timestamp = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S")
+    candidate = root.with_name(f"{root.name}.incomplete-{timestamp}")
+    suffix = 1
+    while candidate.exists():
+        candidate = root.with_name(f"{root.name}.incomplete-{timestamp}-{suffix}")
+        suffix += 1
+    root.replace(candidate)
+    return candidate
+
+
+def _validate_dataset_compatibility(dataset, *, fps: int, features: dict) -> None:
+    """Reject appends that would mix incompatible recording schemas."""
+    if int(dataset.fps) != int(fps):
+        raise ValueError(
+            f"Existing dataset FPS is {dataset.fps}, but this run requested {fps}."
+        )
+    existing = dataset.features
+    for name, expected in features.items():
+        if name not in existing:
+            raise ValueError(f"Existing dataset is missing feature {name!r}.")
+        actual = existing[name]
+        if str(actual.get("dtype")) != str(expected["dtype"]):
+            raise ValueError(
+                f"Existing feature {name!r} has dtype {actual.get('dtype')!r}; "
+                f"expected {expected['dtype']!r}."
+            )
+        if tuple(actual.get("shape", ())) != tuple(expected["shape"]):
+            raise ValueError(
+                f"Existing feature {name!r} has shape {actual.get('shape')!r}; "
+                f"expected {expected['shape']!r}."
+            )

@@ -185,6 +185,10 @@ def build_robot_spec(
 
     arm_spec = _load_spec_or_raise(arm_path, "arm model")
     hand_spec = _load_spec_or_raise(hand_path, "hand model")
+    # The arm is the root spec, so without an explicit rename every assembled
+    # viewer inherits a misleading source-XML title such as
+    # ``rm_75_b_description``.
+    arm_spec.modelname = f"{arm_descriptor.name}_{hand_descriptor.name}"
     _configure_solver(arm_spec)
 
     _mount_arm_on_base(arm_spec, base_path, base_mount_site_name, base_descriptor.mount_prefix)

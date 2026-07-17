@@ -48,6 +48,8 @@ class ArmPositionIkController:
         use_nullspace: bool = True,
         nullspace_gain: float = 0.1,
         nullspace_posture: Optional[np.ndarray] = None,
+        posture_weight: float = 0.0,
+        posture_joint_weights: Optional[np.ndarray] = None,
     ) -> None:
         self.arm_descriptor = arm_descriptor
         self.actuator_names = tuple(arm_descriptor.position_actuator_names)
@@ -73,6 +75,8 @@ class ArmPositionIkController:
         self.use_nullspace = use_nullspace
         self.nullspace_gain = nullspace_gain
         self.nullspace_posture = nullspace_posture
+        self.posture_weight = float(posture_weight)
+        self.posture_joint_weights = posture_joint_weights
 
         self._actuator_ids: Optional[np.ndarray] = None
         self._joint_ids: Optional[np.ndarray] = None
@@ -189,6 +193,30 @@ class ArmPositionIkController:
         self._filtered_velocity = np.zeros(self.position_action_size, dtype=np.float64)
         if self.nullspace_posture is None:
             self.nullspace_posture = 0.5 * (self.ctrl_low + self.ctrl_high).astype(np.float64)
+        else:
+            self.nullspace_posture = np.asarray(
+                self.nullspace_posture, dtype=np.float64
+            ).reshape(-1)
+        if self.nullspace_posture.shape != (self.position_action_size,):
+            raise ValueError(
+                "nullspace_posture must contain one value per arm joint."
+            )
+        if self.posture_weight < 0.0:
+            raise ValueError("posture_weight must be non-negative.")
+        if self.posture_joint_weights is None:
+            self.posture_joint_weights = np.ones(
+                self.position_action_size, dtype=np.float64
+            )
+        else:
+            self.posture_joint_weights = np.asarray(
+                self.posture_joint_weights, dtype=np.float64
+            ).reshape(-1)
+        if self.posture_joint_weights.shape != (self.position_action_size,):
+            raise ValueError(
+                "posture_joint_weights must contain one value per arm joint."
+            )
+        if np.any(self.posture_joint_weights < 0.0):
+            raise ValueError("posture_joint_weights must be non-negative.")
         self._action_space = self._bound_action_space()
 
     def reset(
@@ -342,6 +370,7 @@ class ArmPositionIkController:
             if (
                 np.linalg.norm(pos_error) <= self.position_tolerance
                 and np.linalg.norm(rot_error) <= self.orientation_tolerance
+                and self.posture_weight == 0.0
             ):
                 break
 
@@ -355,12 +384,26 @@ class ArmPositionIkController:
             error = np.concatenate(
                 [self.position_weight * pos_error, self.orientation_weight * rot_error]
             )
+            # A seven-DoF arm has only one exact null-space direction under a
+            # full 6D pose constraint.  A soft posture objective permits a tiny
+            # pose trade-off so teleoperation can select a bent/elbow-up branch
+            # instead of getting stuck in the locally nearest straight-arm
+            # solution.  It is disabled by default for backwards compatibility.
+            if self.posture_weight > 0.0:
+                posture_scale = np.sqrt(
+                    self.posture_weight * self.posture_joint_weights
+                )
+                jac = np.vstack([jac, np.diag(posture_scale)])
+                error = np.concatenate(
+                    [error, posture_scale * (self.nullspace_posture - q)]
+                )
 
             try:
                 u, s, vh = np.linalg.svd(jac, full_matrices=False)
             except np.linalg.LinAlgError:
                 dq = jac.T @ np.linalg.solve(
-                    jac @ jac.T + (self.damping**2) * np.eye(6, dtype=np.float64),
+                    jac @ jac.T
+                    + (self.damping**2) * np.eye(jac.shape[0], dtype=np.float64),
                     error,
                 )
             else:
