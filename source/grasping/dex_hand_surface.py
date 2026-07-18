@@ -72,9 +72,7 @@ def load_posed_dex_hand_surface(
     data = mujoco.MjData(model)
     values = np.empty(6, dtype=np.float64)
     for index, name in enumerate(_ACTUATORS):
-        actuator_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_ACTUATOR, name
-        )
+        actuator_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
         low, high = model.actuator_ctrlrange[actuator_id]
         values[index] = low + fractions[index] * (high - low)
         data.ctrl[actuator_id] = values[index]
@@ -93,9 +91,7 @@ def load_posed_dex_hand_surface(
     fingertip_points: dict[int, list[np.ndarray]] = {index: [] for index in range(5)}
 
     for geom_id in range(model.ngeom):
-        name = (
-            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
-        )
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
         # The MJCF contains a named physical mesh followed by an unnamed visual
         # duplicate for many parts.  Keep every named mesh once: this includes
         # the palm, base, phalanges and linkage parts without double-sampling.
@@ -104,9 +100,7 @@ def load_posed_dex_hand_surface(
         label = _geom_label(name)
         vertices = _mesh_vertices(model, int(model.geom_dataid[geom_id]))
         if vertices.shape[0] > max_points_per_geom:
-            selected = rng.choice(
-                vertices.shape[0], max_points_per_geom, replace=False
-            )
+            selected = rng.choice(vertices.shape[0], max_points_per_geom, replace=False)
             vertices = vertices[selected]
         geom_rotation = data.geom_xmat[geom_id].reshape(3, 3)
         world = vertices @ geom_rotation.T + data.geom_xpos[geom_id]

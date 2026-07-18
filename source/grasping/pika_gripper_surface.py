@@ -41,18 +41,14 @@ def load_posed_pika_gripper_surface(
         raise ValueError("opening_fraction must be in [0, 1].")
     model = mujoco.MjModel.from_xml_path(str(Path(xml_path).resolve()))
     data = mujoco.MjData(model)
-    actuator_id = mujoco.mj_name2id(
-        model, mujoco.mjtObj.mjOBJ_ACTUATOR, "gripper_position"
-    )
+    actuator_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "gripper_position")
     low, high = model.actuator_ctrlrange[actuator_id]
     joint_target = low + 0.5 * (0.1 * float(opening_fraction))
     data.ctrl[actuator_id] = np.clip(joint_target, low, high)
     for _ in range(500):
         mujoco.mj_step(model, data)
 
-    root_id = mujoco.mj_name2id(
-        model, mujoco.mjtObj.mjOBJ_BODY, "gripper_base_link"
-    )
+    root_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "gripper_base_link")
     root_position = data.xpos[root_id].copy()
     root_rotation = data.xmat[root_id].reshape(3, 3).copy()
     rng = np.random.default_rng(seed)
@@ -60,9 +56,7 @@ def load_posed_pika_gripper_surface(
     label_groups = []
     centers = np.empty((2, 3), dtype=np.float64)
     for geom_id in range(model.ngeom):
-        name = (
-            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
-        )
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
         if (
             not name.endswith("_collision")
             or model.geom_type[geom_id] != mujoco.mjtGeom.mjGEOM_MESH
@@ -75,9 +69,7 @@ def load_posed_pika_gripper_surface(
             label = 1
         vertices = _mesh_vertices(model, int(model.geom_dataid[geom_id]))
         if vertices.shape[0] > max_points_per_geom:
-            vertices = vertices[
-                rng.choice(vertices.shape[0], max_points_per_geom, replace=False)
-            ]
+            vertices = vertices[rng.choice(vertices.shape[0], max_points_per_geom, replace=False)]
         rotation = data.geom_xmat[geom_id].reshape(3, 3)
         world = vertices @ rotation.T + data.geom_xpos[geom_id]
         local = (world - root_position) @ root_rotation

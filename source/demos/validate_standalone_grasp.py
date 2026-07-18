@@ -1,4 +1,4 @@
-"""Validate a searched grasp using only Dex Hand MJCF and the object mesh."""
+"""Validate a searched grasp using only the selected end effector and object mesh."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("grasp", type=Path, help="JSON from search_mesh_force_closure.")
     parser.add_argument("--seconds", type=float, default=3.0)
     parser.add_argument("--viewer", action="store_true")
-    parser.add_argument("--viewer-speed", type=float, default=1.0)
+    parser.add_argument("--viewer-speed", type=float, default=0.5)
     parser.add_argument(
         "--approach-steps-per-waypoint",
         type=int,
@@ -87,6 +87,7 @@ def run(args) -> None:
         object_table_height=payload.get("object_table_height"),
         end_effector_name=end_effector_name,
     )
+
     def execute(handle):
         def show(model, data, step, total) -> None:
             if handle is None or not handle.is_running():

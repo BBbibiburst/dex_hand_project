@@ -151,9 +151,7 @@ class TaskStrategy(ABC):
             action[:3] += delta
         if context.ee_target_quaternion_wxyz is not None:
             source = normalize_quat(action[3:7])
-            target = normalize_quat(
-                np.asarray(context.ee_target_quaternion_wxyz, dtype=np.float64)
-            )
+            target = normalize_quat(np.asarray(context.ee_target_quaternion_wxyz, dtype=np.float64))
             dot = float(np.clip(np.dot(source, target), -1.0, 1.0))
             if dot < 0.0:
                 target = -target
@@ -166,11 +164,7 @@ class TaskStrategy(ABC):
                     max_orientation_step,
                     phase_speed * float(env.config.control_dt),
                 )
-            blend = (
-                1.0
-                if angle <= max_orientation_step
-                else max_orientation_step / angle
-            )
+            blend = 1.0 if angle <= max_orientation_step else max_orientation_step / angle
             action[3:7] = normalize_quat((1.0 - blend) * source + blend * target)
         if context.hand_target is not None:
             hand_size = env.controller.hand_controller.action_size

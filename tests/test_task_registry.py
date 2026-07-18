@@ -17,11 +17,9 @@ def test_builtin_tasks_are_registered() -> None:
     assert expected <= set(registered_tasks())
 
 
-@pytest.mark.skipif(
-    not MANIFEST_PATH.is_file(),
-    reason="optional ManiSkill object assets are not installed",
-)
 @pytest.mark.parametrize("task_name", registered_tasks())
 def test_registered_task_can_be_created(task_name: str) -> None:
+    if task_name != "nut_assembly" and not MANIFEST_PATH.is_file():
+        pytest.skip("optional ManiSkill object assets are not installed")
     task = make_task(task_name)
     assert task.name == task_name

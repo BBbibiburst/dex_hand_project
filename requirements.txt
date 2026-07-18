@@ -29,3 +29,4 @@ PyBluez @ git+https://github.com/pybluez/pybluez.git
 
 # Development checks used by pyproject.toml
 ruff
+pytest

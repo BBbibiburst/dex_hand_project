@@ -175,7 +175,7 @@ python -m source.demos.validate_standalone_grasp \
 | `--seconds S` | `3.0` | 施加抓取后的仿真观察时间 |
 | `--grip-preload X` | `0.25` | 在优化手型基础上，对 `hand_preload_weights` 选中的必要手指增加闭合预紧量 |
 | `--viewer` | 关闭 | 打开交互式 Viewer |
-| `--viewer-speed X` | `1.0` | Viewer 播放倍率；`1` 表示与真实时间一致 |
+| `--viewer-speed X` | `0.5` | Viewer 默认半速播放；传 `1` 表示与真实时间一致 |
 | `--approach-steps-per-waypoint N` | `12` | Viewer 中每个点云 approach waypoint 的动画步数 |
 
 Viewer 模式会先显示桌面平面并播放配置中的完整 approach 位姿与手型序列，再在最终抓取
@@ -188,6 +188,8 @@ PCA 主轴、桌面间隙、鲁棒裕量、逐指预紧权重和 waypoint 数量
 生成率、稳定率、失败物体清单和每个物体的漂移、接触指标写入 JSON。每个物体默认尝试
 三个独立随机种子，逐个做动力学验证，找到稳定抓取后立即停止。报告在每个物体完成后
 更新，长时间测试中断后可用 `--resume --reuse` 继续。
+恢复时会校验末端执行器、搜索规模、seed、物体尺寸和验证参数；参数不同会拒绝混入旧
+报告，需要改用新的 `--output` 或不传 `--resume`。
 
 ```bash
 # 使用当前默认搜索和验证参数测试全部 YCB 与 EGAD 物体
@@ -230,10 +232,9 @@ configs/grasps/pika_gripper/<object>.json          # Pika
 当前流程已经打通 mesh/点云搜索、逐指预紧、approach 规划、独立动力学验证、完整场景
 Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级继续完成：
 
-- [ ] **P0：统一正式配置和 benchmark 配置。** 抓取生成 API 应搜索多个候选并逐个进行
-  MuJoCo 保持验证，将第一个稳定候选原子写入对应末端的正式配置；Lift 默认使用这个
-  已验证配置。各末端的 benchmark 目录只保留评测中间结果，不应出现
-  benchmark 已稳定而正式策略读取另一个未验证姿态的情况。
+- [x] **P0：正式配置必须经过动力学验证。** Lift 的生成 API 会搜索多个候选并逐个进行
+  MuJoCo 保持验证，将第一个稳定候选原子写入正式配置；失败时保留已有配置。benchmark
+  目录仍只用于全目录评测，不再作为策略的隐式配置来源。
 - [ ] **P0：提高桌面约束下的候选覆盖率。** 将桌面间隙直接加入位姿生成和优化，而不只
   在末尾过滤；完善矮罐、球体、盒子、薄片和带把手物体的顶抓、侧抓及倾斜抓候选。目前
   全量基线为 `31/127` 可生成、`11/127` 可稳定保持。
@@ -252,15 +253,21 @@ Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级
 - [ ] **P2：建立回归基线。** 固定当前 127 个物体的报告格式和代表物体测试集，要求后续
   优化不得破坏现有 11 个稳定物体，并持续记录生成率、独立保持率和完整 Lift 成功率。
 
+当前已记录的全量基线为：Dex Hand `31/127` 可生成、`11/127` 可稳定保持；Pika
+`75/127` 可生成、`64/127` 可稳定保持。它们来自不同末端的既有 benchmark 运行，仅用于
+后续回归比较；重新比较时应保存报告中的完整参数和 commit。
+
 #### `source.demos.validate_scripted_strategy`
 
 在完整任务环境中运行脚本策略，但不记录数据。Lift 策略简化为
 `approach → grasp → lift`：approach 内部沿点云 waypoint 到达并渐变手型，lift 内部完成
 成功验证。Viewer 中会显示末端目标位姿、旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
-策略默认在每次程序启动时重新运行点云抓取和 approach 路径搜索，并覆盖
-`configs/grasps/<object_id>.json`。开发调试时可传 `--reuse-grasp-config` 跳过搜索并
-直接使用缓存；缓存不存在时即使指定该选项也会自动生成。
+策略默认在每次程序启动时搜索最多三个独立候选，并逐个执行 standalone MuJoCo 保持
+验证；只有首个 `stable=True` 的候选才会原子写入
+`configs/grasps/<object_id>.json`。搜索或验证失败不会覆盖已有正式配置。开发调试时
+可传 `--reuse-grasp-config` 跳过搜索并直接使用缓存；缓存不存在时即使指定该选项也会
+自动生成并验证。
 
 ```bash
 python -m source.demos.validate_scripted_strategy --task lift
@@ -279,7 +286,7 @@ python -m source.demos.validate_scripted_strategy \
 | `--seed N` | `0` | 环境和物体随机种子 |
 | `--max-steps N` | `900` | 单次验证允许的最大控制步数 |
 | `--fps N` | `20` | 控制循环刷新频率 |
-| `--viewer-speed X` | `1.0` | Viewer 播放倍率；`1` 表示与真实时间一致，可传 `0.5` 半速观察 |
+| `--viewer-speed X` | `0.5` | Viewer 默认半速播放，便于观察轨迹；传 `1` 表示与真实时间一致 |
 | `--reuse-grasp-config` | 关闭 | 开发时复用现有抓取配置；默认启动时重新搜索 |
 | `--robot-config PATH` | 当前机器人配置 | 覆盖 `configs/current_robot.json` |
 | `--arm-name/--hand-name/--base-name` | 配置值 | 临时覆盖机器人组件 |
@@ -402,11 +409,12 @@ python -m source.demos.collect_scripted_lerobot \
 python -m pytest -q
 ```
 
-当前测试覆盖内置任务注册、任务环境的参数化 reset/step smoke 路径，以及
-`LiftStrategyState` 和 `LiftStrategy.reset()` 的状态清理。YCB/EGAD 任务依赖
-`assets/maniskill/manifest.json`；未安装可选 ManiSkill 物体资产时，相关任务创建和
-环境 smoke 用例会显示为 `skipped`，其余单元测试仍会运行。需要覆盖完整任务集合时，
-先执行“下载 ManiSkill 物体资产”一节的命令。
+当前测试覆盖内置任务注册、Dex Hand/Pika 两种末端的参数化 reset/step smoke 路径、
+正式抓取配置的原子发布与失败保护，以及 `LiftStrategyState` 和
+`LiftStrategy.reset()` 的状态清理。YCB/EGAD 任务依赖
+`assets/maniskill/manifest.json`；未安装可选 ManiSkill 物体资产时，相关用例会显示为
+`skipped`，不依赖目录资产的 `nut_assembly` 仍会测试。需要覆盖完整任务集合时，先执行
+“下载 ManiSkill 物体资产”一节的命令。
 
 每次修改代码后运行一个命令即可检查核心仿真路径：
 

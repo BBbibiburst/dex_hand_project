@@ -75,9 +75,7 @@ def geometry_metrics(
     maximum_penetration = float(np.maximum(-signed, 0.0).max())
     noncontact = labels == 6
     maximum_noncontact_penetration = (
-        float(np.maximum(-signed[noncontact], 0.0).max())
-        if np.any(noncontact)
-        else 0.0
+        float(np.maximum(-signed[noncontact], 0.0).max()) if np.any(noncontact) else 0.0
     )
     finger_distances = []
     contacting = []
@@ -126,23 +124,15 @@ def _actual_contact_quality(
         contact_points.append(contact_point)
         contact_normals.append(inward)
         reference = (
-            np.asarray([0.0, 1.0, 0.0])
-            if abs(inward[2]) > 0.9
-            else np.asarray([0.0, 0.0, 1.0])
+            np.asarray([0.0, 1.0, 0.0]) if abs(inward[2]) > 0.9 else np.asarray([0.0, 0.0, 1.0])
         )
         tangent_1 = np.cross(inward, reference)
         tangent_1 /= np.linalg.norm(tangent_1)
         tangent_2 = np.cross(inward, tangent_1)
         for angle in np.linspace(0.0, 2.0 * np.pi, 8, endpoint=False):
-            force = (
-                inward
-                + 0.8 * np.cos(angle) * tangent_1
-                + 0.8 * np.sin(angle) * tangent_2
-            )
+            force = inward + 0.8 * np.cos(angle) * tangent_1 + 0.8 * np.sin(angle) * tangent_2
             force /= np.linalg.norm(force)
-            wrenches.append(
-                np.concatenate([force, np.cross(contact_point, force)])
-            )
+            wrenches.append(np.concatenate([force, np.cross(contact_point, force)]))
             wrench_fingers.append(finger)
     matrix = np.asarray(wrenches, dtype=np.float64).T
     wrench_fingers = np.asarray(wrench_fingers, dtype=np.int64)
@@ -152,9 +142,7 @@ def _actual_contact_quality(
         selected_count = selected_matrix.shape[1]
         initial_weights = np.full(selected_count, 1.0 / selected_count)
         solution = minimize(
-            lambda weights: float(
-                np.sum(np.square(selected_matrix @ weights))
-            ),
+            lambda weights: float(np.sum(np.square(selected_matrix @ weights))),
             initial_weights,
             method="SLSQP",
             bounds=[(0.0, 1.0)] * selected_count,
@@ -186,6 +174,7 @@ def _actual_contact_quality(
             break
     preload_weights = np.zeros(5, dtype=np.float64)
     preload_weights[np.asarray(active_fingers, dtype=np.int64)] = 1.0
+
     # Find a realizable preload distribution whose resultant points toward the
     # palm while suppressing sideways force and torque.  Unlike averaging the
     # contact normals, this respects non-negative friction-cone forces and lets
@@ -197,9 +186,7 @@ def _actual_contact_quality(
         perpendicular = force - along * palmward
         scaled_torque = wrench[3:] / 0.05
         return float(
-            np.sum(np.square(perpendicular))
-            + np.sum(np.square(scaled_torque))
-            - 0.5 * along
+            np.sum(np.square(perpendicular)) + np.sum(np.square(scaled_torque)) - 0.5 * along
         )
 
     initial = np.full(count, 1.0 / count)
@@ -234,8 +221,7 @@ def _legacy_plan_approach(
     progress = np.linspace(0.0, 1.0, waypoint_count)
     fractions = (
         open_fractions[None, :]
-        + progress[:, None]
-        * (grasp.actuator_fractions - open_fractions)[None, :]
+        + progress[:, None] * (grasp.actuator_fractions - open_fractions)[None, :]
     )
     posed_hands = [
         load_posed_dex_hand_surface(
@@ -285,8 +271,7 @@ def _legacy_plan_approach(
                 )
             translations.append(translation)
         key = (
-            max(maximum_pad_violation, 0.0) > 0.0
-            or max(maximum_rigid_violation, 0.0) > 0.0,
+            max(maximum_pad_violation, 0.0) > 0.0 or max(maximum_rigid_violation, 0.0) > 0.0,
             max(maximum_rigid_violation, 0.0),
             max(maximum_pad_violation, 0.0),
             1.0 - float(direction @ tabletop_preference),
@@ -335,9 +320,7 @@ def search_hand_grasp(
     # Deterministic seeds decouple finger closure from in-hand depth.  The old
     # diagonal schedule changed both together and skipped the narrow interval
     # where pads touch without penetrating.
-    seed_closures = np.asarray(
-        [0.0, 0.05, 0.10, 0.14, 0.18, 0.25, 0.40, 0.60]
-    )
+    seed_closures = np.asarray([0.0, 0.05, 0.10, 0.14, 0.18, 0.25, 0.40, 0.60])
     seed_depths = np.asarray([0.0, 0.006, 0.012, 0.018])
     deterministic_count = min(samples, seed_closures.size * seed_depths.size)
     # 24 orientations cover +/- each PCA axis at four wrist rolls.  Repeating
@@ -361,38 +344,24 @@ def search_hand_grasp(
             if pca_index < legacy_pca_count:
                 pca_axis_index = pca_index % 3
                 axial_levels = np.asarray([0.0, 0.25, 0.45, -0.20])
-                axial_fraction = float(
-                    axial_levels[(pca_index // 3) % len(axial_levels)]
-                )
+                axial_fraction = float(axial_levels[(pca_index // 3) % len(axial_levels)])
                 closure_levels = np.asarray([0.10, 0.14, 0.18, 0.25, 0.35])
-                closure = float(
-                    closure_levels[(pca_index // 12) % len(closure_levels)]
-                )
-                depth = float(
-                    seed_depths[(pca_index // 48) % len(seed_depths)]
-                )
+                closure = float(closure_levels[(pca_index // 12) % len(closure_levels)])
+                depth = float(seed_depths[(pca_index // 48) % len(seed_depths)])
                 use_pca_orientation = False
             else:
                 orientation_index = (pca_index - legacy_pca_count) % 24
                 variant = (pca_index - legacy_pca_count) // 24
                 pca_axis_index = orientation_index // 8
-                axis_sign = (
-                    1.0 if (orientation_index // 4) % 2 == 0 else -1.0
-                )
+                axis_sign = 1.0 if (orientation_index // 4) % 2 == 0 else -1.0
                 wrist_roll = 0.5 * np.pi * (orientation_index % 4)
                 axial_levels = np.asarray([0.0, 0.35, -0.25, 0.60])
-                axial_fraction = float(
-                    axial_levels[variant % len(axial_levels)]
-                )
+                axial_fraction = float(axial_levels[variant % len(axial_levels)])
                 closure_levels = np.asarray([0.10, 0.20, 0.32, 0.45])
-                closure = float(
-                    closure_levels[variant % len(closure_levels)]
-                )
+                closure = float(closure_levels[variant % len(closure_levels)])
                 depth = float(seed_depths[variant % len(seed_depths)])
                 use_pca_orientation = True
-            fractions = open_fractions + closure * (
-                closed_fractions - open_fractions
-            )
+            fractions = open_fractions + closure * (closed_fractions - open_fractions)
             fractions[4] = 1.0
             lateral = np.zeros(2)
         else:
@@ -431,24 +400,15 @@ def search_hand_grasp(
         side_1 /= np.linalg.norm(side_1)
         side_2 = np.cross(outward, side_1)
         if use_pca_orientation:
-            remaining = [
-                axis for axis in range(3) if axis != pca_axis_index
-            ]
-            target_outward = (
-                axis_sign * principal_axes[:, pca_axis_index]
-            )
+            remaining = [axis for axis in range(3) if axis != pca_axis_index]
+            target_outward = axis_sign * principal_axes[:, pca_axis_index]
             base_side_1 = principal_axes[:, remaining[0]]
             base_side_2 = np.cross(target_outward, base_side_1)
             base_side_2 /= max(np.linalg.norm(base_side_2), 1e-9)
             base_side_1 = np.cross(base_side_2, target_outward)
-            target_side_1 = (
-                np.cos(wrist_roll) * base_side_1
-                + np.sin(wrist_roll) * base_side_2
-            )
+            target_side_1 = np.cos(wrist_roll) * base_side_1 + np.sin(wrist_roll) * base_side_2
             target_side_2 = np.cross(target_outward, target_side_1)
-            target_basis = np.column_stack(
-                [target_outward, target_side_1, target_side_2]
-            )
+            target_basis = np.column_stack([target_outward, target_side_1, target_side_2])
             source_basis = np.column_stack([outward, side_1, side_2])
             rotation = target_basis @ source_basis.T
         else:
@@ -479,14 +439,12 @@ def search_hand_grasp(
             contact_normals,
             palmward_force,
             finger_preload_weights,
-        ) = (
-            _actual_contact_quality(
-                points,
-                hand.labels,
-                cloud,
-                contacting,
-                palmward,
-            )
+        ) = _actual_contact_quality(
+            points,
+            hand.labels,
+            cloud,
+            contacting,
+            palmward,
         )
         # Soft finger pads may overlap the point-cloud surface slightly while
         # making contact.  Rigid base/linkage meshes use a tighter limit.
@@ -499,8 +457,7 @@ def search_hand_grasp(
         object_inside_hand = bool(
             np.any(
                 np.all(
-                    (tip_low[None, :] <= cloud.points)
-                    & (cloud.points <= tip_high[None, :]),
+                    (tip_low[None, :] <= cloud.points) & (cloud.points <= tip_high[None, :]),
                     axis=1,
                 )
             )

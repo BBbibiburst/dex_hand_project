@@ -7,7 +7,9 @@ from source.grasping.dex_hand_surface import (
 )
 from source.grasping.grasp_config_search import (
     GraspConfigSearchResult,
+    ValidatedGraspConfigResult,
     generate_grasp_config,
+    generate_validated_grasp_config,
     search_grasp_config,
 )
 from source.grasping.hand_closure_search import (
@@ -24,6 +26,7 @@ from source.grasping.pika_gripper_surface import (
 )
 from source.grasping.standalone_validator import (
     StandaloneValidationResult,
+    validate_grasp_config,
     validate_standalone,
 )
 
@@ -32,7 +35,9 @@ __all__ = [
     "load_posed_dex_hand_surface",
     "plan_approach_path",
     "GraspConfigSearchResult",
+    "ValidatedGraspConfigResult",
     "generate_grasp_config",
+    "generate_validated_grasp_config",
     "search_grasp_config",
     "HandClosureResult",
     "search_hand_grasp",
@@ -41,5 +46,6 @@ __all__ = [
     "PosedPikaGripperSurface",
     "load_posed_pika_gripper_surface",
     "StandaloneValidationResult",
+    "validate_grasp_config",
     "validate_standalone",
 ]

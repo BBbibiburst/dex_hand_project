@@ -53,15 +53,14 @@ def test_noop_profile_can_reset_and_step(
         env.close()
 
 
-@pytest.mark.skipif(
-    not MANIFEST_PATH.is_file(),
-    reason="optional ManiSkill object assets are not installed",
-)
+@pytest.mark.parametrize("profile", PROFILES, ids=lambda value: Path(value).stem)
 @pytest.mark.parametrize("task_name", registered_tasks())
-def test_builtin_task_can_reset_and_step(task_name: str) -> None:
+def test_builtin_task_can_reset_and_step(task_name: str, profile: str) -> None:
+    if task_name != "nut_assembly" and not MANIFEST_PATH.is_file():
+        pytest.skip("optional ManiSkill object assets are not installed")
     env = make_manipulation_env(
         task_name,
-        robot_config_path="configs/robot_profiles/rm75b_pika_gripper.json",
+        robot_config_path=profile,
         control_mode="ik",
         enable_tactile_sensors=False,
         render_mode=None,

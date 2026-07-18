@@ -80,9 +80,7 @@ def _approach(
     final_fraction = float(result.actuator_fractions[0])
     # Stay fully open through most of the approach; close only near contact.
     close_progress = np.clip((progress - 0.72) / 0.28, 0.0, 1.0)
-    fractions = (
-        1.0 + close_progress * (final_fraction - 1.0)
-    )[:, None]
+    fractions = (1.0 + close_progress * (final_fraction - 1.0))[:, None]
     local_forward = result.rotation_matrix @ np.asarray([1.0, 0.0, 0.0])
     directions = [
         -local_forward,
@@ -104,18 +102,13 @@ def _approach(
         direction = np.asarray(raw_direction, dtype=np.float64)
         direction /= max(np.linalg.norm(direction), 1e-9)
         translations = (
-            result.translation[None, :]
-            + (1.0 - progress[:, None]) * clearance * direction[None, :]
+            result.translation[None, :] + (1.0 - progress[:, None]) * clearance * direction[None, :]
         )
         violation = 0.0
-        for index, (surface, translation) in enumerate(
-            zip(surfaces, translations, strict=True)
-        ):
+        for index, (surface, translation) in enumerate(zip(surfaces, translations, strict=True)):
             if index + 1 == waypoint_count:
                 continue
-            points = (
-                surface.points @ result.rotation_matrix.T + translation
-            )
+            points = surface.points @ result.rotation_matrix.T + translation
             penetration, rigid, _, _ = _metrics(points, surface.labels, cloud)
             violation = max(violation, penetration - 0.003, rigid - 0.0015)
         key = (
@@ -128,9 +121,7 @@ def _approach(
             best = translations
     if best is None or best_key is None or best_key[0]:
         raise RuntimeError("No collision-free Pika approach path was found.")
-    rotations = np.repeat(
-        result.rotation_matrix[None, :, :], waypoint_count, axis=0
-    )
+    rotations = np.repeat(result.rotation_matrix[None, :, :], waypoint_count, axis=0)
     return best, rotations, fractions
 
 
@@ -170,18 +161,14 @@ def search_pika_grasp(
                 up_axis = np.cross(forward_axis, closing_axis)
                 up_axis /= max(np.linalg.norm(up_axis), 1e-9)
                 closing_axis = np.cross(up_axis, forward_axis)
-                rotation = np.column_stack(
-                    [forward_axis, closing_axis, up_axis]
-                )
+                rotation = np.column_stack([forward_axis, closing_axis, up_axis])
                 for height_fraction in (-0.45, 0.0, 0.45):
                     target_midpoint = (
                         height_fraction
                         * half_extents[forward_axis_index]
                         * axes[:, forward_axis_index]
                     )
-                    for opening_fraction, surface in zip(
-                        opening_fractions, surfaces, strict=True
-                    ):
+                    for opening_fraction, surface in zip(opening_fractions, surfaces, strict=True):
                         midpoint = surface.contact_centers.mean(axis=0)
                         translation = target_midpoint - rotation @ midpoint
                         points = surface.points @ rotation.T + translation
@@ -191,16 +178,11 @@ def search_pika_grasp(
                             distances,
                             object_indices,
                         ) = _metrics(points, surface.labels, cloud)
-                        contacts = tuple(
-                            int(index)
-                            for index in np.flatnonzero(distances <= 0.005)
-                        )
+                        contacts = tuple(int(index) for index in np.flatnonzero(distances <= 0.005))
                         contact_points = cloud.points[object_indices]
                         inward = -cloud.normals[object_indices]
                         opposition = float(np.dot(inward[0], inward[1]))
-                        force_residual = 0.5 * float(
-                            np.linalg.norm(inward[0] + inward[1])
-                        )
+                        force_residual = 0.5 * float(np.linalg.norm(inward[0] + inward[1]))
                         table_clearance = float(points[:, 2].min() - table_height)
                         feasible = (
                             penetration <= 0.003
@@ -239,9 +221,7 @@ def search_pika_grasp(
                                 points=points,
                                 translation=translation,
                                 rotation_matrix=rotation,
-                                actuator_fractions=np.asarray(
-                                    [opening_fraction], dtype=np.float64
-                                ),
+                                actuator_fractions=np.asarray([opening_fraction], dtype=np.float64),
                                 maximum_penetration=penetration,
                                 maximum_noncontact_penetration=rigid_penetration,
                                 mean_contact_distance=float(distances.mean()),
@@ -263,9 +243,7 @@ def search_pika_grasp(
         raise RuntimeError("Pika grasp search produced no candidates.")
     if not best.success:
         return best
-    translations, rotations, fractions = _approach(
-        cloud, best, seed=seed
-    )
+    translations, rotations, fractions = _approach(cloud, best, seed=seed)
     return PikaGraspResult(
         **{
             **best.__dict__,

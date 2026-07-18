@@ -80,12 +80,8 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
     hand_tips = getattr(closure, "fingertip_centers", None)
     if hand_tips is None:
         local_centers = getattr(hand, "contact_centers", np.empty((0, 3)))
-        hand_tips = (
-            local_centers @ closure.rotation_matrix.T + closure.translation
-        )
-    hand_colors = np.asarray(
-        ["#f4a261", "#e76f51", "#2a9d8f", "#457b9d", "#9b5de5", "#777777"]
-    )
+        hand_tips = local_centers @ closure.rotation_matrix.T + closure.translation
+    hand_colors = np.asarray(["#f4a261", "#e76f51", "#2a9d8f", "#457b9d", "#9b5de5", "#777777"])
     for label in np.unique(hand.labels):
         selected = hand.labels == label
         axis.scatter(
@@ -142,9 +138,7 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
     ):
         axis.text(*point, f"  F{finger}", color=colors[index], fontsize=10)
 
-    visible_points = np.concatenate(
-        [cloud.points, hand_points, closure.contact_points, path]
-    )
+    visible_points = np.concatenate([cloud.points, hand_points, closure.contact_points, path])
     low = visible_points.min(axis=0)
     high = visible_points.max(axis=0)
     center = 0.5 * (low + high)

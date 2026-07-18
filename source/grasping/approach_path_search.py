@@ -33,8 +33,7 @@ def plan_approach_path(
     progress = np.linspace(0.0, 1.0, waypoint_count)
     fractions = (
         open_fractions[None, :]
-        + progress[:, None]
-        * (grasp.actuator_fractions - open_fractions)[None, :]
+        + progress[:, None] * (grasp.actuator_fractions - open_fractions)[None, :]
     )
     posed_hands = [
         load_posed_dex_hand_surface(
@@ -80,8 +79,7 @@ def plan_approach_path(
                 )
             translations.append(translation)
         key = (
-            max(maximum_pad_violation, 0.0) > 0.0
-            or max(maximum_rigid_violation, 0.0) > 0.0,
+            max(maximum_pad_violation, 0.0) > 0.0 or max(maximum_rigid_violation, 0.0) > 0.0,
             max(maximum_rigid_violation, 0.0),
             max(maximum_pad_violation, 0.0),
             1.0 - float(direction @ tabletop_preference),

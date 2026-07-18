@@ -39,8 +39,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--viewer-speed",
         type=float,
-        default=1.0,
-        help="Playback speed relative to wall-clock time (default: 1.0).",
+        default=0.5,
+        help="Playback speed relative to wall-clock time (default: 0.5).",
     )
     add_robot_config_args(parser)
     return parser.parse_args()
@@ -91,11 +91,7 @@ def _draw_state(
         ),
         dtype=np.float64,
     )
-    command_name = (
-        "gripper opening"
-        if env.hand_descriptor.name == "pika_gripper"
-        else "hand"
-    )
+    command_name = "gripper opening" if env.hand_descriptor.name == "pika_gripper" else "hand"
 
     clear_markers(handle)
     draw_pose_frame(

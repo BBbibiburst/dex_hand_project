@@ -10,8 +10,6 @@ import json
 from pathlib import Path
 import time
 
-import numpy as np
-
 from source.assets import PROJECT_ROOT
 from source.envs.manipulation.object_catalog import object_ids
 from source.grasping.grasp_config_search import (
@@ -19,11 +17,8 @@ from source.grasping.grasp_config_search import (
     search_grasp_config,
 )
 from source.grasping.standalone_validator import (
-    build_standalone_model,
-    set_hand_targets,
-    validate_standalone,
+    validate_grasp_config,
 )
-from source.robots.registry import get_hand
 
 
 def parse_args() -> argparse.Namespace:
@@ -83,12 +78,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        default=(
-            PROJECT_ROOT
-            / "configs"
-            / "grasps"
-            / "grasp_catalog_benchmark.json"
-        ),
+        default=(PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"),
     )
     return parser.parse_args()
 
@@ -122,18 +112,7 @@ def _write_report(
     payload = {
         "schema_version": 1,
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "parameters": {
-            "dataset": args.dataset,
-            "points": args.points,
-            "joint_candidates": args.joint_candidates,
-            "search_attempts": args.search_attempts,
-            "seed": args.seed,
-            "target_size": args.target_size,
-            "end_effector": args.end_effector,
-            "seconds": args.seconds,
-            "settle_seconds": args.settle_seconds,
-            "grip_preload": args.grip_preload,
-        },
+        "parameters": _report_parameters(args),
         "summary": {
             "selected": len(selected),
             "completed": len(rows),
@@ -151,12 +130,34 @@ def _write_report(
     temporary.replace(path)
 
 
-def _load_completed(path: Path) -> list[dict]:
+def _report_parameters(args: argparse.Namespace) -> dict:
+    return {
+        "dataset": args.dataset,
+        "points": args.points,
+        "joint_candidates": args.joint_candidates,
+        "search_attempts": args.search_attempts,
+        "seed": args.seed,
+        "target_size": args.target_size,
+        "end_effector": args.end_effector,
+        "seconds": args.seconds,
+        "settle_seconds": args.settle_seconds,
+        "grip_preload": args.grip_preload,
+    }
+
+
+def _load_completed(path: Path, args: argparse.Namespace) -> list[dict]:
     if not path.is_file():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))
     if payload.get("schema_version") != 1:
         raise ValueError(f"Cannot resume unsupported report {path}.")
+    parameters = payload.get("parameters")
+    expected = _report_parameters(args)
+    if parameters != expected:
+        raise ValueError(
+            f"Cannot resume {path} with different parameters. "
+            f"stored={parameters}, requested={expected}"
+        )
     return list(payload.get("objects", []))
 
 
@@ -168,43 +169,11 @@ def _validate_config(
     grip_preload: float,
 ) -> dict:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    end_effector_name = payload.get("end_effector_name", "dex_hand")
-    actuator_names = tuple(
-        get_hand(end_effector_name).position_actuator_names
-    )
-    model, data = build_standalone_model(
-        object_mesh=payload["mesh"],
-        mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
-        mesh_scale=float(payload["mesh_scale"]),
-        hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
-        hand_rotation_matrix=np.asarray(
-            payload["hand_rotation_matrix"], dtype=np.float64
-        ),
-        object_table_height=payload.get("object_table_height"),
-        end_effector_name=end_effector_name,
-    )
-    set_hand_targets(
-        model,
-        data,
-        np.asarray(payload["hand_actuator_values"], dtype=np.float64),
-        grip_preload=grip_preload,
-        preload_weights=np.asarray(
-            payload["hand_preload_weights"], dtype=np.float64
-        ),
-        preload_directions=np.asarray(
-            payload.get(
-                "hand_preload_directions",
-                np.ones(len(actuator_names)),
-            ),
-            dtype=np.float64,
-        ),
-        actuator_names=actuator_names,
-    )
-    result = validate_standalone(
-        model,
-        data,
+    result = validate_grasp_config(
+        path,
         seconds=seconds,
         settle_seconds=settle_seconds,
+        grip_preload=grip_preload,
     )
     metrics = asdict(result)
     metrics.update(
@@ -212,9 +181,7 @@ def _validate_config(
             "table_clearance": payload.get("hand_table_clearance"),
             "pca_axis_index": payload.get("hand_pca_axis_index"),
             "robustness_margin": payload.get("hand_robustness_margin"),
-            "force_closure_residual": payload.get(
-                "hand_force_closure_residual"
-            ),
+            "force_closure_residual": payload.get("hand_force_closure_residual"),
             "contacting_fingers": payload.get("hand_contacting_fingers"),
             "preload_weights": payload.get("hand_preload_weights"),
         }
@@ -227,13 +194,12 @@ def _run_one(task: dict) -> dict:
     started = time.monotonic()
     config_path = Path(task["config_path"])
     search_errors = []
+    validation_errors = []
     best_unstable = None
     for attempt in range(task["search_attempts"]):
         attempt_started = time.monotonic()
         try:
-            reuse_this_attempt = (
-                task["reuse"] and attempt == 0 and config_path.is_file()
-            )
+            reuse_this_attempt = task["reuse"] and attempt == 0 and config_path.is_file()
             if not reuse_this_attempt:
                 search_grasp_config(
                     object_id=object_id,
@@ -269,11 +235,17 @@ def _run_one(task: dict) -> dict:
                 return row
             best_unstable = row
         except Exception as exc:
-            search_errors.append(
-                f"seed={task['seed'] + attempt} validation: {exc}"
-            )
+            validation_errors.append(f"seed={task['seed'] + attempt} validation: {exc}")
     if best_unstable is not None:
         return best_unstable
+    if validation_errors:
+        return {
+            "object_id": object_id,
+            "status": "validation_error",
+            "error": " | ".join(validation_errors),
+            "attempts_used": task["search_attempts"],
+            "elapsed_seconds": time.monotonic() - started,
+        }
     return {
         "object_id": object_id,
         "status": "search_error",
@@ -292,9 +264,7 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("--search-attempts must be positive.")
     selected = _selected_ids(args)
     default_config_dir = PROJECT_ROOT / "configs" / "grasps" / "benchmark"
-    default_output = (
-        PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"
-    )
+    default_output = PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"
     if args.end_effector != "dex_hand":
         if args.config_dir == default_config_dir:
             args.config_dir = default_config_dir / args.end_effector
@@ -305,9 +275,9 @@ def run(args: argparse.Namespace) -> int:
                 / "grasps"
                 / f"grasp_catalog_benchmark_{args.end_effector}.json"
             )
-    rows = _load_completed(args.output) if args.resume else []
-    completed = {row["object_id"] for row in rows}
+    rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
+    completed = {row["object_id"] for row in rows}
 
     pending = [object_id for object_id in selected if object_id not in completed]
     for object_id in selected:
@@ -316,9 +286,7 @@ def run(args: argparse.Namespace) -> int:
     tasks = [
         {
             "object_id": object_id,
-            "config_path": str(
-                args.config_dir / f"{grasp_config_name(object_id)}.json"
-            ),
+            "config_path": str(args.config_dir / f"{grasp_config_name(object_id)}.json"),
             "reuse": args.reuse,
             "points": args.points,
             "joint_candidates": args.joint_candidates,

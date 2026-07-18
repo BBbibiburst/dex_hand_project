@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 from pathlib import Path
 
 import mujoco
@@ -22,6 +23,55 @@ class StandaloneValidationResult:
     initial_contacts: int
     final_contacts: int
     simulated_seconds: float
+
+
+def validate_grasp_config(
+    path: str | Path,
+    *,
+    seconds: float = 3.0,
+    settle_seconds: float = 0.8,
+    grip_preload: float = 0.25,
+) -> StandaloneValidationResult:
+    """Load and dynamically validate one versioned grasp configuration."""
+    config_path = Path(path)
+    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1:
+        raise ValueError(f"Unsupported or missing schema_version in {config_path}.")
+    if payload.get("hand_fit_success") is not True:
+        raise ValueError(f"Grasp {config_path} did not pass mesh fitting.")
+
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
+    model, data = build_standalone_model(
+        object_mesh=payload["mesh"],
+        mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
+        mesh_scale=float(payload["mesh_scale"]),
+        hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
+        hand_rotation_matrix=np.asarray(
+            payload["hand_rotation_matrix"],
+            dtype=np.float64,
+        ),
+        object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
+    )
+    set_hand_targets(
+        model,
+        data,
+        np.asarray(payload["hand_actuator_values"], dtype=np.float64),
+        grip_preload=grip_preload,
+        preload_weights=np.asarray(payload["hand_preload_weights"], dtype=np.float64),
+        preload_directions=np.asarray(
+            payload.get("hand_preload_directions", np.ones(len(actuator_names))),
+            dtype=np.float64,
+        ),
+        actuator_names=actuator_names,
+    )
+    return validate_standalone(
+        model,
+        data,
+        seconds=seconds,
+        settle_seconds=settle_seconds,
+    )
 
 
 def build_standalone_model(
@@ -75,9 +125,7 @@ def build_standalone_model(
             [0.0, 0.0, float(object_table_height)],
             dtype=np.float64,
         )
-        table_point_hand = object_rotation @ (
-            table_point_object - hand_translation
-        )
+        table_point_hand = object_rotation @ (table_point_object - hand_translation)
         table_normal = object_rotation @ np.asarray([0.0, 0.0, 1.0])
         reference = (
             np.asarray([1.0, 0.0, 0.0])
@@ -141,20 +189,12 @@ def set_hand_targets(
         if preload_directions is None
         else np.asarray(preload_directions, dtype=np.float64)
     )
-    if weights.shape != (len(names),) or np.any(
-        (weights < 0.0) | (weights > 1.0)
-    ):
+    if weights.shape != (len(names),) or np.any((weights < 0.0) | (weights > 1.0)):
         raise ValueError("preload_weights must match actuators and lie in [0, 1].")
-    if directions.shape != (len(names),) or np.any(
-        ~np.isin(directions, (-1.0, 1.0))
-    ):
+    if directions.shape != (len(names),) or np.any(~np.isin(directions, (-1.0, 1.0))):
         raise ValueError("preload_directions must contain only -1 or 1.")
-    for name, value, weight, direction in zip(
-        names, values, weights, directions, strict=True
-    ):
-        actuator_id = mujoco.mj_name2id(
-            model, mujoco.mjtObj.mjOBJ_ACTUATOR, name
-        )
+    for name, value, weight, direction in zip(names, values, weights, directions, strict=True):
+        actuator_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
         if actuator_id < 0:
             raise RuntimeError(f"Standalone hand actuator {name!r} is missing.")
         # Four fingers and thumb grasp receive extra closure after the
@@ -184,9 +224,7 @@ def set_hand_fraction_targets(
     )
     names = default_names if actuator_names is None else actuator_names
     fractions = np.asarray(actuator_fractions, dtype=np.float64)
-    if fractions.shape != (len(names),) or np.any(
-        (fractions < 0.0) | (fractions > 1.0)
-    ):
+    if fractions.shape != (len(names),) or np.any((fractions < 0.0) | (fractions > 1.0)):
         raise ValueError("actuator_fractions must match actuators and lie in [0, 1].")
     for name, fraction in zip(names, fractions, strict=True):
         actuator_id = mujoco.mj_name2id(
@@ -217,9 +255,7 @@ def set_object_pose_for_hand_pose(
     qpos_address = int(model.jnt_qposadr[joint_id])
     dof_address = int(model.jnt_dofadr[joint_id])
     data.qpos[qpos_address : qpos_address + 3] = object_position
-    data.qpos[qpos_address + 3 : qpos_address + 7] = mat_to_quat(
-        object_rotation
-    )
+    data.qpos[qpos_address + 3 : qpos_address + 7] = mat_to_quat(object_rotation)
     data.qvel[dof_address : dof_address + 6] = 0.0
     mujoco.mj_forward(model, data)
 
@@ -235,12 +271,8 @@ def validate_standalone(
     """Simulate a fixed hand holding a free object under gravity."""
     if seconds <= 0 or settle_seconds < 0:
         raise ValueError("seconds must be positive and settle_seconds non-negative.")
-    body_id = mujoco.mj_name2id(
-        model, mujoco.mjtObj.mjOBJ_BODY, "validation_object_body"
-    )
-    joint_id = mujoco.mj_name2id(
-        model, mujoco.mjtObj.mjOBJ_JOINT, "validation_object_freejoint"
-    )
+    body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "validation_object_body")
+    joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "validation_object_freejoint")
     qpos_address = int(model.jnt_qposadr[joint_id])
     dof_address = int(model.jnt_dofadr[joint_id])
     fixed_object_pose = data.qpos[qpos_address : qpos_address + 7].copy()
@@ -252,9 +284,7 @@ def validate_standalone(
         mujoco.mj_forward(model, data)
 
     mujoco.mj_forward(model, data)
-    object_geom = mujoco.mj_name2id(
-        model, mujoco.mjtObj.mjOBJ_GEOM, "validation_object_collision"
-    )
+    object_geom = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "validation_object_collision")
     initial_contacts = sum(
         int(data.contact[index].geom1) == object_geom
         or int(data.contact[index].geom2) == object_geom

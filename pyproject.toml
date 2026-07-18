@@ -37,8 +37,31 @@ dex-collect-teleop = "source.demos.collect_teleop_lerobot:main"
 dex-task-playback = "source.demos.manipulation_task_playback:main"
 dex-glove-test = "source.teleop.bluetooth_glove.bluetooth_glove_test:main"
 
+[tool.setuptools]
+include-package-data = false
+
 [tool.setuptools.packages.find]
-include = ["source*"]
+include = ["source*", "assets", "configs"]
+
+[tool.setuptools.package-data]
+assets = [
+    "arenas/*.xml",
+    "bases/*.xml",
+    "bases/meshes/**/*",
+    "grippers/**/*",
+    "robots/**/*",
+    "textures/*",
+]
+configs = [
+    "current_robot.json",
+    "robot_profiles/*.json",
+    "teleop.json",
+    "*_objects.lock.txt",
+]
+
+[tool.setuptools.exclude-package-data]
+assets = ["maniskill/**/*"]
+configs = ["grasps/**/*"]
 
 [tool.ruff]
 line-length = 100
