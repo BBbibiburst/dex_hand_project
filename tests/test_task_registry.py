@@ -3,6 +3,7 @@
 import pytest
 
 from source.envs.manipulation import make_task, registered_tasks
+from source.envs.manipulation.object_catalog import MANIFEST_PATH
 
 
 def test_builtin_tasks_are_registered() -> None:
@@ -16,6 +17,10 @@ def test_builtin_tasks_are_registered() -> None:
     assert expected <= set(registered_tasks())
 
 
+@pytest.mark.skipif(
+    not MANIFEST_PATH.is_file(),
+    reason="optional ManiSkill object assets are not installed",
+)
 @pytest.mark.parametrize("task_name", registered_tasks())
 def test_registered_task_can_be_created(task_name: str) -> None:
     task = make_task(task_name)
