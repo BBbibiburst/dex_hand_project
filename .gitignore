@@ -231,6 +231,9 @@ datasets/
 recordings/
 checkpoints/
 
+# Generated grasp and approach-path cache
+configs/grasps/
+
 # Downloaded ManiSkill assets (large and separately licensed)
 assets/maniskill/
 assets/ycb/

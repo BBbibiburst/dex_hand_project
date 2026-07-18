@@ -3,20 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 import trimesh
 
-from source.envs.manipulation.object_catalog import (
-    DEFAULT_LIFT_OBJECT,
-    resolve_record,
-    resolve_record_path,
-)
-from source.grasping.mesh_pointcloud import sample_surface_pointcloud
-from source.grasping.hand_closure_search import search_hand_grasp
+from source.envs.manipulation.object_catalog import DEFAULT_LIFT_OBJECT
+from source.grasping.grasp_config_search import search_grasp_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -33,7 +27,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
-    parser.add_argument("--output", type=Path, default=Path("grasp_library/contacts.json"))
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Output JSON (default: configs/grasps/<object_id>.json).",
+    )
     parser.add_argument("--preview", type=Path)
     parser.add_argument(
         "--preview-image",
@@ -46,21 +44,6 @@ def parse_args() -> argparse.Namespace:
         help="Open an interactive Matplotlib 3D viewer after optimization.",
     )
     return parser.parse_args()
-
-
-def _object_mesh_path(object_id: str) -> Path:
-    record = resolve_record(object_id)
-    root = resolve_record_path(record, "source_path")
-    candidates = [
-        root / name
-        for name in record.get("model_files", ())
-        if Path(name).suffix.lower() in {".stl", ".obj", ".ply"}
-    ]
-    visual = next((path for path in candidates if path.name == "textured.obj"), None)
-    path = visual or next(iter(candidates), None)
-    if path is None or not path.is_file():
-        raise FileNotFoundError(f"No mesh found for {object_id!r}.")
-    return path
 
 
 def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
@@ -113,6 +96,24 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
         linewidths=2.0,
         label="Dex Hand fingertips (staged closure)",
     )
+    path = closure.approach_translations
+    if path.size:
+        axis.plot(
+            path[:, 0],
+            path[:, 1],
+            path[:, 2],
+            color="#2ca02c",
+            linewidth=2.5,
+            label="collision-free approach path",
+        )
+        axis.scatter(
+            path[:, 0],
+            path[:, 1],
+            path[:, 2],
+            s=28,
+            c=np.linspace(0.0, 1.0, len(path)),
+            cmap="viridis",
+        )
     normal_length = 0.025
     axis.quiver(
         closure.contact_points[:, 0],
@@ -132,7 +133,7 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
         axis.text(*point, f"  F{finger}", color=colors[index], fontsize=10)
 
     visible_points = np.concatenate(
-        [cloud.points, hand_points, closure.contact_points]
+        [cloud.points, hand_points, closure.contact_points, path]
     )
     low = visible_points.min(axis=0)
     high = visible_points.max(axis=0)
@@ -164,37 +165,19 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
 
 
 def run(args) -> None:
-    mesh_path = args.mesh or _object_mesh_path(args.object_id)
-    cloud = sample_surface_pointcloud(
-        mesh_path,
-        count=args.points,
+    result = search_grasp_config(
+        object_id=None if args.mesh is not None else args.object_id,
+        mesh=args.mesh,
+        output=args.output,
+        points=args.points,
+        joint_candidates=args.joint_candidates,
+        seed=args.seed,
         target_size=args.target_size,
-        seed=args.seed,
     )
-    closure = search_hand_grasp(
-        cloud,
-        samples=args.joint_candidates,
-        seed=args.seed,
-    )
-    payload = {
-        "mesh": str(mesh_path),
-        "mesh_center": cloud.center.tolist(),
-        "mesh_scale": cloud.scale,
-        "contact_points": closure.contact_points.tolist(),
-        "contact_normals": closure.contact_normals.tolist(),
-        "hand_actuator_fractions": closure.actuator_fractions.tolist(),
-        "hand_actuator_values": closure.hand.actuator_values.tolist(),
-        "hand_translation": closure.translation.tolist(),
-        "hand_rotation_matrix": closure.rotation_matrix.tolist(),
-        "hand_closure": closure.closure,
-        "hand_maximum_penetration": closure.maximum_penetration,
-        "hand_mean_contact_distance": closure.mean_contact_distance,
-        "hand_contacting_fingers": list(closure.contacting_fingers),
-        "hand_force_closure_residual": closure.force_closure_residual,
-        "hand_fit_success": closure.success,
-    }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    mesh_path = result.mesh_path
+    output = result.output_path
+    cloud = result.cloud
+    closure = result.grasp
     if args.preview:
         object_colors = np.tile(
             np.asarray([[70, 150, 255, 100]], dtype=np.uint8),
@@ -227,10 +210,13 @@ def run(args) -> None:
         f"mesh={mesh_path} "
         f"closure={closure.closure:.2f} "
         f"penetration={closure.maximum_penetration:.4f}m "
+        f"rigid_penetration={closure.maximum_noncontact_penetration:.4f}m "
         f"contact_distance={closure.mean_contact_distance:.4f}m "
         f"contacts={closure.contacting_fingers} "
         f"hand_Efc={closure.force_closure_residual:.4f} "
-        f"hand_fit={closure.success} output={args.output}"
+        f"palmward_force={closure.palmward_force_component:.4f} "
+        f"palmward_depth={closure.palmward_depth:.4f}m "
+        f"hand_fit={closure.success} output={output}"
     )
 
 

@@ -41,7 +41,9 @@ def _geom_label(name: str) -> int:
     for finger in range(5):
         if f"skin_{finger}_" in name:
             return finger
-    return -1
+    # Non-skin meshes still belong to the physical hand and must participate
+    # in object penetration checks.  They are not eligible contact pads.
+    return 6
 
 
 def load_posed_dex_hand_surface(
@@ -94,9 +96,12 @@ def load_posed_dex_hand_surface(
         name = (
             mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
         )
-        label = _geom_label(name)
-        if label < 0 or model.geom_type[geom_id] != mujoco.mjtGeom.mjGEOM_MESH:
+        # The MJCF contains a named physical mesh followed by an unnamed visual
+        # duplicate for many parts.  Keep every named mesh once: this includes
+        # the palm, base, phalanges and linkage parts without double-sampling.
+        if not name or model.geom_type[geom_id] != mujoco.mjtGeom.mjGEOM_MESH:
             continue
+        label = _geom_label(name)
         vertices = _mesh_vertices(model, int(model.geom_dataid[geom_id]))
         if vertices.shape[0] > max_points_per_geom:
             selected = rng.choice(

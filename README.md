@@ -93,14 +93,14 @@ YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 # 使用资产清单中的物体
 python -m source.demos.search_mesh_force_closure \
   --object-id ycb:005_tomato_soup_can \
-  --output grasp_library/tomato_soup_can.json \
-  --preview-image grasp_library/tomato_soup_can.png
+  --output configs/grasps/ycb_005_tomato_soup_can.json \
+  --preview-image configs/grasps/ycb_005_tomato_soup_can.png
 
 # 直接使用一个 STL/OBJ
 python -m source.demos.search_mesh_force_closure \
   --mesh path/to/object.stl \
   --target-size 0.09 \
-  --output grasp_library/custom.json \
+  --output configs/grasps/custom.json \
   --viewer
 ```
 
@@ -114,12 +114,25 @@ python -m source.demos.search_mesh_force_closure \
 | `--joint-candidates N` | `128` | 搜索的手型候选数 |
 | `--seed N` | `0` | 随机种子，用于复现实验 |
 | `--target-size M` | `0.09` | 将物体最长边归一化到该尺寸，单位为米 |
-| `--output PATH` | `grasp_library/contacts.json` | 输出抓取 JSON，供后续两个验证程序读取 |
+| `--output PATH` | `configs/grasps/<object_id>.json` | 输出正式抓取配置，供验证程序和 Lift 策略读取 |
 | `--preview PATH` | 无 | 用 Trimesh 导出物体、手和接触点组成的 3D 场景，如 `.glb` |
 | `--preview-image PATH` | 无 | 保存点云、接触点和法向量的 PNG 预览图 |
 | `--viewer` | 关闭 | 打开交互式 Matplotlib 3D 窗口查看搜索结果 |
 
 几何评分只是候选生成器，不能代替动力学验证；搜索结果至少应通过下一程序验证。
+
+程序化调用不要导入 demo，使用无窗口 API：
+
+```python
+from source.grasping import generate_grasp_config, plan_approach_path
+
+config_path = generate_grasp_config("ycb:002_master_chef_can")
+```
+
+`source.grasping.grasp_config_search`负责物体 mesh、抓取搜索和版本化配置，
+`source.grasping.approach_path_search`负责完整手点云的无碰撞 waypoint 搜索；两者均不会
+加载 Matplotlib。只有独立运行 `source.demos.search_mesh_force_closure` 时才进行轨迹、
+接触点和手模型可视化。
 
 #### `source.demos.validate_standalone_grasp`
 
@@ -129,12 +142,12 @@ python -m source.demos.search_mesh_force_closure \
 
 ```bash
 python -m source.demos.validate_standalone_grasp \
-  grasp_library/tomato_soup_can.json \
+  configs/grasps/ycb_005_tomato_soup_can.json \
   --seconds 3 \
   --grip-preload 0.35
 
 python -m source.demos.validate_standalone_grasp \
-  grasp_library/tomato_soup_can.json \
+  configs/grasps/ycb_005_tomato_soup_can.json \
   --viewer --viewer-speed 1
 ```
 
@@ -152,6 +165,8 @@ python -m source.demos.validate_standalone_grasp \
 `approach → descend → adjust → make_gripper_hand_form → grasp → lift → check`
 执行；Viewer 中会显示末端目标位姿、旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
+策略会优先读取 `configs/grasps/<object_id>.json`；如果当前物体尚无配置，会自动调用
+点云抓取搜索一次并缓存配置，后续验证和数据收集直接复用，不会重复搜索。
 
 ```bash
 python -m source.demos.validate_scripted_strategy --task lift
