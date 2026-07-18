@@ -6,7 +6,6 @@
   "control_dt": 0.05,
   "episode_length": 500,
   "add_default_scene": true,
-  "enable_task_objects": false,
   "include_hand_action": true,
   "normalized_position": false,
   "enable_tactile_sensors": true,

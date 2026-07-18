@@ -47,7 +47,6 @@ class RLEnvConfig:
     control_dt: float = 0.05  # 20 Hz controller updates.
     episode_length: int = 500
     add_default_scene: bool = True
-    enable_task_objects: bool = False
     hand_prefix: Optional[str] = None
     stats_interval: float = 0.5
     control_mode: str = "position"  # "position" or "ik".
@@ -315,25 +314,13 @@ class RobotGymEnv(gym.Env):
         return self._simulation_stats.copy()
 
     # ------------------------------------------------------------------
-    # Spec augmentation (scene & task objects)
+    # Spec augmentation (scene & task)
     # ------------------------------------------------------------------
 
     def _augment_spec(self, spec: mujoco.MjSpec) -> None:
         self.task.augment_spec(spec)
         if self.config.add_default_scene and spec.geom("floor") is None:
             add_basic_scene(spec)
-        if self.config.enable_task_objects:
-            self._add_placeholder_task_objects(spec)
-
-    def _add_placeholder_task_objects(self, spec: mujoco.MjSpec) -> None:
-        table = spec.worldbody.add_body()
-        table.name = "task_table"
-        table.pos = [0.55, 0.0, 0.35]
-        table_geom = table.add_geom()
-        table_geom.name = "task_table_top"
-        table_geom.type = mujoco.mjtGeom.mjGEOM_BOX
-        table_geom.size = [0.35, 0.35, 0.03]
-        table_geom.rgba = [0.45, 0.42, 0.38, 1.0]
 
     # ------------------------------------------------------------------
     # Observation & info
