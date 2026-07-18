@@ -376,7 +376,37 @@ python -m source.demos.collect_scripted_lerobot \
 安装项目后还可使用 `dex-smoke-test`、`dex-vive-test`、`dex-vive-glove`、
 `dex-glove-test`、`dex-collect-teleop` 和 `dex-task-playback` 这些等价的命令行入口。
 
-## 自动无渲染测试
+## 代码结构
+
+操作任务和脚本策略的可复用实现已经从 demo 入口中分离：
+
+| 路径 | 职责 |
+| --- | --- |
+| `source/envs/manipulation/builtins.py` | 集中导入内置任务，触发任务注册 |
+| `source/envs/manipulation/factory.py` | 提供 `registered_tasks()` 和 `make_task()` 等任务注册表 API |
+| `source/envs/manipulation/*.py` | Lift、Pick Place、Stack、Nut Assembly 和 Push 的任务实现 |
+| `source/scripted/base.py` | 脚本策略公共接口 |
+| `source/scripted/registry.py` | 脚本策略注册与创建 API |
+| `source/scripted/lift.py` | 通用 Lift 策略及其持久状态 `LiftStrategyState` |
+| `source/demos/*.py` | 参数解析、可视化、数据收集和独立验证入口 |
+
+业务代码需要创建任务或脚本策略时应调用注册表 API，不要从 demo 模块导入实现。
+`LiftStrategy.reset()` 会重置阶段计数、稳定性计数、保持位姿和最终验证结果，使同一个策略
+实例可以安全地用于下一个 episode。
+
+## 自动测试与无渲染检查
+
+安装开发依赖后运行完整 pytest 回归测试：
+
+```powershell
+python -m pytest -q
+```
+
+当前测试覆盖内置任务注册、任务环境的参数化 reset/step smoke 路径，以及
+`LiftStrategyState` 和 `LiftStrategy.reset()` 的状态清理。YCB/EGAD 任务依赖
+`assets/maniskill/manifest.json`；未安装可选 ManiSkill 物体资产时，相关任务创建和
+环境 smoke 用例会显示为 `skipped`，其余单元测试仍会运行。需要覆盖完整任务集合时，
+先执行“下载 ManiSkill 物体资产”一节的命令。
 
 每次修改代码后运行一个命令即可检查核心仿真路径：
 
