@@ -21,6 +21,7 @@ from source.envs.manipulation.objects import (
     FreeCylinderSpec,
     FreeNutSpec,
     ManipulationObjectSpec,
+    MeshObjectSpec,
     XmlNutSpec,
 )
 from source.envs.manipulation.placement import UniformTablePlacementSampler
@@ -28,6 +29,7 @@ from source.envs.manipulation.placement import UniformTablePlacementSampler
 __all__ = [
     "FreeBoxSpec",
     "ManipulationObjectSpec",
+    "MeshObjectSpec",
     "SingleArmManipulationTask",
     "TableArena",
     "BinsArena",

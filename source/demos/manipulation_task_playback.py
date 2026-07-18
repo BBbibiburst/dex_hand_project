@@ -9,7 +9,7 @@ Usage::
 
     python -m source.demos.manipulation_task_playback --task lift
     python -m source.demos.manipulation_task_playback --task stack
-    python -m source.demos.manipulation_task_playback --task pick_place --single-object can
+    python -m source.demos.manipulation_task_playback --task pick_place --object-id ycb:025_mug
     python -m source.demos.manipulation_task_playback --task nut_assembly --single-nut square_nut
     python -m source.demos.manipulation_task_playback --task door --no-latch
 """
@@ -44,9 +44,14 @@ def _parse_args() -> argparse.Namespace:
         help="Reset seed controlling initial task placement.",
     )
     parser.add_argument(
-        "--single-object",
-        choices=("milk", "bread", "cereal", "can"),
-        help="Run PickPlace with only the selected object.",
+        "--object-id",
+        help="Catalogue object ID for Lift or PickPlace, for example ycb:025_mug.",
+    )
+    parser.add_argument(
+        "--stack-object-ids",
+        nargs=2,
+        metavar=("TOP", "BOTTOM"),
+        help="Two stack-compatible catalogue IDs.",
     )
     parser.add_argument(
         "--single-nut",
@@ -102,8 +107,10 @@ def _make_env(args: argparse.Namespace):
         raise ValueError(f"--render-fps must be positive, got {args.render_fps}.")
     if args.action_scale < 0.0:
         raise ValueError(f"--action-scale must be non-negative, got {args.action_scale}.")
-    if args.single_object is not None and args.task != "pick_place":
-        raise ValueError("--single-object is only valid with --task pick_place.")
+    if args.object_id is not None and args.task not in {"lift", "pick_place"}:
+        raise ValueError("--object-id is only valid with --task lift or pick_place.")
+    if args.stack_object_ids is not None and args.task != "stack":
+        raise ValueError("--stack-object-ids is only valid with --task stack.")
     if args.single_nut is not None and args.task != "nut_assembly":
         raise ValueError("--single-nut is only valid with --task nut_assembly.")
     if args.no_latch and args.task != "door":
@@ -123,8 +130,10 @@ def _make_env(args: argparse.Namespace):
     # project's current robot profile provide values for omitted CLI options.
     env_kwargs = {key: value for key, value in env_kwargs.items() if value is not None}
     task_config: Dict[str, Any] = {"reward_shaping": True}
-    if args.task == "pick_place" and args.single_object is not None:
-        task_config["single_object"] = args.single_object
+    if args.object_id is not None:
+        task_config["object_id"] = args.object_id
+    if args.stack_object_ids is not None:
+        task_config["object_ids"] = tuple(args.stack_object_ids)
     if args.task == "nut_assembly" and args.single_nut is not None:
         task_config["single_nut"] = args.single_nut
     if args.task == "door":

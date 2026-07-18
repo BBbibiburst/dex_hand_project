@@ -67,11 +67,27 @@ python -m source.demos.smoke_test --skip-tasks
 
 ```powershell
 python -m source.demos.manipulation_task_playback --task lift
+python -m source.demos.manipulation_task_playback --task lift --object-id egad:G6
 python -m source.demos.manipulation_task_playback --task stack
-python -m source.demos.manipulation_task_playback --task pick_place
+python -m source.demos.manipulation_task_playback --task pick_place --object-id ycb:025_mug
 python -m source.demos.manipulation_task_playback --task nut_assembly
 python -m source.demos.manipulation_task_playback --task door
 ```
+
+`lift`可选择全部127个目录物体，`pick_place`使用一个物体在源箱和目标箱两个完整格子
+之间搬运（不再使用四物体、四目标分区），并排除链条、弹珠等4个不适合单刚体搬运的
+模型，共123个候选。`stack`使用25个具有相对稳定支撑面的候选。物体在环境构造时由
+`task_config`选择，例如：
+
+```python
+env = make_manipulation_env(
+    "pick_place",
+    task_config={"object_id": "ycb:025_mug", "reward_shaping": True},
+)
+```
+
+MuJoCo模型编译后不会在`reset()`中替换网格。并行训练时应给不同worker传入不同
+`object_id`，需要切换课程阶段时重建对应worker。
 
 ## 收集示教
 

@@ -5,12 +5,14 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Tuple
 
 import mujoco
 import numpy as np
 
 from source.assets import asset_path
+from source.envs.manipulation.object_catalog import resolve_record, resolve_record_path
 
 
 def _configure_free_joint(joint: mujoco.MjsJoint, name: str) -> None:
@@ -51,6 +53,131 @@ class ManipulationObjectSpec(ABC):
 
     @abstractmethod
     def add_to_spec(self, spec: mujoco.MjSpec, initial_pos: np.ndarray) -> None: ...
+
+
+def _read_obj_bounds(path: Path) -> tuple[np.ndarray, np.ndarray]:
+    vertices: list[list[float]] = []
+    with path.open("r", encoding="utf-8", errors="ignore") as stream:
+        for line in stream:
+            if line.startswith("v "):
+                values = line.split()
+                vertices.append([float(values[1]), float(values[2]), float(values[3])])
+    if not vertices:
+        raise ValueError(f"OBJ mesh contains no vertices: {path}")
+    points = np.asarray(vertices, dtype=np.float64)
+    return points.min(axis=0), points.max(axis=0)
+
+
+@dataclass(frozen=True)
+class MeshObjectSpec(ManipulationObjectSpec):
+    """Free YCB/EGAD mesh with separate visual and collision geoms."""
+
+    name: str
+    object_id: str
+    target_size: float = 0.09
+    density: float = 500.0
+    friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001)
+
+    def __post_init__(self) -> None:
+        record = resolve_record(self.object_id)
+        root = resolve_record_path(record, "source_path")
+        model_files = tuple(record.get("model_files", ()))
+        visual = next(
+            (root / item for item in model_files if Path(item).name == "textured.obj"),
+            None,
+        )
+        if visual is None:
+            visual = next(
+                (root / item for item in model_files if Path(item).suffix.lower() == ".obj"),
+                None,
+            )
+        if visual is None or not visual.is_file():
+            raise FileNotFoundError(f"No OBJ visual mesh for {self.object_id}")
+        low, high = _read_obj_bounds(visual)
+        extent = high - low
+        scale = self.target_size / max(float(extent.max()), 1e-8)
+        object.__setattr__(self, "_visual_path", visual)
+        # MuJoCo builds a convex collision hull from OBJ meshes. The YCB bundle
+        # also contains collision.ply, but MuJoCo's built-in mesh decoder does
+        # not support that file on all platforms.
+        object.__setattr__(self, "_collision_path", visual)
+        object.__setattr__(self, "_center", 0.5 * (low + high))
+        object.__setattr__(self, "_extent", extent * scale)
+        object.__setattr__(self, "_scale", scale)
+        texture = root / "texture_map.png"
+        object.__setattr__(self, "_texture_path", texture if texture.is_file() else None)
+
+    @property
+    def body_name(self) -> str:
+        return f"{self.name}_body"
+
+    @property
+    def joint_name(self) -> str:
+        return f"{self.name}_freejoint"
+
+    @property
+    def geom_names(self) -> tuple[str, ...]:
+        return (f"{self.name}_collision",)
+
+    @property
+    def horizontal_radius(self) -> float:
+        return 0.5 * float(np.linalg.norm(self._extent[:2]))
+
+    @property
+    def bottom_offset(self) -> float:
+        return 0.5 * float(self._extent[2])
+
+    def add_to_spec(self, spec: mujoco.MjSpec, initial_pos: np.ndarray) -> None:
+        prefix = self.name.replace(":", "_")
+        visual_mesh = spec.add_mesh()
+        visual_mesh.name = f"{prefix}_visual_mesh"
+        visual_mesh.file = str(self._visual_path.resolve())
+        visual_mesh.scale = [self._scale] * 3
+        visual_mesh.refpos = self._center.tolist()
+
+        collision_mesh = spec.add_mesh()
+        collision_mesh.name = f"{prefix}_collision_mesh"
+        collision_mesh.file = str(self._collision_path.resolve())
+        collision_mesh.scale = [self._scale] * 3
+        collision_mesh.refpos = self._center.tolist()
+
+        material_name = ""
+        if self._texture_path is not None:
+            texture = spec.add_texture()
+            texture.name = f"{prefix}_texture"
+            texture.type = mujoco.mjtTexture.mjTEXTURE_2D
+            texture.file = str(self._texture_path.resolve())
+            material = spec.add_material()
+            material.name = f"{prefix}_material"
+            material.textures[mujoco.mjtTextureRole.mjTEXROLE_RGB] = texture.name
+            material_name = material.name
+
+        body = spec.worldbody.add_body()
+        body.name = self.body_name
+        body.pos = np.asarray(initial_pos, dtype=float).tolist()
+        joint = body.add_joint()
+        _configure_free_joint(joint, self.joint_name)
+
+        collision = body.add_geom()
+        collision.name = self.geom_names[0]
+        collision.type = mujoco.mjtGeom.mjGEOM_MESH
+        collision.meshname = collision_mesh.name
+        collision.density = self.density
+        collision.friction = list(self.friction)
+        collision.contype = 1
+        collision.conaffinity = 1
+        collision.rgba = [0.0, 0.0, 0.0, 0.0]
+
+        visual = body.add_geom()
+        visual.name = f"{self.name}_visual"
+        visual.type = mujoco.mjtGeom.mjGEOM_MESH
+        visual.meshname = visual_mesh.name
+        visual.contype = 0
+        visual.conaffinity = 0
+        visual.density = 0.0
+        visual.rgba = [0.65, 0.75, 0.90, 1.0]
+        if material_name:
+            visual.material = material_name
 
 
 @dataclass(frozen=True)

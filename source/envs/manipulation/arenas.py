@@ -223,7 +223,7 @@ class TableArena:
 
 @dataclass(frozen=True)
 class BinsArena(TableArena):
-    """Table arena with a source bin and four target compartments."""
+    """Table arena with one source bin and one undivided target bin."""
 
     bin_half_size: Tuple[float, float, float] = (0.18, 0.18, 0.06)
     source_center: Tuple[float, float] = (0.46, -0.20)
@@ -251,16 +251,6 @@ class BinsArena(TableArena):
                 geom.type = mujoco.mjtGeom.mjGEOM_BOX
                 geom.pos, geom.size = list(pos), list(size)
                 geom.rgba = [0.25, 0.35, 0.45, 1.0]
-            if prefix == "target_bin":
-                for axis, pos, size in (
-                    ("x", (0, 0, hz), (0.005, hy, hz)),
-                    ("y", (0, 0, hz), (hx, 0.005, hz)),
-                ):
-                    geom = body.add_geom()
-                    geom.name = f"target_divider_{axis}"
-                    geom.type = mujoco.mjtGeom.mjGEOM_BOX
-                    geom.pos, geom.size = list(pos), list(size)
-                    geom.rgba = [0.25, 0.35, 0.45, 1.0]
 
 
 @dataclass(frozen=True)

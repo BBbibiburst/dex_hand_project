@@ -23,6 +23,11 @@ import numpy as np
 
 from source.assets import PROJECT_ROOT
 from source.envs.manipulation import make_manipulation_env, registered_tasks
+from source.envs.manipulation.object_catalog import (
+    lift_object_ids,
+    pick_place_object_ids,
+    stack_object_ids,
+)
 from source.envs.rl_env import RobotGymEnv, load_env_config
 from source.robots.config import descriptors_from_robot_config, load_robot_config
 from source.sensors.tactile.signal_processing import (
@@ -103,6 +108,22 @@ def _check_task(task_name: str, profile: str, steps: int) -> str:
         return f"observation keys={sorted(env.observation_space.spaces)}"
     finally:
         env.close()
+
+
+def _check_object_catalog() -> str:
+    lift_ids = lift_object_ids()
+    pick_ids = pick_place_object_ids()
+    stack_ids = stack_object_ids()
+    if len(lift_ids) < 100 or len(pick_ids) < 100 or len(stack_ids) < 10:
+        raise AssertionError(
+            f"Insufficient object coverage: lift={len(lift_ids)}, "
+            f"pick_place={len(pick_ids)}, stack={len(stack_ids)}"
+        )
+    if not any(item.startswith("ycb:") for item in lift_ids):
+        raise AssertionError("Lift catalogue contains no YCB objects.")
+    if not any(item.startswith("egad:") for item in lift_ids):
+        raise AssertionError("Lift catalogue contains no EGAD objects.")
+    return f"lift={len(lift_ids)}, pick_place={len(pick_ids)}, stack={len(stack_ids)}"
 
 
 def _check_surface_data(profile: str) -> str:
@@ -201,6 +222,7 @@ def run(args: argparse.Namespace) -> int:
     checks: list[tuple[str, Callable[[], str]]] = [
         ("demo imports", _check_imports),
         ("tactile 8-neighbor diffusion", _check_tactile_diffusion),
+        ("manipulation object catalogue", _check_object_catalog),
     ]
     for profile in profiles:
         label = Path(profile).stem

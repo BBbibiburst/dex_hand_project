@@ -11,7 +11,8 @@ from gymnasium import spaces
 
 from source.envs.core.registry import register_task
 from source.envs.manipulation.base import SingleArmManipulationTask
-from source.envs.manipulation.objects import FreeBoxSpec
+from source.envs.manipulation.object_catalog import DEFAULT_STACK_OBJECTS, stack_object_ids
+from source.envs.manipulation.objects import MeshObjectSpec
 from source.envs.manipulation.placement import UniformTablePlacementSampler
 
 
@@ -21,13 +22,21 @@ class StackTask(SingleArmManipulationTask):
 
     success_reward = 2.0
 
-    def __init__(self, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        *,
+        object_ids: tuple[str, str] = DEFAULT_STACK_OBJECTS,
+        **kwargs: Any,
+    ) -> None:
+        if len(object_ids) != 2 or any(item not in stack_object_ids() for item in object_ids):
+            raise ValueError("object_ids must contain two stack-compatible catalogue IDs.")
+        self.object_ids = tuple(object_ids)
         sampler = kwargs.pop(
             "placement_sampler",
             UniformTablePlacementSampler(
-                x_range=(-0.08, 0.08),
-                y_range=(-0.08, 0.08),
-                min_separation=0.10,
+                x_range=(-0.14, 0.14),
+                y_range=(-0.14, 0.14),
+                min_separation=0.09,
             ),
         )
         super().__init__(placement_sampler=sampler, **kwargs)
@@ -36,17 +45,17 @@ class StackTask(SingleArmManipulationTask):
     def name(self) -> str:
         return "stack"
 
-    def create_objects(self) -> tuple[FreeBoxSpec, ...]:
+    def create_objects(self) -> tuple[MeshObjectSpec, ...]:
         return (
-            FreeBoxSpec(
+            MeshObjectSpec(
                 name="cubeA",
-                half_size=(0.02, 0.02, 0.02),
-                rgba=(0.86, 0.12, 0.10, 1.0),
+                object_id=self.object_ids[0],
+                target_size=0.065,
             ),
-            FreeBoxSpec(
+            MeshObjectSpec(
                 name="cubeB",
-                half_size=(0.025, 0.025, 0.025),
-                rgba=(0.18, 0.62, 0.20, 1.0),
+                object_id=self.object_ids[1],
+                target_size=0.075,
             ),
         )
 
