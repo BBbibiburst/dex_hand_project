@@ -86,8 +86,11 @@ YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 #### `source.demos.search_mesh_force_closure`
 
 只使用物体 mesh 和 `assets/grippers/dex_hand/` 中的灵巧手模型搜索抓取，不加载机械臂、
-桌子或完整任务环境。程序会将物体放入手掌工作空间，联合搜索手腕相对位姿、手指闭合量
-和接触点，并对穿透、接触分布及近似力闭合质量评分。
+桌子或完整任务环境。程序会对点云做 PCA，沿不同主轴、抓取高度和手部朝向生成候选，
+联合搜索手腕相对位姿、手指闭合量和接触点，并对穿透、接触分布、近似力闭合质量、
+掌内预紧合力、鲁棒裕量及完整手相对物体底面（桌面）的安全间隙评分。搜索完成后还会
+逐根手指做力闭合消融：去掉某根手指仍保持力闭合时，该手指只维持优化出的轻接触手型，
+不会在执行阶段继续施加额外预紧；必要手指的权重写入 `hand_preload_weights`。
 
 ```bash
 # 使用资产清单中的物体
@@ -155,18 +158,81 @@ python -m source.demos.validate_standalone_grasp \
 | --- | ---: | --- |
 | `grasp` | 必填 | `search_mesh_force_closure` 生成的 JSON |
 | `--seconds S` | `3.0` | 施加抓取后的仿真观察时间 |
-| `--grip-preload X` | `0.25` | 在优化手型基础上增加的闭合预紧量 |
+| `--grip-preload X` | `0.25` | 在优化手型基础上，对 `hand_preload_weights` 选中的必要手指增加闭合预紧量 |
 | `--viewer` | 关闭 | 打开交互式 Viewer |
 | `--viewer-speed X` | `1.0` | Viewer 播放倍率；`1` 表示与真实时间一致 |
+| `--approach-steps-per-waypoint N` | `12` | Viewer 中每个点云 approach waypoint 的动画步数 |
+
+Viewer 模式会先显示桌面平面并播放配置中的完整 approach 位姿与手型序列，再在最终抓取
+位姿释放物体进行动力学稳定性验证；无 Viewer 模式直接验证最终抓取。输出同时报告
+PCA 主轴、桌面间隙、鲁棒裕量、逐指预紧权重和 waypoint 数量。
+
+#### `source.demos.benchmark_grasp_catalog`
+
+对物体资产清单批量执行“搜索抓取位姿 → 独立 MuJoCo 保持验证”，逐个打印结果并将
+生成率、稳定率、失败物体清单和每个物体的漂移、接触指标写入 JSON。每个物体默认尝试
+三个独立随机种子，逐个做动力学验证，找到稳定抓取后立即停止。报告在每个物体完成后
+更新，长时间测试中断后可用 `--resume --reuse` 继续。
+
+```bash
+# 使用当前默认搜索和验证参数测试全部 YCB 与 EGAD 物体
+python -m source.demos.benchmark_grasp_catalog --jobs 8
+
+# 仅测试 YCB；中断后复用已生成抓取并继续
+python -m source.demos.benchmark_grasp_catalog \
+  --dataset ycb --jobs 8 --resume --reuse
+
+# 对指定物体或前 N 个物体做小规模检查
+python -m source.demos.benchmark_grasp_catalog \
+  --object-id ycb:002_master_chef_can \
+  --object-id ycb:025_mug
+python -m source.demos.benchmark_grasp_catalog --dataset egad --limit 10
+```
+
+默认报告为 `configs/grasps/grasp_catalog_benchmark.json`，各物体抓取配置保存在
+`configs/grasps/benchmark/`；两者都处于抓取缓存目录，不纳入 Git。`status=stable`
+表示成功生成且通过保持验证，`unstable` 表示生成成功但物理保持失败，
+`search_error` 和 `validation_error` 分别表示搜索或验证异常。`--jobs 1` 适合调试；
+并行测试可根据 CPU 核数提高 `--jobs`。`--search-attempts N` 控制每个物体最多尝试的
+独立候选数；搜索失败会打印各次候选具体违反的穿透、桌面间隙、对向接触、掌内合力或
+力闭合约束，不再只报告笼统的 `No valid grasp`。
+
+#### 抓取流程 TODO
+
+当前流程已经打通 mesh/点云搜索、逐指预紧、approach 规划、独立动力学验证、完整场景
+Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级继续完成：
+
+- [ ] **P0：统一正式配置和 benchmark 配置。** 抓取生成 API 应搜索多个候选并逐个进行
+  MuJoCo 保持验证，将第一个稳定候选原子写入 `configs/grasps/<object_id>.json`；Lift
+  默认使用这个已验证配置。`configs/grasps/benchmark/` 只保留评测中间结果，不应出现
+  benchmark 已稳定而正式策略读取另一个未验证姿态的情况。
+- [ ] **P0：提高桌面约束下的候选覆盖率。** 将桌面间隙直接加入位姿生成和优化，而不只
+  在末尾过滤；完善矮罐、球体、盒子、薄片和带把手物体的顶抓、侧抓及倾斜抓候选。目前
+  全量基线为 `31/127` 可生成、`11/127` 可稳定保持。
+- [ ] **P0：缩小几何评分与动力学稳定性的差距。** 对每个物体保留多个候选，使用短时
+  MuJoCo 验证重新排序；重点处理“几何力闭合合格但释放后零接触自由落体”的候选。
+- [ ] **P1：建立多抓取配置库。** 每个物体保存多个经过验证的抓取，包括抓取类型、seed、
+  PCA 轴、预紧权重、稳定性指标和适用物体姿态，而不是只覆盖一个 JSON。
+- [ ] **P1：增加扰动鲁棒性验证。** 对物体初始平移、旋转、质量、摩擦、控制误差和外力
+  做多次验证，报告成功率及置信区间，避免把单次 `stable=True` 当作稳健抓取。
+- [ ] **P1：增加完整场景自动验证。** 在独立固定手验证之后，自动运行机械臂 approach、
+  grasp、lift，检查沿途手/物体/桌面碰撞、抓取后提升高度及保持时间；只有完整场景通过
+  的配置才能用于正式数据采集。
+- [ ] **P2：细化失败等级和阈值。** 区分完全脱落、保持但旋转过大、接触不足和边界稳定；
+  对 `mustard_bottle` 等仍有多点接触但略超旋转阈值的结果提供独立诊断，而不是统一归为
+  `unstable`。
+- [ ] **P2：建立回归基线。** 固定当前 127 个物体的报告格式和代表物体测试集，要求后续
+  优化不得破坏现有 11 个稳定物体，并持续记录生成率、独立保持率和完整 Lift 成功率。
 
 #### `source.demos.validate_scripted_strategy`
 
-在完整任务环境中运行脚本策略，但不记录数据。Lift 策略按
-`approach → descend → adjust → make_gripper_hand_form → grasp → lift → check`
-执行；Viewer 中会显示末端目标位姿、旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
+在完整任务环境中运行脚本策略，但不记录数据。Lift 策略简化为
+`approach → grasp → lift`：approach 内部沿点云 waypoint 到达并渐变手型，lift 内部完成
+成功验证。Viewer 中会显示末端目标位姿、旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
-策略会优先读取 `configs/grasps/<object_id>.json`；如果当前物体尚无配置，会自动调用
-点云抓取搜索一次并缓存配置，后续验证和数据收集直接复用，不会重复搜索。
+策略默认在每次程序启动时重新运行点云抓取和 approach 路径搜索，并覆盖
+`configs/grasps/<object_id>.json`。开发调试时可传 `--reuse-grasp-config` 跳过搜索并
+直接使用缓存；缓存不存在时即使指定该选项也会自动生成。
 
 ```bash
 python -m source.demos.validate_scripted_strategy --task lift
@@ -181,6 +247,7 @@ python -m source.demos.validate_scripted_strategy \
 | `--max-steps N` | `900` | 单次验证允许的最大控制步数 |
 | `--fps N` | `20` | 控制循环刷新频率 |
 | `--viewer-speed X` | `1.0` | Viewer 播放倍率；`1` 表示与真实时间一致，可传 `0.5` 半速观察 |
+| `--reuse-grasp-config` | 关闭 | 开发时复用现有抓取配置；默认启动时重新搜索 |
 | `--robot-config PATH` | 当前机器人配置 | 覆盖 `configs/current_robot.json` |
 | `--arm-name/--hand-name/--base-name` | 配置值 | 临时覆盖机器人组件 |
 
@@ -218,6 +285,7 @@ python -m source.demos.collect_scripted_lerobot \
 | `--save-failures` | 关闭 | 同时保存失败轨迹 |
 | `--dry-run` | 关闭 | 执行策略和成功判定，但不创建数据集 |
 | `--no-video` | 关闭 | 不编码视频，适合只检查状态采集路径 |
+| `--reuse-grasp-config` | 关闭 | 复用现有抓取配置，跳过本次启动的重新搜索 |
 
 ### 仿真、机器人和任务演示
 

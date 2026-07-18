@@ -57,6 +57,7 @@ def _payload(
         "mesh": str(mesh_path),
         "mesh_center": cloud.center.tolist(),
         "mesh_scale": cloud.scale,
+        "object_table_height": float(cloud.points[:, 2].min()),
         "contact_points": grasp.contact_points.tolist(),
         "contact_normals": grasp.contact_normals.tolist(),
         "hand_actuator_fractions": grasp.actuator_fractions.tolist(),
@@ -74,6 +75,11 @@ def _payload(
         "hand_palmward_force_component": grasp.palmward_force_component,
         "hand_palmward_direction": grasp.palmward_direction.tolist(),
         "hand_palmward_depth": grasp.palmward_depth,
+        "hand_table_clearance": grasp.table_clearance,
+        "hand_pca_axis_index": grasp.pca_axis_index,
+        "hand_robustness_margin": grasp.robustness_margin,
+        "hand_object_inside": grasp.object_inside_hand,
+        "hand_preload_weights": grasp.preload_weights.tolist(),
         "approach_hand_translations": grasp.approach_translations.tolist(),
         "approach_hand_rotation_matrices": (
             grasp.approach_rotation_matrices.tolist()
@@ -119,7 +125,41 @@ def search_grasp_config(
         seed=seed,
     )
     if not grasp.success:
-        raise RuntimeError(f"No valid grasp was found for {object_id or mesh_path!r}.")
+        failures = []
+        if grasp.maximum_penetration > 0.004:
+            failures.append(
+                f"pad_penetration={grasp.maximum_penetration:.4f}>0.0040m"
+            )
+        if grasp.maximum_noncontact_penetration > 0.0015:
+            failures.append(
+                "rigid_penetration="
+                f"{grasp.maximum_noncontact_penetration:.4f}>0.0015m"
+            )
+        if not grasp.object_inside_hand:
+            failures.append("object_outside_hand")
+        if grasp.table_clearance < 0.005:
+            failures.append(
+                f"table_clearance={grasp.table_clearance:.4f}<0.0050m"
+            )
+        if not (
+            4 in grasp.contacting_fingers
+            and any(finger < 4 for finger in grasp.contacting_fingers)
+        ):
+            failures.append(
+                f"no_opposing_contacts={grasp.contacting_fingers}"
+            )
+        if grasp.palmward_force_component < 0.0:
+            failures.append(
+                f"outward_force={grasp.palmward_force_component:.3f}"
+            )
+        if grasp.force_closure_residual > 0.35:
+            failures.append(
+                f"force_closure={grasp.force_closure_residual:.3f}>0.350"
+            )
+        detail = ", ".join(failures) or "unknown_constraint"
+        raise RuntimeError(
+            f"No valid grasp was found for {object_id or mesh_path!r}: {detail}."
+        )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         json.dumps(

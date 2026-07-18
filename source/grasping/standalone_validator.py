@@ -31,6 +31,7 @@ def build_standalone_model(
     mesh_scale: float,
     hand_translation: np.ndarray,
     hand_rotation_matrix: np.ndarray,
+    object_table_height: float | None = None,
     density: float = 500.0,
 ) -> tuple[mujoco.MjModel, mujoco.MjData]:
     """Build only the Dex Hand MJCF and one free mesh object."""
@@ -67,6 +68,34 @@ def build_standalone_model(
     geom.friction = [1.0, 0.005, 0.0001]
     geom.condim = 4
 
+    if object_table_height is not None:
+        table_point_object = np.asarray(
+            [0.0, 0.0, float(object_table_height)],
+            dtype=np.float64,
+        )
+        table_point_hand = object_rotation @ (
+            table_point_object - hand_translation
+        )
+        table_normal = object_rotation @ np.asarray([0.0, 0.0, 1.0])
+        reference = (
+            np.asarray([1.0, 0.0, 0.0])
+            if abs(table_normal[0]) < 0.9
+            else np.asarray([0.0, 1.0, 0.0])
+        )
+        table_x = np.cross(reference, table_normal)
+        table_x /= np.linalg.norm(table_x)
+        table_y = np.cross(table_normal, table_x)
+        table_rotation = np.column_stack([table_x, table_y, table_normal])
+        table = spec.worldbody.add_geom()
+        table.name = "validation_table_visual"
+        table.type = mujoco.mjtGeom.mjGEOM_PLANE
+        table.pos = table_point_hand.tolist()
+        table.quat = mat_to_quat(table_rotation).tolist()
+        table.size = [0.25, 0.25, 0.001]
+        table.rgba = [0.45, 0.45, 0.48, 0.45]
+        table.contype = 0
+        table.conaffinity = 0
+
     model = spec.compile()
     data = mujoco.MjData(model)
     return model, data
@@ -78,6 +107,7 @@ def set_hand_targets(
     actuator_values: np.ndarray,
     *,
     grip_preload: float = 0.0,
+    preload_weights: np.ndarray | None = None,
 ) -> None:
     names = (
         "act_push_0_j",
@@ -92,7 +122,14 @@ def set_hand_targets(
         raise ValueError("actuator_values must contain six values.")
     if not 0.0 <= grip_preload <= 1.0:
         raise ValueError("grip_preload must be in [0, 1].")
-    for name, value in zip(names, values, strict=True):
+    weights = (
+        np.asarray([1.0, 1.0, 1.0, 1.0, 0.0, 1.0])
+        if preload_weights is None
+        else np.asarray(preload_weights, dtype=np.float64)
+    )
+    if weights.shape != (6,) or np.any((weights < 0.0) | (weights > 1.0)):
+        raise ValueError("preload_weights must contain six values in [0, 1].")
+    for name, value, weight in zip(names, values, weights, strict=True):
         actuator_id = mujoco.mj_name2id(
             model, mujoco.mjtObj.mjOBJ_ACTUATOR, name
         )
@@ -101,10 +138,62 @@ def set_hand_targets(
         # Four fingers and thumb grasp receive extra closure after the
         # collision-free geometric pose has been initialized. Thumb rotation
         # keeps the optimized opposition angle.
-        if name != "thumb_rotate_act_push_j":
-            high = float(model.actuator_ctrlrange[actuator_id, 1])
-            value = value + grip_preload * (high - value)
+        high = float(model.actuator_ctrlrange[actuator_id, 1])
+        value = value + grip_preload * weight * (high - value)
         data.ctrl[actuator_id] = value
+
+
+def set_hand_fraction_targets(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    actuator_fractions: np.ndarray,
+) -> None:
+    """Set six hand controls from normalized actuator fractions."""
+    names = (
+        "act_push_0_j",
+        "act_push_1_j",
+        "act_push_2_j",
+        "act_push_3_j",
+        "thumb_rotate_act_push_j",
+        "thumb_grasp_act_push_j",
+    )
+    fractions = np.asarray(actuator_fractions, dtype=np.float64)
+    if fractions.shape != (6,) or np.any((fractions < 0.0) | (fractions > 1.0)):
+        raise ValueError("actuator_fractions must contain six values in [0, 1].")
+    for name, fraction in zip(names, fractions, strict=True):
+        actuator_id = mujoco.mj_name2id(
+            model,
+            mujoco.mjtObj.mjOBJ_ACTUATOR,
+            name,
+        )
+        low, high = model.actuator_ctrlrange[actuator_id]
+        data.ctrl[actuator_id] = low + fraction * (high - low)
+
+
+def set_object_pose_for_hand_pose(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    hand_translation: np.ndarray,
+    hand_rotation_matrix: np.ndarray,
+) -> None:
+    """Pin the object so a fixed hand displays a searched relative hand pose."""
+    hand_rotation = np.asarray(hand_rotation_matrix, dtype=np.float64)
+    hand_translation = np.asarray(hand_translation, dtype=np.float64)
+    object_rotation = hand_rotation.T
+    object_position = -(object_rotation @ hand_translation)
+    joint_id = mujoco.mj_name2id(
+        model,
+        mujoco.mjtObj.mjOBJ_JOINT,
+        "validation_object_freejoint",
+    )
+    qpos_address = int(model.jnt_qposadr[joint_id])
+    dof_address = int(model.jnt_dofadr[joint_id])
+    data.qpos[qpos_address : qpos_address + 3] = object_position
+    data.qpos[qpos_address + 3 : qpos_address + 7] = mat_to_quat(
+        object_rotation
+    )
+    data.qvel[dof_address : dof_address + 6] = 0.0
+    mujoco.mj_forward(model, data)
 
 
 def validate_standalone(

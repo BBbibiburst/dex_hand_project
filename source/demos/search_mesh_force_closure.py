@@ -216,6 +216,10 @@ def run(args) -> None:
         f"hand_Efc={closure.force_closure_residual:.4f} "
         f"palmward_force={closure.palmward_force_component:.4f} "
         f"palmward_depth={closure.palmward_depth:.4f}m "
+        f"table_clearance={closure.table_clearance:.4f}m "
+        f"pca_axis={closure.pca_axis_index} "
+        f"robustness={closure.robustness_margin:.4f} "
+        f"preload={closure.preload_weights.tolist()} "
         f"hand_fit={closure.success} output={output}"
     )
 

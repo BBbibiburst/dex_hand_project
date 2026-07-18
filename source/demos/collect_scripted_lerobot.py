@@ -31,6 +31,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save-failures", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-video", action="store_true")
+    parser.add_argument(
+        "--reuse-grasp-config",
+        action="store_true",
+        help="Reuse configs/grasps cache instead of searching at startup.",
+    )
     add_robot_config_args(parser)
     return parser.parse_args()
 
@@ -75,7 +80,10 @@ def run(args) -> None:
         if getattr(args, name) <= 0:
             raise ValueError(f"--{name.replace('_', '-')} must be positive.")
     env = _make_env(args)
-    strategy = create_strategy(args.task)
+    strategy = create_strategy(
+        args.task,
+        reuse_grasp_config=args.reuse_grasp_config,
+    )
     renderer = None
     recorder = None
     successful_episodes = 0

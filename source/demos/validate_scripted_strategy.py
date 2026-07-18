@@ -32,6 +32,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-steps", type=int, default=900)
     parser.add_argument("--fps", type=int, default=20)
     parser.add_argument(
+        "--reuse-grasp-config",
+        action="store_true",
+        help="Reuse configs/grasps cache instead of searching at startup.",
+    )
+    parser.add_argument(
         "--viewer-speed",
         type=float,
         default=1.0,
@@ -147,7 +152,10 @@ def run(args) -> None:
         raise ValueError("--max-steps, --fps, and --viewer-speed must be positive.")
 
     env = _make_env(args)
-    strategy = create_strategy(args.task)
+    strategy = create_strategy(
+        args.task,
+        reuse_grasp_config=args.reuse_grasp_config,
+    )
     observation, info = env.reset(seed=args.seed)
     confirm = threading.Event()
     stop = threading.Event()
