@@ -26,7 +26,7 @@ class SingleArmManipulationTask(RobotTask):
         *,
         arena: TableArena | None = None,
         table_full_size: tuple[float, float, float] = (0.8, 0.8, 0.05),
-        table_offset: tuple[float, float, float] = (0.55, 0.0, 0.8),
+        table_offset: tuple[float, float, float] = (0.55, 0.0, 0.5),
         table_friction: tuple[float, float, float] = (1.0, 0.005, 0.0001),
         table_has_legs: bool = True,
         ee_site_name: str = "right_hand_site",

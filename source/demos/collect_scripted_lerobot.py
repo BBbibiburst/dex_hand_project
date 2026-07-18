@@ -7,14 +7,12 @@ from pathlib import Path
 
 import mujoco
 import numpy as np
-from mujoco import viewer
 
 from source.demos.common import add_robot_config_args
 from source.demos.strategies import create_strategy, registered_strategies
 from source.envs.manipulation import make_manipulation_env
 from source.teleop.devices import GloveSample, ViveSample
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
-from source.viz.overlays import clear_markers, draw_label
 
 
 def parse_args() -> argparse.Namespace:
@@ -31,7 +29,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--image-height", type=int, default=480)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--save-failures", action="store_true")
-    parser.add_argument("--viewer", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-video", action="store_true")
     add_robot_config_args(parser)
@@ -52,7 +49,9 @@ def _make_env(args):
     }
     return make_manipulation_env(
         args.task,
-        task_config={"reward_shaping": True, "terminate_on_success": True},
+        # The strategy owns the final hold-and-verify phase. Do not terminate
+        # the environment on the first transient success sample.
+        task_config={"reward_shaping": True, "terminate_on_success": False},
         **{key: value for key, value in overrides.items() if value is not None},
     )
 
@@ -79,7 +78,6 @@ def run(args) -> None:
     strategy = create_strategy(args.task)
     renderer = None
     recorder = None
-    view_handle = None
     successful_episodes = 0
     attempts = 0
     try:
@@ -98,9 +96,6 @@ def run(args) -> None:
                 image_shape=first_image.shape,
                 use_videos=not args.no_video,
             )
-        if args.viewer:
-            view_handle = viewer.launch_passive(env.model, env.data)
-
         while successful_episodes < args.episodes and attempts < args.max_attempts:
             seed = args.seed + attempts
             observation, info = env.reset(seed=seed)
@@ -108,12 +103,19 @@ def run(args) -> None:
             success = False
             steps = 0
             episode_return = 0.0
+            previous_phase = strategy.phase_name
             for step in range(args.max_steps):
                 action, _ = strategy.tick(observation, info, step, env)
+                if strategy.phase_name != previous_phase:
+                    print(
+                        f"phase complete: {previous_phase} -> {strategy.phase_name} "
+                        f"(attempt={attempts + 1}, step={step})"
+                    )
+                    previous_phase = strategy.phase_name
                 observation, reward, terminated, truncated, info = env.step(action)
                 steps = step + 1
                 episode_return += reward
-                success = bool(info.get("task_success", False))
+                success = bool(strategy.memory.get("verified_success", False))
                 if recorder is not None and renderer is not None:
                     renderer.update_scene(env.data, camera=args.camera)
                     image = renderer.render().copy()
@@ -126,17 +128,7 @@ def run(args) -> None:
                         vive=vive,
                         task=args.task,
                     )
-                if view_handle is not None:
-                    if not view_handle.is_running():
-                        raise KeyboardInterrupt
-                    clear_markers(view_handle)
-                    draw_label(
-                        view_handle,
-                        np.asarray([0.0, -0.32, 1.15], dtype=np.float32),
-                        f"scripted | {strategy.phase_name} | attempt {attempts + 1}",
-                    )
-                    view_handle.sync()
-                if success or terminated or truncated or strategy.aborted:
+                if success or strategy.finished or terminated or truncated or strategy.aborted:
                     break
 
             attempts += 1
@@ -160,8 +152,6 @@ def run(args) -> None:
             if recorder.frame_count:
                 recorder.clear_episode()
             recorder.finalize()
-        if view_handle is not None:
-            view_handle.close()
         if renderer is not None:
             renderer.close()
         env.close()

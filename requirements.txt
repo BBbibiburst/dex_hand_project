@@ -22,6 +22,7 @@ lerobot>=0.4
 openvr
 
 # Bluetooth glove (Windows COM/SPP and direct RFCOMM support)
+# Linux prerequisite: libbluetooth-dev (Debian/Ubuntu) or bluez-libs-devel (Fedora/RHEL)
 pyserial
 PyBluez @ git+https://github.com/pybluez/pybluez.git
 

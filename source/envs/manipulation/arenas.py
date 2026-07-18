@@ -25,7 +25,8 @@ class TableArena:
     """
 
     table_full_size: Tuple[float, float, float] = (0.8, 0.8, 0.05)
-    table_offset: Tuple[float, float, float] = (0.55, 0.0, 0.8)
+    # The table top is level with the default base's arm_mount site (z=0.5).
+    table_offset: Tuple[float, float, float] = (0.55, 0.0, 0.5)
     table_friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001)
     table_has_legs: bool = True
     arena_xml_path: Optional[Path] = None
