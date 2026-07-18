@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import mujoco
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 from source.demos.strategies.base import ActionContext, PhaseContext, PhaseResult, TaskStrategy
+from source.geometry import mat_to_quat
 
 
 def _quat_matrix(quaternion_wxyz: np.ndarray) -> np.ndarray:
@@ -18,19 +20,19 @@ class LiftStrategy(TaskStrategy):
     """Pre-form, approach, descend, adjust, grasp, lift, and check."""
 
     phases = (
-        "make_gripper_hand_form",
         "approach",
         "descend",
         "adjust",
+        "make_gripper_hand_form",
         "grasp",
         "lift",
         "check",
     )
     PHASE_PROMPTS = {
-        "make_gripper_hand_form": "1/7 HAND FORM: shape thumb and fingers as a gripper",
-        "approach": "2/7 APPROACH: move the calibrated grasp center above the object",
-        "descend": "3/7 DESCEND: lower the grasp center to the object center height",
-        "adjust": "4/7 ADJUST: correct grasp-center XY alignment",
+        "approach": "1/7 APPROACH: approach with fingers open and thumb opposed",
+        "descend": "2/7 ADVANCE: move toward the collision-free pregrasp",
+        "adjust": "3/7 ADJUST: realign the pregrasp to the current object pose",
+        "make_gripper_hand_form": "4/7 HAND FORM: form the optimized grasp shape",
         "grasp": "5/7 GRASP: close fingers while holding the wrist pose",
         "lift": "6/7 LIFT: raise the grasp center vertically",
         "check": "7/7 CHECK: verify object height and grasp-center distance",
@@ -43,7 +45,7 @@ class LiftStrategy(TaskStrategy):
     ORIENTATION_TOLERANCE = 0.05
     CHECK_MAX_DISTANCE = 0.06
     MIN_PHASE_STEPS = 10
-    GRASP_STEPS = 100
+    GRASP_STEPS = 130
     PHASE_TIMEOUT = 400
     GRASP_QUATERNION = np.asarray([0.0, 1.0, 0.0, 0.0], dtype=np.float64)
 
@@ -52,6 +54,21 @@ class LiftStrategy(TaskStrategy):
     HAND_GRIPPER = np.asarray([1.0, 1.0, 0.0, 0.0, 1.0, 0.0], dtype=np.float64)
     HAND_GRASP = np.asarray([1.0, 1.0, 0.7, 0.7, 0.3, 1.0], dtype=np.float64)
     HAND_CLOSE = np.ones(6, dtype=np.float64)
+    # Stable standalone grasp generated for ycb:002_master_chef_can. The pose
+    # maps points from the Dex Hand root frame into the object frame.
+    TEMPLATE_HAND_FRACTIONS = np.asarray(
+        [0.1857142857, 0.1857142857, 0.1857142857, 0.1857142857, 1.0, 0.1857142857],
+        dtype=np.float64,
+    )
+    TEMPLATE_HAND_TRANSLATION = np.asarray(
+        [0.0474914941, -0.1880781858, -0.0005670715],
+        dtype=np.float64,
+    )
+    TEMPLATE_HAND_ROTATION = np.eye(3, dtype=np.float64)
+    HAND_ATTACH_ROTATION = Rotation.from_euler(
+        "xyz", [-90.0, -90.0, 0.0], degrees=True
+    ).as_matrix()
+    GRIP_PRELOAD = 0.40
     phase_position_speeds = {
         "approach": 0.16,
         "descend": 0.07,
@@ -138,6 +155,36 @@ class LiftStrategy(TaskStrategy):
         return count >= required_steps
 
     @staticmethod
+    def _contact_fingers(env) -> tuple[int, ...]:
+        object_geoms = env.task._require_bindings().objects["object"].geom_ids
+        fingers: set[int] = set()
+        for index in range(env.data.ncon):
+            contact = env.data.contact[index]
+            geom1, geom2 = int(contact.geom1), int(contact.geom2)
+            if geom1 in object_geoms:
+                robot_geom = geom2
+            elif geom2 in object_geoms:
+                robot_geom = geom1
+            else:
+                continue
+            name = (
+                mujoco.mj_id2name(
+                    env.model, mujoco.mjtObj.mjOBJ_GEOM, robot_geom
+                )
+                or ""
+            )
+            for finger in range(5):
+                if (
+                    f"skin_{finger}_" in name
+                    or f"finger_first_{finger}" in name
+                    or f"finger_second_{finger}" in name
+                ):
+                    fingers.add(finger)
+            if "thumb_" in name:
+                fingers.add(4)
+        return tuple(sorted(fingers))
+
+    @staticmethod
     def _select_grasp_quaternion(
         object_quaternion: np.ndarray,
         midpoint_target: np.ndarray,
@@ -213,6 +260,107 @@ class LiftStrategy(TaskStrategy):
     ) -> np.ndarray:
         return target_midpoint - _quat_matrix(target_quaternion) @ offset_local
 
+    @classmethod
+    def _template_wrist_pose(
+        cls,
+        object_position: np.ndarray,
+        object_quaternion: np.ndarray,
+        yaw: float = 0.0,
+    ) -> tuple[np.ndarray, np.ndarray]:
+        object_rotation = _quat_matrix(object_quaternion)
+        symmetry_rotation = Rotation.from_euler("z", yaw).as_matrix()
+        hand_position = (
+            object_position
+            + object_rotation
+            @ symmetry_rotation
+            @ cls.TEMPLATE_HAND_TRANSLATION
+        )
+        hand_rotation = (
+            object_rotation @ symmetry_rotation @ cls.TEMPLATE_HAND_ROTATION
+        )
+        ee_rotation = hand_rotation @ cls.HAND_ATTACH_ROTATION.T
+        return hand_position, mat_to_quat(ee_rotation)
+
+    @classmethod
+    def _select_reachable_template_pose(
+        cls,
+        env,
+        object_position: np.ndarray,
+        object_quaternion: np.ndarray,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Choose a symmetry-equivalent can grasp using actual IK residual."""
+        arm = env.controller.arm_controller
+        saved_qpos = env.data.qpos.copy()
+        saved_qvel = env.data.qvel.copy()
+        saved_ctrl = env.data.ctrl.copy()
+        previous_velocity = arm.max_joint_velocity
+        previous_filter = arm.velocity_filter_alpha
+        previous_target_q = (
+            None if arm._prev_target_q is None else arm._prev_target_q.copy()
+        )
+        previous_filtered_velocity = (
+            None
+            if arm._filtered_velocity is None
+            else arm._filtered_velocity.copy()
+        )
+        arm.max_joint_velocity = 100.0
+        arm.velocity_filter_alpha = 1.0
+        best = None
+        try:
+            for yaw in np.linspace(-np.pi, np.pi, 16, endpoint=False):
+                grasp_position, quaternion = cls._template_wrist_pose(
+                    object_position,
+                    object_quaternion,
+                    float(yaw),
+                )
+                residual = 0.0
+                grasp_arm_qpos = None
+                for position in (
+                    grasp_position
+                    + np.asarray([0.0, 0.0, cls.PRE_GRASP_HEIGHT]),
+                    grasp_position,
+                ):
+                    arm_qpos = arm._solve_ik(
+                        env.model, env.data, position, quaternion
+                    )
+                    env.data.qpos[arm.qpos_addrs] = arm_qpos
+                    mujoco.mj_forward(env.model, env.data)
+                    actual_position = env.data.site_xpos[arm.site_id]
+                    actual_quaternion = mat_to_quat(
+                        env.data.site_xmat[arm.site_id]
+                    )
+                    position_error = np.linalg.norm(actual_position - position)
+                    orientation_error = 2.0 * np.arccos(
+                        np.clip(
+                            abs(float(np.dot(actual_quaternion, quaternion))),
+                            0.0,
+                            1.0,
+                        )
+                    )
+                    residual += float(position_error + 0.08 * orientation_error)
+                    grasp_arm_qpos = arm_qpos.copy()
+                env.data.qpos[:] = saved_qpos
+                mujoco.mj_forward(env.model, env.data)
+                if best is None or residual < best[0]:
+                    best = (
+                        residual,
+                        grasp_position,
+                        quaternion,
+                        grasp_arm_qpos,
+                    )
+        finally:
+            arm.max_joint_velocity = previous_velocity
+            arm.velocity_filter_alpha = previous_filter
+            arm._prev_target_q = previous_target_q
+            arm._filtered_velocity = previous_filtered_velocity
+            env.data.qpos[:] = saved_qpos
+            env.data.qvel[:] = saved_qvel
+            env.data.ctrl[:] = saved_ctrl
+            mujoco.mj_forward(env.model, env.data)
+        if best is None:
+            raise RuntimeError("No symmetry-equivalent template pose was evaluated.")
+        return best[1], best[2], best[3]
+
     def execute_phase(
         self, phase_index: int, context: PhaseContext
     ) -> tuple[PhaseResult, ActionContext]:
@@ -222,62 +370,58 @@ class LiftStrategy(TaskStrategy):
         ee_position = current[:3]
         object_position = np.asarray(context.observation["object_pos"], dtype=np.float64)
         object_quaternion = np.asarray(context.observation["object_quat"], dtype=np.float64)
-        table_z = float(env.task.table_top_z)
-        gripper = self._hand_target(env, self.HAND_GRIPPER)
-        grasp = self._hand_target(env, self.HAND_GRASP)
-        closed = self._hand_target(env, self.HAND_CLOSE)
+        gripper_fractions = np.asarray(
+            [0.0, 0.0, 0.0, 0.0, 1.0, 0.0], dtype=np.float64
+        )
+        gripper = self._hand_target(env, gripper_fractions)
+        grasp = self._hand_target(env, self.TEMPLATE_HAND_FRACTIONS)
+        preload_fractions = self.TEMPLATE_HAND_FRACTIONS.copy()
+        preload_indices = np.asarray([0, 1, 2, 3, 5])
+        preload_fractions[preload_indices] += self.GRIP_PRELOAD * (
+            1.0 - preload_fractions[preload_indices]
+        )
+        preload_fractions[5] = 1.0
+        preload = self._hand_target(env, preload_fractions)
 
-        if phase == "make_gripper_hand_form":
-            error = float(np.max(np.abs(self._hand_qpos(env) - gripper)))
-            ready = (
+        if phase == "approach" and "target_quaternion" not in context.memory:
+            open_error = float(np.max(np.abs(self._hand_qpos(env) - gripper)))
+            open_ready = (
                 context.phase_step >= self.MIN_PHASE_STEPS
                 and self._stable(
                     context,
-                    "hand_form_stable_steps",
-                    error < 0.0007,
+                    "open_hand_stable_steps",
+                    open_error < 0.0007,
                 )
             )
-            if ready:
-                current_quaternion = current[3:7].copy()
-                finger_center, thumb_center = self._distal_centers(env)
-                midpoint = 0.5 * (finger_center + thumb_center)
-                current_rotation = _quat_matrix(current_quaternion)
-                context.memory["grasp_offset_local"] = (
-                    current_rotation.T @ (midpoint - ee_position)
-                )
-                finger_axis_world = finger_center - thumb_center
-                context.memory["finger_axis_local"] = (
-                    current_rotation.T
-                    @ (finger_axis_world / np.linalg.norm(finger_axis_world))
-                )
-                approach_midpoint = np.asarray(
-                    [object_position[0], object_position[1], table_z + self.PRE_GRASP_HEIGHT],
-                    dtype=np.float64,
-                )
-                target_quaternion = self._select_grasp_quaternion(
-                    object_quaternion,
-                    approach_midpoint,
-                    context.memory["grasp_offset_local"],
-                    context.memory["finger_axis_local"],
-                    ee_position,
-                )
-                context.memory["target_quaternion"] = target_quaternion
-                context.memory["approach_midpoint"] = approach_midpoint
-                return PhaseResult.NEXT, ActionContext(hand_target=gripper)
-            return PhaseResult.CONTINUE, ActionContext(hand_target=gripper)
+            if not open_ready:
+                return PhaseResult.CONTINUE, ActionContext(hand_target=gripper)
+            (
+                grasp_wrist,
+                target_quaternion,
+                grasp_arm_qpos,
+            ) = self._select_reachable_template_pose(
+                env, object_position, object_quaternion
+            )
+            approach_wrist = grasp_wrist + np.asarray(
+                [0.0, 0.0, self.PRE_GRASP_HEIGHT]
+            )
+            contact_wrist = grasp_wrist.copy()
+            engaged_wrist = grasp_wrist.copy()
+            context.memory["target_quaternion"] = target_quaternion
+            context.memory["grasp_wrist_position"] = grasp_wrist
+            context.memory["approach_wrist_position"] = approach_wrist
+            context.memory["contact_wrist_position"] = contact_wrist
+            context.memory["engaged_wrist_position"] = engaged_wrist
+            context.memory["template_object_position"] = object_position.copy()
+            context.memory["grasp_arm_qpos"] = grasp_arm_qpos
 
-        offset_local = np.asarray(context.memory["grasp_offset_local"], dtype=np.float64)
         target_quaternion = np.asarray(context.memory["target_quaternion"], dtype=np.float64)
 
         if phase == "approach":
-            midpoint = np.asarray(context.memory["approach_midpoint"], dtype=np.float64)
-            target = self._wrist_from_midpoint(midpoint, target_quaternion, offset_local)
-            position_error = float(np.linalg.norm(target - ee_position))
-            current_midpoint = self._grasp_midpoint(env)
-            midpoint_xy_error = float(
-                np.linalg.norm(current_midpoint[:2] - midpoint[:2])
+            target = np.asarray(
+                context.memory["approach_wrist_position"], dtype=np.float64
             )
-            midpoint_z_error = abs(float(current_midpoint[2] - midpoint[2]))
+            position_error = float(np.linalg.norm(target - ee_position))
             quaternion_dot = abs(
                 float(np.dot(current[3:7], target_quaternion))
             )
@@ -287,104 +431,133 @@ class LiftStrategy(TaskStrategy):
             converged = (
                 context.phase_step >= self.MIN_PHASE_STEPS
                 and position_error < self.POSITION_TOLERANCE
-                and midpoint_xy_error < 0.01
-                and midpoint_z_error < 0.01
                 and orientation_error < self.ORIENTATION_TOLERANCE
             )
             if self._stable(context, "approach_stable_steps", converged):
-                grasp_midpoint = np.asarray(
-                    [
-                        object_position[0],
-                        object_position[1],
-                        object_position[2],
-                    ],
-                    dtype=np.float64,
-                )
-                context.memory["descend_midpoint"] = grasp_midpoint
                 return PhaseResult.NEXT, ActionContext(target, target_quaternion, gripper)
             if context.phase_step >= self.PHASE_TIMEOUT:
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, gripper)
 
         if phase == "descend":
-            midpoint = np.asarray(context.memory["descend_midpoint"], dtype=np.float64)
-            target = self._wrist_from_midpoint(midpoint, target_quaternion, offset_local)
-            current_midpoint = self._grasp_midpoint(env)
-            midpoint_error = float(np.linalg.norm(current_midpoint - midpoint))
+            target = np.asarray(
+                context.memory["contact_wrist_position"], dtype=np.float64
+            )
+            position_error = float(np.linalg.norm(ee_position - target))
             quaternion_dot = abs(float(np.dot(current[3:7], target_quaternion)))
             orientation_error = 2.0 * np.arccos(
                 np.clip(quaternion_dot, 0.0, 1.0)
             )
             converged = (
                 context.phase_step >= self.MIN_PHASE_STEPS
-                and midpoint_error < self.POSITION_TOLERANCE
+                and position_error < self.POSITION_TOLERANCE
                 and orientation_error < self.ORIENTATION_TOLERANCE
             )
             if self._stable(context, "descend_stable_steps", converged):
-                context.memory["adjust_midpoint"] = np.asarray(
-                    [object_position[0], object_position[1], current_midpoint[2]],
-                    dtype=np.float64,
-                )
                 return PhaseResult.NEXT, ActionContext(target, target_quaternion, gripper)
             if context.phase_step >= self.PHASE_TIMEOUT:
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, gripper)
 
         if phase == "adjust":
-            midpoint = np.asarray(context.memory["adjust_midpoint"], dtype=np.float64)
-            target = self._wrist_from_midpoint(midpoint, target_quaternion, offset_local)
-            current_midpoint = self._grasp_midpoint(env)
-            xy_error = float(np.linalg.norm(current_midpoint[:2] - midpoint[:2]))
+            contact_target = np.asarray(
+                context.memory["contact_wrist_position"], dtype=np.float64
+            )
+            template_object_position = np.asarray(
+                context.memory["template_object_position"], dtype=np.float64
+            )
+            object_delta = object_position - template_object_position
+            target = contact_target + object_delta
+            position_error = float(np.linalg.norm(ee_position - target))
             quaternion_dot = abs(float(np.dot(current[3:7], target_quaternion)))
             orientation_error = 2.0 * np.arccos(
                 np.clip(quaternion_dot, 0.0, 1.0)
             )
             converged = (
                 context.phase_step >= self.MIN_PHASE_STEPS
-                and xy_error < self.XY_TOLERANCE
+                and position_error < self.XY_TOLERANCE
                 and orientation_error < self.ORIENTATION_TOLERANCE
             )
             if self._stable(context, "adjust_stable_steps", converged):
-                context.memory["grasp_wrist_position"] = ee_position.copy()
+                for key in (
+                    "approach_wrist_position",
+                    "contact_wrist_position",
+                    "engaged_wrist_position",
+                    "grasp_wrist_position",
+                ):
+                    context.memory[key] = (
+                        np.asarray(context.memory[key], dtype=np.float64)
+                        + object_delta
+                    )
+                context.memory["template_object_position"] = object_position.copy()
                 context.memory["object_position_at_grasp"] = object_position.copy()
                 return PhaseResult.NEXT, ActionContext(target, target_quaternion, gripper)
             if context.phase_step >= self.PHASE_TIMEOUT:
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, gripper)
 
-        grasp_wrist = np.asarray(context.memory["grasp_wrist_position"], dtype=np.float64)
-        if phase == "grasp":
-            hand_error = float(np.max(np.abs(self._hand_qpos(env) - grasp)))
-            grasp_stable = (
-                context.phase_step >= self.GRASP_STEPS
-                and hand_error < 0.0015
+        if phase == "make_gripper_hand_form":
+            contact_wrist = np.asarray(
+                context.memory["contact_wrist_position"], dtype=np.float64
             )
-            if self._stable(
-                context,
-                "grasp_stable_steps",
-                grasp_stable,
-                required_steps=10,
-            ):
+            error = float(np.max(np.abs(self._hand_qpos(env) - grasp)))
+            ready = (
+                context.phase_step >= self.MIN_PHASE_STEPS
+                and self._stable(
+                    context,
+                    "hand_form_stable_steps",
+                    error < 0.0007,
+                )
+            )
+            if ready:
                 return PhaseResult.NEXT, ActionContext(
-                    grasp_wrist, target_quaternion, grasp
+                    contact_wrist, target_quaternion, grasp
                 )
             if context.phase_step >= self.PHASE_TIMEOUT:
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
-            return PhaseResult.CONTINUE, ActionContext(grasp_wrist, target_quaternion, grasp)
+            return PhaseResult.CONTINUE, ActionContext(
+                contact_wrist, target_quaternion, grasp
+            )
+
+        grasp_wrist = np.asarray(context.memory["grasp_wrist_position"], dtype=np.float64)
+        if phase == "grasp":
+            engaged_wrist = np.asarray(
+                context.memory["engaged_wrist_position"], dtype=np.float64
+            )
+            wrist_target = engaged_wrist
+            close_alpha = np.clip(context.phase_step / 100.0, 0.0, 1.0)
+            hand_target = (
+                (1.0 - close_alpha) * grasp + close_alpha * preload
+            )
+            hand_error = float(np.max(np.abs(self._hand_qpos(env) - hand_target)))
+            contact_fingers = self._contact_fingers(env)
+            antagonistic_contact = (
+                4 in contact_fingers
+                and any(finger < 4 for finger in contact_fingers)
+            )
+            grasp_stable = (
+                context.phase_step >= self.GRASP_STEPS
+                and hand_error < 0.0015
+                and antagonistic_contact
+            )
+            if self._stable(
+                context,
+                    "grasp_stable_steps",
+                grasp_stable,
+                required_steps=10,
+            ):
+                context.memory["grasp_wrist_position"] = engaged_wrist
+                return PhaseResult.NEXT, ActionContext(
+                    engaged_wrist, target_quaternion, preload
+                )
+            if context.phase_step >= self.PHASE_TIMEOUT:
+                return PhaseResult.RESTART, ActionContext(hand_target=gripper)
+            return PhaseResult.CONTINUE, ActionContext(
+                wrist_target, target_quaternion, hand_target
+            )
 
         if phase == "lift":
-            object_at_grasp = np.asarray(
-                context.memory["object_position_at_grasp"], dtype=np.float64
-            )
-            lift_midpoint = np.asarray(
-                [
-                    object_at_grasp[0],
-                    object_at_grasp[1],
-                    table_z + self.PRE_GRASP_HEIGHT + self.LIFT_HEIGHT,
-                ],
-                dtype=np.float64,
-            )
-            target = self._wrist_from_midpoint(lift_midpoint, target_quaternion, offset_local)
+            target = grasp_wrist + np.asarray([0.0, 0.0, self.LIFT_HEIGHT])
             position_error = float(np.linalg.norm(target - ee_position))
             lifted = bool(context.info.get("task_success", False))
             converged = (
@@ -394,10 +567,10 @@ class LiftStrategy(TaskStrategy):
             )
             if self._stable(context, "lift_stable_steps", converged):
                 context.memory["hold_wrist_position"] = ee_position.copy()
-                return PhaseResult.NEXT, ActionContext(target, target_quaternion, closed)
+                return PhaseResult.NEXT, ActionContext(target, target_quaternion, preload)
             if context.phase_step >= self.PHASE_TIMEOUT:
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
-            return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, closed)
+            return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, preload)
 
         hold = np.asarray(context.memory["hold_wrist_position"], dtype=np.float64)
         midpoint_error = float(np.linalg.norm(object_position - self._grasp_midpoint(env)))
@@ -408,7 +581,7 @@ class LiftStrategy(TaskStrategy):
         context.memory["verify_success_steps"] = consecutive + 1 if valid else 0
         if context.memory["verify_success_steps"] >= 10:
             context.memory["verified_success"] = True
-            return PhaseResult.NEXT, ActionContext(hold, target_quaternion, closed)
+            return PhaseResult.NEXT, ActionContext(hold, target_quaternion, preload)
         if context.phase_step >= 40:
             return PhaseResult.RESTART, ActionContext(hand_target=gripper)
-        return PhaseResult.CONTINUE, ActionContext(hold, target_quaternion, closed)
+        return PhaseResult.CONTINUE, ActionContext(hold, target_quaternion, preload)
