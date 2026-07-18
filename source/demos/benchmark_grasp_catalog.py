@@ -23,6 +23,7 @@ from source.grasping.standalone_validator import (
     set_hand_targets,
     validate_standalone,
 )
+from source.robots.registry import get_hand
 
 
 def parse_args() -> argparse.Namespace:
@@ -50,6 +51,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
+    parser.add_argument(
+        "--end-effector",
+        choices=("dex_hand", "pika_gripper"),
+        default="dex_hand",
+    )
     parser.add_argument("--seconds", type=float, default=3.0)
     parser.add_argument("--settle-seconds", type=float, default=0.8)
     parser.add_argument("--grip-preload", type=float, default=0.25)
@@ -123,6 +129,7 @@ def _write_report(
             "search_attempts": args.search_attempts,
             "seed": args.seed,
             "target_size": args.target_size,
+            "end_effector": args.end_effector,
             "seconds": args.seconds,
             "settle_seconds": args.settle_seconds,
             "grip_preload": args.grip_preload,
@@ -161,6 +168,10 @@ def _validate_config(
     grip_preload: float,
 ) -> dict:
     payload = json.loads(path.read_text(encoding="utf-8"))
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    actuator_names = tuple(
+        get_hand(end_effector_name).position_actuator_names
+    )
     model, data = build_standalone_model(
         object_mesh=payload["mesh"],
         mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
@@ -170,6 +181,7 @@ def _validate_config(
             payload["hand_rotation_matrix"], dtype=np.float64
         ),
         object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
     )
     set_hand_targets(
         model,
@@ -179,6 +191,14 @@ def _validate_config(
         preload_weights=np.asarray(
             payload["hand_preload_weights"], dtype=np.float64
         ),
+        preload_directions=np.asarray(
+            payload.get(
+                "hand_preload_directions",
+                np.ones(len(actuator_names)),
+            ),
+            dtype=np.float64,
+        ),
+        actuator_names=actuator_names,
     )
     result = validate_standalone(
         model,
@@ -222,6 +242,7 @@ def _run_one(task: dict) -> dict:
                     joint_candidates=task["joint_candidates"],
                     seed=task["seed"] + attempt,
                     target_size=task["target_size"],
+                    end_effector_name=task["end_effector"],
                 )
             search_seconds = time.monotonic() - attempt_started
         except Exception as exc:
@@ -270,6 +291,20 @@ def run(args: argparse.Namespace) -> int:
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
     selected = _selected_ids(args)
+    default_config_dir = PROJECT_ROOT / "configs" / "grasps" / "benchmark"
+    default_output = (
+        PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"
+    )
+    if args.end_effector != "dex_hand":
+        if args.config_dir == default_config_dir:
+            args.config_dir = default_config_dir / args.end_effector
+        if args.output == default_output:
+            args.output = (
+                PROJECT_ROOT
+                / "configs"
+                / "grasps"
+                / f"grasp_catalog_benchmark_{args.end_effector}.json"
+            )
     rows = _load_completed(args.output) if args.resume else []
     completed = {row["object_id"] for row in rows}
     rows = [row for row in rows if row["object_id"] in selected]
@@ -290,6 +325,7 @@ def run(args: argparse.Namespace) -> int:
             "search_attempts": args.search_attempts,
             "seed": args.seed,
             "target_size": args.target_size,
+            "end_effector": args.end_effector,
             "seconds": args.seconds,
             "settle_seconds": args.settle_seconds,
             "grip_preload": args.grip_preload,

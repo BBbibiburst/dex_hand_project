@@ -85,8 +85,16 @@ def _draw_state(
     hand_size = env.controller.hand_controller.action_size
     fallback_hand = action[-hand_size:] if hand_size else np.zeros(0, dtype=np.float32)
     hand_target = np.asarray(
-        info.get("hand_position_target", fallback_hand),
+        info.get(
+            "gripper_opening",
+            info.get("hand_position_target", fallback_hand),
+        ),
         dtype=np.float64,
+    )
+    command_name = (
+        "gripper opening"
+        if env.hand_descriptor.name == "pika_gripper"
+        else "hand"
     )
 
     clear_markers(handle)
@@ -141,7 +149,7 @@ def _draw_state(
     draw_label(
         handle,
         np.asarray([0.0, -0.32, 1.00], dtype=np.float32),
-        f"hand {_format_vector(hand_target, precision=4)} | step {step}",
+        f"{command_name} {_format_vector(hand_target, precision=4)} | step {step}",
         rgba=(0.3, 1.0, 0.8, 1.0),
     )
     handle.sync()

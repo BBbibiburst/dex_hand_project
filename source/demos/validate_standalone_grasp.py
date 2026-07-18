@@ -20,6 +20,7 @@ from source.grasping.standalone_validator import (
     set_object_pose_for_hand_pose,
     validate_standalone,
 )
+from source.robots.registry import get_hand
 
 
 def parse_args() -> argparse.Namespace:
@@ -49,6 +50,10 @@ def run(args) -> None:
     if args.approach_steps_per_waypoint <= 0:
         raise ValueError("--approach-steps-per-waypoint must be positive.")
     payload = json.loads(args.grasp.read_text(encoding="utf-8"))
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    descriptor = get_hand(end_effector_name)
+    actuator_names = tuple(descriptor.position_actuator_names)
+    actuator_count = len(actuator_names)
     if payload.get("schema_version") != 1:
         raise ValueError("Unsupported or missing grasp schema_version.")
     if not payload.get("hand_fit_success", False):
@@ -70,7 +75,7 @@ def run(args) -> None:
         waypoint_count < 2
         or approach_translations.shape != (waypoint_count, 3)
         or approach_rotations.shape != (waypoint_count, 3, 3)
-        or approach_fractions.shape != (waypoint_count, 6)
+        or approach_fractions.shape != (waypoint_count, actuator_count)
     ):
         raise ValueError("Grasp config has no valid approach path.")
     model, data = build_standalone_model(
@@ -80,6 +85,7 @@ def run(args) -> None:
         hand_translation=payload["hand_translation"],
         hand_rotation_matrix=payload["hand_rotation_matrix"],
         object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
     )
     def execute(handle):
         def show(model, data, step, total) -> None:
@@ -95,7 +101,12 @@ def run(args) -> None:
                 approach_fractions,
                 strict=True,
             ):
-                set_hand_fraction_targets(model, data, fractions)
+                set_hand_fraction_targets(
+                    model,
+                    data,
+                    fractions,
+                    actuator_names=actuator_names,
+                )
                 for _ in range(args.approach_steps_per_waypoint):
                     set_object_pose_for_hand_pose(
                         model,
@@ -123,6 +134,8 @@ def run(args) -> None:
             payload["hand_actuator_values"],
             grip_preload=args.grip_preload,
             preload_weights=payload.get("hand_preload_weights"),
+            preload_directions=payload.get("hand_preload_directions"),
+            actuator_names=actuator_names,
         )
         result = validate_standalone(
             model,
@@ -135,6 +148,7 @@ def run(args) -> None:
     def print_result(result) -> None:
         print(
             f"object_id={payload.get('object_id')} "
+            f"end_effector={end_effector_name} "
             f"waypoints={waypoint_count} "
             f"table_clearance="
             f"{float(payload.get('hand_table_clearance', float('nan'))):.4f}m "

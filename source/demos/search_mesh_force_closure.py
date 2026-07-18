@@ -1,4 +1,4 @@
-"""Search collision-free Dex Hand grasps on an STL/OBJ point cloud."""
+"""Search and visualize collision-free grasps for a supported end effector."""
 
 from __future__ import annotations
 
@@ -27,6 +27,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
+    parser.add_argument(
+        "--end-effector",
+        choices=("dex_hand", "pika_gripper"),
+        default="dex_hand",
+    )
     parser.add_argument(
         "--output",
         type=Path,
@@ -70,20 +75,25 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
         depthshade=False,
         label="force-closure contacts",
     )
-    hand = closure.hand
+    hand = getattr(closure, "hand", getattr(closure, "gripper", None))
     hand_points = closure.points
-    hand_tips = closure.fingertip_centers
+    hand_tips = getattr(closure, "fingertip_centers", None)
+    if hand_tips is None:
+        local_centers = getattr(hand, "contact_centers", np.empty((0, 3)))
+        hand_tips = (
+            local_centers @ closure.rotation_matrix.T + closure.translation
+        )
     hand_colors = np.asarray(
         ["#f4a261", "#e76f51", "#2a9d8f", "#457b9d", "#9b5de5", "#777777"]
     )
-    for label in range(6):
+    for label in np.unique(hand.labels):
         selected = hand.labels == label
         axis.scatter(
             hand_points[selected, 0],
             hand_points[selected, 1],
             hand_points[selected, 2],
             s=2.5,
-            c=hand_colors[label],
+            c=hand_colors[int(label) % len(hand_colors)],
             alpha=0.32 if label == 5 else 0.55,
         )
     axis.scatter(
@@ -92,9 +102,9 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
         hand_tips[:, 2],
         marker="x",
         s=75,
-        c=hand_colors[:5],
+        c=hand_colors[: len(hand_tips)],
         linewidths=2.0,
-        label="Dex Hand fingertips (staged closure)",
+        label="end-effector contact centers",
     )
     path = closure.approach_translations
     if path.size:
@@ -147,8 +157,7 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
     axis.set_ylabel("Y (m)")
     axis.set_zlabel("Z (m)")
     axis.set_title(
-        "Dex Hand mesh force-closure search\n"
-        f"closure={closure.closure:.2f}, "
+        "End-effector mesh grasp search\n"
         f"penetration={closure.maximum_penetration * 1000:.1f}mm, "
         f"hand Efc={closure.force_closure_residual:.3f}, "
         f"fit={'PASS' if closure.success else 'FAIL'}"
@@ -173,6 +182,7 @@ def run(args) -> None:
         joint_candidates=args.joint_candidates,
         seed=args.seed,
         target_size=args.target_size,
+        end_effector_name=args.end_effector,
     )
     mesh_path = result.mesh_path
     output = result.output_path
@@ -208,14 +218,16 @@ def run(args) -> None:
         )
     print(
         f"mesh={mesh_path} "
-        f"closure={closure.closure:.2f} "
+        f"end_effector={args.end_effector} "
         f"penetration={closure.maximum_penetration:.4f}m "
         f"rigid_penetration={closure.maximum_noncontact_penetration:.4f}m "
         f"contact_distance={closure.mean_contact_distance:.4f}m "
         f"contacts={closure.contacting_fingers} "
         f"hand_Efc={closure.force_closure_residual:.4f} "
-        f"palmward_force={closure.palmward_force_component:.4f} "
-        f"palmward_depth={closure.palmward_depth:.4f}m "
+        f"palmward_force="
+        f"{getattr(closure, 'palmward_force_component', float('nan')):.4f} "
+        f"palmward_depth="
+        f"{getattr(closure, 'palmward_depth', float('nan')):.4f}m "
         f"table_clearance={closure.table_clearance:.4f}m "
         f"pca_axis={closure.pca_axis_index} "
         f"robustness={closure.robustness_margin:.4f} "

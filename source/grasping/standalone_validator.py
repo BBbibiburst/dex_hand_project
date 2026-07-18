@@ -8,8 +8,8 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from source.assets import DEX_HAND_XML_PATH
 from source.geometry import mat_to_quat
+from source.robots.registry import get_hand
 
 
 @dataclass(frozen=True)
@@ -33,9 +33,11 @@ def build_standalone_model(
     hand_rotation_matrix: np.ndarray,
     object_table_height: float | None = None,
     density: float = 500.0,
+    end_effector_name: str = "dex_hand",
 ) -> tuple[mujoco.MjModel, mujoco.MjData]:
-    """Build only the Dex Hand MJCF and one free mesh object."""
-    spec = mujoco.MjSpec.from_file(str(Path(DEX_HAND_XML_PATH).resolve()))
+    """Build one registered end effector and one free mesh object."""
+    descriptor = get_hand(end_effector_name)
+    spec = mujoco.MjSpec.from_file(str(descriptor.xml_path.resolve()))
     mesh = spec.add_mesh()
     mesh.name = "validation_object_mesh"
     mesh.file = str(Path(object_mesh).resolve())
@@ -108,8 +110,10 @@ def set_hand_targets(
     *,
     grip_preload: float = 0.0,
     preload_weights: np.ndarray | None = None,
+    preload_directions: np.ndarray | None = None,
+    actuator_names: tuple[str, ...] | None = None,
 ) -> None:
-    names = (
+    default_names = (
         "act_push_0_j",
         "act_push_1_j",
         "act_push_2_j",
@@ -117,19 +121,37 @@ def set_hand_targets(
         "thumb_rotate_act_push_j",
         "thumb_grasp_act_push_j",
     )
+    names = default_names if actuator_names is None else actuator_names
     values = np.asarray(actuator_values, dtype=np.float64)
-    if values.shape != (6,):
-        raise ValueError("actuator_values must contain six values.")
+    if values.shape != (len(names),):
+        raise ValueError("actuator_values size must match actuator_names.")
     if not 0.0 <= grip_preload <= 1.0:
         raise ValueError("grip_preload must be in [0, 1].")
     weights = (
-        np.asarray([1.0, 1.0, 1.0, 1.0, 0.0, 1.0])
+        (
+            np.asarray([1.0, 1.0, 1.0, 1.0, 0.0, 1.0])
+            if len(names) == 6
+            else np.ones(len(names), dtype=np.float64)
+        )
         if preload_weights is None
         else np.asarray(preload_weights, dtype=np.float64)
     )
-    if weights.shape != (6,) or np.any((weights < 0.0) | (weights > 1.0)):
-        raise ValueError("preload_weights must contain six values in [0, 1].")
-    for name, value, weight in zip(names, values, weights, strict=True):
+    directions = (
+        np.ones(len(names), dtype=np.float64)
+        if preload_directions is None
+        else np.asarray(preload_directions, dtype=np.float64)
+    )
+    if weights.shape != (len(names),) or np.any(
+        (weights < 0.0) | (weights > 1.0)
+    ):
+        raise ValueError("preload_weights must match actuators and lie in [0, 1].")
+    if directions.shape != (len(names),) or np.any(
+        ~np.isin(directions, (-1.0, 1.0))
+    ):
+        raise ValueError("preload_directions must contain only -1 or 1.")
+    for name, value, weight, direction in zip(
+        names, values, weights, directions, strict=True
+    ):
         actuator_id = mujoco.mj_name2id(
             model, mujoco.mjtObj.mjOBJ_ACTUATOR, name
         )
@@ -138,8 +160,9 @@ def set_hand_targets(
         # Four fingers and thumb grasp receive extra closure after the
         # collision-free geometric pose has been initialized. Thumb rotation
         # keeps the optimized opposition angle.
-        high = float(model.actuator_ctrlrange[actuator_id, 1])
-        value = value + grip_preload * weight * (high - value)
+        low, high = model.actuator_ctrlrange[actuator_id]
+        endpoint = high if direction > 0.0 else low
+        value = value + grip_preload * weight * (endpoint - value)
         data.ctrl[actuator_id] = value
 
 
@@ -147,9 +170,11 @@ def set_hand_fraction_targets(
     model: mujoco.MjModel,
     data: mujoco.MjData,
     actuator_fractions: np.ndarray,
+    *,
+    actuator_names: tuple[str, ...] | None = None,
 ) -> None:
     """Set six hand controls from normalized actuator fractions."""
-    names = (
+    default_names = (
         "act_push_0_j",
         "act_push_1_j",
         "act_push_2_j",
@@ -157,9 +182,12 @@ def set_hand_fraction_targets(
         "thumb_rotate_act_push_j",
         "thumb_grasp_act_push_j",
     )
+    names = default_names if actuator_names is None else actuator_names
     fractions = np.asarray(actuator_fractions, dtype=np.float64)
-    if fractions.shape != (6,) or np.any((fractions < 0.0) | (fractions > 1.0)):
-        raise ValueError("actuator_fractions must contain six values in [0, 1].")
+    if fractions.shape != (len(names),) or np.any(
+        (fractions < 0.0) | (fractions > 1.0)
+    ):
+        raise ValueError("actuator_fractions must match actuators and lie in [0, 1].")
     for name, fraction in zip(names, fractions, strict=True):
         actuator_id = mujoco.mj_name2id(
             model,

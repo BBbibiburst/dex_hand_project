@@ -6,10 +6,13 @@ from dataclasses import dataclass
 import json
 from pathlib import Path
 
+import numpy as np
+
 from source.assets import PROJECT_ROOT
 from source.envs.manipulation.object_catalog import resolve_record, resolve_record_path
 from source.grasping.hand_closure_search import HandClosureResult, search_hand_grasp
 from source.grasping.mesh_pointcloud import SurfacePointCloud, sample_surface_pointcloud
+from source.grasping.pika_gripper_search import PikaGraspResult, search_pika_grasp
 
 
 @dataclass(frozen=True)
@@ -19,7 +22,7 @@ class GraspConfigSearchResult:
     output_path: Path
     mesh_path: Path
     cloud: SurfacePointCloud
-    grasp: HandClosureResult
+    grasp: HandClosureResult | PikaGraspResult
 
 
 def grasp_config_name(object_id: str) -> str:
@@ -49,11 +52,22 @@ def _payload(
     object_id: str | None,
     mesh_path: Path,
     cloud: SurfacePointCloud,
-    grasp: HandClosureResult,
+    grasp: HandClosureResult | PikaGraspResult,
+    end_effector_name: str,
 ) -> dict:
+    is_dex = isinstance(grasp, HandClosureResult)
+    actuator_values = (
+        grasp.hand.actuator_values if is_dex else grasp.gripper.actuator_values
+    )
+    preload_directions = (
+        np.ones_like(grasp.preload_weights)
+        if is_dex
+        else grasp.preload_directions
+    )
     return {
         "schema_version": 1,
         "object_id": object_id,
+        "end_effector_name": end_effector_name,
         "mesh": str(mesh_path),
         "mesh_center": cloud.center.tolist(),
         "mesh_scale": cloud.scale,
@@ -61,24 +75,31 @@ def _payload(
         "contact_points": grasp.contact_points.tolist(),
         "contact_normals": grasp.contact_normals.tolist(),
         "hand_actuator_fractions": grasp.actuator_fractions.tolist(),
-        "hand_actuator_values": grasp.hand.actuator_values.tolist(),
+        "hand_actuator_values": actuator_values.tolist(),
+        "hand_preload_directions": preload_directions.tolist(),
         "hand_translation": grasp.translation.tolist(),
         "hand_rotation_matrix": grasp.rotation_matrix.tolist(),
-        "hand_closure": grasp.closure,
+        "hand_closure": grasp.closure if is_dex else None,
         "hand_maximum_penetration": grasp.maximum_penetration,
         "hand_maximum_noncontact_penetration": (
             grasp.maximum_noncontact_penetration
         ),
         "hand_mean_contact_distance": grasp.mean_contact_distance,
-        "hand_contacting_fingers": list(grasp.contacting_fingers),
+        "hand_contacting_fingers": [
+            int(index) for index in grasp.contacting_fingers
+        ],
         "hand_force_closure_residual": grasp.force_closure_residual,
-        "hand_palmward_force_component": grasp.palmward_force_component,
-        "hand_palmward_direction": grasp.palmward_direction.tolist(),
-        "hand_palmward_depth": grasp.palmward_depth,
+        "hand_palmward_force_component": (
+            grasp.palmward_force_component if is_dex else None
+        ),
+        "hand_palmward_direction": (
+            grasp.palmward_direction.tolist() if is_dex else None
+        ),
+        "hand_palmward_depth": grasp.palmward_depth if is_dex else None,
         "hand_table_clearance": grasp.table_clearance,
         "hand_pca_axis_index": grasp.pca_axis_index,
         "hand_robustness_margin": grasp.robustness_margin,
-        "hand_object_inside": grasp.object_inside_hand,
+        "hand_object_inside": grasp.object_inside_hand if is_dex else True,
         "hand_preload_weights": grasp.preload_weights.tolist(),
         "approach_hand_translations": grasp.approach_translations.tolist(),
         "approach_hand_rotation_matrices": (
@@ -100,14 +121,18 @@ def search_grasp_config(
     joint_candidates: int = 128,
     seed: int = 0,
     target_size: float = 0.09,
+    end_effector_name: str = "dex_hand",
 ) -> GraspConfigSearchResult:
     """Search a grasp and approach path, then write their versioned JSON."""
     if (object_id is None) == (mesh is None):
         raise ValueError("Provide exactly one of object_id or mesh.")
     mesh_path = object_mesh_path(object_id) if mesh is None else Path(mesh)
     name = "custom_mesh" if object_id is None else grasp_config_name(object_id)
+    default_directory = PROJECT_ROOT / "configs" / "grasps"
+    if end_effector_name != "dex_hand":
+        default_directory = default_directory / end_effector_name
     output_path = (
-        PROJECT_ROOT / "configs" / "grasps" / f"{name}.json"
+        default_directory / f"{name}.json"
         if output is None
         else Path(output)
     )
@@ -119,11 +144,22 @@ def search_grasp_config(
         target_size=target_size,
         seed=seed,
     )
-    grasp = search_hand_grasp(
-        cloud,
-        samples=joint_candidates,
-        seed=seed,
-    )
+    if end_effector_name == "dex_hand":
+        grasp = search_hand_grasp(
+            cloud,
+            samples=joint_candidates,
+            seed=seed,
+        )
+    elif end_effector_name == "pika_gripper":
+        grasp = search_pika_grasp(
+            cloud,
+            samples=joint_candidates,
+            seed=seed,
+        )
+    else:
+        raise ValueError(
+            f"Unsupported grasp end effector {end_effector_name!r}."
+        )
     if not grasp.success:
         failures = []
         if grasp.maximum_penetration > 0.004:
@@ -135,20 +171,27 @@ def search_grasp_config(
                 "rigid_penetration="
                 f"{grasp.maximum_noncontact_penetration:.4f}>0.0015m"
             )
-        if not grasp.object_inside_hand:
+        if is_dex := isinstance(grasp, HandClosureResult):
+            object_inside = grasp.object_inside_hand
+        else:
+            object_inside = True
+        if not object_inside:
             failures.append("object_outside_hand")
         if grasp.table_clearance < 0.005:
             failures.append(
                 f"table_clearance={grasp.table_clearance:.4f}<0.0050m"
             )
-        if not (
+        opposing = (
             4 in grasp.contacting_fingers
             and any(finger < 4 for finger in grasp.contacting_fingers)
-        ):
+            if is_dex
+            else len(grasp.contacting_fingers) == 2
+        )
+        if not opposing:
             failures.append(
                 f"no_opposing_contacts={grasp.contacting_fingers}"
             )
-        if grasp.palmward_force_component < 0.0:
+        if is_dex and grasp.palmward_force_component < 0.0:
             failures.append(
                 f"outward_force={grasp.palmward_force_component:.3f}"
             )
@@ -168,6 +211,7 @@ def search_grasp_config(
                 mesh_path=mesh_path,
                 cloud=cloud,
                 grasp=grasp,
+                end_effector_name=end_effector_name,
             ),
             indent=2,
         ),
@@ -189,6 +233,7 @@ def generate_grasp_config(
     joint_candidates: int = 128,
     seed: int = 0,
     target_size: float = 0.09,
+    end_effector_name: str = "dex_hand",
 ) -> Path:
     """Generate one object config and return its cached path."""
     return search_grasp_config(
@@ -198,4 +243,5 @@ def generate_grasp_config(
         joint_candidates=joint_candidates,
         seed=seed,
         target_size=target_size,
+        end_effector_name=end_effector_name,
     ).output_path
