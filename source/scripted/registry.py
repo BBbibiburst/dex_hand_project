@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from source.demos.strategies.base import TaskStrategy
-from source.demos.strategies.lift import LiftStrategy
+from source.scripted.base import TaskStrategy
+from source.scripted.lift import LiftStrategy
 
 _STRATEGIES: dict[str, type[TaskStrategy]] = {"lift": LiftStrategy}
 

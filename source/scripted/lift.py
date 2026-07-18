@@ -10,7 +10,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from source.assets import PROJECT_ROOT
-from source.demos.strategies.base import ActionContext, PhaseContext, PhaseResult, TaskStrategy
+from source.scripted.base import ActionContext, PhaseContext, PhaseResult, TaskStrategy
 from source.geometry import mat_to_quat
 
 

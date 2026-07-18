@@ -1,12 +1,12 @@
 """Phase-based scripted policies for automated demonstration collection."""
 
-from source.demos.strategies.base import (
+from source.scripted.base import (
     ActionContext,
     PhaseContext,
     PhaseResult,
     TaskStrategy,
 )
-from source.demos.strategies.registry import create_strategy, registered_strategies
+from source.scripted.registry import create_strategy, registered_strategies
 
 __all__ = [
     "ActionContext",

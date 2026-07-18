@@ -9,7 +9,7 @@ import mujoco
 import numpy as np
 
 from source.demos.common import add_robot_config_args
-from source.demos.strategies import create_strategy, registered_strategies
+from source.scripted import create_strategy, registered_strategies
 from source.envs.manipulation import make_manipulation_env
 from source.teleop.devices import GloveSample, ViveSample
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder

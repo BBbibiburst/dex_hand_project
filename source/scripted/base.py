@@ -1,4 +1,4 @@
-"""Reusable phase-state machine for absolute-IK scripted policies."""
+"""Reusable phase-state machine for scripted absolute-IK policies."""
 
 from __future__ import annotations
 
