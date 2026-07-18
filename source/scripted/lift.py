@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 
 import mujoco
@@ -18,6 +19,20 @@ def _quat_matrix(quaternion_wxyz: np.ndarray) -> np.ndarray:
     matrix = np.empty(9, dtype=np.float64)
     mujoco.mju_quat2Mat(matrix, np.asarray(quaternion_wxyz, dtype=np.float64))
     return matrix.reshape(3, 3)
+
+
+@dataclass
+class LiftStrategyState:
+    lift_stable_steps: int = 0
+    verify_success_steps: int = 0
+    hold_wrist_position: np.ndarray | None = None
+    verified_success: bool = False
+
+    def reset(self) -> None:
+        self.lift_stable_steps = 0
+        self.verify_success_steps = 0
+        self.hold_wrist_position = None
+        self.verified_success = False
 
 
 class LiftStrategy(TaskStrategy):
@@ -84,6 +99,7 @@ class LiftStrategy(TaskStrategy):
         reuse_grasp_config: bool = False,
     ) -> None:
         super().__init__(max_position_step=max_position_step, max_orientation_step=0.20)
+        self.state = LiftStrategyState()
         self.reuse_grasp_config = bool(reuse_grasp_config)
         self.template_hand_fractions = self.TEMPLATE_HAND_FRACTIONS.copy()
         self.template_hand_translation = self.TEMPLATE_HAND_TRANSLATION.copy()
@@ -100,6 +116,10 @@ class LiftStrategy(TaskStrategy):
         self.approach_hand_fractions = np.empty((0, 6), dtype=np.float64)
         self.grasp_template_path: Path | None = None
         self.grasp_template_object_id: str | None = None
+
+    def reset(self) -> None:
+        super().reset()
+        self.state.reset()
 
     @staticmethod
     def _grasp_config_name(object_id: str) -> str:
@@ -961,24 +981,30 @@ class LiftStrategy(TaskStrategy):
                 and position_error < 0.015
                 and lifted
             )
-            if self._stable(context, "lift_stable_steps", converged):
-                context.memory["hold_wrist_position"] = ee_position.copy()
-                context.memory["verified_success"] = True
+            self.state.lift_stable_steps = (
+                self.state.lift_stable_steps + 1 if converged else 0
+            )
+            if self.state.lift_stable_steps >= 5:
+                self.state.hold_wrist_position = ee_position.copy()
+                self.state.verified_success = True
                 return PhaseResult.NEXT, ActionContext(target, target_quaternion, preload)
             if context.phase_step >= self.PHASE_TIMEOUT:
+                self.state.reset()
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, preload)
 
-        hold = np.asarray(context.memory["hold_wrist_position"], dtype=np.float64)
+        hold = np.asarray(self.state.hold_wrist_position, dtype=np.float64)
         midpoint_error = float(np.linalg.norm(object_position - self._grasp_midpoint(env)))
         valid = bool(context.info.get("task_success", False)) and (
             midpoint_error <= self.CHECK_MAX_DISTANCE
         )
-        consecutive = int(context.memory.get("verify_success_steps", 0))
-        context.memory["verify_success_steps"] = consecutive + 1 if valid else 0
-        if context.memory["verify_success_steps"] >= 10:
-            context.memory["verified_success"] = True
+        self.state.verify_success_steps = (
+            self.state.verify_success_steps + 1 if valid else 0
+        )
+        if self.state.verify_success_steps >= 10:
+            self.state.verified_success = True
             return PhaseResult.NEXT, ActionContext(hold, target_quaternion, preload)
         if context.phase_step >= 40:
+            self.state.reset()
             return PhaseResult.RESTART, ActionContext(hand_target=gripper)
         return PhaseResult.CONTINUE, ActionContext(hold, target_quaternion, preload)

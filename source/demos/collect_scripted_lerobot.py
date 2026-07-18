@@ -123,7 +123,7 @@ def run(args) -> None:
                 observation, reward, terminated, truncated, info = env.step(action)
                 steps = step + 1
                 episode_return += reward
-                success = bool(strategy.memory.get("verified_success", False))
+                success = bool(strategy.state.verified_success)
                 if recorder is not None and renderer is not None:
                     renderer.update_scene(env.data, camera=args.camera)
                     image = renderer.render().copy()
