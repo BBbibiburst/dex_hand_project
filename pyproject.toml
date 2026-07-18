@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib",
     "opencv-python",
     "Pillow",
+    "trimesh",
 ]
 
 [project.optional-dependencies]
