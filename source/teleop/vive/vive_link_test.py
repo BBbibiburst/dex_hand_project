@@ -15,8 +15,16 @@ from source.teleop.vive.coordinates import (
     rotation_matrix_to_rpy_degrees,
 )
 from source.teleop.vive.vive_plot_style import (
-    BG, CYAN, GREEN, ORANGE, PURPLE, RED, WHITE, apply_theme, draw_floor,
-    style_3d_axis, style_panel, update_frame_axes,
+    BG,
+    CYAN,
+    GREEN,
+    ORANGE,
+    RED,
+    apply_theme,
+    draw_floor,
+    style_3d_axis,
+    style_panel,
+    update_frame_axes,
 )
 
 
@@ -36,7 +44,9 @@ class LivePosePlot:
         self.origin = None
         self.local_hand_lines = make_hand_lines()
         self.figure = plt.figure("Vive Hand 6D Pose", figsize=(13, 8), facecolor=BG)
-        self.figure.suptitle("◆  VIVE TRACKER  ·  LIVE 6D HAND POSE", fontsize=13, fontweight="bold")
+        self.figure.suptitle(
+            "◆  VIVE TRACKER  ·  LIVE 6D HAND POSE", fontsize=13, fontweight="bold"
+        )
         grid = GridSpec(2, 3, figure=self.figure, width_ratios=(1.7, 1.7, 1.0), hspace=0.35)
         self.axes = self.figure.add_subplot(grid[:, :2], projection="3d")
         self.position_axis = self.figure.add_subplot(grid[0, 2])
@@ -60,8 +70,13 @@ class LivePosePlot:
         )
         self.frame_axes = [self.axes.plot([], [], [], linewidth=2)[0] for _ in range(3)]
         self.status = self.axes.text2D(
-            0.025, 0.97, "WAITING FOR TRACKER", transform=self.axes.transAxes, va="top",
-            fontsize=8, bbox=dict(boxstyle="round,pad=0.5", fc=BG, ec="#30363d", alpha=0.9),
+            0.025,
+            0.97,
+            "WAITING FOR TRACKER",
+            transform=self.axes.transAxes,
+            va="top",
+            fontsize=8,
+            bbox=dict(boxstyle="round,pad=0.5", fc=BG, ec="#30363d", alpha=0.9),
         )
         self.axes.legend(loc="lower left", fontsize=7)
         plt.ion()

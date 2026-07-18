@@ -85,9 +85,7 @@ def run(args) -> None:
     try:
         observation, info = env.reset(seed=args.seed)
         if not args.dry_run:
-            renderer = mujoco.Renderer(
-                env.model, height=args.image_height, width=args.image_width
-            )
+            renderer = mujoco.Renderer(env.model, height=args.image_height, width=args.image_width)
             renderer.update_scene(env.data, camera=args.camera)
             first_image = renderer.render()
             recorder = LeRobotEpisodeRecorder(

@@ -11,6 +11,7 @@ from source.assets import asset_path
 MANIFEST_PATH = asset_path("maniskill", "manifest.json")
 DEFAULT_LIFT_OBJECT = "ycb:002_master_chef_can"
 DEFAULT_PICK_PLACE_OBJECT = "ycb:025_mug"
+DEFAULT_PUSH_OBJECT = "ycb:006_mustard_bottle"
 DEFAULT_STACK_OBJECTS = ("ycb:070-a_colored_wood_blocks", "ycb:070-b_colored_wood_blocks")
 
 PICK_PLACE_EXCLUDED = frozenset(
@@ -19,6 +20,16 @@ PICK_PLACE_EXCLUDED = frozenset(
         "ycb:063-a_marbles",
         "ycb:063-b_marbles",
         "ycb:071_nine_hole_peg_test",
+    }
+)
+PUSH_EXCLUDED = PICK_PLACE_EXCLUDED | frozenset(
+    {
+        "ycb:053_mini_soccer_ball",
+        "ycb:054_softball",
+        "ycb:055_baseball",
+        "ycb:056_tennis_ball",
+        "ycb:057_racquetball",
+        "ycb:058_golf_ball",
     }
 )
 STACK_OBJECTS = (
@@ -80,6 +91,11 @@ def pick_place_object_ids() -> tuple[str, ...]:
     return tuple(key for key in object_ids() if key not in PICK_PLACE_EXCLUDED)
 
 
+def push_object_ids() -> tuple[str, ...]:
+    """Objects that remain controllable in a planar pushing task."""
+    return tuple(key for key in object_ids() if key not in PUSH_EXCLUDED)
+
+
 def stack_object_ids() -> tuple[str, ...]:
     available = object_records()
     return tuple(key for key in STACK_OBJECTS if key in available)
@@ -96,4 +112,3 @@ def resolve_record(object_id: str) -> dict:
 def resolve_record_path(record: dict, field: str) -> Path:
     value = Path(record[field])
     return value if value.is_absolute() else asset_path().parent / value
-

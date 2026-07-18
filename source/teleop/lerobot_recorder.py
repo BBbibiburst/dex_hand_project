@@ -85,10 +85,7 @@ class LeRobotEpisodeRecorder:
                 total_frames = int(info.get("total_frames", 0))
                 if total_episodes == 0 and total_frames == 0:
                     archived = _archive_incomplete_dataset(root)
-                    print(
-                        "Archived an incomplete zero-frame LeRobot dataset: "
-                        f"{archived}"
-                    )
+                    print(f"Archived an incomplete zero-frame LeRobot dataset: {archived}")
                     self.dataset = _create_dataset(
                         LeRobotDataset,
                         repo_id=repo_id,
@@ -195,9 +192,7 @@ def _archive_incomplete_dataset(root: Path) -> Path:
 def _validate_dataset_compatibility(dataset, *, fps: int, features: dict) -> None:
     """Reject appends that would mix incompatible recording schemas."""
     if int(dataset.fps) != int(fps):
-        raise ValueError(
-            f"Existing dataset FPS is {dataset.fps}, but this run requested {fps}."
-        )
+        raise ValueError(f"Existing dataset FPS is {dataset.fps}, but this run requested {fps}.")
     existing = dataset.features
     for name, expected in features.items():
         if name not in existing:

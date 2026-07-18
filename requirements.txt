@@ -7,6 +7,10 @@ gymnasium
 # Visualization and tactile-camera demos
 matplotlib
 opencv-python
+Pillow
+
+# Reproducible YCB asset download (EGAD uses the Python standard library)
+mani-skill
 
 # Imitation learning and LeRobot datasets
 torch

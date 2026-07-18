@@ -41,9 +41,7 @@ def save_glove_calibration(
     if not resolved.is_absolute():
         resolved = PROJECT_ROOT / resolved
     config = load_teleop_config(resolved)
-    current_minimum, current_maximum = _validate_glove_bounds(
-        minimum, maximum, label="Current"
-    )
+    current_minimum, current_maximum = _validate_glove_bounds(minimum, maximum, label="Current")
     if not 0.0 <= history_weight <= 1.0:
         raise ValueError("history_weight must be between 0 and 1.")
 
@@ -74,9 +72,7 @@ def save_glove_calibration(
         "history_weight": history_weight if used_history else 0.0,
     }
     temporary = resolved.with_suffix(resolved.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+    temporary.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(resolved)
     return resolved
 
@@ -91,21 +87,11 @@ def _validate_glove_bounds(
     if minimum is None or maximum is None:
         raise ValueError(f"{label} glove calibration is missing bounds.")
     if len(minimum) != GLOVE_CHANNEL_COUNT or len(maximum) != GLOVE_CHANNEL_COUNT:
-        raise ValueError(
-            f"{label} glove calibration must contain {GLOVE_CHANNEL_COUNT} channels."
-        )
+        raise ValueError(f"{label} glove calibration must contain {GLOVE_CHANNEL_COUNT} channels.")
     normalized_minimum = [float(value) for value in minimum]
     normalized_maximum = [float(value) for value in maximum]
-    if not all(
-        math.isfinite(value)
-        for value in (*normalized_minimum, *normalized_maximum)
-    ):
+    if not all(math.isfinite(value) for value in (*normalized_minimum, *normalized_maximum)):
         raise ValueError(f"{label} glove calibration contains non-finite values.")
-    if any(
-        upper <= lower
-        for lower, upper in zip(normalized_minimum, normalized_maximum)
-    ):
-        raise ValueError(
-            f"{label} glove fist values must exceed open-hand values."
-        )
+    if any(upper <= lower for lower, upper in zip(normalized_minimum, normalized_maximum)):
+        raise ValueError(f"{label} glove fist values must exceed open-hand values.")
     return normalized_minimum, normalized_maximum

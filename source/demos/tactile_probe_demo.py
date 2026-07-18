@@ -43,9 +43,7 @@ class TaxelSite:
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Test tactile matrices with a movable probe."
-    )
+    parser = argparse.ArgumentParser(description="Test tactile matrices with a movable probe.")
     parser.add_argument(
         "--backend",
         default=None,
@@ -472,8 +470,7 @@ def _compose_heatmap_panel(
     gap = 10
     blank = np.full((tile_height, tile_width, 3), 24, dtype=np.uint8)
     padded = [
-        _pad_to_shape(cv2_module, tile, height=tile_height, width=tile_width)
-        for tile in tiles
+        _pad_to_shape(cv2_module, tile, height=tile_height, width=tile_width) for tile in tiles
     ]
     padded.extend(blank.copy() for _ in range(rows * columns - len(padded)))
     row_images = []

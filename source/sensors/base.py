@@ -79,9 +79,7 @@ class TactileSensorBase(ABC):
         """
         return ()
 
-    def read_patches(
-        self, model: mujoco.MjModel, data: mujoco.MjData
-    ) -> Mapping[str, np.ndarray]:
+    def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Mapping[str, np.ndarray]:
         """Return named 2-D tactile arrays for diagnostics and visualization."""
         return self.patches_from_values(self.read(model, data))
 

@@ -56,29 +56,84 @@ def font(size: int, *, bold: bool = False) -> ImageFont.ImageFont:
 
 def ycb_category(object_id: str) -> str:
     name = object_id.lower()
-    if any(word in name for word in (
-        "can", "cracker", "sugar", "soup", "mustard", "tuna", "pudding",
-        "gelatin", "meat", "banana", "strawberry", "apple", "lemon",
-        "peach", "pear", "orange", "plum",
-    )):
+    if any(
+        word in name
+        for word in (
+            "can",
+            "cracker",
+            "sugar",
+            "soup",
+            "mustard",
+            "tuna",
+            "pudding",
+            "gelatin",
+            "meat",
+            "banana",
+            "strawberry",
+            "apple",
+            "lemon",
+            "peach",
+            "pear",
+            "orange",
+            "plum",
+        )
+    ):
         return "Food"
-    if any(word in name for word in (
-        "pitcher", "bottle", "bowl", "mug", "plate", "fork", "spoon",
-        "knife", "spatula", "skillet", "cups",
-    )):
+    if any(
+        word in name
+        for word in (
+            "pitcher",
+            "bottle",
+            "bowl",
+            "mug",
+            "plate",
+            "fork",
+            "spoon",
+            "knife",
+            "spatula",
+            "skillet",
+            "cups",
+        )
+    ):
         return "Containers & tableware"
-    if any(word in name for word in (
-        "drill", "scissors", "padlock", "marker", "wrench", "screwdriver",
-        "hammer", "clamp",
-    )):
+    if any(
+        word in name
+        for word in (
+            "drill",
+            "scissors",
+            "padlock",
+            "marker",
+            "wrench",
+            "screwdriver",
+            "hammer",
+            "clamp",
+        )
+    ):
         return "Tools & hardware"
-    if any(word in name for word in (
-        "soccer", "softball", "baseball", "tennis", "racquetball", "golf",
-    )):
+    if any(
+        word in name
+        for word in (
+            "soccer",
+            "softball",
+            "baseball",
+            "tennis",
+            "racquetball",
+            "golf",
+        )
+    ):
         return "Sports"
-    if any(word in name for word in (
-        "dice", "marbles", "blocks", "peg", "airplane", "lego", "rubiks",
-    )):
+    if any(
+        word in name
+        for word in (
+            "dice",
+            "marbles",
+            "blocks",
+            "peg",
+            "airplane",
+            "lego",
+            "rubiks",
+        )
+    ):
         return "Toys & components"
     return "Household"
 
@@ -131,16 +186,20 @@ def projected_mesh(path: Path) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     scale = np.linalg.norm(vertices.max(axis=0) - vertices.min(axis=0))
     vertices /= max(float(scale), 1e-8)
     azimuth, elevation = math.radians(-38), math.radians(24)
-    rz = np.array([
-        [math.cos(azimuth), -math.sin(azimuth), 0],
-        [math.sin(azimuth), math.cos(azimuth), 0],
-        [0, 0, 1],
-    ])
-    rx = np.array([
-        [1, 0, 0],
-        [0, math.cos(elevation), -math.sin(elevation)],
-        [0, math.sin(elevation), math.cos(elevation)],
-    ])
+    rz = np.array(
+        [
+            [math.cos(azimuth), -math.sin(azimuth), 0],
+            [math.sin(azimuth), math.cos(azimuth), 0],
+            [0, 0, 1],
+        ]
+    )
+    rx = np.array(
+        [
+            [1, 0, 0],
+            [0, math.cos(elevation), -math.sin(elevation)],
+            [0, math.sin(elevation), math.cos(elevation)],
+        ]
+    )
     rotated = vertices @ (rz @ rx).T
     if len(faces) > 7000:
         faces = faces[np.linspace(0, len(faces) - 1, 7000, dtype=int)]
@@ -271,7 +330,12 @@ def render_dataset(
     )
     draw = ImageDraw.Draw(sheet)
     dataset_name = "YCB real-scanned objects" if dataset == "ycb" else "EGAD evaluation objects"
-    draw.text((36, 24), f"{dataset_name} — {len(records)} objects", fill="#18222d", font=font(42, bold=True))
+    draw.text(
+        (36, 24),
+        f"{dataset_name} — {len(records)} objects",
+        fill="#18222d",
+        font=font(42, bold=True),
+    )
     draw.text(
         (38, 82),
         "Each tile: normalized shape view (left)  |  MuJoCo tabletop render (right)",
@@ -280,7 +344,8 @@ def render_dataset(
     )
     draw.text(
         (38, 126),
-        "Ordered by semantic category." if dataset == "ycb"
+        "Ordered by semantic category."
+        if dataset == "ycb"
         else "Ordered by complexity A–G, then difficulty 0–6.",
         fill="#607080",
         font=font(20),
@@ -292,7 +357,12 @@ def render_dataset(
         row, column = divmod(index, columns)
         x, y = column * tile_width, header_height + row * tile_height
         color = CATEGORY_COLORS[record["_category"]]
-        draw.rectangle((x + 5, y + 5, x + tile_width - 5, y + tile_height - 5), fill="#ffffff", outline=color, width=5)
+        draw.rectangle(
+            (x + 5, y + 5, x + tile_width - 5, y + tile_height - 5),
+            fill="#ffffff",
+            outline=color,
+            width=5,
+        )
         try:
             mesh_path = find_obj(record, manifest_path)
             preview_width = (tile_width - 30) // 2
@@ -300,17 +370,28 @@ def render_dataset(
             scene = render_mujoco_scene(mesh_path, preview_width, 220, color)
             sheet.paste(preview, (x + 10, y + 48))
             sheet.paste(scene, (x + 18 + preview_width, y + 48))
-            draw.line((x + 14 + preview_width, y + 52, x + 14 + preview_width, y + 264), fill="#d6dbe0", width=2)
+            draw.line(
+                (x + 14 + preview_width, y + 52, x + 14 + preview_width, y + 264),
+                fill="#d6dbe0",
+                width=2,
+            )
         except (OSError, ValueError, RuntimeError) as exc:
             failures.append(f"{record['dataset']}:{record['object_id']}: {exc}")
             draw.text((x + 18, y + 130), "preview unavailable", fill="#aa3344", font=label_font)
-        draw.text((x + 15, y + 14), f"{index + 1:03d}  {record['dataset'].upper()} · {record['object_id']}", fill="#202830", font=title_font)
+        draw.text(
+            (x + 15, y + 14),
+            f"{index + 1:03d}  {record['dataset'].upper()} · {record['object_id']}",
+            fill="#202830",
+            font=title_font,
+        )
         draw.text((x + 15, y + 276), display_name(record)[:42], fill="#263442", font=label_font)
         draw.text((x + 15, y + 308), record["_category"], fill=color, font=small_font)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(output, optimize=True)
-    print(f"Rendered {len(records) - len(failures)}/{len(records)} {dataset.upper()} previews: {output}")
+    print(
+        f"Rendered {len(records) - len(failures)}/{len(records)} {dataset.upper()} previews: {output}"
+    )
     return failures
 
 
@@ -322,11 +403,17 @@ def main() -> int:
     for record in records:
         record["_category"] = category(record)
     ycb_order = [
-        "Food", "Containers & tableware", "Tools & hardware",
-        "Sports", "Toys & components", "Household",
+        "Food",
+        "Containers & tableware",
+        "Tools & hardware",
+        "Sports",
+        "Toys & components",
+        "Household",
     ]
     order = {name: index for index, name in enumerate(ycb_order)}
-    order.update({f"EGAD complexity {letter}": 20 + index for index, letter in enumerate("ABCDEFG")})
+    order.update(
+        {f"EGAD complexity {letter}": 20 + index for index, letter in enumerate("ABCDEFG")}
+    )
     records.sort(key=lambda item: (order[item["_category"]], item["object_id"]))
 
     output_dir = args.output_dir.resolve()

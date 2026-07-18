@@ -55,14 +55,22 @@ class TableArena:
         self._configure_agentview_camera(spec)
 
     def _configure_agentview_camera(self, spec: mujoco.MjSpec) -> None:
-        """Aim agentview at the table workspace instead of the arm column."""
+        """Aim agentview about 30 degrees down and 30 degrees off a side view."""
         camera = spec.camera("agentview")
         if camera is None:
             return
-        target = self.table_top_pos + np.asarray([0.0, 0.0, 0.08])
-        # Stay on the table/robot centerline (Y=0) to avoid introducing a
-        # misleading left/right perspective into recorded demonstrations.
-        position = self.table_top_pos + np.asarray([0.85, 0.0, 0.75])
+        target = self.table_top_pos + np.asarray([-0.10, 0.0, 0.20])
+        # Stay primarily side-on so the palm / gripper opening remains visible,
+        # while a 30-degree forward offset provides useful depth cues.
+        horizontal = 1.15
+        angle = np.deg2rad(30.0)
+        position = target + np.asarray(
+            [
+                horizontal * np.sin(angle),
+                -horizontal * np.cos(angle),
+                horizontal * np.tan(angle),
+            ]
+        )
         view = target - position
         view /= np.linalg.norm(view)
         local_z = -view
@@ -74,6 +82,7 @@ class TableArena:
         mujoco.mju_mat2Quat(quaternion, rotation.reshape(9))
         camera.pos = position.tolist()
         camera.quat = quaternion.tolist()
+        camera.fovy = 55.0
 
     def _merge_arena_spec(
         self,
@@ -254,16 +263,41 @@ class BinsArena(TableArena):
 
 
 @dataclass(frozen=True)
+class PushArena(TableArena):
+    """Flat table with a non-colliding circular planar-pushing target."""
+
+    target_site_name: str = "push_target"
+    target_radius: float = 0.075
+    initial_target_xy: Tuple[float, float] = (0.58, 0.18)
+
+    def augment_spec(self, spec: mujoco.MjSpec) -> None:
+        super().augment_spec(spec)
+        site = spec.worldbody.add_site()
+        site.name = self.target_site_name
+        site.type = mujoco.mjtGeom.mjGEOM_CYLINDER
+        site.pos = [
+            float(self.initial_target_xy[0]),
+            float(self.initial_target_xy[1]),
+            self.table_top_z + 0.001,
+        ]
+        site.size = [self.target_radius, 0.0015, 0.0]
+        site.rgba = [0.12, 0.72, 0.34, 0.55]
+        site.group = 2
+
+
+@dataclass(frozen=True)
 class PegsArena(TableArena):
     """Table arena with one square and one round peg."""
 
     peg_centers: Tuple[Tuple[float, float], Tuple[float, float]] = ((0.50, -0.12), (0.50, 0.12))
-    peg_radius: float = 0.012
+    square_peg_half_width: float = 0.018
+    round_peg_radius: float = 0.025
     peg_half_height: float = 0.08
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         super().augment_spec(spec)
         for index, center in enumerate(self.peg_centers):
+            cross_section = self.square_peg_half_width if index == 0 else self.round_peg_radius
             body = spec.worldbody.add_body()
             body.name = f"peg{index + 1}_body"
             body.pos = [center[0], center[1], self.table_top_z + self.peg_half_height]
@@ -272,11 +306,51 @@ class PegsArena(TableArena):
             if index == 0:
                 geom.type = mujoco.mjtGeom.mjGEOM_BOX
                 geom.size = [
-                    self.peg_radius,
-                    self.peg_radius,
+                    cross_section,
+                    cross_section,
                     self.peg_half_height,
                 ]
             else:
                 geom.type = mujoco.mjtGeom.mjGEOM_CYLINDER
-                geom.size = [self.peg_radius, self.peg_half_height, 0.0]
-            geom.rgba = [0.25, 0.45, 0.85, 1.0] if index == 0 else [0.85, 0.75, 0.15, 1.0]
+                geom.size = [cross_section, self.peg_half_height, 0.0]
+            geom.rgba = [0.0, 0.0, 0.0, 0.0]
+
+            color = [0.20, 0.42, 0.82, 1.0] if index == 0 else [0.88, 0.68, 0.12, 1.0]
+            visual = body.add_geom()
+            visual.name = f"peg{index + 1}_visual"
+            visual.type = geom.type
+            visual.size = list(geom.size)
+            visual.rgba = color
+            visual.contype = 0
+            visual.conaffinity = 0
+            visual.density = 0.0
+
+            collar = body.add_geom()
+            collar.name = f"peg{index + 1}_collar_visual"
+            collar.type = (
+                mujoco.mjtGeom.mjGEOM_BOX if index == 0 else mujoco.mjtGeom.mjGEOM_CYLINDER
+            )
+            collar.pos = [0.0, 0.0, -self.peg_half_height + 0.006]
+            collar.size = (
+                [cross_section * 1.35, cross_section * 1.35, 0.006]
+                if index == 0
+                else [cross_section * 1.35, 0.006, 0.0]
+            )
+            collar.rgba = [color[0] * 0.75, color[1] * 0.75, color[2] * 0.75, 1.0]
+            collar.contype = 0
+            collar.conaffinity = 0
+            collar.density = 0.0
+
+            cap = body.add_geom()
+            cap.name = f"peg{index + 1}_cap_visual"
+            cap.type = mujoco.mjtGeom.mjGEOM_BOX if index == 0 else mujoco.mjtGeom.mjGEOM_CYLINDER
+            cap.pos = [0.0, 0.0, self.peg_half_height - 0.003]
+            cap.size = (
+                [cross_section * 1.05, cross_section * 1.05, 0.003]
+                if index == 0
+                else [cross_section * 1.05, 0.003, 0.0]
+            )
+            cap.rgba = [min(value * 1.18, 1.0) for value in color[:3]] + [1.0]
+            cap.contype = 0
+            cap.conaffinity = 0
+            cap.density = 0.0

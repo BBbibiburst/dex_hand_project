@@ -65,7 +65,9 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--max-release", type=float, default=1e-6)
     parser.add_argument("--csv", type=Path, default=None, help="Optional raw metrics CSV.")
     parser.add_argument(
-        "--plot", type=Path, default=None,
+        "--plot",
+        type=Path,
+        default=None,
         help="Optionally save the 3-D status point cloud to this image.",
     )
     parser.add_argument(
@@ -217,9 +219,22 @@ def _test_taxel(
 
     if not contacted:
         return TaxelResult(
-            ref.flat_index, ref.patch, ref.name, "inactive", False,
-            0.0, 0.0, 0.0, 0.0, -1, 0.0, 0.0, -1,
-            float(position[0]), float(position[1]), float(position[2]),
+            ref.flat_index,
+            ref.patch,
+            ref.name,
+            "inactive",
+            False,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -1,
+            0.0,
+            0.0,
+            -1,
+            float(position[0]),
+            float(position[1]),
+            float(position[2]),
         )
 
     pressed = contact_position - args.penetration * normal
@@ -228,9 +243,7 @@ def _test_taxel(
     peak_other_index = -1
     for _ in range(args.instant_steps):
         _place_probe(model, data, pressed, addresses)
-        target, other, other_index = _sample_metrics(
-            _signals(sensor, model, data), ref.flat_index
-        )
+        target, other, other_index = _sample_metrics(_signals(sensor, model, data), ref.flat_index)
         instant_targets.append(target)
         if other > peak_other:
             peak_other = other
@@ -240,9 +253,7 @@ def _test_taxel(
     hold_targets = []
     for _ in range(args.hold_steps):
         _place_probe(model, data, pressed, addresses)
-        target, other, other_index = _sample_metrics(
-            _signals(sensor, model, data), ref.flat_index
-        )
+        target, other, other_index = _sample_metrics(_signals(sensor, model, data), ref.flat_index)
         hold_targets.append(target)
         if other > peak_other:
             peak_other = other
@@ -268,10 +279,22 @@ def _test_taxel(
     else:
         status = "pass"
     return TaxelResult(
-        ref.flat_index, ref.patch, ref.name, status, True, instant,
-        hold_median, hold_min, peak_other, peak_other_index,
-        crosstalk_ratio, release, contact_step,
-        float(position[0]), float(position[1]), float(position[2]),
+        ref.flat_index,
+        ref.patch,
+        ref.name,
+        status,
+        True,
+        instant,
+        hold_median,
+        hold_min,
+        peak_other,
+        peak_other_index,
+        crosstalk_ratio,
+        release,
+        contact_step,
+        float(position[0]),
+        float(position[1]),
+        float(position[2]),
     )
 
 
@@ -308,19 +331,20 @@ def _plot_results(path: Path | None, results: list[TaxelResult], *, show: bool) 
         if not np.any(mask):
             continue
         axis.scatter(
-            positions[mask, 0], positions[mask, 1], positions[mask, 2],
-            s=sizes[mask], c=colors[status], alpha=0.88,
-            edgecolors="black", linewidths=0.15, depthshade=False,
+            positions[mask, 0],
+            positions[mask, 1],
+            positions[mask, 2],
+            s=sizes[mask],
+            c=colors[status],
+            alpha=0.88,
+            edgecolors="black",
+            linewidths=0.15,
+            depthshade=False,
         )
-    counts = {
-        status: sum(result.status == status for result in results)
-        for status in colors
-    }
+    counts = {status: sum(result.status == status for result in results) for status in colors}
     tested = len(results) - counts["inactive"]
     pass_rate = 100.0 * counts["pass"] / max(tested, 1)
-    summary = "   ".join(
-        f"{status}={count}" for status, count in counts.items() if count
-    )
+    summary = "   ".join(f"{status}={count}" for status, count in counts.items() if count)
     axis.set_title(
         f"Tactile taxel validation point cloud\n{summary}   active pass rate={pass_rate:.2f}%"
     )
@@ -328,8 +352,15 @@ def _plot_results(path: Path | None, results: list[TaxelResult], *, show: bool) 
     axis.set_ylabel("world Y (m)")
     axis.set_zlabel("world Z (m)")
     handles = [
-        Line2D([0], [0], marker="o", linestyle="", markerfacecolor=color,
-               markeredgecolor="black", label=status)
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            linestyle="",
+            markerfacecolor=color,
+            markeredgecolor="black",
+            label=status,
+        )
         for status, color in colors.items()
         if counts[status]
     ]
@@ -362,9 +393,7 @@ def run(args: argparse.Namespace) -> int:
     results: list[TaxelResult] = []
     started = time.perf_counter()
     for count, ref in enumerate(refs, start=1):
-        result = _test_taxel(
-            model, data, sensor, ref, args, addresses, probe_geom_id
-        )
+        result = _test_taxel(model, data, sensor, ref, args, addresses, probe_geom_id)
         results.append(result)
         if count == 1 or count % max(1, args.progress_interval) == 0 or count == len(refs):
             elapsed = time.perf_counter() - started
@@ -376,7 +405,10 @@ def run(args: argparse.Namespace) -> int:
     if args.csv is not None:
         _write_csv(args.csv, results)
     _plot_results(args.plot, results, show=not args.no_show)
-    counts = {status: sum(result.status == status for result in results) for status in sorted({r.status for r in results})}
+    counts = {
+        status: sum(result.status == status for result in results)
+        for status in sorted({r.status for r in results})
+    }
     print(f"Results: {counts}")
     if args.csv is not None:
         print(f"CSV: {args.csv.resolve()}")

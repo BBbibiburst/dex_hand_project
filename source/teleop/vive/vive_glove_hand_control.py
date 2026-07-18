@@ -13,8 +13,18 @@ from source.teleop.glove_processing import GloveValueFilter, read_latest_glove
 from source.teleop.vive.coordinates import remap_pose, rotation_matrix_to_rpy_degrees
 from source.teleop.vive.hand_skeleton import FINGER_NAMES, make_hand_lines
 from source.teleop.vive.vive_plot_style import (
-    BG, CYAN, GREEN, ORANGE, PURPLE, WHITE, YELLOW, apply_theme, draw_floor,
-    style_3d_axis, style_panel, update_frame_axes,
+    BG,
+    CYAN,
+    GREEN,
+    ORANGE,
+    PURPLE,
+    WHITE,
+    YELLOW,
+    apply_theme,
+    draw_floor,
+    style_3d_axis,
+    style_panel,
+    update_frame_axes,
 )
 
 
@@ -52,7 +62,8 @@ class LiveGloveHandPlot:
         self.figure.canvas.mpl_connect("key_press_event", self._on_key)
         self.figure.suptitle(
             "◆  VIVE + BLUETOOTH GLOVE  ·  LIVE HAND CONTROL",
-            fontsize=13, fontweight="bold",
+            fontsize=13,
+            fontweight="bold",
         )
         grid = GridSpec(1, 3, figure=self.figure, width_ratios=(1.7, 1.7, 1.15))
         self.axes = self.figure.add_subplot(grid[0, :2], projection="3d")
@@ -60,9 +71,7 @@ class LiveGloveHandPlot:
         style_panel(self.info_axis, "GLOVE FLEXION + 6D POSE")
         colors = (CYAN, GREEN, ORANGE, PURPLE, YELLOW)
         bar_y = np.asarray((10.5, 9.5, 8.5, 7.5, 6.5))
-        self.finger_bars = self.info_axis.barh(
-            bar_y, np.zeros(5), height=0.56, color=colors
-        )
+        self.finger_bars = self.info_axis.barh(bar_y, np.zeros(5), height=0.56, color=colors)
         self.info_axis.set_xlim(0, 1)
         self.info_axis.set_ylim(0, 11.7)
         self.info_axis.set_yticks(bar_y, FINGER_NAMES)
@@ -71,11 +80,19 @@ class LiveGloveHandPlot:
         self.info_axis.tick_params(axis="x", pad=3)
         self.info_axis.axhline(5.75, color="#30363d", linewidth=1.0)
         self.pose_text = self.info_axis.text(
-            0.04, 0.47, "WAITING FOR DEVICES", va="top", fontsize=8.0,
+            0.04,
+            0.47,
+            "WAITING FOR DEVICES",
+            va="top",
+            fontsize=8.0,
             transform=self.info_axis.transAxes,
         )
         self.glove_text = self.info_axis.text(
-            0.04, 0.19, "RAW / FILTERED", va="top", fontsize=7.2,
+            0.04,
+            0.19,
+            "RAW / FILTERED",
+            va="top",
+            fontsize=7.2,
             transform=self.info_axis.transAxes,
         )
         self.hand_artists = [
@@ -105,10 +122,7 @@ class LiveGloveHandPlot:
         self._calibration_pose_index += 1
         self._calibration_confirmed = False
         self.pose_text.set_text(
-            "GLOVE CALIBRATION\n\n"
-            f"{pose}\n\n"
-            "Hold the pose steady,\n"
-            "then press C to start sampling."
+            f"GLOVE CALIBRATION\n\n{pose}\n\nHold the pose steady,\nthen press C to start sampling."
         )
         self.glove_text.set_text("WAITING FOR C")
         self.figure.canvas.draw_idle()
@@ -194,7 +208,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--glove-mac", default=config.get("glove_mac"))
     parser.add_argument("--glove-serial-port", default=config.get("glove_serial_port"))
     parser.add_argument("--glove-channel", type=int, default=int(config.get("glove_channel", 1)))
-    parser.add_argument("--glove-baudrate", type=int, default=int(config.get("glove_baudrate", 9600)))
+    parser.add_argument(
+        "--glove-baudrate", type=int, default=int(config.get("glove_baudrate", 9600))
+    )
     parser.add_argument(
         "--glove-calibration-seconds",
         type=float,
@@ -267,9 +283,7 @@ def main() -> None:
         baudrate=args.glove_baudrate,
         calibration_seconds=args.glove_calibration_seconds,
         calibration_confirmation=(
-            (lambda pose: plot.wait_for_calibration_pose(pose))
-            if args.recalibrate_glove
-            else None
+            (lambda pose: plot.wait_for_calibration_pose(pose)) if args.recalibrate_glove else None
         ),
         calibration_minimum=calibration_minimum,
         calibration_maximum=calibration_maximum,
@@ -303,9 +317,7 @@ def main() -> None:
             # packets so animation always uses a fresh sample instead of building
             # up several seconds of latency while replaying stale samples.
             glove_values = np.asarray(read_latest_glove(glove).stretch, dtype=float)
-            position, rotation = remap_pose(
-                vive_sample.position, vive_sample.quaternion_wxyz
-            )
+            position, rotation = remap_pose(vive_sample.position, vive_sample.quaternion_wxyz)
             plot.update(position, rotation, glove_values)
     except KeyboardInterrupt:
         print("\n已退出 Vive + 手套控制。")

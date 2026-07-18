@@ -47,5 +47,5 @@ def make_nut_assembly_env(*, task_config=None, **env_kwargs):
     return make_manipulation_env("nut_assembly", task_config=task_config, **env_kwargs)
 
 
-def make_door_env(*, task_config=None, **env_kwargs):
-    return make_manipulation_env("door", task_config=task_config, **env_kwargs)
+def make_push_env(*, task_config=None, **env_kwargs):
+    return make_manipulation_env("push", task_config=task_config, **env_kwargs)

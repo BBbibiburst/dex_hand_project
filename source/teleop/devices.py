@@ -226,9 +226,7 @@ class StretchGloveApiDevice:
             try:
                 import serial
             except ImportError as exc:
-                raise RuntimeError(
-                    "pyserial is required for a configured glove COM port."
-                ) from exc
+                raise RuntimeError("pyserial is required for a configured glove COM port.") from exc
             resolved_port = self._resolve_serial_port()
             try:
                 self._serial = serial.Serial(

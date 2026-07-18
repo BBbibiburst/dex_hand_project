@@ -59,9 +59,7 @@ def parse_args():
     parser.add_argument(
         "--neutral-hand-pitch-degrees",
         type=float,
-        default=float(
-            teleop_config.get("vive_robot_neutral_hand_pitch_degrees", 90.0)
-        ),
+        default=float(teleop_config.get("vive_robot_neutral_hand_pitch_degrees", 90.0)),
         help=(
             "World-Y pitch applied to the robot's initial end-effector orientation "
             "to define the flat, forward neutral hand pose."
@@ -71,9 +69,7 @@ def parse_args():
         "--arm-home-qpos",
         type=float,
         nargs=7,
-        default=teleop_config.get(
-            "teleop_arm_home_qpos", [0.0, 0.7, 0.0, 0.7, 0.0, 0.0, 0.0]
-        ),
+        default=teleop_config.get("teleop_arm_home_qpos", [0.0, 0.7, 0.0, 0.7, 0.0, 0.0, 0.0]),
         metavar=("J1", "J2", "J3", "J4", "J5", "J6", "J7"),
         help="Seven arm joint positions used as the teleoperation reset pose.",
     )
@@ -103,9 +99,7 @@ def parse_args():
         "--ik-posture-qpos",
         type=float,
         nargs=7,
-        default=teleop_config.get(
-            "teleop_ik_posture_qpos", [0.0, 1.1, 0.0, 1.3, 0.0, -0.5, 0.0]
-        ),
+        default=teleop_config.get("teleop_ik_posture_qpos", [0.0, 1.1, 0.0, 1.3, 0.0, -0.5, 0.0]),
         metavar=("J1", "J2", "J3", "J4", "J5", "J6", "J7"),
         help="Preferred bent-arm posture used by the soft teleoperation IK objective.",
     )
@@ -239,8 +233,7 @@ def run(args) -> None:
     ik_posture_qpos = np.asarray(args.ik_posture_qpos, dtype=np.float64)
     if ik_posture_qpos.shape != (arm_controller.position_action_size,):
         raise ValueError(
-            "--ik-posture-qpos must contain exactly "
-            f"{arm_controller.position_action_size} values."
+            f"--ik-posture-qpos must contain exactly {arm_controller.position_action_size} values."
         )
     if np.any(ik_posture_qpos < arm_controller.ctrl_low) or np.any(
         ik_posture_qpos > arm_controller.ctrl_high
@@ -329,9 +322,7 @@ def run(args) -> None:
         ) -> np.ndarray:
             renderer.update_scene(env.data, camera=args.camera)
             image = renderer.render().copy()
-            diagnostic_values = getattr(
-                env.tactile_sensor, "diagnostic_values", None
-            )
+            diagnostic_values = getattr(env.tactile_sensor, "diagnostic_values", None)
             raw_tactile = (
                 diagnostic_values(env.model, env.data)
                 if callable(diagnostic_values)
@@ -341,22 +332,14 @@ def run(args) -> None:
             for contact_index in range(env.data.ncon):
                 contact = env.data.contact[contact_index]
                 names = (
-                    mujoco.mj_id2name(
-                        env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom1)
-                    )
+                    mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom1))
                     or "",
-                    mujoco.mj_id2name(
-                        env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom2)
-                    )
+                    mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom2))
                     or "",
                 )
-                if (
-                    any("cube" in name for name in names)
-                    and any(
-                        "gripper_left_link_collision" in name
-                        or "gripper_right_link_collision" in name
-                        for name in names
-                    )
+                if any("cube" in name for name in names) and any(
+                    "gripper_left_link_collision" in name or "gripper_right_link_collision" in name
+                    for name in names
                 ):
                     grasp_contacts += 1
             key = dashboard.update(
@@ -380,10 +363,7 @@ def run(args) -> None:
 
         def calibrate_vive(*, wait_for_dashboard_confirmation: bool) -> None:
             if args.device == "hardware" and not args.no_calibration_prompt:
-                print(
-                    "\nVive 中立位姿校准：请将手掌水平放平，"
-                    "手指朝向机器人正前方。"
-                )
+                print("\nVive 中立位姿校准：请将手掌水平放平，手指朝向机器人正前方。")
                 if wait_for_dashboard_confirmation:
                     print("保持稳定，然后在 Teleop Data Collection 窗口中按 C 采集基准。")
                     # Discard a C event left over from an earlier interaction.
@@ -420,9 +400,7 @@ def run(args) -> None:
             if np.any(home_qpos < arm_controller.ctrl_low) or np.any(
                 home_qpos > arm_controller.ctrl_high
             ):
-                raise ValueError(
-                    "--arm-home-qpos exceeds the configured arm joint limits."
-                )
+                raise ValueError("--arm-home-qpos exceeds the configured arm joint limits.")
             env.data.qpos[arm_controller.qpos_addrs] = home_qpos
             env.data.qvel[:] = 0.0
             mujoco.mj_forward(env.model, env.data)
@@ -437,10 +415,7 @@ def run(args) -> None:
             mujoco.mj_forward(env.model, env.data)
             initial_action = env.controller.current_ik_action(env.model, env.data)
             vive.set_pose(initial_action[:3], initial_action[3:7])
-            print(
-                "Teleop home pose: "
-                f"EE position={np.round(initial_action[:3], 3).tolist()}"
-            )
+            print(f"Teleop home pose: EE position={np.round(initial_action[:3], 3).tolist()}")
             calibrate_vive(wait_for_dashboard_confirmation=True)
 
         print(

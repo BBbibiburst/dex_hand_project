@@ -17,7 +17,7 @@ _BUILTIN_TASK_MODULES = (
     "source.envs.manipulation.stack",
     "source.envs.manipulation.pick_place",
     "source.envs.manipulation.nut_assembly",
-    "source.envs.manipulation.door",
+    "source.envs.manipulation.push",
 )
 _BUILTINS_LOADED = False
 

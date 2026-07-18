@@ -11,16 +11,19 @@ Usage::
     python -m source.demos.manipulation_task_playback --task stack
     python -m source.demos.manipulation_task_playback --task pick_place --object-id ycb:025_mug
     python -m source.demos.manipulation_task_playback --task nut_assembly --single-nut square_nut
-    python -m source.demos.manipulation_task_playback --task door --no-latch
+    python -m source.demos.manipulation_task_playback --task push --object-id ycb:006_mustard_bottle
 """
 
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 from typing import Any, Dict
 
+import mujoco
 import numpy as np
 from mujoco import viewer
+from PIL import Image
 
 from source.demos.common import RealtimePacer, add_robot_config_args
 from source.envs.manipulation import make_manipulation_env, registered_tasks
@@ -45,7 +48,7 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--object-id",
-        help="Catalogue object ID for Lift or PickPlace, for example ycb:025_mug.",
+        help="Catalogue object ID for Lift, PickPlace, or Push, for example ycb:025_mug.",
     )
     parser.add_argument(
         "--stack-object-ids",
@@ -57,11 +60,6 @@ def _parse_args() -> argparse.Namespace:
         "--single-nut",
         choices=("square_nut", "round_nut"),
         help="Run NutAssembly with only the selected nut.",
-    )
-    parser.add_argument(
-        "--no-latch",
-        action="store_true",
-        help="Run Door without the rotatable latch joint.",
     )
     parser.add_argument(
         "--render-fps",
@@ -96,6 +94,33 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="Print reward and success once per second.",
     )
+    parser.add_argument(
+        "--snapshot",
+        nargs="?",
+        const="docs/manipulation_snapshot.png",
+        metavar="PATH",
+        help=(
+            "Render one fixed-camera PNG and exit without opening the viewer. "
+            "Default path when omitted: docs/manipulation_snapshot.png."
+        ),
+    )
+    parser.add_argument(
+        "--camera",
+        default="agentview",
+        help="Named MuJoCo camera used by --snapshot (default: agentview).",
+    )
+    parser.add_argument(
+        "--image-width",
+        type=int,
+        default=640,
+        help="Snapshot width in pixels (default: 640).",
+    )
+    parser.add_argument(
+        "--image-height",
+        type=int,
+        default=480,
+        help="Snapshot height in pixels (default: 480).",
+    )
     add_robot_config_args(parser)
     return parser.parse_args()
 
@@ -107,14 +132,14 @@ def _make_env(args: argparse.Namespace):
         raise ValueError(f"--render-fps must be positive, got {args.render_fps}.")
     if args.action_scale < 0.0:
         raise ValueError(f"--action-scale must be non-negative, got {args.action_scale}.")
-    if args.object_id is not None and args.task not in {"lift", "pick_place"}:
-        raise ValueError("--object-id is only valid with --task lift or pick_place.")
+    if args.image_width <= 0 or args.image_height <= 0:
+        raise ValueError("--image-width and --image-height must be positive.")
+    if args.object_id is not None and args.task not in {"lift", "pick_place", "push"}:
+        raise ValueError("--object-id is only valid with --task lift, pick_place, or push.")
     if args.stack_object_ids is not None and args.task != "stack":
         raise ValueError("--stack-object-ids is only valid with --task stack.")
     if args.single_nut is not None and args.task != "nut_assembly":
         raise ValueError("--single-nut is only valid with --task nut_assembly.")
-    if args.no_latch and args.task != "door":
-        raise ValueError("--no-latch is only valid with --task door.")
 
     env_kwargs = dict(
         robot_config_path=getattr(args, "robot_config", None),
@@ -136,9 +161,39 @@ def _make_env(args: argparse.Namespace):
         task_config["object_ids"] = tuple(args.stack_object_ids)
     if args.task == "nut_assembly" and args.single_nut is not None:
         task_config["single_nut"] = args.single_nut
-    if args.task == "door":
-        task_config["use_latch"] = not args.no_latch
     return make_manipulation_env(args.task, task_config=task_config, **env_kwargs)
+
+
+def render_snapshot(args: argparse.Namespace) -> Path:
+    """Reset once, render one named-camera frame, and close immediately."""
+    env = _make_env(args)
+    output = Path(args.snapshot).expanduser().resolve()
+    try:
+        env.reset(seed=args.seed)
+        camera_id = mujoco.mj_name2id(
+            env.model,
+            mujoco.mjtObj.mjOBJ_CAMERA,
+            args.camera,
+        )
+        if camera_id < 0:
+            names = [
+                mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_CAMERA, index)
+                for index in range(env.model.ncam)
+            ]
+            raise ValueError(f"Unknown camera {args.camera!r}; available cameras: {names}")
+        with mujoco.Renderer(
+            env.model,
+            height=args.image_height,
+            width=args.image_width,
+        ) as renderer:
+            renderer.update_scene(env.data, camera=args.camera)
+            frame = renderer.render()
+        output.parent.mkdir(parents=True, exist_ok=True)
+        Image.fromarray(frame).save(output)
+        print(f"Snapshot saved: {output}")
+        return output
+    finally:
+        env.close()
 
 
 def _sample_action(
@@ -215,7 +270,11 @@ def run_viewer(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    run_viewer(_parse_args())
+    args = _parse_args()
+    if args.snapshot is not None:
+        render_snapshot(args)
+    else:
+        run_viewer(args)
 
 
 if __name__ == "__main__":

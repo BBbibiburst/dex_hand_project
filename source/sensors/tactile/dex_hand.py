@@ -270,9 +270,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         if patch.kind == "mesh-uv":
             data = patch_mesh_uv_plot_data(stl_path, patch.name, patch.rows, patch.cols)
         elif patch.kind == "fingertip-ellipsoid":
-            data = patch_fingertip_ellipsoid_plot_data(
-                stl_path, patch.name, patch.rows, patch.cols
-            )
+            data = patch_fingertip_ellipsoid_plot_data(stl_path, patch.name, patch.rows, patch.cols)
         else:
             data = patch_plot_data(
                 stl_path,

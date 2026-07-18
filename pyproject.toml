@@ -15,11 +15,17 @@ dependencies = [
     "gymnasium",
     "matplotlib",
     "opencv-python",
+    "Pillow",
 ]
 
 [project.optional-dependencies]
-hardware = ["openvr", "pyserial"]
+hardware = [
+    "openvr",
+    "pyserial",
+    "PyBluez @ git+https://github.com/pybluez/pybluez.git",
+]
 learning = ["torch", "torchvision", "torchcodec", "lerobot>=0.4"]
+assets = ["mani-skill"]
 dev = ["ruff", "pytest"]
 
 [project.scripts]
@@ -27,6 +33,8 @@ dex-smoke-test = "source.demos.smoke_test:main"
 dex-vive-test = "source.teleop.vive.vive_link_test:main"
 dex-vive-glove = "source.teleop.vive.vive_glove_hand_control:main"
 dex-collect-teleop = "source.demos.collect_teleop_lerobot:main"
+dex-task-playback = "source.demos.manipulation_task_playback:main"
+dex-glove-test = "source.teleop.bluetooth_glove.bluetooth_glove_test:main"
 
 [tool.setuptools.packages.find]
 include = ["source*"]

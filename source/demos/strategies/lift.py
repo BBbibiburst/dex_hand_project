@@ -54,7 +54,11 @@ class LiftStrategy(TaskStrategy):
                     if self.grasp_quaternion_wxyz is None
                     else self.grasp_quaternion_wxyz.copy()
                 )
-            result = PhaseResult.NEXT if context.phase_step >= self.settle_steps else PhaseResult.CONTINUE
+            result = (
+                PhaseResult.NEXT
+                if context.phase_step >= self.settle_steps
+                else PhaseResult.CONTINUE
+            )
             return result, ActionContext(hand_target=open_hand)
 
         grasp_quaternion = np.asarray(context.memory["grasp_quaternion"])
@@ -83,7 +87,11 @@ class LiftStrategy(TaskStrategy):
 
         if phase == "grasp":
             target = np.asarray(context.memory.get("grasp_position", ee_position))
-            result = PhaseResult.NEXT if context.phase_step >= self.settle_steps else PhaseResult.CONTINUE
+            result = (
+                PhaseResult.NEXT
+                if context.phase_step >= self.settle_steps
+                else PhaseResult.CONTINUE
+            )
             return result, ActionContext(
                 ee_target_position=target,
                 ee_target_quaternion_wxyz=grasp_quaternion,

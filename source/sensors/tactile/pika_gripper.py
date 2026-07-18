@@ -94,7 +94,9 @@ class PikaGripperTactileSensor(TactileSensorBase):
         if taxel_half_depth <= 0.0:
             raise ValueError("taxel_half_depth must be positive.")
         if not 0.0 <= surface_embed < taxel_half_depth:
-            raise ValueError("surface_embed must be non-negative and smaller than taxel_half_depth.")
+            raise ValueError(
+                "surface_embed must be non-negative and smaller than taxel_half_depth."
+            )
         if taxel_overlap <= 0.0:
             raise ValueError("taxel_overlap must be positive.")
         self.taxel_half_depth = float(taxel_half_depth)
@@ -106,8 +108,14 @@ class PikaGripperTactileSensor(TactileSensorBase):
         self.signal_processor = TactileSignalProcessor(signal_processor)
         self.name_prefix = ""
         self.patches = tuple(
-            TaxelPatch(side, ROWS, COLS, "planar_clipped_tip", index * ROWS * COLS,
-                       (index + 1) * ROWS * COLS)
+            TaxelPatch(
+                side,
+                ROWS,
+                COLS,
+                "planar_clipped_tip",
+                index * ROWS * COLS,
+                (index + 1) * ROWS * COLS,
+            )
             for index, side in enumerate(SIDES)
         )
         self.sensor_names = tuple(
@@ -155,8 +163,7 @@ class PikaGripperTactileSensor(TactileSensorBase):
             [
                 [
                     X_MIN + (col + 0.5) * col_spacing,
-                    side_sign
-                    * _inward_y_magnitude(X_MIN + (col + 0.5) * col_spacing),
+                    side_sign * _inward_y_magnitude(X_MIN + (col + 0.5) * col_spacing),
                     Z_MIN + (row + 0.5) * row_spacing,
                 ]
                 for row in range(ROWS)

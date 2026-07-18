@@ -56,9 +56,9 @@ def normalize_extensions(values: list[str]) -> tuple[str, ...]:
 def is_binary_file(file_path: Path) -> bool:
     """Heuristically detect binary files by checking for null bytes."""
     try:
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             chunk = f.read(1024)
-            return b'\x00' in chunk
+            return b"\x00" in chunk
     except Exception:
         return True
 
@@ -92,7 +92,7 @@ def process_files(file_paths: list, output_file: Path):
 
     print(f"Found {len(valid_files)} valid files, generating {output_file}...")
 
-    with open(output_file, 'w', encoding='utf-8') as outfile:
+    with open(output_file, "w", encoding="utf-8") as outfile:
         outfile.write("Code Merge Report\n")
         outfile.write(f"Total Files: {len(valid_files)}\n")
         outfile.write(f"{SEPARATOR_LINE}\n\n")
@@ -102,7 +102,7 @@ def process_files(file_paths: list, output_file: Path):
             outfile.write("-" * 40 + "\n")
 
             try:
-                with open(file_path, 'r', encoding='utf-8', errors='ignore') as infile:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as infile:
                     content = infile.read()
                     outfile.write(content)
             except Exception as e:
@@ -121,14 +121,14 @@ def main():
         description="Merge multiple code files into a single text report."
     )
     parser.add_argument(
-        "files", 
-        nargs="*", 
-        help="Direct file paths to merge. If omitted, auto-discovers configured file types."
+        "files",
+        nargs="*",
+        help="Direct file paths to merge. If omitted, auto-discovers configured file types.",
     )
     parser.add_argument(
-        "--list", 
-        dest="list_file", 
-        help="Read file paths from a text list file (supports # comments)."
+        "--list",
+        dest="list_file",
+        help="Read file paths from a text list file (supports # comments).",
     )
     parser.add_argument(
         "-e",
@@ -148,11 +148,9 @@ def main():
     if args.list_file:
         list_path = Path(args.list_file)
         if list_path.exists():
-            with open(list_path, 'r', encoding='utf-8') as f:
+            with open(list_path, "r", encoding="utf-8") as f:
                 file_list = [
-                    line.strip()
-                    for line in f
-                    if line.strip() and not line.startswith('#')
+                    line.strip() for line in f if line.strip() and not line.startswith("#")
                 ]
         else:
             print(f"Error: List file {list_path} does not exist")
@@ -180,11 +178,11 @@ def main():
             for path in current_dir.rglob("*")
             if path.is_file() and path.suffix.lower() in extensions
         )
-        
+
         if not discovered_files:
             print(f"No files matching {', '.join(extensions)} were found.")
             return
-            
+
         file_list = discovered_files
 
     process_files(file_list, OUTPUT_FILENAME)

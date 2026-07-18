@@ -15,9 +15,7 @@ class TeleopDashboard:
         try:
             import matplotlib.pyplot as plt
         except ImportError as exc:
-            raise RuntimeError(
-                "The teleoperation dashboard requires matplotlib."
-            ) from exc
+            raise RuntimeError("The teleoperation dashboard requires matplotlib.") from exc
         self.plt = plt
         self.sensor = tactile_sensor
         self.title = title
@@ -98,13 +96,9 @@ class TeleopDashboard:
         target_text = ""
         if target_position is not None:
             target = np.asarray(target_position, dtype=float).reshape(3)
-            target_text = (
-                f"  |  target xyz "
-                f"{target[0]:+.3f} {target[1]:+.3f} {target[2]:+.3f} m"
-            )
+            target_text = f"  |  target xyz {target[0]:+.3f} {target[1]:+.3f} {target[2]:+.3f} m"
         self._controls_text.set_text(
-            "SPACE record/pause  |  C calibrate  |  N save  |  "
-            f"R reset  |  Q quit{target_text}"
+            f"SPACE record/pause  |  C calibrate  |  N save  |  R reset  |  Q quit{target_text}"
         )
         self._message_text.set_text(message)
         self.figure.canvas.draw_idle()
@@ -236,21 +230,15 @@ class TeleopDashboard:
                 interpolation="nearest",
                 aspect="auto",
             )
-        self._status_text = figure.text(
-            0.035, 0.105, "", fontsize=11, fontweight="bold"
-        )
-        self._controls_text = figure.text(
-            0.035, 0.068, "", color="#d6d6d6", fontsize=8.5
-        )
+        self._status_text = figure.text(0.035, 0.105, "", fontsize=11, fontweight="bold")
+        self._controls_text = figure.text(0.035, 0.068, "", color="#d6d6d6", fontsize=8.5)
         self._message_text = figure.text(
             0.035, 0.028, "", color="#ffdf4d", fontsize=10, fontweight="bold"
         )
         self._patch_names = names
 
     def _update_hand(self, values: np.ndarray) -> None:
-        for bar, text, value in zip(
-            self._hand_bars, self._hand_value_texts, values
-        ):
+        for bar, text, value in zip(self._hand_bars, self._hand_value_texts, values):
             value = float(value)
             bar.set_width(value)
             text.set_x(min(value + 0.025, 1.015))

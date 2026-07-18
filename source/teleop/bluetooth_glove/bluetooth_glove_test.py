@@ -41,9 +41,7 @@ def _parse_args() -> argparse.Namespace:
         default=config.get("glove_serial_port"),
         help="Windows 配对生成的出站串口；配置后优先于 MAC/RFCOMM。",
     )
-    parser.add_argument(
-        "--baudrate", type=int, default=int(config.get("glove_baudrate", 9600))
-    )
+    parser.add_argument("--baudrate", type=int, default=int(config.get("glove_baudrate", 9600)))
     parser.add_argument(
         "--calibration-seconds",
         type=float,
@@ -55,9 +53,7 @@ def _parse_args() -> argparse.Namespace:
         default=2.0,
         help="握拳/张手校准开始前的准备时间。",
     )
-    parser.add_argument(
-        "--duration", type=float, default=2.0, help="每个确认姿势的稳定采集秒数。"
-    )
+    parser.add_argument("--duration", type=float, default=2.0, help="每个确认姿势的稳定采集秒数。")
     parser.add_argument("--display-hz", type=float, default=8.0)
     parser.add_argument(
         "--history-weight",
@@ -89,9 +85,7 @@ def _print_preflight(args: argparse.Namespace) -> None:
 
 
 def _print_live(values: np.ndarray, sample_count: int) -> None:
-    fields = [
-        f"{name}:{value:.2f}" for name, value in zip(CHANNEL_SHORT_NAMES, values)
-    ]
+    fields = [f"{name}:{value:.2f}" for name, value in zip(CHANNEL_SHORT_NAMES, values)]
     line = f"样本 {sample_count:6d} | " + " | ".join(fields)
     print(f"\r\033[2K{line}", end="", flush=True)
 
@@ -155,9 +149,7 @@ def _diagnose(
     print("\n逐项通道对应检查")
     passed = True
     for label, target_index, flexed, _ in stage_samples:
-        pose_delta = np.abs(
-            np.median(flexed[:, :5], axis=0) - np.median(opened[:, :5], axis=0)
-        )
+        pose_delta = np.abs(np.median(flexed[:, :5], axis=0) - np.median(opened[:, :5], axis=0))
         if target_index is None:
             minimum_delta = float(pose_delta.min())
             status = "正常" if minimum_delta >= 0.15 else "至少一路变化过小"

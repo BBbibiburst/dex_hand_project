@@ -194,27 +194,21 @@ class ArmPositionIkController:
         if self.nullspace_posture is None:
             self.nullspace_posture = 0.5 * (self.ctrl_low + self.ctrl_high).astype(np.float64)
         else:
-            self.nullspace_posture = np.asarray(
-                self.nullspace_posture, dtype=np.float64
-            ).reshape(-1)
-        if self.nullspace_posture.shape != (self.position_action_size,):
-            raise ValueError(
-                "nullspace_posture must contain one value per arm joint."
+            self.nullspace_posture = np.asarray(self.nullspace_posture, dtype=np.float64).reshape(
+                -1
             )
+        if self.nullspace_posture.shape != (self.position_action_size,):
+            raise ValueError("nullspace_posture must contain one value per arm joint.")
         if self.posture_weight < 0.0:
             raise ValueError("posture_weight must be non-negative.")
         if self.posture_joint_weights is None:
-            self.posture_joint_weights = np.ones(
-                self.position_action_size, dtype=np.float64
-            )
+            self.posture_joint_weights = np.ones(self.position_action_size, dtype=np.float64)
         else:
             self.posture_joint_weights = np.asarray(
                 self.posture_joint_weights, dtype=np.float64
             ).reshape(-1)
         if self.posture_joint_weights.shape != (self.position_action_size,):
-            raise ValueError(
-                "posture_joint_weights must contain one value per arm joint."
-            )
+            raise ValueError("posture_joint_weights must contain one value per arm joint.")
         if np.any(self.posture_joint_weights < 0.0):
             raise ValueError("posture_joint_weights must be non-negative.")
         self._action_space = self._bound_action_space()
@@ -390,20 +384,15 @@ class ArmPositionIkController:
             # instead of getting stuck in the locally nearest straight-arm
             # solution.  It is disabled by default for backwards compatibility.
             if self.posture_weight > 0.0:
-                posture_scale = np.sqrt(
-                    self.posture_weight * self.posture_joint_weights
-                )
+                posture_scale = np.sqrt(self.posture_weight * self.posture_joint_weights)
                 jac = np.vstack([jac, np.diag(posture_scale)])
-                error = np.concatenate(
-                    [error, posture_scale * (self.nullspace_posture - q)]
-                )
+                error = np.concatenate([error, posture_scale * (self.nullspace_posture - q)])
 
             try:
                 u, s, vh = np.linalg.svd(jac, full_matrices=False)
             except np.linalg.LinAlgError:
                 dq = jac.T @ np.linalg.solve(
-                    jac @ jac.T
-                    + (self.damping**2) * np.eye(jac.shape[0], dtype=np.float64),
+                    jac @ jac.T + (self.damping**2) * np.eye(jac.shape[0], dtype=np.float64),
                     error,
                 )
             else:

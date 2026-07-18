@@ -10,14 +10,10 @@ from source.geometry import normalize_quat
 
 
 # OpenVR/SteamVR -> physical workspace: right (+X), forward (+Y), up (+Z).
-STEAMVR_TO_WORKSPACE = np.asarray(
-    [[-1.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0]]
-)
+STEAMVR_TO_WORKSPACE = np.asarray([[-1.0, 0.0, 0.0], [0.0, 0.0, 1.0], [0.0, 1.0, 0.0]])
 
 # Fixed tracker mounting extrinsic: tracker frame -> physical hand frame.
-TRACKER_TO_HAND_ROTATION = np.asarray(
-    [[1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [0.0, 0.0, -1.0]]
-)
+TRACKER_TO_HAND_ROTATION = np.asarray([[1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [0.0, 0.0, -1.0]])
 
 
 def quaternion_to_rotation_matrix(quaternion_wxyz) -> np.ndarray:
@@ -37,9 +33,12 @@ def rotation_matrix_to_quaternion_wxyz(rotation: np.ndarray) -> np.ndarray:
     if trace > 0:
         scale = math.sqrt(trace + 1.0) * 2.0
         quaternion = np.asarray(
-            [0.25 * scale, (rotation[2, 1] - rotation[1, 2]) / scale,
-             (rotation[0, 2] - rotation[2, 0]) / scale,
-             (rotation[1, 0] - rotation[0, 1]) / scale]
+            [
+                0.25 * scale,
+                (rotation[2, 1] - rotation[1, 2]) / scale,
+                (rotation[0, 2] - rotation[2, 0]) / scale,
+                (rotation[1, 0] - rotation[0, 1]) / scale,
+            ]
         )
     else:
         index = int(np.argmax(np.diag(rotation)))

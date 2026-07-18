@@ -346,7 +346,7 @@ class FreeNutSpec(ManipulationObjectSpec):
 
 @dataclass(frozen=True)
 class XmlNutSpec(ManipulationObjectSpec):
-    """Free nut loaded from a project-local copy of robosuite's MJCF asset."""
+    """Procedurally constructed nut retained under its compatible public name."""
 
     name: str
     xml_filename: str
@@ -363,8 +363,12 @@ class XmlNutSpec(ManipulationObjectSpec):
 
     @property
     def geom_names(self) -> tuple[str, ...]:
-        count = 9 if self.xml_filename == "round-nut.xml" else 5
-        return tuple(f"{self.name}_geom_{index}" for index in range(count))
+        ring_count = 32 if self.xml_filename == "round-nut.xml" else 4
+        return (
+            *(f"{self.name}_ring_collision_{index}" for index in range(ring_count)),
+            f"{self.name}_handle_collision",
+            f"{self.name}_grip_pad_collision",
+        )
 
     @property
     def horizontal_radius(self) -> float:
@@ -379,29 +383,198 @@ class XmlNutSpec(ManipulationObjectSpec):
         return f"{self.name}_handle_site"
 
     def add_to_spec(self, spec: mujoco.MjSpec, initial_pos: np.ndarray) -> None:
-        xml_path = asset_path("objects", self.xml_filename)
-        if not xml_path.exists():
-            raise FileNotFoundError(f"Nut object XML not found: {xml_path}")
-
-        object_spec = mujoco.MjSpec.from_file(str(xml_path))
-        wrapper = object_spec.worldbody.first_body()
-        if wrapper is None or wrapper.first_body() is None:
-            raise ValueError(f"Nut XML has no nested object body: {xml_path}")
-        object_body = wrapper.first_body()
+        if self.xml_filename not in {"square-nut.xml", "round-nut.xml"}:
+            raise ValueError(f"Unknown nut design: {self.xml_filename!r}")
+        material = self._add_material(spec)
+        object_body = spec.worldbody.add_body()
         object_body.name = self.body_name
         object_body.pos = np.asarray(initial_pos, dtype=float).tolist()
-
         joint = object_body.add_joint()
         _configure_free_joint(joint, self.joint_name)
-        for geom, name in zip(object_body.geoms, self.geom_names):
-            geom.name = name
-        for site in object_body.sites:
-            if site.name == "handle_site":
-                site.name = self.handle_site_name
-            elif site.name:
-                site.name = f"{self.name}_{site.name}"
-        frame = spec.worldbody.add_frame()
-        # Attach the actual object body at world level. MuJoCo only permits a
-        # free joint on a top-level body; the XML's unnamed wrapper only owns
-        # offset metadata sites used by robosuite's Python object wrapper.
-        frame.attach_body(object_body, prefix="", suffix="")
+        self._add_refined_collisions(object_body)
+        self._add_refined_visuals(object_body, material)
+        handle_site = object_body.add_site()
+        handle_site.name = self.handle_site_name
+        handle_site.pos = [0.084, 0.0, 0.0]
+        handle_site.size = [0.005, 0.0, 0.0]
+        handle_site.rgba = [1.0, 0.0, 0.0, 0.0]
+        center_site = object_body.add_site()
+        center_site.name = f"{self.name}_center_site"
+        center_site.size = [0.003, 0.0, 0.0]
+        center_site.rgba = [1.0, 0.0, 0.0, 0.0]
+
+    def _add_material(self, spec: mujoco.MjSpec) -> str:
+        round_nut = self.xml_filename == "round-nut.xml"
+        texture = spec.add_texture()
+        texture.name = f"{self.name}_metal_texture"
+        texture.type = mujoco.mjtTexture.mjTEXTURE_CUBE
+        texture.file = str(
+            asset_path(
+                "textures",
+                "steel-scratched.png" if round_nut else "brass-ambra.png",
+            ).resolve()
+        )
+        material = spec.add_material()
+        material.name = f"{self.name}_metal"
+        material.textures[mujoco.mjtTextureRole.mjTEXROLE_RGB] = texture.name
+        material.reflectance = 1.0
+        material.shininess = 1.0
+        material.specular = 1.0
+        material.texrepeat = [1.0, 1.0]
+        material.texuniform = True
+        return material.name
+
+    def _add_refined_collisions(self, body: mujoco.MjsBody) -> None:
+        if self.xml_filename == "round-nut.xml":
+            segments = 32
+            radius = 0.04245
+            tube_radius = 0.01125
+            points = tuple(
+                (
+                    radius * np.cos(2.0 * np.pi * index / segments),
+                    radius * np.sin(2.0 * np.pi * index / segments),
+                    0.0,
+                )
+                for index in range(segments)
+            )
+        else:
+            tube_radius = 0.0105
+            half = 0.03325
+            points = (
+                (-half, -half, 0.0),
+                (half, -half, 0.0),
+                (half, half, 0.0),
+                (-half, half, 0.0),
+            )
+
+        for index, start in enumerate(points):
+            self._add_capsule_collision(
+                body,
+                f"{self.name}_ring_collision_{index}",
+                start,
+                points[(index + 1) % len(points)],
+                radius=tube_radius,
+            )
+
+        handle_start = (0.040, 0.0, 0.0) if len(points) == 32 else (0.030, 0.0, 0.0)
+        self._add_capsule_collision(
+            body,
+            f"{self.name}_handle_collision",
+            handle_start,
+            (0.084, 0.0, 0.0),
+            radius=0.0095,
+        )
+        pad = body.add_geom()
+        pad.name = f"{self.name}_grip_pad_collision"
+        pad.type = mujoco.mjtGeom.mjGEOM_ELLIPSOID
+        pad.pos = [0.084, 0.0, 0.0]
+        pad.size = [0.014, 0.019, 0.010]
+        pad.density = 100.0
+        pad.friction = [0.95, 0.3, 0.1]
+        pad.condim = 4
+        pad.contype = 1
+        pad.conaffinity = 1
+        pad.rgba = [0.0, 0.0, 0.0, 0.0]
+
+    def _add_refined_visuals(self, body: mujoco.MjsBody, material: str) -> None:
+        if self.xml_filename == "round-nut.xml":
+            self._add_round_ring_visual(body, material)
+            handle_start = (0.040, 0.0, 0.0)
+            handle_end = (0.085, 0.0, 0.0)
+        else:
+            self._add_square_ring_visual(body, material)
+            handle_start = (0.030, 0.0, 0.0)
+            handle_end = (0.082, 0.0, 0.0)
+        self._add_capsule_visual(
+            body,
+            f"{self.name}_handle_visual",
+            handle_start,
+            handle_end,
+            radius=0.0095,
+            material=material,
+        )
+        # A shallow grip pad makes the handle look manufactured rather than
+        # like another collision bar.
+        pad = body.add_geom()
+        pad.name = f"{self.name}_grip_pad_visual"
+        pad.type = mujoco.mjtGeom.mjGEOM_ELLIPSOID
+        pad.pos = [0.084, 0.0, 0.0]
+        pad.size = [0.014, 0.019, 0.010]
+        pad.material = material
+        pad.contype = 0
+        pad.conaffinity = 0
+        pad.density = 0.0
+
+    def _add_round_ring_visual(self, body: mujoco.MjsBody, material: str) -> None:
+        segments = 32
+        radius = 0.043
+        for index in range(segments):
+            first = 2.0 * np.pi * index / segments
+            second = 2.0 * np.pi * (index + 1) / segments
+            self._add_capsule_visual(
+                body,
+                f"{self.name}_ring_visual_{index}",
+                (radius * np.cos(first), radius * np.sin(first), 0.0),
+                (radius * np.cos(second), radius * np.sin(second), 0.0),
+                radius=0.0095,
+                material=material,
+            )
+
+    def _add_square_ring_visual(self, body: mujoco.MjsBody, material: str) -> None:
+        half = 0.033
+        corners = (
+            (-half, -half, 0.0),
+            (half, -half, 0.0),
+            (half, half, 0.0),
+            (-half, half, 0.0),
+        )
+        for index, first in enumerate(corners):
+            self._add_capsule_visual(
+                body,
+                f"{self.name}_ring_visual_{index}",
+                first,
+                corners[(index + 1) % len(corners)],
+                radius=0.0095,
+                material=material,
+            )
+
+    @staticmethod
+    def _add_capsule_collision(
+        body: mujoco.MjsBody,
+        name: str,
+        start: tuple[float, float, float],
+        end: tuple[float, float, float],
+        *,
+        radius: float,
+    ) -> None:
+        geom = body.add_geom()
+        geom.name = name
+        geom.type = mujoco.mjtGeom.mjGEOM_CAPSULE
+        geom.fromto = [*start, *end]
+        geom.size = [radius, 0.0, 0.0]
+        geom.density = 100.0
+        geom.friction = [0.95, 0.3, 0.1]
+        geom.condim = 4
+        geom.contype = 1
+        geom.conaffinity = 1
+        geom.rgba = [0.0, 0.0, 0.0, 0.0]
+
+    @staticmethod
+    def _add_capsule_visual(
+        body: mujoco.MjsBody,
+        name: str,
+        start: tuple[float, float, float],
+        end: tuple[float, float, float],
+        *,
+        radius: float,
+        material: str,
+    ) -> None:
+        geom = body.add_geom()
+        geom.name = name
+        geom.type = mujoco.mjtGeom.mjGEOM_CAPSULE
+        geom.fromto = [*start, *end]
+        geom.size = [radius, 0.0, 0.0]
+        geom.material = material
+        geom.contype = 0
+        geom.conaffinity = 0
+        geom.density = 0.0

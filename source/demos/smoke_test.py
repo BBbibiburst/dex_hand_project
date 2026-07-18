@@ -21,11 +21,11 @@ from typing import Callable
 
 import numpy as np
 
-from source.assets import PROJECT_ROOT
 from source.envs.manipulation import make_manipulation_env, registered_tasks
 from source.envs.manipulation.object_catalog import (
     lift_object_ids,
     pick_place_object_ids,
+    push_object_ids,
     stack_object_ids,
 )
 from source.envs.rl_env import RobotGymEnv, load_env_config
@@ -113,17 +113,21 @@ def _check_task(task_name: str, profile: str, steps: int) -> str:
 def _check_object_catalog() -> str:
     lift_ids = lift_object_ids()
     pick_ids = pick_place_object_ids()
+    push_ids = push_object_ids()
     stack_ids = stack_object_ids()
-    if len(lift_ids) < 100 or len(pick_ids) < 100 or len(stack_ids) < 10:
+    if len(lift_ids) < 100 or len(pick_ids) < 100 or len(push_ids) < 100 or len(stack_ids) < 10:
         raise AssertionError(
             f"Insufficient object coverage: lift={len(lift_ids)}, "
-            f"pick_place={len(pick_ids)}, stack={len(stack_ids)}"
+            f"pick_place={len(pick_ids)}, push={len(push_ids)}, stack={len(stack_ids)}"
         )
     if not any(item.startswith("ycb:") for item in lift_ids):
         raise AssertionError("Lift catalogue contains no YCB objects.")
     if not any(item.startswith("egad:") for item in lift_ids):
         raise AssertionError("Lift catalogue contains no EGAD objects.")
-    return f"lift={len(lift_ids)}, pick_place={len(pick_ids)}, stack={len(stack_ids)}"
+    return (
+        f"lift={len(lift_ids)}, pick_place={len(pick_ids)}, "
+        f"push={len(push_ids)}, stack={len(stack_ids)}"
+    )
 
 
 def _check_surface_data(profile: str) -> str:
@@ -157,9 +161,9 @@ def _check_tactile_diffusion() -> str:
     patch = TaxelPatch("grid", rows=3, cols=3, kind="test", start=0, stop=9)
     raw = np.zeros(9, dtype=np.float32)
     raw[4] = 1.0
-    output = TactileSignalProcessor(
-        {"crosstalk": 0.16, "gaussian_sigma": 0.0}
-    ).process(raw, (patch,))
+    output = TactileSignalProcessor({"crosstalk": 0.16, "gaussian_sigma": 0.0}).process(
+        raw, (patch,)
+    )
     neighbors = np.delete(output, 4)
     if not np.allclose(neighbors, neighbors[0]) or not np.isclose(output.sum(), 1.0):
         raise AssertionError(f"Eight-neighbor diffusion is asymmetric: {output.reshape(3, 3)}")

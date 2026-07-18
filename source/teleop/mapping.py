@@ -58,9 +58,7 @@ class TeleopMapper:
             ],
             dtype=float,
         )
-        initial_action = self.env.controller.current_ik_action(
-            self.env.model, self.env.data
-        )
+        initial_action = self.env.controller.current_ik_action(self.env.model, self.env.data)
         initial_robot_rotation = quaternion_to_rotation_matrix(initial_action[3:7])
         self._neutral_robot_quaternion = rotation_matrix_to_quaternion_wxyz(
             neutral_pitch_rotation @ initial_robot_rotation
@@ -102,21 +100,11 @@ class TeleopMapper:
         vp, vive_origin_rotation = self._vive_origin
         rp, rq = self._robot_origin
         vive_position, vive_rotation = remap_pose(vive.position, vive.quaternion_wxyz)
-        target_pos = (
-            rp
-            + self.position_scale
-            * (self.workspace_rotation @ (vive_position - vp))
-        )
+        target_pos = rp + self.position_scale * (self.workspace_rotation @ (vive_position - vp))
         robot_origin_rotation = quaternion_to_rotation_matrix(rq)
         relative_rotation = vive_rotation @ vive_origin_rotation.T
-        relative_rotation = (
-            self.workspace_rotation
-            @ relative_rotation
-            @ self.workspace_rotation.T
-        )
-        target_q = rotation_matrix_to_quaternion_wxyz(
-            relative_rotation @ robot_origin_rotation
-        )
+        relative_rotation = self.workspace_rotation @ relative_rotation @ self.workspace_rotation.T
+        target_q = rotation_matrix_to_quaternion_wxyz(relative_rotation @ robot_origin_rotation)
 
         hand = np.asarray(glove.stretch, dtype=np.float32).reshape(-1)
         if hand.shape != (6,):
@@ -130,9 +118,7 @@ class TeleopMapper:
         # near the open pose and more useful travel in the second half.
         linear_hand = hand.copy()
         hand = hand.copy()
-        hand[[0, 1, 2, 3, 5]] = np.power(
-            hand[[0, 1, 2, 3, 5]], self.finger_curve_gamma
-        )
+        hand[[0, 1, 2, 3, 5]] = np.power(hand[[0, 1, 2, 3, 5]], self.finger_curve_gamma)
         self.last_hand_values = hand.copy()
         self.last_hand_values[4] = self.dex_thumb_rotation
         controller = self.env.controller.hand_controller

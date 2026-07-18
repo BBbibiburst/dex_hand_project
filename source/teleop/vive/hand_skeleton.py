@@ -20,8 +20,7 @@ def _bend_finger(base, lengths, flex) -> np.ndarray:
     for length, joint_angle in zip(lengths, joint_angles):
         angle += joint_angle
         step = length * (
-            math.cos(angle) * direction
-            + math.sin(angle) * np.asarray([0.0, 0.0, 1.0])
+            math.cos(angle) * direction + math.sin(angle) * np.asarray([0.0, 0.0, 1.0])
         )
         points.append(points[-1] + step)
     return np.asarray(points)
@@ -35,15 +34,13 @@ def _bend_thumb(opposition, flex) -> np.ndarray:
     # At opposition=0 the thumb points along local +X (0 degrees). It then
     # rotates toward local +Y, reaching exactly 90 degrees at opposition=1.
     extended_relative = np.asarray(
-        [[0.000, 0.000, 0.000], [0.034, 0.000, 0.000],
-         [0.065, 0.000, 0.002], [0.090, 0.000, 0.003]]
+        [[0.000, 0.000, 0.000], [0.034, 0.000, 0.000], [0.065, 0.000, 0.002], [0.090, 0.000, 0.003]]
     )
     # Flexion shortens the thumb in the palm plane and raises it out of that
     # plane, but deliberately preserves its azimuth. Opposition is handled by
     # the explicit rotation below, so it cannot accidentally exceed 90 deg.
     flexed_relative = np.asarray(
-        [[0.000, 0.000, 0.000], [0.025, 0.000, 0.018],
-         [0.035, 0.000, 0.035], [0.040, 0.000, 0.043]]
+        [[0.000, 0.000, 0.000], [0.025, 0.000, 0.018], [0.035, 0.000, 0.035], [0.040, 0.000, 0.043]]
     )
     relative = extended_relative + flex * (flexed_relative - extended_relative)
     angle = opposition * (0.5 * math.pi)
@@ -64,13 +61,15 @@ def make_hand_lines(flex_values=None) -> list[np.ndarray]:
     if values.shape not in ((5,), (6,)):
         raise ValueError(f"Hand flex values must have five or six channels, got {values.shape}.")
     palm = np.asarray(
-        [[-0.045, 0.000, 0.000], [-0.045, 0.090, 0.000],
-         [0.045, 0.090, 0.000], [0.045, 0.000, 0.000],
-         [-0.045, 0.000, 0.000]]
+        [
+            [-0.045, 0.000, 0.000],
+            [-0.045, 0.090, 0.000],
+            [0.045, 0.090, 0.000],
+            [0.045, 0.000, 0.000],
+            [-0.045, 0.000, 0.000],
+        ]
     )
-    wrist = np.asarray(
-        [[-0.025, 0.000, 0.000], [0.000, -0.045, 0.000], [0.025, 0.000, 0.000]]
-    )
+    wrist = np.asarray([[-0.025, 0.000, 0.000], [0.000, -0.045, 0.000], [0.025, 0.000, 0.000]])
     specs = (
         ((0.020, 0.090, 0.000), (0.036, 0.028, 0.023), values[0]),
         ((0.000, 0.090, 0.000), (0.040, 0.032, 0.026), values[1]),
