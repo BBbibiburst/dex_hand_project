@@ -12,13 +12,6 @@ from source.registry import Registry
 TaskClass = type[RobotTask]
 TaskType = TypeVar("TaskType", bound=TaskClass)
 _TASKS = Registry[TaskClass]("task", normalize=str.lower)
-_BUILTIN_TASK_MODULES = (
-    "source.envs.manipulation.lift",
-    "source.envs.manipulation.stack",
-    "source.envs.manipulation.pick_place",
-    "source.envs.manipulation.nut_assembly",
-    "source.envs.manipulation.push",
-)
 _BUILTINS_LOADED = False
 
 
@@ -28,8 +21,7 @@ def load_builtin_tasks() -> None:
     if _BUILTINS_LOADED:
         return
 
-    for module_name in _BUILTIN_TASK_MODULES:
-        importlib.import_module(module_name)
+    importlib.import_module("source.envs.manipulation.builtins")
     _BUILTINS_LOADED = True
 
 

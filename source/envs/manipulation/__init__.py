@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Manipulation tasks and environment factories.
 
-Built-in tasks are imported from an explicit module list. Third-party tasks can
+Built-in tasks are imported through one explicit module. Third-party tasks can
 still register themselves with :func:`register_task`.
 """
 
