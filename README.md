@@ -86,21 +86,22 @@ YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 #### `source.demos.search_mesh_force_closure`
 
 只使用物体 mesh 和所选末端执行器模型搜索抓取，不加载机械臂、桌子或完整任务环境。
-`--viewer` 和 `--preview-image` 会同时显示半透明物体三角 mesh、采样点云以及优化手型
-下的 Dex Hand/Pika 连杆三角 mesh，方便检查点云是否覆盖模型、接触点是否真实落在物体
-表面，以及手和物体是否发生漏检的几何穿透。
-目前支持六维 `dex_hand` 和单自由度 `pika_gripper`。程序会对点云做 PCA，沿不同主轴、
-抓取高度和末端朝向生成候选，联合搜索手腕相对位姿、闭合量和接触点，并对穿透、接触
-分布、近似力闭合质量、鲁棒裕量及末端相对物体底面（桌面）的安全间隙评分。Dex Hand
-还会逐指做力闭合消融；Pika 会检查左右夹爪的对向接触，并优先选择机械臂容易到达的
-水平 approach。
+`--viewer` 和 `--preview-image` 使用轻量点云显示物体、手指语义区域、接触点以及两段
+轨迹：绿色为完全张开手型的无接触 approach，红色为经过检查的预成形/闭合抓取轨迹。
+目前支持六维 `dex_hand` 和单自由度 `pika_gripper`。程序从物体表面锚点和局部法向生成
+位姿候选，联合搜索手腕相对位姿、闭合量和接触点。Dex Hand 使用完整多指六维 wrench
+约束；Pika 使用适合双指夹爪的对向接触、重力支撑和双指闭合约束。
+
+发布前会在独立 MuJoCo 手-物体模型中逐 waypoint 验证 approach：自由空间段不允许任何
+物体接触，抓取段只允许指定手指/夹爪接触，掌部和基座碰撞会淘汰该候选并继续尝试下一
+候选。无效搜索默认不写配置；只有显式指定 `--output` 的调试运行才可保存失败结果。
 
 ```bash
 # 使用资产清单中的物体
 python -m source.demos.search_mesh_force_closure \
   --object-id ycb:005_tomato_soup_can \
-  --output configs/grasps/ycb_005_tomato_soup_can.json \
-  --preview-image configs/grasps/ycb_005_tomato_soup_can.png
+  --output configs/grasps/dex_hand/ycb_005_tomato_soup_can.json \
+  --preview-image configs/grasps/dex_hand/ycb_005_tomato_soup_can.png
 
 # 直接使用一个 STL/OBJ
 python -m source.demos.search_mesh_force_closure \
@@ -124,47 +125,23 @@ python -m source.demos.search_mesh_force_closure \
 | `--object-id ID` | Lift 默认物体 | 从项目物体资产清单选择 mesh；不能和 `--mesh` 同时使用 |
 | `--mesh PATH` | 无 | 直接指定 STL/OBJ 等 Trimesh 支持的文件 |
 | `--points N` | `2048` | 从物体表面采样的点数；增大可提高几何分辨率但会变慢 |
-| `--joint-candidates N` | `128` | Dex Hand 搜索预算；Pika 使用完整确定性 PCA/开口候选库 |
+| `--joint-candidates N` | `128` | 末端手型/开口候选预算 |
+| `--surface-anchors N` | `24` | 物体表面抓取锚点数量 |
+| `--rolls-per-anchor N` | `8` | 每个锚点的手腕滚转候选数量 |
 | `--seed N` | `0` | 随机种子，用于复现实验 |
 | `--target-size M` | `0.09` | 将物体最长边归一化到该尺寸，单位为米 |
 | `--end-effector NAME` | `dex_hand` | 选择 `dex_hand` 或 `pika_gripper` |
-| `--output PATH` | 按末端自动选择 | Dex Hand 写入 `configs/grasps/`，其他末端写入对应子目录 |
+| `--output PATH` | 按末端自动选择 | 写入 `configs/grasps/<end_effector>/` |
 | `--preview PATH` | 无 | 用 Trimesh 导出物体、手和接触点组成的 3D 场景，如 `.glb` |
-| `--preview-image PATH` | 无 | 保存物体/手 mesh、点云、接触点和法向量的 PNG 预览图 |
+| `--preview-image PATH` | 无 | 保存物体/手点云、接触点和两段轨迹的 PNG 预览图 |
 | `--viewer` | 关闭 | 打开交互式 Matplotlib 3D 窗口查看搜索结果 |
 
 几何评分只是候选生成器，不能代替动力学验证；搜索结果至少应通过下一程序验证。
 
-#### 单文件抓取搜索开发版
-
-要把搜索实现交给其他模型独立修改时，使用
-`tools/grasp_search_single_file.py`。该文件不导入 `source.grasping`，在一个文件内包含
-物体 mesh/点云加载、Dex Hand/Pika 正向运动学与连杆 mesh 提取、PCA 和随机方向候选、
-碰撞与接触评分、摩擦锥力闭合估计、approach waypoint、兼容 JSON 输出及双 mesh
-可视化：
-
-```bash
-python tools/grasp_search_single_file.py \
-  --object-id ycb:002_master_chef_can \
-  --end-effector dex_hand \
-  --output configs/grasps/single_file/can.json \
-  --preview-image /tmp/can.png \
-  --viewer
-
-python tools/grasp_search_single_file.py \
-  --mesh path/to/object.stl \
-  --end-effector pika_gripper \
-  --target-size 0.09
-```
-
-它是用于快速改算法的独立工作台，默认写入 `configs/grasps/single_file/`，不会覆盖正式
-配置。改进结果通过 standalone 和完整 Lift 验证后，再将相应算法同步回
-`source/grasping/`；不要同时修改两套实现后假设它们会自动保持一致。
-
 程序化调用不要导入 demo，使用无窗口 API：
 
 ```python
-from source.grasping import generate_grasp_config, plan_approach_path
+from source.grasping import generate_grasp_config
 
 config_path = generate_grasp_config(
     "ycb:002_master_chef_can",
@@ -172,10 +149,8 @@ config_path = generate_grasp_config(
 )
 ```
 
-`source.grasping.grasp_config_search`负责物体 mesh、抓取搜索和版本化配置，
-`source.grasping.approach_path_search`负责完整手点云的无碰撞 waypoint 搜索；两者均不会
-加载 Matplotlib。只有独立运行 `source.demos.search_mesh_force_closure` 时才进行轨迹、
-接触点和手模型可视化。
+`source.grasping.grasp_config_search` 是正式的唯一搜索实现，负责物体点云、末端手型、
+抓取候选、两段轨迹、版本化配置和发布前碰撞验证。Matplotlib 仅在请求预览时延迟加载。
 
 #### `source.demos.validate_standalone_grasp`
 
@@ -239,8 +214,9 @@ python -m source.demos.benchmark_grasp_catalog \
   --end-effector pika_gripper --jobs 8
 ```
 
-默认报告为 `configs/grasps/grasp_catalog_benchmark.json`，各物体抓取配置保存在
-`configs/grasps/benchmark/`；两者都处于抓取缓存目录，不纳入 Git。`status=stable`
+默认报告为 `configs/grasps/<end_effector>/grasp_catalog_benchmark.json`，各物体抓取
+配置保存在 `configs/grasps/<end_effector>/benchmark/`；两者都处于抓取缓存目录，不纳入
+Git。`status=stable`
 表示成功生成且通过保持验证，`unstable` 表示生成成功但物理保持失败，
 `search_error` 和 `validation_error` 分别表示搜索或验证异常。`--jobs 1` 适合调试；
 并行测试可根据 CPU 核数提高 `--jobs`。`--search-attempts N` 控制每个物体最多尝试的
@@ -252,8 +228,8 @@ python -m source.demos.benchmark_grasp_catalog \
 Dex Hand“数值增大表示闭合”和 Pika“开口宽度减小表示闭合”两种控制方向。正式配置路径为：
 
 ```text
-configs/grasps/<object>.json                       # Dex Hand（兼容旧路径）
-configs/grasps/pika_gripper/<object>.json          # Pika
+configs/grasps/dex_hand/<object>.json
+configs/grasps/pika_gripper/<object>.json
 ```
 
 #### 抓取流程 TODO
@@ -288,9 +264,10 @@ Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级
 
 #### `source.demos.validate_scripted_strategy`
 
-在完整任务环境中运行脚本策略，但不记录数据。Lift 策略简化为
-`approach → grasp → lift`：approach 内部沿点云 waypoint 到达并渐变手型，lift 内部完成
-成功验证。Viewer 中会显示末端目标位姿、旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
+在完整任务环境中运行脚本策略，但不记录数据。Lift 策略为
+`approach → grasp → lift → verify`：approach 保持手完全张开并到达预抓取位姿，grasp
+沿经过碰撞检查的预成形/前移轨迹闭合，最后独立保持验证。Viewer 中会显示末端目标位姿、
+旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
 策略默认在每次程序启动时搜索最多三个独立候选，并逐个执行 standalone MuJoCo 保持
 验证；只有首个 `stable=True` 的候选才会原子写入

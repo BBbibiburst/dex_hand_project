@@ -9,23 +9,50 @@ import sys
 import time
 from pathlib import Path
 
-import mujoco
 from mujoco import viewer
 import numpy as np
 
+from source.grasping.constants import (
+    DEFAULT_GRIP_PRELOAD,
+    SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS,
+)
 from source.grasping.standalone_validator import (
     build_standalone_model,
-    set_hand_fraction_targets,
+    execute_configured_grasp_trajectory,
     set_hand_targets,
     set_object_pose_for_hand_pose,
     validate_standalone,
 )
 from source.robots.registry import get_hand
+from source.grasping.grasp_config_search import search_grasp_config
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("grasp", type=Path, help="JSON from search_mesh_force_closure.")
+    parser.add_argument(
+        "grasp",
+        nargs="?",
+        type=Path,
+        help="Existing grasp JSON. Omit to search from --object-id or --mesh.",
+    )
+    search_source = parser.add_mutually_exclusive_group()
+    search_source.add_argument("--object-id")
+    search_source.add_argument("--mesh", type=Path)
+    parser.add_argument("--output", type=Path, help="Output path for a newly searched grasp.")
+    parser.add_argument(
+        "--end-effector",
+        choices=("dex_hand", "pika_gripper"),
+        default="dex_hand",
+    )
+    parser.add_argument("--points", type=int, default=2048)
+    parser.add_argument("--joint-candidates", type=int, default=128)
+    parser.add_argument("--surface-anchors", type=int, default=24)
+    parser.add_argument("--rolls-per-anchor", type=int, default=8)
+    parser.add_argument("--coarse-keep", type=int, default=24)
+    parser.add_argument("--top-k", type=int, default=8)
+    parser.add_argument("--support-margin", type=float, default=0.008)
+    parser.add_argument("--target-size", type=float, default=0.09)
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--seconds", type=float, default=3.0)
     parser.add_argument("--viewer", action="store_true")
     parser.add_argument("--viewer-speed", type=float, default=0.5)
@@ -38,10 +65,37 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--grip-preload",
         type=float,
-        default=0.25,
+        default=DEFAULT_GRIP_PRELOAD,
         help="Extra finger/thumb closure toward actuator maximum.",
     )
     return parser.parse_args()
+
+
+def _resolve_grasp_path(args: argparse.Namespace) -> Path:
+    requested_search = args.object_id is not None or args.mesh is not None
+    if args.grasp is not None and requested_search:
+        raise ValueError("Provide either an existing grasp JSON or --object-id/--mesh.")
+    if args.grasp is not None:
+        return args.grasp
+    if not requested_search:
+        raise ValueError("Provide an existing grasp JSON or one of --object-id/--mesh.")
+    result = search_grasp_config(
+        object_id=args.object_id,
+        mesh=args.mesh,
+        output=args.output,
+        points=args.points,
+        joint_candidates=args.joint_candidates,
+        surface_anchors=args.surface_anchors,
+        rolls_per_anchor=args.rolls_per_anchor,
+        coarse_keep=args.coarse_keep,
+        top_k=args.top_k,
+        support_margin=args.support_margin,
+        target_size=args.target_size,
+        seed=args.seed,
+        end_effector_name=args.end_effector,
+    )
+    print(f"Searched grasp config with the production strategy: {result.output_path}")
+    return result.output_path
 
 
 def run(args) -> None:
@@ -49,12 +103,13 @@ def run(args) -> None:
         raise ValueError("--viewer-speed must be positive.")
     if args.approach_steps_per_waypoint <= 0:
         raise ValueError("--approach-steps-per-waypoint must be positive.")
-    payload = json.loads(args.grasp.read_text(encoding="utf-8"))
+    grasp_path = _resolve_grasp_path(args)
+    payload = json.loads(grasp_path.read_text(encoding="utf-8"))
     end_effector_name = payload.get("end_effector_name", "dex_hand")
     descriptor = get_hand(end_effector_name)
     actuator_names = tuple(descriptor.position_actuator_names)
     actuator_count = len(actuator_names)
-    if payload.get("schema_version") != 1:
+    if payload.get("schema_version") not in SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS:
         raise ValueError("Unsupported or missing grasp schema_version.")
     if not payload.get("hand_fit_success", False):
         raise ValueError("The grasp search result is marked as unsuccessful.")
@@ -70,6 +125,24 @@ def run(args) -> None:
         payload.get("approach_hand_actuator_fractions", []),
         dtype=np.float64,
     )
+    grasp_translations = np.asarray(
+        payload.get("grasp_hand_translations", [payload["hand_translation"]]),
+        dtype=np.float64,
+    )
+    grasp_rotations = np.asarray(
+        payload.get(
+            "grasp_hand_rotation_matrices",
+            [payload["hand_rotation_matrix"]],
+        ),
+        dtype=np.float64,
+    )
+    grasp_fractions = np.asarray(
+        payload.get(
+            "grasp_hand_actuator_fractions",
+            [payload["hand_actuator_fractions"]],
+        ),
+        dtype=np.float64,
+    )
     waypoint_count = approach_translations.shape[0]
     if (
         waypoint_count < 2
@@ -78,6 +151,14 @@ def run(args) -> None:
         or approach_fractions.shape != (waypoint_count, actuator_count)
     ):
         raise ValueError("Grasp config has no valid approach path.")
+    grasp_waypoint_count = grasp_translations.shape[0]
+    if (
+        grasp_waypoint_count < 1
+        or grasp_translations.shape != (grasp_waypoint_count, 3)
+        or grasp_rotations.shape != (grasp_waypoint_count, 3, 3)
+        or grasp_fractions.shape != (grasp_waypoint_count, actuator_count)
+    ):
+        raise ValueError("Grasp config has no valid closing trajectory.")
     model, data = build_standalone_model(
         object_mesh=payload["mesh"],
         mesh_center=payload["mesh_center"],
@@ -95,34 +176,14 @@ def run(args) -> None:
             handle.sync()
             time.sleep(model.opt.timestep / args.viewer_speed)
 
-        if handle is not None:
-            for translation, rotation, fractions in zip(
-                approach_translations,
-                approach_rotations,
-                approach_fractions,
-                strict=True,
-            ):
-                set_hand_fraction_targets(
-                    model,
-                    data,
-                    fractions,
-                    actuator_names=actuator_names,
-                )
-                for _ in range(args.approach_steps_per_waypoint):
-                    set_object_pose_for_hand_pose(
-                        model,
-                        data,
-                        translation,
-                        rotation,
-                    )
-                    mujoco.mj_step(model, data)
-                    set_object_pose_for_hand_pose(
-                        model,
-                        data,
-                        translation,
-                        rotation,
-                    )
-                    show(model, data, 0, 0)
+        execute_configured_grasp_trajectory(
+            model,
+            data,
+            payload,
+            actuator_names=actuator_names,
+            steps_per_waypoint=args.approach_steps_per_waypoint,
+            step_callback=show,
+        )
         set_object_pose_for_hand_pose(
             model,
             data,
@@ -153,9 +214,10 @@ def run(args) -> None:
             f"waypoints={waypoint_count} "
             f"table_clearance="
             f"{float(payload.get('hand_table_clearance', float('nan'))):.4f}m "
-            f"pca_axis={payload.get('hand_pca_axis_index')} "
-            f"robustness="
-            f"{float(payload.get('hand_robustness_margin', float('nan'))):.4f} "
+            f"roll_index="
+            f"{payload.get('hand_orientation_roll_index', payload.get('hand_pca_axis_index'))} "
+            f"contact_margin="
+            f"{float(payload.get('hand_contact_distance_margin', payload.get('hand_robustness_margin', float('nan')))):.4f} "
             f"preload={payload.get('hand_preload_weights')} "
             f"stable={result.stable} seconds={result.simulated_seconds:.2f} "
             f"grip_preload={args.grip_preload:.2f} "

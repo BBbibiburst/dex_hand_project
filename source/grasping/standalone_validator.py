@@ -10,6 +10,10 @@ import mujoco
 import numpy as np
 
 from source.geometry import mat_to_quat
+from source.grasping.constants import (
+    DEFAULT_GRIP_PRELOAD,
+    SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS,
+)
 from source.robots.registry import get_hand
 
 
@@ -30,12 +34,12 @@ def validate_grasp_config(
     *,
     seconds: float = 3.0,
     settle_seconds: float = 0.8,
-    grip_preload: float = 0.25,
+    grip_preload: float = DEFAULT_GRIP_PRELOAD,
 ) -> StandaloneValidationResult:
     """Load and dynamically validate one versioned grasp configuration."""
     config_path = Path(path)
     payload = json.loads(config_path.read_text(encoding="utf-8"))
-    if payload.get("schema_version") != 1:
+    if payload.get("schema_version") not in SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS:
         raise ValueError(f"Unsupported or missing schema_version in {config_path}.")
     if payload.get("hand_fit_success") is not True:
         raise ValueError(f"Grasp {config_path} did not pass mesh fitting.")
@@ -54,6 +58,12 @@ def validate_grasp_config(
         object_table_height=payload.get("object_table_height"),
         end_effector_name=end_effector_name,
     )
+    execute_configured_grasp_trajectory(
+        model,
+        data,
+        payload,
+        actuator_names=actuator_names,
+    )
     set_hand_targets(
         model,
         data,
@@ -71,6 +81,35 @@ def validate_grasp_config(
         data,
         seconds=seconds,
         settle_seconds=settle_seconds,
+    )
+
+
+def validate_grasp_trajectory_payload(
+    payload: dict,
+    *,
+    steps_per_waypoint: int = 10,
+) -> None:
+    """Build the configured end effector and verify its free-space approach."""
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
+    model, data = build_standalone_model(
+        object_mesh=payload["mesh"],
+        mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
+        mesh_scale=float(payload["mesh_scale"]),
+        hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
+        hand_rotation_matrix=np.asarray(
+            payload["hand_rotation_matrix"],
+            dtype=np.float64,
+        ),
+        object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
+    )
+    execute_configured_grasp_trajectory(
+        model,
+        data,
+        payload,
+        actuator_names=actuator_names,
+        steps_per_waypoint=steps_per_waypoint,
     )
 
 
@@ -258,6 +297,139 @@ def set_object_pose_for_hand_pose(
     data.qpos[qpos_address + 3 : qpos_address + 7] = mat_to_quat(object_rotation)
     data.qvel[dof_address : dof_address + 6] = 0.0
     mujoco.mj_forward(model, data)
+
+
+def execute_configured_grasp_trajectory(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    payload: dict,
+    *,
+    actuator_names: tuple[str, ...],
+    steps_per_waypoint: int = 10,
+    step_callback=None,
+) -> None:
+    """Execute and collision-check the configured approach and closing path."""
+    if steps_per_waypoint <= 0:
+        raise ValueError("steps_per_waypoint must be positive.")
+    actuator_count = len(actuator_names)
+    approach_translations = np.asarray(
+        payload.get("approach_hand_translations", []),
+        dtype=np.float64,
+    )
+    approach_rotations = np.asarray(
+        payload.get("approach_hand_rotation_matrices", []),
+        dtype=np.float64,
+    )
+    approach_fractions = np.asarray(
+        payload.get("approach_hand_actuator_fractions", []),
+        dtype=np.float64,
+    )
+    grasp_translations = np.asarray(
+        payload.get("grasp_hand_translations", [payload["hand_translation"]]),
+        dtype=np.float64,
+    )
+    grasp_rotations = np.asarray(
+        payload.get(
+            "grasp_hand_rotation_matrices",
+            [payload["hand_rotation_matrix"]],
+        ),
+        dtype=np.float64,
+    )
+    grasp_fractions = np.asarray(
+        payload.get(
+            "grasp_hand_actuator_fractions",
+            [payload["hand_actuator_fractions"]],
+        ),
+        dtype=np.float64,
+    )
+    approach_count = len(approach_translations)
+    grasp_count = len(grasp_translations)
+    if (
+        approach_count < 2
+        or approach_rotations.shape != (approach_count, 3, 3)
+        or approach_fractions.shape != (approach_count, actuator_count)
+        or grasp_count < 1
+        or grasp_rotations.shape != (grasp_count, 3, 3)
+        or grasp_fractions.shape != (grasp_count, actuator_count)
+    ):
+        raise ValueError("Grasp config has malformed approach/grasp trajectories.")
+
+    object_geom = mujoco.mj_name2id(
+        model,
+        mujoco.mjtObj.mjOBJ_GEOM,
+        "validation_object_collision",
+    )
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+
+    def is_allowed_grasp_geom(geom_id: int) -> bool:
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
+        if end_effector_name == "pika_gripper":
+            return "gripper_left_link" in name or "gripper_right_link" in name
+        return any(f"skin_{finger}_" in name for finger in range(5))
+
+    def execute_waypoints(
+        translations: np.ndarray,
+        rotations: np.ndarray,
+        fractions: np.ndarray,
+        *,
+        phase: str,
+        reject_contacts: bool,
+        reject_rigid_contacts: bool,
+    ) -> None:
+        for waypoint_index, (translation, rotation, waypoint_fractions) in enumerate(
+            zip(translations, rotations, fractions, strict=True)
+        ):
+            set_hand_fraction_targets(
+                model,
+                data,
+                waypoint_fractions,
+                actuator_names=actuator_names,
+            )
+            for _ in range(steps_per_waypoint):
+                set_object_pose_for_hand_pose(model, data, translation, rotation)
+                mujoco.mj_step(model, data)
+                set_object_pose_for_hand_pose(model, data, translation, rotation)
+                for contact_index in range(data.ncon):
+                    geom1 = int(data.contact[contact_index].geom1)
+                    geom2 = int(data.contact[contact_index].geom2)
+                    if object_geom not in (geom1, geom2):
+                        continue
+                    hand_geom = geom2 if geom1 == object_geom else geom1
+                    if reject_contacts or (
+                        reject_rigid_contacts and not is_allowed_grasp_geom(hand_geom)
+                    ):
+                        hand_geom_name = (
+                            mujoco.mj_id2name(
+                                model,
+                                mujoco.mjtObj.mjOBJ_GEOM,
+                                hand_geom,
+                            )
+                            or f"geom#{hand_geom}"
+                        )
+                        raise ValueError(
+                            f"{phase} trajectory collides with the object via "
+                            f"{hand_geom_name} at waypoint "
+                            f"{waypoint_index + 1}/{len(translations)}."
+                        )
+                if step_callback is not None:
+                    step_callback(model, data, waypoint_index, len(translations))
+
+    execute_waypoints(
+        approach_translations,
+        approach_rotations,
+        approach_fractions,
+        phase="Approach",
+        reject_contacts=True,
+        reject_rigid_contacts=True,
+    )
+    execute_waypoints(
+        grasp_translations,
+        grasp_rotations,
+        grasp_fractions,
+        phase="Grasp",
+        reject_contacts=False,
+        reject_rigid_contacts=True,
+    )
 
 
 def validate_standalone(

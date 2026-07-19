@@ -1,17 +1,15 @@
-"""Search and visualize collision-free grasps for a supported end effector."""
+"""Search and visualize collision-free grasps as lightweight point clouds."""
 
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import trimesh
 
 from source.envs.manipulation.object_catalog import DEFAULT_LIFT_OBJECT
-from source.grasping.grasp_config_search import search_grasp_config
+from source.grasping.grasp_config_search import draw, search_grasp_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -24,8 +22,13 @@ def parse_args() -> argparse.Namespace:
         "--joint-candidates",
         type=int,
         default=128,
-        help="Joint wrist/depth/actuator candidates.",
+        help="Budget used to generate candidate end-effector shapes.",
     )
+    parser.add_argument("--surface-anchors", type=int, default=24)
+    parser.add_argument("--rolls-per-anchor", type=int, default=8)
+    parser.add_argument("--coarse-keep", type=int, default=24)
+    parser.add_argument("--top-k", type=int, default=8)
+    parser.add_argument("--support-margin", type=float, default=0.008)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
     parser.add_argument(
@@ -38,11 +41,15 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Output JSON (default: configs/grasps/<end_effector>/<object_id>.json).",
     )
-    parser.add_argument("--preview", type=Path)
+    parser.add_argument(
+        "--preview",
+        type=Path,
+        help="Export a point-cloud 3D scene.",
+    )
     parser.add_argument(
         "--preview-image",
         type=Path,
-        help="Save a PNG showing the object mesh, point cloud, contacts, and normals.",
+        help="Save a PNG showing object/hand point clouds, contacts, and approach path.",
     )
     parser.add_argument(
         "--viewer",
@@ -52,281 +59,105 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _normalized_object_mesh(mesh_path: Path, cloud) -> trimesh.Trimesh:
-    """Load the searched mesh in the same centred, scaled frame as the cloud."""
-    loaded = trimesh.load_mesh(mesh_path, process=True)
-    mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
-    if not isinstance(mesh, trimesh.Trimesh) or mesh.faces.size == 0:
-        raise ValueError(f"Mesh contains no triangle surface: {mesh_path}")
-    mesh = mesh.copy()
-    mesh.vertices = (np.asarray(mesh.vertices, dtype=np.float64) - cloud.center) * cloud.scale
-    return mesh
-
-
-def _posed_end_effector_meshes(closure) -> list[trimesh.Trimesh]:
-    """Transform searched link meshes from hand-root into object coordinates."""
-    surface = getattr(closure, "hand", getattr(closure, "gripper", None))
-    meshes = []
-    for mesh in surface.meshes:
-        vertices = (
-            np.asarray(mesh.vertices, dtype=np.float64) @ closure.rotation_matrix.T
-            + closure.translation
-        )
-        meshes.append(
-            trimesh.Trimesh(
-                vertices=vertices,
-                faces=mesh.faces,
-                process=False,
-            )
-        )
-    return meshes
-
-
-def _draw_contacts(
-    cloud,
-    closure,
-    object_mesh: trimesh.Trimesh,
-    end_effector_meshes: list[trimesh.Trimesh],
-    *,
-    output: Path | None,
-    show: bool,
-) -> None:
-    figure = plt.figure(figsize=(9, 8))
-    axis = figure.add_subplot(111, projection="3d")
-    # Large YCB meshes can contain hundreds of thousands of triangles. A
-    # deterministic face subset preserves the visible surface without making
-    # the interactive Matplotlib viewer unusably slow.
-    face_count = len(object_mesh.faces)
-    max_display_faces = 20_000
-    face_indices = (
-        np.linspace(0, face_count - 1, max_display_faces, dtype=np.int64)
-        if face_count > max_display_faces
-        else np.arange(face_count)
-    )
-    triangles = np.asarray(object_mesh.vertices)[object_mesh.faces[face_indices]]
-    surface = Poly3DCollection(
-        triangles,
-        facecolor="#6f91ad",
-        edgecolor="none",
-        alpha=0.28,
-        label="object mesh",
-    )
-    axis.add_collection3d(surface)
-    total_hand_faces = sum(len(mesh.faces) for mesh in end_effector_meshes)
-    hand_face_budget = 30_000
-    hand_triangles = []
-    for mesh in end_effector_meshes:
-        face_count = len(mesh.faces)
-        display_count = min(
-            face_count,
-            max(1, round(hand_face_budget * face_count / total_hand_faces)),
-        )
-        indices = (
-            np.linspace(0, face_count - 1, display_count, dtype=np.int64)
-            if display_count < face_count
-            else np.arange(face_count)
-        )
-        hand_triangles.append(np.asarray(mesh.vertices)[mesh.faces[indices]])
-    hand_surface = Poly3DCollection(
-        np.concatenate(hand_triangles),
-        facecolor="#f4a261",
-        edgecolor="none",
-        alpha=0.48,
-        label="end-effector mesh",
-    )
-    axis.add_collection3d(hand_surface)
-    axis.scatter(
-        cloud.points[:, 0],
-        cloud.points[:, 1],
-        cloud.points[:, 2],
-        s=2,
-        c="#8ba6c1",
-        alpha=0.22,
-        label="object point cloud",
-    )
-    colors = plt.get_cmap("tab10")(np.arange(closure.contact_points.shape[0]))
-    axis.scatter(
-        closure.contact_points[:, 0],
-        closure.contact_points[:, 1],
-        closure.contact_points[:, 2],
-        s=90,
-        c=colors,
-        edgecolors="black",
-        linewidths=0.8,
-        depthshade=False,
-        label="force-closure contacts",
-    )
-    hand = getattr(closure, "hand", getattr(closure, "gripper", None))
-    hand_points = closure.points
-    hand_tips = getattr(closure, "fingertip_centers", None)
-    if hand_tips is None:
-        local_centers = getattr(hand, "contact_centers", np.empty((0, 3)))
-        hand_tips = local_centers @ closure.rotation_matrix.T + closure.translation
-    hand_colors = np.asarray(["#f4a261", "#e76f51", "#2a9d8f", "#457b9d", "#9b5de5", "#777777"])
-    for label in np.unique(hand.labels):
-        selected = hand.labels == label
-        axis.scatter(
-            hand_points[selected, 0],
-            hand_points[selected, 1],
-            hand_points[selected, 2],
-            s=2.5,
-            c=hand_colors[int(label) % len(hand_colors)],
-            alpha=0.12 if label == 5 else 0.20,
-        )
-    axis.scatter(
-        hand_tips[:, 0],
-        hand_tips[:, 1],
-        hand_tips[:, 2],
-        marker="x",
-        s=75,
-        c=hand_colors[: len(hand_tips)],
-        linewidths=2.0,
-        label="end-effector contact centers",
-    )
-    path = closure.approach_translations
-    if path.size:
-        axis.plot(
-            path[:, 0],
-            path[:, 1],
-            path[:, 2],
-            color="#2ca02c",
-            linewidth=2.5,
-            label="collision-free approach path",
-        )
-        axis.scatter(
-            path[:, 0],
-            path[:, 1],
-            path[:, 2],
-            s=28,
-            c=np.linspace(0.0, 1.0, len(path)),
-            cmap="viridis",
-        )
-    normal_length = 0.025
-    axis.quiver(
-        closure.contact_points[:, 0],
-        closure.contact_points[:, 1],
-        closure.contact_points[:, 2],
-        closure.contact_normals[:, 0],
-        closure.contact_normals[:, 1],
-        closure.contact_normals[:, 2],
-        length=normal_length,
-        normalize=True,
-        color=colors,
-        linewidth=2.0,
-    )
-    for index, (finger, point) in enumerate(
-        zip(closure.contacting_fingers, closure.contact_points, strict=True)
-    ):
-        axis.text(*point, f"  F{finger}", color=colors[index], fontsize=10)
-
-    visible_points = np.concatenate([cloud.points, hand_points, closure.contact_points, path])
-    low = visible_points.min(axis=0)
-    high = visible_points.max(axis=0)
-    center = 0.5 * (low + high)
-    radius = 0.55 * float(np.max(high - low))
-    axis.set_xlim(center[0] - radius, center[0] + radius)
-    axis.set_ylim(center[1] - radius, center[1] + radius)
-    axis.set_zlim(center[2] - radius, center[2] + radius)
-    axis.set_box_aspect((1, 1, 1))
-    axis.set_xlabel("X (m)")
-    axis.set_ylabel("Y (m)")
-    axis.set_zlabel("Z (m)")
-    axis.set_title(
-        "End-effector mesh grasp search\n"
-        f"penetration={closure.maximum_penetration * 1000:.1f}mm, "
-        f"hand Efc={closure.force_closure_residual:.3f}, "
-        f"fit={'PASS' if closure.success else 'FAIL'}"
-    )
-    axis.legend(loc="upper right")
-    figure.tight_layout()
-    if output is not None:
-        output.parent.mkdir(parents=True, exist_ok=True)
-        figure.savefig(output, dpi=180, bbox_inches="tight")
-    if show:
-        print("Close the Matplotlib window to finish.")
-        plt.show()
-    plt.close(figure)
-
-
 def run(args) -> None:
+    for name in (
+        "points",
+        "joint_candidates",
+        "surface_anchors",
+        "rolls_per_anchor",
+        "coarse_keep",
+        "top_k",
+    ):
+        if getattr(args, name) <= 0:
+            raise ValueError(f"--{name.replace('_', '-')} must be positive.")
+    if args.support_margin < 0.0:
+        raise ValueError("--support-margin must be non-negative.")
     result = search_grasp_config(
         object_id=None if args.mesh is not None else args.object_id,
         mesh=args.mesh,
         output=args.output,
         points=args.points,
         joint_candidates=args.joint_candidates,
+        surface_anchors=args.surface_anchors,
+        rolls_per_anchor=args.rolls_per_anchor,
+        coarse_keep=args.coarse_keep,
+        top_k=args.top_k,
+        support_margin=args.support_margin,
         seed=args.seed,
         target_size=args.target_size,
         end_effector_name=args.end_effector,
+        require_valid=False,
+        publish_invalid=args.output is not None,
     )
     mesh_path = result.mesh_path
     output = result.output_path
     cloud = result.cloud
-    closure = result.grasp
-    object_mesh = _normalized_object_mesh(mesh_path, cloud)
-    end_effector_meshes = _posed_end_effector_meshes(closure)
+    candidate = result.grasp
     if args.preview:
-        preview_mesh = object_mesh.copy()
-        preview_mesh.visual.face_colors = np.tile(
-            np.asarray([[100, 145, 180, 85]], dtype=np.uint8),
-            (len(preview_mesh.faces), 1),
-        )
-        preview_hand_meshes = []
-        for mesh in end_effector_meshes:
-            mesh = mesh.copy()
-            mesh.visual.face_colors = np.tile(
-                np.asarray([[244, 162, 97, 120]], dtype=np.uint8),
-                (len(mesh.faces), 1),
-            )
-            preview_hand_meshes.append(mesh)
         object_colors = np.tile(
-            np.asarray([[70, 150, 255, 100]], dtype=np.uint8),
-            (args.points, 1),
+            np.asarray([[91, 135, 173, 150]], dtype=np.uint8),
+            (len(cloud.points), 1),
         )
-        hand_colors = np.tile(
-            np.asarray([[245, 135, 80, 190]], dtype=np.uint8),
-            (closure.points.shape[0], 1),
+        hand_palette = np.asarray(
+            [
+                [239, 68, 68, 230],
+                [139, 92, 246, 230],
+                [6, 182, 212, 230],
+                [34, 197, 94, 230],
+                [234, 179, 8, 240],
+                [217, 119, 6, 210],
+                [107, 114, 128, 180],
+            ],
+            dtype=np.uint8,
         )
+        display_indices = []
+        body_label = 2 if len(candidate.surface.fractions) == 1 else 6
+        for label in np.unique(candidate.surface.labels):
+            indices = np.flatnonzero(candidate.surface.labels == label)
+            point_limit = 350 if label == body_label else 650
+            stride = max(1, (len(indices) + point_limit - 1) // point_limit)
+            display_indices.extend(indices[::stride])
+        display_indices = np.asarray(display_indices, dtype=np.int64)
+        display_labels = candidate.surface.labels[display_indices]
+        hand_colors = hand_palette[np.mod(display_labels, len(hand_palette))]
         scene = trimesh.Scene(
             [
-                preview_mesh,
-                *preview_hand_meshes,
                 trimesh.points.PointCloud(cloud.points, colors=object_colors),
-                trimesh.points.PointCloud(closure.points, colors=hand_colors),
+                trimesh.points.PointCloud(
+                    candidate.points[display_indices],
+                    colors=hand_colors,
+                ),
                 *[
                     trimesh.creation.uv_sphere(radius=0.004).apply_translation(point)
-                    for point in closure.contact_points
+                    for point in candidate.contact_points
                 ],
             ]
         )
         args.preview.parent.mkdir(parents=True, exist_ok=True)
         scene.export(args.preview)
     if args.preview_image is not None or args.viewer:
-        _draw_contacts(
+        draw(
             cloud,
-            closure,
-            object_mesh,
-            end_effector_meshes,
+            candidate,
             output=args.preview_image,
             show=args.viewer,
         )
     print(
         f"mesh={mesh_path} "
         f"end_effector={args.end_effector} "
-        f"penetration={closure.maximum_penetration:.4f}m "
-        f"rigid_penetration={closure.maximum_noncontact_penetration:.4f}m "
-        f"contact_distance={closure.mean_contact_distance:.4f}m "
-        f"contacts={closure.contacting_fingers} "
-        f"hand_Efc={closure.force_closure_residual:.4f} "
-        f"palmward_force="
-        f"{getattr(closure, 'palmward_force_component', float('nan')):.4f} "
-        f"palmward_depth="
-        f"{getattr(closure, 'palmward_depth', float('nan')):.4f}m "
-        f"table_clearance={closure.table_clearance:.4f}m "
-        f"pca_axis={closure.pca_axis_index} "
-        f"robustness={closure.robustness_margin:.4f} "
-        f"preload={closure.preload_weights.tolist()} "
-        f"hand_fit={closure.success} output={output}"
+        f"penetration={candidate.penetration:.4f}m "
+        f"rigid_penetration={candidate.rigid_penetration:.4f}m "
+        f"contact_distance={candidate.mean_distance:.4f}m "
+        f"contacts={candidate.contacts} "
+        f"hand_Efc={candidate.force_closure:.4f} "
+        f"gravity_E={candidate.gravity_balance_residual:.4f} "
+        f"worst_disturbance_E={candidate.disturbance_residual:.4f} "
+        f"normal_coverage={candidate.normal_coverage:.4f} "
+        f"table_clearance={candidate.table_clearance:.4f}m "
+        f"approach_clearance={candidate.approach_table_clearance:.4f}m "
+        f"anchor={candidate.anchor_index} "
+        f"hand_fit={candidate.valid} "
+        f"output={output if result.published else '(not published)'}"
     )
 
 
@@ -336,4 +167,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

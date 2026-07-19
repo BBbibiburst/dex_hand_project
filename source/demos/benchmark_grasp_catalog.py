@@ -11,6 +11,11 @@ from pathlib import Path
 import time
 
 from source.envs.manipulation.object_catalog import object_ids
+from source.grasping.constants import (
+    DEFAULT_GRIP_PRELOAD,
+    GRASP_CONFIG_SCHEMA_VERSION,
+    GRASP_SEARCH_STRATEGY,
+)
 from source.grasping.grasp_config_search import (
     grasp_benchmark_report_path,
     grasp_config_directory,
@@ -39,6 +44,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit", type=int, help="Test only the first N objects.")
     parser.add_argument("--points", type=int, default=2048)
     parser.add_argument("--joint-candidates", type=int, default=128)
+    parser.add_argument("--surface-anchors", type=int, default=24)
+    parser.add_argument("--rolls-per-anchor", type=int, default=8)
+    parser.add_argument("--coarse-keep", type=int, default=24)
+    parser.add_argument("--top-k", type=int, default=8)
+    parser.add_argument("--support-margin", type=float, default=0.008)
     parser.add_argument(
         "--search-attempts",
         type=int,
@@ -54,7 +64,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--seconds", type=float, default=3.0)
     parser.add_argument("--settle-seconds", type=float, default=0.8)
-    parser.add_argument("--grip-preload", type=float, default=0.25)
+    parser.add_argument(
+        "--grip-preload",
+        type=float,
+        default=DEFAULT_GRIP_PRELOAD,
+    )
     parser.add_argument(
         "--jobs",
         type=int,
@@ -74,10 +88,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config-dir",
         type=Path,
-        help=(
-            "Per-object output directory "
-            "(default: configs/grasps/<end_effector>/benchmark)."
-        ),
+        help=("Per-object output directory (default: configs/grasps/<end_effector>/benchmark)."),
     )
     parser.add_argument(
         "--output",
@@ -117,7 +128,7 @@ def _write_report(
     stable = sum(row["status"] == "stable" for row in rows)
     failed = [row["object_id"] for row in rows if row["status"] != "stable"]
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "parameters": _report_parameters(args),
         "summary": {
@@ -140,8 +151,17 @@ def _write_report(
 def _report_parameters(args: argparse.Namespace) -> dict:
     return {
         "dataset": args.dataset,
+        "object_ids": args.object_ids,
+        "limit": args.limit,
+        "search_strategy": GRASP_SEARCH_STRATEGY,
+        "grasp_schema_version": GRASP_CONFIG_SCHEMA_VERSION,
         "points": args.points,
         "joint_candidates": args.joint_candidates,
+        "surface_anchors": args.surface_anchors,
+        "rolls_per_anchor": args.rolls_per_anchor,
+        "coarse_keep": args.coarse_keep,
+        "top_k": args.top_k,
+        "support_margin": args.support_margin,
         "search_attempts": args.search_attempts,
         "seed": args.seed,
         "target_size": args.target_size,
@@ -156,7 +176,7 @@ def _load_completed(path: Path, args: argparse.Namespace) -> list[dict]:
     if not path.is_file():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("schema_version") != 1:
+    if payload.get("schema_version") != 2:
         raise ValueError(f"Cannot resume unsupported report {path}.")
     parameters = payload.get("parameters")
     expected = _report_parameters(args)
@@ -186,8 +206,14 @@ def _validate_config(
     metrics.update(
         {
             "table_clearance": payload.get("hand_table_clearance"),
-            "pca_axis_index": payload.get("hand_pca_axis_index"),
-            "robustness_margin": payload.get("hand_robustness_margin"),
+            "orientation_roll_index": payload.get(
+                "hand_orientation_roll_index",
+                payload.get("hand_pca_axis_index"),
+            ),
+            "contact_distance_margin": payload.get(
+                "hand_contact_distance_margin",
+                payload.get("hand_robustness_margin"),
+            ),
             "force_closure_residual": payload.get("hand_force_closure_residual"),
             "contacting_fingers": payload.get("hand_contacting_fingers"),
             "preload_weights": payload.get("hand_preload_weights"),
@@ -213,6 +239,11 @@ def _run_one(task: dict) -> dict:
                     output=config_path,
                     points=task["points"],
                     joint_candidates=task["joint_candidates"],
+                    surface_anchors=task["surface_anchors"],
+                    rolls_per_anchor=task["rolls_per_anchor"],
+                    coarse_keep=task["coarse_keep"],
+                    top_k=task["top_k"],
+                    support_margin=task["support_margin"],
                     seed=task["seed"] + attempt,
                     target_size=task["target_size"],
                     end_effector_name=task["end_effector"],
@@ -240,11 +271,18 @@ def _run_one(task: dict) -> dict:
             }
             if metrics["stable"]:
                 return row
-            best_unstable = row
+            unstable_key = (
+                float(row["vertical_drop"]),
+                float(row["position_drift"]),
+                float(row["rotation_drift"]),
+                -int(row["final_contacts"]),
+            )
+            if best_unstable is None or unstable_key < best_unstable[0]:
+                best_unstable = (unstable_key, row)
         except Exception as exc:
             validation_errors.append(f"seed={task['seed'] + attempt} validation: {exc}")
     if best_unstable is not None:
-        return best_unstable
+        return best_unstable[1]
     if validation_errors:
         return {
             "object_id": object_id,
@@ -269,6 +307,18 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    for name in (
+        "points",
+        "joint_candidates",
+        "surface_anchors",
+        "rolls_per_anchor",
+        "coarse_keep",
+        "top_k",
+    ):
+        if getattr(args, name) <= 0:
+            raise ValueError(f"--{name.replace('_', '-')} must be positive.")
+    if args.support_margin < 0.0:
+        raise ValueError("--support-margin must be non-negative.")
     selected = _selected_ids(args)
     if args.config_dir is None:
         args.config_dir = grasp_config_directory(args.end_effector, benchmark=True)
@@ -289,6 +339,11 @@ def run(args: argparse.Namespace) -> int:
             "reuse": args.reuse,
             "points": args.points,
             "joint_candidates": args.joint_candidates,
+            "surface_anchors": args.surface_anchors,
+            "rolls_per_anchor": args.rolls_per_anchor,
+            "coarse_keep": args.coarse_keep,
+            "top_k": args.top_k,
+            "support_margin": args.support_margin,
             "search_attempts": args.search_attempts,
             "seed": args.seed,
             "target_size": args.target_size,
@@ -336,4 +391,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -9,6 +9,11 @@ import mujoco
 import numpy as np
 
 from source.demos.common import add_robot_config_args
+from source.demos.grasp_search_cli import (
+    add_scripted_grasp_search_args,
+    scripted_grasp_search_options,
+    validate_scripted_grasp_search_args,
+)
 from source.scripted import create_strategy, registered_strategies
 from source.envs.manipulation import make_manipulation_env
 from source.teleop.devices import GloveSample, ViveSample
@@ -22,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=Path("datasets/scripted_lerobot"))
     parser.add_argument("--episodes", type=int, default=20, help="Number of successful episodes.")
     parser.add_argument("--max-attempts", type=int, default=100)
-    parser.add_argument("--max-steps", type=int, default=400)
+    parser.add_argument("--max-steps", type=int, default=900)
     parser.add_argument("--fps", type=int, default=20)
     parser.add_argument("--camera", default="agentview")
     parser.add_argument("--image-width", type=int, default=640)
@@ -31,11 +36,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save-failures", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--no-video", action="store_true")
-    parser.add_argument(
-        "--reuse-grasp-config",
-        action="store_true",
-        help="Reuse configs/grasps cache instead of searching at startup.",
-    )
+    add_scripted_grasp_search_args(parser)
     add_robot_config_args(parser)
     return parser.parse_args()
 
@@ -79,10 +80,12 @@ def run(args) -> None:
     for name in ("episodes", "max_attempts", "max_steps", "fps"):
         if getattr(args, name) <= 0:
             raise ValueError(f"--{name.replace('_', '-')} must be positive.")
+    validate_scripted_grasp_search_args(args)
     env = _make_env(args)
     strategy = create_strategy(
         args.task,
         reuse_grasp_config=args.reuse_grasp_config,
+        grasp_search_options=scripted_grasp_search_options(args),
     )
     renderer = None
     recorder = None

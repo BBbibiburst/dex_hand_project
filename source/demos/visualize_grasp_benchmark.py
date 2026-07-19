@@ -30,7 +30,7 @@ import json
 import math
 from collections import Counter
 from pathlib import Path
-from typing import Any, Iterable, Mapping, Sequence
+from typing import Any, Mapping, Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
