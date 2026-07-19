@@ -10,9 +10,10 @@ import json
 from pathlib import Path
 import time
 
-from source.assets import PROJECT_ROOT
 from source.envs.manipulation.object_catalog import object_ids
 from source.grasping.grasp_config_search import (
+    grasp_benchmark_report_path,
+    grasp_config_directory,
     grasp_config_name,
     search_grasp_config,
 )
@@ -73,12 +74,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--config-dir",
         type=Path,
-        default=PROJECT_ROOT / "configs" / "grasps" / "benchmark",
+        help=(
+            "Per-object output directory "
+            "(default: configs/grasps/<end_effector>/benchmark)."
+        ),
     )
     parser.add_argument(
         "--output",
         type=Path,
-        default=(PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"),
+        help=(
+            "Benchmark report JSON "
+            "(default: configs/grasps/<end_effector>/grasp_catalog_benchmark.json)."
+        ),
     )
     return parser.parse_args()
 
@@ -263,18 +270,10 @@ def run(args: argparse.Namespace) -> int:
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
     selected = _selected_ids(args)
-    default_config_dir = PROJECT_ROOT / "configs" / "grasps" / "benchmark"
-    default_output = PROJECT_ROOT / "configs" / "grasps" / "grasp_catalog_benchmark.json"
-    if args.end_effector != "dex_hand":
-        if args.config_dir == default_config_dir:
-            args.config_dir = default_config_dir / args.end_effector
-        if args.output == default_output:
-            args.output = (
-                PROJECT_ROOT
-                / "configs"
-                / "grasps"
-                / f"grasp_catalog_benchmark_{args.end_effector}.json"
-            )
+    if args.config_dir is None:
+        args.config_dir = grasp_config_directory(args.end_effector, benchmark=True)
+    if args.output is None:
+        args.output = grasp_benchmark_report_path(args.end_effector)
     rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
     completed = {row["object_id"] for row in rows}
@@ -337,3 +336,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -10,7 +10,6 @@ import mujoco
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-from source.assets import PROJECT_ROOT
 from source.scripted.base import ActionContext, PhaseContext, PhaseResult, TaskStrategy
 from source.geometry import mat_to_quat
 
@@ -137,9 +136,9 @@ class LiftStrategy(TaskStrategy):
             return
 
         end_effector_name = env.hand_descriptor.name
-        config_dir = PROJECT_ROOT / "configs" / "grasps"
-        if end_effector_name != "dex_hand":
-            config_dir = config_dir / end_effector_name
+        from source.grasping.grasp_config_search import grasp_config_directory
+
+        config_dir = grasp_config_directory(end_effector_name)
         path = config_dir / f"{self._grasp_config_name(object_id)}.json"
         should_generate = not self.reuse_grasp_config or not path.is_file()
         if should_generate:
@@ -894,3 +893,4 @@ class LiftStrategy(TaskStrategy):
             self.state.reset()
             return PhaseResult.RESTART, ActionContext(hand_target=gripper)
         return PhaseResult.CONTINUE, ActionContext(hold, target_quaternion, preload)
+

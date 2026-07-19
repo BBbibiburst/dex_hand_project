@@ -9,12 +9,14 @@ import mujoco
 import numpy as np
 
 from source.assets import DEX_HAND_XML_PATH
+from source.grasping.mesh_pointcloud import TriangleMesh
 
 
 @dataclass(frozen=True)
 class PosedDexHandSurface:
     points: np.ndarray
     labels: np.ndarray
+    meshes: tuple[TriangleMesh, ...]
     fingertip_centers: np.ndarray
     actuator_values: np.ndarray
 
@@ -33,6 +35,12 @@ def _mesh_vertices(model: mujoco.MjModel, mesh_id: int) -> np.ndarray:
     start = int(model.mesh_vertadr[mesh_id])
     count = int(model.mesh_vertnum[mesh_id])
     return np.asarray(model.mesh_vert[start : start + count], dtype=np.float64)
+
+
+def _mesh_faces(model: mujoco.MjModel, mesh_id: int) -> np.ndarray:
+    start = int(model.mesh_faceadr[mesh_id])
+    count = int(model.mesh_facenum[mesh_id])
+    return np.asarray(model.mesh_face[start : start + count], dtype=np.int64)
 
 
 def _geom_label(name: str) -> int:
@@ -87,6 +95,7 @@ def load_posed_dex_hand_surface(
     rng = np.random.default_rng(seed)
     point_groups = []
     label_groups = []
+    meshes = []
     fingertip_centers = np.full((5, 3), np.nan, dtype=np.float64)
     fingertip_points: dict[int, list[np.ndarray]] = {index: [] for index in range(5)}
 
@@ -98,11 +107,21 @@ def load_posed_dex_hand_surface(
         if not name or model.geom_type[geom_id] != mujoco.mjtGeom.mjGEOM_MESH:
             continue
         label = _geom_label(name)
-        vertices = _mesh_vertices(model, int(model.geom_dataid[geom_id]))
+        mesh_id = int(model.geom_dataid[geom_id])
+        full_vertices = _mesh_vertices(model, mesh_id)
+        geom_rotation = data.geom_xmat[geom_id].reshape(3, 3)
+        world = full_vertices @ geom_rotation.T + data.geom_xpos[geom_id]
+        full_local = (world - root_position) @ root_rotation
+        meshes.append(
+            TriangleMesh(
+                vertices=full_local,
+                faces=_mesh_faces(model, mesh_id),
+            )
+        )
+        vertices = full_vertices
         if vertices.shape[0] > max_points_per_geom:
             selected = rng.choice(vertices.shape[0], max_points_per_geom, replace=False)
             vertices = vertices[selected]
-        geom_rotation = data.geom_xmat[geom_id].reshape(3, 3)
         world = vertices @ geom_rotation.T + data.geom_xpos[geom_id]
         local = (world - root_position) @ root_rotation
         point_groups.append(local)
@@ -119,6 +138,7 @@ def load_posed_dex_hand_surface(
     return PosedDexHandSurface(
         points=np.concatenate(point_groups),
         labels=np.concatenate(label_groups),
+        meshes=tuple(meshes),
         fingertip_centers=fingertip_centers,
         actuator_values=values,
     )

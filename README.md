@@ -58,7 +58,7 @@ python tools/download_maniskill_objects.py
 
 YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 `assets/maniskill/egad/models/`，统一对象位于 `assets/maniskill/models/`；实际选择
-分别写入 `configs/ycb_objects.lock.txt` 和 `configs/egad_objects.lock.txt`，最终来源
+分别写入 `docs/ycb_objects.lock.txt` 和 `docs/egad_objects.lock.txt`，最终来源
 和模型文件索引写入 `assets/maniskill/manifest.json`。原始压缩包统一放在
 `assets/maniskill/downloads/`。Windows 默认复制文件；Linux 可传
 `--mode symlink` 节省空间。已有原始缓存后可用 `--dry-run` 只查看固定选择、不复制或
@@ -86,6 +86,9 @@ YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 #### `source.demos.search_mesh_force_closure`
 
 只使用物体 mesh 和所选末端执行器模型搜索抓取，不加载机械臂、桌子或完整任务环境。
+`--viewer` 和 `--preview-image` 会同时显示半透明物体三角 mesh、采样点云以及优化手型
+下的 Dex Hand/Pika 连杆三角 mesh，方便检查点云是否覆盖模型、接触点是否真实落在物体
+表面，以及手和物体是否发生漏检的几何穿透。
 目前支持六维 `dex_hand` 和单自由度 `pika_gripper`。程序会对点云做 PCA，沿不同主轴、
 抓取高度和末端朝向生成候选，联合搜索手腕相对位姿、闭合量和接触点，并对穿透、接触
 分布、近似力闭合质量、鲁棒裕量及末端相对物体底面（桌面）的安全间隙评分。Dex Hand
@@ -127,10 +130,36 @@ python -m source.demos.search_mesh_force_closure \
 | `--end-effector NAME` | `dex_hand` | 选择 `dex_hand` 或 `pika_gripper` |
 | `--output PATH` | 按末端自动选择 | Dex Hand 写入 `configs/grasps/`，其他末端写入对应子目录 |
 | `--preview PATH` | 无 | 用 Trimesh 导出物体、手和接触点组成的 3D 场景，如 `.glb` |
-| `--preview-image PATH` | 无 | 保存点云、接触点和法向量的 PNG 预览图 |
+| `--preview-image PATH` | 无 | 保存物体/手 mesh、点云、接触点和法向量的 PNG 预览图 |
 | `--viewer` | 关闭 | 打开交互式 Matplotlib 3D 窗口查看搜索结果 |
 
 几何评分只是候选生成器，不能代替动力学验证；搜索结果至少应通过下一程序验证。
+
+#### 单文件抓取搜索开发版
+
+要把搜索实现交给其他模型独立修改时，使用
+`tools/grasp_search_single_file.py`。该文件不导入 `source.grasping`，在一个文件内包含
+物体 mesh/点云加载、Dex Hand/Pika 正向运动学与连杆 mesh 提取、PCA 和随机方向候选、
+碰撞与接触评分、摩擦锥力闭合估计、approach waypoint、兼容 JSON 输出及双 mesh
+可视化：
+
+```bash
+python tools/grasp_search_single_file.py \
+  --object-id ycb:002_master_chef_can \
+  --end-effector dex_hand \
+  --output configs/grasps/single_file/can.json \
+  --preview-image /tmp/can.png \
+  --viewer
+
+python tools/grasp_search_single_file.py \
+  --mesh path/to/object.stl \
+  --end-effector pika_gripper \
+  --target-size 0.09
+```
+
+它是用于快速改算法的独立工作台，默认写入 `configs/grasps/single_file/`，不会覆盖正式
+配置。改进结果通过 standalone 和完整 Lift 验证后，再将相应算法同步回
+`source/grasping/`；不要同时修改两套实现后假设它们会自动保持一致。
 
 程序化调用不要导入 demo，使用无窗口 API：
 

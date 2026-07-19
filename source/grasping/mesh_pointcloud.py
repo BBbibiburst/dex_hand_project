@@ -17,6 +17,14 @@ class SurfacePointCloud:
     scale: float
 
 
+@dataclass(frozen=True)
+class TriangleMesh:
+    """One triangle mesh expressed in an end-effector root frame."""
+
+    vertices: np.ndarray
+    faces: np.ndarray
+
+
 def sample_surface_pointcloud(
     mesh_path: str | Path,
     *,

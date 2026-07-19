@@ -56,7 +56,6 @@ configs = [
     "current_robot.json",
     "robot_profiles/*.json",
     "teleop.json",
-    "*_objects.lock.txt",
 ]
 
 [tool.setuptools.exclude-package-data]

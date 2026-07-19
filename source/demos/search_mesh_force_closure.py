@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import trimesh
 
@@ -35,13 +36,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        help="Output JSON (default: configs/grasps/<object_id>.json).",
+        help="Output JSON (default: configs/grasps/<end_effector>/<object_id>.json).",
     )
     parser.add_argument("--preview", type=Path)
     parser.add_argument(
         "--preview-image",
         type=Path,
-        help="Save a PNG showing the point cloud, contacts, and normals.",
+        help="Save a PNG showing the object mesh, point cloud, contacts, and normals.",
     )
     parser.add_argument(
         "--viewer",
@@ -51,9 +52,89 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
+def _normalized_object_mesh(mesh_path: Path, cloud) -> trimesh.Trimesh:
+    """Load the searched mesh in the same centred, scaled frame as the cloud."""
+    loaded = trimesh.load_mesh(mesh_path, process=True)
+    mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
+    if not isinstance(mesh, trimesh.Trimesh) or mesh.faces.size == 0:
+        raise ValueError(f"Mesh contains no triangle surface: {mesh_path}")
+    mesh = mesh.copy()
+    mesh.vertices = (np.asarray(mesh.vertices, dtype=np.float64) - cloud.center) * cloud.scale
+    return mesh
+
+
+def _posed_end_effector_meshes(closure) -> list[trimesh.Trimesh]:
+    """Transform searched link meshes from hand-root into object coordinates."""
+    surface = getattr(closure, "hand", getattr(closure, "gripper", None))
+    meshes = []
+    for mesh in surface.meshes:
+        vertices = (
+            np.asarray(mesh.vertices, dtype=np.float64) @ closure.rotation_matrix.T
+            + closure.translation
+        )
+        meshes.append(
+            trimesh.Trimesh(
+                vertices=vertices,
+                faces=mesh.faces,
+                process=False,
+            )
+        )
+    return meshes
+
+
+def _draw_contacts(
+    cloud,
+    closure,
+    object_mesh: trimesh.Trimesh,
+    end_effector_meshes: list[trimesh.Trimesh],
+    *,
+    output: Path | None,
+    show: bool,
+) -> None:
     figure = plt.figure(figsize=(9, 8))
     axis = figure.add_subplot(111, projection="3d")
+    # Large YCB meshes can contain hundreds of thousands of triangles. A
+    # deterministic face subset preserves the visible surface without making
+    # the interactive Matplotlib viewer unusably slow.
+    face_count = len(object_mesh.faces)
+    max_display_faces = 20_000
+    face_indices = (
+        np.linspace(0, face_count - 1, max_display_faces, dtype=np.int64)
+        if face_count > max_display_faces
+        else np.arange(face_count)
+    )
+    triangles = np.asarray(object_mesh.vertices)[object_mesh.faces[face_indices]]
+    surface = Poly3DCollection(
+        triangles,
+        facecolor="#6f91ad",
+        edgecolor="none",
+        alpha=0.28,
+        label="object mesh",
+    )
+    axis.add_collection3d(surface)
+    total_hand_faces = sum(len(mesh.faces) for mesh in end_effector_meshes)
+    hand_face_budget = 30_000
+    hand_triangles = []
+    for mesh in end_effector_meshes:
+        face_count = len(mesh.faces)
+        display_count = min(
+            face_count,
+            max(1, round(hand_face_budget * face_count / total_hand_faces)),
+        )
+        indices = (
+            np.linspace(0, face_count - 1, display_count, dtype=np.int64)
+            if display_count < face_count
+            else np.arange(face_count)
+        )
+        hand_triangles.append(np.asarray(mesh.vertices)[mesh.faces[indices]])
+    hand_surface = Poly3DCollection(
+        np.concatenate(hand_triangles),
+        facecolor="#f4a261",
+        edgecolor="none",
+        alpha=0.48,
+        label="end-effector mesh",
+    )
+    axis.add_collection3d(hand_surface)
     axis.scatter(
         cloud.points[:, 0],
         cloud.points[:, 1],
@@ -90,7 +171,7 @@ def _draw_contacts(cloud, closure, *, output: Path | None, show: bool) -> None:
             hand_points[selected, 2],
             s=2.5,
             c=hand_colors[int(label) % len(hand_colors)],
-            alpha=0.32 if label == 5 else 0.55,
+            alpha=0.12 if label == 5 else 0.20,
         )
     axis.scatter(
         hand_tips[:, 0],
@@ -182,7 +263,22 @@ def run(args) -> None:
     output = result.output_path
     cloud = result.cloud
     closure = result.grasp
+    object_mesh = _normalized_object_mesh(mesh_path, cloud)
+    end_effector_meshes = _posed_end_effector_meshes(closure)
     if args.preview:
+        preview_mesh = object_mesh.copy()
+        preview_mesh.visual.face_colors = np.tile(
+            np.asarray([[100, 145, 180, 85]], dtype=np.uint8),
+            (len(preview_mesh.faces), 1),
+        )
+        preview_hand_meshes = []
+        for mesh in end_effector_meshes:
+            mesh = mesh.copy()
+            mesh.visual.face_colors = np.tile(
+                np.asarray([[244, 162, 97, 120]], dtype=np.uint8),
+                (len(mesh.faces), 1),
+            )
+            preview_hand_meshes.append(mesh)
         object_colors = np.tile(
             np.asarray([[70, 150, 255, 100]], dtype=np.uint8),
             (args.points, 1),
@@ -193,6 +289,8 @@ def run(args) -> None:
         )
         scene = trimesh.Scene(
             [
+                preview_mesh,
+                *preview_hand_meshes,
                 trimesh.points.PointCloud(cloud.points, colors=object_colors),
                 trimesh.points.PointCloud(closure.points, colors=hand_colors),
                 *[
@@ -207,6 +305,8 @@ def run(args) -> None:
         _draw_contacts(
             cloud,
             closure,
+            object_mesh,
+            end_effector_meshes,
             output=args.preview_image,
             show=args.viewer,
         )
@@ -236,3 +336,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

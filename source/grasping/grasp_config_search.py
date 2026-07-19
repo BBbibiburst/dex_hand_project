@@ -46,6 +46,22 @@ def grasp_config_name(object_id: str) -> str:
     )
 
 
+
+
+def grasp_config_directory(
+    end_effector_name: str,
+    *,
+    benchmark: bool = False,
+) -> Path:
+    """Return the canonical config directory for one end effector."""
+    directory = PROJECT_ROOT / "configs" / "grasps" / end_effector_name
+    return directory / "benchmark" if benchmark else directory
+
+
+def grasp_benchmark_report_path(end_effector_name: str) -> Path:
+    """Return the canonical benchmark report path for one end effector."""
+    return grasp_config_directory(end_effector_name) / "grasp_catalog_benchmark.json"
+
 def object_mesh_path(object_id: str) -> Path:
     record = resolve_record(object_id)
     root = resolve_record_path(record, "source_path")
@@ -124,9 +140,7 @@ def search_grasp_config(
         raise ValueError("Provide exactly one of object_id or mesh.")
     mesh_path = object_mesh_path(object_id) if mesh is None else Path(mesh)
     name = "custom_mesh" if object_id is None else grasp_config_name(object_id)
-    default_directory = PROJECT_ROOT / "configs" / "grasps"
-    if end_effector_name != "dex_hand":
-        default_directory = default_directory / end_effector_name
+    default_directory = grasp_config_directory(end_effector_name)
     output_path = default_directory / f"{name}.json" if output is None else Path(output)
     if not output_path.is_absolute():
         output_path = PROJECT_ROOT / output_path
@@ -239,9 +253,7 @@ def generate_validated_grasp_config(
     if attempts <= 0:
         raise ValueError("attempts must be positive.")
     name = grasp_config_name(object_id)
-    default_directory = PROJECT_ROOT / "configs" / "grasps"
-    if end_effector_name != "dex_hand":
-        default_directory /= end_effector_name
+    default_directory = grasp_config_directory(end_effector_name)
     output_path = default_directory / f"{name}.json" if output is None else Path(output)
     if not output_path.is_absolute():
         output_path = PROJECT_ROOT / output_path
@@ -290,3 +302,4 @@ def generate_validated_grasp_config(
         temporary_path.unlink(missing_ok=True)
     detail = " | ".join(failures) or "no candidates evaluated"
     raise RuntimeError(f"No dynamically stable grasp was found for {object_id!r}: {detail}")
+

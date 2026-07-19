@@ -16,7 +16,7 @@ Examples:
     python tools/download_maniskill_objects.py
     python tools/download_maniskill_objects.py --dry-run
     python tools/download_maniskill_objects.py --datasets ycb egad
-    python tools/download_maniskill_objects.py --egad-selection configs/egad_eval49.txt
+    python tools/download_maniskill_objects.py --egad-selection docs/egad_eval49.txt
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CACHE_DIR = PROJECT_ROOT / "assets" / "maniskill"
 DEFAULT_OUTPUT_DIR = DEFAULT_CACHE_DIR / "models"
 DEFAULT_MANIFEST = DEFAULT_CACHE_DIR / "manifest.json"
-DEFAULT_LOCK_DIR = PROJECT_ROOT / "configs"
+DEFAULT_LOCK_DIR = PROJECT_ROOT / "docs"
 
 MODEL_SUFFIXES = {".dae", ".glb", ".gltf", ".obj", ".ply", ".stl", ".urdf", ".xml"}
 

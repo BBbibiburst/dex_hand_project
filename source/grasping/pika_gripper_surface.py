@@ -9,12 +9,14 @@ import mujoco
 import numpy as np
 
 from source.assets import PIKA_GRIPPER_XML_PATH
+from source.grasping.mesh_pointcloud import TriangleMesh
 
 
 @dataclass(frozen=True)
 class PosedPikaGripperSurface:
     points: np.ndarray
     labels: np.ndarray
+    meshes: tuple[TriangleMesh, ...]
     contact_centers: np.ndarray
     actuator_values: np.ndarray
 
@@ -23,6 +25,12 @@ def _mesh_vertices(model: mujoco.MjModel, mesh_id: int) -> np.ndarray:
     start = int(model.mesh_vertadr[mesh_id])
     count = int(model.mesh_vertnum[mesh_id])
     return np.asarray(model.mesh_vert[start : start + count], dtype=np.float64)
+
+
+def _mesh_faces(model: mujoco.MjModel, mesh_id: int) -> np.ndarray:
+    start = int(model.mesh_faceadr[mesh_id])
+    count = int(model.mesh_facenum[mesh_id])
+    return np.asarray(model.mesh_face[start : start + count], dtype=np.int64)
 
 
 def load_posed_pika_gripper_surface(
@@ -54,6 +62,7 @@ def load_posed_pika_gripper_surface(
     rng = np.random.default_rng(seed)
     point_groups = []
     label_groups = []
+    meshes = []
     centers = np.empty((2, 3), dtype=np.float64)
     for geom_id in range(model.ngeom):
         name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
@@ -67,10 +76,20 @@ def load_posed_pika_gripper_surface(
             label = 0
         elif "right_link" in name:
             label = 1
-        vertices = _mesh_vertices(model, int(model.geom_dataid[geom_id]))
+        mesh_id = int(model.geom_dataid[geom_id])
+        full_vertices = _mesh_vertices(model, mesh_id)
+        rotation = data.geom_xmat[geom_id].reshape(3, 3)
+        world = full_vertices @ rotation.T + data.geom_xpos[geom_id]
+        full_local = (world - root_position) @ root_rotation
+        meshes.append(
+            TriangleMesh(
+                vertices=full_local,
+                faces=_mesh_faces(model, mesh_id),
+            )
+        )
+        vertices = full_vertices
         if vertices.shape[0] > max_points_per_geom:
             vertices = vertices[rng.choice(vertices.shape[0], max_points_per_geom, replace=False)]
-        rotation = data.geom_xmat[geom_id].reshape(3, 3)
         world = vertices @ rotation.T + data.geom_xpos[geom_id]
         local = (world - root_position) @ root_rotation
         point_groups.append(local)
@@ -84,6 +103,7 @@ def load_posed_pika_gripper_surface(
     return PosedPikaGripperSurface(
         points=np.concatenate(point_groups),
         labels=np.concatenate(label_groups),
+        meshes=tuple(meshes),
         contact_centers=centers,
         actuator_values=np.asarray([joint_target], dtype=np.float64),
     )

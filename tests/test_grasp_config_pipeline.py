@@ -92,3 +92,18 @@ def test_failed_validation_preserves_existing_grasp(
 
     assert output.read_text(encoding="utf-8") == '{"known": "stable"}'
     assert not output.with_suffix(".json.candidate").exists()
+
+
+
+def test_grasp_config_directories_are_end_effector_scoped() -> None:
+    dex = grasp_config_search.grasp_config_directory("dex_hand")
+    pika = grasp_config_search.grasp_config_directory("pika_gripper")
+
+    assert dex == grasp_config_search.PROJECT_ROOT / "configs" / "grasps" / "dex_hand"
+    assert pika == grasp_config_search.PROJECT_ROOT / "configs" / "grasps" / "pika_gripper"
+    assert grasp_config_search.grasp_config_directory(
+        "dex_hand", benchmark=True
+    ) == dex / "benchmark"
+    assert grasp_config_search.grasp_benchmark_report_path(
+        "pika_gripper"
+    ) == pika / "grasp_catalog_benchmark.json"
