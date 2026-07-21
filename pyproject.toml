@@ -25,9 +25,17 @@ hardware = [
     "pyserial",
     "PyBluez @ git+https://github.com/pybluez/pybluez.git",
 ]
-learning = ["torch", "torchvision", "torchcodec", "lerobot>=0.4"]
+learning = [
+    "torch",
+    "torchvision",
+    "torchcodec",
+    "lerobot>=0.4",
+]
 assets = ["mani-skill"]
-dev = ["ruff", "pytest"]
+dev = [
+    "ruff",
+    "pytest",
+]
 
 [project.scripts]
 dex-smoke-test = "tools.run_smoke_checks:main"
@@ -41,7 +49,15 @@ dex-glove-test = "source.teleop.bluetooth_glove.bluetooth_glove_test:main"
 include-package-data = false
 
 [tool.setuptools.packages.find]
-include = ["source*", "assets", "configs"]
+where = ["."]
+include = [
+    "source*",
+    "apps*",
+    "examples*",
+    "tools*",
+    "assets*",
+    "configs*",
+]
 
 [tool.setuptools.package-data]
 assets = [
@@ -61,6 +77,11 @@ configs = [
 [tool.setuptools.exclude-package-data]
 assets = ["maniskill/**/*"]
 configs = ["grasps/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
