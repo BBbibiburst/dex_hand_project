@@ -18,10 +18,7 @@ import mujoco
 import numpy as np
 from mujoco import viewer
 
-from source.demos.common import (
-    add_robot_config_args,
-    load_demo_robot_config,
-)
+from source.cli.robot_config import add_robot_config_args, load_configured_robot
 from source.robots.builder import build_robot_spec
 from source.robots.config import (
     descriptors_from_robot_config,
@@ -29,10 +26,12 @@ from source.robots.config import (
 )
 from source.robots.scene import add_preview_scene
 from source.sensors.base import TactileSensorBase
+from source.sensors.tactile.probe import (
+    PROBE_GEOM_NAME,
+    add_probe_to_spec,
+    set_probe_pose,
+)
 
-PROBE_BODY_NAME = "tactile_probe"
-PROBE_JOINT_NAME = "tactile_probe_freejoint"
-PROBE_GEOM_NAME = "tactile_probe_geom"
 
 
 @dataclass(frozen=True)
@@ -97,42 +96,12 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _add_probe_to_spec(
-    spec: mujoco.MjSpec,
-    *,
-    radius: float,
-    initial_pos: np.ndarray,
-    gravity_comp: bool,
-) -> None:
-    if radius <= 0.0:
-        raise ValueError("probe-radius must be positive.")
-
-    probe = spec.worldbody.add_body()
-    probe.name = PROBE_BODY_NAME
-    probe.pos = np.asarray(initial_pos, dtype=np.float64).tolist()
-    if gravity_comp and hasattr(probe, "gravcomp"):
-        probe.gravcomp = 1.0
-
-    joint = probe.add_joint()
-    joint.name = PROBE_JOINT_NAME
-    joint.type = mujoco.mjtJoint.mjJNT_FREE
-
-    geom = probe.add_geom()
-    geom.name = PROBE_GEOM_NAME
-    geom.type = mujoco.mjtGeom.mjGEOM_SPHERE
-    geom.size = [float(radius), 0.0, 0.0]
-    geom.rgba = [1.0, 0.12, 0.08, 0.85]
-    geom.mass = 0.01
-    geom.condim = 3
-    geom.contype = 1
-    geom.conaffinity = 3
-    geom.friction = [0.8, 0.01, 0.001]
 
 
 def _build_model_with_probe(
     args: argparse.Namespace,
 ) -> tuple[mujoco.MjModel, mujoco.MjData, TactileSensorBase, dict[str, Any]]:
-    config = load_demo_robot_config(args)
+    config = load_configured_robot(args)
     config["enable_tactile_sensors"] = True
     if args.backend is not None:
         config["tactile_backend"] = args.backend
@@ -160,7 +129,7 @@ def _build_model_with_probe(
         add_preview_scene(spec)
 
     initial = np.asarray(args.probe_pos if args.probe_pos is not None else [0.35, 0.0, 1.0])
-    _add_probe_to_spec(
+    add_probe_to_spec(
         spec,
         radius=args.probe_radius,
         initial_pos=initial,
@@ -223,28 +192,8 @@ def _initial_probe_position(
     return center + max(5.0 * radius, 0.035) * normal
 
 
-def _set_probe_pose(
-    model: mujoco.MjModel,
-    data: mujoco.MjData,
-    *,
-    pos: np.ndarray,
-    quat: np.ndarray,
-) -> None:
-    joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, PROBE_JOINT_NAME)
-    if joint_id < 0:
-        raise RuntimeError(f"Probe joint {PROBE_JOINT_NAME!r} was not compiled.")
-    qpos_adr = int(model.jnt_qposadr[joint_id])
-    qvel_adr = int(model.jnt_dofadr[joint_id])
-    data.qpos[qpos_adr : qpos_adr + 3] = np.asarray(pos, dtype=np.float64)
-    data.qpos[qpos_adr + 3 : qpos_adr + 7] = np.asarray(quat, dtype=np.float64)
-    data.qvel[qvel_adr : qvel_adr + 6] = 0.0
 
 
-def _probe_joint_addresses(model: mujoco.MjModel) -> tuple[int, int]:
-    joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, PROBE_JOINT_NAME)
-    if joint_id < 0:
-        raise RuntimeError(f"Probe joint {PROBE_JOINT_NAME!r} was not compiled.")
-    return int(model.jnt_qposadr[joint_id]), int(model.jnt_dofadr[joint_id])
 
 
 def _geom_name(model: mujoco.MjModel, geom_id: int) -> str:
@@ -526,7 +475,7 @@ def run_demo(args: argparse.Namespace) -> None:
         explicit_pos=args.probe_pos,
         radius=args.probe_radius,
     )
-    _set_probe_pose(
+    set_probe_pose(
         model,
         data,
         pos=probe_pos,

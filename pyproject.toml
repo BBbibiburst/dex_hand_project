@@ -30,11 +30,11 @@ assets = ["mani-skill"]
 dev = ["ruff", "pytest"]
 
 [project.scripts]
-dex-smoke-test = "source.demos.smoke_test:main"
+dex-smoke-test = "tools.run_smoke_checks:main"
 dex-vive-test = "source.teleop.vive.vive_link_test:main"
 dex-vive-glove = "source.teleop.vive.vive_glove_hand_control:main"
-dex-collect-teleop = "source.demos.collect_teleop_lerobot:main"
-dex-task-playback = "source.demos.manipulation_task_playback:main"
+dex-collect-teleop = "apps.collect_teleop_lerobot:main"
+dex-task-playback = "examples.manipulation_task_playback:main"
 dex-glove-test = "source.teleop.bluetooth_glove.bluetooth_glove_test:main"
 
 [tool.setuptools]

@@ -8,7 +8,8 @@ from typing import Any, Dict
 
 import numpy as np
 
-from source.demos.common import RealtimePacer, add_robot_config_args, make_demo_env
+from source.cli.robot_config import add_robot_config_args, make_configured_env
+from source.runtime.pacing import RealtimePacer
 
 
 def _parse_args() -> argparse.Namespace:
@@ -46,7 +47,7 @@ def main() -> None:
     if not 0.0 < args.action_filter <= 1.0:
         raise ValueError(f"--action-filter must be in (0, 1], got {args.action_filter}.")
 
-    env = make_demo_env(
+    env = make_configured_env(
         args,
         render_mode="human",
         control_mode="position",

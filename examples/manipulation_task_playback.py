@@ -7,11 +7,11 @@ contacts, and reset placement can be inspected in the MuJoCo viewer.
 
 Usage::
 
-    python -m source.demos.manipulation_task_playback --task lift
-    python -m source.demos.manipulation_task_playback --task stack
-    python -m source.demos.manipulation_task_playback --task pick_place --object-id ycb:025_mug
-    python -m source.demos.manipulation_task_playback --task nut_assembly --single-nut square_nut
-    python -m source.demos.manipulation_task_playback --task push --object-id ycb:006_mustard_bottle
+    python -m examples.manipulation_task_playback --task lift
+    python -m examples.manipulation_task_playback --task stack
+    python -m examples.manipulation_task_playback --task pick_place --object-id ycb:025_mug
+    python -m examples.manipulation_task_playback --task nut_assembly --single-nut square_nut
+    python -m examples.manipulation_task_playback --task push --object-id ycb:006_mustard_bottle
 """
 
 from __future__ import annotations
@@ -25,7 +25,8 @@ import numpy as np
 from mujoco import viewer
 from PIL import Image
 
-from source.demos.common import RealtimePacer, add_robot_config_args
+from source.cli.robot_config import add_robot_config_args
+from source.runtime.pacing import RealtimePacer
 from source.envs.manipulation import make_manipulation_env, registered_tasks
 from source.viz.overlays import clear_markers, draw_label
 

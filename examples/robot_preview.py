@@ -9,7 +9,7 @@ import logging
 import mujoco
 from mujoco import viewer
 
-from source.demos.common import add_robot_config_args
+from source.cli.robot_config import add_robot_config_args
 from source.robots.builder import build_robot_model_from_config
 
 LOGGER = logging.getLogger(__name__)

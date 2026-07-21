@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -27,81 +26,37 @@ from source.grasping.standalone_validator import (
 )
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--dataset",
-        choices=("all", "ycb", "egad"),
-        default="all",
-        help="Catalogue subset to test.",
-    )
-    parser.add_argument(
-        "--object-id",
-        action="append",
-        dest="object_ids",
-        help="Test only this object; repeat for multiple objects.",
-    )
-    parser.add_argument("--limit", type=int, help="Test only the first N objects.")
-    parser.add_argument("--points", type=int, default=2048)
-    parser.add_argument("--joint-candidates", type=int, default=128)
-    parser.add_argument("--surface-anchors", type=int, default=24)
-    parser.add_argument("--rolls-per-anchor", type=int, default=8)
-    parser.add_argument("--coarse-keep", type=int, default=24)
-    parser.add_argument("--top-k", type=int, default=8)
-    parser.add_argument("--support-margin", type=float, default=0.008)
-    parser.add_argument(
-        "--search-attempts",
-        type=int,
-        default=3,
-        help="Independent seeds tried per object; stops at the first stable grasp.",
-    )
-    parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--target-size", type=float, default=0.09)
-    parser.add_argument(
-        "--end-effector",
-        choices=("dex_hand", "pika_gripper"),
-        default="dex_hand",
-    )
-    parser.add_argument("--seconds", type=float, default=3.0)
-    parser.add_argument("--settle-seconds", type=float, default=0.8)
-    parser.add_argument(
-        "--grip-preload",
-        type=float,
-        default=DEFAULT_GRIP_PRELOAD,
-    )
-    parser.add_argument(
-        "--jobs",
-        type=int,
-        default=1,
-        help="Parallel worker processes; use 1 for deterministic debugging.",
-    )
-    parser.add_argument(
-        "--reuse",
-        action="store_true",
-        help="Reuse existing per-object grasp JSON files.",
-    )
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Keep completed rows in an existing report and test the rest.",
-    )
-    parser.add_argument(
-        "--config-dir",
-        type=Path,
-        help=("Per-object output directory (default: configs/grasps/<end_effector>/benchmark)."),
-    )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        help=(
-            "Benchmark report JSON "
-            "(default: configs/grasps/<end_effector>/grasp_catalog_benchmark.json)."
-        ),
-    )
-    return parser.parse_args()
+@dataclass
+class GraspBenchmarkConfig:
+    """Configuration for a catalogue-wide grasp search and validation run."""
+
+    dataset: str = "all"
+    object_ids: list[str] | None = None
+    limit: int | None = None
+    points: int = 2048
+    joint_candidates: int = 128
+    surface_anchors: int = 24
+    rolls_per_anchor: int = 8
+    coarse_keep: int = 24
+    top_k: int = 8
+    support_margin: float = 0.008
+    search_attempts: int = 3
+    seed: int = 0
+    target_size: float = 0.09
+    end_effector: str = "dex_hand"
+    seconds: float = 3.0
+    settle_seconds: float = 0.8
+    grip_preload: float = DEFAULT_GRIP_PRELOAD
+    jobs: int = 1
+    reuse: bool = False
+    resume: bool = False
+    config_dir: Path | None = None
+    output: Path | None = None
 
 
-def _selected_ids(args: argparse.Namespace) -> list[str]:
+
+
+def _selected_ids(args: "GraspBenchmarkConfig") -> list[str]:
     available = object_ids(None if args.dataset == "all" else args.dataset)
     if args.object_ids:
         unknown = sorted(set(args.object_ids) - set(available))
@@ -120,7 +75,7 @@ def _selected_ids(args: argparse.Namespace) -> list[str]:
 def _write_report(
     path: Path,
     *,
-    args: argparse.Namespace,
+    args: "GraspBenchmarkConfig",
     selected: list[str],
     rows: list[dict],
 ) -> None:
@@ -148,7 +103,7 @@ def _write_report(
     temporary.replace(path)
 
 
-def _report_parameters(args: argparse.Namespace) -> dict:
+def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
     return {
         "dataset": args.dataset,
         "object_ids": args.object_ids,
@@ -172,7 +127,7 @@ def _report_parameters(args: argparse.Namespace) -> dict:
     }
 
 
-def _load_completed(path: Path, args: argparse.Namespace) -> list[dict]:
+def _load_completed(path: Path, args: "GraspBenchmarkConfig") -> list[dict]:
     if not path.is_file():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -300,7 +255,7 @@ def _run_one(task: dict) -> dict:
     }
 
 
-def run(args: argparse.Namespace) -> int:
+def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     if args.seconds <= 0 or args.settle_seconds < 0:
         raise ValueError("Simulation durations are invalid.")
     if args.jobs <= 0:
@@ -385,9 +340,3 @@ def run(args: argparse.Namespace) -> int:
     return int(bool(failed))
 
 
-def main() -> None:
-    raise SystemExit(run(parse_args()))
-
-
-if __name__ == "__main__":
-    main()

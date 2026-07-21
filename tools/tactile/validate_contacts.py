@@ -10,11 +10,11 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from source.demos.common import add_robot_config_args, load_demo_robot_config
-from source.demos.tactile_probe_demo import (
+from source.cli.robot_config import add_robot_config_args, load_configured_robot
+from source.sensors.tactile.probe import (
     PROBE_GEOM_NAME,
-    PROBE_JOINT_NAME,
-    _add_probe_to_spec,
+    add_probe_to_spec,
+    probe_joint_addresses,
 )
 from source.robots.builder import build_robot_spec
 from source.robots.config import descriptors_from_robot_config, optional_tuple
@@ -95,7 +95,7 @@ def _validate_args(args: argparse.Namespace) -> None:
 
 
 def _build(args: argparse.Namespace):
-    config = load_demo_robot_config(args)
+    config = load_configured_robot(args)
     arm, hand, base = descriptors_from_robot_config(config)
     if hand.tactile_sensor_factory is None:
         raise ValueError(f"End effector {hand.name!r} has no tactile backend.")
@@ -117,7 +117,7 @@ def _build(args: argparse.Namespace):
         tactile_sensor=sensor,
         add_tactile_sensors=True,
     )
-    _add_probe_to_spec(
+    add_probe_to_spec(
         spec,
         radius=args.probe_radius,
         initial_pos=np.asarray([0.0, 0.0, -10.0]),
@@ -131,9 +131,6 @@ def _build(args: argparse.Namespace):
     return model, data, sensor, refs
 
 
-def _joint_addresses(model: mujoco.MjModel) -> tuple[int, int]:
-    joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, PROBE_JOINT_NAME)
-    return int(model.jnt_qposadr[joint_id]), int(model.jnt_dofadr[joint_id])
 
 
 def _place_probe(
@@ -388,7 +385,7 @@ def run(args: argparse.Namespace) -> int:
     refs = refs[args.start_index :]
     if args.max_taxels:
         refs = refs[: args.max_taxels]
-    addresses = _joint_addresses(model)
+    addresses = probe_joint_addresses(model)
     probe_geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, PROBE_GEOM_NAME)
     results: list[TaxelResult] = []
     started = time.perf_counter()

@@ -14,7 +14,7 @@ import mujoco
 import numpy as np
 from mujoco import viewer
 
-from source.demos.common import add_robot_config_args
+from source.cli.robot_config import add_robot_config_args
 from source.envs.manipulation import make_manipulation_env, registered_tasks
 from source.teleop.config import load_teleop_config
 from source.teleop.devices import (

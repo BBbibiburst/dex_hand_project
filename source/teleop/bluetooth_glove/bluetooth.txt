@@ -18,7 +18,7 @@ python -m source.teleop.bluetooth_glove.bluetooth_glove_test
 
 正式采集时也会读取同一配置：
 
-python -m source.demos.collect_teleop_lerobot --device hardware --dry-run
+python -m apps.collect_teleop_lerobot --device hardware --dry-run
 
 启动时程序会提示握拳、开掌，随后把5维拉伸值归一化并映射到 Dex Hand 的6个执行器。
 当前遥操作不使用手套的6维 IMU；机械臂末端位姿由 Vive Tracker 提供。

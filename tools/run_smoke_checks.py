@@ -2,7 +2,7 @@
 
 Run after code changes with::
 
-    python -m source.demos.smoke_test
+    python -m tools.run_smoke_checks
 
 The suite deliberately avoids viewers, OpenCV windows, real hardware, datasets,
 and long-running training.  A non-zero exit code means at least one core check
@@ -179,19 +179,25 @@ def _check_imports() -> str:
         "source.teleop.vive.hand_skeleton",
         "source.teleop.vive.vive_link_test",
         "source.teleop.vive.vive_glove_hand_control",
-        "source.demos.collect_teleop_lerobot",
-        "source.demos.robot_preview_demo",
-        "source.demos.random_demo",
-        "source.demos.ik_sine_demo",
-        "source.demos.manipulation_task_playback",
-        "source.demos.tactile_preview",
-        "source.demos.tactile_probe_demo",
-        "source.demos.tactile_surface_fitting",
-        "source.demos.tactile_contact_validation",
+        "apps.collect_teleop_lerobot",
+        "apps.collect_scripted_lerobot",
+        "examples.robot_preview",
+        "examples.random_control",
+        "examples.ik_trajectory",
+        "examples.manipulation_task_playback",
+        "tools.tactile.preview_layout",
+        "tools.tactile.interactive_probe",
+        "tools.tactile.plot_surfaces",
+        "tools.tactile.validate_contacts",
+        "tools.grasping.search_grasp",
+        "tools.grasping.validate_grasp",
+        "tools.grasping.validate_scripted_strategy",
+        "tools.grasping.benchmark_catalog",
+        "tools.grasping.visualize_benchmark",
     )
     for module in modules:
         importlib.import_module(module)
-    return f"imported {len(modules)} runnable demo modules"
+    return f"imported {len(modules)} runnable application, example, and tool modules"
 
 
 def _run_check(name: str, function: Callable[[], str]) -> CheckResult:

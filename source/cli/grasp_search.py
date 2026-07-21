@@ -1,4 +1,4 @@
-"""Shared scripted-demo options for production grasp search."""
+"""CLI arguments shared by scripted grasp-search applications."""
 
 from __future__ import annotations
 

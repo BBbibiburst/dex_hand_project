@@ -1,31 +1,7 @@
-# -*- coding: utf-8 -*-
-"""Visualize benchmark_grasp_catalog JSON results.
-
-Usage
------
-
-Basic::
-
-    python -m source.demos.visualize_grasp_benchmark \
-        configs/grasps/dex_hand/grasp_catalog_benchmark.json
-
-Show the figure::
-
-    python -m source.demos.visualize_grasp_benchmark \
-        configs/grasps/dex_hand/grasp_catalog_benchmark.json \
-        --show
-
-Sort difficult objects first::
-
-    python -m source.demos.visualize_grasp_benchmark \
-        configs/grasps/dex_hand/grasp_catalog_benchmark.json \
-        --sort drift \
-        --show
-"""
+"""Visualization API for grasp catalogue benchmark reports."""
 
 from __future__ import annotations
 
-import argparse
 import json
 import math
 from collections import Counter
@@ -59,56 +35,6 @@ STATUS_COLORS = {
     "validation_error": "tab:red",
     "search_error": "tab:gray",
 }
-
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Visualize benchmark_grasp_catalog JSON results."
-    )
-    parser.add_argument(
-        "report",
-        type=Path,
-        help="Path to the benchmark JSON report.",
-    )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        default=None,
-        help=(
-            "Output PNG path. Defaults to "
-            "<report_stem>_visualization.png beside the JSON file."
-        ),
-    )
-    parser.add_argument(
-        "--sort",
-        choices=("catalog", "name", "status", "drift", "time"),
-        default="catalog",
-        help="Ordering used by all per-object charts.",
-    )
-    parser.add_argument(
-        "--top-failures",
-        type=int,
-        default=15,
-        help="Maximum number of non-stable objects in the failure ranking.",
-    )
-    parser.add_argument(
-        "--max-labels",
-        type=int,
-        default=24,
-        help="Maximum approximate number of x-axis labels.",
-    )
-    parser.add_argument(
-        "--dpi",
-        type=int,
-        default=180,
-        help="Output image DPI.",
-    )
-    parser.add_argument(
-        "--show",
-        action="store_true",
-        help="Open the matplotlib window after saving.",
-    )
-    return parser.parse_args()
 
 
 def load_report(path: Path) -> dict[str, Any]:
@@ -801,45 +727,33 @@ def build_figure(
     return figure
 
 
-def main() -> None:
-    args = parse_args()
-
-    report = load_report(args.report)
-    raw_rows = report["objects"]
-    rows = sort_rows(raw_rows, args.sort)
-
-    output = args.output
-    if output is None:
-        output = args.report.with_name(
-            f"{args.report.stem}_visualization.png"
-        )
-
+def render_grasp_benchmark_report(
+    report_path: Path,
+    *,
+    output: Path | None = None,
+    sort_mode: str = "catalog",
+    top_failures: int = 15,
+    max_labels: int = 24,
+    dpi: int = 180,
+    show: bool = False,
+) -> Path:
+    """Render a benchmark JSON report and return the written image path."""
+    report_path = Path(report_path)
+    report = load_report(report_path)
+    rows = sort_rows(report["objects"], sort_mode)
+    output = output or report_path.with_name(f"{report_path.stem}_visualization.png")
     output.parent.mkdir(parents=True, exist_ok=True)
-
     figure = build_figure(
         report,
         rows,
-        top_failures=args.top_failures,
-        max_labels=args.max_labels,
-        report_name=args.report.name,
-        sort_mode=args.sort,
+        top_failures=top_failures,
+        max_labels=max_labels,
+        report_name=report_path.name,
+        sort_mode=sort_mode,
     )
-
-    figure.savefig(
-        output,
-        dpi=args.dpi,
-        bbox_inches="tight",
-    )
-
-    print(f"Loaded report: {args.report}")
-    print(f"Objects: {len(rows)}")
-    print(f"Saved visualization: {output}")
-
-    if args.show:
+    figure.savefig(output, dpi=dpi, bbox_inches="tight")
+    if show:
         plt.show()
     else:
         plt.close(figure)
-
-
-if __name__ == "__main__":
-    main()
+    return output

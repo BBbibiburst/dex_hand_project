@@ -14,10 +14,7 @@ import mujoco
 import numpy as np
 from mujoco import viewer
 
-from source.demos.common import (
-    add_robot_config_args,
-    load_demo_robot_config,
-)
+from source.cli.robot_config import add_robot_config_args, load_configured_robot
 from source.robots.builder import build_robot_model_from_config
 from source.robots.registry import get_hand
 from source.sensors.base import TactileSensorBase
@@ -328,7 +325,7 @@ def main() -> None:
     if args.normal_length < 0.0:
         raise ValueError(f"--normal-length must be non-negative, got {args.normal_length}.")
 
-    config = load_demo_robot_config(args)
+    config = load_configured_robot(args)
     hand_name = str(config["hand_name"])
     backend = args.backend or str(config.get("tactile_backend", "simple_box"))
     tactile_options = dict(config.get("tactile_options") or {})

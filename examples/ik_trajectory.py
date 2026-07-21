@@ -3,7 +3,7 @@
 
 Usage::
 
-    python -m source.demos.ik_sine_demo --radius-x 0.03 --radius-y 0.03
+    python -m examples.ik_trajectory --radius-x 0.03 --radius-y 0.03
 """
 
 from __future__ import annotations
@@ -13,7 +13,8 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 
-from source.demos.common import RealtimePacer, add_robot_config_args, make_demo_env
+from source.cli.robot_config import add_robot_config_args, make_configured_env
+from source.runtime.pacing import RealtimePacer
 
 
 def _parse_args() -> argparse.Namespace:
@@ -218,7 +219,7 @@ def main() -> None:
     if None not in (args.center_x, args.center_y, args.center_z):
         center = np.asarray([args.center_x, args.center_y, args.center_z], dtype=np.float32)
 
-    env = make_demo_env(
+    env = make_configured_env(
         args,
         control_mode="ik",
     )

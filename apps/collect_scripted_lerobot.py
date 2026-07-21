@@ -8,8 +8,8 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from source.demos.common import add_robot_config_args
-from source.demos.grasp_search_cli import (
+from source.cli.robot_config import add_robot_config_args
+from source.cli.grasp_search import (
     add_scripted_grasp_search_args,
     scripted_grasp_search_options,
     validate_scripted_grasp_search_args,

@@ -1299,9 +1299,9 @@ def plot_tactile_sampling_grids(
     surface_alpha: float = 0.32,
     save: str = "",
 ) -> None:
-    """Compatibility wrapper for the offline visualization demo."""
-    from source.demos.tactile_surface_fitting import plot_tactile_sampling_grids as plot
+    """Plot the default dex-hand tactile sampling grids."""
     from source.sensors.tactile.dex_hand import SimpleBoxTactileSensor
+    from source.viz.tactile import plot_tactile_sampling_grids as plot
 
     plot(
         SimpleBoxTactileSensor(mesh_dir=mesh_dir),
@@ -1310,14 +1310,3 @@ def plot_tactile_sampling_grids(
         surface_alpha=surface_alpha,
         save=save,
     )
-
-
-def main() -> None:
-    """Keep the historical module CLI working after moving plotting to demos."""
-    from source.demos.tactile_surface_fitting import main as visualization_main
-
-    visualization_main()
-
-
-if __name__ == "__main__":
-    main()

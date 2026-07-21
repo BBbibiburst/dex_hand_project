@@ -12,7 +12,7 @@ Run from the repository root, for example:
 
 The output uses the production grasp-config schema and can be inspected with:
 
-    python -m source.demos.validate_standalone_grasp \
+    python -m tools.grasping.validate_grasp \
       configs/grasps/dex_hand/ycb_002_master_chef_can.json --viewer
 """
 

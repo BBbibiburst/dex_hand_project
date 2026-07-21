@@ -1,36 +1,12 @@
-# -*- coding: utf-8 -*-
-"""Shared command-line helpers for demos."""
+"""CLI helpers for selecting and overriding robot assemblies."""
 
 from __future__ import annotations
 
 import argparse
-import time
 from typing import Any
 
 from source.envs.rl_env import make_env
 from source.robots.config import load_robot_config
-
-
-class RealtimePacer:
-    """Synchronize simulation time to wall-clock time.
-
-    The class deliberately knows nothing about control or rendering frequency;
-    demos retain ownership of those policies.
-    """
-
-    def __init__(self) -> None:
-        self._wall_start = 0.0
-        self._sim_start = 0.0
-
-    def reset(self, sim_time: float) -> None:
-        self._wall_start = time.perf_counter()
-        self._sim_start = float(sim_time)
-
-    def sleep_until(self, sim_time: float) -> None:
-        target_wall_time = self._wall_start + float(sim_time) - self._sim_start
-        delay = target_wall_time - time.perf_counter()
-        if delay > 0.0:
-            time.sleep(delay)
 
 
 def add_robot_config_args(
@@ -39,7 +15,7 @@ def add_robot_config_args(
     include_device_overrides: bool = True,
     include_tactile_toggle: bool = True,
 ) -> None:
-    """Add standard robot assembly config arguments to a demo parser."""
+    """Add the standard robot assembly arguments to ``parser``."""
     parser.add_argument(
         "--robot-config",
         type=str,
@@ -56,7 +32,7 @@ def add_robot_config_args(
 
 
 def robot_config_overrides(args: argparse.Namespace) -> dict[str, Any]:
-    """Return non-None robot config overrides from parsed demo args."""
+    """Return non-``None`` assembly overrides from parsed arguments."""
     return {
         "arm_name": getattr(args, "arm_name", None),
         "hand_name": getattr(args, "hand_name", None),
@@ -65,14 +41,14 @@ def robot_config_overrides(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
-def make_demo_env(
+def make_configured_env(
     args: argparse.Namespace,
     *,
     render_mode: str | None = None,
     control_mode: str | None = None,
     **overrides: Any,
 ):
-    """Create an environment using the standard demo robot config arguments."""
+    """Create ``RobotGymEnv`` from standard robot CLI arguments."""
     config_overrides = robot_config_overrides(args)
     config_overrides.update(overrides)
     return make_env(
@@ -83,8 +59,8 @@ def make_demo_env(
     )
 
 
-def load_demo_robot_config(args: argparse.Namespace) -> dict[str, Any]:
-    """Load a robot config and apply standard demo overrides."""
+def load_configured_robot(args: argparse.Namespace) -> dict[str, Any]:
+    """Load a robot config and apply standard CLI overrides."""
     config = load_robot_config(getattr(args, "robot_config", None))
     for key, value in robot_config_overrides(args).items():
         if value is not None:
