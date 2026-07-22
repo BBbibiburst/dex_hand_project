@@ -27,4 +27,8 @@
 
  
 
-6. 连通后，文件夹中的vive_link_test.py可以读到vive的数据
+6. 连通后，在项目根目录运行以下命令读取 Vive 数据：
+
+```powershell
+python -m source.teleop.vive.vive_link_test
+```

@@ -5,7 +5,7 @@ trimesh
 mujoco
 gymnasium
 
-# Visualization and tactile-camera demos
+# Visualization used by examples, diagnostics, and tactile tools
 matplotlib
 opencv-python
 Pillow
@@ -27,6 +27,6 @@ openvr
 pyserial
 PyBluez @ git+https://github.com/pybluez/pybluez.git
 
-# Development checks used by pyproject.toml
+# Development and architecture regression checks
 ruff
 pytest

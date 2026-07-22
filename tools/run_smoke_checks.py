@@ -230,7 +230,7 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("--steps must be at least 1.")
     profiles = tuple(args.profile) or DEFAULT_PROFILES
     checks: list[tuple[str, Callable[[], str]]] = [
-        ("demo imports", _check_imports),
+        ("entrypoint imports", _check_imports),
         ("tactile 8-neighbor diffusion", _check_tactile_diffusion),
         ("manipulation object catalogue", _check_object_catalog),
     ]

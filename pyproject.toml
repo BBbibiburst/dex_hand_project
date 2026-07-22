@@ -39,10 +39,26 @@ dev = [
 
 [project.scripts]
 dex-smoke-test = "tools.run_smoke_checks:main"
+dex-object-download = "tools.download_maniskill_objects:main"
+dex-object-catalog = "tools.render_object_catalog:main"
+dex-code-summary = "tools.code_summary:main"
+dex-grasp-search = "tools.grasping.search_grasp:main"
+dex-grasp-validate = "tools.grasping.validate_grasp:main"
+dex-grasp-benchmark = "tools.grasping.benchmark_catalog:main"
+dex-grasp-benchmark-plot = "tools.grasping.visualize_benchmark:main"
+dex-scripted-validate = "tools.grasping.validate_scripted_strategy:main"
+dex-tactile-preview = "tools.tactile.preview_layout:main"
+dex-tactile-probe = "tools.tactile.interactive_probe:main"
+dex-tactile-plot = "tools.tactile.plot_surfaces:main"
+dex-tactile-validate = "tools.tactile.validate_contacts:main"
 dex-vive-test = "source.teleop.vive.vive_link_test:main"
 dex-vive-glove = "source.teleop.vive.vive_glove_hand_control:main"
 dex-collect-teleop = "apps.collect_teleop_lerobot:main"
+dex-collect-scripted = "apps.collect_scripted_lerobot:main"
 dex-task-playback = "examples.manipulation_task_playback:main"
+dex-robot-preview = "examples.robot_preview:main"
+dex-ik-trajectory = "examples.ik_trajectory:main"
+dex-random-control = "examples.random_control:main"
 dex-glove-test = "source.teleop.bluetooth_glove.bluetooth_glove_test:main"
 
 [tool.setuptools]

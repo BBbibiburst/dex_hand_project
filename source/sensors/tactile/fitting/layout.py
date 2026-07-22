@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
+from types import MappingProxyType
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
@@ -21,11 +23,11 @@ def dex_hand_patch_layout() -> tuple[tuple[str, int, int, str], ...]:
 
 
 DEX_HAND_PATCH_LAYOUT = dex_hand_patch_layout()
-_DEX_HAND_PATCH_INFO = {
-    mesh_name: (rows, cols, kind) for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT
-}
+_DEX_HAND_PATCH_INFO = MappingProxyType(
+    {mesh_name: (rows, cols, kind) for mesh_name, rows, cols, kind in DEX_HAND_PATCH_LAYOUT}
+)
 
 
-def dex_hand_patch_info() -> dict[str, tuple[int, int, str]]:
-    """Return immutable-by-convention patch metadata without rebuilding it."""
+def dex_hand_patch_info() -> Mapping[str, tuple[int, int, str]]:
+    """Return a read-only view of the shared patch metadata."""
     return _DEX_HAND_PATCH_INFO

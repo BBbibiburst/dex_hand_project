@@ -77,10 +77,10 @@ YCB 和 EGAD 的规范化来源分别位于 `assets/maniskill/ycb/models/` 和
 
 ```text
 物体 STL/OBJ
-  → search_mesh_force_closure（搜索手腕位姿、手指关节和接触）
-  → validate_standalone_grasp（只加载手和物体做稳定性验证）
-  → validate_scripted_strategy（在完整机械臂环境中逐阶段验证）
-  → collect_scripted_lerobot（无 Viewer 批量收集成功轨迹）
+  → tools.grasping.search_grasp（搜索手腕位姿、手指关节和接触）
+  → tools.grasping.validate_grasp（只加载手和物体做稳定性验证）
+  → tools.grasping.validate_scripted_strategy（在完整机械臂环境中逐阶段验证）
+  → apps.collect_scripted_lerobot（无 Viewer 批量收集成功轨迹）
 ```
 
 #### `tools.grasping.search_grasp`
@@ -138,7 +138,7 @@ python -m tools.grasping.search_grasp \
 
 几何评分只是候选生成器，不能代替动力学验证；搜索结果至少应通过下一程序验证。
 
-程序化调用不要导入 demo，使用无窗口 API：
+程序化调用不要导入 `apps`、`examples` 或 `tools` 入口层，使用无窗口 API：
 
 ```python
 from source.grasping import generate_grasp_config
@@ -160,12 +160,12 @@ config_path = generate_grasp_config(
 
 ```bash
 python -m tools.grasping.validate_grasp \
-  configs/grasps/ycb_005_tomato_soup_can.json \
+  configs/grasps/dex_hand/ycb_005_tomato_soup_can.json \
   --seconds 3 \
   --grip-preload 0.35
 
 python -m tools.grasping.validate_grasp \
-  configs/grasps/ycb_005_tomato_soup_can.json \
+  configs/grasps/dex_hand/ycb_005_tomato_soup_can.json \
   --viewer --viewer-speed 1
 
 python -m tools.grasping.validate_grasp \
@@ -175,9 +175,9 @@ python -m tools.grasping.validate_grasp \
 
 | 参数 | 默认值 | 作用 |
 | --- | ---: | --- |
-| `grasp` | 必填 | `search_mesh_force_closure` 生成的 JSON |
+| `grasp` | 必填 | `tools.grasping.search_grasp` 生成的 JSON |
 | `--seconds S` | `3.0` | 施加抓取后的仿真观察时间 |
-| `--grip-preload X` | `0.25` | 在优化手型基础上，对 `hand_preload_weights` 选中的必要手指增加闭合预紧量 |
+| `--grip-preload X` | `0.40` | 在优化手型基础上，对 `hand_preload_weights` 选中的必要手指增加闭合预紧量 |
 | `--viewer` | 关闭 | 打开交互式 Viewer |
 | `--viewer-speed X` | `0.5` | Viewer 默认半速播放；传 `1` 表示与真实时间一致 |
 | `--approach-steps-per-waypoint N` | `12` | Viewer 中每个点云 approach waypoint 的动画步数 |
@@ -271,7 +271,7 @@ Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
 策略默认在每次程序启动时搜索最多三个独立候选，并逐个执行 standalone MuJoCo 保持
 验证；只有首个 `stable=True` 的候选才会原子写入
-`configs/grasps/<object_id>.json`。搜索或验证失败不会覆盖已有正式配置。开发调试时
+`configs/grasps/<end_effector>/<object_id>.json`。搜索或验证失败不会覆盖已有正式配置。开发调试时
 可传 `--reuse-grasp-config` 跳过搜索并直接使用缓存；缓存不存在时即使指定该选项也会
 自动生成并验证。
 
@@ -323,7 +323,7 @@ python -m apps.collect_scripted_lerobot \
 | `--output PATH` | `datasets/scripted_lerobot` | 本地数据集目录 |
 | `--episodes N` | `20` | 要保存的成功 episode 数 |
 | `--max-attempts N` | `100` | 包含失败在内的最大尝试次数 |
-| `--max-steps N` | `400` | 每次尝试的最大控制步数 |
+| `--max-steps N` | `900` | 每次尝试的最大控制步数 |
 | `--fps N` | `20` | 数据集帧率 |
 | `--camera NAME` | `agentview` | RGB 相机名 |
 | `--image-width/--image-height` | `640` / `480` | 保存图像分辨率 |
@@ -354,7 +354,7 @@ python -m apps.collect_scripted_lerobot \
 | `tools.tactile.interactive_probe` | 用探针接触 taxel 并实时显示热力图 | `python -m tools.tactile.interactive_probe --fps 60`；`--no-heatmap` 关闭热图，`--debug-tactile` 打印原始响应 |
 | `tools.tactile.plot_surfaces` | 可视化从 mesh/后端生成的触觉曲面和拟合点 | `python -m tools.tactile.plot_surfaces --save tactile_surface.png`；`--backend` 选择后端 |
 | `tools.tactile.validate_contacts` | 自动逐点探测，检查即时响应、保持、串扰和释放 | `python -m tools.tactile.validate_contacts --csv tactile.csv`；阈值参数见下文及 `--help` |
-| `source.sensors.tactile.surface_fitting` | 底层曲面拟合模块的独立调试入口 | `python -m source.sensors.tactile.surface_fitting --help`；日常可视化优先使用上面的 demo |
+| `source.sensors.tactile.surface_fitting` | 底层曲面拟合模块的独立调试入口 | `python -m source.sensors.tactile.surface_fitting --help`；日常可视化优先使用上面的工具 |
 
 ### 遥操作、数据收集与硬件检查
 
@@ -386,24 +386,35 @@ python -m apps.collect_scripted_lerobot \
 | `tools/render_object_catalog.py` | 根据 manifest 渲染物体目录图 | `python tools/render_object_catalog.py --output-dir assets/maniskill/catalog`；可设置 `--columns`、`--tile-width`、`--tile-height` |
 | `tools/code_summary.py` | 生成代码结构/统计摘要，便于审查项目组成 | `python tools/code_summary.py --help` |
 
-安装项目后还可使用 `dex-smoke-test`、`dex-vive-test`、`dex-vive-glove`、
-`dex-glove-test`、`dex-collect-teleop` 和 `dex-task-playback` 这些等价的命令行入口。
+安装项目后还可使用 `dex-*` 命令行入口。除硬件检查入口外，名称与上表模块一一对应，
+例如 `dex-grasp-search`、`dex-tactile-validate`、`dex-collect-scripted`、
+`dex-task-playback` 和 `dex-smoke-test`；完整清单见 `pyproject.toml` 的
+`[project.scripts]`。
 
 ## 代码结构
 
-操作任务和脚本策略的可复用实现已经从 demo 入口中分离：
+可复用库与可执行入口采用单向依赖：`apps`、`examples` 和 `tools` 可以导入 `source`，
+`source` 不得反向导入这些入口层。主要职责如下：
 
 | 路径 | 职责 |
 | --- | --- |
 | `source/envs/manipulation/builtins.py` | 集中导入内置任务，触发任务注册 |
-| `source/envs/manipulation/factory.py` | 提供 `registered_tasks()` 和 `make_task()` 等任务注册表 API |
+| `source/envs/core/registry.py` | 提供 `registered_tasks()`、`register_task()` 和 `make_task()` 等任务注册表 API |
+| `source/envs/manipulation/factory.py` | 根据已注册任务创建完整的操作环境 |
 | `source/envs/manipulation/*.py` | Lift、Pick Place、Stack、Nut Assembly 和 Push 的任务实现 |
 | `source/scripted/base.py` | 脚本策略公共接口 |
 | `source/scripted/registry.py` | 脚本策略注册与创建 API |
 | `source/scripted/lift.py` | 通用 Lift 策略及其持久状态 `LiftStrategyState` |
-| `source/demos/*.py` | 参数解析、可视化、数据收集和独立验证入口 |
+| `source/cli/` | 入口共享的机器人配置和抓取搜索参数逻辑 |
+| `source/runtime/` | 与界面无关的运行时工具，例如墙钟节拍控制 |
+| `source/workflows/` | 可复用的多步骤工作流，例如抓取目录 benchmark |
+| `source/viz/` | 可复用且尽量延迟加载的可视化实现 |
+| `apps/` | 数据采集等面向用户的应用程序 |
+| `examples/` | 机器人、任务和控制器的交互示例 |
+| `tools/grasping/`、`tools/tactile/` | 搜索、验证、诊断和报告命令 |
 
-业务代码需要创建任务或脚本策略时应调用注册表 API，不要从 demo 模块导入实现。
+业务代码需要创建任务或脚本策略时应调用 `source` 中的注册表或工作流 API，不要从入口
+层导入实现。
 `LiftStrategy.reset()` 会重置阶段计数、稳定性计数、保持位姿和最终验证结果，使同一个策略
 实例可以安全地用于下一个 episode。
 
@@ -659,10 +670,17 @@ assets/textures/                场景和程序化任务物体的共享纹理
 configs/                        机器人配置
 source/control/                 机械臂 IK 与末端执行器控制
 source/envs/manipulation/       操作任务
+source/cli/                     多个入口共用的命令行配置逻辑
+source/runtime/                 实时节拍等运行时工具
 source/sensors/tactile/         触觉模型
 source/teleop/                  设备接口、映射、LeRobot 写入
 source/imitation/               Diffusion Policy、训练和闭环验证
-source/demos/                   Viewer 与示教采集程序
+source/workflows/               可复用的多步骤工作流
+source/viz/                     可复用可视化实现
+apps/                           示教数据采集应用
+examples/                       Viewer 与控制示例
+tools/grasping/                 抓取搜索、验证与 benchmark 命令
+tools/tactile/                  触觉预览、探测与验证命令
 datasets/                       本地示教数据（Git 忽略）
 checkpoints/                    训练 checkpoint
 ```
