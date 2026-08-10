@@ -23,7 +23,7 @@ from source.grasping.grasp_config_search import (
 )
 from source.grasping.standalone_validator import (
     validate_grasp_config,
-    validate_grasp_payload_direct,
+    validate_grasp_payload_dynamic,
 )
 from source.grasping.dexevolve import EvolutionConfig, evolve
 
@@ -50,6 +50,8 @@ class GraspBenchmarkConfig:
     evolution_generations: int = 20
     evolution_jobs: int = 4
     evolution_seconds: float = 1.5
+    evolution_disturbance_force: float = 1.0
+    evolution_elite_count: int = 8
     evolution_dir: Path | None = None
     search_attempts: int = 3
     seed: int = 0
@@ -136,6 +138,8 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "evolution_generations": args.evolution_generations,
         "evolution_jobs": args.evolution_jobs,
         "evolution_seconds": args.evolution_seconds,
+        "evolution_disturbance_force": args.evolution_disturbance_force,
+        "evolution_elite_count": args.evolution_elite_count,
         "search_attempts": args.search_attempts,
         "seed": args.seed,
         "target_size": args.target_size,
@@ -254,6 +258,9 @@ def _run_one(task: dict) -> dict:
                     generations=task["evolution_generations"],
                     jobs=task["evolution_jobs"],
                     seconds=task["evolution_seconds"],
+                    elite_seconds=task["seconds"],
+                    elite_count=task["evolution_elite_count"],
+                    disturbance_force=task["evolution_disturbance_force"],
                     seed=task["seed"] + attempt,
                 )
                 archive, history = evolve(seed_payload, evolution_config)
@@ -267,17 +274,29 @@ def _run_one(task: dict) -> dict:
                     "archive": len(archive),
                     "stable_candidates": sum(item.stable for item in archive),
                     "best_fitness": best.fitness,
+                    "elite_revalidated": min(
+                        task["evolution_elite_count"], len(archive)
+                    ),
+                    "elite_stable": sum(
+                        item.stable
+                        for item in archive[: task["evolution_elite_count"]]
+                    ),
+                    "numerical_failures": sum(
+                        bool((item.metrics or {}).get("numerical_failure"))
+                        for item in archive
+                    ),
                     "history": history,
                 }
 
             if task["evolve"]:
                 final_payload = json.loads(validation_path.read_text(encoding="utf-8"))
                 metrics = asdict(
-                    validate_grasp_payload_direct(
+                    validate_grasp_payload_dynamic(
                         final_payload,
                         seconds=task["seconds"],
                         settle_seconds=task["settle_seconds"],
-                        grip_preload=task["grip_preload"],
+                        grip_preload=None,
+                        disturbance_force=task["evolution_disturbance_force"],
                     )
                 )
             else:
@@ -336,6 +355,8 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("Simulation durations are invalid.")
     if args.jobs <= 0:
         raise ValueError("--jobs must be positive.")
+    if args.evolution_seconds <= 0.0 or args.evolution_disturbance_force < 0.0:
+        raise ValueError("Evolution duration must be positive and force non-negative.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
     if args.evolve and args.end_effector != "dex_hand":
@@ -345,6 +366,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         args.evolution_offspring,
         args.evolution_generations,
         args.evolution_jobs,
+        args.evolution_elite_count,
     ) <= 0:
         raise ValueError("Evolution sizes, generations, and jobs must be positive.")
     for name in (
@@ -394,6 +416,8 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "evolution_generations": args.evolution_generations,
             "evolution_jobs": args.evolution_jobs,
             "evolution_seconds": args.evolution_seconds,
+            "evolution_disturbance_force": args.evolution_disturbance_force,
+            "evolution_elite_count": args.evolution_elite_count,
             "evolution_path": str(args.evolution_dir / f"{grasp_config_name(object_id)}.json"),
             "search_attempts": args.search_attempts,
             "seed": args.seed,

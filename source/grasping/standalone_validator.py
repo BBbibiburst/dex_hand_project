@@ -27,6 +27,10 @@ class StandaloneValidationResult:
     initial_contacts: int
     final_contacts: int
     simulated_seconds: float
+    survival_fraction: float = 1.0
+    lift_fraction: float = 1.0
+    numerical_failure: bool = False
+    failure_phase: str | None = None
 
 
 def validate_grasp_config(
@@ -125,6 +129,108 @@ def validate_grasp_payload_direct(
         data,
         seconds=seconds,
         settle_seconds=settle_seconds,
+    )
+
+
+def validate_grasp_payload_dynamic(
+    payload: dict,
+    *,
+    seconds: float = 1.5,
+    settle_seconds: float = 0.25,
+    grip_preload: float | None = None,
+    approach_distance: float = 0.025,
+    close_seconds: float = 0.2,
+    disturbance_force: float = 1.0,
+) -> StandaloneValidationResult:
+    """Evaluate a short executable grasp: local approach, close, preload, disturb."""
+    previous_warning_handler = mujoco.get_mju_user_warning()
+    mujoco.set_mju_user_warning(lambda _message: None)
+    try:
+        return _validate_grasp_payload_dynamic(
+            payload,
+            seconds=seconds,
+            settle_seconds=settle_seconds,
+            grip_preload=grip_preload,
+            approach_distance=approach_distance,
+            close_seconds=close_seconds,
+            disturbance_force=disturbance_force,
+        )
+    finally:
+        mujoco.set_mju_user_warning(previous_warning_handler)
+
+
+def _validate_grasp_payload_dynamic(
+    payload: dict,
+    *,
+    seconds: float,
+    settle_seconds: float,
+    grip_preload: float | None,
+    approach_distance: float,
+    close_seconds: float,
+    disturbance_force: float,
+) -> StandaloneValidationResult:
+    if approach_distance < 0.0 or close_seconds <= 0.0 or disturbance_force < 0.0:
+        raise ValueError("Dynamic grasp durations, distance, and force must be valid.")
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    descriptor = get_hand(end_effector_name)
+    actuator_names = tuple(descriptor.position_actuator_names)
+    final_translation = np.asarray(payload["hand_translation"], dtype=np.float64)
+    rotation = np.asarray(payload["hand_rotation_matrix"], dtype=np.float64)
+    direction = np.asarray(payload.get("approach_direction", rotation[:, 2]), dtype=np.float64)
+    direction /= max(float(np.linalg.norm(direction)), 1e-9)
+    pregrasp_translation = final_translation + approach_distance * direction
+    final_fractions = np.asarray(payload["hand_actuator_fractions"], dtype=np.float64)
+    preload_directions = np.asarray(
+        payload.get("hand_preload_directions", np.ones(len(actuator_names))),
+        dtype=np.float64,
+    )
+    preload_weights = np.asarray(payload["hand_preload_weights"], dtype=np.float64)
+    # Open only the closing actuators. Thumb opposition remains at its optimized angle.
+    pregrasp_fractions = np.clip(
+        final_fractions - 0.35 * preload_directions * preload_weights,
+        0.0,
+        1.0,
+    )
+    model, data = build_standalone_model(
+        object_mesh=payload["mesh"],
+        mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
+        mesh_scale=float(payload["mesh_scale"]),
+        hand_translation=pregrasp_translation,
+        hand_rotation_matrix=rotation,
+        object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
+    )
+    phase_steps = max(2, int(np.ceil(close_seconds / model.opt.timestep)))
+    for step in range(phase_steps):
+        alpha = (step + 1) / phase_steps
+        translation = (1.0 - alpha) * pregrasp_translation + alpha * final_translation
+        fractions = (1.0 - alpha) * pregrasp_fractions + alpha * final_fractions
+        set_hand_fraction_targets(model, data, fractions, actuator_names=actuator_names)
+        set_object_pose_for_hand_pose(model, data, translation, rotation)
+        mujoco.mj_step(model, data)
+        set_object_pose_for_hand_pose(model, data, translation, rotation)
+        if not _state_is_finite(data):
+            return _numerical_failure_result(model, "approach_close", step + 1)
+    candidate_preload = float(
+        payload.get("evolution_grip_preload", DEFAULT_GRIP_PRELOAD)
+        if grip_preload is None
+        else grip_preload
+    )
+    set_hand_targets(
+        model,
+        data,
+        np.asarray(payload["hand_actuator_values"], dtype=np.float64),
+        grip_preload=candidate_preload,
+        preload_weights=preload_weights,
+        preload_directions=preload_directions,
+        actuator_names=actuator_names,
+    )
+    return validate_standalone(
+        model,
+        data,
+        seconds=seconds,
+        settle_seconds=settle_seconds,
+        disturbance_force=disturbance_force,
     )
 
 
@@ -482,6 +588,7 @@ def validate_standalone(
     *,
     seconds: float = 3.0,
     settle_seconds: float = 0.8,
+    disturbance_force: float = 0.0,
     step_callback=None,
 ) -> StandaloneValidationResult:
     """Simulate a fixed hand holding a free object under gravity."""
@@ -493,8 +600,10 @@ def validate_standalone(
     dof_address = int(model.jnt_dofadr[joint_id])
     fixed_object_pose = data.qpos[qpos_address : qpos_address + 7].copy()
     settle_steps = int(np.ceil(settle_seconds / model.opt.timestep))
-    for _ in range(settle_steps):
+    for settle_step in range(settle_steps):
         mujoco.mj_step(model, data)
+        if not _state_is_finite(data):
+            return _numerical_failure_result(model, "settle", settle_step + 1)
         data.qpos[qpos_address : qpos_address + 7] = fixed_object_pose
         data.qvel[dof_address : dof_address + 6] = 0.0
         mujoco.mj_forward(model, data)
@@ -511,10 +620,32 @@ def validate_standalone(
     steps = int(np.ceil(seconds / model.opt.timestep))
     seating_step = min(steps - 1, int(np.ceil(1.0 / model.opt.timestep)))
     seated_position = initial_position.copy()
+    survived_steps = 0
+    failure_phase = None
+    hold_steps = max(1, int(np.ceil(0.2 * steps)))
+    directions = np.asarray(
+        [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]],
+        dtype=np.float64,
+    )
     for step in range(steps):
+        if disturbance_force > 0.0 and step >= hold_steps:
+            disturbance_step = step - hold_steps
+            disturbance_steps = max(steps - hold_steps, 1)
+            direction_index = min(
+                len(directions) - 1,
+                disturbance_step * len(directions) // disturbance_steps,
+            )
+            data.xfrc_applied[body_id, :3] = disturbance_force * directions[direction_index]
         mujoco.mj_step(model, data)
+        if not _state_is_finite(data):
+            return _numerical_failure_result(model, "disturbance", step + 1)
         if step == seating_step:
             seated_position = data.xpos[body_id].copy()
+        displacement = float(np.linalg.norm(data.xpos[body_id] - initial_position))
+        if displacement > 0.08 or initial_position[2] - data.xpos[body_id, 2] > 0.05:
+            failure_phase = "disturbance"
+            break
+        survived_steps = step + 1
         if step_callback is not None:
             step_callback(model, data, step, steps)
 
@@ -530,8 +661,10 @@ def validate_standalone(
         or int(data.contact[index].geom2) == object_geom
         for index in range(data.ncon)
     )
+    survival_fraction = survived_steps / steps
     stable = (
-        position_drift <= 0.01
+        survival_fraction >= 1.0
+        and position_drift <= 0.01
         and rotation_drift <= 0.35
         and vertical_drop <= 0.015
         and final_contacts >= 2
@@ -545,4 +678,36 @@ def validate_standalone(
         initial_contacts=int(initial_contacts),
         final_contacts=int(final_contacts),
         simulated_seconds=float(steps * model.opt.timestep),
+        survival_fraction=float(survival_fraction),
+        lift_fraction=float(min(1.0, survived_steps / hold_steps)),
+        failure_phase=failure_phase,
+    )
+
+
+def _state_is_finite(data: mujoco.MjData) -> bool:
+    return bool(
+        np.all(np.isfinite(data.qpos))
+        and np.all(np.isfinite(data.qvel))
+        and np.all(np.isfinite(data.qacc))
+        and np.max(np.abs(data.qvel), initial=0.0) < 1e4
+        and np.max(np.abs(data.qacc), initial=0.0) < 1e8
+    )
+
+
+def _numerical_failure_result(
+    model: mujoco.MjModel, phase: str, completed_steps: int
+) -> StandaloneValidationResult:
+    return StandaloneValidationResult(
+        stable=False,
+        initial_displacement=float("inf"),
+        position_drift=float("inf"),
+        rotation_drift=float("inf"),
+        vertical_drop=float("inf"),
+        initial_contacts=0,
+        final_contacts=0,
+        simulated_seconds=float(completed_steps * model.opt.timestep),
+        survival_fraction=0.0,
+        lift_fraction=0.0,
+        numerical_failure=True,
+        failure_phase=phase,
     )

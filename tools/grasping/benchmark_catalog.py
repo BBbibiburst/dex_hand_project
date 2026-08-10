@@ -38,6 +38,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--evolution-generations", type=int, default=20)
     parser.add_argument("--evolution-jobs", type=int, default=4)
     parser.add_argument("--evolution-seconds", type=float, default=1.5)
+    parser.add_argument("--evolution-disturbance-force", type=float, default=1.0)
+    parser.add_argument("--evolution-elite-count", type=int, default=8)
     parser.add_argument("--evolution-dir", type=Path)
     parser.add_argument("--search-attempts", type=int, default=3)
     parser.add_argument("--seed", type=int, default=0)
@@ -80,14 +82,18 @@ def main() -> None:
             "evolution_generations": 20,
             "evolution_jobs": 4,
             "evolution_seconds": 1.5,
+            "evolution_disturbance_force": 1.0,
+            "evolution_elite_count": 8,
         }
         values.update(preset)
         if values["output"] is None:
-            values["output"] = Path("configs/grasps/dex_hand/full_pipeline_benchmark.json")
+            values["output"] = Path(
+                "configs/grasps/dex_hand/full_pipeline_dynamic_benchmark.json"
+            )
         if values["config_dir"] is None:
             values["config_dir"] = Path("configs/grasps/dex_hand/graspqp_seeds")
         if values["evolution_dir"] is None:
-            values["evolution_dir"] = Path("configs/grasps/dex_hand/dexevolve")
+            values["evolution_dir"] = Path("configs/grasps/dex_hand/dexevolve_dynamic")
     raise SystemExit(run_grasp_benchmark(GraspBenchmarkConfig(**values)))
 
 

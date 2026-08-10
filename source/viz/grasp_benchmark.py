@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from matplotlib.patches import Patch
+from matplotlib.patches import FancyBboxPatch, Patch
 
 
 STATUS_ORDER = (
@@ -641,6 +641,199 @@ def add_failure_background(
         )
 
 
+def _kpi_card(
+    ax: Axes,
+    x: float,
+    title: str,
+    value: str,
+    subtitle: str,
+    color: str,
+) -> None:
+    card = FancyBboxPatch(
+        (x, 0.08),
+        0.22,
+        0.82,
+        transform=ax.transAxes,
+        boxstyle="round,pad=0.012,rounding_size=0.025",
+        facecolor=color,
+        edgecolor=color,
+        alpha=0.95,
+    )
+    ax.add_patch(card)
+    ax.text(x + 0.11, 0.72, title, transform=ax.transAxes, ha="center", va="center",
+            color="white", fontsize=11, fontweight="bold")
+    ax.text(x + 0.11, 0.44, value, transform=ax.transAxes, ha="center", va="center",
+            color="white", fontsize=24, fontweight="bold")
+    ax.text(x + 0.11, 0.20, subtitle, transform=ax.transAxes, ha="center", va="center",
+            color="white", fontsize=9)
+
+
+def plot_algorithm_kpis(
+    ax: Axes,
+    report: Mapping[str, Any],
+    rows: Sequence[Mapping[str, Any]],
+) -> None:
+    summary = report.get("summary", {})
+    selected = int(summary.get("selected", len(rows)))
+    completed = len(rows)
+    generated = sum(normalize_status(row) != "search_error" for row in rows)
+    stable = sum(normalize_status(row) == "stable" for row in rows)
+    recovered = sum(
+        normalize_status(row) == "stable" and row.get("seed_stable") is not True
+        for row in rows
+    )
+    _kpi_card(ax, 0.015, "TEST PROGRESS", f"{completed}/{selected}", "completed", "#1f4e79")
+    _kpi_card(
+        ax,
+        0.265,
+        "GENERATION",
+        f"{generated / completed:.1%}" if completed else "0%",
+        f"{generated}/{completed} generated",
+        "#2f75b5",
+    )
+    _kpi_card(
+        ax,
+        0.515,
+        "FINAL STABLE",
+        f"{stable / completed:.1%}" if completed else "0%",
+        f"{stable}/{completed} stable",
+        "#2e8b89",
+    )
+    _kpi_card(
+        ax,
+        0.765,
+        "SEED RECOVERY",
+        str(recovered),
+        "stable from non-stable/unverified seed",
+        "#e67e22",
+    )
+    ax.axis("off")
+
+
+def plot_evolution_yield(ax: Axes, rows: Sequence[Mapping[str, Any]]) -> None:
+    points = []
+    for row in rows:
+        evolution = row.get("evolution")
+        if not isinstance(evolution, Mapping):
+            continue
+        archive = as_float(evolution.get("archive"))
+        stable_candidates = as_float(evolution.get("stable_candidates"))
+        if archive > 0 and not math.isnan(stable_candidates):
+            points.append((100.0 * stable_candidates / archive, row))
+    if not points:
+        set_no_data(ax, "No evolution data")
+        return
+    stable_x = [value for value, row in points if normalize_status(row) == "stable"]
+    failed_x = [value for value, row in points if normalize_status(row) != "stable"]
+    ax.scatter(stable_x, np.ones(len(stable_x)), color=STATUS_COLORS["stable"], s=38,
+               alpha=0.75, label="Final stable")
+    ax.scatter(failed_x, np.zeros(len(failed_x)), color=STATUS_COLORS["unstable"], s=38,
+               alpha=0.75, label="Final unstable")
+    ax.set_yticks((0, 1), ("Unstable", "Stable"))
+    ax.set_xlim(-2, 102)
+    ax.set_xlabel("Stable candidates in evolution archive (%)")
+    ax.set_title("Does short-rollout evolution predict final stability?")
+    ax.grid(axis="x", alpha=0.25)
+    ax.legend(frameon=False, fontsize=8, loc="lower right")
+
+
+def plot_evolution_convergence(ax: Axes, rows: Sequence[Mapping[str, Any]]) -> Axes | None:
+    histories = []
+    for row in rows:
+        evolution = row.get("evolution")
+        history = evolution.get("history") if isinstance(evolution, Mapping) else None
+        if isinstance(history, list) and history:
+            histories.append(history)
+    if not histories:
+        set_no_data(ax, "No evolution history")
+        return None
+    generations = sorted({int(item["generation"]) for history in histories for item in history})
+    yield_median, fitness_median = [], []
+    for generation in generations:
+        generation_rows = [
+            item for history in histories for item in history
+            if int(item.get("generation", -1)) == generation
+        ]
+        yields = [100.0 * as_float(item.get("stable")) / as_float(item.get("archive"))
+                  for item in generation_rows if as_float(item.get("archive")) > 0]
+        fitness = [as_float(item.get("best_fitness")) for item in generation_rows]
+        yield_median.append(float(np.nanmedian(yields)))
+        fitness_median.append(float(np.nanmedian(fitness)))
+    ax.plot(generations, yield_median, color="#2e8b89", marker="o", markersize=3,
+            linewidth=2, label="Median stable-candidate ratio")
+    ax.set_xlabel("Generation")
+    ax.set_ylabel("Archive stable candidates (%)", color="#2e8b89")
+    ax.set_title("Evolution convergence across objects")
+    ax.grid(alpha=0.25)
+    twin = ax.twinx()
+    twin.plot(generations, fitness_median, color="#e67e22", linewidth=1.8,
+              label="Median best fitness")
+    twin.set_ylabel("Best fitness (median)", color="#e67e22")
+    handles, labels = ax.get_legend_handles_labels()
+    twin_handles, twin_labels = twin.get_legend_handles_labels()
+    ax.legend(handles + twin_handles, labels + twin_labels, frameon=False, fontsize=8)
+    return twin
+
+
+def classify_failure(row: Mapping[str, Any]) -> str:
+    if normalize_status(row) == "stable":
+        return "Stable"
+    if bool(row.get("numerical_failure")):
+        return "Numerical failure"
+    phase = row.get("failure_phase")
+    if phase:
+        return str(phase).replace("_", " ").title()
+    if normalize_status(row) in ("search_error", "validation_error"):
+        return STATUS_LABELS[normalize_status(row)]
+    if finite_or_zero(row.get("final_contacts")) < 2:
+        return "Lost contact"
+    if finite_or_zero(row.get("vertical_drop")) > 0.015:
+        return "Dropped"
+    if finite_or_zero(row.get("position_drift")) > 0.01:
+        return "Position drift"
+    if finite_or_zero(row.get("rotation_drift")) > 0.35:
+        return "Rotation drift"
+    return "Other unstable"
+
+
+def plot_failure_modes(ax: Axes, rows: Sequence[Mapping[str, Any]]) -> None:
+    counts = Counter(classify_failure(row) for row in rows if normalize_status(row) != "stable")
+    if not counts:
+        set_no_data(ax, "No failures")
+        return
+    labels, values = zip(*counts.most_common(), strict=True)
+    y = np.arange(len(labels))
+    ax.barh(y, values, color="#e67e22", alpha=0.9)
+    ax.set_yticks(y, labels)
+    ax.invert_yaxis()
+    ax.set_xlabel("Object count")
+    ax.set_title("Final failure modes")
+    ax.grid(axis="x", alpha=0.25)
+    for index, value in enumerate(values):
+        ax.text(value + 0.15, index, str(value), va="center", fontsize=9)
+
+
+def plot_robustness_scatter(ax: Axes, rows: Sequence[Mapping[str, Any]]) -> None:
+    position = metric_array(rows, "position_drift", scale=1000.0)
+    rotation = metric_array(rows, "rotation_drift", scale=180.0 / math.pi)
+    position_cap, rotation_cap = 50.0, 90.0
+    clipped = int(np.sum((position > position_cap) | (rotation > rotation_cap)))
+    colors = [status_color(row) for row in rows]
+    ax.scatter(np.clip(position, 0, position_cap), np.clip(rotation, 0, rotation_cap),
+               c=colors, s=30, alpha=0.72)
+    ax.axvline(10.0, color="#2f75b5", linestyle="--", linewidth=1.3, label="10 mm limit")
+    ax.axhline(math.degrees(0.35), color="#e67e22", linestyle="--", linewidth=1.3,
+               label="20.1° limit")
+    ax.set_xlabel("Position drift (mm, clipped at 50)")
+    ax.set_ylabel("Rotation drift (deg, clipped at 90)")
+    ax.set_title("Final physical robustness")
+    ax.grid(alpha=0.2)
+    ax.legend(frameon=False, fontsize=8)
+    if clipped:
+        ax.text(0.98, 0.04, f"{clipped} outliers clipped", transform=ax.transAxes,
+                ha="right", fontsize=8, color="#666666")
+
+
 def build_figure(
     report: Mapping[str, Any],
     rows: Sequence[Mapping[str, Any]],
@@ -650,78 +843,37 @@ def build_figure(
     report_name: str,
     sort_mode: str,
 ) -> Figure:
-    # This is the one and only x coordinate array used by every per-object plot.
     x = np.arange(len(rows), dtype=float)
     labels = [object_id(row) for row in rows]
-
     figure = plt.figure(
-        figsize=(18, 15),
+        figsize=(16, 9),
         constrained_layout=True,
     )
-
     grid = figure.add_gridspec(
-        nrows=5,
+        nrows=4,
         ncols=2,
-        height_ratios=(1.15, 0.38, 1.2, 1.2, 1.25),
+        height_ratios=(0.9, 0.38, 1.35, 1.35),
         width_ratios=(1.0, 1.0),
     )
-
-    ax_summary = figure.add_subplot(grid[0, 0])
-    ax_failures = figure.add_subplot(grid[0, 1])
+    ax_kpis = figure.add_subplot(grid[0, :])
     ax_status = figure.add_subplot(grid[1, :])
-    ax_translation = figure.add_subplot(grid[2, :])
-    ax_rotation = figure.add_subplot(grid[3, 0])
-    ax_contacts = figure.add_subplot(grid[3, 1])
-    ax_runtime = figure.add_subplot(grid[4, :])
+    ax_evolution_yield = figure.add_subplot(grid[2, 0])
+    ax_convergence = figure.add_subplot(grid[2, 1])
+    ax_robustness = figure.add_subplot(grid[3, 0])
+    ax_failures = figure.add_subplot(grid[3, 1])
 
-    plot_summary(ax_summary, report, rows)
-    plot_failure_ranking(
-        ax_failures,
-        rows,
-        top_n=top_failures,
-    )
+    plot_algorithm_kpis(ax_kpis, report, rows)
     plot_status_strip(ax_status, rows, x)
-    plot_translation_metrics(ax_translation, rows, x)
-    plot_rotation_metric(ax_rotation, rows, x)
-    plot_contacts(ax_contacts, rows, x)
-    attempts_ax = plot_runtime(ax_runtime, rows, x)
-
-    object_axes = (
-        ax_status,
-        ax_translation,
-        ax_rotation,
-        ax_contacts,
-        ax_runtime,
-    )
-
-    for axis in object_axes:
-        configure_object_axis(
-            axis,
-            x,
-            labels,
-            max_labels=max_labels,
-            show_labels=True,
-        )
-
-    # twinx must use exactly the same x limits as the runtime axis.
-    if attempts_ax is not None:
-        attempts_ax.set_xlim(ax_runtime.get_xlim())
-        attempts_ax.set_xticks([])
-
-    # Draw failure backgrounds only after bars have been created. zorder=0
-    # keeps them behind all data.
-    for axis in (
-        ax_translation,
-        ax_rotation,
-        ax_contacts,
-        ax_runtime,
-    ):
-        add_failure_background(axis, rows)
+    configure_object_axis(ax_status, x, labels, max_labels=max_labels, show_labels=True)
+    plot_evolution_yield(ax_evolution_yield, rows)
+    plot_evolution_convergence(ax_convergence, rows)
+    plot_robustness_scatter(ax_robustness, rows)
+    plot_failure_modes(ax_failures, rows)
 
     figure.suptitle(
-        f"Grasp catalog benchmark: {report_name}\n"
-        f"objects={len(rows)}, sort={sort_mode}",
-        fontsize=16,
+        f"GraspQP → MuJoCo Evolution Benchmark  |  {report_name}\n"
+        f"in-progress objects={len(rows)}, sort={sort_mode}",
+        fontsize=15,
     )
 
     return figure
