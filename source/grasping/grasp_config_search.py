@@ -33,6 +33,8 @@ from scipy.spatial import cKDTree
 from scipy.spatial.transform import Rotation
 import trimesh
 
+from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
+
 from source.grasping.constants import (
     DEFAULT_GRIP_PRELOAD,
     GRASP_CONFIG_SCHEMA_VERSION,
@@ -317,8 +319,15 @@ def surface_for(device: Device, fractions: np.ndarray, *, seed: int) -> Surface:
         else:
             value = low + float(fraction) * (high - low)
         data.ctrl[actuator] = values[index] = value
-    for _ in range(600):
-        mujoco.mj_step(model, data)
+    with capture_mujoco_warnings() as warnings:
+        for step in range(600):
+            checked_mj_step(
+                model,
+                data,
+                warnings,
+                phase=f"{device.name} surface solve",
+                step=step + 1,
+            )
 
     root = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, device.root_body)
     root_pos = data.xpos[root].copy()

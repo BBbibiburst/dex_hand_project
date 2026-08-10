@@ -2,7 +2,13 @@ from copy import deepcopy
 
 import numpy as np
 
-from source.grasping.dexevolve import EvolutionConfig, crossover, embedding, mutate
+from source.grasping.dexevolve import (
+    EvolutionConfig,
+    crossover,
+    embedding,
+    evaluate_population,
+    mutate,
+)
 
 
 def payload() -> dict:
@@ -39,3 +45,9 @@ def test_crossover_moves_trajectory_with_final_translation() -> None:
     np.testing.assert_allclose(
         child["approach_hand_translations"][0], child["hand_translation"]
     )
+
+
+def test_parallel_evaluation_preserves_submission_order() -> None:
+    payloads = [{"candidate_id": index} for index in range(4)]
+    results = evaluate_population(payloads, EvolutionConfig(jobs=2, seconds=0.01))
+    assert [result.payload["candidate_id"] for result in results] == list(range(4))

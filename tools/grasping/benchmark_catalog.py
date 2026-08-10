@@ -71,14 +71,14 @@ def main() -> None:
             "rolls_per_anchor": 4,
             "coarse_keep": 12,
             "top_k": 4,
-            "search_attempts": 1,
+            "search_attempts": 5,
             "seconds": 3.0,
-            "jobs": 1,
+            "jobs": 2,
             "evolve": True,
             "evolution_population": 32,
             "evolution_offspring": 16,
             "evolution_generations": 20,
-            "evolution_jobs": 4,
+            "evolution_jobs": 8,
             "evolution_seconds": 1.5,
         }
         values.update(preset)

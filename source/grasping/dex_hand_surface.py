@@ -8,6 +8,8 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
+from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
+
 from source.assets import DEX_HAND_XML_PATH
 from source.grasping.mesh_pointcloud import TriangleMesh
 
@@ -86,8 +88,15 @@ def load_posed_dex_hand_surface(
         data.ctrl[actuator_id] = values[index]
 
     # Let position actuators and equality constraints resolve the passive links.
-    for _ in range(600):
-        mujoco.mj_step(model, data)
+    with capture_mujoco_warnings() as warnings:
+        for step in range(600):
+            checked_mj_step(
+                model,
+                data,
+                warnings,
+                phase="Dex Hand closed-chain surface solve",
+                step=step + 1,
+            )
 
     root_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "hand_root")
     root_position = data.xpos[root_id].copy()

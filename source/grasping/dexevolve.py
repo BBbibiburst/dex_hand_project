@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor
 from copy import deepcopy
 from dataclasses import asdict, dataclass
+from functools import lru_cache
 
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -49,17 +50,27 @@ def embedding(payload: dict) -> np.ndarray:
     return np.concatenate([position, angles, joints])
 
 
-def _actuator_values(payload: dict, fractions: np.ndarray) -> list[float]:
-    descriptor = get_hand(payload.get("end_effector_name", "dex_hand"))
+@lru_cache(maxsize=None)
+def _actuator_ranges(end_effector_name: str) -> tuple[tuple[float, float], ...]:
+    """Load immutable actuator limits once per evolution process."""
+    descriptor = get_hand(end_effector_name)
     import mujoco
 
     model = mujoco.MjModel.from_xml_path(str(descriptor.xml_path))
-    values = []
-    for name, fraction in zip(descriptor.position_actuator_names, fractions, strict=True):
+    ranges = []
+    for name in descriptor.position_actuator_names:
         actuator = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
         low, high = model.actuator_ctrlrange[actuator]
-        values.append(float(low + fraction * (high - low)))
-    return values
+        ranges.append((float(low), float(high)))
+    return tuple(ranges)
+
+
+def _actuator_values(payload: dict, fractions: np.ndarray) -> list[float]:
+    ranges = _actuator_ranges(payload.get("end_effector_name", "dex_hand"))
+    return [
+        low + float(fraction) * (high - low)
+        for (low, high), fraction in zip(ranges, fractions, strict=True)
+    ]
 
 
 def mutate(payload: dict, rng: np.random.Generator, config: EvolutionConfig) -> dict:
@@ -132,17 +143,18 @@ def _evaluate_task(task: tuple[dict, float, float]) -> Individual:
 
 
 def evaluate_population(
-    payloads: list[dict], config: EvolutionConfig
+    payloads: list[dict],
+    config: EvolutionConfig,
+    *,
+    executor: ProcessPoolExecutor | None = None,
 ) -> list[Individual]:
     tasks = [(payload, config.seconds, config.settle_seconds) for payload in payloads]
     if config.jobs == 1:
         return [_evaluate_task(task) for task in tasks]
-    results = []
-    with ProcessPoolExecutor(max_workers=config.jobs) as executor:
-        futures = [executor.submit(_evaluate_task, task) for task in tasks]
-        for future in as_completed(futures):
-            results.append(future.result())
-    return results
+    if executor is not None:
+        return list(executor.map(_evaluate_task, tasks))
+    with ProcessPoolExecutor(max_workers=config.jobs) as temporary_executor:
+        return list(temporary_executor.map(_evaluate_task, tasks))
 
 
 def _density_adjusted(archive: list[Individual], config: EvolutionConfig) -> np.ndarray:
@@ -169,10 +181,22 @@ def _insert(archive: list[Individual], child: Individual, config: EvolutionConfi
 
 
 def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual], list[dict]]:
+    if config.jobs == 1:
+        return _evolve(seed_payload, config, executor=None)
+    with ProcessPoolExecutor(max_workers=config.jobs) as executor:
+        return _evolve(seed_payload, config, executor=executor)
+
+
+def _evolve(
+    seed_payload: dict,
+    config: EvolutionConfig,
+    *,
+    executor: ProcessPoolExecutor | None,
+) -> tuple[list[Individual], list[dict]]:
     rng = np.random.default_rng(config.seed)
     seeds = [deepcopy(seed_payload)]
     seeds.extend(mutate(seed_payload, rng, config) for _ in range(config.population_size - 1))
-    archive = evaluate_population(seeds, config)
+    archive = evaluate_population(seeds, config, executor=executor)
     history = []
     for generation in range(config.generations):
         adjusted = _density_adjusted(archive, config)
@@ -187,7 +211,7 @@ def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual
             if rng.random() < config.mutation_probability:
                 child = mutate(child, rng, config)
             children.append(child)
-        evaluated = evaluate_population(children, config)
+        evaluated = evaluate_population(children, config, executor=executor)
         for child in evaluated:
             _insert(archive, child, config)
         history.append(

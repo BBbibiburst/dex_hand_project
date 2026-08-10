@@ -8,6 +8,8 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
+from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
+
 from source.assets import PIKA_GRIPPER_XML_PATH
 from source.grasping.mesh_pointcloud import TriangleMesh
 
@@ -53,8 +55,15 @@ def load_posed_pika_gripper_surface(
     low, high = model.actuator_ctrlrange[actuator_id]
     joint_target = low + 0.5 * (0.1 * float(opening_fraction))
     data.ctrl[actuator_id] = np.clip(joint_target, low, high)
-    for _ in range(500):
-        mujoco.mj_step(model, data)
+    with capture_mujoco_warnings() as warnings:
+        for step in range(500):
+            checked_mj_step(
+                model,
+                data,
+                warnings,
+                phase="Pika gripper surface solve",
+                step=step + 1,
+            )
 
     root_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "gripper_base_link")
     root_position = data.xpos[root_id].copy()

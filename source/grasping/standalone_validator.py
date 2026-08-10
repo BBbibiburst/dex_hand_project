@@ -14,6 +14,7 @@ from source.grasping.constants import (
     DEFAULT_GRIP_PRELOAD,
     SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS,
 )
+from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
 from source.robots.registry import get_hand
 
 
@@ -404,6 +405,7 @@ def execute_configured_grasp_trajectory(
         "validation_object_collision",
     )
     end_effector_name = payload.get("end_effector_name", "dex_hand")
+    warnings: list[str] = []
 
     def is_allowed_grasp_geom(geom_id: int) -> bool:
         name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
@@ -429,9 +431,15 @@ def execute_configured_grasp_trajectory(
                 waypoint_fractions,
                 actuator_names=actuator_names,
             )
-            for _ in range(steps_per_waypoint):
+            for substep in range(steps_per_waypoint):
                 set_object_pose_for_hand_pose(model, data, translation, rotation)
-                mujoco.mj_step(model, data)
+                checked_mj_step(
+                    model,
+                    data,
+                    warnings,
+                    phase=f"{phase.lower()} trajectory waypoint {waypoint_index + 1}",
+                    step=substep + 1,
+                )
                 set_object_pose_for_hand_pose(model, data, translation, rotation)
                 for contact_index in range(data.ncon):
                     geom1 = int(data.contact[contact_index].geom1)
@@ -458,22 +466,24 @@ def execute_configured_grasp_trajectory(
                 if step_callback is not None:
                     step_callback(model, data, waypoint_index, len(translations))
 
-    execute_waypoints(
-        approach_translations,
-        approach_rotations,
-        approach_fractions,
-        phase="Approach",
-        reject_contacts=True,
-        reject_rigid_contacts=True,
-    )
-    execute_waypoints(
-        grasp_translations,
-        grasp_rotations,
-        grasp_fractions,
-        phase="Grasp",
-        reject_contacts=False,
-        reject_rigid_contacts=True,
-    )
+    with capture_mujoco_warnings() as captured_warnings:
+        warnings = captured_warnings
+        execute_waypoints(
+            approach_translations,
+            approach_rotations,
+            approach_fractions,
+            phase="Approach",
+            reject_contacts=True,
+            reject_rigid_contacts=True,
+        )
+        execute_waypoints(
+            grasp_translations,
+            grasp_rotations,
+            grasp_fractions,
+            phase="Grasp",
+            reject_contacts=False,
+            reject_rigid_contacts=True,
+        )
 
 
 def validate_standalone(
@@ -487,14 +497,34 @@ def validate_standalone(
     """Simulate a fixed hand holding a free object under gravity."""
     if seconds <= 0 or settle_seconds < 0:
         raise ValueError("seconds must be positive and settle_seconds non-negative.")
+    with capture_mujoco_warnings() as warnings:
+        return _validate_standalone(
+            model,
+            data,
+            seconds=seconds,
+            settle_seconds=settle_seconds,
+            step_callback=step_callback,
+            warnings=warnings,
+        )
+
+
+def _validate_standalone(
+    model: mujoco.MjModel,
+    data: mujoco.MjData,
+    *,
+    seconds: float,
+    settle_seconds: float,
+    step_callback,
+    warnings: list[str],
+) -> StandaloneValidationResult:
     body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "validation_object_body")
     joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "validation_object_freejoint")
     qpos_address = int(model.jnt_qposadr[joint_id])
     dof_address = int(model.jnt_dofadr[joint_id])
     fixed_object_pose = data.qpos[qpos_address : qpos_address + 7].copy()
     settle_steps = int(np.ceil(settle_seconds / model.opt.timestep))
-    for _ in range(settle_steps):
-        mujoco.mj_step(model, data)
+    for step in range(settle_steps):
+        checked_mj_step(model, data, warnings, phase="settle", step=step + 1)
         data.qpos[qpos_address : qpos_address + 7] = fixed_object_pose
         data.qvel[dof_address : dof_address + 6] = 0.0
         mujoco.mj_forward(model, data)
@@ -512,7 +542,7 @@ def validate_standalone(
     seating_step = min(steps - 1, int(np.ceil(1.0 / model.opt.timestep)))
     seated_position = initial_position.copy()
     for step in range(steps):
-        mujoco.mj_step(model, data)
+        checked_mj_step(model, data, warnings, phase="hold", step=step + 1)
         if step == seating_step:
             seated_position = data.xpos[body_id].copy()
         if step_callback is not None:
