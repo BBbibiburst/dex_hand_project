@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-_OVERLAY_EXPORTS = {
+_OVERLAY_EXPORTS = (
     "clear_markers",
     "draw_ellipse_marker",
     "draw_label",
@@ -11,12 +11,20 @@ _OVERLAY_EXPORTS = {
     "draw_sphere_marker",
     "draw_stats_label",
     "format_stats",
-}
+)
 
 __all__ = [
-    *_OVERLAY_EXPORTS,
-    "render_grasp_benchmark_report",
+    "clear_markers",
+    "draw_ellipse_marker",
+    "draw_label",
+    "draw_line_marker",
+    "draw_pose_frame",
+    "draw_sphere_marker",
+    "draw_stats_label",
+    "format_stats",
     "plot_tactile_sampling_grids",
+    "render_grasp_benchmark_report",
+    "render_grasp_pipeline_figures",
 ]
 
 
@@ -29,6 +37,10 @@ def __getattr__(name: str):
         from source.viz.grasp_benchmark import render_grasp_benchmark_report
 
         return render_grasp_benchmark_report
+    if name == "render_grasp_pipeline_figures":
+        from source.viz.grasp_pipeline import render_grasp_pipeline_figures
+
+        return render_grasp_pipeline_figures
     if name == "plot_tactile_sampling_grids":
         from source.viz.tactile import plot_tactile_sampling_grids
 

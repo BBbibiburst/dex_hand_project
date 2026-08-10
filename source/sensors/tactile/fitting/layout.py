@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from pathlib import Path
 from types import MappingProxyType
 
-PROJECT_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_DEX_HAND_MESH_DIR = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "meshes"
+from source.assets import DEX_HAND_MESH_DIR
+
+DEFAULT_DEX_HAND_MESH_DIR = DEX_HAND_MESH_DIR
 DEFAULT_PLOT_PATCHES = ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
 
 

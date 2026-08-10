@@ -279,9 +279,7 @@ python -m pip install -e "deps/graspqp/graspqp[lite]" --no-build-isolation
 ```
 
 不稳定的 GraspQP 配置可以继续用 MuJoCo 版 DexEvolve 风格搜索优化。该工具以腕部位姿、
-六个执行器状态和持续 preload 为个体。每个候选都执行局部接近、逐渐闭合、
-preload、释放和六向扰动，并以扰动生存时间为主要 fitness；接触数只作为弱 shaping。
-短时 rollout 用于搜索，最优的多个精英会再按最终时长复评，并实现论文
+六个执行器状态为个体，使用模拟保持时间、漂移、旋转和接触数作为 fitness，并实现论文
 中的密度感知 tournament、mutation、structured crossover、novelty gate 和 archive：
 
 ```bash
@@ -302,8 +300,6 @@ python -m tools.grasping.benchmark_catalog --full-pipeline
 ```
 
 中断后使用 `python -m tools.grasping.benchmark_catalog --full-pipeline --resume` 继续。
-动态版默认报告为 `configs/grasps/dex_hand/full_pipeline_dynamic_benchmark.json`，
-不会覆盖旧的静态评价基线。
 
 当前已记录的全量基线为：Dex Hand `31/127` 可生成、`11/127` 可稳定保持；Pika
 `75/127` 可生成、`64/127` 可稳定保持。它们来自不同末端的既有 benchmark 运行，仅用于
