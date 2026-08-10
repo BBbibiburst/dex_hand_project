@@ -1064,6 +1064,8 @@ def search(
     top_k: int,
     support_margin: float,
     seed: int,
+    generator: str = "heuristic",
+    graspqp_iterations: int = 120,
 ) -> list[Candidate]:
     all_fractions = fraction_candidates(device, max(3, joint_candidates // 16))
     coarse_stride = max(1, len(all_fractions) // 8)
@@ -1153,6 +1155,40 @@ def search(
                             f"[fine] {evaluated}/{fine_total} "
                             f"best={best.score:.4f} valid={best.valid}"
                         )
+
+    if generator == "graspqp" and device.name == "dex_hand" and fine:
+        from source.grasping.graspqp_adapter import refine_wrist_pose
+
+        refined: list[Candidate] = []
+        cloud_stride = max(1, len(cloud.points) // 768)
+        for candidate in fine[: max(1, top_k)]:
+            local_contacts = []
+            for label in device.contact_labels:
+                selected = np.flatnonzero(candidate.surface.labels == label)
+                posed = candidate.surface.points[selected] @ candidate.rotation.T + candidate.translation
+                nearest = cloud.tree.query(posed, k=1)[0]
+                local_contacts.append(candidate.surface.points[selected[int(np.argmin(nearest))]])
+            result = refine_wrist_pose(
+                hand_points=np.asarray(local_contacts),
+                initial_rotation=candidate.rotation,
+                initial_translation=candidate.translation,
+                object_points=cloud.points[::cloud_stride],
+                object_normals=cloud.normals[::cloud_stride],
+                iterations=graspqp_iterations,
+            )
+            refined.append(
+                evaluate(
+                    cloud,
+                    device,
+                    candidate.surface,
+                    result.rotation,
+                    result.translation,
+                    roll_index=candidate.roll_index,
+                    anchor_index=candidate.anchor_index,
+                    full_checks=True,
+                )
+            )
+        fine.extend(refined)
 
     # Always preserve at least one result for visualization and debugging.
     selected = fine or coarse
@@ -1422,6 +1458,8 @@ def search_grasp_config(
     end_effector_name: str = "dex_hand",
     require_valid: bool = True,
     publish_invalid: bool = False,
+    generator: str = "heuristic",
+    graspqp_iterations: int = 120,
 ) -> GraspConfigSearchResult:
     """Run the new two-stage search and write a production-schema grasp config."""
     if (object_id is None) == (mesh is None):
@@ -1441,6 +1479,10 @@ def search_grasp_config(
         raise ValueError("support_margin must be non-negative.")
     if target_size <= 0.0:
         raise ValueError("target_size must be positive.")
+    if generator not in {"heuristic", "graspqp"}:
+        raise ValueError("generator must be 'heuristic' or 'graspqp'.")
+    if graspqp_iterations <= 0:
+        raise ValueError("graspqp_iterations must be positive.")
     try:
         device = DEVICES[end_effector_name]
     except KeyError as exc:
@@ -1479,6 +1521,8 @@ def search_grasp_config(
         top_k=top_k,
         support_margin=support_margin,
         seed=seed,
+        generator=generator,
+        graspqp_iterations=graspqp_iterations,
     )
     config = select_executable_config(
         object_id,

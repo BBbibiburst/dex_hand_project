@@ -84,6 +84,50 @@ def validate_grasp_config(
     )
 
 
+def validate_grasp_payload_direct(
+    payload: dict,
+    *,
+    seconds: float = 3.0,
+    settle_seconds: float = 0.8,
+    grip_preload: float = DEFAULT_GRIP_PRELOAD,
+) -> StandaloneValidationResult:
+    """Evaluate a final grasp state without replaying its approach trajectory.
+
+    Simulator-in-the-loop optimizers mutate the final wrist pose independently
+    of motion planning. This entry point deliberately evaluates that state
+    directly; a new approach must be planned after evolution succeeds.
+    """
+    end_effector_name = payload.get("end_effector_name", "dex_hand")
+    actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
+    model, data = build_standalone_model(
+        object_mesh=payload["mesh"],
+        mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
+        mesh_scale=float(payload["mesh_scale"]),
+        hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
+        hand_rotation_matrix=np.asarray(payload["hand_rotation_matrix"], dtype=np.float64),
+        object_table_height=payload.get("object_table_height"),
+        end_effector_name=end_effector_name,
+    )
+    set_hand_targets(
+        model,
+        data,
+        np.asarray(payload["hand_actuator_values"], dtype=np.float64),
+        grip_preload=grip_preload,
+        preload_weights=np.asarray(payload["hand_preload_weights"], dtype=np.float64),
+        preload_directions=np.asarray(
+            payload.get("hand_preload_directions", np.ones(len(actuator_names))),
+            dtype=np.float64,
+        ),
+        actuator_names=actuator_names,
+    )
+    return validate_standalone(
+        model,
+        data,
+        seconds=seconds,
+        settle_seconds=settle_seconds,
+    )
+
+
 def validate_grasp_trajectory_payload(
     payload: dict,
     *,

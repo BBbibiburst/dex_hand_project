@@ -23,7 +23,9 @@ from source.grasping.grasp_config_search import (
 )
 from source.grasping.standalone_validator import (
     validate_grasp_config,
+    validate_grasp_payload_direct,
 )
+from source.grasping.dexevolve import EvolutionConfig, evolve
 
 
 @dataclass
@@ -40,6 +42,15 @@ class GraspBenchmarkConfig:
     coarse_keep: int = 24
     top_k: int = 8
     support_margin: float = 0.008
+    generator: str = "heuristic"
+    graspqp_iterations: int = 120
+    evolve: bool = False
+    evolution_population: int = 32
+    evolution_offspring: int = 16
+    evolution_generations: int = 20
+    evolution_jobs: int = 4
+    evolution_seconds: float = 1.5
+    evolution_dir: Path | None = None
     search_attempts: int = 3
     seed: int = 0
     target_size: float = 0.09
@@ -117,6 +128,14 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "coarse_keep": args.coarse_keep,
         "top_k": args.top_k,
         "support_margin": args.support_margin,
+        "generator": args.generator,
+        "graspqp_iterations": args.graspqp_iterations,
+        "evolve": args.evolve,
+        "evolution_population": args.evolution_population,
+        "evolution_offspring": args.evolution_offspring,
+        "evolution_generations": args.evolution_generations,
+        "evolution_jobs": args.evolution_jobs,
+        "evolution_seconds": args.evolution_seconds,
         "search_attempts": args.search_attempts,
         "seed": args.seed,
         "target_size": args.target_size,
@@ -202,22 +221,79 @@ def _run_one(task: dict) -> dict:
                     seed=task["seed"] + attempt,
                     target_size=task["target_size"],
                     end_effector_name=task["end_effector"],
+                    generator=task["generator"],
+                    graspqp_iterations=task["graspqp_iterations"],
+                    require_valid=not task["evolve"],
+                    publish_invalid=task["evolve"],
                 )
             search_seconds = time.monotonic() - attempt_started
         except Exception as exc:
             search_errors.append(f"seed={task['seed'] + attempt}: {exc}")
             continue
         try:
-            metrics = _validate_config(
-                config_path,
-                seconds=task["seconds"],
-                settle_seconds=task["settle_seconds"],
-                grip_preload=task["grip_preload"],
-            )
+            seed_metrics = None
+            seed_payload = json.loads(config_path.read_text(encoding="utf-8"))
+            if seed_payload.get("hand_fit_success"):
+                seed_metrics = _validate_config(
+                    config_path,
+                    seconds=task["seconds"],
+                    settle_seconds=task["settle_seconds"],
+                    grip_preload=task["grip_preload"],
+                )
+
+            evolution_summary = None
+            validation_path = config_path
+            if task["evolve"]:
+                # DexEvolve intentionally accepts analytically invalid seeds;
+                # simulator fitness, rather than the geometric filter, decides
+                # whether offspring survive.
+                seed_payload["hand_fit_success"] = True
+                evolution_config = EvolutionConfig(
+                    population_size=task["evolution_population"],
+                    offspring=task["evolution_offspring"],
+                    generations=task["evolution_generations"],
+                    jobs=task["evolution_jobs"],
+                    seconds=task["evolution_seconds"],
+                    seed=task["seed"] + attempt,
+                )
+                archive, history = evolve(seed_payload, evolution_config)
+                best = archive[0]
+                validation_path = Path(task["evolution_path"])
+                validation_path.parent.mkdir(parents=True, exist_ok=True)
+                temporary = validation_path.with_suffix(".json.tmp")
+                temporary.write_text(json.dumps(best.payload, indent=2), encoding="utf-8")
+                temporary.replace(validation_path)
+                evolution_summary = {
+                    "archive": len(archive),
+                    "stable_candidates": sum(item.stable for item in archive),
+                    "best_fitness": best.fitness,
+                    "history": history,
+                }
+
+            if task["evolve"]:
+                final_payload = json.loads(validation_path.read_text(encoding="utf-8"))
+                metrics = asdict(
+                    validate_grasp_payload_direct(
+                        final_payload,
+                        seconds=task["seconds"],
+                        settle_seconds=task["settle_seconds"],
+                        grip_preload=task["grip_preload"],
+                    )
+                )
+            else:
+                metrics = _validate_config(
+                    validation_path,
+                    seconds=task["seconds"],
+                    settle_seconds=task["settle_seconds"],
+                    grip_preload=task["grip_preload"],
+                )
             row = {
                 "object_id": object_id,
                 "status": "stable" if metrics["stable"] else "unstable",
-                "config": str(config_path),
+                "config": str(validation_path),
+                "seed_config": str(config_path),
+                "seed_stable": None if seed_metrics is None else seed_metrics["stable"],
+                "evolution": evolution_summary,
                 "selected_seed": task["seed"] + attempt,
                 "attempts_used": attempt + 1,
                 "search_seconds": search_seconds,
@@ -262,6 +338,15 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    if args.evolve and args.end_effector != "dex_hand":
+        raise ValueError("DexEvolve refinement currently supports dex_hand only.")
+    if args.evolve and min(
+        args.evolution_population,
+        args.evolution_offspring,
+        args.evolution_generations,
+        args.evolution_jobs,
+    ) <= 0:
+        raise ValueError("Evolution sizes, generations, and jobs must be positive.")
     for name in (
         "points",
         "joint_candidates",
@@ -279,6 +364,8 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         args.config_dir = grasp_config_directory(args.end_effector, benchmark=True)
     if args.output is None:
         args.output = grasp_benchmark_report_path(args.end_effector)
+    if args.evolution_dir is None:
+        args.evolution_dir = grasp_config_directory(args.end_effector) / "dexevolve"
     rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
     completed = {row["object_id"] for row in rows}
@@ -299,6 +386,15 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "coarse_keep": args.coarse_keep,
             "top_k": args.top_k,
             "support_margin": args.support_margin,
+            "generator": args.generator,
+            "graspqp_iterations": args.graspqp_iterations,
+            "evolve": args.evolve,
+            "evolution_population": args.evolution_population,
+            "evolution_offspring": args.evolution_offspring,
+            "evolution_generations": args.evolution_generations,
+            "evolution_jobs": args.evolution_jobs,
+            "evolution_seconds": args.evolution_seconds,
+            "evolution_path": str(args.evolution_dir / f"{grasp_config_name(object_id)}.json"),
             "search_attempts": args.search_attempts,
             "seed": args.seed,
             "target_size": args.target_size,
@@ -338,5 +434,3 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     print(*(failed or ["(none)"]), sep="\n")
     print(f"report={args.output}")
     return int(bool(failed))
-
-

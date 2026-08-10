@@ -30,6 +30,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--top-k", type=int, default=8)
     parser.add_argument("--support-margin", type=float, default=0.008)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--generator", choices=("heuristic", "graspqp"), default="heuristic")
+    parser.add_argument("--graspqp-iterations", type=int, default=120)
     parser.add_argument("--target-size", type=float, default=0.09)
     parser.add_argument(
         "--end-effector",
@@ -86,6 +88,8 @@ def run(args) -> None:
         seed=args.seed,
         target_size=args.target_size,
         end_effector_name=args.end_effector,
+        generator=args.generator,
+        graspqp_iterations=args.graspqp_iterations,
         require_valid=False,
         publish_invalid=args.output is not None,
     )

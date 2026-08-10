@@ -258,6 +258,49 @@ Lift 验证和数据采集，但还不应视为通用抓取系统。按优先级
 - [ ] **P2：建立回归基线。** 固定当前 127 个物体的报告格式和代表物体测试集，要求后续
   优化不得破坏现有 11 个稳定物体，并持续记录生成率、独立保持率和完整 Lift 成功率。
 
+#### GraspQP 实验适配
+
+项目提供闭链 Dex Hand 的 GraspQP 适配探针。它让 MuJoCo 求解六个独立执行器对应的
+被动关节状态，并通过中心差分计算手表面点和五个指尖相对于执行器的 Jacobian。这是把
+GraspQP 的连续优化接入当前手型所需的运动学边界；最终候选仍应交给现有 MuJoCo 验证器。
+
+```bash
+python -m tools.grasping.probe_graspqp_adapter --points-per-geom 40
+```
+
+官方 GraspQP 会固定 NumPy、`pytorch_kinematics` 等依赖版本。本项目按当前实验方案
+直接安装到 `mujoco` 环境；安装时需留意它与学习、资产工具依赖的版本冲突。
+
+GraspQP 源码作为固定版本的 Git submodule 位于 `deps/graspqp`。首次 clone 项目后执行：
+
+```bash
+git submodule update --init --recursive
+python -m pip install -e "deps/graspqp/graspqp[lite]" --no-build-isolation
+```
+
+不稳定的 GraspQP 配置可以继续用 MuJoCo 版 DexEvolve 风格搜索优化。该工具以腕部位姿、
+六个执行器状态为个体，使用模拟保持时间、漂移、旋转和接触数作为 fitness，并实现论文
+中的密度感知 tournament、mutation、structured crossover、novelty gate 和 archive：
+
+```bash
+python -m tools.grasping.evolve_grasp \
+  configs/grasps/dex_hand/graspqp_benchmark/ycb_002_master_chef_can.json \
+  --output configs/grasps/dex_hand/dexevolve/ycb_002_master_chef_can.json \
+  --population-size 32 --offspring 16 --generations 20 --jobs 4
+```
+
+这里使用 MuJoCo 作为 simulator-in-the-loop 后端，算法结构来自 DexEvolve，但不声称复现
+其 Isaac Sim 的 GPU 并行吞吐或 XHand 接触参数。
+
+全目录端到端测试可由同一个可恢复 Benchmark 完成。`--jobs 1` 串行调度使用 GPU 的
+GraspQP 物体任务，`--evolution-jobs 4` 并行执行每个物体内部的 MuJoCo offspring：
+
+```bash
+python -m tools.grasping.benchmark_catalog --full-pipeline
+```
+
+中断后使用 `python -m tools.grasping.benchmark_catalog --full-pipeline --resume` 继续。
+
 当前已记录的全量基线为：Dex Hand `31/127` 可生成、`11/127` 可稳定保持；Pika
 `75/127` 可生成、`64/127` 可稳定保持。它们来自不同末端的既有 benchmark 运行，仅用于
 后续回归比较；重新比较时应保存报告中的完整参数和 commit。

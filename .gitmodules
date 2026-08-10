@@ -1,0 +1,3 @@
+[submodule "deps/graspqp"]
+	path = deps/graspqp
+	url = https://github.com/leggedrobotics/graspqp.git
