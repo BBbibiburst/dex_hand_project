@@ -405,20 +405,49 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         }
         for object_id in pending
     ]
-    with ProcessPoolExecutor(max_workers=args.jobs) as executor:
-        futures = {executor.submit(_run_one, task): task for task in tasks}
-        for completed_count, future in enumerate(as_completed(futures), start=1):
-            row = future.result()
-            object_id = row["object_id"]
-            rows.append(row)
-            rows.sort(key=lambda row: selected.index(row["object_id"]))
-            _write_report(args.output, args=args, selected=selected, rows=rows)
-            detail = row.get("error", "")
-            print(
-                f"[{len(completed) + completed_count}/{len(selected)}] "
-                f"{row['status'].upper():16} {object_id} {detail}",
-                flush=True,
-            )
+    executor = ProcessPoolExecutor(max_workers=args.jobs)
+    futures = {executor.submit(_run_one, task): task for task in tasks}
+    pending = set(futures)
+    interrupt_count = 0
+    force_stop = False
+    try:
+        while pending:
+            try:
+                for future in as_completed(pending):
+                    pending.remove(future)
+                    row = future.result()
+                    object_id = row["object_id"]
+                    rows.append(row)
+                    rows.sort(key=lambda row: selected.index(row["object_id"]))
+                    _write_report(args.output, args=args, selected=selected, rows=rows)
+                    detail = row.get("error", "")
+                    print(
+                        f"[{len(rows)}/{len(selected)}] "
+                        f"{row['status'].upper():16} {object_id} {detail}",
+                        flush=True,
+                    )
+            except KeyboardInterrupt:
+                interrupt_count += 1
+                _write_report(args.output, args=args, selected=selected, rows=rows)
+                if interrupt_count == 1:
+                    print(
+                        "\nSIGINT received; progress saved and benchmark continues. "
+                        "Press Ctrl-C again to stop.",
+                        flush=True,
+                    )
+                    continue
+                force_stop = True
+                print(
+                    "\nSecond SIGINT received; cancelling pending objects. "
+                    f"Progress saved at {len(rows)}/{len(selected)}.",
+                    flush=True,
+                )
+                break
+    finally:
+        executor.shutdown(wait=not force_stop, cancel_futures=force_stop)
+
+    if force_stop:
+        return 130
 
     _write_report(args.output, args=args, selected=selected, rows=rows)
     stable = sum(row["status"] == "stable" for row in rows)
