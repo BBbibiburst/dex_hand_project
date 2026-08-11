@@ -6,7 +6,7 @@ import numpy as np
 
 from apps import collect_scripted_lerobot
 from apps.collect_scripted_lerobot import _yaw_from_quaternion
-from source.scripted.lift import LiftStrategy
+from source.scripted.lift import LiftStrategy, _mesh_symmetry_yaws_from_vertices
 
 
 def test_yaw_from_quaternion() -> None:
@@ -19,6 +19,17 @@ def test_lift_strategy_accepts_explicit_grasp_config() -> None:
     path = Path("configs/grasps/dex_hand/example.json")
     strategy = LiftStrategy(grasp_config_path=path)
     assert strategy.grasp_config_override == path
+
+
+def test_mesh_symmetry_rejects_invalid_quarter_turn_for_box() -> None:
+    vertices = np.asarray(
+        [[x, y, z] for x in (-1.0, 1.0) for y in (-2.0, 2.0) for z in (-3.0, 3.0)]
+    )
+
+    yaws = _mesh_symmetry_yaws_from_vertices(vertices)
+
+    assert any(np.isclose(yaw, np.pi) for yaw in yaws)
+    assert not any(np.isclose(yaw, np.pi / 2.0) for yaw in yaws)
 
 
 def test_catalog_evaluation_writes_per_object_success_rate(
@@ -44,7 +55,9 @@ def test_catalog_evaluation_writes_per_object_success_rate(
     env = SimpleNamespace(close=lambda: None)
     monkeypatch.setattr(collect_scripted_lerobot, "lift_object_ids", lambda: ("ycb:test",))
     monkeypatch.setattr(collect_scripted_lerobot, "_make_env", lambda *args, **kwargs: env)
-    monkeypatch.setattr(collect_scripted_lerobot, "create_strategy", lambda *args, **kwargs: object())
+    monkeypatch.setattr(
+        collect_scripted_lerobot, "create_strategy", lambda *args, **kwargs: object()
+    )
     monkeypatch.setattr(collect_scripted_lerobot, "scripted_grasp_search_options", lambda args: {})
     monkeypatch.setattr(
         collect_scripted_lerobot,

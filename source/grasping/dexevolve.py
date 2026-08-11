@@ -11,6 +11,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from source.grasping.standalone_validator import validate_grasp_payload_direct
+from source.grasping.dex_hand_surface import load_posed_dex_hand_surface
 from source.robots.registry import get_hand
 
 
@@ -33,6 +34,8 @@ class EvolutionConfig:
     settle_seconds: float = 0.4
     jobs: int = 4
     seed: int = 0
+    minimum_table_clearance: float = 0.005
+    preferred_table_clearance: float = 0.025
 
 
 @dataclass
@@ -73,6 +76,90 @@ def _actuator_values(payload: dict, fractions: np.ndarray) -> list[float]:
     ]
 
 
+@lru_cache(maxsize=16)
+def _dex_hand_vertices(fractions: tuple[float, ...]) -> np.ndarray:
+    surface = load_posed_dex_hand_surface(
+        actuator_fractions=np.asarray(fractions, dtype=np.float64),
+        max_points_per_geom=32,
+        seed=0,
+    )
+    return np.concatenate([mesh.vertices for mesh in surface.meshes])
+
+
+def table_clearance_metrics(payload: dict) -> dict[str, float] | None:
+    """Recompute full-hand table clearance for every executable waypoint."""
+    table_z = payload.get("object_table_height")
+    if table_z is None or payload.get("end_effector_name", "dex_hand") != "dex_hand":
+        return None
+    final_fractions = np.asarray(payload["hand_actuator_fractions"], dtype=np.float64)
+    final_vertices = _dex_hand_vertices(
+        tuple(float(value) for value in np.round(final_fractions, decimals=6))
+    )
+    trajectory_fraction_groups = [
+        np.asarray(payload.get("approach_hand_actuator_fractions", [final_fractions]))[0],
+    ]
+    grasp_fractions = np.asarray(
+        payload.get("grasp_hand_actuator_fractions", [final_fractions]), dtype=np.float64
+    )
+    trajectory_fraction_groups.extend(
+        (grasp_fractions[0], grasp_fractions[len(grasp_fractions) // 2], grasp_fractions[-1])
+    )
+    unique_fraction_groups = {
+        tuple(float(value) for value in np.round(group, decimals=6))
+        for group in trajectory_fraction_groups
+    }
+    # A conservative swept-shape approximation: apply the union of open,
+    # mid-closing and final full collision meshes at every path waypoint.
+    trajectory_vertices = np.concatenate(
+        [_dex_hand_vertices(group) for group in sorted(unique_fraction_groups)]
+    )
+
+    def minimum(translations, rotations, vertices) -> float:
+        result = np.inf
+        for translation, rotation in zip(translations, rotations, strict=True):
+            posed = vertices @ np.asarray(rotation, dtype=np.float64).T + np.asarray(
+                translation, dtype=np.float64
+            )
+            result = min(result, float(posed[:, 2].min() - float(table_z)))
+        return float(result)
+
+    final_rotation = np.asarray(payload["hand_rotation_matrix"], dtype=np.float64)
+    grasp_rotations = np.asarray(
+        payload.get("grasp_hand_rotation_matrices", [final_rotation]), dtype=np.float64
+    )
+    rotation_delta = final_rotation @ grasp_rotations[-1].T
+    approach_rotations = np.einsum(
+        "ij,njk->nik",
+        rotation_delta,
+        np.asarray(
+            payload.get("approach_hand_rotation_matrices", [final_rotation]),
+            dtype=np.float64,
+        ),
+    )
+    grasp_rotations = np.einsum("ij,njk->nik", rotation_delta, grasp_rotations)
+    final_clearance = minimum([payload["hand_translation"]], [final_rotation], final_vertices)
+    approach_clearance = minimum(
+        payload.get("approach_hand_translations", [payload["hand_translation"]]),
+        approach_rotations,
+        trajectory_vertices,
+    )
+    grasp_clearance = minimum(
+        payload.get("grasp_hand_translations", [payload["hand_translation"]]),
+        grasp_rotations,
+        trajectory_vertices,
+    )
+    return {
+        "hand_table_clearance": final_clearance,
+        "approach_minimum_table_clearance": approach_clearance,
+        "grasp_minimum_table_clearance": grasp_clearance,
+        "trajectory_minimum_table_clearance": min(
+            final_clearance,
+            approach_clearance,
+            grasp_clearance,
+        ),
+    }
+
+
 def synchronize_trajectory(
     payload: dict,
     *,
@@ -89,9 +176,8 @@ def synchronize_trajectory(
 
     if "grasp_hand_actuator_fractions" in payload:
         trajectory = np.asarray(payload["grasp_hand_actuator_fractions"], dtype=np.float64)
-        delta = (
-            np.asarray(payload["hand_actuator_fractions"], dtype=np.float64)
-            - np.asarray(previous_fractions, dtype=np.float64)
+        delta = np.asarray(payload["hand_actuator_fractions"], dtype=np.float64) - np.asarray(
+            previous_fractions, dtype=np.float64
         )
         progress = (
             np.ones((1, 1), dtype=np.float64)
@@ -111,9 +197,10 @@ def mutate(payload: dict, rng: np.random.Generator, config: EvolutionConfig) -> 
     translation = old_translation + rng.normal(0.0, config.translation_sigma, 3)
     old_rotation = np.asarray(child["hand_rotation_matrix"], dtype=np.float64)
     old_fractions = np.asarray(child["hand_actuator_fractions"], dtype=np.float64)
-    rotation = old_rotation @ Rotation.from_rotvec(
-        rng.normal(0.0, config.orientation_sigma, 3)
-    ).as_matrix()
+    rotation = (
+        old_rotation
+        @ Rotation.from_rotvec(rng.normal(0.0, config.orientation_sigma, 3)).as_matrix()
+    )
     fractions = np.clip(
         np.asarray(child["hand_actuator_fractions"], dtype=np.float64)
         + rng.normal(0.0, config.actuator_sigma, len(child["hand_actuator_fractions"])),
@@ -156,8 +243,8 @@ def crossover(first: dict, second: dict, rng: np.random.Generator) -> dict:
     second_rot = Rotation.from_matrix(second["hand_rotation_matrix"])
     relative = first_rot.inv() * second_rot
     child["hand_rotation_matrix"] = (
-        first_rot * Rotation.from_rotvec(blend * relative.as_rotvec())
-    ).as_matrix().tolist()
+        (first_rot * Rotation.from_rotvec(blend * relative.as_rotvec())).as_matrix().tolist()
+    )
     synchronize_trajectory(
         child,
         previous_rotation=first_rot.as_matrix(),
@@ -166,9 +253,20 @@ def crossover(first: dict, second: dict, rng: np.random.Generator) -> dict:
     return child
 
 
-def _evaluate_task(task: tuple[dict, float, float]) -> Individual:
-    payload, seconds, settle_seconds = task
+def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
+    payload, seconds, settle_seconds, minimum_clearance, preferred_clearance = task
     try:
+        clearance = table_clearance_metrics(payload)
+        if clearance is not None:
+            payload.update(clearance)
+            actual_minimum = clearance["trajectory_minimum_table_clearance"]
+            if actual_minimum < minimum_clearance:
+                return Individual(
+                    payload,
+                    -1e6 - 1e3 * (minimum_clearance - actual_minimum),
+                    False,
+                    {**clearance, "rejection_reason": "table_clearance"},
+                )
         result = validate_grasp_payload_direct(
             payload, seconds=seconds, settle_seconds=settle_seconds
         )
@@ -180,6 +278,12 @@ def _evaluate_task(task: tuple[dict, float, float]) -> Individual:
             - 200.0 * result.position_drift
             - 2.0 * result.rotation_drift
         )
+        if clearance is not None:
+            fitness -= 20.0 * max(
+                preferred_clearance - clearance["trajectory_minimum_table_clearance"],
+                0.0,
+            )
+            metrics.update(clearance)
         return Individual(payload, fitness, result.stable, metrics)
     except Exception as exc:
         return Individual(payload, -1e6, False, {"error": str(exc)})
@@ -191,7 +295,16 @@ def evaluate_population(
     *,
     executor: ProcessPoolExecutor | None = None,
 ) -> list[Individual]:
-    tasks = [(payload, config.seconds, config.settle_seconds) for payload in payloads]
+    tasks = [
+        (
+            payload,
+            config.seconds,
+            config.settle_seconds,
+            config.minimum_table_clearance,
+            config.preferred_table_clearance,
+        )
+        for payload in payloads
+    ]
     if config.jobs == 1:
         return [_evaluate_task(task) for task in tasks]
     if executor is not None:
@@ -211,7 +324,9 @@ def _density_adjusted(archive: list[Individual], config: EvolutionConfig) -> np.
 def _insert(archive: list[Individual], child: Individual, config: EvolutionConfig) -> None:
     feature = embedding(child.payload)
     if archive:
-        distances = np.asarray([np.linalg.norm(feature - embedding(item.payload)) for item in archive])
+        distances = np.asarray(
+            [np.linalg.norm(feature - embedding(item.payload)) for item in archive]
+        )
         nearest = int(np.argmin(distances))
         if distances[nearest] < config.novelty_threshold:
             if child.fitness > archive[nearest].fitness:
@@ -245,7 +360,9 @@ def _evolve(
         adjusted = _density_adjusted(archive, config)
         children = []
         for _ in range(config.offspring):
-            choices = rng.choice(len(archive), min(config.tournament_size, len(archive)), replace=False)
+            choices = rng.choice(
+                len(archive), min(config.tournament_size, len(archive)), replace=False
+            )
             parent = archive[int(choices[np.argmax(adjusted[choices])])].payload
             child = deepcopy(parent)
             if len(archive) > 1 and rng.random() < config.crossover_probability:

@@ -65,8 +65,6 @@ class GraspBenchmarkConfig:
     output: Path | None = None
 
 
-
-
 def _selected_ids(args: "GraspBenchmarkConfig") -> list[str]:
     available = object_ids(None if args.dataset == "all" else args.dataset)
     if args.object_ids:
@@ -258,10 +256,25 @@ def _run_one(task: dict) -> dict:
                 )
                 archive, history = evolve(seed_payload, evolution_config)
                 best = archive[0]
+                # Keep a compact, diverse set of simulator-stable alternatives.
+                # A single object-relative grasp cannot remain arm-reachable for
+                # every randomized object yaw; Lift selects among these without
+                # inventing contact-invalid rotations at execution time.
+                stable_payloads = []
+                for individual in archive:
+                    if not individual.stable:
+                        continue
+                    candidate = dict(individual.payload)
+                    candidate.pop("stable_grasp_candidates", None)
+                    stable_payloads.append(candidate)
+                    if len(stable_payloads) >= 16:
+                        break
+                published_payload = dict(best.payload)
+                published_payload["stable_grasp_candidates"] = stable_payloads
                 validation_path = Path(task["evolution_path"])
                 validation_path.parent.mkdir(parents=True, exist_ok=True)
                 temporary = validation_path.with_suffix(".json.tmp")
-                temporary.write_text(json.dumps(best.payload, indent=2), encoding="utf-8")
+                temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
                 temporary.replace(validation_path)
                 evolution_summary = {
                     "archive": len(archive),
@@ -279,6 +292,27 @@ def _run_one(task: dict) -> dict:
                         settle_seconds=task["settle_seconds"],
                         grip_preload=task["grip_preload"],
                     )
+                )
+                # Evolution-level hard constraints (notably swept hand/table
+                # clearance) must not be overwritten by the final free-hand
+                # dynamics check, whose table is visual-only.
+                metrics["stable"] = bool(metrics["stable"] and best.stable)
+                if not best.stable and best.metrics is not None:
+                    metrics["evolution_rejection"] = best.metrics.get(
+                        "rejection_reason",
+                        best.metrics.get("error"),
+                    )
+                metrics.update(
+                    {
+                        "table_clearance": final_payload.get("hand_table_clearance"),
+                        "approach_table_clearance": final_payload.get(
+                            "approach_minimum_table_clearance"
+                        ),
+                        "grasp_table_clearance": final_payload.get("grasp_minimum_table_clearance"),
+                        "trajectory_table_clearance": final_payload.get(
+                            "trajectory_minimum_table_clearance"
+                        ),
+                    }
                 )
             else:
                 metrics = _validate_config(
@@ -340,12 +374,16 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--search-attempts must be positive.")
     if args.evolve and args.end_effector != "dex_hand":
         raise ValueError("DexEvolve refinement currently supports dex_hand only.")
-    if args.evolve and min(
-        args.evolution_population,
-        args.evolution_offspring,
-        args.evolution_generations,
-        args.evolution_jobs,
-    ) <= 0:
+    if (
+        args.evolve
+        and min(
+            args.evolution_population,
+            args.evolution_offspring,
+            args.evolution_generations,
+            args.evolution_jobs,
+        )
+        <= 0
+    ):
         raise ValueError("Evolution sizes, generations, and jobs must be positive.")
     for name in (
         "points",

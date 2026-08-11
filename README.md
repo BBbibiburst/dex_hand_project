@@ -292,8 +292,9 @@ python -m tools.grasping.evolve_grasp \
 这里使用 MuJoCo 作为 simulator-in-the-loop 后端，算法结构来自 DexEvolve，但不声称复现
 其 Isaac Sim 的 GPU 并行吞吐或 XHand 接触参数。
 
-全目录端到端测试可由同一个可恢复 Benchmark 完成。`--jobs 1` 串行调度使用 GPU 的
-GraspQP 物体任务，`--evolution-jobs 4` 并行执行每个物体内部的 MuJoCo offspring：
+全目录端到端测试可由同一个可恢复 Benchmark 完成。当前 full-pipeline preset 使用
+`--jobs 2` 调度物体任务，并用 `--evolution-jobs 8` 并行执行每个物体内部的 MuJoCo
+offspring：
 
 ```bash
 python -m tools.grasping.benchmark_catalog --full-pipeline
@@ -301,9 +302,26 @@ python -m tools.grasping.benchmark_catalog --full-pipeline
 
 中断后使用 `python -m tools.grasping.benchmark_catalog --full-pipeline --resume` 继续。
 
-当前已记录的全量基线为：Dex Hand `31/127` 可生成、`11/127` 可稳定保持；Pika
-`75/127` 可生成、`64/127` 可稳定保持。它们来自不同末端的既有 benchmark 运行，仅用于
-后续回归比较；重新比较时应保存报告中的完整参数和 commit。
+新生成的 DexEvolve 配置会保留最多 16 个经过 MuJoCo 验证的稳定候选。随机 Lift
+episode 根据当前物体位姿用机械臂 IK 选择可达候选；旧的单候选配置仍可读取，但应重新
+运行 full pipeline 才能获得多候选选择带来的覆盖率提升。物体相对 yaw 只会使用网格
+验证过的旋转对称角，避免为了 IK 可达而改变非对称物体的实际接触位置。
+DexEvolve 会在每次变异后用张开、中间闭合和最终手形的完整网格包络重新检查最终抓姿、
+approach 与 closing 全轨迹；任一点距离桌面不足 5 mm 即淘汰，25 mm 以下会降低适应度。
+Lift 的运行时候选排序还会排除机械臂或手部与桌面、地面的碰撞。
+
+将报告中的全部稳定抓姿渲染成真实 MuJoCo 物体/手部模型、接触点、坐标系和
+接近/闭合轨迹总览图：
+
+```bash
+MUJOCO_GL=egl python -m tools.grasping.render_grasp_catalog
+```
+
+默认输出为 `docs/grasp_trajectory_catalog.png`；可用 `--limit 8 --columns 4` 快速预览。
+
+旧 Dex Hand 配置曾达到独立固定手验证 `127/127 stable`，但重新计算完整手网格桌面
+间隙后只有 `40/127` 满足 5 mm 硬约束，因此该结果仅保留为历史基线，不能作为完整场景
+成功率。重新比较时应保存报告中的完整参数和 commit。
 
 #### `tools.grasping.validate_scripted_strategy`
 

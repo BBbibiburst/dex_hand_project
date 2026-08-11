@@ -8,6 +8,7 @@ from source.grasping.dexevolve import (
     embedding,
     evaluate_population,
     mutate,
+    table_clearance_metrics,
 )
 
 
@@ -51,9 +52,7 @@ def test_crossover_moves_trajectory_with_final_translation() -> None:
     second = payload()
     second["hand_translation"] = [0.1, 0.0, 0.0]
     child = crossover(first, second, np.random.default_rng(1))
-    np.testing.assert_allclose(
-        child["approach_hand_translations"][0], child["hand_translation"]
-    )
+    np.testing.assert_allclose(child["approach_hand_translations"][0], child["hand_translation"])
     np.testing.assert_allclose(
         child["grasp_hand_rotation_matrices"][-1], child["hand_rotation_matrix"]
     )
@@ -66,3 +65,23 @@ def test_parallel_evaluation_preserves_submission_order() -> None:
     payloads = [{"candidate_id": index} for index in range(4)]
     results = evaluate_population(payloads, EvolutionConfig(jobs=2, seconds=0.01))
     assert [result.payload["candidate_id"] for result in results] == list(range(4))
+
+
+def test_table_clearance_uses_mutated_pose_and_full_trajectory(monkeypatch) -> None:
+    value = payload()
+    value["object_table_height"] = 0.0
+    value["hand_translation"] = [0.0, 0.0, 0.02]
+    value["approach_hand_translations"] = [[0.0, 0.0, 0.03]]
+    value["grasp_hand_translations"] = [[0.0, 0.0, 0.004]]
+    monkeypatch.setattr(
+        "source.grasping.dexevolve._dex_hand_vertices",
+        lambda fractions: np.asarray([[0.0, 0.0, 0.0], [0.0, 0.0, 0.01]]),
+    )
+
+    metrics = table_clearance_metrics(value)
+
+    assert metrics is not None
+    assert metrics["hand_table_clearance"] == 0.02
+    assert metrics["approach_minimum_table_clearance"] == 0.03
+    assert metrics["grasp_minimum_table_clearance"] == 0.004
+    assert metrics["trajectory_minimum_table_clearance"] == 0.004

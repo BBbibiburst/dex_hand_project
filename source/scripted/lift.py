@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 
 import mujoco
 import numpy as np
+from scipy.spatial import cKDTree
 from scipy.spatial.transform import Rotation
+import trimesh
 
 from source.geometry import mat_to_quat
 from source.grasping.constants import (
@@ -24,6 +27,52 @@ def _quat_matrix(quaternion_wxyz: np.ndarray) -> np.ndarray:
     matrix = np.empty(9, dtype=np.float64)
     mujoco.mju_quat2Mat(matrix, np.asarray(quaternion_wxyz, dtype=np.float64))
     return matrix.reshape(3, 3)
+
+
+def _mesh_symmetry_yaws_from_vertices(vertices: np.ndarray) -> tuple[float, ...]:
+    """Return z rotations that preserve a centered, 12-cm object mesh.
+
+    The thresholds tolerate scanned-mesh tessellation noise, but reject shape
+    changes of several millimetres.  This makes the returned rotations safe
+    grasp equivalents instead of arbitrary IK conveniences.
+    """
+    vertices = np.asarray(vertices, dtype=np.float64)
+    if vertices.ndim != 2 or vertices.shape[1] != 3 or len(vertices) < 4:
+        return (0.0,)
+    center = 0.5 * (vertices.min(axis=0) + vertices.max(axis=0))
+    normalized = vertices - center
+    normalized *= 0.12 / max(float(np.ptp(normalized, axis=0).max()), 1e-9)
+    if len(normalized) > 12_000:
+        indices = np.linspace(0, len(normalized) - 1, 12_000, dtype=np.int64)
+        normalized = normalized[indices]
+    tree = cKDTree(normalized)
+    valid = [0.0]
+    for yaw in np.linspace(0.0, 2.0 * np.pi, 16, endpoint=False)[1:]:
+        cosine, sine = np.cos(yaw), np.sin(yaw)
+        rotation = np.asarray(
+            [[cosine, -sine, 0.0], [sine, cosine, 0.0], [0.0, 0.0, 1.0]],
+            dtype=np.float64,
+        )
+        distances = tree.query(normalized @ rotation.T, k=1)[0]
+        if float(np.mean(distances)) <= 0.0025 and float(np.quantile(distances, 0.95)) <= 0.006:
+            valid.append(float(yaw))
+    return tuple(valid)
+
+
+@lru_cache(maxsize=256)
+def _object_symmetry_yaws(object_id: str) -> tuple[float, ...]:
+    try:
+        from source.grasping.grasp_config_search import resolve_object
+
+        loaded = trimesh.load_mesh(resolve_object(object_id), process=True)
+        mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
+        if not isinstance(mesh, trimesh.Trimesh):
+            return (0.0,)
+        return _mesh_symmetry_yaws_from_vertices(np.asarray(mesh.vertices))
+    except Exception:
+        # A missing optional source mesh must not prevent execution of a cached
+        # grasp.  Zero yaw is always the exact configuration that was tested.
+        return (0.0,)
 
 
 @dataclass
@@ -57,8 +106,12 @@ class LiftStrategy(TaskStrategy):
     }
 
     LIFT_HEIGHT = 0.20
-    WAYPOINT_POSITION_TOLERANCE = 0.012
-    ORIENTATION_TOLERANCE = 0.05
+    # The position controller settles a few millimetres away from its internal
+    # IK solution under gravity and hand inertia. These thresholds still keep
+    # the wrist inside the searched local corridor while avoiding deadlocks at
+    # physically converged waypoints (observed residuals: 9-16 mm, 3-5 deg).
+    WAYPOINT_POSITION_TOLERANCE = 0.018
+    ORIENTATION_TOLERANCE = np.deg2rad(5.0)
     CHECK_MAX_DISTANCE = 0.06
     MIN_PHASE_STEPS = 10
     GRASP_STEPS = 130
@@ -102,9 +155,7 @@ class LiftStrategy(TaskStrategy):
         super().__init__(max_position_step=max_position_step, max_orientation_step=0.20)
         self.state = LiftStrategyState()
         self.reuse_grasp_config = bool(reuse_grasp_config)
-        self.grasp_config_override = (
-            None if grasp_config_path is None else Path(grasp_config_path)
-        )
+        self.grasp_config_override = None if grasp_config_path is None else Path(grasp_config_path)
         self.grasp_search_options = dict(grasp_search_options or {})
         reserved_options = {"object_id", "output", "end_effector_name"}
         invalid_options = reserved_options.intersection(self.grasp_search_options)
@@ -128,10 +179,38 @@ class LiftStrategy(TaskStrategy):
         self.grasp_hand_fractions = np.empty((0, 6), dtype=np.float64)
         self.grasp_template_path: Path | None = None
         self.grasp_template_object_id: str | None = None
+        self.archive_candidate_index = 0
 
     def reset(self) -> None:
         super().reset()
         self.state.reset()
+        # Randomized episodes may require a different member of the stable
+        # grasp archive, so force reachability selection for the new pose.
+        self.grasp_template_object_id = None
+        self.archive_candidate_index = 0
+
+    def _advance_grasp_candidate(self) -> None:
+        """Try the next reachability-ranked stable grasp after a phase failure."""
+        self.archive_candidate_index += 1
+        self.grasp_template_object_id = None
+
+    @staticmethod
+    def _robot_table_collision(env) -> bool:
+        """Return whether any robot geom currently touches the table or floor."""
+        bindings = env.task._require_bindings()
+        object_geoms = set().union(*(binding.geom_ids for binding in bindings.objects.values()))
+        table_geoms = bindings.environment_geom_ids.difference(object_geoms)
+        for index in range(env.data.ncon):
+            geom1 = int(env.data.contact[index].geom1)
+            geom2 = int(env.data.contact[index].geom2)
+            if (
+                geom1 in bindings.robot_geom_ids
+                and geom2 in table_geoms
+                or geom2 in bindings.robot_geom_ids
+                and geom1 in table_geoms
+            ):
+                return True
+        return False
 
     @staticmethod
     def _grasp_config_name(object_id: str) -> str:
@@ -140,7 +219,94 @@ class LiftStrategy(TaskStrategy):
             for character in object_id
         )
 
-    def _ensure_grasp_template(self, env) -> None:
+    @staticmethod
+    def _select_reachable_payload(
+        env,
+        payload: dict,
+        object_position: np.ndarray,
+        object_quaternion: np.ndarray,
+        hand_attach_rotation: np.ndarray,
+        candidate_index: int = 0,
+    ) -> dict:
+        """Select an actually generated stable grasp using arm IK residual."""
+        candidates = payload.get("stable_grasp_candidates")
+        if not isinstance(candidates, list) or len(candidates) < 2:
+            return payload
+        arm = env.controller.arm_controller
+        saved_qpos = env.data.qpos.copy()
+        saved_qvel = env.data.qvel.copy()
+        saved_ctrl = env.data.ctrl.copy()
+        previous_target_q = None if arm._prev_target_q is None else arm._prev_target_q.copy()
+        previous_filtered_velocity = (
+            None if arm._filtered_velocity is None else arm._filtered_velocity.copy()
+        )
+        object_rotation = _quat_matrix(object_quaternion)
+        ranked: list[tuple[float, dict]] = []
+        try:
+            for candidate in candidates:
+                try:
+                    final_rotation = np.asarray(candidate["hand_rotation_matrix"], dtype=np.float64)
+                    final_translation = np.asarray(candidate["hand_translation"], dtype=np.float64)
+                    approach_translation = np.asarray(
+                        candidate["approach_hand_translations"][0], dtype=np.float64
+                    )
+                    approach_rotation = np.asarray(
+                        candidate["approach_hand_rotation_matrices"][0], dtype=np.float64
+                    )
+                    cached_final_rotation = np.asarray(
+                        candidate.get("grasp_hand_rotation_matrices", [final_rotation])[-1],
+                        dtype=np.float64,
+                    )
+                except (KeyError, IndexError, TypeError, ValueError):
+                    continue
+                approach_rotation = final_rotation @ cached_final_rotation.T @ approach_rotation
+                residual = 0.0
+                for index, (local_position, local_rotation) in enumerate(
+                    ((approach_translation, approach_rotation), (final_translation, final_rotation))
+                ):
+                    target_position = object_position + object_rotation @ local_position
+                    target_quaternion = mat_to_quat(
+                        object_rotation @ local_rotation @ hand_attach_rotation.T
+                    )
+                    arm_qpos = arm._solve_ik(
+                        env.model, env.data, target_position, target_quaternion
+                    )
+                    env.data.qpos[arm.qpos_addrs] = arm_qpos
+                    mujoco.mj_forward(env.model, env.data)
+                    actual_position = env.data.site_xpos[arm.site_id]
+                    actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
+                    position_error = float(np.linalg.norm(actual_position - target_position))
+                    orientation_error = 2.0 * np.arccos(
+                        np.clip(abs(float(np.dot(actual_quaternion, target_quaternion))), 0.0, 1.0)
+                    )
+                    # Final contact pose matters more than the first approach
+                    # point, which can later be reconnected by the planner.
+                    residual += (1.0 if index == 0 else 2.0) * (
+                        position_error + 0.08 * orientation_error
+                    )
+                    if LiftStrategy._robot_table_collision(env):
+                        residual += 100.0
+                ranked.append((residual, candidate))
+                env.data.qpos[:] = saved_qpos
+                mujoco.mj_forward(env.model, env.data)
+        finally:
+            arm._prev_target_q = previous_target_q
+            arm._filtered_velocity = previous_filtered_velocity
+            env.data.qpos[:] = saved_qpos
+            env.data.qvel[:] = saved_qvel
+            env.data.ctrl[:] = saved_ctrl
+            mujoco.mj_forward(env.model, env.data)
+        if not ranked:
+            return payload
+        ranked.sort(key=lambda item: item[0])
+        return ranked[candidate_index % len(ranked)][1]
+
+    def _ensure_grasp_template(
+        self,
+        env,
+        object_position: np.ndarray,
+        object_quaternion: np.ndarray,
+    ) -> None:
         object_id = getattr(env.task, "object_id", None)
         if not isinstance(object_id, str) or not object_id:
             raise RuntimeError("Lift task does not expose a valid object_id.")
@@ -189,6 +355,20 @@ class LiftStrategy(TaskStrategy):
             )
 
         payload = json.loads(path.read_text(encoding="utf-8"))
+        attach_degrees = (
+            env.arm_descriptor.hand_attach_rot_xyz_deg
+            if env.config.hand_attach_rot_xyz_deg is None
+            else tuple(env.config.hand_attach_rot_xyz_deg)
+        )
+        hand_attach_rotation = Rotation.from_euler("xyz", attach_degrees, degrees=True).as_matrix()
+        payload = self._select_reachable_payload(
+            env,
+            payload,
+            object_position,
+            object_quaternion,
+            hand_attach_rotation,
+            self.archive_candidate_index,
+        )
         schema_version = payload.get("schema_version")
         if schema_version not in SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS:
             raise ValueError(f"Unsupported or missing schema_version in {path}.")
@@ -260,9 +440,7 @@ class LiftStrategy(TaskStrategy):
         # those cached configs in memory so the executed final waypoint matches
         # the state that passed standalone dynamics validation.
         rotation_delta = rotation @ grasp_rotations[-1].T
-        approach_rotations = np.einsum(
-            "ij,njk->nik", rotation_delta, approach_rotations
-        )
+        approach_rotations = np.einsum("ij,njk->nik", rotation_delta, approach_rotations)
         grasp_rotations = np.einsum("ij,njk->nik", rotation_delta, grasp_rotations)
         fraction_delta = fractions - grasp_fractions[-1]
         grasp_progress = (
@@ -343,14 +521,7 @@ class LiftStrategy(TaskStrategy):
         self.grasp_template_path = path
         self.grasp_template_object_id = object_id
         self.end_effector_name = end_effector_name
-        attach_degrees = (
-            env.arm_descriptor.hand_attach_rot_xyz_deg
-            if env.config.hand_attach_rot_xyz_deg is None
-            else tuple(env.config.hand_attach_rot_xyz_deg)
-        )
-        self.hand_attach_rotation = Rotation.from_euler(
-            "xyz", attach_degrees, degrees=True
-        ).as_matrix()
+        self.hand_attach_rotation = hand_attach_rotation
 
     @property
     def phase_prompt(self) -> str:
@@ -570,7 +741,14 @@ class LiftStrategy(TaskStrategy):
         object_position: np.ndarray,
         object_quaternion: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray, float, float]:
-        """Choose a symmetry-equivalent can grasp using actual IK residual."""
+        """Evaluate the configured object-relative grasp with actual IK residual.
+
+        A grasp configuration is tied to a specific object mesh. Rotating it
+        around the object to improve reachability is only valid for a proven
+        rotational symmetry; doing so for boxes and EGAD shapes destroys the
+        contact geometry that passed standalone validation. The object's
+        randomized world yaw is already included in ``object_quaternion``.
+        """
         arm = env.controller.arm_controller
         saved_qpos = env.data.qpos.copy()
         saved_qvel = env.data.qvel.copy()
@@ -585,68 +763,64 @@ class LiftStrategy(TaskStrategy):
         arm.velocity_filter_alpha = 1.0
         best = None
         try:
+            # Pika's two-finger tool has a known 180-degree roll symmetry. An
+            # object-relative yaw is considered only when its actual mesh
+            # passes the geometric symmetry check above.
             rolls = (0.0, np.pi) if self.end_effector_name == "pika_gripper" else (0.0,)
-            for yaw, tool_roll in (
-                (float(yaw), float(tool_roll))
-                for yaw in np.linspace(-np.pi, np.pi, 16, endpoint=False)
-                for tool_roll in rolls
-            ):
-                grasp_position, quaternion = self._template_wrist_pose(
-                    object_position,
-                    object_quaternion,
-                    yaw,
-                    tool_roll,
-                )
-                approach_positions, approach_quaternions = self._world_approach_waypoints(
-                    object_position,
-                    object_quaternion,
-                    yaw,
-                    tool_roll,
-                )
-                residual = 0.0
-                grasp_arm_qpos = None
-                for position, waypoint_quaternion in (
-                    (approach_positions[0], approach_quaternions[0]),
-                    (grasp_position, quaternion),
-                ):
-                    arm_qpos = arm._solve_ik(
-                        env.model,
-                        env.data,
-                        position,
-                        waypoint_quaternion,
-                    )
-                    env.data.qpos[arm.qpos_addrs] = arm_qpos
-                    mujoco.mj_forward(env.model, env.data)
-                    actual_position = env.data.site_xpos[arm.site_id]
-                    actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
-                    position_error = np.linalg.norm(actual_position - position)
-                    orientation_error = 2.0 * np.arccos(
-                        np.clip(
-                            abs(
-                                float(
-                                    np.dot(
-                                        actual_quaternion,
-                                        waypoint_quaternion,
-                                    )
-                                )
-                            ),
-                            0.0,
-                            1.0,
-                        )
-                    )
-                    residual += float(position_error + 0.08 * orientation_error)
-                    grasp_arm_qpos = arm_qpos.copy()
-                env.data.qpos[:] = saved_qpos
-                mujoco.mj_forward(env.model, env.data)
-                if best is None or residual < best[0]:
-                    best = (
-                        residual,
-                        grasp_position,
-                        quaternion,
-                        grasp_arm_qpos,
+            yaws = _object_symmetry_yaws(self.grasp_template_object_id or "")
+            for yaw in yaws:
+                for tool_roll in rolls:
+                    grasp_position, quaternion = self._template_wrist_pose(
+                        object_position,
+                        object_quaternion,
                         yaw,
                         tool_roll,
                     )
+                    approach_positions, approach_quaternions = self._world_approach_waypoints(
+                        object_position,
+                        object_quaternion,
+                        yaw,
+                        tool_roll,
+                    )
+                    residual = 0.0
+                    grasp_arm_qpos = None
+                    for position, waypoint_quaternion in (
+                        (approach_positions[0], approach_quaternions[0]),
+                        (grasp_position, quaternion),
+                    ):
+                        arm_qpos = arm._solve_ik(
+                            env.model,
+                            env.data,
+                            position,
+                            waypoint_quaternion,
+                        )
+                        env.data.qpos[arm.qpos_addrs] = arm_qpos
+                        mujoco.mj_forward(env.model, env.data)
+                        actual_position = env.data.site_xpos[arm.site_id]
+                        actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
+                        position_error = np.linalg.norm(actual_position - position)
+                        orientation_error = 2.0 * np.arccos(
+                            np.clip(
+                                abs(float(np.dot(actual_quaternion, waypoint_quaternion))),
+                                0.0,
+                                1.0,
+                            )
+                        )
+                        residual += float(position_error + 0.08 * orientation_error)
+                        if self._robot_table_collision(env):
+                            residual += 100.0
+                        grasp_arm_qpos = arm_qpos.copy()
+                    env.data.qpos[:] = saved_qpos
+                    mujoco.mj_forward(env.model, env.data)
+                    if best is None or residual < best[0]:
+                        best = (
+                            residual,
+                            grasp_position,
+                            quaternion,
+                            grasp_arm_qpos,
+                            yaw,
+                            tool_roll,
+                        )
         finally:
             arm.max_joint_velocity = previous_velocity
             arm.velocity_filter_alpha = previous_filter
@@ -730,11 +904,11 @@ class LiftStrategy(TaskStrategy):
     ) -> tuple[PhaseResult, ActionContext]:
         phase = self.phases[phase_index]
         env = context.env
-        self._ensure_grasp_template(env)
         current = env.controller.current_ik_action(env.model, env.data).astype(np.float64)
         ee_position = current[:3]
         object_position = np.asarray(context.observation["object_pos"], dtype=np.float64)
         object_quaternion = np.asarray(context.observation["object_quat"], dtype=np.float64)
+        self._ensure_grasp_template(env, object_position, object_quaternion)
         gripper_fractions = np.asarray(
             [0.0, 0.0, 0.0, 0.0, 1.0, 0.0]
             if self.end_effector_name == "dex_hand"
@@ -864,6 +1038,7 @@ class LiftStrategy(TaskStrategy):
                     waypoint_hand,
                 )
             if context.phase_step >= self.PHASE_TIMEOUT:
+                self._advance_grasp_candidate()
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(
                 target,
@@ -911,6 +1086,7 @@ class LiftStrategy(TaskStrategy):
                         hand_target,
                     )
                 if context.phase_step >= self.PHASE_TIMEOUT:
+                    self._advance_grasp_candidate()
                     return PhaseResult.RESTART, ActionContext(hand_target=gripper)
                 return PhaseResult.CONTINUE, ActionContext(
                     wrist_target,
@@ -943,6 +1119,7 @@ class LiftStrategy(TaskStrategy):
             ):
                 return PhaseResult.NEXT, ActionContext(grasp_wrist, target_quaternion, preload)
             if context.phase_step >= self.PHASE_TIMEOUT:
+                self._advance_grasp_candidate()
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(wrist_target, target_quaternion, hand_target)
 
@@ -959,6 +1136,7 @@ class LiftStrategy(TaskStrategy):
                 return PhaseResult.NEXT, ActionContext(target, target_quaternion, preload)
             if context.phase_step >= self.PHASE_TIMEOUT:
                 self.state.reset()
+                self._advance_grasp_candidate()
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(target, target_quaternion, preload)
 
@@ -975,5 +1153,6 @@ class LiftStrategy(TaskStrategy):
             return PhaseResult.NEXT, ActionContext(hold, target_quaternion, preload)
         if context.phase_step >= 40:
             self.state.reset()
+            self._advance_grasp_candidate()
             return PhaseResult.RESTART, ActionContext(hand_target=gripper)
         return PhaseResult.CONTINUE, ActionContext(hold, target_quaternion, preload)
