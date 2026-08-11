@@ -97,10 +97,14 @@ class LiftStrategy(TaskStrategy):
         max_position_step: float = 0.03,
         reuse_grasp_config: bool = False,
         grasp_search_options: dict | None = None,
+        grasp_config_path: str | Path | None = None,
     ) -> None:
         super().__init__(max_position_step=max_position_step, max_orientation_step=0.20)
         self.state = LiftStrategyState()
         self.reuse_grasp_config = bool(reuse_grasp_config)
+        self.grasp_config_override = (
+            None if grasp_config_path is None else Path(grasp_config_path)
+        )
         self.grasp_search_options = dict(grasp_search_options or {})
         reserved_options = {"object_id", "output", "end_effector_name"}
         invalid_options = reserved_options.intersection(self.grasp_search_options)
@@ -150,8 +154,16 @@ class LiftStrategy(TaskStrategy):
         from source.grasping.grasp_config_search import grasp_config_directory
 
         config_dir = grasp_config_directory(end_effector_name)
-        path = config_dir / f"{self._grasp_config_name(object_id)}.json"
-        should_generate = not self.reuse_grasp_config or not path.is_file()
+        path = (
+            self.grasp_config_override
+            if self.grasp_config_override is not None
+            else config_dir / f"{self._grasp_config_name(object_id)}.json"
+        )
+        should_generate = self.grasp_config_override is None and (
+            not self.reuse_grasp_config or not path.is_file()
+        )
+        if self.grasp_config_override is not None and not path.is_file():
+            raise FileNotFoundError(f"Explicit grasp config does not exist: {path}")
         if should_generate:
             # Import lazily so normal cached-policy startup does not pay the
             # visualization import cost of the search demo.
@@ -242,6 +254,26 @@ class LiftStrategy(TaskStrategy):
         grasp_fractions = np.asarray(
             payload.get("grasp_hand_actuator_fractions", [fractions]),
             dtype=np.float64,
+        )
+        # Configs produced before trajectory-aware evolution kept the seed
+        # trajectory while mutating the final rotation and finger state. Repair
+        # those cached configs in memory so the executed final waypoint matches
+        # the state that passed standalone dynamics validation.
+        rotation_delta = rotation @ grasp_rotations[-1].T
+        approach_rotations = np.einsum(
+            "ij,njk->nik", rotation_delta, approach_rotations
+        )
+        grasp_rotations = np.einsum("ij,njk->nik", rotation_delta, grasp_rotations)
+        fraction_delta = fractions - grasp_fractions[-1]
+        grasp_progress = (
+            np.ones((1, 1), dtype=np.float64)
+            if len(grasp_fractions) == 1
+            else np.linspace(0.0, 1.0, len(grasp_fractions))[:, None]
+        )
+        grasp_fractions = np.clip(
+            grasp_fractions + grasp_progress * fraction_delta,
+            0.0,
+            1.0,
         )
         actuator_count = env.controller.hand_controller.action_size
         if fractions.shape != (actuator_count,) or np.any((fractions < 0.0) | (fractions > 1.0)):

@@ -376,6 +376,23 @@ python -m apps.collect_scripted_lerobot \
 | `--no-video` | 关闭 | 不编码视频，适合只检查状态采集路径 |
 | `--reuse-grasp-config` | 关闭 | 复用现有抓取配置，跳过本次启动的重新搜索 |
 
+使用全量抓取报告中的已验证配置，在 Lift 环境中对每个物体随机采样桌面位置和完整 yaw，
+执行多次 `approach → grasp → lift → verify` 并统计逐物体成功率：
+
+```bash
+python -m apps.collect_scripted_lerobot \
+  --task lift \
+  --grasp-benchmark-report configs/grasps/dex_hand/full_pipeline_benchmark.json \
+  --trials-per-object 10 \
+  --evaluation-output configs/grasps/dex_hand/lift_task_evaluation.json
+```
+
+该模式只做任务评测，不创建 LeRobotDataset。报告逐次记录 seed、初始位置、初始 yaw、
+执行阶段、步数、return 和成功状态，并汇总 micro/macro 成功率。可用 `--dataset ycb`、
+`--object-id ycb:025_mug` 或 `--limit 10` 缩小范围；中断后追加
+`--resume-evaluation` 跳过已经完成的物体。Lift 的 verify 阶段依赖触觉，不要传
+`--no-tactile`。
+
 ### 仿真、机器人和任务演示
 
 | 程序 | 功能 | 常用参数和运行示例 |

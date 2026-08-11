@@ -19,6 +19,9 @@ def payload() -> dict:
         "hand_actuator_fractions": [0.5] * 6,
         "approach_hand_translations": [[0.0, 0.0, 0.0]],
         "grasp_hand_translations": [[0.0, 0.0, 0.0]],
+        "approach_hand_rotation_matrices": [np.eye(3).tolist()],
+        "grasp_hand_rotation_matrices": [np.eye(3).tolist()],
+        "grasp_hand_actuator_fractions": [[0.5] * 6],
     }
 
 
@@ -35,6 +38,12 @@ def test_mutation_preserves_input_and_limits() -> None:
     assert source == original
     assert np.all((np.asarray(child["hand_actuator_fractions"]) >= 0.0))
     assert np.all((np.asarray(child["hand_actuator_fractions"]) <= 1.0))
+    np.testing.assert_allclose(
+        child["grasp_hand_rotation_matrices"][-1], child["hand_rotation_matrix"]
+    )
+    np.testing.assert_allclose(
+        child["grasp_hand_actuator_fractions"][-1], child["hand_actuator_fractions"]
+    )
 
 
 def test_crossover_moves_trajectory_with_final_translation() -> None:
@@ -44,6 +53,12 @@ def test_crossover_moves_trajectory_with_final_translation() -> None:
     child = crossover(first, second, np.random.default_rng(1))
     np.testing.assert_allclose(
         child["approach_hand_translations"][0], child["hand_translation"]
+    )
+    np.testing.assert_allclose(
+        child["grasp_hand_rotation_matrices"][-1], child["hand_rotation_matrix"]
+    )
+    np.testing.assert_allclose(
+        child["grasp_hand_actuator_fractions"][-1], child["hand_actuator_fractions"]
     )
 
 

@@ -73,11 +73,44 @@ def _actuator_values(payload: dict, fractions: np.ndarray) -> list[float]:
     ]
 
 
+def synchronize_trajectory(
+    payload: dict,
+    *,
+    previous_rotation: np.ndarray,
+    previous_fractions: np.ndarray,
+) -> None:
+    """Propagate a mutated final pose through its executable trajectory."""
+    rotation = np.asarray(payload["hand_rotation_matrix"], dtype=np.float64)
+    rotation_delta = rotation @ np.asarray(previous_rotation, dtype=np.float64).T
+    for key in ("approach_hand_rotation_matrices", "grasp_hand_rotation_matrices"):
+        if key in payload:
+            matrices = np.asarray(payload[key], dtype=np.float64)
+            payload[key] = np.einsum("ij,njk->nik", rotation_delta, matrices).tolist()
+
+    if "grasp_hand_actuator_fractions" in payload:
+        trajectory = np.asarray(payload["grasp_hand_actuator_fractions"], dtype=np.float64)
+        delta = (
+            np.asarray(payload["hand_actuator_fractions"], dtype=np.float64)
+            - np.asarray(previous_fractions, dtype=np.float64)
+        )
+        progress = (
+            np.ones((1, 1), dtype=np.float64)
+            if len(trajectory) == 1
+            else np.linspace(0.0, 1.0, len(trajectory))[:, None]
+        )
+        payload["grasp_hand_actuator_fractions"] = np.clip(
+            trajectory + progress * delta,
+            0.0,
+            1.0,
+        ).tolist()
+
+
 def mutate(payload: dict, rng: np.random.Generator, config: EvolutionConfig) -> dict:
     child = deepcopy(payload)
     old_translation = np.asarray(child["hand_translation"], dtype=np.float64)
     translation = old_translation + rng.normal(0.0, config.translation_sigma, 3)
     old_rotation = np.asarray(child["hand_rotation_matrix"], dtype=np.float64)
+    old_fractions = np.asarray(child["hand_actuator_fractions"], dtype=np.float64)
     rotation = old_rotation @ Rotation.from_rotvec(
         rng.normal(0.0, config.orientation_sigma, 3)
     ).as_matrix()
@@ -95,6 +128,11 @@ def mutate(payload: dict, rng: np.random.Generator, config: EvolutionConfig) -> 
     for key in ("approach_hand_translations", "grasp_hand_translations"):
         if key in child:
             child[key] = (np.asarray(child[key], dtype=np.float64) + delta).tolist()
+    synchronize_trajectory(
+        child,
+        previous_rotation=old_rotation,
+        previous_fractions=old_fractions,
+    )
     return child
 
 
@@ -120,6 +158,11 @@ def crossover(first: dict, second: dict, rng: np.random.Generator) -> dict:
     child["hand_rotation_matrix"] = (
         first_rot * Rotation.from_rotvec(blend * relative.as_rotvec())
     ).as_matrix().tolist()
+    synchronize_trajectory(
+        child,
+        previous_rotation=first_rot.as_matrix(),
+        previous_fractions=first_q,
+    )
     return child
 
 
