@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 import json
 from pathlib import Path
 
@@ -169,7 +170,7 @@ def validate_grasp_payload_direct(
     """
     end_effector_name = payload.get("end_effector_name", "dex_hand")
     actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
-    model, data = build_standalone_model(
+    model, data = build_cached_direct_hold_model(
         object_mesh=resolve_payload_mesh_path(payload["mesh"]),
         mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
         mesh_scale=float(payload["mesh_scale"]),
@@ -196,6 +197,56 @@ def validate_grasp_payload_direct(
         seconds=seconds,
         settle_seconds=settle_seconds,
     )
+
+
+@lru_cache(maxsize=4)
+def _compiled_direct_hold_model(
+    object_mesh: str,
+    mesh_center: tuple[float, float, float],
+    mesh_scale: float,
+    object_table_height: float | None,
+    end_effector_name: str,
+) -> mujoco.MjModel:
+    """Compile invariant hand/object geometry once per evolution worker."""
+    model, _ = build_standalone_model(
+        object_mesh=object_mesh,
+        mesh_center=np.asarray(mesh_center, dtype=np.float64),
+        mesh_scale=mesh_scale,
+        hand_translation=np.zeros(3, dtype=np.float64),
+        hand_rotation_matrix=np.eye(3, dtype=np.float64),
+        object_table_height=object_table_height,
+        end_effector_name=end_effector_name,
+    )
+    return model
+
+
+def build_cached_direct_hold_model(
+    *,
+    object_mesh: str | Path,
+    mesh_center: np.ndarray,
+    mesh_scale: float,
+    hand_translation: np.ndarray,
+    hand_rotation_matrix: np.ndarray,
+    object_table_height: float | None,
+    end_effector_name: str,
+) -> tuple[mujoco.MjModel, mujoco.MjData]:
+    """Create fresh simulation state from a process-local compiled model cache."""
+    center = tuple(float(value) for value in np.asarray(mesh_center, dtype=np.float64))
+    model = _compiled_direct_hold_model(
+        str(Path(object_mesh).resolve()),
+        center,
+        float(mesh_scale),
+        None if object_table_height is None else float(object_table_height),
+        end_effector_name,
+    )
+    data = mujoco.MjData(model)
+    set_object_pose_for_hand_pose(
+        model,
+        data,
+        np.asarray(hand_translation, dtype=np.float64),
+        np.asarray(hand_rotation_matrix, dtype=np.float64),
+    )
+    return model, data
 
 
 def validate_grasp_trajectory_payload(

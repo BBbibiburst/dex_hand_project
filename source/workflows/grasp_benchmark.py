@@ -300,6 +300,12 @@ def _run_one(task: dict) -> dict:
     search_errors = []
     validation_errors = []
     best_unstable = None
+    phase_seconds = {
+        "search": 0.0,
+        "evolution": 0.0,
+        "trajectory_replan_and_validation": 0.0,
+        "robot_lift_validation": 0.0,
+    }
     for attempt in range(task["search_attempts"]):
         attempt_started = time.monotonic()
         try:
@@ -324,6 +330,7 @@ def _run_one(task: dict) -> dict:
                     publish_invalid=task["evolve"],
                 )
             search_seconds = time.monotonic() - attempt_started
+            phase_seconds["search"] += search_seconds
         except Exception as exc:
             search_errors.append(f"seed={task['seed'] + attempt}: {exc}")
             continue
@@ -349,10 +356,13 @@ def _run_one(task: dict) -> dict:
                     seconds=task["evolution_seconds"],
                     seed=task["seed"] + attempt,
                 )
+                evolution_started = time.monotonic()
                 archive, history = evolve(seed_payload, evolution_config)
+                phase_seconds["evolution"] += time.monotonic() - evolution_started
                 best = archive[0]
                 trajectory_candidates = []
                 trajectory_errors = []
+                trajectory_started = time.monotonic()
                 for archive_index, individual in enumerate(archive):
                     if not individual.direct_hold_stable:
                         continue
@@ -391,6 +401,9 @@ def _run_one(task: dict) -> dict:
                     trajectory_candidates.append((candidate, result, individual))
                     if len(trajectory_candidates) >= 16:
                         break
+                phase_seconds["trajectory_replan_and_validation"] += (
+                    time.monotonic() - trajectory_started
+                )
                 selected = trajectory_candidates[0] if trajectory_candidates else None
                 selected_individual = selected[2] if selected else best
                 published_payload = dict(selected[0] if selected else best.payload)
@@ -458,6 +471,7 @@ def _run_one(task: dict) -> dict:
                     trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
                 )
                 preferred_payload = dict(published_payload)
+                robot_lift_started = time.monotonic()
                 for candidate_index, robot_candidate in enumerate(robot_candidates):
                     candidate_payload = dict(robot_candidate[0])
                     if task["evolve"]:
@@ -493,6 +507,7 @@ def _run_one(task: dict) -> dict:
                             if key in candidate_payload:
                                 metrics[key] = candidate_payload[key]
                     break
+                phase_seconds["robot_lift_validation"] += time.monotonic() - robot_lift_started
                 attempted_payload = json.loads(validation_path.read_text(encoding="utf-8"))
                 published_payload = _payload_after_robot_lift_attempts(
                     preferred_payload,
@@ -544,7 +559,8 @@ def _run_one(task: dict) -> dict:
                 "evolution": evolution_summary,
                 "selected_seed": task["seed"] + attempt,
                 "attempts_used": attempt + 1,
-                "search_seconds": search_seconds,
+                "search_seconds": phase_seconds["search"],
+                "phase_seconds": dict(phase_seconds),
                 "elapsed_seconds": time.monotonic() - started,
                 **metrics,
             }

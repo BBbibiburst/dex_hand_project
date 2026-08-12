@@ -15,6 +15,9 @@
 6. 实际执行 approach、closure 和 hold，产生 trajectory validation 结果。
 7. 在 RM75B 完整场景执行 IK 预检及 scripted Lift，单独记录 Robot Lift 结果。
 
+进化 worker 会按物体 mesh、scale 和手型结构复用已编译的 MuJoCo `MjModel`；每个
+候选只创建新 `MjData` 并重置相对位姿，不再重复解析 XML 和编译 mesh。
+
 这里借鉴 DexEvolve 的 simulator-in-the-loop、无梯度进化思想，但后端是 MuJoCo，不声称
 复现 Isaac Sim 的 GPU 吞吐或论文中的完整硬件参数。
 
@@ -94,6 +97,8 @@ configs/grasps/dex_hand/
 Benchmark 报告保存逐物体状态、配置路径、搜索/进化摘要、Lift 尝试、耗时和总体统计。
 总体 `failure_reasons` 还会汇总轨迹碰撞、IK 不可达、机器人碰桌和各 Lift
 阶段失败，便于在全量任务未结束时分析。
+每个物体的 `phase_seconds` 分别记录 `search`、`evolution`、
+`trajectory_replan_and_validation` 和 `robot_lift_validation`，用于判断真实瓶颈。
 
 ## 运行输出
 
