@@ -9,7 +9,7 @@ description = "MuJoCo RM75B and dexterous-hand manipulation environments"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "numpy",
+    "numpy<2",
     "scipy",
     "mujoco",
     "gymnasium",
@@ -30,6 +30,10 @@ learning = [
     "torchvision",
     "torchcodec",
     "lerobot>=0.4",
+]
+mjwarp = [
+    "mujoco-warp>=3.11.0",
+    "warp-lang>=1.14",
 ]
 assets = ["mani-skill"]
 dev = [

@@ -8,6 +8,7 @@ from pathlib import Path
 import sys
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
+from source.grasping.dexevolve import mjwarp_available
 from source.workflows.grasp_benchmark import GraspBenchmarkConfig, run_grasp_benchmark
 
 FULL_PIPELINE_PRESET = {
@@ -27,6 +28,7 @@ FULL_PIPELINE_PRESET = {
     "evolution_offspring": 16,
     "evolution_generations": 20,
     "evolution_seconds": 1.5,
+    "evolution_backend": "cpu",
     "validate_robot_lift": True,
 }
 
@@ -120,6 +122,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--evolution-generations", type=int, default=20)
     parser.add_argument("--evolution-jobs", type=int, default=4)
     parser.add_argument("--evolution-seconds", type=float, default=1.5)
+    parser.add_argument(
+        "--evolution-backend",
+        choices=("auto", "cpu", "mjwarp"),
+        default="cpu",
+        help="Direct-hold rollout backend; use mjwarp explicitly after benchmarking the GPU.",
+    )
+    parser.add_argument("--mjwarp-device", default="cuda:0")
+    parser.add_argument("--mjwarp-batch-size", type=int, default=32)
+    parser.add_argument("--mjwarp-nconmax", type=int, default=128)
+    parser.add_argument("--mjwarp-njmax", type=int, default=512)
     parser.add_argument("--evolution-dir", type=Path)
     parser.add_argument("--search-attempts", type=int, default=3)
     parser.add_argument("--seed", type=int, default=0)
@@ -157,6 +169,14 @@ def main() -> None:
             if argument.startswith("--")
         }
         _apply_full_pipeline_preset(values, explicitly_set)
+        gpu_evolution = values["evolution_backend"] == "mjwarp" or (
+            values["evolution_backend"] == "auto" and mjwarp_available()
+        )
+        if gpu_evolution:
+            if "jobs" not in explicitly_set:
+                values["jobs"] = 1
+            if "evolution_jobs" not in explicitly_set:
+                values["evolution_jobs"] = 1
         if "jobs" not in explicitly_set or "evolution_jobs" not in explicitly_set:
             memory = _available_memory_bytes()
             memory_label = "unknown" if memory is None else f"{memory / GIB:.1f}GiB"
@@ -164,6 +184,7 @@ def main() -> None:
                 f"parallelism=auto available_cpus={_available_cpu_count()} "
                 f"available_memory={memory_label} selected_jobs={values['jobs']} "
                 f"selected_evolution_jobs={values['evolution_jobs']}",
+                f"evolution_backend={values['evolution_backend']}",
                 flush=True,
             )
         if values["output"] is None:

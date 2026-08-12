@@ -6,6 +6,8 @@ from concurrent.futures import ProcessPoolExecutor
 from copy import deepcopy
 from dataclasses import asdict, dataclass
 from functools import lru_cache
+import importlib.util
+from typing import Any
 
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -36,6 +38,12 @@ class EvolutionConfig:
     seed: int = 0
     minimum_table_clearance: float = 0.005
     preferred_table_clearance: float = 0.025
+    backend: str = "cpu"
+    mjwarp_device: str = "cuda:0"
+    mjwarp_batch_size: int = 32
+    mjwarp_nconmax: int = 128
+    mjwarp_njmax: int = 512
+    mjwarp_fallback: bool = True
 
 
 @dataclass
@@ -44,6 +52,35 @@ class Individual:
     fitness: float = -np.inf
     direct_hold_stable: bool = False
     metrics: dict | None = None
+
+
+class _MjWarpWithCpuFallback:
+    """Switch a failed device batch to the existing CPU validator for this object."""
+
+    def __init__(self, evaluator: Any) -> None:
+        self.evaluator = evaluator
+        self.backend = "mjwarp"
+        self.fallback_error: str | None = None
+
+    def evaluate(self, payloads: list[dict], *, seconds: float, settle_seconds: float):
+        if self.backend == "mjwarp":
+            try:
+                return self.evaluator.evaluate(
+                    payloads,
+                    seconds=seconds,
+                    settle_seconds=settle_seconds,
+                )
+            except Exception as exc:
+                self.backend = "cpu_fallback"
+                self.fallback_error = str(exc)
+        return [
+            validate_grasp_payload_direct(
+                payload,
+                seconds=seconds,
+                settle_seconds=settle_seconds,
+            )
+            for payload in payloads
+        ]
 
 
 def embedding(payload: dict) -> np.ndarray:
@@ -270,23 +307,95 @@ def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
         result = validate_grasp_payload_direct(
             payload, seconds=seconds, settle_seconds=settle_seconds
         )
-        metrics = asdict(result)
-        fitness = (
-            100.0 * float(result.direct_hold_stable)
-            + 0.5 * result.final_contacts
-            - 500.0 * max(result.vertical_drop, 0.0)
-            - 200.0 * result.position_drift
-            - 2.0 * result.rotation_drift
+        return _individual_from_result(
+            payload,
+            result,
+            clearance=clearance,
+            preferred_clearance=preferred_clearance,
         )
-        if clearance is not None:
-            fitness -= 20.0 * max(
-                preferred_clearance - clearance["trajectory_minimum_table_clearance"],
-                0.0,
-            )
-            metrics.update(clearance)
-        return Individual(payload, fitness, result.direct_hold_stable, metrics)
     except Exception as exc:
         return Individual(payload, -1e6, False, {"error": str(exc)})
+
+
+def _individual_from_result(
+    payload: dict,
+    result,
+    *,
+    clearance: dict[str, float] | None,
+    preferred_clearance: float,
+) -> Individual:
+    metrics = asdict(result)
+    fitness = (
+        100.0 * float(result.direct_hold_stable)
+        + 0.5 * result.final_contacts
+        - 500.0 * max(result.vertical_drop, 0.0)
+        - 200.0 * result.position_drift
+        - 2.0 * result.rotation_drift
+    )
+    if clearance is not None:
+        fitness -= 20.0 * max(
+            preferred_clearance - clearance["trajectory_minimum_table_clearance"],
+            0.0,
+        )
+        metrics.update(clearance)
+    return Individual(payload, fitness, result.direct_hold_stable, metrics)
+
+
+def mjwarp_available() -> bool:
+    """Return whether optional MJWarp modules are installed without initialising CUDA."""
+
+    return (
+        importlib.util.find_spec("mujoco_warp") is not None
+        and importlib.util.find_spec("warp") is not None
+    )
+
+
+def _evaluate_population_mjwarp(
+    payloads: list[dict],
+    config: EvolutionConfig,
+    evaluator: Any,
+) -> list[Individual]:
+    individuals: list[Individual | None] = [None] * len(payloads)
+    accepted: list[dict] = []
+    accepted_indices: list[int] = []
+    clearances: list[dict[str, float] | None] = []
+    for index, payload in enumerate(payloads):
+        clearance = table_clearance_metrics(payload)
+        if clearance is not None:
+            payload.update(clearance)
+            actual_minimum = clearance["trajectory_minimum_table_clearance"]
+            if actual_minimum < config.minimum_table_clearance:
+                individuals[index] = Individual(
+                    payload,
+                    -1e6 - 1e3 * (config.minimum_table_clearance - actual_minimum),
+                    False,
+                    {**clearance, "rejection_reason": "table_clearance"},
+                )
+                continue
+        accepted.append(payload)
+        accepted_indices.append(index)
+        clearances.append(clearance)
+
+    batch_size = max(1, int(config.mjwarp_batch_size))
+    for start in range(0, len(accepted), batch_size):
+        batch = accepted[start : start + batch_size]
+        results = evaluator.evaluate(
+            batch,
+            seconds=config.seconds,
+            settle_seconds=config.settle_seconds,
+        )
+        for offset, result in enumerate(results):
+            accepted_index = start + offset
+            original_index = accepted_indices[accepted_index]
+            individuals[original_index] = _individual_from_result(
+                batch[offset],
+                result,
+                clearance=clearances[accepted_index],
+                preferred_clearance=config.preferred_table_clearance,
+            )
+    if any(item is None for item in individuals):
+        raise RuntimeError("MJWarp population evaluator returned an incomplete batch.")
+    return [item for item in individuals if item is not None]
 
 
 def evaluate_population(
@@ -294,7 +403,10 @@ def evaluate_population(
     config: EvolutionConfig,
     *,
     executor: ProcessPoolExecutor | None = None,
+    batch_evaluator: Any = None,
 ) -> list[Individual]:
+    if batch_evaluator is not None:
+        return _evaluate_population_mjwarp(payloads, config, batch_evaluator)
     tasks = [
         (
             payload,
@@ -305,7 +417,7 @@ def evaluate_population(
         )
         for payload in payloads
     ]
-    if config.jobs == 1:
+    if batch_evaluator is not None or config.jobs == 1:
         return [_evaluate_task(task) for task in tasks]
     if executor is not None:
         return list(executor.map(_evaluate_task, tasks))
@@ -339,10 +451,48 @@ def _insert(archive: list[Individual], child: Individual, config: EvolutionConfi
 
 
 def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual], list[dict]]:
+    backend = config.backend
+    if backend not in {"cpu", "mjwarp", "auto"}:
+        raise ValueError(f"Unknown evolution backend {backend!r}.")
+    if backend == "auto":
+        backend = "mjwarp" if mjwarp_available() else "cpu"
+    batch_evaluator = None
+    fallback_error = None
+    if backend == "mjwarp":
+        try:
+            from source.grasping.mjwarp_evaluator import MjWarpPopulationEvaluator
+
+            batch_evaluator = _MjWarpWithCpuFallback(
+                MjWarpPopulationEvaluator(
+                    seed_payload,
+                    device=config.mjwarp_device,
+                    nconmax=config.mjwarp_nconmax,
+                    njmax=config.mjwarp_njmax,
+                )
+            )
+        except Exception as exc:
+            if not config.mjwarp_fallback:
+                raise
+            fallback_error = str(exc)
+            backend = "cpu"
     if config.jobs == 1:
-        return _evolve(seed_payload, config, executor=None)
+        return _evolve(
+            seed_payload,
+            config,
+            executor=None,
+            batch_evaluator=batch_evaluator,
+            backend=backend,
+            fallback_error=fallback_error,
+        )
     with ProcessPoolExecutor(max_workers=config.jobs) as executor:
-        return _evolve(seed_payload, config, executor=executor)
+        return _evolve(
+            seed_payload,
+            config,
+            executor=executor,
+            batch_evaluator=batch_evaluator,
+            backend=backend,
+            fallback_error=fallback_error,
+        )
 
 
 def _evolve(
@@ -350,11 +500,19 @@ def _evolve(
     config: EvolutionConfig,
     *,
     executor: ProcessPoolExecutor | None,
+    batch_evaluator: Any = None,
+    backend: str = "cpu",
+    fallback_error: str | None = None,
 ) -> tuple[list[Individual], list[dict]]:
     rng = np.random.default_rng(config.seed)
     seeds = [deepcopy(seed_payload)]
     seeds.extend(mutate(seed_payload, rng, config) for _ in range(config.population_size - 1))
-    archive = evaluate_population(seeds, config, executor=executor)
+    archive = evaluate_population(
+        seeds,
+        config,
+        executor=executor,
+        batch_evaluator=batch_evaluator,
+    )
     history = []
     for generation in range(config.generations):
         adjusted = _density_adjusted(archive, config)
@@ -371,7 +529,12 @@ def _evolve(
             if rng.random() < config.mutation_probability:
                 child = mutate(child, rng, config)
             children.append(child)
-        evaluated = evaluate_population(children, config, executor=executor)
+        evaluated = evaluate_population(
+            children,
+            config,
+            executor=executor,
+            batch_evaluator=batch_evaluator,
+        )
         for child in evaluated:
             _insert(archive, child, config)
         history.append(
@@ -380,6 +543,12 @@ def _evolve(
                 "archive": len(archive),
                 "direct_hold_stable": sum(item.direct_hold_stable for item in archive),
                 "best_fitness": max(item.fitness for item in archive),
+                "backend": getattr(batch_evaluator, "backend", backend),
+                "backend_fallback_error": getattr(
+                    batch_evaluator,
+                    "fallback_error",
+                    fallback_error,
+                ),
             }
         )
     archive.sort(key=lambda item: (not item.direct_hold_stable, -item.fitness))

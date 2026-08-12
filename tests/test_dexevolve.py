@@ -67,6 +67,41 @@ def test_parallel_evaluation_preserves_submission_order() -> None:
     assert [result.payload["candidate_id"] for result in results] == list(range(4))
 
 
+def test_population_uses_batch_evaluator(monkeypatch) -> None:
+    payloads = [{"candidate_id": index} for index in range(3)]
+    monkeypatch.setattr("source.grasping.dexevolve.table_clearance_metrics", lambda _: None)
+
+    class FakeEvaluator:
+        def evaluate(self, values, *, seconds, settle_seconds):
+            assert values == payloads
+            assert seconds == 0.01
+            assert settle_seconds == 0.4
+            from source.grasping.standalone_validator import DirectHoldValidationResult
+
+            return [
+                DirectHoldValidationResult(
+                    direct_hold_stable=True,
+                    initial_displacement=0.0,
+                    position_drift=0.0,
+                    rotation_drift=0.0,
+                    vertical_drop=0.0,
+                    initial_contacts=2,
+                    final_contacts=2,
+                    simulated_seconds=seconds,
+                )
+                for _ in values
+            ]
+
+    results = evaluate_population(
+        payloads,
+        EvolutionConfig(jobs=1, seconds=0.01),
+        batch_evaluator=FakeEvaluator(),
+    )
+
+    assert [result.payload["candidate_id"] for result in results] == [0, 1, 2]
+    assert all(result.direct_hold_stable for result in results)
+
+
 def test_table_clearance_uses_mutated_pose_and_full_trajectory(monkeypatch) -> None:
     value = payload()
     value["object_table_height"] = 0.0

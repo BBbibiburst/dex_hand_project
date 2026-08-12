@@ -35,7 +35,12 @@ from source.grasping.standalone_validator import (
     validate_grasp_config,
     validate_grasp_payload_trajectory,
 )
-from source.grasping.dexevolve import EvolutionConfig, evolve, table_clearance_metrics
+from source.grasping.dexevolve import (
+    EvolutionConfig,
+    evolve,
+    mjwarp_available,
+    table_clearance_metrics,
+)
 
 
 def _format_duration(seconds: float) -> str:
@@ -130,6 +135,11 @@ class GraspBenchmarkConfig:
     evolution_generations: int = 20
     evolution_jobs: int = 4
     evolution_seconds: float = 1.5
+    evolution_backend: str = "cpu"
+    mjwarp_device: str = "cuda:0"
+    mjwarp_batch_size: int = 32
+    mjwarp_nconmax: int = 128
+    mjwarp_njmax: int = 512
     evolution_dir: Path | None = None
     search_attempts: int = 3
     seed: int = 0
@@ -233,6 +243,11 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "evolution_generations": args.evolution_generations,
         "evolution_jobs": args.evolution_jobs,
         "evolution_seconds": args.evolution_seconds,
+        "evolution_backend": args.evolution_backend,
+        "mjwarp_device": args.mjwarp_device,
+        "mjwarp_batch_size": args.mjwarp_batch_size,
+        "mjwarp_nconmax": args.mjwarp_nconmax,
+        "mjwarp_njmax": args.mjwarp_njmax,
         "search_attempts": args.search_attempts,
         "seed": args.seed,
         "target_size": args.target_size,
@@ -355,6 +370,11 @@ def _run_one(task: dict) -> dict:
                     jobs=task["evolution_jobs"],
                     seconds=task["evolution_seconds"],
                     seed=task["seed"] + attempt,
+                    backend=task["evolution_backend"],
+                    mjwarp_device=task["mjwarp_device"],
+                    mjwarp_batch_size=task["mjwarp_batch_size"],
+                    mjwarp_nconmax=task["mjwarp_nconmax"],
+                    mjwarp_njmax=task["mjwarp_njmax"],
                 )
                 evolution_started = time.monotonic()
                 archive, history = evolve(seed_payload, evolution_config)
@@ -429,6 +449,8 @@ def _run_one(task: dict) -> dict:
                     "trajectory_validation_errors": trajectory_errors[:8],
                     "best_fitness": best.fitness,
                     "history": history,
+                    "backend": history[-1].get("backend", task["evolution_backend"]),
+                    "backend_fallback_error": history[-1].get("backend_fallback_error"),
                 }
                 metrics = (
                     asdict(selected[1])
@@ -603,6 +625,17 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    if args.evolution_backend not in {"auto", "cpu", "mjwarp"}:
+        raise ValueError("--evolution-backend must be auto, cpu, or mjwarp.")
+    if min(args.mjwarp_batch_size, args.mjwarp_nconmax, args.mjwarp_njmax) <= 0:
+        raise ValueError("MJWarp batch size and capacities must be positive.")
+    gpu_evolution = args.evolution_backend == "mjwarp" or (
+        args.evolution_backend == "auto" and mjwarp_available()
+    )
+    if args.evolve and gpu_evolution and args.jobs != 1:
+        raise ValueError(
+            "MJWarp evolution requires --jobs 1 so object workers do not duplicate GPU buffers."
+        )
     total_workers = args.jobs * (args.evolution_jobs if args.evolve else 1)
     if total_workers > 8:
         raise ValueError(
@@ -645,6 +678,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         f"workers: objects={args.jobs} evolution_per_object="
         f"{args.evolution_jobs if args.evolve else 0} "
         f"maximum_process_parallelism={total_workers}",
+        f"evolution_backend={args.evolution_backend}",
         flush=True,
     )
     rows = _load_completed(args.output, args) if args.resume else []
@@ -694,6 +728,11 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "evolution_generations": args.evolution_generations,
             "evolution_jobs": args.evolution_jobs,
             "evolution_seconds": args.evolution_seconds,
+            "evolution_backend": args.evolution_backend,
+            "mjwarp_device": args.mjwarp_device,
+            "mjwarp_batch_size": args.mjwarp_batch_size,
+            "mjwarp_nconmax": args.mjwarp_nconmax,
+            "mjwarp_njmax": args.mjwarp_njmax,
             "evolution_path": str(args.evolution_dir / f"{grasp_config_name(object_id)}.json"),
             "search_attempts": args.search_attempts,
             "seed": args.seed,

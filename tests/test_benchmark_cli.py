@@ -24,6 +24,14 @@ def test_full_pipeline_keeps_explicit_parallelism() -> None:
     assert values["generator"] == "graspqp"
 
 
+def test_full_pipeline_keeps_safe_cpu_evolution_backend() -> None:
+    values = {"jobs": 4, "evolution_jobs": 1, "evolution_backend": "cpu"}
+
+    _apply_full_pipeline_preset(values, set())
+
+    assert values["evolution_backend"] == "cpu"
+
+
 def test_duration_format_is_compact() -> None:
     assert _format_duration(19.7) == "20s"
     assert _format_duration(125) == "2m05s"
