@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import sys
 
@@ -21,15 +22,59 @@ FULL_PIPELINE_PRESET = {
     "top_k": 4,
     "search_attempts": 5,
     "seconds": 3.0,
-    "jobs": 1,
     "evolve": True,
     "evolution_population": 32,
     "evolution_offspring": 16,
     "evolution_generations": 20,
-    "evolution_jobs": 2,
     "evolution_seconds": 1.5,
     "validate_robot_lift": True,
 }
+
+GIB = 1024**3
+MAXIMUM_PROCESS_PARALLELISM = 8
+MEMORY_PER_WORKER_BYTES = 2 * GIB
+RESERVED_MEMORY_BYTES = GIB
+
+
+def _available_cpu_count() -> int:
+    try:
+        return max(1, len(os.sched_getaffinity(0)))
+    except AttributeError:
+        return max(1, os.cpu_count() or 1)
+
+
+def _available_memory_bytes() -> int | None:
+    """Return conservative available memory, respecting cgroup v2 when present."""
+    candidates: list[int] = []
+    try:
+        for line in Path("/proc/meminfo").read_text(encoding="utf-8").splitlines():
+            if line.startswith("MemAvailable:"):
+                candidates.append(int(line.split()[1]) * 1024)
+                break
+    except (OSError, ValueError, IndexError):
+        pass
+    try:
+        limit_text = Path("/sys/fs/cgroup/memory.max").read_text(encoding="utf-8").strip()
+        if limit_text != "max":
+            limit = int(limit_text)
+            used = int(Path("/sys/fs/cgroup/memory.current").read_text(encoding="utf-8"))
+            candidates.append(max(0, limit - used))
+    except (OSError, ValueError):
+        pass
+    return min(candidates) if candidates else None
+
+
+def _recommended_parallelism(
+    *, cpu_count: int | None = None, available_memory_bytes: int | None = None
+) -> int:
+    """Choose a safe worker count from CPU affinity and available memory."""
+    cpus = _available_cpu_count() if cpu_count is None else max(1, cpu_count)
+    cpu_budget = max(1, cpus - 1) if cpus > 2 else 1
+    memory = _available_memory_bytes() if available_memory_bytes is None else available_memory_bytes
+    memory_budget = MAXIMUM_PROCESS_PARALLELISM
+    if memory is not None:
+        memory_budget = max(1, (memory - RESERVED_MEMORY_BYTES) // MEMORY_PER_WORKER_BYTES)
+    return min(MAXIMUM_PROCESS_PARALLELISM, cpu_budget, memory_budget)
 
 
 def _apply_full_pipeline_preset(values: dict, explicitly_set: set[str]) -> None:
@@ -37,6 +82,13 @@ def _apply_full_pipeline_preset(values: dict, explicitly_set: set[str]) -> None:
     for name, value in FULL_PIPELINE_PRESET.items():
         if name not in explicitly_set:
             values[name] = value
+    if "evolution_jobs" not in explicitly_set:
+        values["evolution_jobs"] = 1
+    if "jobs" not in explicitly_set:
+        values["jobs"] = max(
+            1,
+            _recommended_parallelism() // int(values["evolution_jobs"]),
+        )
 
 
 def parse_args() -> argparse.Namespace:
@@ -100,6 +152,15 @@ def main() -> None:
             if argument.startswith("--")
         }
         _apply_full_pipeline_preset(values, explicitly_set)
+        if "jobs" not in explicitly_set or "evolution_jobs" not in explicitly_set:
+            memory = _available_memory_bytes()
+            memory_label = "unknown" if memory is None else f"{memory / GIB:.1f}GiB"
+            print(
+                f"parallelism=auto available_cpus={_available_cpu_count()} "
+                f"available_memory={memory_label} selected_jobs={values['jobs']} "
+                f"selected_evolution_jobs={values['evolution_jobs']}",
+                flush=True,
+            )
         if values["output"] is None:
             values["output"] = Path("configs/grasps/dex_hand/full_pipeline_benchmark.json")
         if values["config_dir"] is None:
