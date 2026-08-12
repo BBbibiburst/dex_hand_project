@@ -38,6 +38,17 @@ from source.grasping.standalone_validator import (
 from source.grasping.dexevolve import EvolutionConfig, evolve, table_clearance_metrics
 
 
+def _format_duration(seconds: float) -> str:
+    seconds = max(0, int(round(seconds)))
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    if hours:
+        return f"{hours:d}h{minutes:02d}m"
+    if minutes:
+        return f"{minutes:d}m{seconds:02d}s"
+    return f"{seconds:d}s"
+
+
 @dataclass
 class GraspBenchmarkConfig:
     """Configuration for a catalogue-wide grasp search and validation run."""
@@ -482,6 +493,7 @@ def _run_one(task: dict) -> dict:
 
 
 def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
+    run_started = time.monotonic()
     if args.seconds <= 0 or args.settle_seconds < 0:
         raise ValueError("Simulation durations are invalid.")
     if args.jobs <= 0:
@@ -535,6 +547,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
     completed = {row["object_id"] for row in rows}
+    resumed_count = len(rows)
 
     pending = [object_id for object_id in selected if object_id not in completed]
     for object_id in selected:
@@ -588,9 +601,17 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     rows.sort(key=lambda row: selected.index(row["object_id"]))
                     _write_report(args.output, args=args, selected=selected, rows=rows)
                     detail = row.get("error", "")
+                    completed_this_run = len(rows) - resumed_count
+                    run_elapsed = time.monotonic() - run_started
+                    average = run_elapsed / completed_this_run
+                    remaining = len(selected) - len(rows)
+                    eta = average * remaining
                     print(
                         f"[{len(rows)}/{len(selected)}] "
-                        f"{row['status'].upper():16} {object_id} {detail}",
+                        f"{row['status'].upper():16} {object_id} "
+                        f"object={_format_duration(row.get('elapsed_seconds', 0.0))} "
+                        f"avg={_format_duration(average)} eta={_format_duration(eta)} "
+                        f"{detail}",
                         flush=True,
                     )
             except KeyboardInterrupt:
@@ -626,6 +647,20 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         f"trajectory_stable={stable}/{len(rows)} "
         f"trajectory_stable_rate={stable / len(rows):.1%}"
     )
+    status_counts = {
+        status: sum(row["status"] == status for row in rows)
+        for status in (
+            TRAJECTORY_STABLE,
+            DIRECT_HOLD_ONLY,
+            UNSTABLE,
+            VALIDATION_ERROR,
+            SEARCH_ERROR,
+        )
+    }
+    print(
+        "status_counts=" + " ".join(f"{status}:{count}" for status, count in status_counts.items())
+    )
+    print(f"total_elapsed={_format_duration(time.monotonic() - run_started)}")
     print("cannot_grasp_or_hold:")
     print(*(failed or ["(none)"]), sep="\n")
     print(f"report={args.output}")

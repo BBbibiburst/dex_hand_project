@@ -4,9 +4,39 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
 from source.workflows.grasp_benchmark import GraspBenchmarkConfig, run_grasp_benchmark
+
+FULL_PIPELINE_PRESET = {
+    "dataset": "all",
+    "generator": "graspqp",
+    "graspqp_iterations": 40,
+    "points": 1024,
+    "joint_candidates": 64,
+    "surface_anchors": 12,
+    "rolls_per_anchor": 4,
+    "coarse_keep": 12,
+    "top_k": 4,
+    "search_attempts": 5,
+    "seconds": 3.0,
+    "jobs": 1,
+    "evolve": True,
+    "evolution_population": 32,
+    "evolution_offspring": 16,
+    "evolution_generations": 20,
+    "evolution_jobs": 2,
+    "evolution_seconds": 1.5,
+    "validate_robot_lift": True,
+}
+
+
+def _apply_full_pipeline_preset(values: dict, explicitly_set: set[str]) -> None:
+    """Apply safe defaults without discarding explicit server overrides."""
+    for name, value in FULL_PIPELINE_PRESET.items():
+        if name not in explicitly_set:
+            values[name] = value
 
 
 def parse_args() -> argparse.Namespace:
@@ -64,28 +94,12 @@ def main() -> None:
     values = vars(args)
     full_pipeline = values.pop("full_pipeline")
     if full_pipeline:
-        preset = {
-            "dataset": "all",
-            "generator": "graspqp",
-            "graspqp_iterations": 40,
-            "points": 1024,
-            "joint_candidates": 64,
-            "surface_anchors": 12,
-            "rolls_per_anchor": 4,
-            "coarse_keep": 12,
-            "top_k": 4,
-            "search_attempts": 5,
-            "seconds": 3.0,
-            "jobs": 1,
-            "evolve": True,
-            "evolution_population": 32,
-            "evolution_offspring": 16,
-            "evolution_generations": 20,
-            "evolution_jobs": 2,
-            "evolution_seconds": 1.5,
-            "validate_robot_lift": True,
+        explicitly_set = {
+            argument[2:].split("=", 1)[0].replace("-", "_")
+            for argument in sys.argv[1:]
+            if argument.startswith("--")
         }
-        values.update(preset)
+        _apply_full_pipeline_preset(values, explicitly_set)
         if values["output"] is None:
             values["output"] = Path("configs/grasps/dex_hand/full_pipeline_benchmark.json")
         if values["config_dir"] is None:
