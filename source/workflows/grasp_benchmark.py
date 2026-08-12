@@ -83,6 +83,7 @@ class GraspBenchmarkConfig:
     reuse: bool = False
     validate_robot_lift: bool = False
     resume: bool = False
+    retry_incomplete: bool = False
     config_dir: Path | None = None
     output: Path | None = None
 
@@ -112,6 +113,10 @@ def _write_report(
 ) -> None:
     generated = sum(row["status"] != SEARCH_ERROR for row in rows)
     stable = sum(row["status"] == TRAJECTORY_STABLE for row in rows)
+    robot_lift_tested = sum(row.get("robot_lift") is not None for row in rows)
+    robot_lift_verified = sum(
+        bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
+    )
     failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
     payload = {
         "schema_version": BENCHMARK_SCHEMA_VERSION,
@@ -124,6 +129,11 @@ def _write_report(
             "trajectory_stable": stable,
             "generation_rate": generated / len(rows) if rows else 0.0,
             "trajectory_stable_rate": stable / len(rows) if rows else 0.0,
+            "robot_lift_tested": robot_lift_tested,
+            "robot_lift_verified": robot_lift_verified,
+            "robot_lift_verified_rate": (
+                robot_lift_verified / robot_lift_tested if robot_lift_tested else 0.0
+            ),
             "failed_object_ids": failed,
         },
         "objects": rows,
@@ -278,7 +288,7 @@ def _run_one(task: dict) -> dict:
                 best = archive[0]
                 trajectory_candidates = []
                 trajectory_errors = []
-                for individual in archive:
+                for archive_index, individual in enumerate(archive):
                     if not individual.direct_hold_stable:
                         continue
                     candidate = dict(individual.payload)
@@ -287,7 +297,7 @@ def _run_one(task: dict) -> dict:
                     try:
                         candidate = replan_evolved_payload(
                             candidate,
-                            seed=task["seed"] + attempt + len(trajectory_candidates),
+                            seed=(task["seed"] + attempt * max(1, len(archive)) + archive_index),
                         )
                         replanned_clearance = table_clearance_metrics(candidate)
                         if (
@@ -320,6 +330,7 @@ def _run_one(task: dict) -> dict:
                 selected_individual = selected[2] if selected else best
                 published_payload = dict(selected[0] if selected else best.payload)
                 published_payload.update(
+                    evolution_refined=True,
                     direct_hold_stable=bool(selected_individual.direct_hold_stable),
                     trajectory_collision_free=bool(selected),
                     trajectory_hold_stable=bool(selected),
@@ -546,6 +557,22 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     )
     rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
+    if args.retry_incomplete:
+        retained = []
+        for row in rows:
+            trajectory_ready = row.get("status") == TRAJECTORY_STABLE
+            robot_ready = not args.validate_robot_lift or bool(
+                (row.get("robot_lift") or {}).get("robot_lift_verified")
+            )
+            if trajectory_ready and robot_ready:
+                retained.append(row)
+            else:
+                print(
+                    f"RETRY {row['object_id']} status={row.get('status')} "
+                    f"robot_lift_verified={robot_ready if args.validate_robot_lift else 'n/a'}",
+                    flush=True,
+                )
+        rows = retained
     completed = {row["object_id"] for row in rows}
     resumed_count = len(rows)
 
@@ -601,6 +628,12 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     rows.sort(key=lambda row: selected.index(row["object_id"]))
                     _write_report(args.output, args=args, selected=selected, rows=rows)
                     detail = row.get("error", "")
+                    lift = row.get("robot_lift")
+                    lift_label = (
+                        ""
+                        if lift is None
+                        else f"lift={'PASS' if lift.get('robot_lift_verified') else 'FAIL'} "
+                    )
                     completed_this_run = len(rows) - resumed_count
                     run_elapsed = time.monotonic() - run_started
                     average = run_elapsed / completed_this_run
@@ -609,6 +642,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     print(
                         f"[{len(rows)}/{len(selected)}] "
                         f"{row['status'].upper():16} {object_id} "
+                        f"{lift_label}"
                         f"object={_format_duration(row.get('elapsed_seconds', 0.0))} "
                         f"avg={_format_duration(average)} eta={_format_duration(eta)} "
                         f"{detail}",
@@ -640,6 +674,10 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     _write_report(args.output, args=args, selected=selected, rows=rows)
     stable = sum(row["status"] == TRAJECTORY_STABLE for row in rows)
     generated = sum(row["status"] != SEARCH_ERROR for row in rows)
+    robot_lift_tested = sum(row.get("robot_lift") is not None for row in rows)
+    robot_lift_verified = sum(
+        bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
+    )
     failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
     print(
         f"\ncompleted={len(rows)}/{len(selected)} "
@@ -660,6 +698,13 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     print(
         "status_counts=" + " ".join(f"{status}:{count}" for status, count in status_counts.items())
     )
+    if robot_lift_tested:
+        print(
+            f"robot_lift_verified={robot_lift_verified}/{robot_lift_tested} "
+            f"robot_lift_verified_rate={robot_lift_verified / robot_lift_tested:.1%}"
+        )
+    else:
+        print("robot_lift_verified=0/0 robot_lift_verified_rate=n/a")
     print(f"total_elapsed={_format_duration(time.monotonic() - run_started)}")
     print("cannot_grasp_or_hold:")
     print(*(failed or ["(none)"]), sep="\n")

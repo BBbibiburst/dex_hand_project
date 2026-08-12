@@ -14,6 +14,7 @@ from source.evaluation.grasp_schema import (
 from source.grasping.standalone_validator import (
     DirectHoldValidationResult,
     TrajectoryValidationResult,
+    is_executable_grasp_payload,
 )
 from source.scripted.lift import LiftStrategyState
 from source.scripted import registered_strategies, strategy_task_name
@@ -29,6 +30,13 @@ def test_direct_and_trajectory_validation_results_are_distinct() -> None:
     assert "trajectory_hold_stable" in trajectory_fields
     assert "trajectory_collision_free" in trajectory_fields
     assert "direct_hold_stable" not in trajectory_fields
+
+
+def test_replanned_evolved_grasp_is_executable_without_claiming_analytic_fit() -> None:
+    payload = {"hand_fit_success": False, "trajectory_replanned": True}
+
+    assert is_executable_grasp_payload(payload)
+    assert payload["hand_fit_success"] is False
 
 
 def test_current_statuses_do_not_publish_legacy_stable() -> None:

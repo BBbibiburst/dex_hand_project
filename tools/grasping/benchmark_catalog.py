@@ -136,6 +136,11 @@ def parse_args() -> argparse.Namespace:
         help="Record collision-free full-robot Lift validation separately from trajectory stability.",
     )
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--retry-incomplete",
+        action="store_true",
+        help="With --resume, recompute rows lacking trajectory or requested robot-Lift success.",
+    )
     parser.add_argument("--config-dir", type=Path)
     parser.add_argument("--output", type=Path)
     return parser.parse_args()

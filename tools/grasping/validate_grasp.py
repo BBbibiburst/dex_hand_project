@@ -19,8 +19,11 @@ from source.grasping.constants import (
 from source.grasping.standalone_validator import (
     build_standalone_model,
     execute_configured_grasp_trajectory,
+    is_executable_grasp_payload,
+    resolve_payload_mesh_path,
     set_hand_targets,
     set_object_pose_for_hand_pose,
+    trajectory_result_from_direct_hold,
     validate_standalone,
 )
 from source.robots.registry import get_hand
@@ -111,8 +114,8 @@ def run(args) -> None:
     actuator_count = len(actuator_names)
     if payload.get("schema_version") not in SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS:
         raise ValueError("Unsupported or missing grasp schema_version.")
-    if not payload.get("hand_fit_success", False):
-        raise ValueError("The grasp search result is marked as unsuccessful.")
+    if not is_executable_grasp_payload(payload):
+        raise ValueError("The grasp has neither a valid fit nor a replanned trajectory.")
     approach_translations = np.asarray(
         payload.get("approach_hand_translations", []),
         dtype=np.float64,
@@ -160,7 +163,7 @@ def run(args) -> None:
     ):
         raise ValueError("Grasp config has no valid closing trajectory.")
     model, data = build_standalone_model(
-        object_mesh=payload["mesh"],
+        object_mesh=resolve_payload_mesh_path(payload["mesh"]),
         mesh_center=payload["mesh_center"],
         mesh_scale=payload["mesh_scale"],
         hand_translation=payload["hand_translation"],
@@ -199,13 +202,13 @@ def run(args) -> None:
             preload_directions=payload.get("hand_preload_directions"),
             actuator_names=actuator_names,
         )
-        result = validate_standalone(
+        direct_result = validate_standalone(
             model,
             data,
             seconds=args.seconds,
             step_callback=show,
         )
-        return result
+        return trajectory_result_from_direct_hold(direct_result, collision_free=True)
 
     def print_result(result) -> None:
         print(

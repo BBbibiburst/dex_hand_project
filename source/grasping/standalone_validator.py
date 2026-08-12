@@ -20,6 +20,11 @@ from source.robots.registry import get_hand
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
+def is_executable_grasp_payload(payload: dict) -> bool:
+    """Accept an analytic fit or a trajectory replanned after evolution."""
+    return payload.get("hand_fit_success") is True or payload.get("trajectory_replanned") is True
+
+
 def resolve_payload_mesh_path(mesh: str | Path) -> Path:
     """Resolve configs copied from another project checkout."""
     path = Path(mesh).expanduser()
@@ -58,6 +63,25 @@ class TrajectoryValidationResult:
     simulated_seconds: float
 
 
+def trajectory_result_from_direct_hold(
+    result: DirectHoldValidationResult,
+    *,
+    collision_free: bool,
+) -> TrajectoryValidationResult:
+    """Label hold metrics after an explicitly executed trajectory."""
+    return TrajectoryValidationResult(
+        trajectory_collision_free=collision_free,
+        trajectory_hold_stable=collision_free and result.direct_hold_stable,
+        initial_displacement=result.initial_displacement,
+        position_drift=result.position_drift,
+        rotation_drift=result.rotation_drift,
+        vertical_drop=result.vertical_drop,
+        initial_contacts=result.initial_contacts,
+        final_contacts=result.final_contacts,
+        simulated_seconds=result.simulated_seconds,
+    )
+
+
 def validate_grasp_config(
     path: str | Path,
     *,
@@ -70,8 +94,8 @@ def validate_grasp_config(
     payload = json.loads(config_path.read_text(encoding="utf-8"))
     if payload.get("schema_version") not in SUPPORTED_GRASP_CONFIG_SCHEMA_VERSIONS:
         raise ValueError(f"Unsupported or missing schema_version in {config_path}.")
-    if payload.get("hand_fit_success") is not True:
-        raise ValueError(f"Grasp {config_path} did not pass mesh fitting.")
+    if not is_executable_grasp_payload(payload):
+        raise ValueError(f"Grasp {config_path} has neither a valid fit nor a replanned trajectory.")
 
     return validate_grasp_payload_trajectory(
         payload,
@@ -127,17 +151,7 @@ def validate_grasp_payload_trajectory(
         seconds=seconds,
         settle_seconds=settle_seconds,
     )
-    return TrajectoryValidationResult(
-        trajectory_collision_free=True,
-        trajectory_hold_stable=result.direct_hold_stable,
-        initial_displacement=result.initial_displacement,
-        position_drift=result.position_drift,
-        rotation_drift=result.rotation_drift,
-        vertical_drop=result.vertical_drop,
-        initial_contacts=result.initial_contacts,
-        final_contacts=result.final_contacts,
-        simulated_seconds=result.simulated_seconds,
-    )
+    return trajectory_result_from_direct_hold(result, collision_free=True)
 
 
 def validate_grasp_payload_direct(

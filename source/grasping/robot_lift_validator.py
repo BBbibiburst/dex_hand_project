@@ -12,6 +12,16 @@ from source.envs.manipulation import make_manipulation_env
 from source.geometry import mat_to_quat
 from source.scripted.lift import LiftStrategy
 
+MAXIMUM_PRECHECK_POSITION_ERROR = 0.06
+MAXIMUM_PRECHECK_ORIENTATION_ERROR = 0.35
+
+
+def _ik_waypoint_is_reachable(position_error: float, orientation_error: float) -> bool:
+    return (
+        position_error <= MAXIMUM_PRECHECK_POSITION_ERROR
+        and orientation_error <= MAXIMUM_PRECHECK_ORIENTATION_ERROR
+    )
+
 
 @dataclass(frozen=True)
 class RobotLiftValidationResult:
@@ -104,15 +114,21 @@ def validate_robot_lift(
             # A single call to this controller's iterative IK can be far from
             # its eventual closed-loop solution. Joint interpolation is only
             # meaningful when both endpoint solutions are already credible.
-            if position_error <= 0.06 and orientation_error <= 0.35:
-                for progress in np.linspace(0.0, 1.0, 13)[1:]:
-                    env.data.qpos[arm.qpos_addrs] = previous_q + progress * (target_q - previous_q)
-                    mujoco.mj_forward(env.model, env.data)
-                    if LiftStrategy._robot_table_collision(env):
-                        table_collision = True
-                        precheck_reason = f"robot_table_collision_waypoint_{waypoint_index}"
-                        break
-            if table_collision:
+            if not _ik_waypoint_is_reachable(position_error, orientation_error):
+                precheck_reason = (
+                    f"robot_ik_unreachable_waypoint_{waypoint_index}:"
+                    f"position_error={position_error:.4f},"
+                    f"orientation_error={orientation_error:.4f}"
+                )
+                break
+            for progress in np.linspace(0.0, 1.0, 13)[1:]:
+                env.data.qpos[arm.qpos_addrs] = previous_q + progress * (target_q - previous_q)
+                mujoco.mj_forward(env.model, env.data)
+                if LiftStrategy._robot_table_collision(env):
+                    table_collision = True
+                    precheck_reason = f"robot_table_collision_waypoint_{waypoint_index}"
+                    break
+            if precheck_reason is not None:
                 break
             previous_q = target_q
         else:
