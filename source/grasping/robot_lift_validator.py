@@ -91,48 +91,68 @@ def validate_robot_lift(
             object_position, object_quaternion, yaw, tool_roll
         )
         arm = env.controller.arm_controller
+        # The runtime controller smooths every IK target according to one
+        # control interval.  Precheck needs the converged endpoint solution,
+        # not the first velocity-limited command on the way to that endpoint.
+        previous_max_joint_velocity = arm.max_joint_velocity
+        previous_velocity_filter = arm.velocity_filter_alpha
+        previous_target_q = None if arm._prev_target_q is None else arm._prev_target_q.copy()
+        previous_filtered_velocity = (
+            None if arm._filtered_velocity is None else arm._filtered_velocity.copy()
+        )
+        arm.max_joint_velocity = 100.0
+        arm.velocity_filter_alpha = 1.0
+        arm._prev_target_q = None
+        arm._filtered_velocity = None
         previous_q = env.data.qpos[arm.qpos_addrs].copy()
-        for waypoint_index, (position, quaternion) in enumerate(
-            zip(
-                np.concatenate([approach_positions, grasp_positions]),
-                np.concatenate([approach_quaternions, grasp_quaternions]),
-                strict=True,
-            )
-        ):
-            target_q = arm._solve_ik(env.model, env.data, position, quaternion)
-            env.data.qpos[arm.qpos_addrs] = target_q
-            mujoco.mj_forward(env.model, env.data)
-            actual_position = env.data.site_xpos[arm.site_id]
-            actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
-            position_error = float(np.linalg.norm(actual_position - position))
-            orientation_error = float(
-                2.0
-                * np.arccos(np.clip(abs(float(np.dot(actual_quaternion, quaternion))), 0.0, 1.0))
-            )
-            maximum_position_error = max(maximum_position_error, position_error)
-            maximum_orientation_error = max(maximum_orientation_error, orientation_error)
-            # A single call to this controller's iterative IK can be far from
-            # its eventual closed-loop solution. Joint interpolation is only
-            # meaningful when both endpoint solutions are already credible.
-            if not _ik_waypoint_is_reachable(position_error, orientation_error):
-                precheck_reason = (
-                    f"robot_ik_unreachable_waypoint_{waypoint_index}:"
-                    f"position_error={position_error:.4f},"
-                    f"orientation_error={orientation_error:.4f}"
+        try:
+            for waypoint_index, (position, quaternion) in enumerate(
+                zip(
+                    np.concatenate([approach_positions, grasp_positions]),
+                    np.concatenate([approach_quaternions, grasp_quaternions]),
+                    strict=True,
                 )
-                break
-            for progress in np.linspace(0.0, 1.0, 13)[1:]:
-                env.data.qpos[arm.qpos_addrs] = previous_q + progress * (target_q - previous_q)
+            ):
+                target_q = arm._solve_ik(env.model, env.data, position, quaternion)
+                env.data.qpos[arm.qpos_addrs] = target_q
                 mujoco.mj_forward(env.model, env.data)
-                if LiftStrategy._robot_table_collision(env):
-                    table_collision = True
-                    precheck_reason = f"robot_table_collision_waypoint_{waypoint_index}"
+                actual_position = env.data.site_xpos[arm.site_id]
+                actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
+                position_error = float(np.linalg.norm(actual_position - position))
+                orientation_error = float(
+                    2.0
+                    * np.arccos(
+                        np.clip(abs(float(np.dot(actual_quaternion, quaternion))), 0.0, 1.0)
+                    )
+                )
+                maximum_position_error = max(maximum_position_error, position_error)
+                maximum_orientation_error = max(maximum_orientation_error, orientation_error)
+                if not _ik_waypoint_is_reachable(position_error, orientation_error):
+                    precheck_reason = (
+                        f"robot_ik_unreachable_waypoint_{waypoint_index}:"
+                        f"position_error={position_error:.4f},"
+                        f"orientation_error={orientation_error:.4f}"
+                    )
                     break
-            if precheck_reason is not None:
-                break
-            previous_q = target_q
-        else:
-            precheck_passed = True
+                for progress in np.linspace(0.0, 1.0, 13)[1:]:
+                    env.data.qpos[arm.qpos_addrs] = previous_q + progress * (
+                        target_q - previous_q
+                    )
+                    mujoco.mj_forward(env.model, env.data)
+                    if LiftStrategy._robot_table_collision(env):
+                        table_collision = True
+                        precheck_reason = f"robot_table_collision_waypoint_{waypoint_index}"
+                        break
+                if precheck_reason is not None:
+                    break
+                previous_q = target_q
+            else:
+                precheck_passed = True
+        finally:
+            arm.max_joint_velocity = previous_max_joint_velocity
+            arm.velocity_filter_alpha = previous_velocity_filter
+            arm._prev_target_q = previous_target_q
+            arm._filtered_velocity = previous_filtered_velocity
         if not precheck_passed:
             return RobotLiftValidationResult(
                 precheck_passed=False,
