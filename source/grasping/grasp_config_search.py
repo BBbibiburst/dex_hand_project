@@ -41,7 +41,8 @@ from source.grasping.constants import (
     GRASP_SEARCH_STRATEGY,
 )
 from source.grasping.standalone_validator import (
-    StandaloneValidationResult,
+    TrajectoryValidationResult,
+    resolve_payload_mesh_path,
     validate_grasp_config,
     validate_grasp_trajectory_payload,
 )
@@ -182,7 +183,7 @@ class ValidatedGraspConfigResult:
     output_path: Path
     selected_seed: int
     attempts_used: int
-    validation: StandaloneValidationResult
+    validation: TrajectoryValidationResult
 
 
 def safe_name(value: str) -> str:
@@ -523,11 +524,7 @@ def _robot_execution_penalty(
     """Prefer contact-rich Dex poses with enough clearance for the robot wrist."""
     missing_contact_count = len(device.contact_labels) - len(contacts)
     contact_penalty = 0.04 * missing_contact_count
-    clearance_penalty = (
-        0.15
-        if device.name == "dex_hand" and table_clearance < 0.025
-        else 0.0
-    )
+    clearance_penalty = 0.15 if device.name == "dex_hand" and table_clearance < 0.025 else 0.0
     return contact_penalty + clearance_penalty
 
 
@@ -1174,7 +1171,10 @@ def search(
             local_contacts = []
             for label in device.contact_labels:
                 selected = np.flatnonzero(candidate.surface.labels == label)
-                posed = candidate.surface.points[selected] @ candidate.rotation.T + candidate.translation
+                posed = (
+                    candidate.surface.points[selected] @ candidate.rotation.T
+                    + candidate.translation
+                )
                 nearest = cloud.tree.query(posed, k=1)[0]
                 local_contacts.append(candidate.surface.points[selected[int(np.argmin(nearest))]])
             result = refine_wrist_pose(
@@ -1450,6 +1450,80 @@ def select_executable_config(
     return payload(object_id, mesh_path, cloud, device, candidates)
 
 
+def replan_evolved_payload(
+    evolved: dict,
+    *,
+    seed: int = 0,
+    point_count: int = 2048,
+) -> dict:
+    """Plan a fresh collision-free approach for an evolved final grasp."""
+    device_name = evolved.get("end_effector_name", "dex_hand")
+    try:
+        device = DEVICES[device_name]
+    except KeyError as exc:
+        raise ValueError(f"Unsupported end effector {device_name!r}.") from exc
+    mesh_path = resolve_payload_mesh_path(evolved["mesh"])
+    loaded = trimesh.load_mesh(mesh_path, process=True)
+    mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
+    if not isinstance(mesh, trimesh.Trimesh):
+        raise ValueError(f"No triangle mesh in {mesh_path}")
+    raw_extent = max(float(np.ptp(np.asarray(mesh.vertices), axis=0).max()), 1e-9)
+    target_size = raw_extent * float(evolved["mesh_scale"])
+    cloud = load_cloud(mesh_path, count=point_count, target_size=target_size, seed=seed)
+    fractions = np.asarray(evolved["hand_actuator_fractions"], dtype=np.float64)
+    final_surface = surface_for(device, fractions, seed=seed + 10_000)
+    candidate = evaluate(
+        cloud,
+        device,
+        final_surface,
+        np.asarray(evolved["hand_rotation_matrix"], dtype=np.float64),
+        np.asarray(evolved["hand_translation"], dtype=np.float64),
+        roll_index=int(evolved.get("hand_orientation_roll_index", 0)),
+        full_checks=True,
+    )
+    open_fractions = _open_fractions(device)
+    open_surface = surface_for(device, open_fractions, seed=seed + 20_000)
+    surface_cache = {tuple(np.round(open_fractions, 8)): open_surface}
+    alternatives = plan_approach(
+        cloud,
+        device,
+        candidate,
+        open_surface,
+        surface_cache,
+        seed=seed + 30_000,
+    )
+    errors = []
+    for plan in alternatives:
+        replanned = dict(evolved)
+        rotation = np.asarray(evolved["hand_rotation_matrix"], dtype=np.float64)
+        replanned.update(
+            approach_direction=plan.direction.tolist(),
+            approach_hand_translations=plan.approach_translations.tolist(),
+            approach_hand_rotation_matrices=np.repeat(
+                rotation[None, :, :], len(plan.approach_translations), axis=0
+            ).tolist(),
+            approach_hand_actuator_fractions=plan.approach_fractions.tolist(),
+            grasp_hand_translations=plan.grasp_translations.tolist(),
+            grasp_hand_rotation_matrices=np.repeat(
+                rotation[None, :, :], len(plan.grasp_translations), axis=0
+            ).tolist(),
+            grasp_hand_actuator_fractions=plan.grasp_fractions.tolist(),
+            approach_minimum_object_clearance=plan.minimum_object_clearance,
+            approach_minimum_table_clearance=plan.minimum_table_clearance,
+            grasp_trajectory_maximum_penetration=plan.maximum_grasp_penetration,
+            grasp_trajectory_maximum_rigid_penetration=(plan.maximum_grasp_rigid_penetration),
+            trajectory_replanned=True,
+        )
+        try:
+            validate_grasp_trajectory_payload(replanned)
+        except ValueError as exc:
+            errors.append(str(exc))
+            continue
+        return replanned
+    detail = " | ".join(errors[:4]) or "no collision-free approach plan"
+    raise ValueError(f"Unable to replan evolved grasp trajectory: {detail}")
+
+
 def search_grasp_config(
     *,
     object_id: str | None = None,
@@ -1595,7 +1669,7 @@ def generate_validated_grasp_config(
     grip_preload: float = DEFAULT_GRIP_PRELOAD,
     **search_kwargs,
 ) -> ValidatedGraspConfigResult:
-    """Publish the first new-search candidate that is dynamically stable."""
+    """Publish the first candidate that passes trajectory-and-hold validation."""
     if attempts <= 0:
         raise ValueError("attempts must be positive.")
     end_effector_name = str(search_kwargs.get("end_effector_name", "dex_hand"))
@@ -1631,7 +1705,7 @@ def generate_validated_grasp_config(
             except Exception as exc:
                 failures.append(f"seed={candidate_seed}: {exc}")
                 continue
-            if not validation.stable:
+            if not validation.trajectory_hold_stable:
                 failures.append(
                     f"seed={candidate_seed}: unstable "
                     f"drift={validation.position_drift:.4f}m "
@@ -1640,6 +1714,13 @@ def generate_validated_grasp_config(
                     f"contacts={validation.final_contacts}"
                 )
                 continue
+            payload = json.loads(temporary_path.read_text(encoding="utf-8"))
+            payload.update(
+                trajectory_collision_free=True,
+                trajectory_hold_stable=True,
+                validation_stage="trajectory_hold_stable",
+            )
+            temporary_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
             os.replace(temporary_path, output_path)
             return ValidatedGraspConfigResult(
                 output_path=output_path,

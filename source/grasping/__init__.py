@@ -20,8 +20,11 @@ from source.grasping.pika_gripper_surface import (
     load_posed_pika_gripper_surface,
 )
 from source.grasping.standalone_validator import (
-    StandaloneValidationResult,
+    DirectHoldValidationResult,
+    TrajectoryValidationResult,
     validate_grasp_config,
+    validate_grasp_payload_direct,
+    validate_grasp_payload_trajectory,
     validate_standalone,
 )
 
@@ -57,7 +60,10 @@ __all__ = [
     "search_pika_grasp",
     "PosedPikaGripperSurface",
     "load_posed_pika_gripper_surface",
-    "StandaloneValidationResult",
+    "DirectHoldValidationResult",
+    "TrajectoryValidationResult",
     "validate_grasp_config",
+    "validate_grasp_payload_direct",
+    "validate_grasp_payload_trajectory",
     "validate_standalone",
 ]

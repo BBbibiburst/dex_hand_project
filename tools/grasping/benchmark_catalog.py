@@ -42,14 +42,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--search-attempts", type=int, default=3)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
-    parser.add_argument(
-        "--end-effector", choices=("dex_hand", "pika_gripper"), default="dex_hand"
-    )
+    parser.add_argument("--end-effector", choices=("dex_hand", "pika_gripper"), default="dex_hand")
     parser.add_argument("--seconds", type=float, default=3.0)
     parser.add_argument("--settle-seconds", type=float, default=0.8)
     parser.add_argument("--grip-preload", type=float, default=DEFAULT_GRIP_PRELOAD)
     parser.add_argument("--jobs", type=int, default=1)
     parser.add_argument("--reuse", action="store_true")
+    parser.add_argument(
+        "--validate-robot-lift",
+        action="store_true",
+        help="Record collision-free full-robot Lift validation separately from trajectory stability.",
+    )
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--config-dir", type=Path)
     parser.add_argument("--output", type=Path)
@@ -73,13 +76,14 @@ def main() -> None:
             "top_k": 4,
             "search_attempts": 5,
             "seconds": 3.0,
-            "jobs": 2,
+            "jobs": 1,
             "evolve": True,
             "evolution_population": 32,
             "evolution_offspring": 16,
             "evolution_generations": 20,
-            "evolution_jobs": 8,
+            "evolution_jobs": 2,
             "evolution_seconds": 1.5,
+            "validate_robot_lift": True,
         }
         values.update(preset)
         if values["output"] is None:

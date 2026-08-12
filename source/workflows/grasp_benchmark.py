@@ -10,6 +10,15 @@ from pathlib import Path
 import time
 
 from source.envs.manipulation.object_catalog import object_ids
+from source.evaluation.grasp_schema import (
+    BENCHMARK_SCHEMA_VERSION,
+    DIRECT_HOLD_ONLY,
+    SEARCH_ERROR,
+    TRAJECTORY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
+    VALIDATION_SEMANTICS,
+)
 from source.grasping.constants import (
     DEFAULT_GRIP_PRELOAD,
     GRASP_CONFIG_SCHEMA_VERSION,
@@ -19,13 +28,14 @@ from source.grasping.grasp_config_search import (
     grasp_benchmark_report_path,
     grasp_config_directory,
     grasp_config_name,
+    replan_evolved_payload,
     search_grasp_config,
 )
 from source.grasping.standalone_validator import (
     validate_grasp_config,
-    validate_grasp_payload_direct,
+    validate_grasp_payload_trajectory,
 )
-from source.grasping.dexevolve import EvolutionConfig, evolve
+from source.grasping.dexevolve import EvolutionConfig, evolve, table_clearance_metrics
 
 
 @dataclass
@@ -60,6 +70,7 @@ class GraspBenchmarkConfig:
     grip_preload: float = DEFAULT_GRIP_PRELOAD
     jobs: int = 1
     reuse: bool = False
+    validate_robot_lift: bool = False
     resume: bool = False
     config_dir: Path | None = None
     output: Path | None = None
@@ -88,20 +99,20 @@ def _write_report(
     selected: list[str],
     rows: list[dict],
 ) -> None:
-    generated = sum(row["status"] != "search_error" for row in rows)
-    stable = sum(row["status"] == "stable" for row in rows)
-    failed = [row["object_id"] for row in rows if row["status"] != "stable"]
+    generated = sum(row["status"] != SEARCH_ERROR for row in rows)
+    stable = sum(row["status"] == TRAJECTORY_STABLE for row in rows)
+    failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
     payload = {
-        "schema_version": 2,
+        "schema_version": BENCHMARK_SCHEMA_VERSION,
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "parameters": _report_parameters(args),
         "summary": {
             "selected": len(selected),
             "completed": len(rows),
             "grasp_generated": generated,
-            "stable": stable,
+            "trajectory_stable": stable,
             "generation_rate": generated / len(rows) if rows else 0.0,
-            "stable_rate": stable / len(rows) if rows else 0.0,
+            "trajectory_stable_rate": stable / len(rows) if rows else 0.0,
             "failed_object_ids": failed,
         },
         "objects": rows,
@@ -119,6 +130,8 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "limit": args.limit,
         "search_strategy": GRASP_SEARCH_STRATEGY,
         "grasp_schema_version": GRASP_CONFIG_SCHEMA_VERSION,
+        "validation_semantics": VALIDATION_SEMANTICS,
+        "validate_robot_lift": args.validate_robot_lift,
         "points": args.points,
         "joint_candidates": args.joint_candidates,
         "surface_anchors": args.surface_anchors,
@@ -148,7 +161,7 @@ def _load_completed(path: Path, args: "GraspBenchmarkConfig") -> list[dict]:
     if not path.is_file():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("schema_version") != 2:
+    if payload.get("schema_version") != BENCHMARK_SCHEMA_VERSION:
         raise ValueError(f"Cannot resume unsupported report {path}.")
     parameters = payload.get("parameters")
     expected = _report_parameters(args)
@@ -242,10 +255,6 @@ def _run_one(task: dict) -> dict:
             evolution_summary = None
             validation_path = config_path
             if task["evolve"]:
-                # DexEvolve intentionally accepts analytically invalid seeds;
-                # simulator fitness, rather than the geometric filter, decides
-                # whether offspring survive.
-                seed_payload["hand_fit_success"] = True
                 evolution_config = EvolutionConfig(
                     population_size=task["evolution_population"],
                     offspring=task["evolution_offspring"],
@@ -256,21 +265,58 @@ def _run_one(task: dict) -> dict:
                 )
                 archive, history = evolve(seed_payload, evolution_config)
                 best = archive[0]
-                # Keep a compact, diverse set of simulator-stable alternatives.
-                # A single object-relative grasp cannot remain arm-reachable for
-                # every randomized object yaw; Lift selects among these without
-                # inventing contact-invalid rotations at execution time.
-                stable_payloads = []
+                trajectory_candidates = []
+                trajectory_errors = []
                 for individual in archive:
-                    if not individual.stable:
+                    if not individual.direct_hold_stable:
                         continue
                     candidate = dict(individual.payload)
-                    candidate.pop("stable_grasp_candidates", None)
-                    stable_payloads.append(candidate)
-                    if len(stable_payloads) >= 16:
+                    candidate.pop("trajectory_stable_candidates", None)
+                    candidate["direct_hold_stable"] = True
+                    try:
+                        candidate = replan_evolved_payload(
+                            candidate,
+                            seed=task["seed"] + attempt + len(trajectory_candidates),
+                        )
+                        replanned_clearance = table_clearance_metrics(candidate)
+                        if (
+                            replanned_clearance is None
+                            or replanned_clearance["trajectory_minimum_table_clearance"]
+                            < evolution_config.minimum_table_clearance
+                        ):
+                            raise ValueError("replanned trajectory violates table clearance")
+                        candidate.update(replanned_clearance)
+                        result = validate_grasp_payload_trajectory(
+                            candidate,
+                            seconds=task["seconds"],
+                            settle_seconds=task["settle_seconds"],
+                            grip_preload=task["grip_preload"],
+                        )
+                    except Exception as exc:
+                        trajectory_errors.append(str(exc))
+                        continue
+                    if not result.trajectory_hold_stable:
+                        continue
+                    candidate.update(
+                        trajectory_collision_free=True,
+                        trajectory_hold_stable=True,
+                        validation_stage="trajectory_hold_stable",
+                    )
+                    trajectory_candidates.append((candidate, result, individual))
+                    if len(trajectory_candidates) >= 16:
                         break
-                published_payload = dict(best.payload)
-                published_payload["stable_grasp_candidates"] = stable_payloads
+                selected = trajectory_candidates[0] if trajectory_candidates else None
+                selected_individual = selected[2] if selected else best
+                published_payload = dict(selected[0] if selected else best.payload)
+                published_payload.update(
+                    direct_hold_stable=bool(selected_individual.direct_hold_stable),
+                    trajectory_collision_free=bool(selected),
+                    trajectory_hold_stable=bool(selected),
+                    validation_stage=("trajectory_hold_stable" if selected else DIRECT_HOLD_ONLY),
+                    trajectory_stable_candidates=[
+                        candidate for candidate, _, _ in trajectory_candidates
+                    ],
+                )
                 validation_path = Path(task["evolution_path"])
                 validation_path.parent.mkdir(parents=True, exist_ok=True)
                 temporary = validation_path.with_suffix(".json.tmp")
@@ -278,42 +324,26 @@ def _run_one(task: dict) -> dict:
                 temporary.replace(validation_path)
                 evolution_summary = {
                     "archive": len(archive),
-                    "stable_candidates": sum(item.stable for item in archive),
+                    "direct_hold_candidates": sum(item.direct_hold_stable for item in archive),
+                    "trajectory_stable_candidates": len(trajectory_candidates),
+                    "trajectory_validation_errors": trajectory_errors[:8],
                     "best_fitness": best.fitness,
                     "history": history,
                 }
-
-            if task["evolve"]:
-                final_payload = json.loads(validation_path.read_text(encoding="utf-8"))
-                metrics = asdict(
-                    validate_grasp_payload_direct(
-                        final_payload,
-                        seconds=task["seconds"],
-                        settle_seconds=task["settle_seconds"],
-                        grip_preload=task["grip_preload"],
-                    )
+                metrics = (
+                    asdict(selected[1])
+                    if selected
+                    else dict(best.metrics or {}, trajectory_hold_stable=False)
                 )
-                # Evolution-level hard constraints (notably swept hand/table
-                # clearance) must not be overwritten by the final free-hand
-                # dynamics check, whose table is visual-only.
-                metrics["stable"] = bool(metrics["stable"] and best.stable)
-                if not best.stable and best.metrics is not None:
-                    metrics["evolution_rejection"] = best.metrics.get(
-                        "rejection_reason",
-                        best.metrics.get("error"),
-                    )
-                metrics.update(
-                    {
-                        "table_clearance": final_payload.get("hand_table_clearance"),
-                        "approach_table_clearance": final_payload.get(
-                            "approach_minimum_table_clearance"
-                        ),
-                        "grasp_table_clearance": final_payload.get("grasp_minimum_table_clearance"),
-                        "trajectory_table_clearance": final_payload.get(
-                            "trajectory_minimum_table_clearance"
-                        ),
-                    }
-                )
+                if selected:
+                    for key in (
+                        "hand_table_clearance",
+                        "approach_minimum_table_clearance",
+                        "grasp_minimum_table_clearance",
+                        "trajectory_minimum_table_clearance",
+                    ):
+                        if key in selected[0]:
+                            metrics[key] = selected[0][key]
             else:
                 metrics = _validate_config(
                     validation_path,
@@ -321,12 +351,98 @@ def _run_one(task: dict) -> dict:
                     settle_seconds=task["settle_seconds"],
                     grip_preload=task["grip_preload"],
                 )
+                if metrics["trajectory_hold_stable"]:
+                    published_payload = json.loads(validation_path.read_text(encoding="utf-8"))
+                    published_payload.update(
+                        trajectory_collision_free=True,
+                        trajectory_hold_stable=True,
+                        validation_stage="trajectory_hold_stable",
+                    )
+                    temporary = validation_path.with_suffix(".json.tmp")
+                    temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
+                    temporary.replace(validation_path)
+            trajectory_hold_stable = bool(metrics["trajectory_hold_stable"])
+            robot_lift = None
+            robot_lift_attempts = []
+            if trajectory_hold_stable and task["validate_robot_lift"]:
+                from source.grasping.robot_lift_validator import validate_robot_lift
+
+                robot_candidates = (
+                    trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
+                )
+                for candidate_index, robot_candidate in enumerate(robot_candidates):
+                    candidate_payload = dict(robot_candidate[0])
+                    if task["evolve"]:
+                        candidate_payload.pop("trajectory_stable_candidates", None)
+                        candidate_payload.update(
+                            direct_hold_stable=True,
+                            trajectory_collision_free=True,
+                            trajectory_hold_stable=True,
+                            validation_stage="trajectory_hold_stable",
+                        )
+                    temporary = validation_path.with_suffix(".json.tmp")
+                    temporary.write_text(json.dumps(candidate_payload, indent=2), encoding="utf-8")
+                    temporary.replace(validation_path)
+                    candidate_lift = validate_robot_lift(
+                        object_id,
+                        validation_path,
+                        seed=task["seed"] + attempt,
+                    ).as_dict()
+                    candidate_lift["candidate_index"] = candidate_index
+                    robot_lift_attempts.append(candidate_lift)
+                    robot_lift = candidate_lift
+                    if not candidate_lift["robot_lift_verified"]:
+                        continue
+                    if task["evolve"]:
+                        selected = robot_candidate
+                        metrics = asdict(robot_candidate[1])
+                        for key in (
+                            "hand_table_clearance",
+                            "approach_minimum_table_clearance",
+                            "grasp_minimum_table_clearance",
+                            "trajectory_minimum_table_clearance",
+                        ):
+                            if key in candidate_payload:
+                                metrics[key] = candidate_payload[key]
+                    break
+                published_payload = json.loads(validation_path.read_text(encoding="utf-8"))
+                if task["evolve"]:
+                    published_payload["trajectory_stable_candidates"] = [
+                        candidate for candidate, _, _ in trajectory_candidates
+                    ]
+                published_payload.update(
+                    robot_lift_verified=robot_lift["robot_lift_verified"],
+                    robot_table_collision=robot_lift["table_collision"],
+                    validation_stage=(
+                        "robot_lift_verified"
+                        if robot_lift["robot_lift_verified"]
+                        else "trajectory_hold_stable"
+                    ),
+                )
+                temporary = validation_path.with_suffix(".json.tmp")
+                temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
+                temporary.replace(validation_path)
+            fully_validated = trajectory_hold_stable and (
+                not task["validate_robot_lift"] or bool(robot_lift["robot_lift_verified"])
+            )
+            status = (
+                TRAJECTORY_STABLE
+                if trajectory_hold_stable
+                else DIRECT_HOLD_ONLY
+                if task["evolve"] and best.direct_hold_stable
+                else UNSTABLE
+            )
             row = {
                 "object_id": object_id,
-                "status": "stable" if metrics["stable"] else "unstable",
+                "status": status,
                 "config": str(validation_path),
                 "seed_config": str(config_path),
-                "seed_stable": None if seed_metrics is None else seed_metrics["stable"],
+                "seed_trajectory_stable": (
+                    None if seed_metrics is None else seed_metrics["trajectory_hold_stable"]
+                ),
+                "trajectory_hold_stable": trajectory_hold_stable,
+                "robot_lift": robot_lift,
+                "robot_lift_attempts": robot_lift_attempts,
                 "evolution": evolution_summary,
                 "selected_seed": task["seed"] + attempt,
                 "attempts_used": attempt + 1,
@@ -334,13 +450,13 @@ def _run_one(task: dict) -> dict:
                 "elapsed_seconds": time.monotonic() - started,
                 **metrics,
             }
-            if metrics["stable"]:
+            if fully_validated:
                 return row
             unstable_key = (
-                float(row["vertical_drop"]),
-                float(row["position_drift"]),
-                float(row["rotation_drift"]),
-                -int(row["final_contacts"]),
+                float(row.get("vertical_drop", float("inf"))),
+                float(row.get("position_drift", float("inf"))),
+                float(row.get("rotation_drift", float("inf"))),
+                -int(row.get("final_contacts", 0)),
             )
             if best_unstable is None or unstable_key < best_unstable[0]:
                 best_unstable = (unstable_key, row)
@@ -351,14 +467,14 @@ def _run_one(task: dict) -> dict:
     if validation_errors:
         return {
             "object_id": object_id,
-            "status": "validation_error",
+            "status": VALIDATION_ERROR,
             "error": " | ".join(validation_errors),
             "attempts_used": task["search_attempts"],
             "elapsed_seconds": time.monotonic() - started,
         }
     return {
         "object_id": object_id,
-        "status": "search_error",
+        "status": SEARCH_ERROR,
         "error": " | ".join(search_errors),
         "attempts_used": task["search_attempts"],
         "elapsed_seconds": time.monotonic() - started,
@@ -372,6 +488,12 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    total_workers = args.jobs * (args.evolution_jobs if args.evolve else 1)
+    if total_workers > 8:
+        raise ValueError(
+            "Unsafe nested parallelism: --jobs * --evolution-jobs must be <= 8 "
+            f"(got {args.jobs} * {args.evolution_jobs} = {total_workers})."
+        )
     if args.evolve and args.end_effector != "dex_hand":
         raise ValueError("DexEvolve refinement currently supports dex_hand only.")
     if (
@@ -404,6 +526,12 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         args.output = grasp_benchmark_report_path(args.end_effector)
     if args.evolution_dir is None:
         args.evolution_dir = grasp_config_directory(args.end_effector) / "dexevolve"
+    print(
+        f"workers: objects={args.jobs} evolution_per_object="
+        f"{args.evolution_jobs if args.evolve else 0} "
+        f"maximum_process_parallelism={total_workers}",
+        flush=True,
+    )
     rows = _load_completed(args.output, args) if args.resume else []
     rows = [row for row in rows if row["object_id"] in selected]
     completed = {row["object_id"] for row in rows}
@@ -417,6 +545,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "object_id": object_id,
             "config_path": str(args.config_dir / f"{grasp_config_name(object_id)}.json"),
             "reuse": args.reuse,
+            "validate_robot_lift": args.validate_robot_lift,
             "points": args.points,
             "joint_candidates": args.joint_candidates,
             "surface_anchors": args.surface_anchors,
@@ -488,14 +617,14 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         return 130
 
     _write_report(args.output, args=args, selected=selected, rows=rows)
-    stable = sum(row["status"] == "stable" for row in rows)
-    generated = sum(row["status"] != "search_error" for row in rows)
-    failed = [row["object_id"] for row in rows if row["status"] != "stable"]
+    stable = sum(row["status"] == TRAJECTORY_STABLE for row in rows)
+    generated = sum(row["status"] != SEARCH_ERROR for row in rows)
+    failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
     print(
         f"\ncompleted={len(rows)}/{len(selected)} "
         f"generated={generated}/{len(rows)} "
-        f"stable={stable}/{len(rows)} "
-        f"stable_rate={stable / len(rows):.1%}"
+        f"trajectory_stable={stable}/{len(rows)} "
+        f"trajectory_stable_rate={stable / len(rows):.1%}"
     )
     print("cannot_grasp_or_hold:")
     print(*(failed or ["(none)"]), sep="\n")

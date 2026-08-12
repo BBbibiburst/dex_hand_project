@@ -80,13 +80,13 @@ class LiftStrategyState:
     lift_stable_steps: int = 0
     verify_success_steps: int = 0
     hold_wrist_position: np.ndarray | None = None
-    verified_success: bool = False
+    strategy_verified_success: bool = False
 
     def reset(self) -> None:
         self.lift_stable_steps = 0
         self.verify_success_steps = 0
         self.hold_wrist_position = None
-        self.verified_success = False
+        self.strategy_verified_success = False
 
 
 class LiftStrategy(TaskStrategy):
@@ -151,11 +151,15 @@ class LiftStrategy(TaskStrategy):
         reuse_grasp_config: bool = False,
         grasp_search_options: dict | None = None,
         grasp_config_path: str | Path | None = None,
+        grasp_candidate_index: int | None = None,
     ) -> None:
         super().__init__(max_position_step=max_position_step, max_orientation_step=0.20)
         self.state = LiftStrategyState()
         self.reuse_grasp_config = bool(reuse_grasp_config)
         self.grasp_config_override = None if grasp_config_path is None else Path(grasp_config_path)
+        if grasp_candidate_index is not None and grasp_candidate_index < 0:
+            raise ValueError("grasp_candidate_index must be non-negative.")
+        self.forced_candidate_index = grasp_candidate_index
         self.grasp_search_options = dict(grasp_search_options or {})
         reserved_options = {"object_id", "output", "end_effector_name"}
         invalid_options = reserved_options.intersection(self.grasp_search_options)
@@ -179,7 +183,7 @@ class LiftStrategy(TaskStrategy):
         self.grasp_hand_fractions = np.empty((0, 6), dtype=np.float64)
         self.grasp_template_path: Path | None = None
         self.grasp_template_object_id: str | None = None
-        self.archive_candidate_index = 0
+        self.archive_candidate_index = grasp_candidate_index or 0
 
     def reset(self) -> None:
         super().reset()
@@ -187,11 +191,12 @@ class LiftStrategy(TaskStrategy):
         # Randomized episodes may require a different member of the stable
         # grasp archive, so force reachability selection for the new pose.
         self.grasp_template_object_id = None
-        self.archive_candidate_index = 0
+        self.archive_candidate_index = self.forced_candidate_index or 0
 
     def _advance_grasp_candidate(self) -> None:
         """Try the next reachability-ranked stable grasp after a phase failure."""
-        self.archive_candidate_index += 1
+        if self.forced_candidate_index is None:
+            self.archive_candidate_index += 1
         self.grasp_template_object_id = None
 
     @staticmethod
@@ -228,8 +233,8 @@ class LiftStrategy(TaskStrategy):
         hand_attach_rotation: np.ndarray,
         candidate_index: int = 0,
     ) -> dict:
-        """Select an actually generated stable grasp using arm IK residual."""
-        candidates = payload.get("stable_grasp_candidates")
+        """Select a trajectory-validated grasp using arm IK residual."""
+        candidates = payload.get("trajectory_stable_candidates")
         if not isinstance(candidates, list) or len(candidates) < 2:
             return payload
         arm = env.controller.arm_controller
@@ -388,8 +393,13 @@ class LiftStrategy(TaskStrategy):
                 f"Grasp {path} belongs to {payload_object_id!r}, "
                 f"not the active object {object_id!r}."
             )
-        if payload.get("hand_fit_success") is not True:
-            raise ValueError(f"Grasp {path} did not pass mesh fitting.")
+        if payload.get("trajectory_hold_stable") is not True or payload.get(
+            "validation_stage"
+        ) not in {"trajectory_hold_stable", "robot_lift_verified"}:
+            raise ValueError(
+                f"Grasp {path} has not passed executable approach/closure/hold "
+                "validation. Regenerate it with the current benchmark pipeline."
+            )
         payload_end_effector = payload.get("end_effector_name", "dex_hand")
         if payload_end_effector != end_effector_name:
             raise ValueError(
@@ -1149,7 +1159,7 @@ class LiftStrategy(TaskStrategy):
         )
         self.state.verify_success_steps = self.state.verify_success_steps + 1 if valid else 0
         if self.state.verify_success_steps >= 10:
-            self.state.verified_success = True
+            self.state.strategy_verified_success = True
             return PhaseResult.NEXT, ActionContext(hold, target_quaternion, preload)
         if context.phase_step >= 40:
             self.state.reset()

@@ -29,10 +29,7 @@ def checked_mj_step(
     step: int,
 ) -> None:
     mujoco.mj_step(model, data)
-    finite = all(
-        np.all(np.isfinite(values))
-        for values in (data.qpos, data.qvel, data.qacc)
-    )
+    finite = all(np.all(np.isfinite(values)) for values in (data.qpos, data.qvel, data.qacc))
     bounded = (
         np.max(np.abs(data.qvel), initial=0.0) < 1e6
         and np.max(np.abs(data.qacc), initial=0.0) < 1e12

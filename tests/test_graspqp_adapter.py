@@ -10,9 +10,7 @@ def test_rejects_invalid_actuator_fractions() -> None:
 
 
 def test_closed_chain_jacobian_is_finite() -> None:
-    sample = sample_closed_chain_kinematics(
-        np.full(6, 0.5), epsilon=2e-3, max_points_per_geom=8
-    )
+    sample = sample_closed_chain_kinematics(np.full(6, 0.5), epsilon=2e-3, max_points_per_geom=8)
     assert sample.point_jacobian.shape == (*sample.surface.points.shape, 6)
     assert sample.fingertip_jacobian.shape == (5, 3, 6)
     assert np.isfinite(sample.point_jacobian).all()

@@ -131,8 +131,6 @@ def _build(args: argparse.Namespace):
     return model, data, sensor, refs
 
 
-
-
 def _place_probe(
     model: mujoco.MjModel,
     data: mujoco.MjData,
@@ -167,7 +165,8 @@ def _touches_body(
 
 
 def _signals(sensor: TactileSensorBase, model, data) -> np.ndarray:
-    return np.asarray(sensor.diagnostic_values(model, data), dtype=np.float64).reshape(-1)
+    read_raw = getattr(sensor, "read_raw", sensor.read)
+    return np.asarray(read_raw(model, data), dtype=np.float64).reshape(-1)
 
 
 def _sample_metrics(values: np.ndarray, target_index: int) -> tuple[float, float, int]:

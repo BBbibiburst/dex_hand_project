@@ -42,7 +42,7 @@ class EvolutionConfig:
 class Individual:
     payload: dict
     fitness: float = -np.inf
-    stable: bool = False
+    direct_hold_stable: bool = False
     metrics: dict | None = None
 
 
@@ -272,7 +272,7 @@ def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
         )
         metrics = asdict(result)
         fitness = (
-            100.0 * float(result.stable)
+            100.0 * float(result.direct_hold_stable)
             + 0.5 * result.final_contacts
             - 500.0 * max(result.vertical_drop, 0.0)
             - 200.0 * result.position_drift
@@ -284,7 +284,7 @@ def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
                 0.0,
             )
             metrics.update(clearance)
-        return Individual(payload, fitness, result.stable, metrics)
+        return Individual(payload, fitness, result.direct_hold_stable, metrics)
     except Exception as exc:
         return Individual(payload, -1e6, False, {"error": str(exc)})
 
@@ -378,9 +378,9 @@ def _evolve(
             {
                 "generation": generation + 1,
                 "archive": len(archive),
-                "stable": sum(item.stable for item in archive),
+                "direct_hold_stable": sum(item.direct_hold_stable for item in archive),
                 "best_fitness": max(item.fitness for item in archive),
             }
         )
-    archive.sort(key=lambda item: (not item.stable, -item.fitness))
+    archive.sort(key=lambda item: (not item.direct_hold_stable, -item.fitness))
     return archive, history

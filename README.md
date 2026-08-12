@@ -155,8 +155,8 @@ config_path = generate_grasp_config(
 #### `tools.grasping.validate_grasp`
 
 根据 JSON 的 `end_effector_name` 自动加载 Dex Hand 或 Pika XML、物体 mesh 和自由物体
-关节，不加载机械臂及完整任务场景。程序先执行抓取手型和预紧，再观测接触保持、物体位移与转动，最后打印
-`stable=True/False`。适合快速排除穿透严重、没有夹紧或一受力就脱落的候选。
+关节，不加载机械臂及完整任务场景。程序从无接触预抓取位姿开始执行接近、闭合和预紧，
+再观测接触保持、物体位移与转动，最后打印 `trajectory_hold_stable=True/False`。
 
 ```bash
 python -m tools.grasping.validate_grasp \
@@ -216,8 +216,9 @@ python -m tools.grasping.benchmark_catalog \
 
 默认报告为 `configs/grasps/<end_effector>/grasp_catalog_benchmark.json`，各物体抓取
 配置保存在 `configs/grasps/<end_effector>/benchmark/`；两者都处于抓取缓存目录，不纳入
-Git。`status=stable`
-表示成功生成且通过保持验证，`unstable` 表示生成成功但物理保持失败，
+Git。`status=trajectory_stable`
+表示抓姿成功生成，并完整通过无接触接近、闭合和保持验证；`direct_hold_only`
+表示进化终态能保持、但还不能由预设轨迹可靠执行，`unstable` 表示物理保持失败，
 `search_error` 和 `validation_error` 分别表示搜索或验证异常。`--jobs 1` 适合调试；
 并行测试可根据 CPU 核数提高 `--jobs`。`--search-attempts N` 控制每个物体最多尝试的
 独立候选数；搜索失败会打印各次候选具体违反的穿透、桌面间隙、对向接触、掌内合力或
@@ -308,7 +309,12 @@ episode 根据当前物体位姿用机械臂 IK 选择可达候选；旧的单�
 验证过的旋转对称角，避免为了 IK 可达而改变非对称物体的实际接触位置。
 DexEvolve 会在每次变异后用张开、中间闭合和最终手形的完整网格包络重新检查最终抓姿、
 approach 与 closing 全轨迹；任一点距离桌面不足 5 mm 即淘汰，25 mm 以下会降低适应度。
-Lift 的运行时候选排序还会排除机械臂或手部与桌面、地面的碰撞。
+`--full-pipeline` 还会在完整机械臂场景实际执行一次 approach、grasp、lift 和 verify；
+每个控制步都会检查机器人与桌面/地面的接触。报告将两层结果分开：
+`trajectory_stable` 只表示无碰接近、闭合后保持稳定；`robot_lift_verified` 表示完整
+机械臂策略完成抓取和提升且全程无桌面碰撞。新报告使用
+`validation_semantics=trajectory-hold-v2`。单独使用其他参数时可显式添加
+`--validate-robot-lift` 记录第二层结果。
 
 将报告中的全部稳定抓姿渲染成真实 MuJoCo 物体/手部模型、接触点、坐标系和
 接近/闭合轨迹总览图：
@@ -331,7 +337,7 @@ MUJOCO_GL=egl python -m tools.grasping.render_grasp_catalog
 旋转轴、抓取中点和手部指令。每个阶段结束后暂停，
 按空格确认进入下一阶段，按 `Q` 退出。机械臂目标使用限速插值，不会瞬间跳变。
 策略默认在每次程序启动时搜索最多三个独立候选，并逐个执行 standalone MuJoCo 保持
-验证；只有首个 `stable=True` 的候选才会原子写入
+验证；只有首个 `trajectory_hold_stable=True` 的候选才会原子写入
 `configs/grasps/<end_effector>/<object_id>.json`。搜索或验证失败不会覆盖已有正式配置。开发调试时
 可传 `--reuse-grasp-config` 跳过搜索并直接使用缓存；缓存不存在时即使指定该选项也会
 自动生成并验证。
@@ -410,6 +416,11 @@ python -m apps.collect_scripted_lerobot \
 `--object-id ycb:025_mug` 或 `--limit 10` 缩小范围；中断后追加
 `--resume-evaluation` 跳过已经完成的物体。Lift 的 verify 阶段依赖触觉，不要传
 `--no-tactile`。
+
+添加 `--coverage-search --target-successes-per-object N` 时会将成功 episode 写入
+LeRobotDataset。为避免重复数据，每个随机 seed（同一物体初始位姿）最多保存一条成功
+轨迹，抓取候选的尝试顺序随 seed 轮换。报告额外统计成功 seed 数、候选覆盖率、
+初始位置范围和 yaw 分桶覆盖。
 
 ### 仿真、机器人和任务演示
 

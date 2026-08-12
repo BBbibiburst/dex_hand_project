@@ -6,7 +6,11 @@ from source.scripted.base import (
     PhaseResult,
     TaskStrategy,
 )
-from source.scripted.registry import create_strategy, registered_strategies
+from source.scripted.registry import (
+    create_strategy,
+    registered_strategies,
+    strategy_task_name,
+)
 
 __all__ = [
     "ActionContext",
@@ -15,4 +19,5 @@ __all__ = [
     "TaskStrategy",
     "create_strategy",
     "registered_strategies",
+    "strategy_task_name",
 ]

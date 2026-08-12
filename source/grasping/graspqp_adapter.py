@@ -95,7 +95,10 @@ def sample_closed_chain_kinematics(
         span = upper[axis] - lower[axis]
         low_surface = load_posed_dex_hand_surface(actuator_fractions=lower, **kwargs)
         high_surface = load_posed_dex_hand_surface(actuator_fractions=upper, **kwargs)
-        if low_surface.points.shape != center.points.shape or high_surface.points.shape != center.points.shape:
+        if (
+            low_surface.points.shape != center.points.shape
+            or high_surface.points.shape != center.points.shape
+        ):
             raise RuntimeError("Dex Hand surface sampling changed during finite differences.")
         point_jacobian[..., axis] = (high_surface.points - low_surface.points) / span
         fingertip_jacobian[..., axis] = (
@@ -128,6 +131,7 @@ def refine_wrist_pose(
     contact-distance term while GraspQP supplies the force-closure QP term.
     """
     import torch
+
     # GraspQP prints optional-backend warnings at import time and solver details
     # every time its lazy metric is initialized. The catalogue benchmark has
     # its own concise per-object progress output, so suppress only those known
@@ -172,16 +176,23 @@ def refine_wrist_pose(
         weights = torch.softmax(-squared / (0.004**2), dim=-1)
         surface = weights @ cloud
         contact_normals = -(weights @ normals)
-        contact_normals = contact_normals / contact_normals.norm(dim=-1, keepdim=True).clamp_min(1e-6)
+        contact_normals = contact_normals / contact_normals.norm(dim=-1, keepdim=True).clamp_min(
+            1e-6
+        )
         distance_energy = (contacts - surface).square().sum(-1).sqrt().sum()
         cog = cloud.mean(0, keepdim=True)
         with redirect_stdout(io.StringIO()):
-            qp_energy = metric(
-                contacts.unsqueeze(0), contact_normals.unsqueeze(0), cog=cog
-            ).sum()
-        pose_regularizer = 20.0 * (translation - torch.as_tensor(
-            initial_translation, dtype=dtype, device=target_device
-        )).square().sum() + 0.02 * rotation_delta.square().sum()
+            qp_energy = metric(contacts.unsqueeze(0), contact_normals.unsqueeze(0), cog=cog).sum()
+        pose_regularizer = (
+            20.0
+            * (
+                translation
+                - torch.as_tensor(initial_translation, dtype=dtype, device=target_device)
+            )
+            .square()
+            .sum()
+            + 0.02 * rotation_delta.square().sum()
+        )
         energy = 100.0 * distance_energy + qp_energy + pose_regularizer
         if initial_energy is None:
             initial_energy = float(energy.detach().cpu())

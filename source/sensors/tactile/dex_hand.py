@@ -426,12 +426,6 @@ class DexHandTactileSensorBase(TactileSensorBase):
     def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
         return self.signal_processor.process(self.read_raw(model, data), self.patches)
 
-    def diagnostic_values(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
-        return self.read_raw(model, data)
-
-    def read_concat(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
-        return self.read(model, data)
-
     def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Dict[str, np.ndarray]:
         return self.patches_from_values(self.read(model, data))
 
@@ -456,24 +450,6 @@ class DexHandTactileSensorBase(TactileSensorBase):
             name: np.rint(np.clip(values, 0.0, maximum) * (255.0 / maximum)).astype(np.uint8)
             for name, values in self.read_patches(model, data).items()
         }
-
-    def read_image(
-        self,
-        model: mujoco.MjModel,
-        data: mujoco.MjData,
-        *,
-        patch_name: Optional[str] = None,
-        force_max: Optional[float] = None,
-    ) -> Dict[str, np.ndarray] | np.ndarray:
-        images = self.read_images(model, data, force_max=force_max)
-        if patch_name is None:
-            return images
-        try:
-            return images[patch_name]
-        except KeyError as exc:
-            raise ValueError(
-                f"Unknown tactile patch {patch_name!r}; known: {sorted(images)}"
-            ) from exc
 
     def metadata(self) -> Dict[str, Any]:
         patches = {

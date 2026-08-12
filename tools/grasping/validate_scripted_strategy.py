@@ -7,20 +7,23 @@ viewer to allow the next phase, or Q to stop. No dataset is created.
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 import threading
 import time
 
 import numpy as np
 from mujoco import viewer
 
-from source.cli.robot_config import add_robot_config_args
+from source.cli.robot_config import (
+    add_robot_config_args,
+    make_configured_manipulation_env,
+)
 from source.cli.grasp_search import (
     add_scripted_grasp_search_args,
     scripted_grasp_search_options,
     validate_scripted_grasp_search_args,
 )
 from source.scripted import create_strategy, registered_strategies
-from source.envs.manipulation import make_manipulation_env
 from source.viz.overlays import (
     clear_markers,
     draw_label,
@@ -36,6 +39,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--max-steps", type=int, default=900)
     parser.add_argument("--fps", type=int, default=20)
+    parser.add_argument("--object-id")
+    parser.add_argument("--grasp-config", type=Path)
     add_scripted_grasp_search_args(parser)
     parser.add_argument(
         "--viewer-speed",
@@ -49,20 +54,20 @@ def parse_args() -> argparse.Namespace:
 
 def _make_env(args):
     overrides = {
-        "robot_config_path": getattr(args, "robot_config", None),
-        "arm_name": getattr(args, "arm_name", None),
-        "hand_name": getattr(args, "hand_name", None),
-        "base_name": getattr(args, "base_name", None),
-        "control_mode": "ik",
         "control_dt": 1.0 / args.fps,
         "episode_length": args.max_steps,
-        "enable_tactile_sensors": not getattr(args, "no_tactile", False),
-        "render_mode": None,
     }
-    return make_manipulation_env(
+    return make_configured_manipulation_env(
+        args,
         args.task,
-        task_config={"reward_shaping": True, "terminate_on_success": False},
-        **{key: value for key, value in overrides.items() if value is not None},
+        task_config={
+            "reward_shaping": True,
+            "terminate_on_success": False,
+            **({"object_id": args.object_id} if args.object_id else {}),
+        },
+        control_mode="ik",
+        render_mode=None,
+        **overrides,
     )
 
 
@@ -161,6 +166,7 @@ def run(args) -> None:
     strategy = create_strategy(
         args.task,
         reuse_grasp_config=args.reuse_grasp_config,
+        grasp_config_path=args.grasp_config,
         grasp_search_options=scripted_grasp_search_options(args),
     )
     observation, info = env.reset(seed=args.seed)

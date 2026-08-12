@@ -25,9 +25,12 @@ import numpy as np
 from mujoco import viewer
 from PIL import Image
 
-from source.cli.robot_config import add_robot_config_args
+from source.cli.robot_config import (
+    add_robot_config_args,
+    make_configured_manipulation_env,
+)
 from source.runtime.pacing import RealtimePacer
-from source.envs.manipulation import make_manipulation_env, registered_tasks
+from source.envs.manipulation import registered_tasks
 from source.viz.overlays import clear_markers, draw_label
 
 
@@ -142,19 +145,6 @@ def _make_env(args: argparse.Namespace):
     if args.single_nut is not None and args.task != "nut_assembly":
         raise ValueError("--single-nut is only valid with --task nut_assembly.")
 
-    env_kwargs = dict(
-        robot_config_path=getattr(args, "robot_config", None),
-        arm_name=getattr(args, "arm_name", None),
-        hand_name=getattr(args, "hand_name", None),
-        base_name=getattr(args, "base_name", None),
-        enable_tactile_sensors=False if getattr(args, "no_tactile", False) else None,
-        control_mode="ik",
-        render_mode=None,
-        control_dt=1.0 / args.control_hz,
-    )
-    # Avoid passing None as an explicit robot-config override. This lets the
-    # project's current robot profile provide values for omitted CLI options.
-    env_kwargs = {key: value for key, value in env_kwargs.items() if value is not None}
     task_config: Dict[str, Any] = {"reward_shaping": True}
     if args.object_id is not None:
         task_config["object_id"] = args.object_id
@@ -162,7 +152,14 @@ def _make_env(args: argparse.Namespace):
         task_config["object_ids"] = tuple(args.stack_object_ids)
     if args.task == "nut_assembly" and args.single_nut is not None:
         task_config["single_nut"] = args.single_nut
-    return make_manipulation_env(args.task, task_config=task_config, **env_kwargs)
+    return make_configured_manipulation_env(
+        args,
+        args.task,
+        task_config=task_config,
+        control_mode="ik",
+        render_mode=None,
+        control_dt=1.0 / args.control_hz,
+    )
 
 
 def render_snapshot(args: argparse.Namespace) -> Path:

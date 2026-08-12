@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.lines import Line2D
 import numpy as np
+
+from source.evaluation.grasp_schema import TRAJECTORY_STABLE
 import trimesh
 import mujoco
 
@@ -303,7 +305,7 @@ def _render_tile(axis, object_id: str, payload: dict, index: int, args) -> None:
         [object_points, hand_points, approach, closing, contacts, fingertip_centers],
     )
     dataset, name = object_id.split(":", 1)
-    archive_size = len(payload.get("stable_grasp_candidates", []))
+    archive_size = len(payload.get("trajectory_stable_candidates", []))
     suffix = f" · {archive_size} candidates" if archive_size else ""
     axis.set_title(
         f"{index + 1:03d}  {dataset.upper()}\n{name.replace('_', ' ')}{suffix}",
@@ -318,7 +320,7 @@ def render(args: argparse.Namespace) -> Path:
     if args.columns <= 0 or args.object_points < 32 or args.hand_points_per_geom <= 0:
         raise ValueError("columns and point counts must be positive")
     report = json.loads(args.report.resolve().read_text(encoding="utf-8"))
-    rows = [row for row in report.get("objects", []) if row.get("status") == "stable"]
+    rows = [row for row in report.get("objects", []) if row.get("status") == TRAJECTORY_STABLE]
     if args.dataset != "all":
         rows = [row for row in rows if row["object_id"].startswith(f"{args.dataset}:")]
     if args.limit is not None:
@@ -326,7 +328,7 @@ def render(args: argparse.Namespace) -> Path:
             raise ValueError("--limit must be positive")
         rows = rows[: args.limit]
     if not rows:
-        raise ValueError(f"No stable objects found in {args.report}")
+        raise ValueError(f"No trajectory-stable objects found in {args.report}")
 
     columns = min(args.columns, len(rows))
     row_count = math.ceil(len(rows) / columns)

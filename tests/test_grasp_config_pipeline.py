@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -9,12 +10,13 @@ import numpy as np
 import pytest
 
 from source.grasping import grasp_config_search
-from source.grasping.standalone_validator import StandaloneValidationResult
+from source.grasping.standalone_validator import TrajectoryValidationResult
 
 
-def _validation(*, stable: bool) -> StandaloneValidationResult:
-    return StandaloneValidationResult(
-        stable=stable,
+def _validation(*, stable: bool) -> TrajectoryValidationResult:
+    return TrajectoryValidationResult(
+        trajectory_collision_free=True,
+        trajectory_hold_stable=stable,
         initial_displacement=0.0,
         position_drift=0.0 if stable else 0.02,
         rotation_drift=0.0,
@@ -59,7 +61,10 @@ def test_validated_grasp_publishes_first_stable_candidate(
     assert searched_seeds == [7, 8]
     assert result.selected_seed == 8
     assert result.attempts_used == 2
-    assert output.read_text(encoding="utf-8") == '{"seed": 8}'
+    payload = json.loads(output.read_text(encoding="utf-8"))
+    assert payload["seed"] == 8
+    assert payload["trajectory_hold_stable"] is True
+    assert payload["validation_stage"] == "trajectory_hold_stable"
     assert not output.with_suffix(".json.candidate").exists()
 
 

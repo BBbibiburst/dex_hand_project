@@ -6,6 +6,10 @@ import numpy as np
 
 from apps import collect_scripted_lerobot
 from apps.collect_scripted_lerobot import _yaw_from_quaternion
+from apps.collect_scripted_lerobot import (
+    _rotated_candidate_indices,
+    _successful_diversity,
+)
 from source.scripted.lift import LiftStrategy, _mesh_symmetry_yaws_from_vertices
 
 
@@ -32,6 +36,46 @@ def test_mesh_symmetry_rejects_invalid_quarter_turn_for_box() -> None:
     assert not any(np.isclose(yaw, np.pi / 2.0) for yaw in yaws)
 
 
+def test_candidate_priority_rotates_across_randomized_seeds() -> None:
+    assert _rotated_candidate_indices(0, 4) == (0, 1, 2, 3)
+    assert _rotated_candidate_indices(1, 4) == (1, 2, 3, 0)
+    assert _rotated_candidate_indices(5, 4) == (1, 2, 3, 0)
+
+
+def test_successful_diversity_counts_only_saved_successes() -> None:
+    trials = [
+        {
+            "success": True,
+            "seed": 10,
+            "candidate_index": 0,
+            "initial_position": [0.0, 0.0, 0.1],
+            "initial_yaw": -3.0,
+        },
+        {
+            "success": False,
+            "seed": 11,
+            "candidate_index": 1,
+            "initial_position": [1.0, 1.0, 0.1],
+            "initial_yaw": 0.0,
+        },
+        {
+            "success": True,
+            "seed": 12,
+            "candidate_index": 2,
+            "initial_position": [0.2, 0.1, 0.1],
+            "initial_yaw": 0.2,
+        },
+    ]
+
+    diversity = _successful_diversity(trials, candidate_count=4)
+
+    assert diversity["unique_successful_seeds"] == 2
+    assert diversity["unique_successful_candidates"] == 2
+    assert diversity["candidate_coverage_rate"] == 0.5
+    assert np.allclose(diversity["initial_position_span_xyz"], [0.2, 0.1, 0.0])
+    assert diversity["initial_yaw_bins"] == 2
+
+
 def test_catalog_evaluation_writes_per_object_success_rate(
     tmp_path: Path,
     monkeypatch,
@@ -41,13 +85,15 @@ def test_catalog_evaluation_writes_per_object_success_rate(
     source.write_text(
         json.dumps(
             {
+                "schema_version": 4,
+                "parameters": {"validation_semantics": "trajectory-hold-v2"},
                 "objects": [
                     {
                         "object_id": "ycb:test",
-                        "status": "stable",
+                        "status": "trajectory_stable",
                         "config": "grasp.json",
                     }
-                ]
+                ],
             }
         ),
         encoding="utf-8",
@@ -66,11 +112,17 @@ def test_catalog_evaluation_writes_per_object_success_rate(
             "seed": seed,
             "success": seed % 2 == 0,
             "final_phase": "verify",
+            "initial_position": [0.0, 0.0, 0.1],
+            "initial_yaw": 0.0,
         },
     )
     args = SimpleNamespace(
         task="lift",
         trials_per_object=2,
+        coverage_search=False,
+        target_successes_per_object=1,
+        max_coverage_seeds=30,
+        max_coverage_candidates=16,
         no_tactile=False,
         limit=None,
         grasp_benchmark_report=source,

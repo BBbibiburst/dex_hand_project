@@ -33,7 +33,6 @@ from source.sensors.tactile.probe import (
 )
 
 
-
 @dataclass(frozen=True)
 class TaxelSite:
     site_id: int
@@ -94,8 +93,6 @@ def _parse_args() -> argparse.Namespace:
         include_tactile_toggle=False,
     )
     return parser.parse_args()
-
-
 
 
 def _build_model_with_probe(
@@ -190,10 +187,6 @@ def _initial_probe_position(
     else:
         normal /= norm
     return center + max(5.0 * radius, 0.035) * normal
-
-
-
-
 
 
 def _geom_name(model: mujoco.MjModel, geom_id: int) -> str:

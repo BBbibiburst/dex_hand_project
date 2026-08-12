@@ -13,27 +13,44 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from matplotlib.patches import Patch
+from source.evaluation.grasp_schema import (
+    DIRECT_HOLD_ONLY,
+    LEGACY_STABLE,
+    SEARCH_ERROR,
+    TRAJECTORY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
+)
 
 
 STATUS_ORDER = (
-    "stable",
-    "unstable",
-    "validation_error",
-    "search_error",
+    TRAJECTORY_STABLE,
+    DIRECT_HOLD_ONLY,
+    "robot_infeasible",
+    LEGACY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
+    SEARCH_ERROR,
 )
 
 STATUS_LABELS = {
-    "stable": "Stable",
-    "unstable": "Unstable",
-    "validation_error": "Validation error",
-    "search_error": "Search error",
+    TRAJECTORY_STABLE: "Trajectory stable",
+    DIRECT_HOLD_ONLY: "Direct hold only",
+    "robot_infeasible": "Robot/Lift infeasible",
+    LEGACY_STABLE: "Legacy stable (ambiguous)",
+    UNSTABLE: "Unstable",
+    VALIDATION_ERROR: "Validation error",
+    SEARCH_ERROR: "Search error",
 }
 
 STATUS_COLORS = {
-    "stable": "tab:green",
-    "unstable": "tab:orange",
-    "validation_error": "tab:red",
-    "search_error": "tab:gray",
+    TRAJECTORY_STABLE: "tab:green",
+    DIRECT_HOLD_ONLY: "tab:blue",
+    "robot_infeasible": "tab:purple",
+    LEGACY_STABLE: "tab:gray",
+    UNSTABLE: "tab:orange",
+    VALIDATION_ERROR: "tab:red",
+    SEARCH_ERROR: "tab:gray",
 }
 
 
@@ -49,9 +66,7 @@ def load_report(path: Path) -> dict[str, Any]:
 
     objects = report.get("objects")
     if not isinstance(objects, list):
-        raise ValueError(
-            "The benchmark report must contain an 'objects' list."
-        )
+        raise ValueError("The benchmark report must contain an 'objects' list.")
 
     return report
 
@@ -64,27 +79,28 @@ def normalize_status(row: Mapping[str, Any]) -> str:
         status = status.replace("-", "_").replace(" ", "_")
 
         aliases = {
-            "success": "stable",
-            "passed": "stable",
-            "pass": "stable",
-            "failed": "unstable",
-            "failure": "unstable",
-            "error": "validation_error",
+            "stable": LEGACY_STABLE,
+            "success": LEGACY_STABLE,
+            "passed": LEGACY_STABLE,
+            "pass": LEGACY_STABLE,
+            "failed": UNSTABLE,
+            "failure": UNSTABLE,
+            "error": VALIDATION_ERROR,
         }
         status = aliases.get(status, status)
 
         if status in STATUS_ORDER:
             return status
 
-    stable = row.get("stable")
+    stable = row.get("trajectory_hold_stable")
 
     if stable is True:
-        return "stable"
+        return TRAJECTORY_STABLE
 
     if stable is False:
-        return "unstable"
+        return UNSTABLE
 
-    return "validation_error"
+    return VALIDATION_ERROR
 
 
 def object_id(row: Mapping[str, Any]) -> str:
@@ -127,9 +143,7 @@ def metric_array(
     """
 
     values = [
-        as_float(row.get(key)) * scale
-        if not math.isnan(as_float(row.get(key)))
-        else math.nan
+        as_float(row.get(key)) * scale if not math.isnan(as_float(row.get(key))) else math.nan
         for row in rows
     ]
     return np.asarray(values, dtype=float)
@@ -149,18 +163,10 @@ def failure_score(row: Mapping[str, Any]) -> float:
 
     status = normalize_status(row)
 
-    position_drift_mm = (
-        finite_or_zero(row.get("position_drift")) * 1000.0
-    )
-    vertical_drop_mm = (
-        max(0.0, finite_or_zero(row.get("vertical_drop"))) * 1000.0
-    )
-    initial_displacement_mm = (
-        finite_or_zero(row.get("initial_displacement")) * 1000.0
-    )
-    rotation_drift_deg = math.degrees(
-        finite_or_zero(row.get("rotation_drift"))
-    )
+    position_drift_mm = finite_or_zero(row.get("position_drift")) * 1000.0
+    vertical_drop_mm = max(0.0, finite_or_zero(row.get("vertical_drop"))) * 1000.0
+    initial_displacement_mm = finite_or_zero(row.get("initial_displacement")) * 1000.0
+    rotation_drift_deg = math.degrees(finite_or_zero(row.get("rotation_drift")))
 
     initial_contacts = finite_or_zero(row.get("initial_contacts"))
     final_contacts = finite_or_zero(row.get("final_contacts"))
@@ -174,11 +180,11 @@ def failure_score(row: Mapping[str, Any]) -> float:
         + lost_contacts * 2.0
     )
 
-    if status == "validation_error":
+    if status == VALIDATION_ERROR:
         score += 100.0
-    elif status == "search_error":
+    elif status == SEARCH_ERROR:
         score += 150.0
-    elif status == "unstable":
+    elif status == UNSTABLE:
         score += 20.0
 
     return score
@@ -293,11 +299,7 @@ def plot_summary(
 ) -> None:
     counts = Counter(normalize_status(row) for row in rows)
 
-    statuses = [
-        status
-        for status in STATUS_ORDER
-        if counts.get(status, 0) > 0
-    ]
+    statuses = [status for status in STATUS_ORDER if counts.get(status, 0) > 0]
 
     if not statuses:
         set_no_data(ax)
@@ -310,13 +312,10 @@ def plot_summary(
     bars = ax.bar(labels, values, color=colors, width=0.65)
 
     total = len(rows)
-    stable_count = counts.get("stable", 0)
+    stable_count = counts.get(TRAJECTORY_STABLE, 0)
     stable_rate = stable_count / total * 100.0 if total else 0.0
 
-    ax.set_title(
-        f"Result summary — stable {stable_count}/{total} "
-        f"({stable_rate:.1f}%)"
-    )
+    ax.set_title(f"Result summary — trajectory stable {stable_count}/{total} ({stable_rate:.1f}%)")
     ax.set_ylabel("Object count")
     ax.grid(axis="y", alpha=0.25)
 
@@ -363,9 +362,7 @@ def plot_failure_ranking(
     *,
     top_n: int,
 ) -> None:
-    failed_rows = [
-        row for row in rows if normalize_status(row) != "stable"
-    ]
+    failed_rows = [row for row in rows if normalize_status(row) != TRAJECTORY_STABLE]
 
     failed_rows.sort(key=failure_score, reverse=True)
     failed_rows = failed_rows[: max(1, top_n)]
@@ -607,9 +604,7 @@ def plot_runtime(
         )
 
     left_handles, left_labels = ax.get_legend_handles_labels()
-    right_handles, right_labels = (
-        attempts_ax.get_legend_handles_labels()
-    )
+    right_handles, right_labels = attempts_ax.get_legend_handles_labels()
 
     ax.legend(
         left_handles + right_handles,
@@ -628,7 +623,7 @@ def add_failure_background(
     """Add subtle bands behind non-stable object positions."""
 
     for index, row in enumerate(rows):
-        if normalize_status(row) == "stable":
+        if normalize_status(row) == TRAJECTORY_STABLE:
             continue
 
         ax.axvspan(
@@ -719,8 +714,7 @@ def build_figure(
         add_failure_background(axis, rows)
 
     figure.suptitle(
-        f"Grasp catalog benchmark: {report_name}\n"
-        f"objects={len(rows)}, sort={sort_mode}",
+        f"Grasp catalog benchmark: {report_name}\nobjects={len(rows)}, sort={sort_mode}",
         fontsize=16,
     )
 

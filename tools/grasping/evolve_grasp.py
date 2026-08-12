@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from source.grasping.dexevolve import EvolutionConfig, evolve
+from source.grasping.standalone_validator import validate_grasp_payload_trajectory
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,22 +38,50 @@ def main() -> None:
     )
     archive, history = evolve(payload, config)
     best = archive[0]
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(best.payload, indent=2), encoding="utf-8")
+    selected = None
+    trajectory_errors = []
+    for individual in archive:
+        if not individual.direct_hold_stable:
+            continue
+        candidate = dict(individual.payload)
+        try:
+            validation = validate_grasp_payload_trajectory(
+                candidate,
+                seconds=args.seconds,
+            )
+        except Exception as exc:
+            trajectory_errors.append(str(exc))
+            continue
+        if validation.trajectory_hold_stable:
+            candidate.update(
+                direct_hold_stable=True,
+                trajectory_collision_free=True,
+                trajectory_hold_stable=True,
+                validation_stage="trajectory_hold_stable",
+            )
+            selected = (candidate, validation)
+            break
     report = args.report or args.output.with_suffix(".evolution.json")
+    report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(
         json.dumps(
             {
                 "config": asdict(config),
                 "summary": {
                     "archive": len(archive),
-                    "stable": sum(item.stable for item in archive),
+                    "direct_hold_stable": sum(item.direct_hold_stable for item in archive),
+                    "trajectory_hold_stable": selected is not None,
                     "best_fitness": best.fitness,
-                    "best_stable": best.stable,
+                    "best_direct_hold_stable": best.direct_hold_stable,
+                    "trajectory_validation_errors": trajectory_errors[:8],
                 },
                 "history": history,
                 "individuals": [
-                    {"fitness": item.fitness, "stable": item.stable, "metrics": item.metrics}
+                    {
+                        "fitness": item.fitness,
+                        "direct_hold_stable": item.direct_hold_stable,
+                        "metrics": item.metrics,
+                    }
                     for item in archive
                 ],
             },
@@ -60,7 +89,16 @@ def main() -> None:
         ),
         encoding="utf-8",
     )
-    print(f"stable={sum(item.stable for item in archive)}/{len(archive)} output={args.output}")
+    if selected is None:
+        raise RuntimeError(
+            "Evolution found no grasp that passes executable approach/closure/hold "
+            f"validation; diagnostic report: {report}"
+        )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = args.output.with_suffix(".json.tmp")
+    temporary.write_text(json.dumps(selected[0], indent=2), encoding="utf-8")
+    temporary.replace(args.output)
+    print(f"trajectory_hold_stable=True output={args.output} report={report}")
 
 
 if __name__ == "__main__":

@@ -14,8 +14,11 @@ import mujoco
 import numpy as np
 from mujoco import viewer
 
-from source.cli.robot_config import add_robot_config_args
-from source.envs.manipulation import make_manipulation_env, registered_tasks
+from source.cli.robot_config import (
+    add_robot_config_args,
+    make_configured_manipulation_env,
+)
+from source.envs.manipulation import registered_tasks
 from source.teleop.config import load_teleop_config
 from source.teleop.devices import (
     MockStretchGlove,
@@ -198,23 +201,19 @@ def parse_args():
 
 def _make_env(args):
     overrides = {
-        "robot_config_path": getattr(args, "robot_config", None),
-        "arm_name": getattr(args, "arm_name", None),
-        "hand_name": getattr(args, "hand_name", None),
-        "base_name": getattr(args, "base_name", None),
-        "control_mode": "ik",
         "control_dt": 1.0 / args.fps,
         # Interactive episodes are ended explicitly with N / R / Q. Keep the
         # Gymnasium time limit from expiring while the operator is calibrating,
         # positioning, or recording a long demonstration.
         "episode_length": np.iinfo(np.int32).max,
-        "enable_tactile_sensors": not getattr(args, "no_tactile", False),
-        "render_mode": None,
     }
-    return make_manipulation_env(
+    return make_configured_manipulation_env(
+        args,
         args.task,
         task_config={"reward_shaping": True},
-        **{key: value for key, value in overrides.items() if value is not None},
+        control_mode="ik",
+        render_mode=None,
+        **overrides,
     )
 
 
@@ -322,11 +321,9 @@ def run(args) -> None:
         ) -> np.ndarray:
             renderer.update_scene(env.data, camera=args.camera)
             image = renderer.render().copy()
-            diagnostic_values = getattr(env.tactile_sensor, "diagnostic_values", None)
+            read_raw = getattr(env.tactile_sensor, "read_raw", None)
             raw_tactile = (
-                diagnostic_values(env.model, env.data)
-                if callable(diagnostic_values)
-                else observation["tactile"]
+                read_raw(env.model, env.data) if callable(read_raw) else observation["tactile"]
             )
             grasp_contacts = 0
             for contact_index in range(env.data.ncon):

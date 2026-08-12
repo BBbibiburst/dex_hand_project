@@ -17,10 +17,38 @@ from source.grasping.constants import (
 from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
 from source.robots.registry import get_hand
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+
+def resolve_payload_mesh_path(mesh: str | Path) -> Path:
+    """Resolve configs copied from another project checkout."""
+    path = Path(mesh).expanduser()
+    if path.is_file():
+        return path.resolve()
+    parts = path.parts
+    if "assets" in parts:
+        relocated = PROJECT_ROOT.joinpath(*parts[parts.index("assets") :])
+        if relocated.is_file():
+            return relocated.resolve()
+    raise FileNotFoundError(f"Grasp object mesh does not exist: {path}")
+
 
 @dataclass(frozen=True)
-class StandaloneValidationResult:
-    stable: bool
+class DirectHoldValidationResult:
+    direct_hold_stable: bool
+    initial_displacement: float
+    position_drift: float
+    rotation_drift: float
+    vertical_drop: float
+    initial_contacts: int
+    final_contacts: int
+    simulated_seconds: float
+
+
+@dataclass(frozen=True)
+class TrajectoryValidationResult:
+    trajectory_collision_free: bool
+    trajectory_hold_stable: bool
     initial_displacement: float
     position_drift: float
     rotation_drift: float
@@ -36,7 +64,7 @@ def validate_grasp_config(
     seconds: float = 3.0,
     settle_seconds: float = 0.8,
     grip_preload: float = DEFAULT_GRIP_PRELOAD,
-) -> StandaloneValidationResult:
+) -> TrajectoryValidationResult:
     """Load and dynamically validate one versioned grasp configuration."""
     config_path = Path(path)
     payload = json.loads(config_path.read_text(encoding="utf-8"))
@@ -45,10 +73,26 @@ def validate_grasp_config(
     if payload.get("hand_fit_success") is not True:
         raise ValueError(f"Grasp {config_path} did not pass mesh fitting.")
 
+    return validate_grasp_payload_trajectory(
+        payload,
+        seconds=seconds,
+        settle_seconds=settle_seconds,
+        grip_preload=grip_preload,
+    )
+
+
+def validate_grasp_payload_trajectory(
+    payload: dict,
+    *,
+    seconds: float = 3.0,
+    settle_seconds: float = 0.8,
+    grip_preload: float = DEFAULT_GRIP_PRELOAD,
+) -> TrajectoryValidationResult:
+    """Execute no-contact approach, closing trajectory, preload and hold."""
     end_effector_name = payload.get("end_effector_name", "dex_hand")
     actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
     model, data = build_standalone_model(
-        object_mesh=payload["mesh"],
+        object_mesh=resolve_payload_mesh_path(payload["mesh"]),
         mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
         mesh_scale=float(payload["mesh_scale"]),
         hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
@@ -77,11 +121,22 @@ def validate_grasp_config(
         ),
         actuator_names=actuator_names,
     )
-    return validate_standalone(
+    result = validate_standalone(
         model,
         data,
         seconds=seconds,
         settle_seconds=settle_seconds,
+    )
+    return TrajectoryValidationResult(
+        trajectory_collision_free=True,
+        trajectory_hold_stable=result.direct_hold_stable,
+        initial_displacement=result.initial_displacement,
+        position_drift=result.position_drift,
+        rotation_drift=result.rotation_drift,
+        vertical_drop=result.vertical_drop,
+        initial_contacts=result.initial_contacts,
+        final_contacts=result.final_contacts,
+        simulated_seconds=result.simulated_seconds,
     )
 
 
@@ -91,8 +146,8 @@ def validate_grasp_payload_direct(
     seconds: float = 3.0,
     settle_seconds: float = 0.8,
     grip_preload: float = DEFAULT_GRIP_PRELOAD,
-) -> StandaloneValidationResult:
-    """Evaluate a final grasp state without replaying its approach trajectory.
+) -> DirectHoldValidationResult:
+    """Evaluate only a final grasp state without replaying its trajectory.
 
     Simulator-in-the-loop optimizers mutate the final wrist pose independently
     of motion planning. This entry point deliberately evaluates that state
@@ -101,7 +156,7 @@ def validate_grasp_payload_direct(
     end_effector_name = payload.get("end_effector_name", "dex_hand")
     actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
     model, data = build_standalone_model(
-        object_mesh=payload["mesh"],
+        object_mesh=resolve_payload_mesh_path(payload["mesh"]),
         mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
         mesh_scale=float(payload["mesh_scale"]),
         hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
@@ -138,7 +193,7 @@ def validate_grasp_trajectory_payload(
     end_effector_name = payload.get("end_effector_name", "dex_hand")
     actuator_names = tuple(get_hand(end_effector_name).position_actuator_names)
     model, data = build_standalone_model(
-        object_mesh=payload["mesh"],
+        object_mesh=resolve_payload_mesh_path(payload["mesh"]),
         mesh_center=np.asarray(payload["mesh_center"], dtype=np.float64),
         mesh_scale=float(payload["mesh_scale"]),
         hand_translation=np.asarray(payload["hand_translation"], dtype=np.float64),
@@ -493,7 +548,7 @@ def validate_standalone(
     seconds: float = 3.0,
     settle_seconds: float = 0.8,
     step_callback=None,
-) -> StandaloneValidationResult:
+) -> DirectHoldValidationResult:
     """Simulate a fixed hand holding a free object under gravity."""
     if seconds <= 0 or settle_seconds < 0:
         raise ValueError("seconds must be positive and settle_seconds non-negative.")
@@ -516,7 +571,7 @@ def _validate_standalone(
     settle_seconds: float,
     step_callback,
     warnings: list[str],
-) -> StandaloneValidationResult:
+) -> DirectHoldValidationResult:
     body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "validation_object_body")
     joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "validation_object_freejoint")
     qpos_address = int(model.jnt_qposadr[joint_id])
@@ -560,14 +615,14 @@ def _validate_standalone(
         or int(data.contact[index].geom2) == object_geom
         for index in range(data.ncon)
     )
-    stable = (
+    direct_hold_stable = (
         position_drift <= 0.01
         and rotation_drift <= 0.35
         and vertical_drop <= 0.015
         and final_contacts >= 2
     )
-    return StandaloneValidationResult(
-        stable=stable,
+    return DirectHoldValidationResult(
+        direct_hold_stable=direct_hold_stable,
         initial_displacement=initial_displacement,
         position_drift=position_drift,
         rotation_drift=rotation_drift,

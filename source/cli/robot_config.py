@@ -59,6 +59,32 @@ def make_configured_env(
     )
 
 
+def make_configured_manipulation_env(
+    args: argparse.Namespace,
+    task: str,
+    *,
+    task_config: dict[str, Any] | None = None,
+    render_mode: str | None = None,
+    control_mode: str | None = None,
+    **overrides: Any,
+):
+    """Create a manipulation env while preserving unspecified config values."""
+    from source.envs.manipulation import make_manipulation_env
+
+    config_overrides = {
+        key: value for key, value in robot_config_overrides(args).items() if value is not None
+    }
+    config_overrides.update({key: value for key, value in overrides.items() if value is not None})
+    return make_manipulation_env(
+        task,
+        task_config=task_config,
+        render_mode=render_mode,
+        control_mode=control_mode,
+        robot_config_path=getattr(args, "robot_config", None),
+        **config_overrides,
+    )
+
+
 def load_configured_robot(args: argparse.Namespace) -> dict[str, Any]:
     """Load a robot config and apply standard CLI overrides."""
     config = load_robot_config(getattr(args, "robot_config", None))

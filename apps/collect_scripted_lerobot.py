@@ -10,14 +10,19 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
+from source.evaluation.grasp_schema import (
+    BENCHMARK_SCHEMA_VERSION,
+    TRAJECTORY_STABLE,
+    VALIDATION_SEMANTICS,
+)
 from source.cli.robot_config import add_robot_config_args
+from source.cli.robot_config import make_configured_manipulation_env
 from source.cli.grasp_search import (
     add_scripted_grasp_search_args,
     scripted_grasp_search_options,
     validate_scripted_grasp_search_args,
 )
 from source.scripted import create_strategy, registered_strategies
-from source.envs.manipulation import make_manipulation_env
 from source.envs.manipulation.object_catalog import lift_object_ids
 from source.teleop.devices import GloveSample, ViveSample
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
@@ -42,9 +47,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--grasp-benchmark-report",
         type=Path,
-        help="Evaluate stable configs from a grasp benchmark in randomized Lift episodes.",
+        help=("Evaluate trajectory-stable benchmark configs in randomized Lift episodes."),
     )
     parser.add_argument("--trials-per-object", type=int, default=10)
+    parser.add_argument(
+        "--coverage-search",
+        action="store_true",
+        help="Search seed/candidate combinations until each object has a success.",
+    )
+    parser.add_argument("--target-successes-per-object", type=int, default=1)
+    parser.add_argument("--max-coverage-seeds", type=int, default=30)
+    parser.add_argument("--max-coverage-candidates", type=int, default=16)
     parser.add_argument("--evaluation-output", type=Path)
     parser.add_argument("--resume-evaluation", action="store_true")
     parser.add_argument("--dataset", choices=("all", "ycb", "egad"), default="all")
@@ -57,25 +70,21 @@ def parse_args() -> argparse.Namespace:
 
 def _make_env(args, *, object_id: str | None = None):
     overrides = {
-        "robot_config_path": getattr(args, "robot_config", None),
-        "arm_name": getattr(args, "arm_name", None),
-        "hand_name": getattr(args, "hand_name", None),
-        "base_name": getattr(args, "base_name", None),
-        "control_mode": "ik",
         "control_dt": 1.0 / args.fps,
         "episode_length": args.max_steps,
-        "enable_tactile_sensors": not getattr(args, "no_tactile", False),
-        "render_mode": None,
     }
     task_config = {"reward_shaping": True, "terminate_on_success": False}
     if object_id is not None:
         task_config["object_id"] = object_id
-    return make_manipulation_env(
+    return make_configured_manipulation_env(
+        args,
         args.task,
         # The strategy owns the final hold-and-verify phase. Do not terminate
         # the environment on the first transient success sample.
         task_config=task_config,
-        **{key: value for key, value in overrides.items() if value is not None},
+        control_mode="ik",
+        render_mode=None,
+        **overrides,
     )
 
 
@@ -106,7 +115,46 @@ def _write_evaluation_report(path: Path, payload: dict) -> None:
     temporary.replace(path)
 
 
-def _evaluate_episode(env, strategy, *, seed: int, max_steps: int) -> dict:
+def _rotated_candidate_indices(seed_index: int, candidate_count: int) -> tuple[int, ...]:
+    """Rotate candidate priority so early candidates do not dominate the dataset."""
+    start = seed_index % candidate_count
+    return tuple((start + offset) % candidate_count for offset in range(candidate_count))
+
+
+def _successful_diversity(trials: list[dict], *, candidate_count: int) -> dict:
+    """Summarize diversity among saved successful episodes."""
+    successful = [trial for trial in trials if trial["success"]]
+    if not successful:
+        return {
+            "unique_successful_seeds": 0,
+            "unique_successful_candidates": 0,
+            "candidate_coverage_rate": 0.0,
+            "initial_position_span_xyz": [0.0, 0.0, 0.0],
+            "initial_yaw_bins": 0,
+        }
+    positions = np.asarray([trial["initial_position"] for trial in successful], dtype=np.float64)
+    yaw_bins = {
+        int(np.floor((float(trial["initial_yaw"]) + np.pi) / (2.0 * np.pi) * 12.0)) % 12
+        for trial in successful
+    }
+    candidates = {int(trial["candidate_index"]) for trial in successful}
+    return {
+        "unique_successful_seeds": len({int(trial["seed"]) for trial in successful}),
+        "unique_successful_candidates": len(candidates),
+        "candidate_coverage_rate": len(candidates) / candidate_count,
+        "initial_position_span_xyz": np.ptp(positions, axis=0).tolist(),
+        "initial_yaw_bins": len(yaw_bins),
+    }
+
+
+def _evaluate_episode(
+    env,
+    strategy,
+    *,
+    seed: int,
+    max_steps: int,
+    frame_callback=None,
+) -> dict:
     observation, info = env.reset(seed=seed)
     initial_position = np.asarray(observation["object_pos"], dtype=np.float64).copy()
     initial_quaternion = np.asarray(observation["object_quat"], dtype=np.float64).copy()
@@ -119,9 +167,11 @@ def _evaluate_episode(env, strategy, *, seed: int, max_steps: int) -> dict:
         for step in range(max_steps):
             action, _ = strategy.tick(observation, info, step, env)
             observation, reward, terminated, truncated, info = env.step(action)
+            if frame_callback is not None:
+                frame_callback(observation, action)
             steps = step + 1
             episode_return += reward
-            success = bool(strategy.state.verified_success)
+            success = bool(strategy.state.strategy_verified_success)
             if success or strategy.finished or terminated or truncated or strategy.aborted:
                 break
     except Exception as exc:
@@ -145,17 +195,38 @@ def _run_catalog_evaluation(args) -> None:
         raise ValueError("--grasp-benchmark-report currently supports only --task lift.")
     if args.trials_per_object <= 0:
         raise ValueError("--trials-per-object must be positive.")
+    for name in (
+        "target_successes_per_object",
+        "max_coverage_seeds",
+        "max_coverage_candidates",
+    ):
+        if getattr(args, name, 1) <= 0:
+            raise ValueError(f"--{name.replace('_', '-')} must be positive.")
+    if args.coverage_search and args.target_successes_per_object > args.max_coverage_seeds:
+        raise ValueError(
+            "--target-successes-per-object cannot exceed --max-coverage-seeds: "
+            "diversity collection saves at most one success per randomized seed."
+        )
     if getattr(args, "no_tactile", False):
         raise ValueError("Randomized Lift evaluation requires tactile sensors.")
     if args.limit is not None and args.limit <= 0:
         raise ValueError("--limit must be positive.")
     source_report = json.loads(args.grasp_benchmark_report.read_text(encoding="utf-8"))
+    source_parameters = source_report.get("parameters", {})
+    if (
+        source_report.get("schema_version") != BENCHMARK_SCHEMA_VERSION
+        or source_parameters.get("validation_semantics") != VALIDATION_SEMANTICS
+    ):
+        raise ValueError(
+            "The grasp benchmark uses legacy or ambiguous stability semantics. "
+            "Regenerate it with the current benchmark pipeline."
+        )
     available = set(lift_object_ids())
     requested = None if not args.object_ids else set(args.object_ids)
     rows = []
     for row in source_report.get("objects", []):
         object_id = row.get("object_id")
-        if row.get("status") != "stable" or object_id not in available:
+        if row.get("status") != TRAJECTORY_STABLE or object_id not in available:
             continue
         if args.dataset != "all" and not object_id.startswith(f"{args.dataset}:"):
             continue
@@ -165,21 +236,30 @@ def _run_catalog_evaluation(args) -> None:
     if requested is not None:
         missing = sorted(requested - {row["object_id"] for row in rows})
         if missing:
-            raise ValueError(f"Requested objects have no stable benchmark config: {missing}")
+            raise ValueError(
+                f"Requested objects have no trajectory-stable benchmark config: {missing}"
+            )
     if args.limit is not None:
         rows = rows[: args.limit]
     if not rows:
-        raise ValueError("No stable grasp configs match the evaluation selection.")
+        raise ValueError("No trajectory-stable grasp configs match the selection.")
 
     output = args.evaluation_output or args.grasp_benchmark_report.with_name(
         f"{args.grasp_benchmark_report.stem}_lift_evaluation.json"
     )
     result = {
-        "schema_version": 1,
+        "schema_version": 4,
         "source_grasp_report": str(args.grasp_benchmark_report),
+        "source_validation_semantics": source_parameters["validation_semantics"],
         "parameters": {
             "task": "lift",
             "trials_per_object": args.trials_per_object,
+            "coverage_search": args.coverage_search,
+            "target_successes_per_object": args.target_successes_per_object,
+            "max_coverage_seeds": args.max_coverage_seeds,
+            "max_coverage_candidates": args.max_coverage_candidates,
+            "one_success_per_seed": True,
+            "candidate_order": "rotated_by_seed",
             "seed": args.seed,
             "max_steps": args.max_steps,
             "fps": args.fps,
@@ -200,6 +280,7 @@ def _run_catalog_evaluation(args) -> None:
     completed_ids = {item["object_id"] for item in result["objects"]}
     total_successes = sum(item["successes"] for item in result["objects"])
     total_trials = sum(item["trials"] for item in result["objects"])
+    recorder = None
     for object_index, row in enumerate(rows):
         object_id = row["object_id"]
         if object_id in completed_ids:
@@ -209,45 +290,116 @@ def _run_catalog_evaluation(args) -> None:
         if not config_path.is_absolute():
             config_path = Path.cwd() / config_path
         env = _make_env(args, object_id=object_id)
-        strategy = create_strategy(
-            "lift",
-            reuse_grasp_config=True,
-            grasp_config_path=config_path,
-            grasp_search_options=scripted_grasp_search_options(args),
-        )
+        renderer = None
+        if args.coverage_search and not getattr(args, "dry_run", False):
+            initial_observation, _ = env.reset(seed=args.seed)
+            renderer = mujoco.Renderer(env.model, height=args.image_height, width=args.image_width)
+            renderer.update_scene(env.data, camera=args.camera)
+            first_image = renderer.render()
+            if recorder is None:
+                recorder = LeRobotEpisodeRecorder(
+                    repo_id=args.repo_id,
+                    root=args.output,
+                    fps=args.fps,
+                    state_dim=env.model.nq + env.model.nv + env.model.nu,
+                    action_dim=env.action_space.shape[0],
+                    tactile_shape=np.asarray(initial_observation["tactile"]).shape,
+                    image_shape=first_image.shape,
+                    use_videos=not args.no_video,
+                )
+
+        def record_frame(observation, action) -> None:
+            if recorder is None or renderer is None:
+                return
+            renderer.update_scene(env.data, camera=args.camera)
+            image = renderer.render().copy()
+            glove, vive = _operator_samples(action, env, float(env.data.time))
+            recorder.add_frame(
+                observation=observation,
+                image=image,
+                action=action,
+                glove=glove,
+                vive=vive,
+                task=f"lift:{object_id}",
+            )
+
+        candidate_count = 1
+        if args.coverage_search:
+            config_payload = json.loads(config_path.read_text(encoding="utf-8"))
+            archive = config_payload.get("trajectory_stable_candidates")
+            if isinstance(archive, list) and archive:
+                candidate_count = min(len(archive), args.max_coverage_candidates)
         trials = []
         try:
-            for trial_index in range(args.trials_per_object):
-                seed = args.seed + object_index * args.trials_per_object + trial_index
-                trial = _evaluate_episode(
-                    env,
-                    strategy,
-                    seed=seed,
-                    max_steps=args.max_steps,
+            seed_count = args.max_coverage_seeds if args.coverage_search else args.trials_per_object
+            for seed_index in range(seed_count):
+                seed = args.seed + object_index * seed_count + seed_index
+                candidate_indices = (
+                    _rotated_candidate_indices(seed_index, candidate_count)
+                    if args.coverage_search
+                    else range(candidate_count)
                 )
-                trials.append(trial)
-                outcome = "SUCCESS" if trial["success"] else "FAILED"
-                print(
-                    f"[{object_index + 1}/{len(rows)}] {object_id} "
-                    f"trial={trial_index + 1}/{args.trials_per_object} "
-                    f"seed={seed} {outcome} phase={trial['final_phase']}",
-                    flush=True,
-                )
+                for candidate_index in candidate_indices:
+                    strategy = create_strategy(
+                        "lift",
+                        reuse_grasp_config=True,
+                        grasp_config_path=config_path,
+                        grasp_candidate_index=(candidate_index if args.coverage_search else None),
+                        grasp_search_options=scripted_grasp_search_options(args),
+                    )
+                    episode_kwargs = {
+                        "seed": seed,
+                        "max_steps": args.max_steps,
+                    }
+                    if args.coverage_search:
+                        episode_kwargs["frame_callback"] = record_frame
+                    trial = _evaluate_episode(env, strategy, **episode_kwargs)
+                    trial["candidate_index"] = candidate_index
+                    trials.append(trial)
+                    if recorder is not None:
+                        if trial["success"]:
+                            recorder.save_episode()
+                        else:
+                            recorder.clear_episode()
+                    outcome = "SUCCESS" if trial["success"] else "FAILED"
+                    print(
+                        f"[{object_index + 1}/{len(rows)}] {object_id} "
+                        f"attempt={len(trials)} seed={seed} candidate={candidate_index} "
+                        f"{outcome} phase={trial['final_phase']}",
+                        flush=True,
+                    )
+                    # A randomized seed defines one object pose. Saving more
+                    # than one successful candidate for that seed would add
+                    # near-duplicate demonstrations, so move to a new pose.
+                    if args.coverage_search and trial["success"]:
+                        break
+                if args.coverage_search and sum(item["success"] for item in trials) >= (
+                    args.target_successes_per_object
+                ):
+                    break
         finally:
+            if renderer is not None:
+                renderer.close()
             env.close()
         successes = sum(trial["success"] for trial in trials)
         total_successes += successes
         total_trials += len(trials)
-        result["objects"].append(
-            {
-                "object_id": object_id,
-                "grasp_config": str(config_path),
-                "successes": successes,
-                "trials": len(trials),
-                "success_rate": successes / len(trials),
-                "episodes": trials,
-            }
-        )
+        object_result = {
+            "object_id": object_id,
+            "grasp_config": str(config_path),
+            "successes": successes,
+            "trials": len(trials),
+            "success_rate": successes / len(trials),
+            "coverage_success": successes >= args.target_successes_per_object,
+            "successful_combinations": [
+                {"seed": trial["seed"], "candidate_index": trial["candidate_index"]}
+                for trial in trials
+                if trial["success"]
+            ],
+            "episodes": trials,
+        }
+        object_result.update(_successful_diversity(trials, candidate_count=candidate_count))
+        result["objects"].append(object_result)
         object_rates = [item["success_rate"] for item in result["objects"]]
         result["summary"] = {
             "selected_objects": len(rows),
@@ -256,8 +408,19 @@ def _run_catalog_evaluation(args) -> None:
             "total_episodes": total_trials,
             "micro_success_rate": total_successes / total_trials,
             "macro_object_success_rate": float(np.mean(object_rates)),
+            "objects_with_success": sum(
+                item["successes"] >= args.target_successes_per_object for item in result["objects"]
+            ),
+            "object_coverage_rate": sum(
+                item["successes"] >= args.target_successes_per_object for item in result["objects"]
+            )
+            / len(result["objects"]),
         }
         _write_evaluation_report(output, result)
+    if recorder is not None:
+        if recorder.frame_count:
+            recorder.clear_episode()
+        recorder.finalize()
     print(
         f"lift_evaluation={total_successes}/{total_trials} "
         f"success_rate={total_successes / total_trials:.1%} report={output}"
@@ -317,7 +480,7 @@ def run(args) -> None:
                 observation, reward, terminated, truncated, info = env.step(action)
                 steps = step + 1
                 episode_return += reward
-                success = bool(strategy.state.verified_success)
+                success = bool(strategy.state.strategy_verified_success)
                 if recorder is not None and renderer is not None:
                     renderer.update_scene(env.data, camera=args.camera)
                     image = renderer.render().copy()
