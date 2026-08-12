@@ -49,6 +49,46 @@ def _format_duration(seconds: float) -> str:
     return f"{seconds:d}s"
 
 
+def _failure_reason(row: dict) -> str | None:
+    """Classify an incomplete result without discarding its detailed diagnostics."""
+    status = row.get("status")
+    if status == SEARCH_ERROR:
+        return SEARCH_ERROR
+    if status == VALIDATION_ERROR:
+        return VALIDATION_ERROR
+    if status == UNSTABLE:
+        return "hold_unstable"
+    if status == DIRECT_HOLD_ONLY:
+        errors = " ".join(
+            (row.get("evolution") or {}).get("trajectory_validation_errors") or []
+        ).lower()
+        if "table clearance" in errors:
+            return "trajectory_table_clearance"
+        if "collides with the object" in errors:
+            return "trajectory_object_collision"
+        return "trajectory_validation_failed"
+    lift = row.get("robot_lift")
+    if lift is None or lift.get("robot_lift_verified"):
+        return None
+    reason = str(lift.get("precheck_reason") or "")
+    if reason.startswith("robot_ik_unreachable"):
+        return "robot_ik_unreachable"
+    if lift.get("table_collision") or reason.startswith("robot_table_collision"):
+        return "robot_table_collision"
+    phase = str(lift.get("final_phase") or "unknown")
+    return f"robot_lift_{phase}_failed"
+
+
+def _payload_after_robot_lift_attempts(
+    preferred_payload: dict,
+    attempted_payload: dict,
+    *,
+    robot_lift_verified: bool,
+) -> dict:
+    """Publish a successful Lift candidate, otherwise restore the trajectory-first choice."""
+    return dict(attempted_payload if robot_lift_verified else preferred_payload)
+
+
 @dataclass
 class GraspBenchmarkConfig:
     """Configuration for a catalogue-wide grasp search and validation run."""
@@ -117,6 +157,11 @@ def _write_report(
     robot_lift_verified = sum(
         bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
     )
+    failure_reasons: dict[str, int] = {}
+    for row in rows:
+        reason = _failure_reason(row)
+        if reason is not None:
+            failure_reasons[reason] = failure_reasons.get(reason, 0) + 1
     failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
     payload = {
         "schema_version": BENCHMARK_SCHEMA_VERSION,
@@ -134,6 +179,7 @@ def _write_report(
             "robot_lift_verified_rate": (
                 robot_lift_verified / robot_lift_tested if robot_lift_tested else 0.0
             ),
+            "failure_reasons": failure_reasons,
             "failed_object_ids": failed,
         },
         "objects": rows,
@@ -392,6 +438,7 @@ def _run_one(task: dict) -> dict:
                 robot_candidates = (
                     trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
                 )
+                preferred_payload = dict(published_payload)
                 for candidate_index, robot_candidate in enumerate(robot_candidates):
                     candidate_payload = dict(robot_candidate[0])
                     if task["evolve"]:
@@ -427,7 +474,12 @@ def _run_one(task: dict) -> dict:
                             if key in candidate_payload:
                                 metrics[key] = candidate_payload[key]
                     break
-                published_payload = json.loads(validation_path.read_text(encoding="utf-8"))
+                attempted_payload = json.loads(validation_path.read_text(encoding="utf-8"))
+                published_payload = _payload_after_robot_lift_attempts(
+                    preferred_payload,
+                    attempted_payload,
+                    robot_lift_verified=robot_lift["robot_lift_verified"],
+                )
                 if task["evolve"]:
                     published_payload["trajectory_stable_candidates"] = [
                         candidate for candidate, _, _ in trajectory_candidates

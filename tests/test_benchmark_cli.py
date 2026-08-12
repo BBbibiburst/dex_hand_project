@@ -5,7 +5,11 @@ from tools.grasping.benchmark_catalog import (
     _apply_full_pipeline_preset,
     _recommended_parallelism,
 )
-from source.workflows.grasp_benchmark import _format_duration
+from source.workflows.grasp_benchmark import (
+    _failure_reason,
+    _format_duration,
+    _payload_after_robot_lift_attempts,
+)
 
 
 def test_full_pipeline_keeps_explicit_parallelism() -> None:
@@ -28,3 +32,47 @@ def test_parallelism_reserves_cpu_and_memory() -> None:
     assert _recommended_parallelism(cpu_count=32, available_memory_bytes=64 * GIB) == 8
     assert _recommended_parallelism(cpu_count=8, available_memory_bytes=7 * GIB) == 3
     assert _recommended_parallelism(cpu_count=2, available_memory_bytes=64 * GIB) == 1
+
+
+def test_benchmark_failure_reason_classification() -> None:
+    assert _failure_reason({"status": "search_error"}) == "search_error"
+    assert (
+        _failure_reason(
+            {
+                "status": "direct_hold_only",
+                "evolution": {
+                    "trajectory_validation_errors": [
+                        "Grasp trajectory collides with the object via v3_base_link"
+                    ]
+                },
+            }
+        )
+        == "trajectory_object_collision"
+    )
+    assert (
+        _failure_reason(
+            {
+                "status": "trajectory_stable",
+                "robot_lift": {
+                    "robot_lift_verified": False,
+                    "precheck_reason": "robot_ik_unreachable_waypoint_2",
+                    "table_collision": False,
+                },
+            }
+        )
+        == "robot_ik_unreachable"
+    )
+
+
+def test_failed_robot_lift_restores_preferred_trajectory_payload() -> None:
+    preferred = {"candidate": "trajectory_best"}
+    attempted = {"candidate": "last_robot_failure"}
+
+    assert (
+        _payload_after_robot_lift_attempts(preferred, attempted, robot_lift_verified=False)
+        == preferred
+    )
+    assert (
+        _payload_after_robot_lift_attempts(preferred, attempted, robot_lift_verified=True)
+        == attempted
+    )

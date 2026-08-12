@@ -47,7 +47,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--grasp-benchmark-report",
         type=Path,
-        help=("Evaluate trajectory-stable benchmark configs in randomized Lift episodes."),
+        help=(
+            "Evaluate trajectory-stable grasps, or collect successful randomized Lift episodes "
+            "when --coverage-search is enabled."
+        ),
     )
     parser.add_argument("--trials-per-object", type=int, default=10)
     parser.add_argument(
@@ -145,6 +148,11 @@ def _successful_diversity(trials: list[dict], *, candidate_count: int) -> dict:
         "initial_position_span_xyz": np.ptp(positions, axis=0).tolist(),
         "initial_yaw_bins": len(yaw_bins),
     }
+
+
+def _evaluation_target_met(item: dict, *, coverage_search: bool, target: int) -> bool:
+    """Return whether an existing object row is complete for this run mode."""
+    return not coverage_search or int(item.get("successes", 0)) >= target
 
 
 def _evaluate_episode(
@@ -248,7 +256,7 @@ def _run_catalog_evaluation(args) -> None:
         f"{args.grasp_benchmark_report.stem}_lift_evaluation.json"
     )
     result = {
-        "schema_version": 4,
+        "schema_version": 5,
         "source_grasp_report": str(args.grasp_benchmark_report),
         "source_validation_semantics": source_parameters["validation_semantics"],
         "parameters": {
@@ -264,6 +272,8 @@ def _run_catalog_evaluation(args) -> None:
             "max_steps": args.max_steps,
             "fps": args.fps,
             "dataset": args.dataset,
+            "object_ids": args.object_ids,
+            "limit": args.limit,
         },
         "summary": {},
         "objects": [],
@@ -277,9 +287,20 @@ def _run_catalog_evaluation(args) -> None:
         ):
             raise ValueError(f"Cannot resume {output} with different parameters.")
         result = stored
-    completed_ids = {item["object_id"] for item in result["objects"]}
-    total_successes = sum(item["successes"] for item in result["objects"])
-    total_trials = sum(item["trials"] for item in result["objects"])
+    stored_by_id = {item["object_id"]: item for item in result["objects"]}
+    retained = [
+        item
+        for item in result["objects"]
+        if _evaluation_target_met(
+            item,
+            coverage_search=args.coverage_search,
+            target=args.target_successes_per_object,
+        )
+    ]
+    completed_ids = {item["object_id"] for item in retained}
+    result["objects"] = retained
+    total_successes = sum(item["successes"] for item in retained)
+    total_trials = sum(item["trials"] for item in retained)
     recorder = None
     for object_index, row in enumerate(rows):
         object_id = row["object_id"]
@@ -329,11 +350,21 @@ def _run_catalog_evaluation(args) -> None:
             archive = config_payload.get("trajectory_stable_candidates")
             if isinstance(archive, list) and archive:
                 candidate_count = min(len(archive), args.max_coverage_candidates)
-        trials = []
+        previous = stored_by_id.get(object_id, {})
+        trials = list(previous.get("episodes", []))
+        attempted_seeds = {int(trial["seed"]) for trial in trials}
+        if trials:
+            print(
+                f"RESUME {object_id} successes={sum(item['success'] for item in trials)}/"
+                f"{args.target_successes_per_object} previous_trials={len(trials)}",
+                flush=True,
+            )
         try:
             seed_count = args.max_coverage_seeds if args.coverage_search else args.trials_per_object
             for seed_index in range(seed_count):
                 seed = args.seed + object_index * seed_count + seed_index
+                if seed in attempted_seeds:
+                    continue
                 candidate_indices = (
                     _rotated_candidate_indices(seed_index, candidate_count)
                     if args.coverage_search
@@ -400,6 +431,13 @@ def _run_catalog_evaluation(args) -> None:
         }
         object_result.update(_successful_diversity(trials, candidate_count=candidate_count))
         result["objects"].append(object_result)
+        result["objects"].sort(
+            key=lambda item: next(
+                index
+                for index, source_row in enumerate(rows)
+                if source_row["object_id"] == item["object_id"]
+            )
+        )
         object_rates = [item["success_rate"] for item in result["objects"]]
         result["summary"] = {
             "selected_objects": len(rows),
