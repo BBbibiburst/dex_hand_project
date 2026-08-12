@@ -1,0 +1,1990 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="V3_Hand_Total_Assy_0702">
+  <link name="v3_base_link">
+    <inertial>
+      <origin xyz="0.0012226 0.071412 -0.0019287" rpy="0 0 0" />
+      <mass value="0.11812" />
+      <inertia ixx="0.00012576" ixy="-5.8809E-07" ixz="-1.5494E-06" iyy="8.8264E-05" iyz="-1.7571E-06" izz="5.7884E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/v3_base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/v3_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="act_root_0_p">
+    <inertial>
+      <origin xyz="1.7055801215804E-14 -6.1855034982905E-14 2.87478374438876E-14" rpy="0 0 0" />
+      <mass value="0.000195564142685963" />
+      <inertia ixx="2.65551954774003E-09" ixy="-8.49798832427525E-25" ixz="3.12777669121614E-24" iyy="2.65551954774009E-09" iyz="4.10561080400465E-25" izz="5.00921058128648E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_root_0_j" type="continuous">
+    <origin xyz="0.008 0.05768 -0.03033" rpy="2.9011 -1.5088 1.8118" />
+    <parent link="v3_base_link" />
+    <child link="act_root_0_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="act_push_0_p">
+    <inertial>
+      <origin xyz="3.39221580686333E-09 -6.02197615731659E-09 0.00341047416450066" rpy="0 0 0" />
+      <mass value="0.000158976339523404" />
+      <inertia ixx="2.53626972148179E-09" ixy="4.70635075386899E-13" ixz="2.29675127662993E-15" iyy="2.50432553315453E-09" iyz="3.34212422333049E-14" izz="3.61585249462696E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_push_0_j" type="prismatic">
+    <origin xyz="1.8829E-05 -0.0012733 0.064147" rpy="0.019847 0.00029211 7.1641E-05" />
+    <parent link="act_root_0_p" />
+    <child link="act_push_0_p" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.01" effort="0" velocity="0.01" />
+  </joint>
+  <link name="act_end_0_p">
+    <inertial>
+      <origin xyz="6.93889390390723E-18 3.46944695195361E-18 1.86260729062582E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343171E-11" ixy="2.15339305602706E-27" ixz="1.26217744835362E-25" iyy="3.64774668343172E-11" iyz="1.79418524283467E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_end_0_j" type="fixed">
+    <origin xyz="0 0 0.0109999999454814" rpy="0.0147175527230911 1.5707963267949 0" />
+    <parent link="act_push_0_p" />
+    <child link="act_end_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="bar_0_p">
+    <inertial>
+      <origin xyz="-0.0164666769944131 0.00356909023963185 -7.50004151499478E-05" rpy="0 0 0" />
+      <mass value="0.000338285716359648" />
+      <inertia ixx="2.80962664005144E-09" ixy="8.47102587003965E-09" ixz="-1.42606450210553E-16" iyy="3.9083764845765E-08" iyz="-8.88706481773614E-17" izz="4.14027355407716E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_0_j" type="continuous">
+    <origin xyz="-0.00356000000267413 0.133048726462739 -0.0347740030868354" rpy="-0.00119658986101058 -0.0602019828748688 -1.55091067434436" />
+    <parent link="v3_base_link" />
+    <child link="bar_0_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="bar_connect_0_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.60208521396521E-17 1.86288484638197E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="5.7269723997235E-26" ixz="4.2974617761544E-25" iyy="1.50694143479741E-10" iyz="1.38151632609545E-25" izz="4.76258864741126E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_connect_0_j" type="fixed">
+    <origin xyz="-0.0318999408980421 0.00671965554947208 -0.000100000000083936" rpy="0 0 0" />
+    <parent link="bar_0_p" />
+    <child link="bar_connect_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="finger_first_0_p">
+    <inertial>
+      <origin xyz="-0.0129893559454126 -0.00120992072581834 9.97967623904625E-05" rpy="0 0 0" />
+      <mass value="0.00690799581750135" />
+      <inertia ixx="4.56955074162352E-07" ixy="5.58575797174515E-09" ixz="-1.29986305016211E-12" iyy="1.14515682325523E-06" iyz="-5.22220267993127E-12" izz="1.15700707513809E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_first_0_j" type="continuous">
+    <origin xyz="0.00199999999731556 0.13803966492907 -0.0350748904840537" rpy="3.14039606372878 -0.0602019828748688 -1.55091067434436" />
+    <parent link="v3_base_link" />
+    <child link="finger_first_0_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="finger_second_0_p">
+    <inertial>
+      <origin xyz="-0.0216570511649852 -0.00483292650569304 9.99985428106545E-05" rpy="0 0 0" />
+      <mass value="0.00687357412307827" />
+      <inertia ixx="2.26071297520486E-07" ixy="4.19361893022507E-08" ixz="-5.04175690709703E-12" iyy="9.69205602545506E-07" iyz="2.47207489242406E-13" izz="9.4005642108272E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_second_0_j" type="continuous">
+    <origin xyz="-0.03189833466344 0.0038925114896853 0" rpy="0 0 0" />
+    <parent link="finger_first_0_p" />
+    <child link="finger_second_0_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="bar_close_0_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.60208521396521E-17 1.86288484638197E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="5.7269723997235E-26" ixz="4.2974617761544E-25" iyy="1.50694143479741E-10" iyz="1.38151632609545E-25" izz="4.76258864741126E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_close_0_j" type="fixed">
+    <origin xyz="0.0048871 -0.004954 0.0001" rpy="-3.1416 0 0" />
+    <parent link="finger_second_0_p" />
+    <child link="bar_close_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_0_1_p">
+    <inertial>
+      <origin xyz="-2.51254604535789E-06 3.9621595740863E-06 0.00276921753424465" rpy="0 0 0" />
+      <mass value="0.000874923124127166" />
+      <inertia ixx="3.0098141487189E-08" ixy="4.45550173784149E-10" ixz="3.26208137984629E-12" iyy="3.81528205276642E-08" iyz="-1.76983372297827E-11" izz="5.38990070624137E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_0_1_j" type="fixed">
+    <origin xyz="-0.0140027834967258 0.00423084639466224 9.99999999942922E-05" rpy="-1.57079632679596 -1.51370171678779 -3.10828749849042" />
+    <parent link="finger_second_0_p" />
+    <child link="skin_0_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_0_2_p">
+    <inertial>
+      <origin xyz="2.8794E-05 0.00062027 0.00348" rpy="0 0 0" />
+      <mass value="0.0010656" />
+      <inertia ixx="4.7943E-08" ixy="-6.2541E-11" ixz="-6.032E-11" iyy="4.6641E-08" iyz="-1.3193E-09" izz="7.1127E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_0_2_j" type="fixed">
+    <origin xyz="-0.035171684433363 0.00347780578878105 9.99999999823156E-05" rpy="-1.57079632679524 -1.52493263991337 -3.04401349785809" />
+    <parent link="finger_second_0_p" />
+    <child link="skin_0_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="crank_close_0_p">
+    <inertial>
+      <origin xyz="6.93889390390723E-18 3.46944695195361E-18 1.86260729062582E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343171E-11" ixy="2.15043482763248E-27" ixz="1.26116770639494E-25" iyy="3.64774668343172E-11" iyz="1.78471891197202E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="crank_close_0_j" type="fixed">
+    <origin xyz="0.00544343182009915 -0.00440102829127413 0.000100000000164802" rpy="-3.14159265358979 0 0" />
+    <parent link="finger_first_0_p" />
+    <child link="crank_close_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_0_0_p">
+    <inertial>
+      <origin xyz="2.32111164213955E-06 -4.21694130608996E-06 0.00276922358145759" rpy="0 0 0" />
+      <mass value="0.00087489275023937" />
+      <inertia ixx="3.00884972492574E-08" ixy="3.83380511580802E-10" ixz="-3.00636637870301E-12" iyy="3.81597794296365E-08" iyz="1.6993744099222E-11" izz="5.38978304809912E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_0_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_0_0_j" type="fixed">
+    <origin xyz="-0.0157378387860235 0.0119850845372546 0.00010000000001055" rpy="-1.57079632678896 -1.52160301724665 -3.06626579431617" />
+    <parent link="finger_first_0_p" />
+    <child link="skin_0_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="act_root_1_p">
+    <inertial>
+      <origin xyz="1.6750489884032E-14 -6.1931362815848E-14 2.87478374438876E-14" rpy="0 0 0" />
+      <mass value="0.000195564142685963" />
+      <inertia ixx="2.65551954774003E-09" ixy="-5.81611368201348E-25" ixz="3.34749654142553E-24" iyy="2.65551954774009E-09" iyz="4.37925087480772E-25" izz="5.00921058128647E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_root_1_j" type="continuous">
+    <origin xyz="0.00799999999736481 0.0586907698924681 -0.0101945296280494" rpy="2.90083506420471 -1.52946089111952 1.81175187242119" />
+    <parent link="v3_base_link" />
+    <child link="act_root_1_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="act_push_1_p">
+    <inertial>
+      <origin xyz="3.37730709024098E-09 -6.02552501297038E-09 0.00341047440478096" rpy="0 0 0" />
+      <mass value="0.000158976342825135" />
+      <inertia ixx="2.53627384089168E-09" ixy="3.14008980304732E-13" ixz="2.28758673245657E-15" iyy="2.50432193416953E-09" iyz="3.3414500903975E-14" izz="3.61585264650081E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_push_1_j" type="prismatic">
+    <origin xyz="1.25577505449351E-05 -0.00127340229187332 0.0641471605075268" rpy="0.0198486671128852 0.00019481521053252 4.78307843214498E-05" />
+    <parent link="act_root_1_p" />
+    <child link="act_push_1_p" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.01" effort="0" velocity="0.01" />
+  </joint>
+  <link name="act_end_1_p">
+    <inertial>
+      <origin xyz="6.9389E-18 3.4694E-18 1.8626E-13" rpy="0 0 0" />
+      <mass value="1.5682E-05" />
+      <inertia ixx="3.6477E-11" ixy="1.5366E-27" ixz="1.633E-25" iyy="3.6477E-11" iyz="1.8887E-26" izz="7.8288E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_end_1_j" type="fixed">
+    <origin xyz="0 0 0.0109999999999828" rpy="0.00981535675201853 1.5707963267949 0" />
+    <parent link="act_push_1_p" />
+    <child link="act_end_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="bar_1_p">
+    <inertial>
+      <origin xyz="-0.0164666769944135 0.00356909023963043 -7.5000415149986E-05" rpy="0 0 0" />
+      <mass value="0.000338285716359647" />
+      <inertia ixx="2.80962664004998E-09" ixy="8.47102587003651E-09" ixz="-1.42606499834927E-16" iyy="3.90837648457664E-08" iyz="-8.88706371784442E-17" izz="4.14027355407715E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_1_j" type="continuous">
+    <origin xyz="-0.00356000000267347 0.134133959902819 -0.0131245605250209" rpy="-0.000797190694907363 -0.0401346605695356 -1.55093070413472" />
+    <parent link="v3_base_link" />
+    <child link="bar_1_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="bar_connect_1_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.77555756156289E-17 1.86291954085149E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="5.7210953859796E-26" ixz="6.29069240259444E-25" iyy="1.50694143479741E-10" iyz="1.62716761198128E-25" izz="4.76258864741126E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_connect_1_j" type="fixed">
+    <origin xyz="-0.0318999408980427 0.00671965554946933 -0.000100000000083974" rpy="0 0 0" />
+    <parent link="bar_1_p" />
+    <child link="bar_connect_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="finger_first_1_p">
+    <inertial>
+      <origin xyz="-0.0129893572656325 -0.00120992071888522 9.97966548387033E-05" rpy="0 0 0" />
+      <mass value="0.00690799571641837" />
+      <inertia ixx="4.56955080968447E-07" ixy="5.58573615556193E-09" ixz="-1.34189550999674E-12" iyy="1.14515687490788E-06" iyz="-5.22313679724801E-12" izz="1.15700713025065E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_first_1_j" type="continuous">
+    <origin xyz="0.00199999999731621 0.139129931878447 -0.0133252194875541" rpy="3.14079546289489 -0.0401346605695356 -1.55093070413472" />
+    <parent link="v3_base_link" />
+    <child link="finger_first_1_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="finger_second_1_p">
+    <inertial>
+      <origin xyz="-0.0253226268371414 -0.00393969357014086 9.99724576982129E-05" rpy="0 0 0" />
+      <mass value="0.00854827910068667" />
+      <inertia ixx="2.91699891080623E-07" ixy="1.04113631800162E-07" ixz="-1.30454198090726E-12" iyy="1.6554954946507E-06" iyz="-1.18850285745883E-12" izz="1.6198224755505E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_second_1_j" type="continuous">
+    <origin xyz="-0.0318983346634397 0.00389251148968804 0" rpy="0 0 0" />
+    <parent link="finger_first_1_p" />
+    <child link="finger_second_1_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="bar_close_1_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.77555756156289E-17 1.86291954085149E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="5.72152925947748E-26" ixz="6.29069240259444E-25" iyy="1.50694143479741E-10" iyz="1.62918709589864E-25" izz="4.76258864741126E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_close_1_j" type="fixed">
+    <origin xyz="0.00488705212217402 -0.00495402074632369 0.000100000000221999" rpy="-3.14159265358979 0 0" />
+    <parent link="finger_second_1_p" />
+    <child link="bar_close_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_1_1_p">
+    <inertial>
+      <origin xyz="-2.547E-06 3.9506E-06 0.0027692" rpy="0 0 0" />
+      <mass value="0.00087492" />
+      <inertia ixx="3.0086E-08" ixy="3.1862E-10" ixz="3.4486E-12" iyy="3.8165E-08" iyz="-1.756E-11" izz="5.3899E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_1_1_j" type="fixed">
+    <origin xyz="-0.015911 0.0047591 0.0001" rpy="-1.5708 -1.5294 -3.129" />
+    <parent link="finger_second_1_p" />
+    <child link="skin_1_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_1_2_p">
+    <inertial>
+      <origin xyz="2.03661155586954E-05 0.000620674147336978 0.00348002196068925" rpy="0 0 0" />
+      <mass value="0.00106556469514642" />
+      <inertia ixx="4.79455314845539E-08" ixy="-4.47119718855435E-11" ixz="-4.24345278502474E-11" iyy="4.6639326549533E-08" iyz="-1.32007391976974E-09" izz="7.11276397731724E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_1_2_j" type="fixed">
+    <origin xyz="-0.0429720718829061 0.00510208462362634 0.000100000000022624" rpy="-1.57079632679491 -1.53847841679202 -3.06175972236212" />
+    <parent link="finger_second_1_p" />
+    <child link="skin_1_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="crank_close_1_p">
+    <inertial>
+      <origin xyz="6.93889390390723E-18 3.46944695195361E-18 1.8625725961563E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343172E-11" ixy="1.53660243575738E-27" ixz="1.63300518267991E-25" iyy="3.64774668343172E-11" iyz="1.88873022232541E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="crank_close_1_j" type="fixed">
+    <origin xyz="0.00544343182009876 -0.00440102829127459 0.000100000000164788" rpy="3.14159265358979 0 0" />
+    <parent link="finger_first_1_p" />
+    <child link="crank_close_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_1_0_p">
+    <inertial>
+      <origin xyz="2.3727392422998E-06 -4.19781558617938E-06 0.00276921491098542" rpy="0 0 0" />
+      <mass value="0.000874888198472693" />
+      <inertia ixx="3.00778026711601E-08" ixy="2.50802872682234E-10" ixz="-3.19041717815918E-12" iyy="3.8170124503651E-08" iyz="1.6877345601809E-11" izz="5.38975903172843E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_1_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_1_0_j" type="fixed">
+    <origin xyz="-0.0157378387860225 0.0119850845372559 0.000100000000010567" rpy="-1.570796326786 -1.5380019755171 -3.06626579431922" />
+    <parent link="finger_first_1_p" />
+    <child link="skin_1_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="act_root_2_p">
+    <inertial>
+      <origin xyz="1.64443111905221E-14 -6.20180989896468E-14 2.87408985499837E-14" rpy="0 0 0" />
+      <mass value="0.000195564142685963" />
+      <inertia ixx="2.65551954774002E-09" ixy="-2.81919954864264E-25" ixz="3.24086779058862E-24" iyy="2.65551954774009E-09" iyz="5.43544096359002E-25" izz="5.00921058128647E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_root_2_j" type="continuous">
+    <origin xyz="0.008 0.059298 0.0099576" rpy="2.9007 -1.5501 1.8118" />
+    <parent link="v3_base_link" />
+    <child link="act_root_2_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="act_push_2_p">
+    <inertial>
+      <origin xyz="3.36121383504029E-09 -6.03585864969447E-09 0.00341047459866994" rpy="0 0 0" />
+      <mass value="0.000158976346218964" />
+      <inertia ixx="2.53627635567045E-09" ixy="1.57212827873085E-13" ixz="2.27841119031072E-15" iyy="2.50431979695206E-09" iyz="3.3407618643651E-14" izz="3.61585279352597E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_push_2_j" type="prismatic">
+    <origin xyz="0 -0.00127344872321735 0.0641471605075268" rpy="0.0198493839352424 9.74308895257723E-05 2.39364458715646E-05" />
+    <parent link="act_root_2_p" />
+    <child link="act_push_2_p" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.01" effort="0" velocity="0.01" />
+  </joint>
+  <link name="act_end_2_p">
+    <inertial>
+      <origin xyz="-6.93889390390723E-18 3.46944695195361E-18 1.86258126977368E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343171E-11" ixy="-1.07869333217987E-27" ixz="1.83937119548573E-25" iyy="3.64774668343172E-11" iyz="2.16810531190943E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_end_2_j" type="fixed">
+    <origin xyz="0 0 0.0109999999999967" rpy="0.00490879242144773 1.5707963267949 0" />
+    <parent link="act_push_2_p" />
+    <child link="act_end_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="bar_2_p">
+    <inertial>
+      <origin xyz="-0.0164666769944136 0.00356909023963004 -7.5000415149986E-05" rpy="0 0 0" />
+      <mass value="0.000338285716359648" />
+      <inertia ixx="2.80962664004958E-09" ixy="8.47102587003566E-09" ixz="-1.42606507247241E-16" iyy="3.90837648457669E-08" iyz="-8.88706370459661E-17" izz="4.14027355407716E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_2_j" type="continuous">
+    <origin xyz="-0.00356 0.13478 0.0085423" rpy="-0.00039843 -0.020067 -1.5509" />
+    <parent link="v3_base_link" />
+    <child link="bar_2_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="bar_connect_2_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.60208521396521E-17 1.86293688808625E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="4.16379521222149E-26" ixz="6.80364131760535E-25" iyy="1.50694143479741E-10" iyz="1.65469885757349E-25" izz="4.76258864741125E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_connect_2_j" type="fixed">
+    <origin xyz="-0.0318999408980428 0.00671965554946856 -0.000100000000083983" rpy="0 0 0" />
+    <parent link="bar_2_p" />
+    <child link="bar_connect_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="finger_first_2_p">
+    <inertial>
+      <origin xyz="-0.0129893578859068 -0.00120992053414729 9.97968831467052E-05" rpy="0 0 0" />
+      <mass value="0.00690799532613584" />
+      <inertia ixx="4.56955065444042E-07" ixy="5.58573438276158E-09" ixz="-1.34325820243185E-12" iyy="1.14515682647364E-06" iyz="-5.21247969411586E-12" izz="1.15700709848031E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_first_2_j" type="continuous">
+    <origin xyz="0.002 0.13978 0.008442" rpy="3.1412 -0.020067 -1.5509" />
+    <parent link="v3_base_link" />
+    <child link="finger_first_2_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="finger_second_2_p">
+    <inertial>
+      <origin xyz="-0.0280775946777808 -0.00381237856991497 9.9963916400281E-05" rpy="0 0 0" />
+      <mass value="0.0097994329836655" />
+      <inertia ixx="3.40549518853269E-07" ixy="1.50174355933417E-07" ixz="-7.75126527250581E-12" iyy="2.35140168766161E-06" iyz="-6.53113935996661E-13" izz="2.30989289291965E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_second_2_j" type="continuous">
+    <origin xyz="-0.0318983346634396 0.0038925114896888 0" rpy="0 0 0" />
+    <parent link="finger_first_2_p" />
+    <child link="finger_second_2_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="bar_close_2_p">
+    <inertial>
+      <origin xyz="-9.71445146547012E-17 -2.60208521396521E-17 1.86293688808625E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="4.16369660460834E-26" ixz="6.80364131760535E-25" iyy="1.50694143479741E-10" iyz="1.65381533335964E-25" izz="4.76258864741125E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_close_2_j" type="fixed">
+    <origin xyz="0.0048870521221739 -0.0049540207463238 0.000100000000222001" rpy="-3.14159265358979 0 0" />
+    <parent link="finger_second_2_p" />
+    <child link="bar_close_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_2_1_p">
+    <inertial>
+      <origin xyz="-2.62196736627103E-06 3.91938007125725E-06 0.00276920975784318" rpy="0 0 0" />
+      <mass value="0.000874914673710745" />
+      <inertia ixx="3.00759343460904E-08" ixy="1.54519277073089E-10" ixz="3.76731408234059E-12" iyy="3.81743986110762E-08" iyz="-1.74784315336302E-11" izz="5.3898646626121E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_2_1_j" type="fixed">
+    <origin xyz="-0.0179081565777154 0.00481423065830604 0.0001000000000102" rpy="-1.57079632679582 -1.54972240129816 -3.13341645744971" />
+    <parent link="finger_second_2_p" />
+    <child link="skin_2_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_2_2_p">
+    <inertial>
+      <origin xyz="1.03652504054015E-05 0.000620926606557604 0.00348001996277886" rpy="0 0 0" />
+      <mass value="0.00106556513612827" />
+      <inertia ixx="4.79466889843152E-08" ixy="-2.36416901080458E-11" ixz="-2.11962886167412E-11" iyy="4.66382175815517E-08" iyz="-1.320572758513E-09" izz="7.11276521807352E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_2_2_j" type="fixed">
+    <origin xyz="-0.0489202821920267 0.00557317085500345 0.000100000000005746" rpy="-1.57079632679573 -1.55457648040687 -3.06293045056534" />
+    <parent link="finger_second_2_p" />
+    <child link="skin_2_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="crank_close_2_p">
+    <inertial>
+      <origin xyz="-6.93889390390723E-18 3.46944695195361E-18 1.86258126977368E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343171E-11" ixy="-1.07869333217987E-27" ixz="1.83937119548573E-25" iyy="3.64774668343172E-11" iyz="2.16810531190943E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="crank_close_2_j" type="fixed">
+    <origin xyz="0.00544343182009866 -0.00440102829127473 0.000100000000164786" rpy="3.14159265358979 0 0" />
+    <parent link="finger_first_2_p" />
+    <child link="crank_close_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_2_0_p">
+    <inertial>
+      <origin xyz="2.43977678280206E-06 -4.1896399750746E-06 0.00276922396168922" rpy="0 0 0" />
+      <mass value="0.000874885606612768" />
+      <inertia ixx="3.0071590689225E-08" ixy="1.18026324740368E-10" ixz="-3.48022167242798E-12" iyy="3.81762052037432E-08" iyz="1.68343870161017E-11" izz="5.38975442085085E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_2_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_2_0_j" type="fixed">
+    <origin xyz="-0.0157378387860222 0.0119850845372563 0.00010000000001057" rpy="-1.57079632677711 -1.5543994501431 -3.06626579432814" />
+    <parent link="finger_first_2_p" />
+    <child link="skin_2_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="act_root_3_p">
+    <inertial>
+      <origin xyz="1.61398672204882E-14 -6.20944268225898E-14 2.87443679969357E-14" rpy="0 0 0" />
+      <mass value="0.000195564142685963" />
+      <inertia ixx="2.65551954774003E-09" ixy="-1.48203175004355E-26" ixz="3.21713801639486E-24" iyy="2.65551954774009E-09" iyz="1.56270948414835E-25" izz="5.00921058128648E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_root_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_root_3_j" type="continuous">
+    <origin xyz="0.008 0.0595 0.030118" rpy="1.5708 -1.5708 3.1416" />
+    <parent link="v3_base_link" />
+    <child link="act_root_3_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="act_push_3_p">
+    <inertial>
+      <origin xyz="3.34380302613457E-09 -6.05297968345186E-09 0.00341047474579226" rpy="0 0 0" />
+      <mass value="0.000158976349699175" />
+      <inertia ixx="2.53627726100774E-09" ixy="3.31378051636467E-16" ixz="2.2692235966184E-15" iyy="2.50431912542589E-09" iyz="3.34006144024575E-14" izz="3.61585293555994E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_push_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_push_3_j" type="prismatic">
+    <origin xyz="0 -0.00127346420995918 0.0641471605075268" rpy="0.0198496230226206 0 0" />
+    <parent link="act_root_3_p" />
+    <child link="act_push_3_p" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.01" effort="0" velocity="0.01" />
+  </joint>
+  <link name="act_end_3_p">
+    <inertial>
+      <origin xyz="6.93889390390723E-18 1.73472347597681E-18 1.8625725961563E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343172E-11" ixy="3.16653900436368E-29" ixz="1.7004804878378E-25" iyy="3.64774668343172E-11" iyz="1.9416517143667E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/act_end_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="act_end_3_j" type="fixed">
+    <origin xyz="0 0 0.0109999999999828" rpy="0 1.5707963267949 0" />
+    <parent link="act_push_3_p" />
+    <child link="act_end_3_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="bar_3_p">
+    <inertial>
+      <origin xyz="-0.0164666769944135 0.00356909023963043 -7.50004151499825E-05" rpy="0 0 0" />
+      <mass value="0.000338285716359647" />
+      <inertia ixx="2.80962664004997E-09" ixy="8.4710258700365E-09" ixz="-1.42606502559919E-16" iyy="3.90837648457664E-08" iyz="-8.88706369551192E-17" izz="4.14027355407715E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_3_j" type="continuous">
+    <origin xyz="-0.00356 0.135 0.030218" rpy="0 0 -1.5509" />
+    <parent link="v3_base_link" />
+    <child link="bar_3_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="bar_connect_3_p">
+    <inertial>
+      <origin xyz="-1.11022302462516E-16 -2.77555756156289E-17 1.86291954085149E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="4.4520151765896E-26" ixz="6.29990230744057E-25" iyy="1.50694143479741E-10" iyz="1.58580736725702E-25" izz="4.76258864741125E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_connect_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_connect_3_j" type="fixed">
+    <origin xyz="-0.0318999408980427 0.00671965554946933 -0.00010000000008397" rpy="0 0 0" />
+    <parent link="bar_3_p" />
+    <child link="bar_connect_3_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="finger_first_3_p">
+    <inertial>
+      <origin xyz="-0.0129893282462472 -0.00120980698220511 9.96395218383107E-05" rpy="0 0 0" />
+      <mass value="0.00690782823710619" />
+      <inertia ixx="4.56943354165165E-07" ixy="5.58607264850889E-09" ixz="-2.8327816254186E-12" iyy="1.14513448295522E-06" iyz="-1.07398239517011E-11" izz="1.15698831399361E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_first_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_first_3_j" type="continuous">
+    <origin xyz="0.002 0.14 0.030218" rpy="3.1416 0 -1.5509" />
+    <parent link="v3_base_link" />
+    <child link="finger_first_3_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="finger_second_3_p">
+    <inertial>
+      <origin xyz="-0.025322627395694 -0.00393969366835084 9.99725908863609E-05" rpy="0 0 0" />
+      <mass value="0.00854827887370032" />
+      <inertia ixx="2.91699889666135E-07" ixy="1.04113619189807E-07" ixz="-1.3318472189223E-12" iyy="1.65549554226118E-06" iyz="-1.22737660242674E-12" izz="1.61982253696357E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/finger_second_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="finger_second_3_j" type="continuous">
+    <origin xyz="-0.031898 0.0038925 0" rpy="0 0 0" />
+    <parent link="finger_first_3_p" />
+    <child link="finger_second_3_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="bar_close_3_p">
+    <inertial>
+      <origin xyz="-1.11022302462516E-16 -2.77555756156289E-17 1.86291954085149E-13" rpy="0 0 0" />
+      <mass value="4.23716517013747E-05" />
+      <inertia ixx="1.50694143479742E-10" ixy="4.4520151765896E-26" ixz="6.29990230744057E-25" iyy="1.50694143479741E-10" iyz="1.58580736725702E-25" izz="4.76258864741125E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/bar_close_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="bar_close_3_j" type="fixed">
+    <origin xyz="0.0048871 -0.004954 0.0001" rpy="-3.1416 0 0" />
+    <parent link="finger_second_3_p" />
+    <child link="bar_close_3_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_3_1_p">
+    <inertial>
+      <origin xyz="-2.70827009285837E-06 3.8752476576448E-06 0.00276920630952635" rpy="0 0 0" />
+      <mass value="0.000874913066820656" />
+      <inertia ixx="3.00729529193048E-08" ixy="-1.62789480452627E-11" ixz="4.10605094591873E-12" iyy="3.81772867612084E-08" iyz="-1.74099485212933E-11" izz="5.38985659435162E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_3_1_j" type="fixed">
+    <origin xyz="-0.0159110604781311 0.00475913478097056 0.000100000000037927" rpy="-1.57079632913056 -1.57079614490304 -3.1289571758664" />
+    <parent link="finger_second_3_p" />
+    <child link="skin_3_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_3_2_p">
+    <inertial>
+      <origin xyz="2.87382274307552E-07 0.000621008864436168 0.00348001798199426" rpy="0 0 0" />
+      <mass value="0.0010655643302391" />
+      <inertia ixx="4.79470827845616E-08" ixy="-2.39807054183533E-12" ixz="2.05331392768892E-13" iyy="4.66377868563027E-08" iyz="-1.32072713464197E-09" izz="7.11275864615005E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_3_2_j" type="fixed">
+    <origin xyz="-0.0429720718829061 0.00510208462362635 0.000100000000022624" rpy="-1.57079632886123 -1.57079618386798 -3.0617597202958" />
+    <parent link="finger_second_3_p" />
+    <child link="skin_3_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="crank_close_3_p">
+    <inertial>
+      <origin xyz="6.93889390390723E-18 1.73472347597681E-18 1.8625725961563E-13" rpy="0 0 0" />
+      <mass value="1.56815979769271E-05" />
+      <inertia ixx="3.64774668343172E-11" ixy="3.16653900436569E-29" ixz="1.7004804878378E-25" iyy="3.64774668343172E-11" iyz="1.941651733626E-26" izz="7.82875339235693E-12" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_3_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/crank_close_3_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="crank_close_3_j" type="fixed">
+    <origin xyz="0.00544343182009877 -0.0044010282912746 0.000100000000164788" rpy="-3.14159265358979 0 0" />
+    <parent link="finger_first_3_p" />
+    <child link="crank_close_3_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_3_0_p">
+    <inertial>
+      <origin xyz="2.4944479403953E-06 -4.16960155205648E-06 0.0027692168915736" rpy="0 0 0" />
+      <mass value="0.000874881188653625" />
+      <inertia ixx="3.00696245777691E-08" ixy="-1.495273682927E-11" ixz="-3.67089806551434E-12" iyy="3.8177831490216E-08" iyz="1.67234210048711E-11" izz="5.3897311951897E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_3_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_3_0_j" type="fixed">
+    <origin xyz="-0.0157378387860225 0.0119850845372559 0.000100000000010571" rpy="-1.57079429754436 -1.57079618232278 -3.06626782356087" />
+    <parent link="finger_first_3_p" />
+    <child link="skin_3_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_rotate_act_root_p">
+    <inertial>
+      <origin xyz="1.71016326100393E-12 7.27881643847184E-12 -4.60710920802132E-10" rpy="0 0 0" />
+      <mass value="0.000195564142685963" />
+      <inertia ixx="2.65551954774004E-09" ixy="-2.56165327837877E-23" ixz="-2.78699474592125E-24" iyy="2.65551954774007E-09" iyz="-2.05607351714719E-24" izz="5.00921058128648E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_root_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_root_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_rotate_act_root_j" type="continuous">
+    <origin xyz="-0.009 0.0635 -0.031882" rpy="0 0 -1.3298" />
+    <parent link="v3_base_link" />
+    <child link="thumb_rotate_act_root_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="thumb_rotate_act_push_p">
+    <inertial>
+      <origin xyz="-7.90742561707081E-10 -2.42648001751514E-05 0.00149199549744399" rpy="0 0 0" />
+      <mass value="0.000108416542853512" />
+      <inertia ixx="8.60961116990711E-10" ixy="5.87630293585484E-15" ixz="-4.50603924645059E-16" iyy="6.90262645739707E-10" iyz="5.24297219631275E-12" izz="3.67894467575658E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_push_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_push_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_rotate_act_push_j" type="prismatic">
+    <origin xyz="-0.000201360505622399 -0.000819442581558603 0.0518834258677029" rpy="0 0 -0.240954530589599" />
+    <parent link="thumb_rotate_act_root_p" />
+    <child link="thumb_rotate_act_push_p" />
+    <axis xyz="0 -0.0162615742725967 0.999867771858948" />
+    <limit lower="-0.0069" upper="0.004" effort="0" velocity="0.01" />
+  </joint>
+  <link name="thumb_rotate_act_end_p">
+    <inertial>
+      <origin xyz="-3.46944695195361E-18 3.46944695195361E-18 1.86260729062582E-13" rpy="0 0 0" />
+      <mass value="5.88717550482535E-05" />
+      <inertia ixx="7.28660145760621E-10" ixy="-4.9432815378824E-26" ixz="1.62431090605769E-22" iyy="7.28660145760621E-10" iyz="1.16913206725106E-25" izz="4.59694911408474E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_end_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_act_end_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_rotate_act_end_j" type="fixed">
+    <origin xyz="0 -4.22800931495458E-05 0.00259965620676423" rpy="1.5707963267949 0 1.57079632679513" />
+    <parent link="thumb_rotate_act_push_p" />
+    <child link="thumb_rotate_act_end_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_rotate_p">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_rotate_j" type="continuous">
+    <origin xyz="-0.015 0.0636 0.018118" rpy="1.5708 0 0" />
+    <parent link="v3_base_link" />
+    <child link="thumb_rotate_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_rotate_close_p">
+    <inertial>
+      <origin xyz="-3.46944695195361E-18 3.46944695195361E-18 1.86260729062582E-13" rpy="0 0 0" />
+      <mass value="5.88717550482535E-05" />
+      <inertia ixx="7.28660145760621E-10" ixy="-4.94328084454762E-26" ixz="1.62431090605769E-22" iyy="7.28660145760621E-10" iyz="1.16913219051057E-25" izz="4.59694911408474E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_close_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_rotate_close_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_rotate_close_j" type="fixed">
+    <origin xyz="0.00511389580849672 0.00448308706799254 9.99999998602986E-05" rpy="0 0 0" />
+    <parent link="thumb_rotate_p" />
+    <child link="thumb_rotate_close_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_bar_first_p">
+    <inertial>
+      <origin xyz="-0.004612065283744 -0.0247482864898725 3.81673859184417E-13" rpy="0 0 0" />
+      <mass value="0.000742807683152485" />
+      <inertia ixx="1.73677825399305E-07" ixy="-3.1213634147185E-08" ixz="-2.29588445789401E-18" iyy="8.79247317818867E-09" iyz="-2.98355485628537E-18" izz="1.82346497294156E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_first_j" type="continuous">
+    <origin xyz="-0.0219403190459119 0.00521415383011382 -0.0076499999999936" rpy="1.57079632679492 0.664364072409181 -0.222237362982839" />
+    <parent link="thumb_rotate_p" />
+    <child link="thumb_bar_first_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_bar_first_connect_p">
+    <inertial>
+      <origin xyz="-3.60147994746263E-07 -1.16584729092928E-08 -0.00147681236758027" rpy="0 0 0" />
+      <mass value="0.000132837583088097" />
+      <inertia ixx="3.1684240762119E-09" ixy="-2.5122518230942E-15" ixz="-4.63824046292208E-14" iyy="3.1684279000972E-09" iyz="-4.62642627461612E-14" izz="2.92231556596674E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_connect_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_connect_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_first_connect_j" type="fixed">
+    <origin xyz="-0.00911214415780016 -0.0491626771936262 0.000100000000166651" rpy="0 0 0" />
+    <parent link="thumb_bar_first_p" />
+    <child link="thumb_bar_first_connect_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_first_p">
+    <inertial>
+      <origin xyz="0.000858025098737933 -0.0259523578894481 -9.77180736217251E-05" rpy="0 0 0" />
+      <mass value="0.00965934890789728" />
+      <inertia ixx="2.72122245854511E-06" ixy="4.04684061215406E-07" ixz="-2.08706277801831E-09" iyy="1.46771849000295E-06" iyz="-6.05482410079433E-11" izz="4.01127137071258E-06" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_first_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_first_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_first_j" type="continuous">
+    <origin xyz="-0.0248548319356077 0.00577022452341483 0.00127000000006663" rpy="1.57079632679492 0.664364072409181 -0.222237362982839" />
+    <parent link="thumb_rotate_p" />
+    <child link="thumb_first_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_grasp_act_root_p">
+    <inertial>
+      <origin xyz="-7.25114412958305E-15 -2.90323320939478E-14 -4.60778800531747E-10" rpy="0 0 0" />
+      <mass value="0.000195564142685964" />
+      <inertia ixx="2.65551954774005E-09" ixy="2.58623188393533E-23" ixz="-2.68833699079734E-24" iyy="2.65551954774007E-09" iyz="1.83046022270035E-24" izz="5.00921058128648E-09" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_root_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_root_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_grasp_act_root_j" type="continuous">
+    <origin xyz="-0.00767761665064694 -0.00550000046081591 -0.000100000000026581" rpy="-1.5707963267927 1.33551377784827 -3.14159265358805" />
+    <parent link="thumb_first_p" />
+    <child link="thumb_grasp_act_root_p" />
+    <axis xyz="0 0 -1" />
+  </joint>
+  <link name="thumb_grasp_act_push_p">
+    <inertial>
+      <origin xyz="-4.36934434116382E-07 4.01871479094318E-07 0.002096642046179" rpy="0 0 0" />
+      <mass value="7.41080033897667E-05" />
+      <inertia ixx="7.04694372795172E-10" ixy="9.70520185424128E-15" ixz="-1.55355690587982E-13" iyy="6.56174253131639E-10" iyz="1.36523805190946E-13" izz="1.25572447485233E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_push_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_push_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_grasp_act_push_j" type="prismatic">
+    <origin xyz="0 0 0.0438150564290305" rpy="0 0 0.235282548946631" />
+    <parent link="thumb_grasp_act_root_p" />
+    <child link="thumb_grasp_act_push_p" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0.01" effort="0" velocity="0.01" />
+  </joint>
+  <link name="thumb_grasp_act_end_p">
+    <inertial>
+      <origin xyz="1.38777878078145E-17 1.38777878078145E-17 -1.86243381827822E-13" rpy="0 0 0" />
+      <mass value="2.51063759376965E-05" />
+      <inertia ixx="1.3989474629695E-10" ixy="9.69352280335579E-27" ixz="2.40318586166529E-26" iyy="1.3989474629695E-10" iyz="3.58458395332428E-26" izz="1.25411423727417E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_end_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_act_end_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_grasp_act_end_j" type="fixed">
+    <origin xyz="0 0 0.00499999311594161" rpy="-1.57079632679499 0 1.57079632679422" />
+    <parent link="thumb_grasp_act_push_p" />
+    <child link="thumb_grasp_act_end_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_second_p">
+    <inertial>
+      <origin xyz="-0.00429682813208503 -0.00874032662205736 -0.000100035011561219" rpy="0 0 0" />
+      <mass value="0.0051599014546346" />
+      <inertia ixx="5.62195717339446E-07" ixy="1.19387567007294E-07" ixz="1.18767284435839E-13" iyy="5.41075379000443E-07" iyz="1.84673692487077E-12" izz="7.24333667412896E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_second_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_second_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_second_j" type="continuous">
+    <origin xyz="0.00538618609454388 -0.0564999999999784 0" rpy="0 0 0" />
+    <parent link="thumb_first_p" />
+    <child link="thumb_second_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_grasp_crank_close_p">
+    <inertial>
+      <origin xyz="0 0 -1.86243381827822E-13" rpy="0 0 0" />
+      <mass value="2.51063759376965E-05" />
+      <inertia ixx="1.3989474629695E-10" ixy="1.0097419586829E-26" ixz="2.58493941422821E-26" iyy="1.3989474629695E-10" iyz="3.80672718423451E-26" izz="1.25411423727417E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_crank_close_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_grasp_crank_close_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_grasp_crank_close_j" type="fixed">
+    <origin xyz="-0.0130638027452758 0.00218494999419043 -9.99999998428239E-05" rpy="0 0 0" />
+    <parent link="thumb_second_p" />
+    <child link="thumb_grasp_crank_close_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_bar_first_close_p">
+    <inertial>
+      <origin xyz="-3.60147994746263E-07 -1.16584729231706E-08 -0.00147681236758027" rpy="0 0 0" />
+      <mass value="0.000132837583088097" />
+      <inertia ixx="3.1684240762119E-09" ixy="-2.51225182286802E-15" ixz="-4.6382404629098E-14" iyy="3.1684279000972E-09" iyz="-4.62642627460578E-14" izz="2.92231556596674E-10" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_close_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_first_close_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_first_close_j" type="fixed">
+    <origin xyz="-0.00666394108882064 0.00214286937642706 0" rpy="0 0 0" />
+    <parent link="thumb_second_p" />
+    <child link="thumb_bar_first_close_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_third_p">
+    <inertial>
+      <origin xyz="0.000817591053118523 -0.0161853072425445 -9.99504940756638E-05" rpy="0 0 0" />
+      <mass value="0.00444107115829296" />
+      <inertia ixx="2.79054068905199E-07" ixy="2.30504168347204E-08" ixz="9.33853763454138E-13" iyy="1.79090045019301E-07" iyz="-7.89097943035161E-13" izz="2.87346965490611E-07" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_third_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_third_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_third_j" type="continuous">
+    <origin xyz="0.00212064750639931 -0.023388111866233 0" rpy="0 0 0" />
+    <parent link="thumb_second_p" />
+    <child link="thumb_third_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_bar_second_close_p">
+    <inertial>
+      <origin xyz="0 0 1.8625725961563E-13" rpy="0 0 0" />
+      <mass value="3.43280624420834E-05" />
+      <inertia ixx="1.53305098899649E-10" ixy="-3.15039491109063E-26" ixz="-7.27014210251684E-27" iyy="1.53305098899649E-10" iyz="1.67617165141361E-26" izz="2.67947312922772E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_close_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_close_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_second_close_j" type="fixed">
+    <origin xyz="-0.00578595030228755 0.00158832587947667 -0.000100000000144827" rpy="0 0 0" />
+    <parent link="thumb_third_p" />
+    <child link="thumb_bar_second_close_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_4_2_p">
+    <inertial>
+      <origin xyz="0.000621055184477956 -3.01374360574952E-07 0.00348013752683911" rpy="0 0 0" />
+      <mass value="0.00106556580174426" />
+      <inertia ixx="4.66383747298413E-08" ixy="2.34591120982514E-12" ixz="-1.32133674577817E-09" iyy="4.79469472142981E-08" iyz="-2.28895373917326E-13" izz="7.11290181494163E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_2_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_2_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_4_2_j" type="fixed">
+    <origin xyz="0.0109190850064045 -0.0187754806807404 -0.000100000000015628" rpy="1.57079632679471 0 -1.6149921607375" />
+    <parent link="thumb_third_p" />
+    <child link="skin_4_2_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_4_1_p">
+    <inertial>
+      <origin xyz="3.40096884636487E-06 2.911763061407E-06 0.00276922707025874" rpy="0 0 0" />
+      <mass value="0.000874976203876614" />
+      <inertia ixx="3.81771371396571E-08" ixy="1.67044959691397E-11" ixz="-1.78362656953866E-11" iyy="3.00774259062957E-08" iyz="-4.87940709236807E-12" izz="5.39007237014059E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_1_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_1_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_4_1_j" type="fixed">
+    <origin xyz="0.0120658831793239 -0.0106683508096661 -0.000100000000049822" rpy="1.57079632679491 0 -1.50166421478899" />
+    <parent link="thumb_second_p" />
+    <child link="skin_4_1_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="thumb_bar_second_p">
+    <inertial>
+      <origin xyz="-0.00442523027920893 -0.0147719454760585 -5.00000300631236E-05" rpy="0 0 0" />
+      <mass value="0.000318926085306967" />
+      <inertia ixx="4.05227771367525E-08" ixy="-1.19405409986264E-08" ixz="1.14608772310088E-16" iyy="4.46059009918664E-09" iyz="5.52897761926427E-17" izz="4.45363391486639E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_second_j" type="continuous">
+    <origin xyz="0.0100498756211201 -0.049999999999988 -5.0000000002463E-05" rpy="0 0 0" />
+    <parent link="thumb_first_p" />
+    <child link="thumb_bar_second_p" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="thumb_bar_second_connect_p">
+    <inertial>
+      <origin xyz="0 0 1.8625725961563E-13" rpy="0 0 0" />
+      <mass value="3.43280624420834E-05" />
+      <inertia ixx="1.53305098899649E-10" ixy="-3.15039491109063E-26" ixz="-7.27014210251684E-27" iyy="1.53305098899649E-10" iyz="1.67617165141361E-26" izz="2.67947312922772E-11" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_connect_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/thumb_bar_second_connect_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="thumb_bar_second_connect_j" type="fixed">
+    <origin xyz="-0.00832899232246439 -0.0282997859867468 -5.00000001361989E-05" rpy="0 0 0" />
+    <parent link="thumb_bar_second_p" />
+    <child link="thumb_bar_second_connect_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_4_0_p">
+    <inertial>
+      <origin xyz="3.40804505752357E-06 2.93986307983371E-06 0.00276920860753149" rpy="0 0 0" />
+      <mass value="0.000874977551068588" />
+      <inertia ixx="3.81771016914082E-08" ixy="1.67174388407648E-11" ixz="-1.78968911132537E-11" iyy="3.00774466074039E-08" iyz="-4.8161478350359E-12" izz="5.39005823164559E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_0_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_4_0_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_4_0_j" type="fixed">
+    <origin xyz="0.0200317383315479 -0.0367688188685958 -0.00010000000002576" rpy="1.57079632679492 0 -1.5707963267952" />
+    <parent link="thumb_first_p" />
+    <child link="skin_4_0_p" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <link name="skin_palm_p">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.000874977551068588" />
+      <inertia ixx="3.81771016914082E-08" ixy="1.67174388407648E-11" ixz="-1.78968911132537E-11" iyy="3.00774466074039E-08" iyz="-4.8161478350359E-12" izz="5.39005823164559E-08" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_palm_p.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="meshes/skin_palm_p.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="skin_palm_j" type="fixed">
+    <origin xyz="-0.01544 0.11121 -0.003" rpy="3.14 0 0" />
+    <parent link="v3_base_link" />
+    <child link="skin_palm_p" />
+  </joint>
+</robot>
