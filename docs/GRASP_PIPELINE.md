@@ -26,6 +26,9 @@ python -m tools.grasping.benchmark_catalog --full-pipeline
 
 预设包括 GraspQP、20 代进化、完整轨迹验证、Robot Lift 验证和最多 5 次独立搜索。
 运行 `--help` 查看当前参数，不要从旧日志复制超长参数列表。
+首轮一旦得到 `trajectory_stable` 就结束该物体，Robot Lift 只独立记录结果，
+不会因 `lift=FAIL` 重复整套 GraspQP 和进化。需要追求 Lift 成功时，再使用
+`--resume --retry-incomplete` 对失败物体定向补跑。
 
 ### 小规模测试
 
@@ -99,8 +102,8 @@ Benchmark 报告保存逐物体状态、配置路径、搜索/进化摘要、Lif
 ```
 
 - `object`：该物体累计处理时间。
-- `avg`：本轮按并行吞吐计算的平均墙钟时间。
-- `eta`：动态剩余时间；首批结果完成前波动较大。
+- `throughput`：本轮按并行吞吐计算的平均墙钟时间/物体。
+- `eta`：至少完成一整批 worker 前显示 `warming_up`，之后才给出动态剩余时间。
 - `lift=PASS/FAIL`：完整机械臂验证结果；没有进入验证时不显示。
 
 结束统计：

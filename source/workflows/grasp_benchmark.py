@@ -49,6 +49,25 @@ def _format_duration(seconds: float) -> str:
     return f"{seconds:d}s"
 
 
+def _progress_timing(
+    *, elapsed: float, completed: int, total: int, worker_count: int
+) -> tuple[float, float | None]:
+    """Return observed throughput time and a post-warmup ETA."""
+    average = elapsed / max(1, completed)
+    if completed < min(worker_count, total):
+        return average, None
+    return average, average * max(0, total - completed)
+
+
+def _attempt_satisfies_goal(
+    *, trajectory_hold_stable: bool, require_robot_lift_success: bool, robot_lift: dict | None
+) -> bool:
+    """Use Robot Lift as a retry gate only during explicit refinement."""
+    return trajectory_hold_stable and (
+        not require_robot_lift_success or bool((robot_lift or {}).get("robot_lift_verified"))
+    )
+
+
 def _failure_reason(row: dict) -> str | None:
     """Classify an incomplete result without discarding its detailed diagnostics."""
     status = row.get("status")
@@ -496,8 +515,13 @@ def _run_one(task: dict) -> dict:
                 temporary = validation_path.with_suffix(".json.tmp")
                 temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
                 temporary.replace(validation_path)
-            fully_validated = trajectory_hold_stable and (
-                not task["validate_robot_lift"] or bool(robot_lift["robot_lift_verified"])
+            # The first catalogue pass optimizes for broad trajectory coverage.
+            # Robot Lift remains an independent result and only becomes a retry
+            # gate during the explicit incomplete-object refinement pass.
+            fully_validated = _attempt_satisfies_goal(
+                trajectory_hold_stable=trajectory_hold_stable,
+                require_robot_lift_success=task["require_robot_lift_success"],
+                robot_lift=robot_lift,
             )
             status = (
                 TRAJECTORY_STABLE
@@ -638,6 +662,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "config_path": str(args.config_dir / f"{grasp_config_name(object_id)}.json"),
             "reuse": args.reuse,
             "validate_robot_lift": args.validate_robot_lift,
+            "require_robot_lift_success": args.retry_incomplete,
             "points": args.points,
             "joint_candidates": args.joint_candidates,
             "surface_anchors": args.surface_anchors,
@@ -688,15 +713,19 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     )
                     completed_this_run = len(rows) - resumed_count
                     run_elapsed = time.monotonic() - run_started
-                    average = run_elapsed / completed_this_run
-                    remaining = len(selected) - len(rows)
-                    eta = average * remaining
+                    average, eta = _progress_timing(
+                        elapsed=run_elapsed,
+                        completed=completed_this_run,
+                        total=len(selected) - resumed_count,
+                        worker_count=args.jobs,
+                    )
+                    eta_label = "warming_up" if eta is None else _format_duration(eta)
                     print(
                         f"[{len(rows)}/{len(selected)}] "
                         f"{row['status'].upper():16} {object_id} "
                         f"{lift_label}"
                         f"object={_format_duration(row.get('elapsed_seconds', 0.0))} "
-                        f"avg={_format_duration(average)} eta={_format_duration(eta)} "
+                        f"throughput={_format_duration(average)}/object eta={eta_label} "
                         f"{detail}",
                         flush=True,
                     )
