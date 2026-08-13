@@ -16,6 +16,12 @@
 6. 实际执行 approach、closure 和 hold，产生 trajectory validation 结果。
 7. 在 RM75B 完整场景执行 IK 预检及 scripted Lift，单独记录 Robot Lift 结果。
 
+完整 Robot Lift 前会在一个复用的 RM75B 场景中批量检查所有 trajectory-stable 候选的
+全部腕部路点。IK 不可达或关节插值会碰桌面的候选被后置并跳过动态执行；可行候选按 IK
+残差、桌面余量和进化 fitness 排序。这样不会再为确定不可执行的候选反复运行最长 900
+步仿真。多次独立搜索全部结束后，报告选中的最佳尝试会重新原子写回对应 grasp JSON，
+保证 benchmark 行与后续示教实际读取的配置一致。
+
 进化 worker 会按物体 mesh、scale 和手型结构复用已编译的 MuJoCo `MjModel`；每个
 候选只创建新 `MjData` 并重置相对位姿，不再重复解析 XML 和编译 mesh。
 

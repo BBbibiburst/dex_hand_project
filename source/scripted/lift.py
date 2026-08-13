@@ -184,6 +184,12 @@ class LiftStrategy(TaskStrategy):
         self.grasp_template_path: Path | None = None
         self.grasp_template_object_id: str | None = None
         self.archive_candidate_index = grasp_candidate_index or 0
+        self.restart_count = 0
+        self.last_failed_phase: str | None = None
+        self.last_grasp_hand_error = 0.0
+        self.last_contact_fingers: tuple[int, ...] = ()
+        self.last_wrist_position_error = 0.0
+        self.last_wrist_orientation_error = 0.0
 
     def reset(self) -> None:
         super().reset()
@@ -192,9 +198,17 @@ class LiftStrategy(TaskStrategy):
         # grasp archive, so force reachability selection for the new pose.
         self.grasp_template_object_id = None
         self.archive_candidate_index = self.forced_candidate_index or 0
+        self.restart_count = 0
+        self.last_failed_phase = None
+        self.last_grasp_hand_error = 0.0
+        self.last_contact_fingers = ()
+        self.last_wrist_position_error = 0.0
+        self.last_wrist_orientation_error = 0.0
 
     def _advance_grasp_candidate(self) -> None:
         """Try the next reachability-ranked stable grasp after a phase failure."""
+        self.restart_count += 1
+        self.last_failed_phase = self.phase_name
         if self.forced_candidate_index is None:
             self.archive_candidate_index += 1
         self.grasp_template_object_id = None
@@ -1047,7 +1061,7 @@ class LiftStrategy(TaskStrategy):
                     target_quaternion,
                     waypoint_hand,
                 )
-            if context.phase_step >= self.PHASE_TIMEOUT:
+            if context.phase_step >= self.PHASE_TIMEOUT and not converged:
                 self._advance_grasp_candidate()
                 return PhaseResult.RESTART, ActionContext(hand_target=gripper)
             return PhaseResult.CONTINUE, ActionContext(
@@ -1071,12 +1085,18 @@ class LiftStrategy(TaskStrategy):
                 position_error = float(np.linalg.norm(wrist_target - ee_position))
                 quaternion_dot = abs(float(np.dot(current[3:7], target_quaternion)))
                 orientation_error = 2.0 * np.arccos(np.clip(quaternion_dot, 0.0, 1.0))
+                self.last_wrist_position_error = position_error
+                self.last_wrist_orientation_error = orientation_error
                 hand_error = float(np.max(np.abs(self._hand_qpos(env) - hand_target)))
+                contact_fingers = self._contact_fingers(env)
+                self.last_grasp_hand_error = hand_error
+                self.last_contact_fingers = contact_fingers
                 converged = (
                     context.phase_step >= self.MIN_PHASE_STEPS
                     and position_error < self.WAYPOINT_POSITION_TOLERANCE
                     and orientation_error < self.ORIENTATION_TOLERANCE
-                    and hand_error < (0.015 if self.end_effector_name == "pika_gripper" else 0.0015)
+                    and hand_error
+                    < (0.015 if self.end_effector_name == "pika_gripper" else 0.0015)
                 )
                 if self._stable(
                     context,
@@ -1095,7 +1115,7 @@ class LiftStrategy(TaskStrategy):
                         target_quaternion,
                         hand_target,
                     )
-                if context.phase_step >= self.PHASE_TIMEOUT:
+                if context.phase_step >= self.PHASE_TIMEOUT and not converged:
                     self._advance_grasp_candidate()
                     return PhaseResult.RESTART, ActionContext(hand_target=gripper)
                 return PhaseResult.CONTINUE, ActionContext(
@@ -1111,6 +1131,8 @@ class LiftStrategy(TaskStrategy):
             hand_target = (1.0 - preload_alpha) * grasp + preload_alpha * preload
             hand_error = float(np.max(np.abs(self._hand_qpos(env) - hand_target)))
             contact_fingers = self._contact_fingers(env)
+            self.last_grasp_hand_error = hand_error
+            self.last_contact_fingers = contact_fingers
             antagonistic_contact = (
                 (4 in contact_fingers and any(finger < 4 for finger in contact_fingers))
                 if self.end_effector_name == "dex_hand"
@@ -1118,7 +1140,8 @@ class LiftStrategy(TaskStrategy):
             )
             grasp_stable = (
                 preload_alpha >= 1.0
-                and hand_error < (0.015 if self.end_effector_name == "pika_gripper" else 0.0015)
+                and hand_error
+                < (0.015 if self.end_effector_name == "pika_gripper" else 0.0015)
                 and antagonistic_contact
             )
             if self._stable(

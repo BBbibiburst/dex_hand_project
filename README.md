@@ -25,6 +25,8 @@ Policy 实验入口，但当前全量生成和自动示教以 `RM75B + dex_hand 
   MuJoCo simulator-in-the-loop 进化优化。
 - 安全约束：完整手部网格、桌面硬约束、接近/闭合轨迹碰撞检查。
 - 验证分层：direct hold、trajectory hold、完整机器人 Lift 分开记录。
+- 整机候选先批量检查 RM75B IK 与桌面碰撞，再运行动态 Lift；最终报告与写入的 grasp
+  config 始终对应同一次最佳搜索。
 - 长任务支持：自动推断并行度、逐物体原子保存、ETA、断点恢复和失败物体定向重试。
 - 示教采集：按物体、随机 seed 和抓取候选搜索成功轨迹；每个 seed 最多保存一条，优先保证多样性。
 

@@ -113,6 +113,28 @@ def _payload_after_robot_lift_attempts(
     return dict(attempted_payload if robot_lift_verified else preferred_payload)
 
 
+def _write_payload_atomic(path: Path, payload: dict) -> None:
+    """Publish one grasp payload without exposing a partially-written JSON file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    temporary.replace(path)
+
+
+def _robot_candidate_precheck_key(
+    payload: dict, individual_fitness: float, precheck: dict
+) -> tuple:
+    """Prioritize executable, collision-free and well-cleared robot candidates."""
+    return (
+        0 if precheck["precheck_passed"] else 1,
+        1 if precheck["table_collision"] else 0,
+        float(precheck["maximum_ik_position_error"]),
+        float(precheck["maximum_ik_orientation_error"]),
+        -float(payload.get("trajectory_minimum_table_clearance", 0.0)),
+        -float(individual_fitness),
+    )
+
+
 def _incomplete_attempt_key(row: dict) -> tuple:
     """Rank failed attempts by progress toward an executable robot Lift."""
     lift = row.get("robot_lift") or {}
@@ -374,6 +396,7 @@ def _run_one(task: dict) -> dict:
         "search": 0.0,
         "evolution": 0.0,
         "trajectory_replan_and_validation": 0.0,
+        "robot_candidate_precheck": 0.0,
         "robot_lift_validation": 0.0,
     }
     for attempt in range(task["search_attempts"]):
@@ -479,6 +502,38 @@ def _run_one(task: dict) -> dict:
                 phase_seconds["trajectory_replan_and_validation"] += (
                     time.monotonic() - trajectory_started
                 )
+                robot_prechecks = []
+                if trajectory_candidates and task["validate_robot_lift"]:
+                    from source.grasping.robot_lift_validator import (
+                        precheck_robot_lift_candidates,
+                    )
+
+                    robot_precheck_started = time.monotonic()
+                    robot_prechecks = precheck_robot_lift_candidates(
+                        object_id,
+                        [candidate for candidate, _, _ in trajectory_candidates],
+                        seed=task["seed"] + attempt,
+                    )
+                    phase_seconds["robot_candidate_precheck"] += (
+                        time.monotonic() - robot_precheck_started
+                    )
+                    indexed_prechecks = {
+                        item["candidate_index"]: item for item in robot_prechecks
+                    }
+
+                    def robot_candidate_key(index_and_candidate):
+                        index, candidate = index_and_candidate
+                        payload, result, individual = candidate
+                        precheck = indexed_prechecks[index]
+                        return _robot_candidate_precheck_key(
+                            payload,
+                            individual.fitness,
+                            precheck,
+                        )
+
+                    ordered = sorted(enumerate(trajectory_candidates), key=robot_candidate_key)
+                    trajectory_candidates = [candidate for _, candidate in ordered]
+                    robot_prechecks = [indexed_prechecks[index] for index, _ in ordered]
                 selected = trajectory_candidates[0] if trajectory_candidates else None
                 selected_individual = selected[2] if selected else best
                 published_payload = dict(selected[0] if selected else best.payload)
@@ -494,9 +549,7 @@ def _run_one(task: dict) -> dict:
                 )
                 validation_path = Path(task["evolution_path"])
                 validation_path.parent.mkdir(parents=True, exist_ok=True)
-                temporary = validation_path.with_suffix(".json.tmp")
-                temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
-                temporary.replace(validation_path)
+                _write_payload_atomic(validation_path, published_payload)
                 evolution_summary = {
                     "archive": len(archive),
                     "direct_hold_candidates": sum(item.direct_hold_stable for item in archive),
@@ -506,6 +559,7 @@ def _run_one(task: dict) -> dict:
                     "history": history,
                     "backend": history[-1].get("backend", task["evolution_backend"]),
                     "backend_fallback_error": history[-1].get("backend_fallback_error"),
+                    "robot_prechecks": robot_prechecks,
                 }
                 metrics = (
                     asdict(selected[1])
@@ -547,6 +601,13 @@ def _run_one(task: dict) -> dict:
                 robot_candidates = (
                     trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
                 )
+                if task["evolve"] and robot_prechecks:
+                    feasible_count = sum(
+                        item["precheck_passed"] for item in robot_prechecks
+                    )
+                    # Do not spend up to 900 dynamic steps on a candidate that
+                    # has already failed deterministic IK/table precheck.
+                    robot_candidates = robot_candidates[: max(1, feasible_count)]
                 preferred_payload = dict(published_payload)
                 robot_lift_started = time.monotonic()
                 for candidate_index, robot_candidate in enumerate(robot_candidates):
@@ -559,9 +620,7 @@ def _run_one(task: dict) -> dict:
                             trajectory_hold_stable=True,
                             validation_stage="trajectory_hold_stable",
                         )
-                    temporary = validation_path.with_suffix(".json.tmp")
-                    temporary.write_text(json.dumps(candidate_payload, indent=2), encoding="utf-8")
-                    temporary.replace(validation_path)
+                    _write_payload_atomic(validation_path, candidate_payload)
                     candidate_lift = validate_robot_lift(
                         object_id,
                         validation_path,
@@ -604,9 +663,7 @@ def _run_one(task: dict) -> dict:
                         else "trajectory_hold_stable"
                     ),
                 )
-                temporary = validation_path.with_suffix(".json.tmp")
-                temporary.write_text(json.dumps(published_payload, indent=2), encoding="utf-8")
-                temporary.replace(validation_path)
+                _write_payload_atomic(validation_path, published_payload)
             # The first catalogue pass optimizes for broad trajectory coverage.
             # Robot Lift remains an independent result and only becomes a retry
             # gate during the explicit incomplete-object refinement pass.
@@ -645,10 +702,16 @@ def _run_one(task: dict) -> dict:
                 return row
             unstable_key = _incomplete_attempt_key(row)
             if best_unstable is None or unstable_key < best_unstable[0]:
-                best_unstable = (unstable_key, row)
+                best_unstable = (
+                    unstable_key,
+                    row,
+                    dict(published_payload),
+                    validation_path,
+                )
         except Exception as exc:
             validation_errors.append(f"seed={task['seed'] + attempt} validation: {exc}")
     if best_unstable is not None:
+        _write_payload_atomic(best_unstable[3], best_unstable[2])
         return best_unstable[1]
     if validation_errors:
         return {

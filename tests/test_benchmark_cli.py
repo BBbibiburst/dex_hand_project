@@ -13,6 +13,8 @@ from source.workflows.grasp_benchmark import (
     _pilot_stop_reason,
     _payload_after_robot_lift_attempts,
     _progress_timing,
+    _robot_candidate_precheck_key,
+    _write_payload_atomic,
 )
 
 
@@ -113,6 +115,32 @@ def test_failed_robot_lift_restores_preferred_trajectory_payload() -> None:
         _payload_after_robot_lift_attempts(preferred, attempted, robot_lift_verified=True)
         == attempted
     )
+
+
+def test_robot_precheck_ranking_prefers_executable_candidate() -> None:
+    unreachable = {
+        "precheck_passed": False,
+        "table_collision": False,
+        "maximum_ik_position_error": 0.4,
+        "maximum_ik_orientation_error": 1.0,
+    }
+    reachable = {
+        "precheck_passed": True,
+        "table_collision": False,
+        "maximum_ik_position_error": 0.001,
+        "maximum_ik_orientation_error": 0.01,
+    }
+    assert _robot_candidate_precheck_key({}, 100.0, reachable) < (
+        _robot_candidate_precheck_key({}, 1000.0, unreachable)
+    )
+
+
+def test_atomic_payload_writer_replaces_previous_result(tmp_path) -> None:
+    path = tmp_path / "grasp.json"
+    _write_payload_atomic(path, {"attempt": 1})
+    _write_payload_atomic(path, {"attempt": 2})
+    assert path.read_text(encoding="utf-8").strip().endswith("2\n}")
+    assert not path.with_suffix(".json.tmp").exists()
 
 
 def test_incomplete_attempt_prefers_later_robot_phase() -> None:
