@@ -30,6 +30,11 @@
 - 每次搜索最多执行 6 个动态 Lift 候选；
 - 达到 3 个成功候选立即结束；否则最多 5 次搜索或每物体 45 分钟，先到即止。
 
+三个执行失败源分别在对应阶段处理：生成/重规划为每条路径记录水平六分区和
+level/upper 高度分区，完成目标至少覆盖两个 approach bin；局部接近由最终稳定抓姿
+逆向构造带上抬余量的撤离轨迹，再反转执行；进化 fitness 额外评估两次确定性小扰动
+（位置标准差 2.5 mm、旋转标准差 0.025 rad），奖励扰动稳定率并淘汰窄接触裕量抓姿。
+
 示教采集优先从 `lift_verified_candidates` 轮换；没有该字段时才回退到普通 trajectory
 archive。上述限制都可通过 `--target-lift-candidates`、`--maximum-saved-candidates`、
 `--maximum-robot-candidates-per-attempt` 和 `--maximum-object-seconds` 调整。

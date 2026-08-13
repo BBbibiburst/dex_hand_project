@@ -38,6 +38,9 @@ class EvolutionConfig:
     seed: int = 0
     minimum_table_clearance: float = 0.005
     preferred_table_clearance: float = 0.025
+    robustness_samples: int = 2
+    robustness_translation_sigma: float = 0.0025
+    robustness_orientation_sigma: float = 0.025
     backend: str = "cpu"
     mjwarp_device: str = "cuda:0"
     mjwarp_batch_size: int = 32
@@ -291,7 +294,16 @@ def crossover(first: dict, second: dict, rng: np.random.Generator) -> dict:
 
 
 def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
-    payload, seconds, settle_seconds, minimum_clearance, preferred_clearance = task
+    (
+        payload,
+        seconds,
+        settle_seconds,
+        minimum_clearance,
+        preferred_clearance,
+        robustness_samples,
+        robustness_translation_sigma,
+        robustness_orientation_sigma,
+    ) = task
     try:
         clearance = table_clearance_metrics(payload)
         if clearance is not None:
@@ -307,11 +319,20 @@ def _evaluate_task(task: tuple[dict, float, float, float, float]) -> Individual:
         result = validate_grasp_payload_direct(
             payload, seconds=seconds, settle_seconds=settle_seconds
         )
+        robustness_results = _evaluate_robustness(
+            payload,
+            samples=robustness_samples,
+            translation_sigma=robustness_translation_sigma,
+            orientation_sigma=robustness_orientation_sigma,
+            seconds=min(seconds, 0.8),
+            settle_seconds=min(settle_seconds, 0.25),
+        )
         return _individual_from_result(
             payload,
             result,
             clearance=clearance,
             preferred_clearance=preferred_clearance,
+            robustness_results=robustness_results,
         )
     except Exception as exc:
         return Individual(payload, -1e6, False, {"error": str(exc)})
@@ -323,6 +344,7 @@ def _individual_from_result(
     *,
     clearance: dict[str, float] | None,
     preferred_clearance: float,
+    robustness_results: list | None = None,
 ) -> Individual:
     metrics = asdict(result)
     fitness = (
@@ -338,7 +360,60 @@ def _individual_from_result(
             0.0,
         )
         metrics.update(clearance)
+    if robustness_results:
+        stable_count = sum(item.direct_hold_stable for item in robustness_results)
+        robustness_rate = stable_count / len(robustness_results)
+        fitness += 30.0 * robustness_rate
+        fitness -= 100.0 * (1.0 - robustness_rate)
+        metrics.update(
+            robustness_samples=len(robustness_results),
+            robustness_stable=stable_count,
+            robustness_rate=robustness_rate,
+        )
     return Individual(payload, fitness, result.direct_hold_stable, metrics)
+
+
+def _evaluate_robustness(
+    payload: dict,
+    *,
+    samples: int,
+    translation_sigma: float,
+    orientation_sigma: float,
+    seconds: float,
+    settle_seconds: float,
+) -> list:
+    """Evaluate deterministic small wrist perturbations around a candidate."""
+    if samples <= 0:
+        return []
+    signature = np.concatenate(
+        [
+            np.asarray(payload["hand_translation"], dtype=np.float64),
+            np.asarray(payload["hand_actuator_fractions"], dtype=np.float64),
+        ]
+    )
+    seed = int(abs(float(np.dot(signature, np.arange(1, len(signature) + 1)))) * 1e6) % 2**32
+    rng = np.random.default_rng(seed)
+    results = []
+    for _ in range(samples):
+        perturbed = deepcopy(payload)
+        translation_delta = rng.normal(0.0, translation_sigma, 3)
+        perturbed["hand_translation"] = (
+            np.asarray(payload["hand_translation"], dtype=np.float64) + translation_delta
+        ).tolist()
+        rotation_delta = Rotation.from_rotvec(
+            rng.normal(0.0, orientation_sigma, 3)
+        ).as_matrix()
+        perturbed["hand_rotation_matrix"] = (
+            np.asarray(payload["hand_rotation_matrix"], dtype=np.float64) @ rotation_delta
+        ).tolist()
+        results.append(
+            validate_grasp_payload_direct(
+                perturbed,
+                seconds=seconds,
+                settle_seconds=settle_seconds,
+            )
+        )
+    return results
 
 
 def mjwarp_available() -> bool:
@@ -392,6 +467,7 @@ def _evaluate_population_mjwarp(
                 result,
                 clearance=clearances[accepted_index],
                 preferred_clearance=config.preferred_table_clearance,
+                robustness_results=None,
             )
     if any(item is None for item in individuals):
         raise RuntimeError("MJWarp population evaluator returned an incomplete batch.")
@@ -414,6 +490,9 @@ def evaluate_population(
             config.settle_seconds,
             config.minimum_table_clearance,
             config.preferred_table_clearance,
+            config.robustness_samples,
+            config.robustness_translation_sigma,
+            config.robustness_orientation_sigma,
         )
         for payload in payloads
     ]

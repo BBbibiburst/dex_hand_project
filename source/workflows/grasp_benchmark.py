@@ -166,6 +166,11 @@ def _candidate_is_diverse(
     return True
 
 
+def _approach_bins(candidate: dict) -> set[str]:
+    value = candidate.get("approach_bin")
+    return {str(value)} if value else set()
+
+
 def _append_diverse_candidates(
     archive: list[dict], candidates: list[dict], *, maximum: int
 ) -> None:
@@ -750,7 +755,13 @@ def _run_one(task: dict) -> dict:
                         ):
                             if key in candidate_payload:
                                 metrics[key] = candidate_payload[key]
-                    if len(lift_verified_candidates) >= task["target_lift_candidates"]:
+                    covered_bins = set().union(
+                        *(_approach_bins(item) for item in lift_verified_candidates)
+                    )
+                    if (
+                        len(lift_verified_candidates) >= task["target_lift_candidates"]
+                        and len(covered_bins) >= min(2, task["target_lift_candidates"])
+                    ):
                         break
                 phase_seconds["robot_lift_validation"] += time.monotonic() - robot_lift_started
                 attempted_payload = json.loads(validation_path.read_text(encoding="utf-8"))
@@ -798,7 +809,15 @@ def _run_one(task: dict) -> dict:
                 robot_lift=robot_lift,
             ) and (
                 not task["validate_robot_lift"]
-                or len(lift_verified_candidates) >= task["target_lift_candidates"]
+                or (
+                    len(lift_verified_candidates) >= task["target_lift_candidates"]
+                    and len(
+                        set().union(
+                            *(_approach_bins(item) for item in lift_verified_candidates)
+                        )
+                    )
+                    >= min(2, task["target_lift_candidates"])
+                )
             )
             status = (
                 TRAJECTORY_STABLE

@@ -837,6 +837,24 @@ def _approach_directions(candidate: Candidate, seed: int) -> list[np.ndarray]:
     return directions
 
 
+def approach_direction_metadata(direction: np.ndarray) -> dict[str, float | str]:
+    """Describe an object-frame approach direction for coverage accounting."""
+    direction = np.asarray(direction, dtype=np.float64)
+    direction /= max(np.linalg.norm(direction), 1e-9)
+    azimuth = float(np.arctan2(direction[1], direction[0]))
+    elevation = float(np.arcsin(np.clip(direction[2], -1.0, 1.0)))
+    sector = int(np.floor(((azimuth + np.pi) % (2.0 * np.pi)) / (np.pi / 3.0)))
+    label = ("back", "back_left", "front_left", "front", "front_right", "back_right")[
+        sector
+    ]
+    elevation_label = "upper" if elevation >= np.deg2rad(15.0) else "level"
+    return {
+        "approach_azimuth": azimuth,
+        "approach_elevation": elevation,
+        "approach_bin": f"{label}_{elevation_label}",
+    }
+
+
 def plan_approach(
     cloud: Cloud,
     device: Device,
@@ -897,6 +915,15 @@ def plan_approach(
             candidate.translation[None, :]
             + (1.0 - move_progress[:, None]) * pregrasp_clearance * direction
         )
+        # Construct the path in the collision-sensitive direction: start at
+        # the stable final grasp, withdraw upward and outward, then reverse it
+        # for execution. The sinusoidal lift leaves both endpoints unchanged
+        # while preventing low straight-line sweeps across the table.
+        reverse_arc_height = max(0.0, 0.035 * (1.0 - max(float(direction[2]), 0.0)))
+        # pregrasp -> grasp execution must descend monotonically from the safe
+        # lifted corridor; constructing the reverse withdrawal means height is
+        # maximal at pregrasp and exactly zero at the validated final grasp.
+        move_translations[:, 2] += reverse_arc_height * (1.0 - move_progress)
         maximum_penetration = 0.0
         minimum_object_clearance = np.inf
         minimum_table_clearance = np.inf
@@ -1366,6 +1393,11 @@ def payload(
             if candidate.approach_plan is not None
             else None
         ),
+        **(
+            approach_direction_metadata(candidate.approach_plan.direction)
+            if candidate.approach_plan is not None
+            else {}
+        ),
         "hand_orientation_roll_index": candidate.roll_index,
         "hand_contact_distance_margin": max(0.0, 0.005 - candidate.mean_distance),
         "approach_hand_translations": translations.tolist(),
@@ -1505,6 +1537,7 @@ def replan_evolved_payload(
         rotation = np.asarray(evolved["hand_rotation_matrix"], dtype=np.float64)
         replanned.update(
             approach_direction=plan.direction.tolist(),
+            **approach_direction_metadata(plan.direction),
             approach_hand_translations=plan.approach_translations.tolist(),
             approach_hand_rotation_matrices=np.repeat(
                 rotation[None, :, :], len(plan.approach_translations), axis=0
@@ -1520,6 +1553,7 @@ def replan_evolved_payload(
             grasp_trajectory_maximum_penetration=plan.maximum_grasp_penetration,
             grasp_trajectory_maximum_rigid_penetration=(plan.maximum_grasp_rigid_penetration),
             trajectory_replanned=True,
+            approach_planner="reverse_with_upward_arc",
         )
         try:
             validate_grasp_trajectory_payload(replanned)

@@ -8,6 +8,7 @@ from tools.grasping.benchmark_catalog import (
 from source.workflows.grasp_benchmark import (
     _attempt_satisfies_goal,
     _append_diverse_candidates,
+    _approach_bins,
     _candidate_is_diverse,
     _failure_reason,
     _format_duration,
@@ -173,6 +174,12 @@ def test_candidate_archive_deduplicates_pose_and_hand_shape() -> None:
         maximum=2,
     )
     assert len(archive) == 2
+
+
+def test_approach_bin_coverage_is_explicit() -> None:
+    candidates = [{"approach_bin": "front_level"}, {"approach_bin": "left_upper"}]
+    covered = set().union(*(_approach_bins(candidate) for candidate in candidates))
+    assert covered == {"front_level", "left_upper"}
 
 
 def test_incomplete_attempt_prefers_later_robot_phase() -> None:

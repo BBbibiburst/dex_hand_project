@@ -32,6 +32,13 @@ def test_embedding_matches_dexevolve_scaling() -> None:
     np.testing.assert_allclose(value[:6], 0.0, atol=1e-12)
 
 
+def test_robustness_defaults_are_bounded() -> None:
+    config = EvolutionConfig()
+    assert config.robustness_samples == 2
+    assert config.robustness_translation_sigma == 0.0025
+    assert config.robustness_orientation_sigma == 0.025
+
+
 def test_mutation_preserves_input_and_limits() -> None:
     source = payload()
     original = deepcopy(source)
