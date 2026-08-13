@@ -10,6 +10,7 @@ from source.workflows.grasp_benchmark import (
     _failure_reason,
     _format_duration,
     _incomplete_attempt_key,
+    _pilot_stop_reason,
     _payload_after_robot_lift_attempts,
     _progress_timing,
 )
@@ -118,3 +119,41 @@ def test_incomplete_attempt_prefers_later_robot_phase() -> None:
     precheck = {"robot_lift": {"final_phase": "precheck", "table_collision": False}}
     lift = {"robot_lift": {"final_phase": "lift", "table_collision": False}}
     assert _incomplete_attempt_key(lift) < _incomplete_attempt_key(precheck)
+
+
+def test_pilot_stops_on_low_lift_rate_after_warmup() -> None:
+    rows = [
+        {"status": "trajectory_stable", "robot_lift": {"robot_lift_verified": False}}
+        for _ in range(4)
+    ]
+    assert (
+        _pilot_stop_reason(
+            rows[:3],
+            minimum_results=4,
+            minimum_lift_rate=0.25,
+            maximum_repeated_failure=3,
+        )
+        is None
+    )
+    assert "lift_rate=" in _pilot_stop_reason(
+        rows,
+        minimum_results=4,
+        minimum_lift_rate=0.25,
+        maximum_repeated_failure=3,
+    )
+
+
+def test_pilot_stops_on_repeated_failure_even_with_acceptable_lift_rate() -> None:
+    rows = [
+        {"status": "trajectory_stable", "robot_lift": {"robot_lift_verified": True}},
+        {"status": "search_error"},
+        {"status": "search_error"},
+        {"status": "search_error"},
+    ]
+    reason = _pilot_stop_reason(
+        rows,
+        minimum_results=4,
+        minimum_lift_rate=0.25,
+        maximum_repeated_failure=3,
+    )
+    assert reason == "repeated_failure=search_error count=3"

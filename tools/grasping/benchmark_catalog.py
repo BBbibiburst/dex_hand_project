@@ -35,6 +35,17 @@ FULL_PIPELINE_PRESET = {
     "retry_incomplete": True,
 }
 
+PILOT_OBJECT_IDS = [
+    "ycb:003_cracker_box",
+    "ycb:011_banana",
+    "ycb:019_pitcher_base",
+    "ycb:024_bowl",
+    "ycb:025_mug",
+    "ycb:026_sponge",
+    "ycb:035_power_drill",
+    "ycb:061_foam_brick",
+]
+
 GIB = 1024**3
 MAXIMUM_PROCESS_PARALLELISM = 8
 MEMORY_PER_WORKER_BYTES = 2 * GIB
@@ -103,6 +114,14 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Use the standard GraspQP -> DexEvolve -> MuJoCo full-catalog preset.",
     )
+    parser.add_argument(
+        "--pilot",
+        action="store_true",
+        help="Run the full pipeline on eight representative shapes with early diagnosis.",
+    )
+    parser.add_argument("--pilot-min-results", type=int, default=4)
+    parser.add_argument("--pilot-min-lift-rate", type=float, default=0.25)
+    parser.add_argument("--pilot-max-repeated-failure", type=int, default=3)
     parser.add_argument("--dataset", choices=("all", "ycb", "egad"), default="all")
     parser.add_argument("--object-id", action="append", dest="object_ids")
     parser.add_argument("--limit", type=int)
@@ -165,13 +184,20 @@ def main() -> None:
     args = parse_args()
     values = vars(args)
     full_pipeline = values.pop("full_pipeline")
-    if full_pipeline:
+    pilot = bool(values["pilot"])
+    if full_pipeline or pilot:
         explicitly_set = {
             argument[2:].split("=", 1)[0].replace("-", "_")
             for argument in sys.argv[1:]
             if argument.startswith("--")
         }
         _apply_full_pipeline_preset(values, explicitly_set)
+        if pilot:
+            if "object_id" not in explicitly_set:
+                values["object_ids"] = PILOT_OBJECT_IDS.copy()
+            values["limit"] = None
+            values["jobs"] = 1
+            values["evolution_jobs"] = 1
         gpu_evolution = values["evolution_backend"] == "mjwarp" or (
             values["evolution_backend"] == "auto" and mjwarp_available()
         )
@@ -191,7 +217,11 @@ def main() -> None:
                 flush=True,
             )
         if values["output"] is None:
-            values["output"] = Path("configs/grasps/dex_hand/full_pipeline_benchmark.json")
+            values["output"] = Path(
+                "configs/grasps/dex_hand/pilot_benchmark.json"
+                if pilot
+                else "configs/grasps/dex_hand/full_pipeline_benchmark.json"
+            )
         if values["config_dir"] is None:
             values["config_dir"] = Path("configs/grasps/dex_hand/graspqp_seeds")
         if values["evolution_dir"] is None:

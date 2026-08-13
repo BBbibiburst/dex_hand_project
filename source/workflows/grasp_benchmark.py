@@ -135,6 +135,31 @@ def _incomplete_attempt_key(row: dict) -> tuple:
     )
 
 
+def _pilot_stop_reason(
+    rows: list[dict],
+    *,
+    minimum_results: int,
+    minimum_lift_rate: float,
+    maximum_repeated_failure: int,
+) -> str | None:
+    """Return a diagnostic reason when a pilot already shows systematic failure."""
+    if len(rows) < minimum_results:
+        return None
+    lift_successes = sum(
+        bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
+    )
+    lift_rate = lift_successes / len(rows)
+    if lift_rate < minimum_lift_rate:
+        return (
+            f"lift_rate={lift_successes}/{len(rows)} ({lift_rate:.1%}) "
+            f"below {minimum_lift_rate:.1%}"
+        )
+    recent_reasons = [_failure_reason(row) for row in rows[-maximum_repeated_failure:]]
+    if recent_reasons and recent_reasons[0] is not None and len(set(recent_reasons)) == 1:
+        return f"repeated_failure={recent_reasons[0]} count={len(recent_reasons)}"
+    return None
+
+
 @dataclass
 class GraspBenchmarkConfig:
     """Configuration for a catalogue-wide grasp search and validation run."""
@@ -173,6 +198,10 @@ class GraspBenchmarkConfig:
     jobs: int = 1
     reuse: bool = False
     validate_robot_lift: bool = False
+    pilot: bool = False
+    pilot_min_results: int = 4
+    pilot_min_lift_rate: float = 0.25
+    pilot_max_repeated_failure: int = 3
     resume: bool = False
     retry_incomplete: bool = False
     config_dir: Path | None = None
@@ -250,6 +279,10 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "grasp_schema_version": GRASP_CONFIG_SCHEMA_VERSION,
         "validation_semantics": VALIDATION_SEMANTICS,
         "validate_robot_lift": args.validate_robot_lift,
+        "pilot": args.pilot,
+        "pilot_min_results": args.pilot_min_results,
+        "pilot_min_lift_rate": args.pilot_min_lift_rate,
+        "pilot_max_repeated_failure": args.pilot_max_repeated_failure,
         "points": args.points,
         "joint_candidates": args.joint_candidates,
         "surface_anchors": args.surface_anchors,
@@ -642,6 +675,10 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    if args.pilot_min_results <= 0 or args.pilot_max_repeated_failure <= 0:
+        raise ValueError("Pilot result and repeated-failure thresholds must be positive.")
+    if not 0.0 <= args.pilot_min_lift_rate <= 1.0:
+        raise ValueError("--pilot-min-lift-rate must be between zero and one.")
     if args.evolution_backend not in {"auto", "cpu", "mjwarp"}:
         raise ValueError("--evolution-backend must be auto, cpu, or mjwarp.")
     if min(args.mjwarp_batch_size, args.mjwarp_nconmax, args.mjwarp_njmax) <= 0:
@@ -766,6 +803,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     pending = set(futures)
     interrupt_count = 0
     force_stop = False
+    pilot_stop = None
     try:
         while pending:
             try:
@@ -801,6 +839,34 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                         f"{detail}",
                         flush=True,
                     )
+                    if args.pilot:
+                        lift_successes = sum(
+                            bool((item.get("robot_lift") or {}).get("robot_lift_verified"))
+                            for item in rows
+                        )
+                        reasons = {}
+                        for item in rows:
+                            reason = _failure_reason(item)
+                            if reason is not None:
+                                reasons[reason] = reasons.get(reason, 0) + 1
+                        print(
+                            f"pilot_progress={len(rows)}/{len(selected)} "
+                            f"lift_rate={lift_successes / len(rows):.1%} "
+                            f"failure_reasons={reasons or '{}'}",
+                            flush=True,
+                        )
+                        pilot_stop = _pilot_stop_reason(
+                            rows,
+                            minimum_results=args.pilot_min_results,
+                            minimum_lift_rate=args.pilot_min_lift_rate,
+                            maximum_repeated_failure=args.pilot_max_repeated_failure,
+                        )
+                        if pilot_stop is not None:
+                            force_stop = True
+                            print(f"PILOT_STOP {pilot_stop}", flush=True)
+                            break
+                if pilot_stop is not None:
+                    break
             except KeyboardInterrupt:
                 interrupt_count += 1
                 _write_report(args.output, args=args, selected=selected, rows=rows)
@@ -821,6 +887,10 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     finally:
         executor.shutdown(wait=not force_stop, cancel_futures=force_stop)
 
+    if pilot_stop is not None:
+        _write_report(args.output, args=args, selected=selected, rows=rows)
+        print(f"report={args.output}")
+        return 2
     if force_stop:
         return 130
 

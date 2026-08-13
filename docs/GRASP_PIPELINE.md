@@ -32,6 +32,17 @@ Dex Hand 的六驱动闭链不能直接交给 GraspQP 的通用开链 URDF `Hand
 python -m tools.grasping.benchmark_catalog --full-pipeline
 ```
 
+全量运行前建议先执行代表性诊断：
+
+```bash
+python -m tools.grasping.benchmark_catalog --pilot
+```
+
+Pilot 固定单进程，逐物体输出累计 Lift 成功率和失败原因。默认在至少 4 个结果后检查：
+Lift 成功率低于 25%，或同一失败连续出现 3 次时，以退出码 2 提前结束并保留
+`configs/grasps/dex_hand/pilot_benchmark.json`。阈值可通过 `--pilot-min-results`、
+`--pilot-min-lift-rate` 和 `--pilot-max-repeated-failure` 调整。
+
 预设包括 GraspQP、20 代进化、完整轨迹验证、Robot Lift 验证和最多 5 次独立搜索。
 运行 `--help` 查看当前参数，不要从旧日志复制超长参数列表。
 当前完整预设以 `robot_lift_verified` 为最终目标。某次搜索得到

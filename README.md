@@ -118,6 +118,14 @@ tail -f logs/full_pipeline.log
 python -m tools.grasping.benchmark_catalog --full-pipeline --resume
 ```
 
+全量运行前可先执行代表性 pilot。它串行测试盒体、曲面、容器、带柄和不规则物体，
+实时打印 Lift 成功率与失败类型；完成至少 4 个物体后，成功率低于 25% 或同一错误连续
+出现 3 次会保存报告并提前退出：
+
+```bash
+python -m tools.grasping.benchmark_catalog --pilot
+```
+
 重新计算未通过完整轨迹或 Robot Lift 的物体（`--full-pipeline` 当前默认采用该语义，
 显式参数保留用于普通非预设运行）：
 
