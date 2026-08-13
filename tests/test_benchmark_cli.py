@@ -9,6 +9,7 @@ from source.workflows.grasp_benchmark import (
     _attempt_satisfies_goal,
     _failure_reason,
     _format_duration,
+    _incomplete_attempt_key,
     _payload_after_robot_lift_attempts,
     _progress_timing,
 )
@@ -30,6 +31,7 @@ def test_full_pipeline_keeps_safe_cpu_evolution_backend() -> None:
     _apply_full_pipeline_preset(values, set())
 
     assert values["evolution_backend"] == "cpu"
+    assert values["retry_incomplete"] is True
 
 
 def test_duration_format_is_compact() -> None:
@@ -110,3 +112,9 @@ def test_failed_robot_lift_restores_preferred_trajectory_payload() -> None:
         _payload_after_robot_lift_attempts(preferred, attempted, robot_lift_verified=True)
         == attempted
     )
+
+
+def test_incomplete_attempt_prefers_later_robot_phase() -> None:
+    precheck = {"robot_lift": {"final_phase": "precheck", "table_collision": False}}
+    lift = {"robot_lift": {"final_phase": "lift", "table_collision": False}}
+    assert _incomplete_attempt_key(lift) < _incomplete_attempt_key(precheck)

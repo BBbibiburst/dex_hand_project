@@ -21,7 +21,8 @@ Policy 实验入口，但当前全量生成和自动示教以 `RM75B + dex_hand 
 
 - 物体目录：YCB 与 EGAD，共约 127 个对象，实际数量以
   `assets/maniskill/manifest.json` 为准。
-- 抓取生成：GraspQP Git submodule + MuJoCo simulator-in-the-loop 进化优化。
+- 抓取生成：官方 GraspQP force-closure metric + Dex Hand 闭链联合姿态优化 +
+  MuJoCo simulator-in-the-loop 进化优化。
 - 安全约束：完整手部网格、桌面硬约束、接近/闭合轨迹碰撞检查。
 - 验证分层：direct hold、trajectory hold、完整机器人 Lift 分开记录。
 - 长任务支持：自动推断并行度、逐物体原子保存、ETA、断点恢复和失败物体定向重试。
@@ -117,7 +118,8 @@ tail -f logs/full_pipeline.log
 python -m tools.grasping.benchmark_catalog --full-pipeline --resume
 ```
 
-重新计算未通过完整轨迹或 Robot Lift 的物体：
+重新计算未通过完整轨迹或 Robot Lift 的物体（`--full-pipeline` 当前默认采用该语义，
+显式参数保留用于普通非预设运行）：
 
 ```bash
 python -m tools.grasping.benchmark_catalog \

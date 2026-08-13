@@ -113,6 +113,28 @@ def _payload_after_robot_lift_attempts(
     return dict(attempted_payload if robot_lift_verified else preferred_payload)
 
 
+def _incomplete_attempt_key(row: dict) -> tuple:
+    """Rank failed attempts by progress toward an executable robot Lift."""
+    lift = row.get("robot_lift") or {}
+    phase_rank = {
+        "precheck": 0,
+        "approach": 1,
+        "grasp": 2,
+        "lift": 3,
+        "verify": 4,
+        "done": 5,
+    }.get(str(lift.get("final_phase") or ""), -1)
+    return (
+        0 if lift.get("robot_lift_verified") else 1,
+        -phase_rank,
+        1 if lift.get("table_collision") else 0,
+        float(row.get("vertical_drop", float("inf"))),
+        float(row.get("position_drift", float("inf"))),
+        float(row.get("rotation_drift", float("inf"))),
+        -int(row.get("final_contacts", 0)),
+    )
+
+
 @dataclass
 class GraspBenchmarkConfig:
     """Configuration for a catalogue-wide grasp search and validation run."""
@@ -588,12 +610,7 @@ def _run_one(task: dict) -> dict:
             }
             if fully_validated:
                 return row
-            unstable_key = (
-                float(row.get("vertical_drop", float("inf"))),
-                float(row.get("position_drift", float("inf"))),
-                float(row.get("rotation_drift", float("inf"))),
-                -int(row.get("final_contacts", 0)),
-            )
+            unstable_key = _incomplete_attempt_key(row)
             if best_unstable is None or unstable_key < best_unstable[0]:
                 best_unstable = (unstable_key, row)
         except Exception as exc:

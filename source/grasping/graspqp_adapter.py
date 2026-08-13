@@ -1,11 +1,11 @@
-"""Experimental kinematics bridge for using GraspQP with the closed-chain Dex Hand.
+"""Closed-chain Dex Hand integration for GraspQP seed optimization.
 
 GraspQP expects differentiable hand kinematics.  The project's hand is an MJCF
 closed linkage, so it cannot be loaded by GraspQP's URDF kinematics directly.
-This module provides the first, dependency-light bridge: MuJoCo resolves the
-linkage and central differences expose derivatives with respect to the six
-independent actuator fractions.  It is suitable for validating an optimizer
-integration and for generating data for a later differentiable surrogate.
+MuJoCo therefore resolves the linkage and central differences expose derivatives
+with respect to the six independent actuator fractions.  GraspQP's force-closure
+metric then jointly refines the hand drives and free-wrist pose before the
+simulator-based evolutionary stage.
 """
 
 from __future__ import annotations
@@ -40,8 +40,10 @@ class DexHandKinematicsSample:
 class GraspQPPoseRefinement:
     rotation: np.ndarray
     translation: np.ndarray
+    actuator_fractions: np.ndarray
     initial_energy: float
     final_energy: float
+    minimum_table_clearance: float
 
 
 def check_graspqp_compatibility() -> GraspQPCompatibility:
@@ -113,22 +115,26 @@ def sample_closed_chain_kinematics(
     )
 
 
-def refine_wrist_pose(
+def refine_closed_chain_grasp(
     *,
     hand_points: np.ndarray,
     initial_rotation: np.ndarray,
     initial_translation: np.ndarray,
     object_points: np.ndarray,
     object_normals: np.ndarray,
+    initial_fractions: np.ndarray | None = None,
+    table_z: float | None = None,
+    table_clearance: float = 0.005,
     iterations: int = 120,
     learning_rate: float = 2e-3,
     device: str = "cuda",
 ) -> GraspQPPoseRefinement:
-    """Refine a wrist pose with the official differentiable GraspQP metric.
+    """Jointly refine a closed-chain Dex Hand grasp with the GraspQP metric.
 
-    ``hand_points`` contains one fixed contact candidate per digit in hand-root
-    coordinates. A differentiable soft nearest-neighbour surface supplies the
-    contact-distance term while GraspQP supplies the force-closure QP term.
+    MuJoCo resolves the closed-chain kinematics and finite differences expose
+    derivatives for the six independent drives. Wrist pose and drive fractions
+    are optimized together. GraspQP supplies force closure while surface
+    distance, drive bounds, and the table half-space provide task constraints.
     """
     import torch
 
@@ -143,7 +149,6 @@ def refine_wrist_pose(
         raise ValueError("iterations must be positive.")
     dtype = torch.float32
     target_device = torch.device(device)
-    local = torch.as_tensor(hand_points, dtype=dtype, device=target_device)
     cloud = torch.as_tensor(object_points, dtype=dtype, device=target_device)
     normals = torch.as_tensor(object_normals, dtype=dtype, device=target_device)
     base_rotation = torch.as_tensor(initial_rotation, dtype=dtype, device=target_device)
@@ -151,7 +156,33 @@ def refine_wrist_pose(
         initial_translation, dtype=dtype, device=target_device, requires_grad=True
     )
     rotation_delta = torch.zeros(3, dtype=dtype, device=target_device, requires_grad=True)
-    optimizer = torch.optim.Adam([translation, rotation_delta], lr=learning_rate)
+    if initial_fractions is None:
+        raise ValueError("initial_fractions are required for closed-chain grasp refinement")
+    base_fractions_np = np.asarray(initial_fractions, dtype=np.float64)
+    kinematics = sample_closed_chain_kinematics(
+        base_fractions_np,
+        epsilon=2e-3,
+        max_points_per_geom=20,
+    )
+    requested_contacts = np.asarray(hand_points, dtype=np.float64)
+    nearest_indices = np.linalg.norm(
+        kinematics.surface.points[:, None, :] - requested_contacts[None, :, :],
+        axis=-1,
+    ).argmin(axis=0)
+    local = torch.as_tensor(
+        kinematics.surface.points[nearest_indices], dtype=dtype, device=target_device
+    )
+    local_jacobian_np = kinematics.point_jacobian[nearest_indices]
+    table_points_np = kinematics.surface.points
+    table_jacobian_np = kinematics.point_jacobian
+    base_fractions = torch.as_tensor(base_fractions_np, dtype=dtype, device=target_device)
+    local_jacobian = torch.as_tensor(local_jacobian_np, dtype=dtype, device=target_device)
+    table_points = torch.as_tensor(table_points_np, dtype=dtype, device=target_device)
+    table_jacobian = torch.as_tensor(table_jacobian_np, dtype=dtype, device=target_device)
+    fraction_delta = torch.zeros(6, dtype=dtype, device=target_device, requires_grad=True)
+    optimizer = torch.optim.Adam(
+        [translation, rotation_delta, fraction_delta], lr=learning_rate
+    )
     with redirect_stdout(io.StringIO()):
         metric = GraspSpanMetricFactory.create(
             GraspSpanMetricFactory.MetricType.GRASPQP,
@@ -171,7 +202,9 @@ def refine_wrist_pose(
     for _ in range(iterations):
         optimizer.zero_grad()
         rotation = base_rotation @ rotation_matrix(rotation_delta)
-        contacts = local @ rotation.T + translation
+        fractions = base_fractions + fraction_delta
+        local_contacts = local + torch.einsum("pij,j->pi", local_jacobian, fraction_delta)
+        contacts = local_contacts @ rotation.T + translation
         squared = torch.cdist(contacts, cloud).square()
         weights = torch.softmax(-squared / (0.004**2), dim=-1)
         surface = weights @ cloud
@@ -193,16 +226,48 @@ def refine_wrist_pose(
             .sum()
             + 0.02 * rotation_delta.square().sum()
         )
-        energy = 100.0 * distance_energy + qp_energy + pose_regularizer
+        joint_limit_energy = (
+            torch.relu(-fractions).square() + torch.relu(fractions - 1.0).square()
+        ).sum()
+        table_energy = torch.zeros((), dtype=dtype, device=target_device)
+        if table_z is not None:
+            local_table_points = table_points + torch.einsum(
+                "pij,j->pi", table_jacobian, fraction_delta
+            )
+            world_z = (local_table_points @ rotation.T + translation)[:, 2]
+            floor = float(table_z) + float(table_clearance)
+            table_energy = torch.relu(floor - world_z).square().sum()
+        energy = (
+            100.0 * distance_energy
+            + qp_energy
+            + pose_regularizer
+            + 500.0 * joint_limit_energy
+            + 2_000.0 * table_energy
+        )
         if initial_energy is None:
             initial_energy = float(energy.detach().cpu())
         energy.backward()
         optimizer.step()
 
+    final_fractions = np.clip(
+        (base_fractions + fraction_delta).detach().cpu().numpy(), 0.0, 1.0
+    )
     final_rotation = (base_rotation @ rotation_matrix(rotation_delta)).detach().cpu().numpy()
+    final_translation = translation.detach().cpu().numpy()
+    final_surface = load_posed_dex_hand_surface(
+        actuator_fractions=final_fractions,
+        max_points_per_geom=20,
+        seed=0,
+    )
+    world_points = final_surface.points @ final_rotation.T + final_translation
+    minimum_table_clearance = (
+        float("inf") if table_z is None else float(world_points[:, 2].min() - table_z)
+    )
     return GraspQPPoseRefinement(
         rotation=final_rotation,
-        translation=translation.detach().cpu().numpy(),
+        translation=final_translation,
+        actuator_fractions=final_fractions,
         initial_energy=float(initial_energy),
         final_energy=float(energy.detach().cpu()),
+        minimum_table_clearance=minimum_table_clearance,
     )

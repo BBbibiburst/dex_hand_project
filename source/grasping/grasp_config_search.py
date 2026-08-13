@@ -1163,7 +1163,7 @@ def search(
                         )
 
     if generator == "graspqp" and device.name == "dex_hand" and fine:
-        from source.grasping.graspqp_adapter import refine_wrist_pose
+        from source.grasping.graspqp_adapter import refine_closed_chain_grasp
 
         refined: list[Candidate] = []
         cloud_stride = max(1, len(cloud.points) // 768)
@@ -1177,19 +1177,26 @@ def search(
                 )
                 nearest = cloud.tree.query(posed, k=1)[0]
                 local_contacts.append(candidate.surface.points[selected[int(np.argmin(nearest))]])
-            result = refine_wrist_pose(
+            result = refine_closed_chain_grasp(
                 hand_points=np.asarray(local_contacts),
                 initial_rotation=candidate.rotation,
                 initial_translation=candidate.translation,
                 object_points=cloud.points[::cloud_stride],
                 object_normals=cloud.normals[::cloud_stride],
+                initial_fractions=candidate.surface.fractions,
+                table_z=float(cloud.points[:, 2].min()),
                 iterations=graspqp_iterations,
+            )
+            refined_surface = surface_for(
+                device,
+                result.actuator_fractions,
+                seed=seed + 30_000 + len(refined),
             )
             refined.append(
                 evaluate(
                     cloud,
                     device,
-                    candidate.surface,
+                    refined_surface,
                     result.rotation,
                     result.translation,
                     roll_index=candidate.roll_index,

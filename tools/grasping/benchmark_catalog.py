@@ -30,6 +30,9 @@ FULL_PIPELINE_PRESET = {
     "evolution_seconds": 1.5,
     "evolution_backend": "cpu",
     "validate_robot_lift": True,
+    # A full pipeline result is intended for successful demonstration
+    # collection, so a trajectory-only grasp is not the terminal goal.
+    "retry_incomplete": True,
 }
 
 GIB = 1024**3

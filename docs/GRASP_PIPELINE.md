@@ -7,7 +7,8 @@
 
 ## 流程
 
-1. GraspQP 从物体点云和候选手形产生解析初始姿态。
+1. 闭链 GraspQP 适配器以 MuJoCo 有限差分运动学联合优化手腕位姿和六个驱动量；
+   force-closure 使用官方 QP metric，并在种子目标中加入桌面半空间惩罚。
 2. MuJoCo evolutionary refinement 变异腕部位姿与六个执行器状态。
 3. Direct-hold 仿真快速筛选动力学稳定候选。
 4. 对进化候选重新规划 approach 与 closure；每个候选使用独立 seed 搜索方向。
@@ -21,6 +22,10 @@
 这里借鉴 DexEvolve 的 simulator-in-the-loop、无梯度进化思想，但后端是 MuJoCo，不声称
 复现 Isaac Sim 的 GPU 吞吐或论文中的完整硬件参数。
 
+Dex Hand 的六驱动闭链不能直接交给 GraspQP 的通用开链 URDF `HandModel`。因此前端复用
+官方 force-closure metric，但由 MuJoCo 解闭链 FK/Jacobian；优化后的完整网格还必须通过
+桌面 5 mm 硬过滤。该阶段只生成种子，最终稳定性仍由后续进化和物理执行决定。
+
 ## 标准命令
 
 ```bash
@@ -29,9 +34,10 @@ python -m tools.grasping.benchmark_catalog --full-pipeline
 
 预设包括 GraspQP、20 代进化、完整轨迹验证、Robot Lift 验证和最多 5 次独立搜索。
 运行 `--help` 查看当前参数，不要从旧日志复制超长参数列表。
-首轮一旦得到 `trajectory_stable` 就结束该物体，Robot Lift 只独立记录结果，
-不会因 `lift=FAIL` 重复整套 GraspQP 和进化。需要追求 Lift 成功时，再使用
-`--resume --retry-incomplete` 对失败物体定向补跑。
+当前完整预设以 `robot_lift_verified` 为最终目标。某次搜索得到
+`trajectory_stable` 但 `lift=FAIL` 时，会继续使用剩余独立搜索 seed（最多 5 次），
+而不是把仅通过固定手轨迹验证的配置视作完成。所有尝试仍失败时，报告保留整机执行阶段
+进展最远的结果，便于后续定向补跑。
 
 ### 小规模测试
 
@@ -48,7 +54,7 @@ python -m tools.grasping.benchmark_catalog \
 # 只继续未写入报告的物体
 python -m tools.grasping.benchmark_catalog --full-pipeline --resume
 
-# 同时重算 trajectory 或 Robot Lift 未完成的行
+# 重算 trajectory 或 Robot Lift 未完成的行；完整预设默认启用该语义
 python -m tools.grasping.benchmark_catalog \
   --full-pipeline --resume --retry-incomplete
 ```
