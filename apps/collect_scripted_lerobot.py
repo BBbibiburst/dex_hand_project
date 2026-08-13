@@ -347,7 +347,9 @@ def _run_catalog_evaluation(args) -> None:
         candidate_count = 1
         if args.coverage_search:
             config_payload = json.loads(config_path.read_text(encoding="utf-8"))
-            archive = config_payload.get("trajectory_stable_candidates")
+            archive = config_payload.get("lift_verified_candidates")
+            if not isinstance(archive, list) or not archive:
+                archive = config_payload.get("trajectory_stable_candidates")
             if isinstance(archive, list) and archive:
                 candidate_count = min(len(archive), args.max_coverage_candidates)
         previous = stored_by_id.get(object_id, {})

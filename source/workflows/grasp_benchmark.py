@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 import time
 
+import numpy as np
+
 from source.envs.manipulation.object_catalog import object_ids
 from source.evaluation.grasp_schema import (
     BENCHMARK_SCHEMA_VERSION,
@@ -135,6 +137,45 @@ def _robot_candidate_precheck_key(
     )
 
 
+def _candidate_is_diverse(
+    candidate: dict,
+    archive: list[dict],
+    *,
+    translation_threshold: float = 0.025,
+    rotation_threshold: float = np.deg2rad(15.0),
+    joint_threshold: float = 0.08,
+) -> bool:
+    """Reject near-identical wrist poses and hand shapes across search attempts."""
+    translation = np.asarray(candidate["hand_translation"], dtype=np.float64)
+    rotation = np.asarray(candidate["hand_rotation_matrix"], dtype=np.float64)
+    joints = np.asarray(candidate["hand_actuator_fractions"], dtype=np.float64)
+    for existing in archive:
+        existing_translation = np.asarray(existing["hand_translation"], dtype=np.float64)
+        existing_rotation = np.asarray(existing["hand_rotation_matrix"], dtype=np.float64)
+        existing_joints = np.asarray(existing["hand_actuator_fractions"], dtype=np.float64)
+        translation_distance = float(np.linalg.norm(translation - existing_translation))
+        relative_trace = float(np.trace(rotation @ existing_rotation.T))
+        rotation_distance = float(np.arccos(np.clip((relative_trace - 1.0) / 2.0, -1.0, 1.0)))
+        joint_distance = float(np.sqrt(np.mean(np.square(joints - existing_joints))))
+        if (
+            translation_distance < translation_threshold
+            and rotation_distance < rotation_threshold
+            and joint_distance < joint_threshold
+        ):
+            return False
+    return True
+
+
+def _append_diverse_candidates(
+    archive: list[dict], candidates: list[dict], *, maximum: int
+) -> None:
+    for candidate in candidates:
+        if len(archive) >= maximum:
+            break
+        if _candidate_is_diverse(candidate, archive):
+            archive.append(dict(candidate))
+
+
 def _incomplete_attempt_key(row: dict) -> tuple:
     """Rank failed attempts by progress toward an executable robot Lift."""
     lift = row.get("robot_lift") or {}
@@ -211,6 +252,10 @@ class GraspBenchmarkConfig:
     mjwarp_njmax: int = 512
     evolution_dir: Path | None = None
     search_attempts: int = 3
+    target_lift_candidates: int = 1
+    maximum_saved_candidates: int = 24
+    maximum_robot_candidates_per_attempt: int = 6
+    maximum_object_seconds: float = 2700.0
     seed: int = 0
     target_size: float = 0.09
     end_effector: str = "dex_hand"
@@ -259,12 +304,28 @@ def _write_report(
     robot_lift_verified = sum(
         bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
     )
+    lift_verified_candidates = sum(
+        int(row.get("lift_verified_candidate_count", 0)) for row in rows
+    )
+    lift_candidate_targets_met = sum(
+        int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
+        for row in rows
+    )
+    object_time_budgets_reached = sum(
+        bool(row.get("object_time_budget_reached")) for row in rows
+    )
     failure_reasons: dict[str, int] = {}
     for row in rows:
         reason = _failure_reason(row)
         if reason is not None:
             failure_reasons[reason] = failure_reasons.get(reason, 0) + 1
     failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
+    incomplete_lift_archives = [
+        row["object_id"]
+        for row in rows
+        if args.validate_robot_lift
+        and int(row.get("lift_verified_candidate_count", 0)) < args.target_lift_candidates
+    ]
     payload = {
         "schema_version": BENCHMARK_SCHEMA_VERSION,
         "updated_at": datetime.now(timezone.utc).isoformat(),
@@ -281,8 +342,12 @@ def _write_report(
             "robot_lift_verified_rate": (
                 robot_lift_verified / robot_lift_tested if robot_lift_tested else 0.0
             ),
+            "lift_verified_candidates": lift_verified_candidates,
+            "lift_candidate_targets_met": lift_candidate_targets_met,
+            "object_time_budgets_reached": object_time_budgets_reached,
             "failure_reasons": failure_reasons,
             "failed_object_ids": failed,
+            "incomplete_lift_archive_object_ids": incomplete_lift_archives,
         },
         "objects": rows,
     }
@@ -326,6 +391,10 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "mjwarp_nconmax": args.mjwarp_nconmax,
         "mjwarp_njmax": args.mjwarp_njmax,
         "search_attempts": args.search_attempts,
+        "target_lift_candidates": args.target_lift_candidates,
+        "maximum_saved_candidates": args.maximum_saved_candidates,
+        "maximum_robot_candidates_per_attempt": args.maximum_robot_candidates_per_attempt,
+        "maximum_object_seconds": args.maximum_object_seconds,
         "seed": args.seed,
         "target_size": args.target_size,
         "end_effector": args.end_effector,
@@ -392,6 +461,11 @@ def _run_one(task: dict) -> dict:
     search_errors = []
     validation_errors = []
     best_unstable = None
+    accumulated_trajectory_candidates: list[dict] = []
+    lift_verified_candidates: list[dict] = []
+    accumulated_robot_lift_attempts: list[dict] = []
+    best_lift_result = None
+    best_lift_payload = None
     phase_seconds = {
         "search": 0.0,
         "evolution": 0.0,
@@ -400,6 +474,8 @@ def _run_one(task: dict) -> dict:
         "robot_lift_validation": 0.0,
     }
     for attempt in range(task["search_attempts"]):
+        if time.monotonic() - started >= task["maximum_object_seconds"]:
+            break
         attempt_started = time.monotonic()
         try:
             reuse_this_attempt = task["reuse"] and attempt == 0 and config_path.is_file()
@@ -462,6 +538,8 @@ def _run_one(task: dict) -> dict:
                 trajectory_errors = []
                 trajectory_started = time.monotonic()
                 for archive_index, individual in enumerate(archive):
+                    if time.monotonic() - started >= task["maximum_object_seconds"]:
+                        break
                     if not individual.direct_hold_stable:
                         continue
                     candidate = dict(individual.payload)
@@ -495,6 +573,8 @@ def _run_one(task: dict) -> dict:
                         trajectory_collision_free=True,
                         trajectory_hold_stable=True,
                         validation_stage="trajectory_hold_stable",
+                        search_seed=task["seed"] + attempt,
+                        search_attempt=attempt,
                     )
                     trajectory_candidates.append((candidate, result, individual))
                     if len(trajectory_candidates) >= 16:
@@ -503,7 +583,11 @@ def _run_one(task: dict) -> dict:
                     time.monotonic() - trajectory_started
                 )
                 robot_prechecks = []
-                if trajectory_candidates and task["validate_robot_lift"]:
+                if (
+                    trajectory_candidates
+                    and task["validate_robot_lift"]
+                    and time.monotonic() - started < task["maximum_object_seconds"]
+                ):
                     from source.grasping.robot_lift_validator import (
                         precheck_robot_lift_candidates,
                     )
@@ -534,6 +618,11 @@ def _run_one(task: dict) -> dict:
                     ordered = sorted(enumerate(trajectory_candidates), key=robot_candidate_key)
                     trajectory_candidates = [candidate for _, candidate in ordered]
                     robot_prechecks = [indexed_prechecks[index] for index, _ in ordered]
+                _append_diverse_candidates(
+                    accumulated_trajectory_candidates,
+                    [candidate for candidate, _, _ in trajectory_candidates],
+                    maximum=task["maximum_saved_candidates"],
+                )
                 selected = trajectory_candidates[0] if trajectory_candidates else None
                 selected_individual = selected[2] if selected else best
                 published_payload = dict(selected[0] if selected else best.payload)
@@ -608,9 +697,14 @@ def _run_one(task: dict) -> dict:
                     # Do not spend up to 900 dynamic steps on a candidate that
                     # has already failed deterministic IK/table precheck.
                     robot_candidates = robot_candidates[: max(1, feasible_count)]
+                robot_candidates = robot_candidates[
+                    : task["maximum_robot_candidates_per_attempt"]
+                ]
                 preferred_payload = dict(published_payload)
                 robot_lift_started = time.monotonic()
                 for candidate_index, robot_candidate in enumerate(robot_candidates):
+                    if time.monotonic() - started >= task["maximum_object_seconds"]:
+                        break
                     candidate_payload = dict(robot_candidate[0])
                     if task["evolve"]:
                         candidate_payload.pop("trajectory_stable_candidates", None)
@@ -627,10 +721,24 @@ def _run_one(task: dict) -> dict:
                         seed=task["seed"] + attempt,
                     ).as_dict()
                     candidate_lift["candidate_index"] = candidate_index
+                    candidate_lift["search_attempt"] = attempt
+                    candidate_lift["search_seed"] = task["seed"] + attempt
                     robot_lift_attempts.append(candidate_lift)
+                    accumulated_robot_lift_attempts.append(candidate_lift)
                     robot_lift = candidate_lift
                     if not candidate_lift["robot_lift_verified"]:
                         continue
+                    verified_payload = dict(candidate_payload)
+                    verified_payload.update(
+                        robot_lift_verified=True,
+                        robot_table_collision=False,
+                        validation_stage="robot_lift_verified",
+                    )
+                    if _candidate_is_diverse(verified_payload, lift_verified_candidates):
+                        lift_verified_candidates.append(verified_payload)
+                    if best_lift_payload is None:
+                        best_lift_payload = dict(verified_payload)
+                        best_lift_result = dict(candidate_lift)
                     if task["evolve"]:
                         selected = robot_candidate
                         metrics = asdict(robot_candidate[1])
@@ -642,26 +750,43 @@ def _run_one(task: dict) -> dict:
                         ):
                             if key in candidate_payload:
                                 metrics[key] = candidate_payload[key]
-                    break
+                    if len(lift_verified_candidates) >= task["target_lift_candidates"]:
+                        break
                 phase_seconds["robot_lift_validation"] += time.monotonic() - robot_lift_started
                 attempted_payload = json.loads(validation_path.read_text(encoding="utf-8"))
-                published_payload = _payload_after_robot_lift_attempts(
-                    preferred_payload,
-                    attempted_payload,
-                    robot_lift_verified=robot_lift["robot_lift_verified"],
+                if best_lift_result is not None:
+                    robot_lift = dict(best_lift_result)
+                robot_lift_verified = bool(
+                    (robot_lift or {}).get("robot_lift_verified")
+                )
+                published_payload = (
+                    dict(best_lift_payload)
+                    if best_lift_payload is not None
+                    else _payload_after_robot_lift_attempts(
+                        preferred_payload,
+                        attempted_payload,
+                        robot_lift_verified=robot_lift_verified,
+                    )
                 )
                 if task["evolve"]:
-                    published_payload["trajectory_stable_candidates"] = [
-                        candidate for candidate, _, _ in trajectory_candidates
-                    ]
+                    published_payload["trajectory_stable_candidates"] = list(
+                        accumulated_trajectory_candidates
+                    )
+                    published_payload["lift_verified_candidates"] = list(
+                        lift_verified_candidates
+                    )
                 published_payload.update(
-                    robot_lift_verified=robot_lift["robot_lift_verified"],
-                    robot_table_collision=robot_lift["table_collision"],
+                    robot_lift_verified=robot_lift_verified,
+                    robot_table_collision=bool(
+                        (robot_lift or {}).get("table_collision")
+                    ),
                     validation_stage=(
                         "robot_lift_verified"
-                        if robot_lift["robot_lift_verified"]
+                        if robot_lift_verified
                         else "trajectory_hold_stable"
                     ),
+                    lift_verified_candidate_count=len(lift_verified_candidates),
+                    lift_candidate_target=task["target_lift_candidates"],
                 )
                 _write_payload_atomic(validation_path, published_payload)
             # The first catalogue pass optimizes for broad trajectory coverage.
@@ -671,6 +796,9 @@ def _run_one(task: dict) -> dict:
                 trajectory_hold_stable=trajectory_hold_stable,
                 require_robot_lift_success=task["require_robot_lift_success"],
                 robot_lift=robot_lift,
+            ) and (
+                not task["validate_robot_lift"]
+                or len(lift_verified_candidates) >= task["target_lift_candidates"]
             )
             status = (
                 TRAJECTORY_STABLE
@@ -689,7 +817,12 @@ def _run_one(task: dict) -> dict:
                 ),
                 "trajectory_hold_stable": trajectory_hold_stable,
                 "robot_lift": robot_lift,
-                "robot_lift_attempts": robot_lift_attempts,
+                "robot_lift_attempts": list(accumulated_robot_lift_attempts),
+                "lift_verified_candidate_count": len(lift_verified_candidates),
+                "lift_candidate_target": task["target_lift_candidates"],
+                "object_time_budget_reached": (
+                    time.monotonic() - started >= task["maximum_object_seconds"]
+                ),
                 "evolution": evolution_summary,
                 "selected_seed": task["seed"] + attempt,
                 "attempts_used": attempt + 1,
@@ -701,7 +834,15 @@ def _run_one(task: dict) -> dict:
             if fully_validated:
                 return row
             unstable_key = _incomplete_attempt_key(row)
-            if best_unstable is None or unstable_key < best_unstable[0]:
+            if (
+                best_unstable is None
+                or unstable_key < best_unstable[0]
+                or (
+                    unstable_key == best_unstable[0]
+                    and row["lift_verified_candidate_count"]
+                    > best_unstable[1].get("lift_verified_candidate_count", 0)
+                )
+            ):
                 best_unstable = (
                     unstable_key,
                     row,
@@ -738,6 +879,14 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
+    if min(
+        args.target_lift_candidates,
+        args.maximum_saved_candidates,
+        args.maximum_robot_candidates_per_attempt,
+    ) <= 0:
+        raise ValueError("Candidate targets and limits must be positive.")
+    if args.maximum_object_seconds <= 0.0:
+        raise ValueError("--maximum-object-seconds must be positive.")
     if args.pilot_min_results <= 0 or args.pilot_max_repeated_failure <= 0:
         raise ValueError("Pilot result and repeated-failure thresholds must be positive.")
     if not 0.0 <= args.pilot_min_lift_rate <= 1.0:
@@ -807,6 +956,14 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             robot_ready = not args.validate_robot_lift or bool(
                 (row.get("robot_lift") or {}).get("robot_lift_verified")
             )
+            if args.validate_robot_lift and robot_ready:
+                candidate_count = int(
+                    row.get(
+                        "lift_verified_candidate_count",
+                        1,
+                    )
+                )
+                robot_ready = candidate_count >= args.target_lift_candidates
             if trajectory_ready and robot_ready:
                 retained.append(row)
             else:
@@ -852,6 +1009,10 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "mjwarp_njmax": args.mjwarp_njmax,
             "evolution_path": str(args.evolution_dir / f"{grasp_config_name(object_id)}.json"),
             "search_attempts": args.search_attempts,
+            "target_lift_candidates": args.target_lift_candidates,
+            "maximum_saved_candidates": args.maximum_saved_candidates,
+            "maximum_robot_candidates_per_attempt": args.maximum_robot_candidates_per_attempt,
+            "maximum_object_seconds": args.maximum_object_seconds,
             "seed": args.seed,
             "target_size": args.target_size,
             "end_effector": args.end_effector,
@@ -884,6 +1045,12 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                         if lift is None
                         else f"lift={'PASS' if lift.get('robot_lift_verified') else 'FAIL'} "
                     )
+                    diversity_label = (
+                        f"grasps={row.get('lift_verified_candidate_count', 0)}/"
+                        f"{args.target_lift_candidates} "
+                        if args.validate_robot_lift
+                        else ""
+                    )
                     completed_this_run = len(rows) - resumed_count
                     run_elapsed = time.monotonic() - run_started
                     average, eta = _progress_timing(
@@ -896,7 +1063,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     print(
                         f"[{len(rows)}/{len(selected)}] "
                         f"{row['status'].upper():16} {object_id} "
-                        f"{lift_label}"
+                        f"{lift_label}{diversity_label}"
                         f"object={_format_duration(row.get('elapsed_seconds', 0.0))} "
                         f"throughput={_format_duration(average)}/object eta={eta_label} "
                         f"{detail}",
@@ -964,7 +1131,20 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     robot_lift_verified = sum(
         bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
     )
+    lift_verified_candidate_count = sum(
+        int(row.get("lift_verified_candidate_count", 0)) for row in rows
+    )
+    lift_candidate_targets_met = sum(
+        int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
+        for row in rows
+    )
     failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
+    incomplete_lift_archives = [
+        row["object_id"]
+        for row in rows
+        if args.validate_robot_lift
+        and int(row.get("lift_verified_candidate_count", 0)) < args.target_lift_candidates
+    ]
     print(
         f"\ncompleted={len(rows)}/{len(selected)} "
         f"generated={generated}/{len(rows)} "
@@ -989,10 +1169,16 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             f"robot_lift_verified={robot_lift_verified}/{robot_lift_tested} "
             f"robot_lift_verified_rate={robot_lift_verified / robot_lift_tested:.1%}"
         )
+        print(
+            f"lift_verified_candidates={lift_verified_candidate_count} "
+            f"candidate_targets_met={lift_candidate_targets_met}/{len(rows)}"
+        )
     else:
         print("robot_lift_verified=0/0 robot_lift_verified_rate=n/a")
     print(f"total_elapsed={_format_duration(time.monotonic() - run_started)}")
     print("cannot_grasp_or_hold:")
     print(*(failed or ["(none)"]), sep="\n")
+    print("incomplete_lift_archives:")
+    print(*(incomplete_lift_archives or ["(none)"]), sep="\n")
     print(f"report={args.output}")
-    return int(bool(failed))
+    return int(bool(failed or incomplete_lift_archives))

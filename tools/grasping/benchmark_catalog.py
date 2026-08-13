@@ -22,6 +22,10 @@ FULL_PIPELINE_PRESET = {
     "coarse_keep": 12,
     "top_k": 4,
     "search_attempts": 5,
+    "target_lift_candidates": 3,
+    "maximum_saved_candidates": 24,
+    "maximum_robot_candidates_per_attempt": 6,
+    "maximum_object_seconds": 2700.0,
     "seconds": 3.0,
     "evolve": True,
     "evolution_population": 32,
@@ -156,6 +160,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mjwarp-njmax", type=int, default=512)
     parser.add_argument("--evolution-dir", type=Path)
     parser.add_argument("--search-attempts", type=int, default=3)
+    parser.add_argument("--target-lift-candidates", type=int, default=1)
+    parser.add_argument("--maximum-saved-candidates", type=int, default=24)
+    parser.add_argument("--maximum-robot-candidates-per-attempt", type=int, default=6)
+    parser.add_argument(
+        "--maximum-object-seconds",
+        type=float,
+        default=2700.0,
+        help="Stop starting new candidate/attempt work after this per-object wall-clock budget.",
+    )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--target-size", type=float, default=0.09)
     parser.add_argument("--end-effector", choices=("dex_hand", "pika_gripper"), default="dex_hand")
@@ -198,6 +211,10 @@ def main() -> None:
             values["limit"] = None
             values["jobs"] = 1
             values["evolution_jobs"] = 1
+            if "target_lift_candidates" not in explicitly_set:
+                values["target_lift_candidates"] = 1
+            if "maximum_object_seconds" not in explicitly_set:
+                values["maximum_object_seconds"] = 1200.0
         gpu_evolution = values["evolution_backend"] == "mjwarp" or (
             values["evolution_backend"] == "auto" and mjwarp_available()
         )

@@ -22,6 +22,18 @@
 步仿真。多次独立搜索全部结束后，报告选中的最佳尝试会重新原子写回对应 grasp JSON，
 保证 benchmark 行与后续示教实际读取的配置一致。
 
+完整预设不会在第一个 Lift 成功后立即停止，而是跨 attempt 累积候选：
+
+- `trajectory_stable_candidates`：去重后的轨迹稳定候选，默认最多 24 个；
+- `lift_verified_candidates`：完整 RM75B Lift 成功候选，默认目标 3 个；
+- 平移小于 25 mm、旋转小于 15 度且驱动量 RMS 差小于 0.08 的候选视为重复；
+- 每次搜索最多执行 6 个动态 Lift 候选；
+- 达到 3 个成功候选立即结束；否则最多 5 次搜索或每物体 45 分钟，先到即止。
+
+示教采集优先从 `lift_verified_candidates` 轮换；没有该字段时才回退到普通 trajectory
+archive。上述限制都可通过 `--target-lift-candidates`、`--maximum-saved-candidates`、
+`--maximum-robot-candidates-per-attempt` 和 `--maximum-object-seconds` 调整。
+
 进化 worker 会按物体 mesh、scale 和手型结构复用已编译的 MuJoCo `MjModel`；每个
 候选只创建新 `MjData` 并重置相对位姿，不再重复解析 XML 和编译 mesh。
 

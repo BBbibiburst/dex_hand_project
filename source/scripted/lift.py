@@ -248,7 +248,9 @@ class LiftStrategy(TaskStrategy):
         candidate_index: int = 0,
     ) -> dict:
         """Select a trajectory-validated grasp using arm IK residual."""
-        candidates = payload.get("trajectory_stable_candidates")
+        candidates = payload.get("lift_verified_candidates")
+        if not isinstance(candidates, list) or not candidates:
+            candidates = payload.get("trajectory_stable_candidates")
         if not isinstance(candidates, list) or len(candidates) < 2:
             return payload
         arm = env.controller.arm_controller

@@ -7,6 +7,8 @@ from tools.grasping.benchmark_catalog import (
 )
 from source.workflows.grasp_benchmark import (
     _attempt_satisfies_goal,
+    _append_diverse_candidates,
+    _candidate_is_diverse,
     _failure_reason,
     _format_duration,
     _incomplete_attempt_key,
@@ -35,6 +37,8 @@ def test_full_pipeline_keeps_safe_cpu_evolution_backend() -> None:
 
     assert values["evolution_backend"] == "cpu"
     assert values["retry_incomplete"] is True
+    assert values["target_lift_candidates"] == 3
+    assert values["maximum_object_seconds"] == 2700.0
 
 
 def test_duration_format_is_compact() -> None:
@@ -141,6 +145,34 @@ def test_atomic_payload_writer_replaces_previous_result(tmp_path) -> None:
     _write_payload_atomic(path, {"attempt": 2})
     assert path.read_text(encoding="utf-8").strip().endswith("2\n}")
     assert not path.with_suffix(".json.tmp").exists()
+
+
+def _candidate(x: float, angle: float = 0.0, joint: float = 0.2) -> dict:
+    cosine, sine = __import__("math").cos(angle), __import__("math").sin(angle)
+    return {
+        "hand_translation": [x, 0.0, 0.0],
+        "hand_rotation_matrix": [
+            [cosine, -sine, 0.0],
+            [sine, cosine, 0.0],
+            [0.0, 0.0, 1.0],
+        ],
+        "hand_actuator_fractions": [joint] * 6,
+    }
+
+
+def test_candidate_archive_deduplicates_pose_and_hand_shape() -> None:
+    archive = [_candidate(0.0)]
+    assert not _candidate_is_diverse(_candidate(0.005, angle=0.05, joint=0.21), archive)
+    assert _candidate_is_diverse(_candidate(0.05), archive)
+    assert _candidate_is_diverse(_candidate(0.0, angle=0.5), archive)
+    assert _candidate_is_diverse(_candidate(0.0, joint=0.4), archive)
+
+    _append_diverse_candidates(
+        archive,
+        [_candidate(0.005), _candidate(0.05), _candidate(0.10)],
+        maximum=2,
+    )
+    assert len(archive) == 2
 
 
 def test_incomplete_attempt_prefers_later_robot_phase() -> None:
