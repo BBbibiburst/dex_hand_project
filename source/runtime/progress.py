@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import os
+import shutil
 import sys
 import time
 
@@ -22,7 +23,14 @@ class WorkerProgress:
 class LiveWorkerProgress:
     """Render one stable terminal row per active worker."""
 
-    def __init__(self, *, total: int, workers: int, stream=None) -> None:
+    def __init__(
+        self,
+        *,
+        total: int,
+        workers: int,
+        stream=None,
+        columns: int | None = None,
+    ) -> None:
         self.total = total
         self.workers = workers
         self.stream = stream or sys.stdout
@@ -34,6 +42,7 @@ class LiveWorkerProgress:
         self.started = time.monotonic()
         self._rendered_lines = 0
         self._last_noninteractive: dict[str, tuple[str, float]] = {}
+        self._fixed_columns = columns
 
     @staticmethod
     def _bar(current: int | None, total: int | None, width: int = 14) -> str:
@@ -122,6 +131,13 @@ class LiveWorkerProgress:
                 self._last_noninteractive[worker] = (last_phase or state.phase, now)
             return
         self.clear()
+        columns = self._fixed_columns or shutil.get_terminal_size(fallback=(100, 24)).columns
+
+        def fit(line: str) -> str:
+            # Never let a logical worker row wrap into two physical terminal
+            # rows; cursor-up redraw relies on this invariant.
+            return line[: max(20, columns - 1)]
+
         elapsed = time.monotonic() - self.started
         eta = (
             None
@@ -130,18 +146,22 @@ class LiveWorkerProgress:
         )
         eta_text = "warming_up" if eta is None else self._duration(eta)
         lines = [
-            f"Overall [{self._bar(self.completed, self.total)}] "
-            f"{self.completed}/{self.total} solved={self.solved} "
-            f"elapsed={self._duration(elapsed)} eta={eta_text}"
+            fit(
+                f"Overall [{self._bar(self.completed, self.total, width=12)}] "
+                f"{self.completed}/{self.total} solved={self.solved} "
+                f"elapsed={self._duration(elapsed)} eta={eta_text}"
+            )
         ]
         for worker in sorted(self.states):
             state = self.states[worker]
             label = self.worker_labels[worker]
             count = "" if state.total is None else f" {state.current or 0}/{state.total}"
             lines.append(
-                f"{label:<4} {state.object_id:<31} {state.phase:<20} "
-                f"[{self._bar(state.current, state.total)}]{count:<8} "
-                f"{self._duration(time.monotonic() - state.started):>7} {state.detail}"
+                fit(
+                    f"{label:<3} {state.object_id:<27.27} {state.phase:<18.18} "
+                    f"[{self._bar(state.current, state.total, width=12)}]{count:<7} "
+                    f"{self._duration(time.monotonic() - state.started):>6} {state.detail}"
+                ).rstrip()
             )
         self.stream.write("\n".join(lines) + "\n")
         self.stream.flush()

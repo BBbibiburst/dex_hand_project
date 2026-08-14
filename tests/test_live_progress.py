@@ -12,7 +12,7 @@ class InteractiveBuffer(StringIO):
 
 def test_live_progress_renders_one_row_per_active_worker() -> None:
     stream = InteractiveBuffer()
-    progress = LiveWorkerProgress(total=127, workers=2, stream=stream)
+    progress = LiveWorkerProgress(total=127, workers=2, stream=stream, columns=180)
     progress.update(
         {
             "worker": "W1",
@@ -46,7 +46,7 @@ def test_live_progress_renders_one_row_per_active_worker() -> None:
 
 def test_completed_worker_row_is_removed() -> None:
     stream = InteractiveBuffer()
-    progress = LiveWorkerProgress(total=1, workers=1, stream=stream)
+    progress = LiveWorkerProgress(total=1, workers=1, stream=stream, columns=180)
     progress.update(
         {
             "worker": "W1",
@@ -60,3 +60,22 @@ def test_completed_worker_row_is_removed() -> None:
     assert progress.completed == 1
     assert progress.solved == 1
     assert not progress.states
+
+
+def test_worker_rows_never_wrap_past_terminal_width() -> None:
+    stream = InteractiveBuffer()
+    progress = LiveWorkerProgress(total=127, workers=1, stream=stream, columns=72)
+    progress.update(
+        {
+            "worker": "long-process-name",
+            "object_id": "ycb:002_master_chef_can_with_a_very_long_suffix",
+            "phase": "TRAJECTORY_VALIDATION_WITH_LONG_NAME",
+            "current": 123,
+            "total": 999,
+            "detail": "a detail that must be truncated instead of wrapping",
+        }
+    )
+    progress.render()
+    visible_lines = [line for line in stream.getvalue().splitlines() if not line.startswith("\x1b")]
+    assert visible_lines
+    assert all(len(line) <= 71 for line in visible_lines)
