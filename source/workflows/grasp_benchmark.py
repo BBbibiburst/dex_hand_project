@@ -56,6 +56,44 @@ def _format_duration(seconds: float) -> str:
     return f"{seconds:d}s"
 
 
+def _task_outcome_label(row: dict, *, target_lift_candidates: int) -> str:
+    """Return the user-facing result of a concrete robot Lift task search."""
+    verified = int(row.get("lift_verified_candidate_count", 0))
+    if verified >= target_lift_candidates:
+        return "TASK_SOLVED"
+    if verified > 0:
+        return "TASK_PARTIAL"
+    status = row.get("status")
+    if status in {SEARCH_ERROR, VALIDATION_ERROR}:
+        return str(status).upper()
+    if status in {DIRECT_HOLD_ONLY, UNSTABLE}:
+        return "GRASP_FAILED"
+    lift = row.get("robot_lift") or {}
+    phase = str(lift.get("final_phase") or "").lower()
+    if phase == "precheck":
+        return "TASK_INFEASIBLE"
+    if phase in {"approach", "grasp", "lift", "verify"}:
+        return f"LIFT_{phase.upper()}_FAILED"
+    return "LIFT_NOT_EXECUTED"
+
+
+def _task_scene_label(row: dict) -> str:
+    """Format the concrete object placement selected by task-conditioned search."""
+    scene = (row.get("robot_lift") or {}).get("task_scene")
+    if not isinstance(scene, dict):
+        return ""
+    xy = scene.get("object_xy")
+    if not isinstance(xy, list) or len(xy) != 2:
+        return ""
+    yaw_degrees = np.rad2deg(float(scene.get("object_yaw", 0.0)))
+    pull_centimetres = 100.0 * float(scene.get("pull_toward_robot", 0.0))
+    return (
+        f"scene={int(scene.get('scene_index', 0))} "
+        f"xy=({float(xy[0]):+.2f},{float(xy[1]):+.2f})m "
+        f"yaw={yaw_degrees:+.0f}deg pull={pull_centimetres:.0f}cm "
+    )
+
+
 def _progress_timing(
     *, elapsed: float, completed: int, total: int, worker_count: int
 ) -> tuple[float, float | None]:
@@ -321,6 +359,10 @@ def _write_report(
         int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
         for row in rows
     )
+    task_solved = sum(
+        int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows
+    )
+    task_targets_met = lift_candidate_targets_met
     object_time_budgets_reached = sum(
         bool(row.get("object_time_budget_reached")) for row in rows
     )
@@ -335,6 +377,11 @@ def _write_report(
         for row in rows
         if args.validate_robot_lift
         and int(row.get("lift_verified_candidate_count", 0)) < args.target_lift_candidates
+    ]
+    unsolved = [
+        row["object_id"]
+        for row in rows
+        if int(row.get("lift_verified_candidate_count", 0)) == 0
     ]
     payload = {
         "schema_version": BENCHMARK_SCHEMA_VERSION,
@@ -354,6 +401,10 @@ def _write_report(
             ),
             "lift_verified_candidates": lift_verified_candidates,
             "lift_candidate_targets_met": lift_candidate_targets_met,
+            "task_solved": task_solved,
+            "task_success_rate": task_solved / len(rows) if rows else 0.0,
+            "task_targets_met": task_targets_met,
+            "unsolved_object_ids": unsolved,
             "object_time_budgets_reached": object_time_budgets_reached,
             "failure_reasons": failure_reasons,
             "failed_object_ids": failed,
@@ -1202,18 +1253,21 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     rows.sort(key=lambda row: selected.index(row["object_id"]))
                     _write_report(args.output, args=args, selected=selected, rows=rows)
                     detail = row.get("error", "")
-                    lift = row.get("robot_lift")
-                    lift_label = (
-                        ""
-                        if lift is None
-                        else f"lift={'PASS' if lift.get('robot_lift_verified') else 'FAIL'} "
+                    task_label = (
+                        _task_outcome_label(
+                            row,
+                            target_lift_candidates=args.target_lift_candidates,
+                        )
+                        if args.validate_robot_lift
+                        else row["status"].upper()
                     )
-                    diversity_label = (
-                        f"grasps={row.get('lift_verified_candidate_count', 0)}/"
+                    lift_archive_label = (
+                        f"lift_grasps={row.get('lift_verified_candidate_count', 0)}/"
                         f"{args.target_lift_candidates} "
                         if args.validate_robot_lift
                         else ""
                     )
+                    scene_label = _task_scene_label(row) if args.task_conditioned_search else ""
                     completed_this_run = len(rows) - resumed_count
                     run_elapsed = time.monotonic() - run_started
                     average, eta = _progress_timing(
@@ -1225,8 +1279,8 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                     eta_label = "warming_up" if eta is None else _format_duration(eta)
                     print(
                         f"[{len(rows)}/{len(selected)}] "
-                        f"{row['status'].upper():16} {object_id} "
-                        f"{lift_label}{diversity_label}"
+                        f"{task_label:20} {object_id} "
+                        f"{lift_archive_label}{scene_label}"
                         f"object={_format_duration(row.get('elapsed_seconds', 0.0))} "
                         f"throughput={_format_duration(average)}/object eta={eta_label} "
                         f"{detail}",
@@ -1301,18 +1355,29 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
         for row in rows
     )
-    failed = [row["object_id"] for row in rows if row["status"] != TRAJECTORY_STABLE]
+    task_solved = sum(
+        int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows
+    )
+    unsolved = [
+        row["object_id"]
+        for row in rows
+        if int(row.get("lift_verified_candidate_count", 0)) == 0
+    ]
     incomplete_lift_archives = [
         row["object_id"]
         for row in rows
         if args.validate_robot_lift
         and int(row.get("lift_verified_candidate_count", 0)) < args.target_lift_candidates
     ]
+    print(f"\ncompleted={len(rows)}/{len(selected)}")
     print(
-        f"\ncompleted={len(rows)}/{len(selected)} "
-        f"generated={generated}/{len(rows)} "
-        f"trajectory_stable={stable}/{len(rows)} "
-        f"trajectory_stable_rate={stable / len(rows):.1%}"
+        f"task_solved={task_solved}/{len(rows)} "
+        f"object_success_rate={task_solved / len(rows):.1%} "
+        f"task_targets_met={lift_candidate_targets_met}/{len(rows)}"
+    )
+    print(
+        f"lift_verified_grasps={lift_verified_candidate_count} "
+        f"target_per_object={args.target_lift_candidates}"
     )
     status_counts = {
         status: sum(row["status"] == status for row in rows)
@@ -1325,23 +1390,19 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         )
     }
     print(
-        "status_counts=" + " ".join(f"{status}:{count}" for status, count in status_counts.items())
+        "diagnostic_status_counts="
+        + " ".join(f"{status}:{count}" for status, count in status_counts.items())
     )
-    if robot_lift_tested:
-        print(
-            f"robot_lift_verified={robot_lift_verified}/{robot_lift_tested} "
-            f"robot_lift_verified_rate={robot_lift_verified / robot_lift_tested:.1%}"
-        )
-        print(
-            f"lift_verified_candidates={lift_verified_candidate_count} "
-            f"candidate_targets_met={lift_candidate_targets_met}/{len(rows)}"
-        )
-    else:
-        print("robot_lift_verified=0/0 robot_lift_verified_rate=n/a")
+    print(
+        f"diagnostics: generated={generated}/{len(rows)} "
+        f"trajectory_stable={stable}/{len(rows)} "
+        f"robot_lift_tested={robot_lift_tested} "
+        f"robot_lift_verified={robot_lift_verified}"
+    )
     print(f"total_elapsed={_format_duration(time.monotonic() - run_started)}")
-    print("cannot_grasp_or_hold:")
-    print(*(failed or ["(none)"]), sep="\n")
-    print("incomplete_lift_archives:")
+    print("unsolved_objects:")
+    print(*(unsolved or ["(none)"]), sep="\n")
+    print("objects_below_lift_grasp_target:")
     print(*(incomplete_lift_archives or ["(none)"]), sep="\n")
     print(f"report={args.output}")
-    return int(bool(failed or incomplete_lift_archives))
+    return int(bool(unsolved or incomplete_lift_archives))

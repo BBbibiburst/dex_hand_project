@@ -17,6 +17,8 @@ from source.workflows.grasp_benchmark import (
     _payload_after_robot_lift_attempts,
     _progress_timing,
     _robot_candidate_precheck_key,
+    _task_outcome_label,
+    _task_scene_label,
     _write_payload_atomic,
 )
 
@@ -46,6 +48,38 @@ def test_duration_format_is_compact() -> None:
     assert _format_duration(19.7) == "20s"
     assert _format_duration(125) == "2m05s"
     assert _format_duration(7500) == "2h05m"
+
+
+def test_task_conditioned_progress_uses_lift_outcome_and_scene() -> None:
+    solved = {
+        "status": "trajectory_stable",
+        "lift_verified_candidate_count": 3,
+        "robot_lift": {
+            "robot_lift_verified": True,
+            "task_scene": {
+                "scene_index": 4,
+                "object_xy": [-0.05, 0.02],
+                "object_yaw": 1.5708,
+                "pull_toward_robot": 0.05,
+            },
+        },
+    }
+    assert _task_outcome_label(solved, target_lift_candidates=3) == "TASK_SOLVED"
+    assert _task_outcome_label(solved, target_lift_candidates=4) == "TASK_PARTIAL"
+    assert _task_scene_label(solved) == (
+        "scene=4 xy=(-0.05,+0.02)m yaw=+90deg pull=5cm "
+    )
+    assert (
+        _task_outcome_label(
+            {
+                "status": "trajectory_stable",
+                "lift_verified_candidate_count": 0,
+                "robot_lift": {"final_phase": "precheck"},
+            },
+            target_lift_candidates=1,
+        )
+        == "TASK_INFEASIBLE"
+    )
 
 
 def test_eta_waits_for_one_full_worker_wave() -> None:
