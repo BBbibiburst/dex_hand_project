@@ -165,8 +165,9 @@ python -m apps.collect_scripted_lerobot \
   --evaluation-output configs/grasps/dex_hand/lift_diversity_evaluation.json
 ```
 
-采集器只读取 benchmark 中的 `trajectory_stable` 物体。每个随机 seed 最多保存一条成功
-轨迹，并轮换候选尝试顺序，避免相同初始位姿或候选支配数据集。
+采集器只读取同时满足 `trajectory_stable` 和 `robot_lift_verified=true` 的物体，并从
+benchmark 记录的成功 `task_scene` 开始执行。每个 seed 最多保存一条成功轨迹，并轮换候选
+尝试顺序。
 
 完整说明见 [示教数据采集](docs/DATA_COLLECTION.md)。
 

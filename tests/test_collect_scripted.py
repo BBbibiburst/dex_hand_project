@@ -97,8 +97,9 @@ def test_catalog_evaluation_writes_per_object_success_rate(
                 "objects": [
                     {
                         "object_id": "ycb:test",
-                        "status": "trajectory_stable",
-                        "config": "grasp.json",
+                            "status": "trajectory_stable",
+                            "config": "grasp.json",
+                            "robot_lift": {"robot_lift_verified": True},
                     }
                 ],
             }
@@ -165,8 +166,9 @@ def test_coverage_resume_continues_partial_object_with_unused_seed(
                 "objects": [
                     {
                         "object_id": "ycb:test",
-                        "status": "trajectory_stable",
-                        "config": str(grasp),
+                            "status": "trajectory_stable",
+                            "config": str(grasp),
+                            "robot_lift": {"robot_lift_verified": True},
                     }
                 ],
             }

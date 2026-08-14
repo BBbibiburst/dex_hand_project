@@ -7,20 +7,22 @@
 
 ## 流程
 
-1. 闭链 GraspQP 适配器以 MuJoCo 有限差分运动学联合优化手腕位姿和六个驱动量；
+1. 先创建 RM75B、桌面和一个随机物体位姿组成的具体 Lift 场景。
+2. 闭链 GraspQP 适配器以 MuJoCo 有限差分运动学联合优化手腕位姿和六个驱动量；
    force-closure 使用官方 QP metric，并在种子目标中加入桌面半空间惩罚。
-2. MuJoCo evolutionary refinement 变异腕部位姿与六个执行器状态。
-3. Direct-hold 仿真快速筛选动力学稳定候选。
-4. 对进化候选重新规划 approach 与 closure；每个候选使用独立 seed 搜索方向。
-5. 检查完整手部网格、物体碰撞和桌面硬约束。
-6. 实际执行 approach、closure 和 hold，产生 trajectory validation 结果。
-7. 在 RM75B 完整场景执行 IK 预检及 scripted Lift，单独记录 Robot Lift 结果。
+3. 每个带接近轨迹的种子立即在具体场景检查整机 IK 和桌面碰撞；失败时先旋转物体，
+   再分级向机械臂拉近。只有整机可行种子进入进化。
+4. MuJoCo evolutionary refinement 变异腕部位姿与六个执行器状态。
+5. Direct-hold 仿真快速筛选动力学稳定候选。
+6. 对进化候选重新规划 approach 与 closure；每个候选使用独立 seed 搜索方向。
+7. 检查完整手部网格、物体碰撞和桌面硬约束。
+8. 实际执行 approach、closure 和 hold，产生 trajectory validation 结果。
+9. 在候选场景中执行完整 scripted Lift，只保存 Robot Lift 成功结果。
 
 完整 Robot Lift 前会在一个复用的 RM75B 场景中批量检查所有 trajectory-stable 候选的
-全部腕部路点。IK 不可达或关节插值会碰桌面的候选被后置并跳过动态执行；可行候选按 IK
-残差、桌面余量和进化 fitness 排序。这样不会再为确定不可执行的候选反复运行最长 900
-步仿真。多次独立搜索全部结束后，报告选中的最佳尝试会重新原子写回对应 grasp JSON，
-保证 benchmark 行与后续示教实际读取的配置一致。
+全部腕部路点。默认测试 12 个场景：每个距离尝试 4 个 yaw，随后以 5 cm 步长向机械臂
+拉近，最多 10 cm。IK 不可达或关节插值碰桌的组合直接跳过动态执行。多次独立搜索全部
+结束后，报告选中的最佳尝试会原子写回 grasp JSON，保证 benchmark 与示教读取一致。
 
 完整预设不会在第一个 Lift 成功后立即停止，而是跨 attempt 累积候选：
 
@@ -97,7 +99,7 @@ python -m tools.grasping.benchmark_catalog \
 
 | Benchmark status | 含义 | 能否进入示教采集 |
 | --- | --- | --- |
-| `trajectory_stable` | 完整 approach/closure/hold 通过 | 可以 |
+| `trajectory_stable` | 完整 approach/closure/hold 通过 | 仅当 `robot_lift_verified=true` |
 | `direct_hold_only` | 终态可保持，但完整轨迹未通过 | 不可以 |
 | `unstable` | 动力学保持失败 | 不可以 |
 | `validation_error` | 配置生成后验证异常 | 不可以 |
@@ -133,6 +135,7 @@ configs/grasps/dex_hand/
 - 桌面间隙与动力学指标
 - `robot_lift_verified`
 - `robot_table_collision`
+- `task_scene`（成功时的物体 XY、yaw 和拉近距离）
 
 Benchmark 报告保存逐物体状态、配置路径、搜索/进化摘要、Lift 尝试、耗时和总体统计。
 总体 `failure_reasons` 还会汇总轨迹碰撞、IK 不可达、机器人碰桌和各 Lift

@@ -260,6 +260,11 @@ class GraspBenchmarkConfig:
     target_lift_candidates: int = 1
     maximum_saved_candidates: int = 24
     maximum_robot_candidates_per_attempt: int = 6
+    task_conditioned_search: bool = False
+    task_scene_attempts: int = 12
+    task_rotations_per_distance: int = 4
+    task_pull_step: float = 0.05
+    task_maximum_pull: float = 0.15
     maximum_object_seconds: float = 2700.0
     seed: int = 0
     target_size: float = 0.09
@@ -399,6 +404,11 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "target_lift_candidates": args.target_lift_candidates,
         "maximum_saved_candidates": args.maximum_saved_candidates,
         "maximum_robot_candidates_per_attempt": args.maximum_robot_candidates_per_attempt,
+        "task_conditioned_search": args.task_conditioned_search,
+        "task_scene_attempts": args.task_scene_attempts,
+        "task_rotations_per_distance": args.task_rotations_per_distance,
+        "task_pull_step": args.task_pull_step,
+        "task_maximum_pull": args.task_maximum_pull,
         "maximum_object_seconds": args.maximum_object_seconds,
         "seed": args.seed,
         "target_size": args.target_size,
@@ -481,28 +491,62 @@ def _run_one(task: dict) -> dict:
     for attempt in range(task["search_attempts"]):
         if time.monotonic() - started >= task["maximum_object_seconds"]:
             break
+        attempt_scenes = [None]
+        if task["task_conditioned_search"]:
+            from source.grasping.robot_lift_validator import task_scene_schedule
+
+            attempt_scenes = task_scene_schedule(
+                seed=task["seed"] + attempt,
+                scene_attempts=task["task_scene_attempts"],
+                rotations_per_distance=task["task_rotations_per_distance"],
+                pull_step=task["task_pull_step"],
+                maximum_pull=task["task_maximum_pull"],
+            )
         attempt_started = time.monotonic()
         try:
             reuse_this_attempt = task["reuse"] and attempt == 0 and config_path.is_file()
             if not reuse_this_attempt:
-                search_grasp_config(
-                    object_id=object_id,
-                    output=config_path,
-                    points=task["points"],
-                    joint_candidates=task["joint_candidates"],
-                    surface_anchors=task["surface_anchors"],
-                    rolls_per_anchor=task["rolls_per_anchor"],
-                    coarse_keep=task["coarse_keep"],
-                    top_k=task["top_k"],
-                    support_margin=task["support_margin"],
-                    seed=task["seed"] + attempt,
-                    target_size=task["target_size"],
-                    end_effector_name=task["end_effector"],
-                    generator=task["generator"],
-                    graspqp_iterations=task["graspqp_iterations"],
-                    require_valid=not task["evolve"],
-                    publish_invalid=task["evolve"],
-                )
+                search_kwargs = {
+                    "object_id": object_id,
+                    "output": config_path,
+                    "points": task["points"],
+                    "joint_candidates": task["joint_candidates"],
+                    "surface_anchors": task["surface_anchors"],
+                    "rolls_per_anchor": task["rolls_per_anchor"],
+                    "coarse_keep": task["coarse_keep"],
+                    "top_k": task["top_k"],
+                    "support_margin": task["support_margin"],
+                    "seed": task["seed"] + attempt,
+                    "target_size": task["target_size"],
+                    "end_effector_name": task["end_effector"],
+                    "generator": task["generator"],
+                    "graspqp_iterations": task["graspqp_iterations"],
+                    "require_valid": not task["evolve"],
+                    "publish_invalid": task["evolve"],
+                }
+                if task["task_conditioned_search"]:
+                    from source.grasping.robot_lift_validator import (
+                        RobotTaskCandidateFilter,
+                    )
+
+                    with RobotTaskCandidateFilter(
+                        object_id,
+                        attempt_scenes,
+                        seed=task["seed"] + attempt,
+                    ) as task_filter:
+                        search_grasp_config(
+                            **search_kwargs,
+                            candidate_filter=task_filter,
+                        )
+                else:
+                    search_grasp_config(**search_kwargs)
+            if task["task_conditioned_search"]:
+                generated_payload = json.loads(config_path.read_text(encoding="utf-8"))
+                if not generated_payload.get("task_scene"):
+                    raise RuntimeError(
+                        "No generated grasp passed full-robot task precheck; "
+                        "skipping DexEvolve for this search attempt"
+                    )
             search_seconds = time.monotonic() - attempt_started
             phase_seconds["search"] += search_seconds
         except Exception as exc:
@@ -511,6 +555,12 @@ def _run_one(task: dict) -> dict:
         try:
             seed_metrics = None
             seed_payload = json.loads(config_path.read_text(encoding="utf-8"))
+            if task["task_conditioned_search"] and seed_payload.get("task_scene"):
+                selected_scene_index = int(seed_payload["task_scene"]["scene_index"])
+                attempt_scenes = sorted(
+                    attempt_scenes,
+                    key=lambda scene: int(scene["scene_index"]) != selected_scene_index,
+                )
             if seed_payload.get("hand_fit_success"):
                 seed_metrics = _validate_config(
                     config_path,
@@ -591,6 +641,7 @@ def _run_one(task: dict) -> dict:
                 if (
                     trajectory_candidates
                     and task["validate_robot_lift"]
+                    and not task["task_conditioned_search"]
                     and time.monotonic() - started < task["maximum_object_seconds"]
                 ):
                     from source.grasping.robot_lift_validator import (
@@ -690,12 +741,20 @@ def _run_one(task: dict) -> dict:
             robot_lift = None
             robot_lift_attempts = []
             if trajectory_hold_stable and task["validate_robot_lift"]:
-                from source.grasping.robot_lift_validator import validate_robot_lift
+                from source.grasping.robot_lift_validator import (
+                    precheck_robot_lift_candidates,
+                    precheck_robot_lift_task_scenes,
+                    validate_robot_lift,
+                )
 
                 robot_candidates = (
                     trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
                 )
-                if task["evolve"] and robot_prechecks:
+                if (
+                    not task["task_conditioned_search"]
+                    and task["evolve"]
+                    and robot_prechecks
+                ):
                     feasible_count = sum(
                         item["precheck_passed"] for item in robot_prechecks
                     )
@@ -707,7 +766,78 @@ def _run_one(task: dict) -> dict:
                 ]
                 preferred_payload = dict(published_payload)
                 robot_lift_started = time.monotonic()
-                for candidate_index, robot_candidate in enumerate(robot_candidates):
+                scenes = attempt_scenes
+                candidate_scene_pairs = []
+                failed_scene_prechecks = []
+                if task["task_conditioned_search"]:
+                    payloads = [item[0] for item in robot_candidates]
+                    scene_prechecks = precheck_robot_lift_task_scenes(
+                        object_id,
+                        payloads,
+                        scenes,
+                        seed=task["seed"] + attempt,
+                    )
+                    for precheck in scene_prechecks:
+                        candidate_index = int(precheck["candidate_index"])
+                        scene = precheck["task_scene"]
+                        if precheck["precheck_passed"]:
+                            candidate_scene_pairs.append(
+                                (candidate_index, robot_candidates[candidate_index], scene)
+                            )
+                        else:
+                            failed_scene_prechecks.append(precheck)
+                    # Dynamic rollout is expensive. Rank feasible combinations
+                    # by least object relocation and then preserve grasp order.
+                    candidate_scene_pairs.sort(
+                        key=lambda item: (
+                            float(item[2]["pull_toward_robot"]),
+                            int(item[2]["scene_index"]),
+                            item[0],
+                        )
+                    )
+                    # Spend the dynamic-rollout budget across different task
+                    # poses before trying a second grasp in the same pose.
+                    first_per_scene = []
+                    remaining_pairs = []
+                    seen_scenes = set()
+                    for pair in candidate_scene_pairs:
+                        scene_index = int(pair[2]["scene_index"])
+                        if scene_index in seen_scenes:
+                            remaining_pairs.append(pair)
+                        else:
+                            seen_scenes.add(scene_index)
+                            first_per_scene.append(pair)
+                    candidate_scene_pairs = first_per_scene + remaining_pairs
+                else:
+                    candidate_scene_pairs = [
+                        (index, candidate, None)
+                        for index, candidate in enumerate(robot_candidates)
+                    ]
+                candidate_scene_pairs = candidate_scene_pairs[
+                    : task["maximum_robot_candidates_per_attempt"]
+                ]
+                if not candidate_scene_pairs and failed_scene_prechecks:
+                    best_precheck = min(
+                        failed_scene_prechecks,
+                        key=lambda item: (
+                            bool(item["table_collision"]),
+                            float(item["maximum_ik_position_error"]),
+                            float(item["maximum_ik_orientation_error"]),
+                        ),
+                    )
+                    robot_lift = {
+                        **best_precheck,
+                        "robot_lift_verified": False,
+                        "steps": 0,
+                        "final_phase": "precheck",
+                        "aborted": False,
+                        "error": None,
+                        "search_attempt": attempt,
+                        "search_seed": task["seed"] + attempt,
+                    }
+                    robot_lift_attempts.append(robot_lift)
+                    accumulated_robot_lift_attempts.append(robot_lift)
+                for candidate_index, robot_candidate, scene in candidate_scene_pairs:
                     if time.monotonic() - started >= task["maximum_object_seconds"]:
                         break
                     candidate_payload = dict(robot_candidate[0])
@@ -724,10 +854,13 @@ def _run_one(task: dict) -> dict:
                         object_id,
                         validation_path,
                         seed=task["seed"] + attempt,
+                        scene=scene,
                     ).as_dict()
                     candidate_lift["candidate_index"] = candidate_index
                     candidate_lift["search_attempt"] = attempt
                     candidate_lift["search_seed"] = task["seed"] + attempt
+                    if scene is not None:
+                        candidate_lift["task_scene"] = dict(scene)
                     robot_lift_attempts.append(candidate_lift)
                     accumulated_robot_lift_attempts.append(candidate_lift)
                     robot_lift = candidate_lift
@@ -739,6 +872,8 @@ def _run_one(task: dict) -> dict:
                         robot_table_collision=False,
                         validation_stage="robot_lift_verified",
                     )
+                    if scene is not None:
+                        verified_payload["task_scene"] = dict(scene)
                     if _candidate_is_diverse(verified_payload, lift_verified_candidates):
                         lift_verified_candidates.append(verified_payload)
                     if best_lift_payload is None:
@@ -906,6 +1041,10 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("Candidate targets and limits must be positive.")
     if args.maximum_object_seconds <= 0.0:
         raise ValueError("--maximum-object-seconds must be positive.")
+    if min(args.task_scene_attempts, args.task_rotations_per_distance) <= 0:
+        raise ValueError("Task scene attempt counts must be positive.")
+    if args.task_pull_step < 0.0 or args.task_maximum_pull < 0.0:
+        raise ValueError("Task pull distances must be non-negative.")
     if args.pilot_min_results <= 0 or args.pilot_max_repeated_failure <= 0:
         raise ValueError("Pilot result and repeated-failure thresholds must be positive.")
     if not 0.0 <= args.pilot_min_lift_rate <= 1.0:
@@ -1031,6 +1170,11 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "target_lift_candidates": args.target_lift_candidates,
             "maximum_saved_candidates": args.maximum_saved_candidates,
             "maximum_robot_candidates_per_attempt": args.maximum_robot_candidates_per_attempt,
+            "task_conditioned_search": args.task_conditioned_search,
+            "task_scene_attempts": args.task_scene_attempts,
+            "task_rotations_per_distance": args.task_rotations_per_distance,
+            "task_pull_step": args.task_pull_step,
+            "task_maximum_pull": args.task_maximum_pull,
             "maximum_object_seconds": args.maximum_object_seconds,
             "seed": args.seed,
             "target_size": args.target_size,

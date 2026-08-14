@@ -11,11 +11,62 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_manipulation_env
+from source.envs.manipulation.placement import FixedTablePlacementSampler
 from source.geometry import mat_to_quat
 from source.scripted.lift import LiftStrategy
 
 MAXIMUM_PRECHECK_POSITION_ERROR = 0.06
 MAXIMUM_PRECHECK_ORIENTATION_ERROR = 0.35
+
+
+def task_scene_schedule(
+    *,
+    seed: int,
+    scene_attempts: int,
+    rotations_per_distance: int,
+    pull_step: float,
+    maximum_pull: float,
+) -> list[dict]:
+    """Build bounded task poses, rotating first and then moving toward the robot.
+
+    Table X grows away from the robot in the standard arena, hence a positive
+    pull is represented by a decreasing table-relative X coordinate.
+    """
+    if scene_attempts <= 0 or rotations_per_distance <= 0:
+        raise ValueError("Scene attempt counts must be positive.")
+    if pull_step < 0.0 or maximum_pull < 0.0:
+        raise ValueError("Pull distances must be non-negative.")
+    rng = np.random.default_rng(seed)
+    initial_xy = rng.uniform((-0.06, -0.06), (0.06, 0.06))
+    initial_yaw = float(rng.uniform(-np.pi, np.pi))
+    scenes = []
+    for index in range(scene_attempts):
+        distance_level = index // rotations_per_distance
+        pull = min(maximum_pull, distance_level * pull_step)
+        rotation_index = index % rotations_per_distance
+        yaw = initial_yaw + rotation_index * (2.0 * np.pi / rotations_per_distance)
+        scenes.append(
+            {
+                "scene_index": index,
+                "object_xy": [float(initial_xy[0] - pull), float(initial_xy[1])],
+                "object_yaw": float((yaw + np.pi) % (2.0 * np.pi) - np.pi),
+                "pull_toward_robot": float(pull),
+            }
+        )
+    return scenes
+
+
+def _lift_task_config(object_id: str, scene: dict | None = None) -> dict:
+    config = {
+        "object_id": object_id,
+        "reward_shaping": True,
+        "terminate_on_success": False,
+    }
+    if scene is not None:
+        config["placement_sampler"] = FixedTablePlacementSampler(
+            xy=tuple(scene["object_xy"]), yaw=float(scene["object_yaw"])
+        )
+    return config
 
 
 def _ik_waypoint_is_reachable(position_error: float, orientation_error: float) -> bool:
@@ -113,17 +164,14 @@ def precheck_robot_lift_candidates(
     candidates: list[dict],
     *,
     seed: int = 0,
+    scene: dict | None = None,
 ) -> list[dict]:
     """Precheck many candidates while compiling the full robot scene only once."""
     if not candidates:
         return []
     env = make_manipulation_env(
         "lift",
-        task_config={
-            "object_id": object_id,
-            "reward_shaping": True,
-            "terminate_on_success": False,
-        },
+        task_config=_lift_task_config(object_id, scene),
         control_mode="ik",
         control_dt=1.0 / 20,
         episode_length=900,
@@ -150,10 +198,143 @@ def precheck_robot_lift_candidates(
                         "table_collision": False,
                     }
                 result["candidate_index"] = index
+                if scene is not None:
+                    result["task_scene"] = dict(scene)
                 results.append(result)
     finally:
         env.close()
     return results
+
+
+def precheck_robot_lift_task_scenes(
+    object_id: str,
+    candidates: list[dict],
+    scenes: list[dict],
+    *,
+    seed: int = 0,
+) -> list[dict]:
+    """Precheck every task-scene/candidate pair with one compiled robot model."""
+    if not candidates or not scenes:
+        return []
+    sampler = FixedTablePlacementSampler(xy=(0.0, 0.0), yaw=0.0)
+    env = make_manipulation_env(
+        "lift",
+        task_config={
+            **_lift_task_config(object_id),
+            "placement_sampler": sampler,
+        },
+        control_mode="ik",
+        control_dt=1.0 / 20,
+        episode_length=900,
+        enable_tactile_sensors=True,
+        render_mode=None,
+    )
+    results = []
+    try:
+        with tempfile.TemporaryDirectory(prefix="dex_robot_scene_precheck_") as directory:
+            path = Path(directory) / "candidate.json"
+            for scene in scenes:
+                sampler.xy[:] = np.asarray(scene["object_xy"], dtype=np.float64)
+                sampler.yaw = float(scene["object_yaw"])
+                for candidate_index, payload in enumerate(candidates):
+                    path.write_text(json.dumps(payload), encoding="utf-8")
+                    observation, _ = env.reset(seed=seed)
+                    strategy = LiftStrategy(reuse_grasp_config=True, grasp_config_path=path)
+                    strategy.reset()
+                    try:
+                        result = _precheck_strategy_waypoints(env, strategy, observation)
+                    except Exception as exc:
+                        result = {
+                            "precheck_passed": False,
+                            "precheck_reason": f"{type(exc).__name__}: {exc}",
+                            "maximum_ik_position_error": float("inf"),
+                            "maximum_ik_orientation_error": float("inf"),
+                            "table_collision": False,
+                        }
+                    results.append(
+                        {
+                            **result,
+                            "candidate_index": candidate_index,
+                            "task_scene": dict(scene),
+                        }
+                    )
+    finally:
+        env.close()
+    return results
+
+
+class RobotTaskCandidateFilter:
+    """Filter generated grasp seeds against concrete full-robot task scenes."""
+
+    def __init__(self, object_id: str, scenes: list[dict], *, seed: int = 0) -> None:
+        if not scenes:
+            raise ValueError("At least one task scene is required.")
+        self.scenes = [dict(scene) for scene in scenes]
+        self.seed = seed
+        self.sampler = FixedTablePlacementSampler(xy=(0.0, 0.0), yaw=0.0)
+        self.env = make_manipulation_env(
+            "lift",
+            task_config={
+                **_lift_task_config(object_id),
+                "placement_sampler": self.sampler,
+            },
+            control_mode="ik",
+            control_dt=1.0 / 20,
+            episode_length=900,
+            enable_tactile_sensors=True,
+            render_mode=None,
+        )
+        self._temporary_directory = tempfile.TemporaryDirectory(
+            prefix="dex_task_candidate_filter_"
+        )
+        self.path = Path(self._temporary_directory.name) / "candidate.json"
+        self.attempts: list[dict] = []
+
+    def __call__(self, payload: dict) -> tuple[bool, dict]:
+        precheck_payload = dict(payload)
+        # LiftStrategy normally accepts only physics-validated configs. This
+        # filter runs before DexEvolve by design, so temporarily satisfy that
+        # schema gate while checking only IK and collision geometry.
+        precheck_payload.update(
+            trajectory_collision_free=True,
+            trajectory_hold_stable=True,
+            validation_stage="trajectory_hold_stable",
+        )
+        self.path.write_text(json.dumps(precheck_payload), encoding="utf-8")
+        for scene in self.scenes:
+            self.sampler.xy[:] = np.asarray(scene["object_xy"], dtype=np.float64)
+            self.sampler.yaw = float(scene["object_yaw"])
+            observation, _ = self.env.reset(seed=self.seed)
+            strategy = LiftStrategy(reuse_grasp_config=True, grasp_config_path=self.path)
+            strategy.reset()
+            try:
+                result = _precheck_strategy_waypoints(self.env, strategy, observation)
+            except Exception as exc:
+                result = {
+                    "precheck_passed": False,
+                    "precheck_reason": f"{type(exc).__name__}: {exc}",
+                    "maximum_ik_position_error": float("inf"),
+                    "maximum_ik_orientation_error": float("inf"),
+                    "table_collision": False,
+                }
+            attempt = {**result, "task_scene": dict(scene)}
+            self.attempts.append(attempt)
+            if result["precheck_passed"]:
+                return True, {
+                    "task_scene": dict(scene),
+                    "task_conditioned_precheck": attempt,
+                }
+        return False, {}
+
+    def close(self) -> None:
+        self.env.close()
+        self._temporary_directory.cleanup()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.close()
 
 
 @dataclass(frozen=True)
@@ -185,17 +366,14 @@ def validate_robot_lift(
     seed: int = 0,
     max_steps: int = 900,
     fps: int = 20,
+    scene: dict | None = None,
 ) -> RobotLiftValidationResult:
     """Execute approach, grasp, lift and verify in the complete robot scene."""
     if max_steps <= 0 or fps <= 0:
         raise ValueError("max_steps and fps must be positive.")
     env = make_manipulation_env(
         "lift",
-        task_config={
-            "object_id": object_id,
-            "reward_shaping": True,
-            "terminate_on_success": False,
-        },
+        task_config=_lift_task_config(object_id, scene),
         control_mode="ik",
         control_dt=1.0 / fps,
         episode_length=max_steps,

@@ -23,6 +23,7 @@ from source.cli.grasp_search import (
     validate_scripted_grasp_search_args,
 )
 from source.scripted import create_strategy, registered_strategies
+from source.envs.manipulation.placement import FixedTablePlacementSampler
 from source.envs.manipulation.object_catalog import lift_object_ids
 from source.teleop.devices import GloveSample, ViveSample
 from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
@@ -71,7 +72,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _make_env(args, *, object_id: str | None = None):
+def _make_env(args, *, object_id: str | None = None, task_scene: dict | None = None):
     overrides = {
         "control_dt": 1.0 / args.fps,
         "episode_length": args.max_steps,
@@ -79,6 +80,11 @@ def _make_env(args, *, object_id: str | None = None):
     task_config = {"reward_shaping": True, "terminate_on_success": False}
     if object_id is not None:
         task_config["object_id"] = object_id
+    if task_scene is not None:
+        task_config["placement_sampler"] = FixedTablePlacementSampler(
+            xy=tuple(task_scene["object_xy"]),
+            yaw=float(task_scene["object_yaw"]),
+        )
     return make_configured_manipulation_env(
         args,
         args.task,
@@ -236,6 +242,8 @@ def _run_catalog_evaluation(args) -> None:
         object_id = row.get("object_id")
         if row.get("status") != TRAJECTORY_STABLE or object_id not in available:
             continue
+        if not (row.get("robot_lift") or {}).get("robot_lift_verified"):
+            continue
         if args.dataset != "all" and not object_id.startswith(f"{args.dataset}:"):
             continue
         if requested is not None and object_id not in requested:
@@ -245,12 +253,12 @@ def _run_catalog_evaluation(args) -> None:
         missing = sorted(requested - {row["object_id"] for row in rows})
         if missing:
             raise ValueError(
-                f"Requested objects have no trajectory-stable benchmark config: {missing}"
+                f"Requested objects have no Lift-verified benchmark task: {missing}"
             )
     if args.limit is not None:
         rows = rows[: args.limit]
     if not rows:
-        raise ValueError("No trajectory-stable grasp configs match the selection.")
+        raise ValueError("No Lift-verified benchmark tasks match the selection.")
 
     output = args.evaluation_output or args.grasp_benchmark_report.with_name(
         f"{args.grasp_benchmark_report.stem}_lift_evaluation.json"
@@ -310,7 +318,8 @@ def _run_catalog_evaluation(args) -> None:
         config_path = Path(row["config"])
         if not config_path.is_absolute():
             config_path = Path.cwd() / config_path
-        env = _make_env(args, object_id=object_id)
+        task_scene = (row.get("robot_lift") or {}).get("task_scene")
+        env = _make_env(args, object_id=object_id, task_scene=task_scene)
         renderer = None
         if args.coverage_search and not getattr(args, "dry_run", False):
             initial_observation, _ = env.reset(seed=args.seed)

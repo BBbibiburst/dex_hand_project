@@ -134,8 +134,9 @@ python -m apps.collect_scripted_lerobot \
 --limit 10
 ```
 
-Collector 只读取 `trajectory_stable` 行。若某物体在 benchmark 中为 `direct_hold_only`，应
-先用 `--resume --retry-incomplete` 修复抓取，而不是在采集阶段绕过验证。
+Collector 只读取同时满足 `trajectory_stable` 和 `robot_lift_verified=true` 的行，并复现
+benchmark 保存的成功 `task_scene`。若物体只有 `direct_hold_only` 或未通过 Robot Lift，
+应先用 `--resume --retry-incomplete` 修复，而不是在采集阶段绕过验证。
 
 ## 数据字段
 

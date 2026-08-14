@@ -5,7 +5,7 @@
 ```text
 source/envs/                 MuJoCo 环境、任务和 task registry
 source/robots/               机器人组件描述与 robot config
-source/controllers/          机械臂与末端控制
+source/control/              机械臂与末端控制
 source/grasping/             搜索、GraspQP 适配、进化与物理验证
 source/workflows/            可恢复的目录级工作流
 source/evaluation/           公共 benchmark schema 与状态常量

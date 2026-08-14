@@ -25,6 +25,7 @@ import logging
 import os
 from pathlib import Path
 import time
+from typing import Callable
 
 import mujoco
 import numpy as np
@@ -1432,6 +1433,7 @@ def select_executable_config(
     candidates: list[Candidate],
     *,
     seed: int,
+    candidate_filter: Callable[[dict], tuple[bool, dict]] | None = None,
 ) -> dict:
     """Select the first analytically valid candidate with an exact free approach."""
     open_surface = surface_for(device, _open_fractions(device), seed=seed + 50_000)
@@ -1439,7 +1441,11 @@ def select_executable_config(
         tuple(np.round(_open_fractions(device), 8)): open_surface,
     }
     for candidate_index, candidate in enumerate(candidates):
-        if not candidate.valid:
+        # A task-conditioned run may deliberately pass an analytically
+        # unstable but geometrically plausible seed to DexEvolve. It still
+        # must have a collision-free, robot-reachable approach before the
+        # expensive simulator refinement starts.
+        if not candidate.valid and candidate_filter is None:
             continue
         alternatives = plan_approach(
             cloud,
@@ -1463,6 +1469,7 @@ def select_executable_config(
             (candidate.approach_plan,) if candidate.approach_plan is not None else ()
         )
         ordered = [candidate, *(item for item in candidates if item is not candidate)]
+        task_filter_rejected = False
         for plan in alternatives:
             candidate.approach_plan = plan
             candidate_payload = payload(
@@ -1476,13 +1483,21 @@ def select_executable_config(
                 validate_grasp_trajectory_payload(candidate_payload)
             except ValueError:
                 continue
+            if candidate_filter is not None:
+                accepted, metadata = candidate_filter(candidate_payload)
+                if not accepted:
+                    task_filter_rejected = True
+                    continue
+                candidate_payload.update(metadata)
             candidate.approach_table_clearance = plan.minimum_table_clearance
             candidates[:] = ordered
             return candidate_payload
         candidate.valid = False
         candidate.rejection_reasons = (
             *candidate.rejection_reasons,
-            "mujoco_approach_collision",
+            "robot_task_infeasible"
+            if task_filter_rejected
+            else "mujoco_approach_collision",
         )
         candidate.score += 2.0
     candidates.sort(key=lambda item: (not item.valid, item.score))
@@ -1584,6 +1599,7 @@ def search_grasp_config(
     publish_invalid: bool = False,
     generator: str = "heuristic",
     graspqp_iterations: int = 120,
+    candidate_filter: Callable[[dict], tuple[bool, dict]] | None = None,
 ) -> GraspConfigSearchResult:
     """Run the new two-stage search and write a production-schema grasp config."""
     if (object_id is None) == (mesh is None):
@@ -1655,6 +1671,7 @@ def search_grasp_config(
         device,
         candidates,
         seed=seed,
+        candidate_filter=candidate_filter,
     )
     result = GraspConfigSearchResult(
         output_path=output_path,

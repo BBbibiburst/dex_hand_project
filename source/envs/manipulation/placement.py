@@ -12,6 +12,49 @@ from source.envs.manipulation.objects import ManipulationObjectSpec
 Placement = tuple[np.ndarray, np.ndarray]
 
 
+class FixedTablePlacementSampler:
+    """Place one object at an explicit table-relative XY position and yaw."""
+
+    def __init__(self, *, xy: tuple[float, float], yaw: float) -> None:
+        self.xy = np.asarray(xy, dtype=np.float64)
+        if self.xy.shape != (2,) or not np.all(np.isfinite(self.xy)):
+            raise ValueError("xy must contain two finite values.")
+        if not np.isfinite(yaw):
+            raise ValueError("yaw must be finite.")
+        self.yaw = float(yaw)
+
+    def sample(
+        self,
+        objects: Sequence[ManipulationObjectSpec],
+        *,
+        rng: np.random.Generator,
+        reference_pos: np.ndarray,
+        z_offset: float = 0.002,
+    ) -> dict[str, Placement]:
+        _ = rng
+        if len(objects) != 1:
+            raise ValueError("FixedTablePlacementSampler supports exactly one object.")
+        obj = objects[0]
+        reference_pos = np.asarray(reference_pos, dtype=np.float64)
+        half_yaw = 0.5 * self.yaw
+        return {
+            obj.name: (
+                np.asarray(
+                    [
+                        reference_pos[0] + self.xy[0],
+                        reference_pos[1] + self.xy[1],
+                        reference_pos[2] + obj.bottom_offset + z_offset,
+                    ],
+                    dtype=np.float64,
+                ),
+                np.asarray(
+                    [np.cos(half_yaw), 0.0, 0.0, np.sin(half_yaw)],
+                    dtype=np.float64,
+                ),
+            )
+        }
+
+
 class UniformTablePlacementSampler:
     """Sample non-overlapping object poses from rectangular table ranges.
 

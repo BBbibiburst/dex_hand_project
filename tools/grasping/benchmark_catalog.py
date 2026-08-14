@@ -25,6 +25,11 @@ FULL_PIPELINE_PRESET = {
     "target_lift_candidates": 3,
     "maximum_saved_candidates": 24,
     "maximum_robot_candidates_per_attempt": 6,
+    "task_conditioned_search": True,
+    "task_scene_attempts": 12,
+    "task_rotations_per_distance": 4,
+    "task_pull_step": 0.05,
+    "task_maximum_pull": 0.10,
     "maximum_object_seconds": 2700.0,
     "seconds": 3.0,
     "evolve": True,
@@ -163,6 +168,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--target-lift-candidates", type=int, default=1)
     parser.add_argument("--maximum-saved-candidates", type=int, default=24)
     parser.add_argument("--maximum-robot-candidates-per-attempt", type=int, default=6)
+    parser.add_argument(
+        "--task-conditioned-search",
+        action="store_true",
+        help="Search complete Lift tasks and resample object yaw/distance after infeasibility.",
+    )
+    parser.add_argument("--task-scene-attempts", type=int, default=12)
+    parser.add_argument("--task-rotations-per-distance", type=int, default=4)
+    parser.add_argument("--task-pull-step", type=float, default=0.05)
+    parser.add_argument("--task-maximum-pull", type=float, default=0.15)
     parser.add_argument(
         "--maximum-object-seconds",
         type=float,
