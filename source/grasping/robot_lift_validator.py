@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 import json
 import tempfile
+from typing import Callable
 
 import mujoco
 import numpy as np
@@ -122,9 +123,7 @@ def _precheck_strategy_waypoints(env, strategy: LiftStrategy, observation: dict)
             position_error = float(np.linalg.norm(actual_position - position))
             orientation_error = float(
                 2.0
-                * np.arccos(
-                    np.clip(abs(float(np.dot(actual_quaternion, quaternion))), 0.0, 1.0)
-                )
+                * np.arccos(np.clip(abs(float(np.dot(actual_quaternion, quaternion))), 0.0, 1.0))
             )
             maximum_position_error = max(maximum_position_error, position_error)
             maximum_orientation_error = max(maximum_orientation_error, orientation_error)
@@ -212,6 +211,7 @@ def precheck_robot_lift_task_scenes(
     scenes: list[dict],
     *,
     seed: int = 0,
+    progress_callback: Callable[[int, int, dict], None] | None = None,
 ) -> list[dict]:
     """Precheck every task-scene/candidate pair with one compiled robot model."""
     if not candidates or not scenes:
@@ -230,6 +230,7 @@ def precheck_robot_lift_task_scenes(
         render_mode=None,
     )
     results = []
+    total = len(candidates) * len(scenes)
     try:
         with tempfile.TemporaryDirectory(prefix="dex_robot_scene_precheck_") as directory:
             path = Path(directory) / "candidate.json"
@@ -258,6 +259,8 @@ def precheck_robot_lift_task_scenes(
                             "task_scene": dict(scene),
                         }
                     )
+                    if progress_callback is not None:
+                        progress_callback(len(results), total, scene)
     finally:
         env.close()
     return results
@@ -284,9 +287,7 @@ class RobotTaskCandidateFilter:
             enable_tactile_sensors=True,
             render_mode=None,
         )
-        self._temporary_directory = tempfile.TemporaryDirectory(
-            prefix="dex_task_candidate_filter_"
-        )
+        self._temporary_directory = tempfile.TemporaryDirectory(prefix="dex_task_candidate_filter_")
         self.path = Path(self._temporary_directory.name) / "candidate.json"
         self.attempts: list[dict] = []
 

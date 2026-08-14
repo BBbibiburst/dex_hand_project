@@ -145,8 +145,23 @@ Benchmark 报告保存逐物体状态、配置路径、搜索/进化摘要、Lif
 
 ## 运行输出
 
+交互式终端会为每个 object worker 固定显示一行实时进度：
+
 ```text
-[15/127] TRAJECTORY_STABLE ycb:016_pear lift=PASS object=18m42s avg=2m31s eta=4h42m
+Overall [██░░░░░░░░░░░░] 18/127 solved=15 elapsed=2h31m eta=15h12m
+W1   ycb:024_bowl                    EVOLUTION            [████████░░░░░░] 12/20
+W2   ycb:025_mug                     TASK_PRECHECK         [████░░░░░░░░░░] 18/72
+```
+
+阶段包括 `TASK_SETUP`、`GRASP_SEARCH`、`EVOLUTION`、`TRAJECTORY_VALIDATION`、
+`TASK_PRECHECK` 和 `DYNAMIC_LIFT`。进度条只表达当前阶段的真实计数，不用估算权重拼接一个
+虚假的单物体百分比。输出重定向到文件或非 TTY 环境时，自动降级为阶段切换/每30秒一次的
+`PROGRESS` 单行日志。
+
+物体完成后仍会保留一条最终结果：
+
+```text
+[15/127] TASK_SOLVED ycb:016_pear lift_grasps=3/3 scene=4 ... object=18m42s ...
 ```
 
 - `object`：该物体累计处理时间。

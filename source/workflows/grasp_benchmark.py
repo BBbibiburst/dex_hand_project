@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import json
+import multiprocessing
 from pathlib import Path
+import queue
 import time
 
 import numpy as np
@@ -43,6 +45,37 @@ from source.grasping.dexevolve import (
     mjwarp_available,
     table_clearance_metrics,
 )
+from source.runtime.progress import LiveWorkerProgress
+
+
+_PROGRESS_QUEUE = None
+
+
+def _init_progress_worker(progress_queue) -> None:
+    global _PROGRESS_QUEUE
+    _PROGRESS_QUEUE = progress_queue
+
+
+def _emit_progress(
+    object_id: str,
+    phase: str,
+    *,
+    current: int | None = None,
+    total: int | None = None,
+    detail: str = "",
+) -> None:
+    if _PROGRESS_QUEUE is None:
+        return
+    _PROGRESS_QUEUE.put(
+        {
+            "worker": multiprocessing.current_process().name,
+            "object_id": object_id,
+            "phase": phase,
+            "current": current,
+            "total": total,
+            "detail": detail,
+        }
+    )
 
 
 def _format_duration(seconds: float) -> str:
@@ -352,20 +385,14 @@ def _write_report(
     robot_lift_verified = sum(
         bool((row.get("robot_lift") or {}).get("robot_lift_verified")) for row in rows
     )
-    lift_verified_candidates = sum(
-        int(row.get("lift_verified_candidate_count", 0)) for row in rows
-    )
+    lift_verified_candidates = sum(int(row.get("lift_verified_candidate_count", 0)) for row in rows)
     lift_candidate_targets_met = sum(
         int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
         for row in rows
     )
-    task_solved = sum(
-        int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows
-    )
+    task_solved = sum(int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows)
     task_targets_met = lift_candidate_targets_met
-    object_time_budgets_reached = sum(
-        bool(row.get("object_time_budget_reached")) for row in rows
-    )
+    object_time_budgets_reached = sum(bool(row.get("object_time_budget_reached")) for row in rows)
     failure_reasons: dict[str, int] = {}
     for row in rows:
         reason = _failure_reason(row)
@@ -379,9 +406,7 @@ def _write_report(
         and int(row.get("lift_verified_candidate_count", 0)) < args.target_lift_candidates
     ]
     unsolved = [
-        row["object_id"]
-        for row in rows
-        if int(row.get("lift_verified_candidate_count", 0)) == 0
+        row["object_id"] for row in rows if int(row.get("lift_verified_candidate_count", 0)) == 0
     ]
     payload = {
         "schema_version": BENCHMARK_SCHEMA_VERSION,
@@ -522,6 +547,7 @@ def _validate_config(
 
 def _run_one(task: dict) -> dict:
     object_id = task["object_id"]
+    _emit_progress(object_id, "TASK_SETUP", detail="creating concrete Lift scenes")
     started = time.monotonic()
     config_path = Path(task["config_path"])
     search_errors = []
@@ -557,6 +583,12 @@ def _run_one(task: dict) -> dict:
         try:
             reuse_this_attempt = task["reuse"] and attempt == 0 and config_path.is_file()
             if not reuse_this_attempt:
+                _emit_progress(
+                    object_id,
+                    "GRASP_SEARCH",
+                    detail=f"attempt={attempt + 1}/{task['search_attempts']} "
+                    "GraspQP candidate generation",
+                )
                 search_kwargs = {
                     "object_id": object_id,
                     "output": config_path,
@@ -600,6 +632,12 @@ def _run_one(task: dict) -> dict:
                     )
             search_seconds = time.monotonic() - attempt_started
             phase_seconds["search"] += search_seconds
+            _emit_progress(
+                object_id,
+                "GRASP_SEARCH_DONE",
+                current=attempt + 1,
+                total=task["search_attempts"],
+            )
         except Exception as exc:
             search_errors.append(f"seed={task['seed'] + attempt}: {exc}")
             continue
@@ -637,13 +675,31 @@ def _run_one(task: dict) -> dict:
                     mjwarp_njmax=task["mjwarp_njmax"],
                 )
                 evolution_started = time.monotonic()
-                archive, history = evolve(seed_payload, evolution_config)
+                archive, history = evolve(
+                    seed_payload,
+                    evolution_config,
+                    progress_callback=lambda current, total, summary: _emit_progress(
+                        object_id,
+                        "EVOLUTION",
+                        current=current,
+                        total=total,
+                        detail=f"stable={summary['direct_hold_stable']} "
+                        f"archive={summary['archive']}",
+                    ),
+                )
                 phase_seconds["evolution"] += time.monotonic() - evolution_started
                 best = archive[0]
                 trajectory_candidates = []
                 trajectory_errors = []
                 trajectory_started = time.monotonic()
                 for archive_index, individual in enumerate(archive):
+                    _emit_progress(
+                        object_id,
+                        "TRAJECTORY_VALIDATION",
+                        current=archive_index + 1,
+                        total=len(archive),
+                        detail=f"accepted={len(trajectory_candidates)}",
+                    )
                     if time.monotonic() - started >= task["maximum_object_seconds"]:
                         break
                     if not individual.direct_hold_stable:
@@ -708,9 +764,7 @@ def _run_one(task: dict) -> dict:
                     phase_seconds["robot_candidate_precheck"] += (
                         time.monotonic() - robot_precheck_started
                     )
-                    indexed_prechecks = {
-                        item["candidate_index"]: item for item in robot_prechecks
-                    }
+                    indexed_prechecks = {item["candidate_index"]: item for item in robot_prechecks}
 
                     def robot_candidate_key(index_and_candidate):
                         index, candidate = index_and_candidate
@@ -801,32 +855,39 @@ def _run_one(task: dict) -> dict:
                 robot_candidates = (
                     trajectory_candidates if task["evolve"] else [(published_payload, None, None)]
                 )
-                if (
-                    not task["task_conditioned_search"]
-                    and task["evolve"]
-                    and robot_prechecks
-                ):
-                    feasible_count = sum(
-                        item["precheck_passed"] for item in robot_prechecks
-                    )
+                if not task["task_conditioned_search"] and task["evolve"] and robot_prechecks:
+                    feasible_count = sum(item["precheck_passed"] for item in robot_prechecks)
                     # Do not spend up to 900 dynamic steps on a candidate that
                     # has already failed deterministic IK/table precheck.
                     robot_candidates = robot_candidates[: max(1, feasible_count)]
-                robot_candidates = robot_candidates[
-                    : task["maximum_robot_candidates_per_attempt"]
-                ]
+                robot_candidates = robot_candidates[: task["maximum_robot_candidates_per_attempt"]]
                 preferred_payload = dict(published_payload)
                 robot_lift_started = time.monotonic()
                 scenes = attempt_scenes
                 candidate_scene_pairs = []
                 failed_scene_prechecks = []
                 if task["task_conditioned_search"]:
+                    _emit_progress(
+                        object_id,
+                        "TASK_PRECHECK",
+                        current=0,
+                        total=len(robot_candidates) * len(scenes),
+                        detail=f"scenes={len(scenes)} candidates={len(robot_candidates)}",
+                    )
                     payloads = [item[0] for item in robot_candidates]
                     scene_prechecks = precheck_robot_lift_task_scenes(
                         object_id,
                         payloads,
                         scenes,
                         seed=task["seed"] + attempt,
+                        progress_callback=lambda current, total, scene: _emit_progress(
+                            object_id,
+                            "TASK_PRECHECK",
+                            current=current,
+                            total=total,
+                            detail=f"scene={scene['scene_index']} "
+                            f"pull={100.0 * scene['pull_toward_robot']:.0f}cm",
+                        ),
                     )
                     for precheck in scene_prechecks:
                         candidate_index = int(precheck["candidate_index"])
@@ -861,8 +922,7 @@ def _run_one(task: dict) -> dict:
                     candidate_scene_pairs = first_per_scene + remaining_pairs
                 else:
                     candidate_scene_pairs = [
-                        (index, candidate, None)
-                        for index, candidate in enumerate(robot_candidates)
+                        (index, candidate, None) for index, candidate in enumerate(robot_candidates)
                     ]
                 candidate_scene_pairs = candidate_scene_pairs[
                     : task["maximum_robot_candidates_per_attempt"]
@@ -892,6 +952,18 @@ def _run_one(task: dict) -> dict:
                     if time.monotonic() - started >= task["maximum_object_seconds"]:
                         break
                     candidate_payload = dict(robot_candidate[0])
+                    _emit_progress(
+                        object_id,
+                        "DYNAMIC_LIFT",
+                        current=len(robot_lift_attempts) + 1,
+                        total=len(candidate_scene_pairs),
+                        detail=(
+                            "default scene"
+                            if scene is None
+                            else f"scene={scene['scene_index']} "
+                            f"pull={100.0 * scene['pull_toward_robot']:.0f}cm"
+                        ),
+                    )
                     if task["evolve"]:
                         candidate_payload.pop("trajectory_stable_candidates", None)
                         candidate_payload.update(
@@ -944,18 +1016,15 @@ def _run_one(task: dict) -> dict:
                     covered_bins = set().union(
                         *(_approach_bins(item) for item in lift_verified_candidates)
                     )
-                    if (
-                        len(lift_verified_candidates) >= task["target_lift_candidates"]
-                        and len(covered_bins) >= min(2, task["target_lift_candidates"])
-                    ):
+                    if len(lift_verified_candidates) >= task["target_lift_candidates"] and len(
+                        covered_bins
+                    ) >= min(2, task["target_lift_candidates"]):
                         break
                 phase_seconds["robot_lift_validation"] += time.monotonic() - robot_lift_started
                 attempted_payload = json.loads(validation_path.read_text(encoding="utf-8"))
                 if best_lift_result is not None:
                     robot_lift = dict(best_lift_result)
-                robot_lift_verified = bool(
-                    (robot_lift or {}).get("robot_lift_verified")
-                )
+                robot_lift_verified = bool((robot_lift or {}).get("robot_lift_verified"))
                 published_payload = (
                     dict(best_lift_payload)
                     if best_lift_payload is not None
@@ -969,18 +1038,12 @@ def _run_one(task: dict) -> dict:
                     published_payload["trajectory_stable_candidates"] = list(
                         accumulated_trajectory_candidates
                     )
-                    published_payload["lift_verified_candidates"] = list(
-                        lift_verified_candidates
-                    )
+                    published_payload["lift_verified_candidates"] = list(lift_verified_candidates)
                 published_payload.update(
                     robot_lift_verified=robot_lift_verified,
-                    robot_table_collision=bool(
-                        (robot_lift or {}).get("table_collision")
-                    ),
+                    robot_table_collision=bool((robot_lift or {}).get("table_collision")),
                     validation_stage=(
-                        "robot_lift_verified"
-                        if robot_lift_verified
-                        else "trajectory_hold_stable"
+                        "robot_lift_verified" if robot_lift_verified else "trajectory_hold_stable"
                     ),
                     lift_verified_candidate_count=len(lift_verified_candidates),
                     lift_candidate_target=task["target_lift_candidates"],
@@ -998,9 +1061,7 @@ def _run_one(task: dict) -> dict:
                 or (
                     len(lift_verified_candidates) >= task["target_lift_candidates"]
                     and len(
-                        set().union(
-                            *(_approach_bins(item) for item in lift_verified_candidates)
-                        )
+                        set().union(*(_approach_bins(item) for item in lift_verified_candidates))
                     )
                     >= min(2, task["target_lift_candidates"])
                 )
@@ -1084,11 +1145,14 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         raise ValueError("--jobs must be positive.")
     if args.search_attempts <= 0:
         raise ValueError("--search-attempts must be positive.")
-    if min(
-        args.target_lift_candidates,
-        args.maximum_saved_candidates,
-        args.maximum_robot_candidates_per_attempt,
-    ) <= 0:
+    if (
+        min(
+            args.target_lift_candidates,
+            args.maximum_saved_candidates,
+            args.maximum_robot_candidates_per_attempt,
+        )
+        <= 0
+    ):
         raise ValueError("Candidate targets and limits must be positive.")
     if args.maximum_object_seconds <= 0.0:
         raise ValueError("--maximum-object-seconds must be positive.")
@@ -1236,16 +1300,37 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         }
         for object_id in pending
     ]
-    executor = ProcessPoolExecutor(max_workers=args.jobs)
+    progress_manager = multiprocessing.Manager()
+    progress_queue = progress_manager.Queue()
+    executor = ProcessPoolExecutor(
+        max_workers=args.jobs,
+        initializer=_init_progress_worker,
+        initargs=(progress_queue,),
+    )
     futures = {executor.submit(_run_one, task): task for task in tasks}
     pending = set(futures)
+    live_progress = LiveWorkerProgress(
+        total=len(tasks),
+        workers=args.jobs,
+    )
     interrupt_count = 0
     force_stop = False
     pilot_stop = None
     try:
         while pending:
             try:
-                for future in as_completed(pending):
+                completed_futures, _ = wait(
+                    pending,
+                    timeout=0.25,
+                    return_when=FIRST_COMPLETED,
+                )
+                while True:
+                    try:
+                        live_progress.update(progress_queue.get_nowait())
+                    except queue.Empty:
+                        break
+                live_progress.render()
+                for future in completed_futures:
                     pending.remove(future)
                     row = future.result()
                     object_id = row["object_id"]
@@ -1277,6 +1362,11 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                         worker_count=args.jobs,
                     )
                     eta_label = "warming_up" if eta is None else _format_duration(eta)
+                    live_progress.mark_completed(
+                        object_id=object_id,
+                        solved=int(row.get("lift_verified_candidate_count", 0)) > 0,
+                    )
+                    live_progress.clear()
                     print(
                         f"[{len(rows)}/{len(selected)}] "
                         f"{task_label:20} {object_id} "
@@ -1286,6 +1376,7 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                         f"{detail}",
                         flush=True,
                     )
+                    live_progress.render()
                     if args.pilot:
                         lift_successes = sum(
                             bool((item.get("robot_lift") or {}).get("robot_lift_verified"))
@@ -1332,7 +1423,9 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
                 )
                 break
     finally:
+        live_progress.close()
         executor.shutdown(wait=not force_stop, cancel_futures=force_stop)
+        progress_manager.shutdown()
 
     if pilot_stop is not None:
         _write_report(args.output, args=args, selected=selected, rows=rows)
@@ -1355,13 +1448,9 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
         int(row.get("lift_verified_candidate_count", 0)) >= args.target_lift_candidates
         for row in rows
     )
-    task_solved = sum(
-        int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows
-    )
+    task_solved = sum(int(row.get("lift_verified_candidate_count", 0)) > 0 for row in rows)
     unsolved = [
-        row["object_id"]
-        for row in rows
-        if int(row.get("lift_verified_candidate_count", 0)) == 0
+        row["object_id"] for row in rows if int(row.get("lift_verified_candidate_count", 0)) == 0
     ]
     incomplete_lift_archives = [
         row["object_id"]

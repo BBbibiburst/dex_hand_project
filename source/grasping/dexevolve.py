@@ -7,7 +7,7 @@ from copy import deepcopy
 from dataclasses import asdict, dataclass
 from functools import lru_cache
 import importlib.util
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -400,9 +400,7 @@ def _evaluate_robustness(
         perturbed["hand_translation"] = (
             np.asarray(payload["hand_translation"], dtype=np.float64) + translation_delta
         ).tolist()
-        rotation_delta = Rotation.from_rotvec(
-            rng.normal(0.0, orientation_sigma, 3)
-        ).as_matrix()
+        rotation_delta = Rotation.from_rotvec(rng.normal(0.0, orientation_sigma, 3)).as_matrix()
         perturbed["hand_rotation_matrix"] = (
             np.asarray(payload["hand_rotation_matrix"], dtype=np.float64) @ rotation_delta
         ).tolist()
@@ -529,7 +527,12 @@ def _insert(archive: list[Individual], child: Individual, config: EvolutionConfi
         del archive[config.max_archive :]
 
 
-def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual], list[dict]]:
+def evolve(
+    seed_payload: dict,
+    config: EvolutionConfig,
+    *,
+    progress_callback: Callable[[int, int, dict], None] | None = None,
+) -> tuple[list[Individual], list[dict]]:
     backend = config.backend
     if backend not in {"cpu", "mjwarp", "auto"}:
         raise ValueError(f"Unknown evolution backend {backend!r}.")
@@ -562,6 +565,7 @@ def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual
             batch_evaluator=batch_evaluator,
             backend=backend,
             fallback_error=fallback_error,
+            progress_callback=progress_callback,
         )
     with ProcessPoolExecutor(max_workers=config.jobs) as executor:
         return _evolve(
@@ -571,6 +575,7 @@ def evolve(seed_payload: dict, config: EvolutionConfig) -> tuple[list[Individual
             batch_evaluator=batch_evaluator,
             backend=backend,
             fallback_error=fallback_error,
+            progress_callback=progress_callback,
         )
 
 
@@ -582,6 +587,7 @@ def _evolve(
     batch_evaluator: Any = None,
     backend: str = "cpu",
     fallback_error: str | None = None,
+    progress_callback: Callable[[int, int, dict], None] | None = None,
 ) -> tuple[list[Individual], list[dict]]:
     rng = np.random.default_rng(config.seed)
     seeds = [deepcopy(seed_payload)]
@@ -616,19 +622,20 @@ def _evolve(
         )
         for child in evaluated:
             _insert(archive, child, config)
-        history.append(
-            {
-                "generation": generation + 1,
-                "archive": len(archive),
-                "direct_hold_stable": sum(item.direct_hold_stable for item in archive),
-                "best_fitness": max(item.fitness for item in archive),
-                "backend": getattr(batch_evaluator, "backend", backend),
-                "backend_fallback_error": getattr(
-                    batch_evaluator,
-                    "fallback_error",
-                    fallback_error,
-                ),
-            }
-        )
+        generation_summary = {
+            "generation": generation + 1,
+            "archive": len(archive),
+            "direct_hold_stable": sum(item.direct_hold_stable for item in archive),
+            "best_fitness": max(item.fitness for item in archive),
+            "backend": getattr(batch_evaluator, "backend", backend),
+            "backend_fallback_error": getattr(
+                batch_evaluator,
+                "fallback_error",
+                fallback_error,
+            ),
+        }
+        history.append(generation_summary)
+        if progress_callback is not None:
+            progress_callback(generation + 1, config.generations, generation_summary)
     archive.sort(key=lambda item: (not item.direct_hold_stable, -item.fitness))
     return archive, history
