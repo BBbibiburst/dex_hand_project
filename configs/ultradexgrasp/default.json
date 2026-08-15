@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "target_size": 0.09,
+  "surface_points": 2048,
+  "surrogate_cache": "configs/ultradexgrasp/cache/dex_hand_surrogate.npz",
+  "surrogate": {
+    "points_per_geom": 12,
+    "finger_samples": 15,
+    "thumb_samples": 9,
+    "finger_degree": 7,
+    "thumb_degree": 5,
+    "settle_steps": 700
+  },
+  "synthesis": {
+    "seed_count": 64,
+    "optimization_steps": 220,
+    "translation_learning_rate": 0.0025,
+    "rotation_learning_rate": 0.012,
+    "actuator_learning_rate": 0.025,
+    "force_learning_rate": 0.05,
+    "contact_distance": 0.004,
+    "maximum_penetration": 0.003,
+    "penetration_allowance": 0.0005,
+    "minimum_contact_fingers": 4,
+    "top_k": 32,
+    "friction_coefficient": 0.8,
+    "contact_temperature": 0.002,
+    "table_margin": 0.0015,
+    "force_residual_threshold": 0.28,
+    "side_seed_fraction": 0.8
+  },
+  "execution": {
+    "pregrasp_distance": 0.09,
+    "lift_height": 0.065,
+    "finger_preload": 0.15,
+    "thumb_grasp_preload": 0.2,
+    "transit_clearance": 0.16,
+    "settle_steps": 12,
+    "transit_steps": 70,
+    "pregrasp_steps": 55,
+    "approach_steps": 45,
+    "close_steps": 45,
+    "hold_steps": 40,
+    "lift_steps": 90,
+    "verify_steps": 30,
+    "position_tolerance": 0.025,
+    "orientation_tolerance": 0.22,
+    "enable_tactile_sensors": false
+  }
+}

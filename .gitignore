@@ -234,6 +234,12 @@ checkpoints/
 # Generated grasp and approach-path cache
 configs/grasps/
 
+# UltraDexGrasp reference/development checkouts and generated episodes
+deps/ultradexgrasp/upstream/
+deps/ultradexgrasp/third_party/
+outputs/ultradexgrasp/
+configs/ultradexgrasp/cache/
+
 # Downloaded ManiSkill assets (large and separately licensed)
 assets/maniskill/
 assets/ycb/

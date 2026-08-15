@@ -1,18 +1,22 @@
 # Dex Hand Project
 
-基于 MuJoCo 的 RM75B 机械臂与灵巧手操作项目。目前工作的主线是：为 YCB/EGAD 物体生成
-可执行抓取，经过轨迹与完整机械臂 Lift 验证，再将成功执行过程记录为多样化 LeRobot
-示教数据。
+基于 MuJoCo 的 RM75B 机械臂与灵巧手操作项目。当前主线是独立的
+UltraDexGrasp 风格抓取示教生成：直接优化物体相对手掌位姿与 Dex Hand 六个物理驱动，
+再由完整 RM75B 场景执行并记录成功 Lift episode。
 
-当前抓取流水线为：
+当前默认抓取流水线为：
 
 ```text
-GraspQP 初始姿态
-→ MuJoCo evolutionary refinement
-→ 无接触 approach / closure / hold 验证
-→ 完整 RM75B + Dex Hand Lift 验证
-→ 随机化成功示教采集
+MuJoCo 闭链手模型标定
+→ UltraDexGrasp/BODex 风格批量可微抓取优化
+→ RM75B 实际 IK 可达性排序
+→ 同步接近与闭合
+→ 抬升和保持验证
+→ manifest.json + episode.npz
 ```
+
+旧 GraspQP + DexEvolve 实现仍保留为回退和结果对照，但新流水线不读取旧 grasp config、
+不调用旧搜索模块，也不输出旧 schema。
 
 项目还包含 Pika 平行夹爪、触觉阵列、Vive/蓝牙手套遥操作、基础操作任务与 Diffusion
 Policy 实验入口，但当前全量生成和自动示教以 `RM75B + dex_hand + lift` 为主。
@@ -21,19 +25,16 @@ Policy 实验入口，但当前全量生成和自动示教以 `RM75B + dex_hand 
 
 - 物体目录：YCB 与 EGAD，共约 127 个对象，实际数量以
   `assets/maniskill/manifest.json` 为准。
-- 抓取生成：官方 GraspQP force-closure metric + Dex Hand 闭链联合姿态优化 +
-  MuJoCo simulator-in-the-loop 进化优化。
-- 安全约束：完整手部网格、桌面硬约束、接近/闭合轨迹碰撞检查。
-- 验证分层：direct hold、trajectory hold、完整机器人 Lift 分开记录。
-- 整机候选先批量检查 RM75B IK 与桌面碰撞，再运行动态 Lift；最终报告与写入的 grasp
-  config 始终对应同一次最佳搜索。
-- 完整预设跨独立搜索累积并去重可执行抓取，默认每物体目标 3 个；最多搜索 5 次、保存
-  24 个轨迹候选、每次动态测试 6 个候选，并设置 45 分钟物体预算。
-- 长任务支持：自动推断并行度、逐物体原子保存、ETA、断点恢复和失败物体定向重试。
-- 示教采集：按物体、随机 seed 和抓取候选搜索成功轨迹；每个 seed 最多保存一条，优先保证多样性。
+- 手模型：从权威 MuJoCo 闭链模型标定六驱动可微曲面代理，当前 RMS 约 0.7 mm。
+- 物体模型：使用与 MuJoCo 单 mesh geom 一致的凸碰撞壳，不把视觉凹腔误当成可进入空间。
+- 抓取生成：批量优化 6D 手根位姿、六个驱动、接触与摩擦锥力闭合。
+- 安全约束：最坏点穿透、桌面间隙、五指接触分离和接近轨迹联合约束。
+- 整机验证：使用 RM75B 实际 IK 排序候选，执行张开、接近、同步闭合、抬升和保持。
+- 输出：独立 episode contract，包含控制、状态、物体位姿、阶段、奖励、成功和接触诊断。
 
-项目仍处于全量验证阶段。`trajectory_stable` 不等于机械臂一定能完成 Lift，最终示教可用性
-应结合 `robot_lift_verified` 和随机化采集报告判断。
+新流水线已经完成单物体端到端验证，仍需开展全目录统计。下文中的
+`trajectory_stable`、`robot_lift_verified` 等字段仅属于保留的旧流水线；新输出直接使用
+episode 的 `success`、`terminal_stage` 和逐帧 `task_success`。
 
 ## 快速开始
 
@@ -59,8 +60,7 @@ conda create -n mujoco python=3.10 -y
 conda activate mujoco
 
 python -m pip install --upgrade pip
-python -m pip install -e ".[dev,assets]"
-python -m pip install -e "deps/graspqp/graspqp[lite]" --no-build-isolation
+python -m pip install -e ".[dev,assets,ultradexgrasp]"
 ```
 
 采集 LeRobot 数据时再安装：
@@ -90,7 +90,35 @@ python -m pytest -q
 python -m tools.run_smoke_checks --steps 2
 ```
 
-## 全量抓取生成
+## UltraDexGrasp 示教生成
+
+检查固定版本的上游参考仓库与本机 CUDA/Torch 环境：
+
+```bash
+python -m tools.ultradexgrasp.bootstrap --clone-missing
+python -m tools.ultradexgrasp.probe --strict
+```
+
+为单个物体生成全新抓取并执行 Lift：
+
+```bash
+MUJOCO_GL=egl python -m tools.ultradexgrasp.generate \
+  --object-id ycb:002_master_chef_can \
+  --seed 11 \
+  --output outputs/ultradexgrasp/ycb_002_master_chef_can/seed_0011
+```
+
+只生成物体相对抓取候选、不启动机械臂：
+
+```bash
+python -m tools.ultradexgrasp.generate \
+  --object-id ycb:024_bowl --synthesis-only
+```
+
+成功目录包含 `manifest.json`、`episode.npz`、`candidates.json` 和运行摘要。详细设计、
+环境构建及坐标约定见 [UltraDexGrasp 新流水线](docs/ULTRADEXGRASP.md)。
+
+## 旧全量抓取生成（回退）
 
 首次运行：
 
@@ -228,6 +256,7 @@ MUJOCO_GL=egl python -m tools.grasping.render_grasp_catalog
 ## 文档
 
 - [安装与服务器部署](docs/DEPLOYMENT.md)
+- [UltraDexGrasp 新流水线](docs/ULTRADEXGRASP.md)
 - [抓取生成、验证和结果解释](docs/GRASP_PIPELINE.md)
 - [多样化示教数据采集](docs/DATA_COLLECTION.md)
 - [代码结构与语义约定](docs/ARCHITECTURE.md)
@@ -239,6 +268,7 @@ apps/                    数据采集应用
 assets/                  机器人、手、场景和 ManiSkill 物体资产
 configs/                 机器人配置及本地抓取结果
 deps/graspqp/            固定版本的 GraspQP submodule
+deps/ultradexgrasp/      固定版本的 UltraDexGrasp/BODex 参考仓库
 docs/                    部署、流水线、采集和架构文档
 examples/                Viewer、控制和任务示例
 source/                  环境、控制、抓取、策略、传感器和学习代码
