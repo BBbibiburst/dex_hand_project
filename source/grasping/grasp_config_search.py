@@ -1190,49 +1190,11 @@ def search(
                             f"best={best.score:.4f} valid={best.valid}"
                         )
 
-    if generator == "graspqp" and device.name == "dex_hand" and fine:
-        from source.grasping.graspqp_adapter import refine_closed_chain_grasp
-
-        refined: list[Candidate] = []
-        cloud_stride = max(1, len(cloud.points) // 768)
-        for candidate in fine[: max(1, top_k)]:
-            local_contacts = []
-            for label in device.contact_labels:
-                selected = np.flatnonzero(candidate.surface.labels == label)
-                posed = (
-                    candidate.surface.points[selected] @ candidate.rotation.T
-                    + candidate.translation
-                )
-                nearest = cloud.tree.query(posed, k=1)[0]
-                local_contacts.append(candidate.surface.points[selected[int(np.argmin(nearest))]])
-            result = refine_closed_chain_grasp(
-                hand_points=np.asarray(local_contacts),
-                initial_rotation=candidate.rotation,
-                initial_translation=candidate.translation,
-                object_points=cloud.points[::cloud_stride],
-                object_normals=cloud.normals[::cloud_stride],
-                initial_fractions=candidate.surface.fractions,
-                table_z=float(cloud.points[:, 2].min()),
-                iterations=graspqp_iterations,
-            )
-            refined_surface = surface_for(
-                device,
-                result.actuator_fractions,
-                seed=seed + 30_000 + len(refined),
-            )
-            refined.append(
-                evaluate(
-                    cloud,
-                    device,
-                    refined_surface,
-                    result.rotation,
-                    result.translation,
-                    roll_index=candidate.roll_index,
-                    anchor_index=candidate.anchor_index,
-                    full_checks=True,
-                )
-            )
-        fine.extend(refined)
+    if generator == "graspqp":
+        raise ValueError(
+            "GraspQP support has been removed; use generator="heuristic" "
+            "or the UltraDexGrasp residual-RL pipeline."
+        )
 
     # Always preserve at least one result for visualization and debugging.
     selected = fine or coarse

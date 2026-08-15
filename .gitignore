@@ -239,6 +239,7 @@ deps/ultradexgrasp/upstream/
 deps/ultradexgrasp/third_party/
 outputs/ultradexgrasp/
 configs/ultradexgrasp/cache/
+outputs/
 
 # Downloaded ManiSkill assets (large and separately licensed)
 assets/maniskill/

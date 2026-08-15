@@ -587,7 +587,7 @@ def _run_one(task: dict) -> dict:
                     object_id,
                     "GRASP_SEARCH",
                     detail=f"attempt={attempt + 1}/{task['search_attempts']} "
-                    "GraspQP candidate generation",
+                    "geometric candidate generation",
                 )
                 search_kwargs = {
                     "object_id": object_id,

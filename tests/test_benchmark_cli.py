@@ -30,7 +30,7 @@ def test_full_pipeline_keeps_explicit_parallelism() -> None:
 
     assert values["jobs"] == 4
     assert values["evolution_jobs"] == 1
-    assert values["generator"] == "graspqp"
+    assert values["generator"] == "heuristic"
 
 
 def test_full_pipeline_keeps_safe_cpu_evolution_backend() -> None:

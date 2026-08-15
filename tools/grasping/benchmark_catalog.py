@@ -13,7 +13,7 @@ from source.workflows.grasp_benchmark import GraspBenchmarkConfig, run_grasp_ben
 
 FULL_PIPELINE_PRESET = {
     "dataset": "all",
-    "generator": "graspqp",
+    "generator": "heuristic",
     "graspqp_iterations": 40,
     "points": 1024,
     "joint_candidates": 64,
@@ -121,7 +121,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--full-pipeline",
         action="store_true",
-        help="Use the standard GraspQP -> DexEvolve -> MuJoCo full-catalog preset.",
+        help="Use the standard heuristic -> DexEvolve -> MuJoCo full-catalog preset.",
     )
     parser.add_argument(
         "--pilot",
@@ -254,7 +254,7 @@ def main() -> None:
                 else "configs/grasps/dex_hand/full_pipeline_benchmark.json"
             )
         if values["config_dir"] is None:
-            values["config_dir"] = Path("configs/grasps/dex_hand/graspqp_seeds")
+            values["config_dir"] = Path("configs/grasps/dex_hand/heuristic_seeds")
         if values["evolution_dir"] is None:
             values["evolution_dir"] = Path("configs/grasps/dex_hand/dexevolve")
     raise SystemExit(run_grasp_benchmark(GraspBenchmarkConfig(**values)))
