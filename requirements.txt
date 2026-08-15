@@ -1,9 +1,15 @@
-# Core simulation and numerical stack
+# Core simulation, numerical stack, and native UltraDexGrasp synthesis
 numpy
 scipy
 trimesh
 mujoco
 gymnasium
+torch
+
+# The adapted UltraDexGrasp path uses the project-native MuJoCo closed-chain
+# surrogate. The pinned upstream SAPIEN/cuRobo/BODex/PyTorch3D repositories are
+# reference sources managed by tools/ultradexgrasp/bootstrap.py, not runtime
+# pip dependencies of this project.
 
 # Visualization used by examples, diagnostics, and tactile tools
 matplotlib
@@ -13,8 +19,7 @@ Pillow
 # Reproducible YCB asset download (EGAD uses the Python standard library)
 mani-skill
 
-# Imitation learning and LeRobot datasets
-torch
+# Imitation learning and LeRobot datasets (torch is required above by UltraDexGrasp)
 torchvision
 torchcodec
 lerobot>=0.4

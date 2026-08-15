@@ -32,6 +32,15 @@ def _write_json(path: Path, payload: dict[str, Any]) -> Path:
     return path
 
 
+def _execution_failure_type(attempts: list[dict[str, Any]]) -> str:
+    """Collapse candidate-level execution failures into one stable batch category."""
+    reasons = [str(item.get("failure_reason") or "") for item in attempts]
+    reasons = [reason for reason in reasons if reason]
+    if reasons and all("IK residual is too large" in reason for reason in reasons):
+        return "ik_unreachable"
+    return "execution_failed"
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", default="ycb:002_master_chef_can")
@@ -80,12 +89,29 @@ def main(argv: list[str] | None = None) -> int:
         f"[geometry] object={args.object_id} points={pipeline.surface_points}",
         flush=True,
     )
-    geometry = load_object_geometry(
-        args.object_id,
-        target_size=pipeline.target_size,
-        surface_points=pipeline.surface_points,
-        seed=args.seed,
-    )
+    try:
+        geometry = load_object_geometry(
+            args.object_id,
+            target_size=pipeline.target_size,
+            surface_points=pipeline.surface_points,
+            seed=args.seed,
+        )
+    except Exception as exc:
+        _write_json(
+            output / "run.json",
+            {
+                "schema_version": 1,
+                "pipeline": PIPELINE_NAME,
+                "object_id": args.object_id,
+                "seed": args.seed,
+                "success": False,
+                "failure_type": "geometry_load_failed",
+                "error": f"{type(exc).__name__}: {exc}",
+                "attempts": [],
+            },
+        )
+        print(f"[failed] geometry: {type(exc).__name__}: {exc}", flush=True)
+        return 4
 
     def progress(step: int, total: int, metrics: dict[str, float]) -> None:
         print(
@@ -114,6 +140,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[done] candidates={output / 'candidates.json'}", flush=True)
         return 0 if valid_candidates else 2
     if not valid_candidates:
+        _write_json(
+            output / "run.json",
+            {
+                "schema_version": 1,
+                "pipeline": PIPELINE_NAME,
+                "object_id": args.object_id,
+                "seed": args.seed,
+                "success": False,
+                "failure_type": "no_valid_candidates",
+                "candidate_count": len(candidates),
+                "valid_candidate_count": 0,
+                "attempts": [],
+            },
+        )
         print("[failed] synthesis returned no valid candidate", flush=True)
         return 2
 
@@ -181,7 +221,10 @@ def main(argv: list[str] | None = None) -> int:
                 {
                     "schema_version": 1,
                     "pipeline": PIPELINE_NAME,
+                    "object_id": args.object_id,
+                    "seed": args.seed,
                     "success": True,
+                    "failure_type": None,
                     "manifest": manifest.name,
                     "attempts": attempts,
                 },
@@ -196,7 +239,10 @@ def main(argv: list[str] | None = None) -> int:
         {
             "schema_version": 1,
             "pipeline": PIPELINE_NAME,
+            "object_id": args.object_id,
+            "seed": args.seed,
             "success": False,
+            "failure_type": _execution_failure_type(attempts),
             "attempts": attempts,
         },
     )
