@@ -8,10 +8,9 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
-
 from source.assets import DEX_HAND_XML_PATH
 from source.grasping.mesh_pointcloud import TriangleMesh
+from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
 
 
 @dataclass(frozen=True)
@@ -63,9 +62,9 @@ def load_posed_dex_hand_surface(
     seed: int = 0,
     xml_path: str | Path = DEX_HAND_XML_PATH,
 ) -> PosedDexHandSurface:
-    """Resolve the closed linkage once and return STL vertices in hand-root space.
+    """Settle the underactuated tendons and return STL vertices in hand-root space.
 
-    MuJoCo is used only as the MJCF closed-chain kinematics resolver here. The
+    MuJoCo resolves the passive spring/tendon equilibrium here. The
     returned arrays are plain NumPy data; the subsequent search has no simulator.
     """
     if max_points_per_geom <= 0:
@@ -87,14 +86,14 @@ def load_posed_dex_hand_surface(
         values[index] = low + fractions[index] * (high - low)
         data.ctrl[actuator_id] = values[index]
 
-    # Let position actuators and equality constraints resolve the passive links.
+    # Let tendon actuators and passive joint springs settle to equilibrium.
     with capture_mujoco_warnings() as warnings:
         for step in range(600):
             checked_mj_step(
                 model,
                 data,
                 warnings,
-                phase="Dex Hand closed-chain surface solve",
+                phase="Dex Hand underactuated surface solve",
                 step=step + 1,
             )
 

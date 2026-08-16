@@ -192,7 +192,7 @@ def _render_migration(output_dir: Path) -> Path:
     )
     ax.add_patch(panel)
     ax.text(9.23, 3.45, "迁移后的目标", ha="center", fontsize=18, fontweight="bold", color=TEAL)
-    ax.text(9.23, 2.65, "闭链 Dex Hand", ha="center", fontsize=17, color=DARK)
+    ax.text(9.23, 2.65, "欠驱动 Dex Hand", ha="center", fontsize=17, color=DARK)
     ax.text(9.23, 2.05, "真实接触动力学", ha="center", fontsize=17, color=DARK)
     ax.text(9.23, 1.45, "127种物体统一测试", ha="center", fontsize=17, color=DARK)
     return _save(fig, output_dir, "02_method_migration.png")
@@ -203,7 +203,7 @@ def _render_graspqp_adapter(output_dir: Path) -> Path:
     ax.text(
         6,
         4.55,
-        "GraspQP 与闭链 Dex Hand 适配",
+        "GraspQP 与欠驱动 Dex Hand 适配",
         ha="center",
         fontsize=23,
         fontweight="bold",
@@ -219,7 +219,7 @@ def _render_graspqp_adapter(output_dir: Path) -> Path:
     ax.text(2.0, 1.05, "接触点 + 法向 + 摩擦锥", ha="center", fontsize=14, color=BLUE)
     _box(ax, 4.15, 2.05, 2.15, 1.0, "6个执行器", NAVY)
     _arrow(ax, (3.05, 2.5), (4.05, 2.5), GRAY)
-    _box(ax, 7.05, 2.05, 2.15, 1.0, "MuJoCo\n闭链求解", TEAL)
+    _box(ax, 7.05, 2.05, 2.15, 1.0, "MuJoCo\n肌腱平衡", TEAL)
     _arrow(ax, (6.32, 2.5), (6.95, 2.5))
     _box(ax, 9.85, 2.05, 1.8, 1.0, "位置与\nJacobian", ORANGE)
     _arrow(ax, (9.22, 2.5), (9.75, 2.5))

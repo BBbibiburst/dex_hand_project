@@ -1,7 +1,7 @@
 """UltraDexGrasp-style demonstration generation for RM75B + Dex Hand.
 
 The package is deliberately independent from ``source.grasping``.  It uses a
-MuJoCo-calibrated differentiable model of the closed-chain hand, gradient-based
+MuJoCo-calibrated differentiable model of the underactuated tendon hand, gradient-based
 grasp synthesis, and a planning/execution stage that emits complete episodes.
 """
 

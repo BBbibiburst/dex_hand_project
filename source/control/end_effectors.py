@@ -59,6 +59,11 @@ class EndEffectorPositionController:
     def qpos_addrs(self) -> np.ndarray:
         if self._qpos_addrs is None:
             raise RuntimeError("EndEffectorPositionController.bind() must be called first.")
+        if np.any(self._qpos_addrs < 0):
+            raise RuntimeError(
+                "This end-effector includes non-joint actuator transmissions; "
+                "use current_position() to read its actuator coordinates."
+            )
         return self._qpos_addrs
 
     @property
@@ -74,7 +79,6 @@ class EndEffectorPositionController:
         return self._ctrl_high
 
     def bind(self, model: mujoco.MjModel, data: mujoco.MjData) -> None:
-        _ = data
         if self.action_size == 0:
             self._actuator_ids = np.zeros(0, dtype=np.int32)
             self._qpos_addrs = np.zeros(0, dtype=np.int32)
@@ -88,8 +92,22 @@ class EndEffectorPositionController:
             self.actuator_names,
             owner=f"{self.hand_descriptor.name} controller",
         )
-        joint_ids = model.actuator_trnid[self._actuator_ids, 0].astype(np.int32)
-        self._qpos_addrs = model.jnt_qposadr[joint_ids].astype(np.int32)
+        transmission_types = model.actuator_trntype[self._actuator_ids]
+        joint_transmissions = np.isin(
+            transmission_types,
+            (
+                int(mujoco.mjtTrn.mjTRN_JOINT),
+                int(mujoco.mjtTrn.mjTRN_JOINTINPARENT),
+            ),
+        )
+        self._qpos_addrs = np.full(self.action_size, -1, dtype=np.int32)
+        if np.any(joint_transmissions):
+            joint_ids = model.actuator_trnid[
+                self._actuator_ids[joint_transmissions], 0
+            ].astype(np.int32)
+            self._qpos_addrs[joint_transmissions] = model.jnt_qposadr[joint_ids].astype(
+                np.int32
+            )
         ctrlrange = model.actuator_ctrlrange[self._actuator_ids].astype(np.float32)
         self._ctrl_low = ctrlrange[:, 0].copy()
         self._ctrl_high = ctrlrange[:, 1].copy()
@@ -112,7 +130,12 @@ class EndEffectorPositionController:
             }
 
         if self.reset_to_current_position:
-            target = np.clip(data.qpos[self.qpos_addrs], self.ctrl_low, self.ctrl_high)
+            mujoco.mj_forward(model, data)
+            target = np.clip(
+                self.current_position(model, data),
+                self.ctrl_low,
+                self.ctrl_high,
+            )
         else:
             target = np.clip(
                 np.zeros(self.action_size, dtype=np.float32),
@@ -147,6 +170,18 @@ class EndEffectorPositionController:
         if self.action_size == 0:
             return np.zeros(0, dtype=np.float32)
         return data.ctrl[self.actuator_ids].astype(np.float32).copy()
+
+    def current_position(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
+        """Return measured actuator coordinates in the same units as ``ctrl``.
+
+        ``actuator_length`` is the correct generalized coordinate for both
+        joint and tendon transmissions.  Reading ``qpos`` through
+        ``actuator_trnid`` is only valid for direct joint actuators.
+        """
+        _ = model
+        if self.action_size == 0:
+            return np.zeros(0, dtype=np.float32)
+        return data.actuator_length[self.actuator_ids].astype(np.float32).copy()
 
     def action_layout(self) -> tuple[str, ...]:
         return self.local_action_names if self.include_action else ()

@@ -1,9 +1,9 @@
-"""Differentiable surrogate for the six-drive closed-chain Dex Hand.
+"""Differentiable surrogate for the six-drive underactuated Dex Hand.
 
-The original hand URDF exposes passive linkage joints as independent joints,
-which makes it invalid for BODex's serial-tree optimizer.  This module instead
-samples the authoritative MuJoCo closed-chain model and fits smooth polynomial
-pad/surface trajectories as functions of the six physical actuator fractions.
+The hand has twelve passive/active joint coordinates coupled by six tendons,
+which does not map directly to BODex's independently actuated serial joints.
+This module samples the authoritative MuJoCo tendon model and fits smooth
+polynomial pad trajectories as functions of the six physical drive fractions.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_HAND_XML = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "dex_hand.xml"
-SURROGATE_SCHEMA_VERSION = 1
+SURROGATE_SCHEMA_VERSION = 2
 ACTUATOR_NAMES = (
     "act_push_0_j",
     "act_push_1_j",
@@ -61,8 +61,15 @@ def _transform_geom_points(
     return local_points @ rotation.T + np.asarray(data.geom_xpos[geom_id], dtype=np.float64)
 
 
-def _thumb_powers(values: np.ndarray, degree: int) -> tuple[np.ndarray, tuple[tuple[int, int], ...]]:
-    terms = tuple((i, j) for total in range(degree + 1) for i in range(total + 1) for j in [total - i])
+def _thumb_powers(
+    values: np.ndarray,
+    degree: int,
+) -> tuple[np.ndarray, tuple[tuple[int, int], ...]]:
+    terms = tuple(
+        (i, total - i)
+        for total in range(degree + 1)
+        for i in range(total + 1)
+    )
     matrix = np.stack(
         [(values[:, 0] ** i) * (values[:, 1] ** j) for i, j in terms],
         axis=1,
@@ -290,7 +297,11 @@ def calibrate_dex_hand_surrogate(
         squared_errors.extend(np.square(predicted - targets).reshape(-1).tolist())
 
     thumb_grid = np.asarray(
-        [(rotate, grasp) for rotate in np.linspace(0.0, 1.0, thumb_samples) for grasp in np.linspace(0.0, 1.0, thumb_samples)],
+        [
+            (rotate, grasp)
+            for rotate in np.linspace(0.0, 1.0, thumb_samples)
+            for grasp in np.linspace(0.0, 1.0, thumb_samples)
+        ],
         dtype=np.float64,
     )
     thumb_design, thumb_terms = _thumb_powers(thumb_grid, thumb_degree)
@@ -312,7 +323,10 @@ def calibrate_dex_hand_surrogate(
     if palm_points is None:
         raise RuntimeError("Dex Hand calibration produced no palm sample.")
     contact_offsets = np.asarray(
-        [len(palm_points) + digit * points_per_geom * 3 + points_per_geom * 2 for digit in range(5)],
+        [
+            len(palm_points) + digit * points_per_geom * 3 + points_per_geom * 2
+            for digit in range(5)
+        ],
         dtype=np.int64,
     )
     return DexHandSurrogate(

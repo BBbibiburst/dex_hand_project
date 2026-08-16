@@ -126,6 +126,7 @@ def _configure_solver(spec: mujoco.MjSpec) -> None:
     spec.option.timestep = 0.001
     spec.option.solver = mujoco.mjtSolver.mjSOL_NEWTON
     spec.option.iterations = 100
+    spec.option.cone = mujoco.mjtCone.mjCONE_ELLIPTIC
 
 
 def build_robot_spec(

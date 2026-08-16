@@ -113,9 +113,8 @@ class TeleopMapper:
         # Device and dex-hand conventions both use 0=open and 1=flexed.
         if self.glove_inverted:
             hand = 1.0 - hand
-        # The linkage moves much more visibly in the first part of its pushrod
-        # travel. Shape flexion commands so the operator gets finer control
-        # near the open pose and more useful travel in the second half.
+        # Shape tendon travel so the operator gets finer control near the open
+        # pose and more useful flexion authority in the second half.
         linear_hand = hand.copy()
         hand = hand.copy()
         hand[[0, 1, 2, 3, 5]] = np.power(hand[[0, 1, 2, 3, 5]], self.finger_curve_gamma)

@@ -1,4 +1,4 @@
-"""Closed-chain end-effector geometry extraction and shape sampling."""
+"""Underactuated end-effector geometry extraction and shape sampling."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ import mujoco
 import numpy as np
 
 from source.grasping.mujoco_safety import capture_mujoco_warnings, checked_mj_step
-from source.grasping.search.common import progress
 from source.grasping.search.types import Device, Surface
+
 
 def mesh_vertices(model: mujoco.MjModel, mesh_id: int) -> np.ndarray:
     start, count = int(model.mesh_vertadr[mesh_id]), int(model.mesh_vertnum[mesh_id])

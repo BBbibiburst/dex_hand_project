@@ -9,9 +9,9 @@ from pathlib import Path
 
 import mujoco
 import numpy as np
+import trimesh
 from scipy.spatial import cKDTree
 from scipy.spatial.transform import Rotation
-import trimesh
 
 from source.geometry import mat_to_quat
 from source.grasping.constants import (
@@ -567,13 +567,16 @@ class LiftStrategy(TaskStrategy):
     @staticmethod
     def _hand_qpos(env) -> np.ndarray:
         hand = env.controller.hand_controller
-        joint_positions = np.asarray(env.data.qpos[hand.qpos_addrs], dtype=np.float64)
+        actuator_positions = np.asarray(
+            hand.current_position(env.model, env.data),
+            dtype=np.float64,
+        )
         if env.hand_descriptor.name == "pika_gripper":
             return np.asarray(
-                hand._joint_target_to_opening(joint_positions),
+                hand._joint_target_to_opening(actuator_positions),
                 dtype=np.float64,
             )
-        return joint_positions
+        return actuator_positions
 
     @staticmethod
     def _distal_centers(env) -> tuple[np.ndarray, np.ndarray]:

@@ -1,4 +1,4 @@
-"""Native UltraDexGrasp-style optimizer for the closed-chain Dex Hand.
+"""Native UltraDexGrasp-style optimizer for the underactuated Dex Hand.
 
 The optimizer deliberately uses the six physical hand drives rather than a
 serial-joint approximation. It combines a MuJoCo-calibrated differentiable

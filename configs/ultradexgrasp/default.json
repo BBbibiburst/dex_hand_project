@@ -2,7 +2,7 @@
   "schema_version": 1,
   "target_size": 0.09,
   "surface_points": 2048,
-  "surrogate_cache": "configs/ultradexgrasp/cache/dex_hand_surrogate.npz",
+  "surrogate_cache": "configs/ultradexgrasp/cache/dex_hand_surrogate_adaptive_v2.npz",
   "surrogate": {
     "points_per_geom": 12,
     "finger_samples": 15,
