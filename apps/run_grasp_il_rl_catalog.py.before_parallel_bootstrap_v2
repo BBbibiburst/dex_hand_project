@@ -1,14 +1,11 @@
 """End-to-end successful-demo BC -> parallel BC-guided residual RL catalogue sweep.
 
 Pipeline:
-  reuse any surviving validated trajectories -> if needed rebuild a bootstrap
-  pool of successful experts in parallel across GPUs -> hand behavior cloning ->
-  BC-guided stage-curriculum arm+hand residual PPO -> authoritative C MuJoCo replay.
+  validated successful trajectories -> hand behavior cloning -> BC-guided
+  stage-curriculum arm+hand residual PPO -> authoritative C MuJoCo replay.
 
-The runner works even when the old benchmark trajectories were deleted.  A stale
-benchmark summary is treated only as a priority hint for bootstrap scheduling.
-Both bootstrap search and the final catalogue sweep are resumable and assign each
-subprocess to a fixed CUDA_VISIBLE_DEVICES slot.
+The runner is resumable at object granularity and assigns each subprocess to a
+fixed CUDA_VISIBLE_DEVICES slot, making it suitable for multi-GPU servers.
 """
 from __future__ import annotations
 
@@ -74,34 +71,6 @@ def _resolve_path(value: str | Path, *, base: Path) -> Path:
     return path if path.is_absolute() else (base / path).resolve()
 
 
-def _gpu_ids(spec: str) -> list[str]:
-    if spec.strip().lower() != "auto":
-        values = [item.strip() for item in spec.split(",") if item.strip()]
-        if not values:
-            raise ValueError("--gpus must contain at least one GPU id or 'auto'.")
-        return values
-
-    visible = os.environ.get("CUDA_VISIBLE_DEVICES", "").strip()
-    if visible and visible != "-1":
-        values = [item.strip() for item in visible.split(",") if item.strip()]
-        if values:
-            return values
-
-    try:
-        child = subprocess.run(
-            ["nvidia-smi", "--query-gpu=index", "--format=csv,noheader,nounits"],
-            text=True,
-            capture_output=True,
-            check=False,
-        )
-        values = [line.strip() for line in child.stdout.splitlines() if line.strip()]
-        if child.returncode == 0 and values:
-            return values
-    except OSError:
-        pass
-    return ["0"]
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -132,28 +101,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--bc-max-experts-per-object", type=int, default=4)
     parser.add_argument("--rebuild-bc", action="store_true")
     parser.add_argument(
-        "--bootstrap-experts",
-        type=int,
-        default=16,
-        help=(
-            "Minimum number of distinct expert objects required before BC. "
-            "Missing experts are rebuilt automatically in parallel; 0 disables rebuilding."
-        ),
-    )
-    parser.add_argument(
-        "--bootstrap-workers-per-gpu",
-        type=int,
-        default=1,
-        help="Concurrent bootstrap-search subprocesses per physical GPU.",
-    )
-    parser.add_argument("--bootstrap-num-envs", type=int, default=64)
-    parser.add_argument("--bootstrap-initial-updates", type=int, default=5)
-    parser.add_argument("--bootstrap-mid-updates", type=int, default=10)
-    parser.add_argument("--bootstrap-max-updates", type=int, default=15)
-    parser.add_argument("--bootstrap-base-candidates", type=int, default=3)
-    parser.add_argument("--bootstrap-lattice-max-templates", type=int, default=12)
-    parser.add_argument("--bootstrap-lattice-max-executions", type=int, default=32)
-    parser.add_argument(
         "--trust-rl-experts",
         action="store_true",
         help="Use RL_SUCCESS trajectories without re-validating them in classic MuJoCo.",
@@ -162,8 +109,8 @@ def build_parser() -> argparse.ArgumentParser:
     # Parallel RL workers.
     parser.add_argument(
         "--gpus",
-        default="auto",
-        help="'auto' uses every visible GPU; otherwise comma-separated physical GPU ids.",
+        default="0",
+        help="Comma-separated physical GPU ids, e.g. 0,1,2,3,4,5.",
     )
     parser.add_argument("--workers-per-gpu", type=int, default=1)
     parser.add_argument("--num-envs", type=int, default=512)
@@ -216,16 +163,10 @@ def _catalog(args: argparse.Namespace) -> list[str]:
 
 
 def _benchmark_rows(path: Path) -> dict[str, dict]:
-    # The old benchmark may survive after its trajectory directories were deleted.
-    # Treat it as a scheduling hint, never as proof that an expert still exists.
-    if not path.is_file():
-        print(f"[benchmark:missing] {path}; bootstrap will use catalogue order", flush=True)
-        return {}
     payload = _read_json(path)
     rows = payload.get("results", [])
     if not isinstance(rows, list):
-        print(f"[benchmark:invalid] {path}; bootstrap will use catalogue order", flush=True)
-        return {}
+        raise ValueError(f"Benchmark {path} has no results list.")
     return {
         str(row["object_id"]): dict(row)
         for row in rows
@@ -265,64 +206,11 @@ def _validate_expert(manifest: Path, *, trust_rl: bool) -> bool:
     return bool(result.success)
 
 
-def _expert_candidates_for_object(
-    object_id: str,
-    *,
-    benchmark_root: Path,
-    output_root: Path,
-    bootstrap_root: Path,
-    lattice_root: Path,
-    ultra_roots: tuple[Path, ...],
-) -> list[Path]:
-    """Return every currently materialized success candidate for one object."""
-    slug = _slug(object_id)
-    candidates: list[Path] = []
-
-    # Newly generated BC-guided success from a previous interrupted run.
-    candidates.append(output_root / "rl" / slug / "best_trajectory" / "manifest.json")
-    # Bootstrap grasp-edit success generated by this runner.
-    candidates.append(
-        bootstrap_root / "jobs" / slug / "benchmark" / "rl" / slug / "best_trajectory" / "manifest.json"
-    )
-    # Historical grasp-edit success, if it still exists.
-    candidates.append(benchmark_root / "rl" / slug / "best_trajectory" / "manifest.json")
-
-    for lattice in _lattice_rows(lattice_root, object_id):
-        if not bool(lattice.get("success")) or not lattice.get("manifest"):
-            continue
-        candidates.append(_resolve_path(lattice["manifest"], base=Path.cwd()))
-
-    try:
-        for manifest, episode in discover_ultra_attempts(
-            object_id,
-            roots=ultra_roots,
-            maximum=32,
-        ):
-            if episode.success:
-                candidates.append(Path(manifest))
-    except (FileNotFoundError, RuntimeError, ValueError):
-        pass
-
-    unique: list[Path] = []
-    seen: set[str] = set()
-    for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        key = str(candidate.resolve())
-        if key in seen:
-            continue
-        seen.add(key)
-        unique.append(candidate.resolve())
-    return unique
-
-
 def _discover_experts(
     *,
     benchmark: Path,
     rows: dict[str, dict],
     catalog: list[str],
-    output_root: Path,
-    bootstrap_root: Path,
     lattice_root: Path,
     ultra_roots: tuple[Path, ...],
     max_per_object: int,
@@ -335,332 +223,53 @@ def _discover_experts(
     expert_objects: set[str] = set()
 
     for object_id in catalog:
-        candidates = _expert_candidates_for_object(
-            object_id,
-            benchmark_root=benchmark_root,
-            output_root=output_root,
-            bootstrap_root=bootstrap_root,
-            lattice_root=lattice_root,
-            ultra_roots=ultra_roots,
-        )
-        accepted: list[Path] = []
+        row = rows.get(object_id, {})
+        if row.get("status") not in SUCCESS_SOURCE_STATUSES:
+            continue
+        candidates: list[Path] = []
+
+        rl_best = benchmark_root / "rl" / _slug(object_id) / "best_trajectory" / "manifest.json"
+        if rl_best.is_file():
+            candidates.append(rl_best.resolve())
+
+        for lattice in _lattice_rows(lattice_root, object_id):
+            if not bool(lattice.get("success")) or not lattice.get("manifest"):
+                continue
+            manifest = _resolve_path(lattice["manifest"], base=Path.cwd())
+            if manifest.is_file():
+                candidates.append(manifest)
+
+        try:
+            for manifest, episode in discover_ultra_attempts(
+                object_id,
+                roots=ultra_roots,
+                maximum=max(8, max_per_object),
+            ):
+                if episode.success:
+                    candidates.append(Path(manifest))
+        except (FileNotFoundError, RuntimeError, ValueError):
+            pass
+
+        unique: list[Path] = []
+        seen: set[str] = set()
         for candidate in candidates:
+            key = str(candidate.resolve())
+            if key in seen:
+                continue
+            seen.add(key)
             if _validate_expert(candidate, trust_rl=trust_rl):
-                accepted.append(candidate)
-            if len(accepted) >= max_per_object:
+                unique.append(candidate.resolve())
+            if len(unique) >= max_per_object:
                 break
-        if accepted:
-            experts.extend(accepted)
+        if unique:
+            experts.extend(unique)
             expert_objects.add(object_id)
-            print(f"[expert] object={object_id} trajectories={len(accepted)}", flush=True)
-        elif rows.get(object_id, {}).get("status") in SUCCESS_SOURCE_STATUSES:
-            # A stale summary claiming success is useful for scheduling, but not
-            # enough for BC because the actual episode/trajectory may have been deleted.
-            print(
-                f"[expert:stale] object={object_id} "
-                f"old_status={rows.get(object_id, {}).get('status')} artifacts=missing",
-                flush=True,
-            )
-    return experts, expert_objects
+            print(f"[expert] object={object_id} trajectories={len(unique)}", flush=True)
+        else:
+            print(f"[expert:missing] object={object_id} status={row.get('status')}", flush=True)
 
-
-def _bootstrap_priority(
-    catalog: list[str],
-    rows: dict[str, dict],
-    expert_objects: set[str],
-) -> list[str]:
-    """Prioritize objects that were historically easiest, then fall back to all 127."""
-    status_rank = {
-        "ULTRA_SUCCESS": 0,
-        "LATTICE_SUCCESS": 1,
-        "RL_SUCCESS": 2,
-        "RL_PROMISING": 3,
-        "DIRECT_FAILED": 4,
-        "NO_REACHABLE_TEMPLATE": 5,
-        "NO_ULTRA_PRIOR": 6,
-        "PIPELINE_ERROR": 7,
-    }
-    order = {object_id: index for index, object_id in enumerate(catalog)}
-
-    def lift_hint(row: dict) -> float:
-        values = (
-            row.get("rl_best_final_lift_mm"),
-            row.get("rl_best_lift_mm"),
-            row.get("lattice_best_lift_mm"),
-            row.get("ultra_best_final_lift_mm"),
-            row.get("ultra_best_lift_mm"),
-        )
-        parsed = []
-        for value in values:
-            try:
-                parsed.append(float(value or 0.0))
-            except (TypeError, ValueError):
-                parsed.append(0.0)
-        return max(parsed, default=0.0)
-
-    selected = [item for item in catalog if item not in expert_objects]
-    selected.sort(
-        key=lambda object_id: (
-            status_rank.get(str(rows.get(object_id, {}).get("status", "")), 8),
-            -lift_hint(rows.get(object_id, {})),
-            order[object_id],
-        )
-    )
-    return selected
-
-
-def _bootstrap_job(
-    object_id: str,
-    *,
-    gpu: str,
-    args: argparse.Namespace,
-    bootstrap_root: Path,
-    ultra_roots: tuple[Path, ...],
-) -> dict[str, Any]:
-    """Re-run the proven Ultra->lattice->adaptive grasp-edit search for one object."""
-    slug = _slug(object_id)
-    job_root = bootstrap_root / "jobs" / slug
-    benchmark_output = job_root / "benchmark"
-    result_path = job_root / "expert_result.json"
-    log_path = bootstrap_root / "logs" / f"{slug}.log"
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    job_root.mkdir(parents=True, exist_ok=True)
-
-    cached = _read_json(result_path)
-    cached_manifest = Path(str(cached.get("manifest", ""))) if cached.get("manifest") else None
-    if cached and not args.force:
-        if cached_manifest is not None and cached_manifest.is_file():
-            if _validate_expert(cached_manifest, trust_rl=args.trust_rl_experts):
-                return dict(cached) | {"cached": True, "gpu": gpu, "log": str(log_path)}
-        elif cached.get("status") in {"NO_EXPERT", "ERROR"} and not args.retry_failed:
-            return dict(cached) | {"cached": True, "gpu": gpu, "log": str(log_path)}
-
-    env = os.environ.copy()
-    env["CUDA_VISIBLE_DEVICES"] = gpu
-    env["PYTHONUNBUFFERED"] = "1"
-    command = [
-        sys.executable,
-        "-m",
-        "tools.grasping.batch_grasp_edit",
-        "--object-id",
-        object_id,
-        "--expect-count",
-        "0",
-        "--output",
-        str(benchmark_output),
-        "--num-envs",
-        str(args.bootstrap_num_envs),
-        "--initial-updates",
-        str(args.bootstrap_initial_updates),
-        "--mid-updates",
-        str(args.bootstrap_mid_updates),
-        "--max-updates",
-        str(args.bootstrap_max_updates),
-        "--device",
-        "cuda:0",
-        "--ultra-seed-count",
-        str(args.ultra_seed_count),
-        "--ultra-generate-seeds",
-        str(args.ultra_generate_seeds),
-        "--ultra-max-execution-candidates",
-        str(args.ultra_max_execution_candidates),
-        "--base-candidates",
-        str(args.bootstrap_base_candidates),
-        "--lattice-max-templates",
-        str(args.bootstrap_lattice_max_templates),
-        "--lattice-max-executions",
-        str(args.bootstrap_lattice_max_executions),
-    ]
-    for ultra_root in ultra_roots:
-        command.extend(["--ultra-root", str(ultra_root)])
-
-    # If this job was previously classified from files that are now missing,
-    # bypass its per-object benchmark cache and rebuild the actual trajectory.
-    stale_job = (benchmark_output / "summary.json").is_file() and (
-        cached_manifest is None or not cached_manifest.is_file()
-    )
-    if args.force or stale_job:
-        command.append("--force")
-
-    started = time.perf_counter()
-    with log_path.open("a", encoding="utf-8") as log:
-        log.write(f"\n=== bootstrap object={object_id} gpu={gpu} started={_utc_now()} ===\n")
-        log.write(f"[command] {' '.join(command)}\n")
-        log.flush()
-        child = subprocess.run(
-            command,
-            stdout=log,
-            stderr=subprocess.STDOUT,
-            env=env,
-            check=False,
-        )
-
-    candidates = _expert_candidates_for_object(
-        object_id,
-        benchmark_root=benchmark_output,
-        output_root=args.output,
-        bootstrap_root=bootstrap_root,
-        lattice_root=args.lattice_root,
-        ultra_roots=ultra_roots,
-    )
-    accepted = [
-        path
-        for path in candidates
-        if _validate_expert(path, trust_rl=args.trust_rl_experts)
-    ][: args.bc_max_experts_per_object]
-    summary = _read_json(benchmark_output / "summary.json")
-    rows = summary.get("results", []) if isinstance(summary.get("results", []), list) else []
-    old_status = rows[0].get("status") if rows else ""
-    result = {
-        "schema_version": 1,
-        "object_id": object_id,
-        "status": "EXPERT_READY" if accepted else "NO_EXPERT",
-        "pipeline_status": old_status,
-        "manifest": str(accepted[0]) if accepted else "",
-        "manifests": [str(path) for path in accepted],
-        "gpu": gpu,
-        "log": str(log_path),
-        "return_code": int(child.returncode),
-        "runtime_sec": round(time.perf_counter() - started, 3),
-    }
-    _atomic_json(result_path, result)
-    return result
-
-
-def _parallel_bootstrap_experts(
-    *,
-    experts: list[Path],
-    expert_objects: set[str],
-    catalog: list[str],
-    rows: dict[str, dict],
-    gpu_ids: list[str],
-    args: argparse.Namespace,
-    bootstrap_root: Path,
-    ultra_roots: tuple[Path, ...],
-) -> tuple[list[Path], set[str]]:
-    target = min(max(0, int(args.bootstrap_experts)), len(catalog))
-    if target <= len(expert_objects):
-        print(
-            f"[bootstrap:skip] expert_objects={len(expert_objects)} target={target}",
-            flush=True,
-        )
-        return experts, expert_objects
-    if target == 0:
-        return experts, expert_objects
-    if args.bootstrap_workers_per_gpu <= 0 or args.bootstrap_num_envs <= 0:
-        raise ValueError("bootstrap-workers-per-gpu and bootstrap-num-envs must be positive.")
-    if not (
-        0 < args.bootstrap_initial_updates
-        <= args.bootstrap_mid_updates
-        <= args.bootstrap_max_updates
-    ):
-        raise ValueError(
-            "Require 0 < bootstrap-initial-updates <= bootstrap-mid-updates <= bootstrap-max-updates."
-        )
-
-    candidates = _bootstrap_priority(catalog, rows, expert_objects)
-    slots = [gpu for gpu in gpu_ids for _ in range(args.bootstrap_workers_per_gpu)]
-    print(
-        f"[bootstrap] need={target - len(expert_objects)} target={target} "
-        f"candidates={len(candidates)} gpu_slots={slots} envs/job={args.bootstrap_num_envs} "
-        f"budget={args.bootstrap_initial_updates}->{args.bootstrap_mid_updates}->"
-        f"{args.bootstrap_max_updates}",
-        flush=True,
-    )
-
-    if args.dry_run:
-        for index, object_id in enumerate(candidates[: max(target * 2, len(slots))], 1):
-            print(
-                f"[bootstrap:plan {index:03d}] object={object_id} "
-                f"old_status={rows.get(object_id, {}).get('status', '')}",
-                flush=True,
-            )
-        return experts, expert_objects
-
-    work: queue.Queue[str] = queue.Queue()
-    for object_id in candidates:
-        work.put(object_id)
-    lock = threading.Lock()
-    path_keys = {str(path.resolve()) for path in experts if path.is_file()}
-    attempted: dict[str, dict] = {}
-
-    def persist_bootstrap() -> None:
-        _atomic_json(
-            bootstrap_root / "summary.json",
-            {
-                "schema_version": 1,
-                "updated_at": _utc_now(),
-                "target_expert_objects": target,
-                "expert_objects": len(expert_objects),
-                "expert_trajectories": len(experts),
-                "results": [attempted[key] for key in catalog if key in attempted],
-            },
-        )
-
-    def worker(gpu: str) -> None:
-        while True:
-            with lock:
-                if len(expert_objects) >= target:
-                    return
-            try:
-                object_id = work.get_nowait()
-            except queue.Empty:
-                return
-            try:
-                result = _bootstrap_job(
-                    object_id,
-                    gpu=gpu,
-                    args=args,
-                    bootstrap_root=bootstrap_root,
-                    ultra_roots=ultra_roots,
-                )
-            except Exception as exc:
-                result = {
-                    "object_id": object_id,
-                    "status": "ERROR",
-                    "gpu": gpu,
-                    "error": f"{type(exc).__name__}: {exc}",
-                }
-
-            with lock:
-                attempted[object_id] = result
-                for value in result.get("manifests", []):
-                    path = Path(value)
-                    if not path.is_file():
-                        continue
-                    key = str(path.resolve())
-                    if key not in path_keys:
-                        path_keys.add(key)
-                        experts.append(path.resolve())
-                if result.get("status") == "EXPERT_READY":
-                    expert_objects.add(object_id)
-                persist_bootstrap()
-                print(
-                    f"[bootstrap:done] object={object_id:<34} "
-                    f"status={result.get('status'):<12} gpu={gpu} "
-                    f"experts={len(expert_objects)}/{target} "
-                    f"runtime={float(result.get('runtime_sec', 0.0) or 0.0):.1f}s",
-                    flush=True,
-                )
-            work.task_done()
-
-    threads = [threading.Thread(target=worker, args=(gpu,), daemon=False) for gpu in slots]
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
-
-    persist_bootstrap()
-    if len(expert_objects) < target:
-        raise RuntimeError(
-            f"Parallel bootstrap exhausted the catalogue with only {len(expert_objects)}/{target} "
-            f"validated expert objects. Inspect {bootstrap_root / 'summary.json'} and logs."
-        )
-    print(
-        f"[bootstrap:ready] expert_objects={len(expert_objects)} "
-        f"expert_trajectories={len(experts)}",
-        flush=True,
-    )
+    if not experts:
+        raise RuntimeError("No validated expert trajectories were discovered from the benchmark.")
     return experts, expert_objects
 
 
@@ -739,16 +348,13 @@ def _best_reference(
     object_id: str,
     *,
     benchmark_root: Path,
-    bootstrap_root: Path,
     primitive_root: Path,
     lattice_root: Path,
     ultra_roots: tuple[Path, ...],
 ) -> Path | None:
-    slug = _slug(object_id)
     direct = (
-        primitive_root / slug / "best_attempt" / "manifest.json",
-        bootstrap_root / "jobs" / slug / "benchmark" / "rl" / slug / "best_attempt" / "manifest.json",
-        benchmark_root / "rl" / slug / "best_attempt" / "manifest.json",
+        primitive_root / _slug(object_id) / "best_attempt" / "manifest.json",
+        benchmark_root / "rl" / _slug(object_id) / "best_attempt" / "manifest.json",
     )
     for path in direct:
         if path.is_file():
@@ -848,7 +454,6 @@ def _run_object(
         reference = _best_reference(
             object_id,
             benchmark_root=args.benchmark.parent,
-            bootstrap_root=args.output / "bootstrap",
             primitive_root=args.primitive_root,
             lattice_root=args.lattice_root,
             ultra_roots=ultra_roots,
@@ -864,7 +469,6 @@ def _run_object(
             reference = _best_reference(
                 object_id,
                 benchmark_root=args.benchmark.parent,
-                bootstrap_root=args.output / "bootstrap",
                 primitive_root=args.primitive_root,
                 lattice_root=args.lattice_root,
                 ultra_roots=ultra_roots,
@@ -995,68 +599,32 @@ def _write_summary(output: Path, catalog: list[str], rows: dict[str, dict]) -> N
 def run(args: argparse.Namespace) -> int:
     if args.workers_per_gpu <= 0 or args.num_envs <= 0 or args.updates <= 0:
         raise ValueError("workers-per-gpu, num-envs and updates must be positive.")
-    if args.bootstrap_experts < 0:
-        raise ValueError("--bootstrap-experts must be >= 0.")
-    if min(
-        args.bootstrap_base_candidates,
-        args.bootstrap_lattice_max_templates,
-        args.bootstrap_lattice_max_executions,
-    ) <= 0:
-        raise ValueError("bootstrap lattice/search counts must be positive.")
-    gpu_ids = _gpu_ids(args.gpus)
-    print(f"[gpu] selected={gpu_ids} source={args.gpus}", flush=True)
+    gpu_ids = [item.strip() for item in args.gpus.split(",") if item.strip()]
+    if not gpu_ids:
+        raise ValueError("--gpus must contain at least one GPU id.")
     args.output.mkdir(parents=True, exist_ok=True)
     catalog = _catalog(args)
     benchmark_rows = _benchmark_rows(args.benchmark)
-    bootstrap_root = args.output / "bootstrap"
-    bootstrap_ultra_root = bootstrap_root / "ultra"
-    configured_ultra_roots = (
+    ultra_roots = (
         tuple(args.ultra_roots)
         if args.ultra_roots
         else (Path("outputs/ultradexgrasp"), Path("outputs/ultradexgrasp_catalog"))
-    )
-    # Put the runner-owned root first so every newly generated prior is kept under
-    # the resumable output tree rather than scattered into a deleted old output.
-    ultra_roots_list = [bootstrap_ultra_root, *configured_ultra_roots]
-    ultra_roots: tuple[Path, ...] = tuple(
-        dict.fromkeys(Path(path) for path in ultra_roots_list)
     )
 
     experts, expert_objects = _discover_experts(
         benchmark=args.benchmark,
         rows=benchmark_rows,
         catalog=catalog,
-        output_root=args.output,
-        bootstrap_root=bootstrap_root,
         lattice_root=args.lattice_root,
         ultra_roots=ultra_roots,
         max_per_object=args.bc_max_experts_per_object,
         trust_rl=args.trust_rl_experts,
     )
     print(
-        f"[prepare] catalogue={len(catalog)} existing_expert_objects={len(expert_objects)} "
+        f"[prepare] catalogue={len(catalog)} expert_objects={len(expert_objects)} "
         f"expert_trajectories={len(experts)}",
         flush=True,
     )
-
-    experts, expert_objects = _parallel_bootstrap_experts(
-        experts=experts,
-        expert_objects=expert_objects,
-        catalog=catalog,
-        rows=benchmark_rows,
-        gpu_ids=gpu_ids,
-        args=args,
-        bootstrap_root=bootstrap_root,
-        ultra_roots=ultra_roots,
-    )
-    if args.dry_run:
-        print("[done] dry-run stops before BC training and catalogue RL.", flush=True)
-        return 0
-    if not experts:
-        raise RuntimeError(
-            "No validated experts are available for BC. Set --bootstrap-experts to a positive "
-            "value or restore at least one successful trajectory."
-        )
     bc_checkpoint = _prepare_bc(experts, args)
     if args.prepare_only:
         print(f"[done] prepare-only bc={bc_checkpoint}", flush=True)
