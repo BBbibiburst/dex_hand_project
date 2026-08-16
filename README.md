@@ -139,6 +139,10 @@ python -m tools.grasping.batch_grasp_edit \
   --ultra-root outputs/dex_hand_ppo127/ultra \
   --lattice-root outputs/dex_hand_ppo127/lattice \
   --device cuda:0 \
+  --gpus auto \
+  --workers-per-gpu auto \
+  --gpu-jobs-per-gpu auto \
+  --ppo-jobs-per-gpu auto \
   --num-envs 64 \
   --initial-updates 5 \
   --mid-updates 10 \
@@ -149,6 +153,10 @@ python -m tools.grasping.batch_grasp_edit \
   --train-ultra-success \
   --train-lattice-success
 ```
+
+自动调度会根据可见 GPU、空闲显存、启动利用率、环境数和 CPU 核数，为单卡或多卡分配对象
+worker；24 GB GPU 配合 64 个环境时通常采用同卡双流水线，让 Ultra/CPU 工作与单路满载 PPO
+重叠，并输出动态 ETA。详细资源规则见 `docs/PIPELINE.md`。
 
 移除最后两个 `--train-*-success` 参数后，流水线会在 Ultra 或 Lattice 已成功时提前停止，
 只把尚未解决的对象交给 PPO。中断后使用相同参数重新运行即可继续。

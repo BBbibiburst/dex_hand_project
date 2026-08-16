@@ -135,7 +135,11 @@ Pilot 应满足：没有 traceback、CUDA OOM、NaN、MJWarp capacity overflow �
 
 ## 127 对象全量运行
 
-以下参数适合单张 24 GB GPU。显存不足时把 `--num-envs` 降为 32：
+以下参数适合单张 24 GB GPU。调度器会读取 `CUDA_VISIBLE_DEVICES`、GPU 空闲显存、启动时
+利用率和 CPU 核心数；在空闲的 24 GB 3090、`--num-envs 64` 下通常会选择两个对象 worker
+和两个通用 GPU 任务槽，使低占用 Ultra、CPU Wrist Lattice 与 PPO 在对象间形成流水线。
+实测 64-env PPO 会达到 100% GPU 利用率，因此默认仍只允许一个 PPO；显存紧张或启动时 GPU
+已高负载时，通用 GPU 槽也会自动退回一个。显存不足时可把 `--num-envs` 降为 32：
 
 ```bash
 MUJOCO_GL=egl \
@@ -148,6 +152,10 @@ python -m tools.grasping.batch_grasp_edit \
   --ultra-root outputs/dex_hand_ppo127/ultra \
   --lattice-root outputs/dex_hand_ppo127/lattice \
   --device cuda:0 \
+  --gpus auto \
+  --workers-per-gpu auto \
+  --gpu-jobs-per-gpu auto \
+  --ppo-jobs-per-gpu auto \
   --num-envs 64 \
   --initial-updates 5 \
   --mid-updates 10 \
@@ -156,13 +164,33 @@ python -m tools.grasping.batch_grasp_edit \
   --lattice-max-templates 12 \
   --lattice-max-executions 32 \
   --train-ultra-success \
-  --train-lattice-success
+  --train-lattice-success \
+  2>&1 | tee -a outputs/dex_hand_ppo127/console.log
 ```
+
+多卡时只需扩大可见设备，例如 `CUDA_VISIBLE_DEVICES=0,1`；`--gpus auto` 会为每张卡建立
+独立槽位。自动模式最多给每张卡两个 worker/两个通用 GPU 任务，避免为了追求并发无限增加
+进程。`--ppo-jobs-per-gpu auto` 会把满算力 PPO 限制为一路，但不阻止另一个 worker 同时执行
+Ultra；只有在实测双 PPO 能提高总吞吐时才建议把它显式改为 `2`。
+
+启动和每个对象完成时都会打印资源计划与动态 ETA：
+
+```text
+[resource] gpu=0 workers=2 gpu_jobs=2 ppo_jobs=1 estimated_worker=2.0GiB memory=free=22.0/24.0GiB ...
+[estimate] cached=5 pending=122 samples=5 avg=7m07s/object workers=2 gpu_parallelism=1 eta=14h28m
+```
+
+启动时 ETA 使用当前签名下已完成对象的实际 `runtime_sec` 均值，并除以真正允许并发的 GPU
+PPO 阶段数，所以预热前会偏保守。所有 worker 至少完成一个对象后，ETA 会切换为本轮墙钟
+吞吐率，从而把 Ultra/PPO 重叠带来的单卡加速计入估计。前几个对象差异较大时仍只是粗估，
+样本增加后会自动收敛。相同信息写入
+`summary.json.progress` 和 `summary.json.resource_plan`。
 
 两个 `--train-*-success` 参数用于压力测试：即使 Ultra 或 Lattice 已经成功，只要模板可用，
 仍然运行 PPO。正常的分层生产流程应移除这两个参数，让已经解决的对象提前退出。
 
-任务被中断时，使用完全相同的参数重新运行。匹配的每对象结果会被自动复用。
+任务被中断时，使用完全相同的语义参数重新运行。GPU 数量和 worker 数只影响调度，不会让
+已经完成且签名匹配的每对象结果失效。
 
 ## 结果状态
 
