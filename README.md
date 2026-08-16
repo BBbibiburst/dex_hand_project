@@ -164,6 +164,26 @@ worker；24 GB GPU 配合 64 个环境时通常采用同卡双流水线，让 Ul
 详细的状态解释、缓存规则和 C MuJoCo 复验方法见
 [全量流水线与验证](docs/PIPELINE.md)。
 
+### GraspM3-lite 单物体多抓取模式验证
+
+需要对一个物体跑“Ultra Prior → Wrist Lattice → 低维时序 CEM/MJWarp → C MuJoCo”闭环时，
+使用：
+
+```bash
+MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m apps.run_graspm3_lite_single \
+  --object-id ycb:005_tomato_soup_can \
+  --output-root outputs/graspm3_lite_single \
+  --template-root outputs/graspm3_lite_single/lattice \
+  --ultra-root outputs/graspm3_lite_single/ultra \
+  --population-size 64 --iterations 4 --grasp-modes all --device cuda:0
+```
+
+`all` 会尝试八个抓取 family：Power Wrap、Pinch、Tripod、Spherical、Hook、Cradle、
+Lateral 和 Table-assisted。它们是候选 seed/prior，仍然只输出六个欠驱动 actuator 控制，
+不是八个独立策略。最终是否成功只看 C MuJoCo 的持续 lift/hold；桌面香蕉需要额外的推、滚或
+翻转物体阶段，`TABLE_ASSISTED_CANDIDATE_ONLY` 不等于已验证成功。重跑同一对象目录时使用
+`--overwrite-output`，避免复用旧候选。
+
 ## 输出目录
 
 ```text

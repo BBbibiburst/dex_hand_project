@@ -18,7 +18,10 @@ from source.rl.grasp_edit.primitive_env import (
     PrimitiveGraspEditConfig,
     PrimitiveMjWarpGraspEditEnv,
 )
-from source.rl.grasp_edit.primitives import available_grasp_primitives
+from source.rl.grasp_edit.primitives import (
+    available_grasp_primitives,
+    resolve_grasp_primitives,
+)
 from source.rl.grasp_edit.templates import build_grasp_edit_templates
 
 
@@ -46,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--hand-edit-fraction", type=float, default=0.35)
     parser.add_argument(
         "--grasp-primitives",
-        default="wrap,pinch,support,hook",
+        default="wrap,pinch,cradle,hook",
         help=(
             "Comma-separated styles or 'all'. Available: " + ",".join(available_grasp_primitives())
         ),
@@ -70,17 +73,13 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _primitive_names(value: str) -> tuple[str, ...]:
     value = value.strip()
-    if value == "all":
-        return available_grasp_primitives()
-    names = tuple(part.strip() for part in value.split(",") if part.strip())
-    if not names:
-        raise ValueError("--grasp-primitives cannot be empty.")
-    unknown = sorted(set(names) - set(available_grasp_primitives()))
-    if unknown:
+    try:
+        return tuple(item.name for item in resolve_grasp_primitives(value))
+    except ValueError as exc:
         raise ValueError(
-            f"Unknown grasp primitives {unknown}; available={available_grasp_primitives()}"
-        )
-    return tuple(dict.fromkeys(names))
+            f"Invalid --grasp-primitives={value!r}; "
+            f"available={available_grasp_primitives()}"
+        ) from exc
 
 
 def _trajectory_summary(trajectory) -> str:

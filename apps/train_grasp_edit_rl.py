@@ -135,6 +135,8 @@ def _ensure_ultra_priors(args: argparse.Namespace, ultra_roots: tuple[Path, ...]
             str(rng_seed),
             "--seed-count",
             str(args.ultra_seed_count),
+            "--device",
+            args.device,
             "--max-execution-candidates",
             str(args.ultra_max_execution_candidates),
             "--output",

@@ -12,6 +12,40 @@
 5. **C MuJoCo 复验**：重新执行最佳控制序列，验证末段持续抬升，并检查轨迹与权威
    MuJoCo 模型、当前控制维度是否一致。
 
+### GraspM3-lite 单物体多模式流程
+
+参考 GraspM³ 的“多方向示教候选 + 物理筛选”思想，项目提供不依赖 ShadowHand 轨迹的
+低维时序搜索：每个候选只优化 6 个欠驱动 actuator 的开合时序、少量 residual 和可达
+wrist template。抓取模式是 seed/prior，而不是八套 PPO。默认覆盖以下八个宏观 family：
+
+`wrap`（Power Wrap）、`pinch`、`tripod`、`spherical`、`hook`、`cradle`、`lateral`、
+`table_assisted`。旧名称 `power_wrap` 和 `support` 分别兼容为 `wrap` 和 `cradle`。
+`cradle` 对香蕉、碗、盘等物体提高掌面/近端指节支撑和末段保持的权重；
+`table_assisted` 只是允许接触丰富的推/滚预抓取 seed，当前实现没有物体位姿重定位动作，
+因此不能把它当作已经解决“香蕉平放桌面”的完整规划器。
+
+单物体全流程命令：
+
+```bash
+MUJOCO_GL=egl \
+CUDA_VISIBLE_DEVICES=0 \
+PYTHONUNBUFFERED=1 \
+python -m apps.run_graspm3_lite_single \
+  --object-id ycb:005_tomato_soup_can \
+  --output-root outputs/graspm3_lite_single \
+  --template-root outputs/graspm3_lite_single/lattice \
+  --ultra-root outputs/graspm3_lite_single/ultra \
+  --population-size 64 \
+  --iterations 4 \
+  --grasp-modes all \
+  --device cuda:0
+```
+
+输出 `summary.json` 会分别统计每个 mode 的候选数、MJWarp 成功数和 C MuJoCo 成功数。
+只有 `C_MUJOCO_SUCCESS` 才会生成 `best_trajectory/`；若只有桌面接触 seed 通过了廉价筛选，
+状态为 `TABLE_ASSISTED_CANDIDATE_ONLY`，仍不能进入最终专家池。重复使用同一对象输出目录时
+需显式加入 `--overwrite-output`，防止旧的 `best_trajectory` 与新结果混在一起。
+
 ## Geometry-aware BC 与 residual RL 契约
 
 BC 数据中必须保留两条独立控制序列：
