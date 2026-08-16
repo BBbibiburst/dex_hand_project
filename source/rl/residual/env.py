@@ -12,13 +12,13 @@ import warp as wp
 
 import mujoco_warp as mjw
 from source.envs.manipulation import make_lift_env
-from source.rl.reference import (
+from source.rl.residual.reference import (
     EpisodeRecord,
     ReferenceTrajectory,
     STAGE_CODES,
     resolve_reference_manifest,
 )
-from source.rl.trajectory import ResidualTrajectory
+from source.rl.residual.trajectory import ResidualTrajectory
 
 
 @wp.kernel

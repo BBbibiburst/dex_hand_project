@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from source.assets import asset_path
-from source.control.end_effectors import PikaGripperController
 from source.robots.descriptors import EndEffectorDescriptor
 from source.robots.registry import register_hand
 from source.sensors.tactile.pika_gripper import create_pika_gripper_tactile_sensor
@@ -19,6 +18,6 @@ PIKA_GRIPPER = register_hand(
         position_actuator_names=PIKA_GRIPPER_POSITION_ACTUATORS,
         default_prefix="pika_",
         tactile_sensor_factory=create_pika_gripper_tactile_sensor,
-        controller_factory=PikaGripperController,
+        controller_kind="pika",
     )
 )

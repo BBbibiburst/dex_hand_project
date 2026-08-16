@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from apps.train_grasp_rl import _slug, build_parser
+from apps.train_residual_grasp_rl import _slug, build_parser
 
 
 def test_object_mode_needs_no_reference_path():

@@ -9,7 +9,8 @@ import numpy as np
 import trimesh
 
 from source.envs.manipulation.object_catalog import DEFAULT_LIFT_OBJECT
-from source.grasping.grasp_config_search import draw, search_grasp_config
+from source.grasping.search import search_grasp_config
+from source.viz.grasp_search import draw
 
 
 def parse_args() -> argparse.Namespace:

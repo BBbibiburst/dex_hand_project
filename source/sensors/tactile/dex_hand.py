@@ -23,7 +23,7 @@ from source.sensors.tactile.signal_processing import (
     TactileSignalProcessorConfig,
     TaxelPatch,
 )
-from source.sensors.tactile.surface_fitting import (
+from source.sensors.tactile.fitting.surfaces import (
     DEX_HAND_PATCH_LAYOUT,
     grid_points_for_kind,
 )
@@ -250,7 +250,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         return ("skin_0_0_p", "skin_0_2_p", "skin_palm_p")
 
     def surface_plot_data(self, patch_name: str) -> TactileSurfacePlotData:
-        from source.sensors.tactile.surface_fitting import (
+        from source.sensors.tactile.fitting.surfaces import (
             GRID_POINT_FUNCTIONS,
             finger_segment_fit_surface,
             patch_fingertip_ellipsoid_plot_data,

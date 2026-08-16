@@ -1,21 +1,13 @@
-"""Residual reinforcement learning for UltraDexGrasp trajectory refinement."""
+"""Reinforcement-learning methods used to refine generated grasps.
 
-from __future__ import annotations
+The package has two explicit algorithm families:
 
-_EXPORTS = {
-    "ReferenceTrajectory": ("source.rl.reference", "ReferenceTrajectory"),
-    "resolve_reference_manifest": ("source.rl.reference", "resolve_reference_manifest"),
-    "ResidualTrajectory": ("source.rl.trajectory", "ResidualTrajectory"),
-}
+``source.rl.residual``
+    Residual actions along a complete UltraDexGrasp reference trajectory.
+``source.rl.grasp_edit``
+    Categorical wrist-template selection plus continuous six-actuator editing.
+"""
 
-__all__ = list(_EXPORTS)
+from source.rl.residual import ReferenceTrajectory, ResidualTrajectory, resolve_reference_manifest
 
-
-def __getattr__(name: str):
-    try:
-        module_name, attribute = _EXPORTS[name]
-    except KeyError as exc:
-        raise AttributeError(name) from exc
-    from importlib import import_module
-
-    return getattr(import_module(module_name), attribute)
+__all__ = ["ReferenceTrajectory", "ResidualTrajectory", "resolve_reference_manifest"]

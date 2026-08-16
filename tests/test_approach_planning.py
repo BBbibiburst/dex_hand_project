@@ -1,6 +1,6 @@
 import numpy as np
 
-from source.grasping.grasp_config_search import approach_direction_metadata
+from source.grasping.search.planning import approach_direction_metadata
 
 
 def test_approach_direction_metadata_separates_elevation_and_azimuth() -> None:

@@ -1,6 +1,6 @@
 import torch
 
-from source.rl.ppo import ActorCritic, PPOConfig, RunningNormalizer
+from source.rl.common.ppo import ActorCritic, PPOConfig, RunningNormalizer
 
 
 def test_running_normalizer_stays_finite() -> None:

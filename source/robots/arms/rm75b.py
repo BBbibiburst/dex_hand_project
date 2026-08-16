@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 from source.assets import asset_path
-from source.control.arm import ArmPositionIkController
 from source.robots.descriptors import ArmDescriptor
 from source.robots.registry import register_arm
 
@@ -24,6 +23,6 @@ RM75B_ARM = register_arm(
         ee_site_name="right_hand_site",
         hand_attach_body_name="right_hand",
         hand_attach_rot_xyz_deg=(-90.0, -90.0, 0.0),
-        controller_factory=ArmPositionIkController,
+        controller_kind="position_ik",
     )
 )

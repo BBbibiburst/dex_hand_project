@@ -4,8 +4,8 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from source.rl.reference import EpisodeRecord, ReferenceTrajectory, STAGE_CODES, resolve_reference_manifest
-from source.rl.trajectory import ResidualTrajectory
+from source.rl.residual.reference import EpisodeRecord, ReferenceTrajectory, STAGE_CODES, resolve_reference_manifest
+from source.rl.residual.trajectory import ResidualTrajectory
 
 
 def _arrays() -> dict[str, np.ndarray]:

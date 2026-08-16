@@ -7,7 +7,7 @@ from pathlib import Path
 import torch
 from torch.utils.data import Dataset
 
-from source.imitation.schema import (
+from source.data.lerobot_schema import (
     ACTION_KEY,
     AGENTVIEW_IMAGE_KEY,
     STATE_KEY,

@@ -17,7 +17,7 @@ import trimesh
 import mujoco
 
 from source.grasping.dex_hand_surface import load_posed_dex_hand_surface
-from source.grasping.grasp_config_search import grasp_config_name, resolve_object
+from source.grasping.search.catalog import grasp_config_name, resolve_object
 from source.grasping.mesh_pointcloud import sample_surface_pointcloud
 from source.grasping.standalone_validator import (
     build_standalone_model,

@@ -9,9 +9,9 @@ import torch
 import warp as wp
 
 from source.envs.manipulation import make_lift_env
-from source.rl.grasp_edit_templates import GraspEditTemplate
-from source.rl.reference import ReferenceTrajectory, STAGE_CODES, load_reference
-from source.rl.trajectory import ResidualTrajectory
+from source.rl.grasp_edit.templates import GraspEditTemplate
+from source.rl.residual.reference import ReferenceTrajectory, STAGE_CODES, load_reference
+from source.rl.residual.trajectory import ResidualTrajectory
 from source.ultradexgrasp.contracts import DemonstrationEpisode
 from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
 
@@ -49,7 +49,7 @@ class GraspEditConfig:
 class MjWarpGraspEditEnv:
     """One PPO step selects a reachable wrist template and edits the hand.
 
-    The v10 hybrid policy samples the wrist template from a categorical
+    The hybrid policy samples the wrist template from a categorical
     distribution and the six physical Dex Hand edits from a squashed Gaussian.
     The dense action transport has seven columns: template_id + hand_edit[6].
     There is no continuous-wrist nearest-neighbour projection.
@@ -330,7 +330,7 @@ class MjWarpGraspEditEnv:
             object_id=self.object_id,
             source_manifest=str(template.manifest),
             start_stage="approach",
-            action_mode="grasp_edit_hybrid_v10",
+            action_mode="grasp_edit_hybrid",
             residual_actions=repeated_action,
             controls=controls,
             initial_qpos=reference.initial_qpos.copy(),

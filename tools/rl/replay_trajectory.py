@@ -10,7 +10,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("trajectory", type=Path)
     parser.add_argument("--render", action="store_true")
     args = parser.parse_args(argv)
-    from source.rl.replay import replay_residual_trajectory
+    from source.rl.residual.replay import replay_residual_trajectory
 
     result = replay_residual_trajectory(
         args.trajectory,

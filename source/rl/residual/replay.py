@@ -9,7 +9,7 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.rl.trajectory import ResidualTrajectory
+from source.rl.residual.trajectory import ResidualTrajectory
 
 
 @dataclass(frozen=True)

@@ -41,6 +41,7 @@ class ArmDescriptor:
     ee_site_name: str
     hand_attach_body_name: str
     hand_attach_rot_xyz_deg: tuple[float, float, float]
+    controller_kind: str = "position_ik"
     controller_factory: Optional[ControllerFactory] = None
 
 
@@ -58,6 +59,7 @@ class EndEffectorDescriptor:
     position_actuator_names: Sequence[str] = ()
     default_prefix: str = ""
     tactile_sensor_factory: Optional[TactileSensorFactory] = None
+    controller_kind: str = "position"
     controller_factory: Optional[ControllerFactory] = None
 
 

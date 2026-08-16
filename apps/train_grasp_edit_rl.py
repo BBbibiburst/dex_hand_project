@@ -6,13 +6,13 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
-from source.rl.grasp_edit_templates import (
+from source.rl.grasp_edit.templates import (
     build_grasp_edit_templates,
     discover_ultra_attempts,
 )
-from source.rl.mjwarp_grasp_edit_env import GraspEditConfig, MjWarpGraspEditEnv
-from source.rl.grasp_edit_hybrid_ppo import HybridPPOTrainer
-from source.rl.ppo import PPOConfig
+from source.rl.grasp_edit.env import GraspEditConfig, MjWarpGraspEditEnv
+from source.rl.grasp_edit.ppo import HybridPPOTrainer
+from source.rl.common.ppo import PPOConfig
 
 
 def _write_json(path: Path, payload) -> None:
@@ -26,10 +26,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", required=True)
     parser.add_argument(
-        "--output-root", type=Path, default=Path("outputs/grasp_edit_rl_v10")
+        "--output-root", type=Path, default=Path("outputs/grasp_edit_rl")
     )
     parser.add_argument(
-        "--template-root", type=Path, default=Path("outputs/grasp_edit_lattice_v9")
+        "--template-root", type=Path, default=Path("outputs/grasp_edit_lattice")
     )
     parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
     parser.add_argument("--ultra-seed-count", type=int, default=100)
@@ -352,7 +352,7 @@ def run(args: argparse.Namespace) -> int:
         else output / "best_attempt"
     )
     if args.visualize and (trajectory / "manifest.json").is_file():
-        from source.rl.replay import replay_residual_trajectory
+        from source.rl.residual.replay import replay_residual_trajectory
 
         print(f"[visualize] {trajectory}", flush=True)
         result = replay_residual_trajectory(trajectory, render_mode="human")

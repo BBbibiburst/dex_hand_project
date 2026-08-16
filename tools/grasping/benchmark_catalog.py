@@ -8,8 +8,7 @@ from pathlib import Path
 import sys
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
-from source.grasping.dexevolve import mjwarp_available
-from source.workflows.grasp_benchmark import GraspBenchmarkConfig, run_grasp_benchmark
+from source.workflows.grasp_benchmark import GraspBenchmarkConfig
 
 FULL_PIPELINE_PRESET = {
     "dataset": "all",
@@ -229,9 +228,12 @@ def main() -> None:
                 values["target_lift_candidates"] = 1
             if "maximum_object_seconds" not in explicitly_set:
                 values["maximum_object_seconds"] = 1200.0
-        gpu_evolution = values["evolution_backend"] == "mjwarp" or (
-            values["evolution_backend"] == "auto" and mjwarp_available()
-        )
+        if values["evolution_backend"] == "auto":
+            from source.grasping.dexevolve import mjwarp_available
+
+            gpu_evolution = mjwarp_available()
+        else:
+            gpu_evolution = values["evolution_backend"] == "mjwarp"
         if gpu_evolution:
             if "jobs" not in explicitly_set:
                 values["jobs"] = 1
@@ -257,6 +259,8 @@ def main() -> None:
             values["config_dir"] = Path("configs/grasps/dex_hand/heuristic_seeds")
         if values["evolution_dir"] is None:
             values["evolution_dir"] = Path("configs/grasps/dex_hand/dexevolve")
+    from source.workflows.grasp_benchmark import run_grasp_benchmark
+
     raise SystemExit(run_grasp_benchmark(GraspBenchmarkConfig(**values)))
 
 

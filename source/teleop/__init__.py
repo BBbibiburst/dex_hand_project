@@ -12,7 +12,7 @@ _EXPORT_MODULES = {
     "StretchGloveApiDevice": "source.teleop.devices",
     "ViveApiTracker": "source.teleop.devices",
     "TeleopMapper": "source.teleop.mapping",
-    "LeRobotEpisodeRecorder": "source.teleop.lerobot_recorder",
+    "LeRobotEpisodeRecorder": "source.data.lerobot_recorder",
 }
 
 __all__ = [

@@ -62,7 +62,7 @@ def _mesh_symmetry_yaws_from_vertices(vertices: np.ndarray) -> tuple[float, ...]
 @lru_cache(maxsize=256)
 def _object_symmetry_yaws(object_id: str) -> tuple[float, ...]:
     try:
-        from source.grasping.grasp_config_search import resolve_object
+        from source.grasping.search.catalog import resolve_object
 
         loaded = trimesh.load_mesh(resolve_object(object_id), process=True)
         mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
@@ -338,7 +338,7 @@ class LiftStrategy(TaskStrategy):
             return
 
         end_effector_name = env.hand_descriptor.name
-        from source.grasping.grasp_config_search import grasp_config_directory
+        from source.grasping.search.catalog import grasp_config_directory
 
         config_dir = grasp_config_directory(end_effector_name)
         path = (
@@ -354,9 +354,7 @@ class LiftStrategy(TaskStrategy):
         if should_generate:
             # Import lazily so normal cached-policy startup does not pay the
             # visualization import cost of the search demo.
-            from source.grasping.grasp_config_search import (
-                generate_validated_grasp_config,
-            )
+            from source.grasping.search.api import generate_validated_grasp_config
 
             reason = "default fresh search" if path.is_file() else "no cached config"
             print(

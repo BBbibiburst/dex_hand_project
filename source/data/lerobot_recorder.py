@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
-from source.imitation.schema import (
+from source.data.lerobot_schema import (
     ACTION_KEY,
     AGENTVIEW_IMAGE_KEY,
     OPERATOR_GLOVE_KEY,

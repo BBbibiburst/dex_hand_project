@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Sensor contracts and implementations.
 
-The base Gym-facing sensor types are loaded lazily so utility subpackages such as ``source.sensors.tactile.surface_fitting`` can be imported without
+The base Gym-facing sensor types are loaded lazily so utility subpackages such as ``source.sensors.tactile.fitting.surfaces`` can be imported without
 importing Gymnasium first.
 """
 

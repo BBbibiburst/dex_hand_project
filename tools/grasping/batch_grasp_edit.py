@@ -1,11 +1,11 @@
-"""Run a resumable preflight + adaptive-budget v10 grasp-edit diagnostic.
+"""Run a resumable preflight + adaptive-budget grasp-edit diagnostic.
 
 This benchmark is intentionally a screening pass, not final policy training.
 For each object it first ensures an UltraDexGrasp prior exists.  Ultra success
 returns immediately.  Otherwise a CPU DIRECT wrist-lattice preflight is built
 before any MJWarp PPO process is started: if the lattice already contains a
 MuJoCo-successful template, the object is classified LATTICE_SUCCESS with zero
-RL updates.  Only preflight-failed lattices enter hybrid v10 PPO with an
+RL updates.  Only preflight-failed lattices enter hybrid grasp-edit PPO with an
 adaptive 5 -> 10 -> 15 update budget.
 """
 from __future__ import annotations
@@ -180,7 +180,7 @@ def _episode_lifts(episode: Any) -> tuple[float, float]:
 
 
 def _discover_ultra(object_id: str, roots: tuple[Path, ...]):
-    from source.rl.grasp_edit_templates import discover_ultra_attempts
+    from source.rl.grasp_edit.templates import discover_ultra_attempts
 
     return discover_ultra_attempts(object_id, roots=roots, maximum=256)
 
@@ -323,7 +323,7 @@ def _preflight_lattice(
     log_path: Path,
 ) -> LatticePreflight:
     """Compile/reuse DIRECT lattice on CPU before starting any MJWarp PPO."""
-    from source.rl.grasp_edit_templates import build_grasp_edit_templates
+    from source.rl.grasp_edit.templates import build_grasp_edit_templates
 
     started = time.perf_counter()
     buffer = io.StringIO()
@@ -333,7 +333,7 @@ def _preflight_lattice(
         with contextlib.redirect_stdout(buffer), contextlib.redirect_stderr(buffer):
             templates = build_grasp_edit_templates(
                 object_id,
-                output_root=Path("outputs/grasp_edit_lattice_v9"),
+                output_root=Path("outputs/grasp_edit_lattice"),
                 ultra_roots=ultra_roots,
                 base_candidates=args.base_candidates,
                 maximum_templates=args.lattice_max_templates,
@@ -477,7 +477,7 @@ def _adaptive_train(
     log_path: Path,
     rl_root: Path,
 ) -> ChildResult:
-    """Train 5 -> 10 -> 15 updates using v10 checkpoints rather than restarting."""
+    """Train 5 -> 10 -> 15 updates using grasp-edit checkpoints rather than restarting."""
     train_output = rl_root / _slug(object_id)
     if train_output.exists():
         shutil.rmtree(train_output)
@@ -506,7 +506,7 @@ def _adaptive_train(
             "--output-root",
             str(rl_root),
             "--template-root",
-            "outputs/grasp_edit_lattice_v9",
+            "outputs/grasp_edit_lattice",
             "--no-auto-ultra",
             "--num-envs",
             str(args.num_envs),
@@ -783,7 +783,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--object-id", action="append", dest="object_ids")
     parser.add_argument("--expect-count", type=int, default=127)
     parser.add_argument("--limit", type=int)
-    parser.add_argument("--output", type=Path, default=Path("outputs/grasp_edit_benchmark_v10_3"))
+    parser.add_argument("--output", type=Path, default=Path("outputs/grasp_edit_benchmark"))
     parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
     parser.add_argument("--ultra-seed-count", type=int, default=100)
     parser.add_argument("--ultra-generate-seeds", type=int, default=3)

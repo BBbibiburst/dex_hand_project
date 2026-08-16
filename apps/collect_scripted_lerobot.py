@@ -26,7 +26,7 @@ from source.scripted import create_strategy, registered_strategies
 from source.envs.manipulation.placement import FixedTablePlacementSampler
 from source.envs.manipulation.object_catalog import lift_object_ids
 from source.teleop.devices import GloveSample, ViveSample
-from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
+from source.data.lerobot_recorder import LeRobotEpisodeRecorder
 
 
 def parse_args() -> argparse.Namespace:

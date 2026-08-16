@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.rl.reference import STAGE_CODES
+from source.rl.residual.reference import STAGE_CODES
 from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
 from source.ultradexgrasp.executor import (
     ExecutionConfig,
@@ -283,7 +283,7 @@ def _write_index(path: Path, object_id: str, templates: list[GraspEditTemplate])
 def build_grasp_edit_templates(
     object_id: str,
     *,
-    output_root: Path = Path("outputs/grasp_edit_lattice_v9"),
+    output_root: Path = Path("outputs/grasp_edit_lattice"),
     ultra_roots: tuple[Path, ...] = (
         Path("outputs/ultradexgrasp"),
         Path("outputs/ultradexgrasp_catalog"),

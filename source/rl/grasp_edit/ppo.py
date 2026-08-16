@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from source.rl.ppo import PPOConfig
+from source.rl.common.ppo import PPOConfig
 
 
 class RunningNormalizer(nn.Module):
@@ -309,7 +309,7 @@ class HybridPPOTrainer:
         path.parent.mkdir(parents=True, exist_ok=True)
         torch.save(
             {
-                "trainer_type": "grasp_edit_hybrid_v10",
+                "trainer_type": "grasp_edit_hybrid",
                 "template_count": int(self.env.template_count),
                 "hand_action_dim": int(self.env.hand_action_dim),
                 "update": self.update_index,
@@ -324,8 +324,9 @@ class HybridPPOTrainer:
 
     def load(self, path: str | Path) -> None:
         payload = torch.load(Path(path), map_location=self.device, weights_only=False)
-        if payload.get("trainer_type") != "grasp_edit_hybrid_v10":
-            raise ValueError("Checkpoint is not a v10 hybrid grasp-edit PPO checkpoint.")
+        trainer_type = payload.get("trainer_type")
+        if trainer_type not in {"grasp_edit_hybrid", "grasp_edit_hybrid_v10"}:
+            raise ValueError("Checkpoint is not a grasp-edit hybrid PPO checkpoint.")
         if int(payload.get("template_count", -1)) != int(self.env.template_count):
             raise ValueError("Checkpoint template count differs from the current lattice.")
         if int(payload.get("hand_action_dim", -1)) != int(self.env.hand_action_dim):

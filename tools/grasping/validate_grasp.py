@@ -27,7 +27,7 @@ from source.grasping.standalone_validator import (
     validate_standalone,
 )
 from source.robots.registry import get_hand
-from source.grasping.grasp_config_search import search_grasp_config
+from source.grasping.search import search_grasp_config
 
 
 def parse_args() -> argparse.Namespace:

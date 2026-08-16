@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import numpy as np
 
 from source.envs.manipulation.placement import FixedTablePlacementSampler
-from source.grasping.robot_lift_validator import (
+from source.execution.robot_lift import (
     _ik_waypoint_is_reachable,
     task_scene_schedule,
 )

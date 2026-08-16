@@ -28,7 +28,7 @@ from source.teleop.devices import (
     StretchGloveApiDevice,
     ViveApiTracker,
 )
-from source.teleop.lerobot_recorder import LeRobotEpisodeRecorder
+from source.data.lerobot_recorder import LeRobotEpisodeRecorder
 from source.teleop.glove_processing import read_latest_glove
 from source.teleop.mapping import TeleopMapper
 from source.teleop.ui import TeleopUIState

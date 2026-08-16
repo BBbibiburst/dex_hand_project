@@ -10,7 +10,7 @@ import numpy as np
 from gymnasium import spaces
 
 from source.control.arm import ArmPositionIkController
-from source.control.end_effectors import EndEffectorPositionController
+from source.control.end_effectors import EndEffectorPositionController, PikaGripperController
 from source.robots.descriptors import ArmDescriptor, EndEffectorDescriptor
 
 
@@ -201,8 +201,31 @@ def build_robot_controller(
 ) -> CompositeRobotController:
     """Build a composite controller from descriptor-declared factories."""
 
-    arm_factory = arm_descriptor.controller_factory or ArmPositionIkController
-    hand_factory = hand_descriptor.controller_factory or EndEffectorPositionController
+    arm_factories = {"position_ik": ArmPositionIkController}
+    hand_factories = {
+        "position": EndEffectorPositionController,
+        "pika": PikaGripperController,
+    }
+    if arm_descriptor.controller_factory is not None:
+        arm_factory = arm_descriptor.controller_factory
+    else:
+        try:
+            arm_factory = arm_factories[arm_descriptor.controller_kind]
+        except KeyError as exc:
+            raise ValueError(
+                f"Unknown arm controller kind {arm_descriptor.controller_kind!r} "
+                f"for {arm_descriptor.name!r}."
+            ) from exc
+    if hand_descriptor.controller_factory is not None:
+        hand_factory = hand_descriptor.controller_factory
+    else:
+        try:
+            hand_factory = hand_factories[hand_descriptor.controller_kind]
+        except KeyError as exc:
+            raise ValueError(
+                f"Unknown end-effector controller kind {hand_descriptor.controller_kind!r} "
+                f"for {hand_descriptor.name!r}."
+            ) from exc
 
     arm_controller = arm_factory(
         arm_descriptor=arm_descriptor,
