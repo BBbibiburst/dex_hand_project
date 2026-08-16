@@ -52,6 +52,10 @@ class TeleopDashboard:
         success: bool,
         message: str = "",
         target_position: Any = None,
+        actual_position: Any = None,
+        ik_error: Any = None,
+        vive_position: Any = None,
+        vive_rpy: Any = None,
         hand_values: Any = None,
         raw_tactile_values: Any = None,
         grasp_contacts: int = 0,
@@ -93,12 +97,35 @@ class TeleopDashboard:
             f"{raw_tactile_max:.3g}  |  processed max {tactile_max:.3g}  "
             f"({tactile_active} active)"
         )
-        target_text = ""
+        spatial_lines: list[str] = []
         if target_position is not None:
             target = np.asarray(target_position, dtype=float).reshape(3)
-            target_text = f"  |  target xyz {target[0]:+.3f} {target[1]:+.3f} {target[2]:+.3f} m"
+            line = f"target xyz {target[0]:+.3f} {target[1]:+.3f} {target[2]:+.3f} m"
+            if actual_position is not None:
+                actual = np.asarray(actual_position, dtype=float).reshape(3)
+                distance = float(np.linalg.norm(target - actual))
+                line += (
+                    f"  |  actual {actual[0]:+.3f} {actual[1]:+.3f} {actual[2]:+.3f}"
+                    f"  |  |dxyz| {distance * 1000.0:.1f} mm"
+                )
+            spatial_lines.append(line)
+        if ik_error is not None:
+            error = np.asarray(ik_error, dtype=float).reshape(-1)
+            if len(error) >= 6:
+                spatial_lines.append(
+                    f"IK error: pos {np.linalg.norm(error[:3]) * 1000.0:.1f} mm  |  "
+                    f"rot {np.degrees(np.linalg.norm(error[3:6])):.2f} deg"
+                )
+        if vive_position is not None and vive_rpy is not None:
+            vive_xyz = np.asarray(vive_position, dtype=float).reshape(3)
+            vive_angles = np.asarray(vive_rpy, dtype=float).reshape(3)
+            spatial_lines.append(
+                f"Vive xyz {vive_xyz[0]:+.3f} {vive_xyz[1]:+.3f} {vive_xyz[2]:+.3f} m  |  "
+                f"rpy {vive_angles[0]:+.1f} {vive_angles[1]:+.1f} {vive_angles[2]:+.1f} deg"
+            )
         self._controls_text.set_text(
-            f"SPACE record/pause  |  C calibrate  |  N save  |  R reset  |  Q quit{target_text}"
+            "SPACE record/pause  |  C calibrate  |  N save  |  R reset  |  Q quit"
+            + (("\n" + "\n".join(spatial_lines)) if spatial_lines else "")
         )
         self._message_text.set_text(message)
         self.figure.canvas.draw_idle()
@@ -231,9 +258,11 @@ class TeleopDashboard:
                 aspect="auto",
             )
         self._status_text = figure.text(0.035, 0.105, "", fontsize=11, fontweight="bold")
-        self._controls_text = figure.text(0.035, 0.068, "", color="#d6d6d6", fontsize=8.5)
+        self._controls_text = figure.text(
+            0.035, 0.062, "", color="#d6d6d6", fontsize=8.0, va="top"
+        )
         self._message_text = figure.text(
-            0.035, 0.028, "", color="#ffdf4d", fontsize=10, fontweight="bold"
+            0.035, 0.012, "", color="#ffdf4d", fontsize=9.5, fontweight="bold"
         )
         self._patch_names = names
 
