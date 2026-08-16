@@ -13,7 +13,10 @@ from source.envs.core.registry import register_task
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.object_catalog import DEFAULT_STACK_OBJECTS, stack_object_ids
 from source.envs.manipulation.objects import MeshObjectSpec
-from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.placement import (
+    STACK_REACHABLE_REGION,
+    UniformTablePlacementSampler,
+)
 
 
 @register_task("stack")
@@ -33,9 +36,8 @@ class StackTask(SingleArmManipulationTask):
         self.object_ids = tuple(object_ids)
         sampler = kwargs.pop(
             "placement_sampler",
-            UniformTablePlacementSampler(
-                x_range=(-0.14, 0.14),
-                y_range=(-0.14, 0.14),
+            UniformTablePlacementSampler.for_object_centers(
+                STACK_REACHABLE_REGION,
                 min_separation=0.09,
             ),
         )

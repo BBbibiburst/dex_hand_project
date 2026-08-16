@@ -1,4 +1,5 @@
 """Geometry-aware observation wrapper for grasp imitation and residual RL."""
+
 from __future__ import annotations
 
 import mujoco
@@ -7,8 +8,7 @@ import torch
 
 from source.rl.residual.env import MjWarpResidualLiftEnv, ResidualLiftConfig
 
-
-GEOMETRY_OBSERVATION_SCHEMA_VERSION = 4
+GEOMETRY_OBSERVATION_SCHEMA_VERSION = 5
 
 
 def _quat_conjugate(q: torch.Tensor) -> torch.Tensor:
@@ -47,7 +47,8 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
     qpos.  This wrapper exposes inexpensive geometry that is already authoritative
     in MuJoCo: object size/shape, palm-object pose, fingertip-object positions,
     fingertip bounding-box distances, geometric opposition, and the current
-    per-object reference hand target.  The final 13 entries remain ``last_action``
+    coarse-reference hand target. The expert control sequence is deliberately
+    excluded from the observation. The final 13 entries remain ``last_action``
     so the BC policy can continue to ignore that tail deterministically.
     """
 
@@ -94,20 +95,13 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
                 candidates.append(f"{hand_prefix}{local_name}")
             candidates.append(local_name)
             for candidate in candidates:
-                geom = mujoco.mj_name2id(
-                    self.model, mujoco.mjtObj.mjOBJ_GEOM, candidate
-                )
+                geom = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, candidate)
                 if geom >= 0:
                     return int(geom)
 
             suffix_matches = []
             for geom in range(self.model.ngeom):
-                name = (
-                    mujoco.mj_id2name(
-                        self.model, mujoco.mjtObj.mjOBJ_GEOM, geom
-                    )
-                    or ""
-                )
+                name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_GEOM, geom) or ""
                 if name.endswith(local_name):
                     suffix_matches.append(int(geom))
             if len(suffix_matches) == 1:
@@ -130,9 +124,7 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
             self.palm_body_id,
             self.palm_local_position,
         ) = geom_context("skin_palm_p")
-        fingertip_contexts = tuple(
-            geom_context(f"skin_{digit}_2_p") for digit in range(5)
-        )
+        fingertip_contexts = tuple(geom_context(f"skin_{digit}_2_p") for digit in range(5))
         self.fingertip_geom_ids = tuple(item[0] for item in fingertip_contexts)
         self.fingertip_body_ids = tuple(item[1] for item in fingertip_contexts)
         self.fingertip_local_positions = tuple(item[2] for item in fingertip_contexts)
@@ -151,7 +143,7 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
         prefix_dim = int(base.shape[1] - self.action_dim)
         # extra layout: extent3, ratios3, object_in_palm3, relative_quat4,
         # fingertip_in_object15, fingertip_bbox_distance5, opposition_score1,
-        # reference_hand6.  last_action13 stays at the end.
+        # coarse_reference_hand6.  last_action13 stays at the end.
         offset = prefix_dim
         self.geometry_feature_slices = {
             "object_extent": (offset, offset + 3),
@@ -161,17 +153,19 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
             "fingertips_in_object": (offset + 13, offset + 28),
             "fingertip_bbox_distance": (offset + 28, offset + 33),
             "opposition_score": (offset + 33, offset + 34),
-            "reference_hand": (offset + 34, offset + 40),
+            "coarse_reference_hand": (offset + 34, offset + 40),
             "last_action": (offset + 40, offset + 40 + self.action_dim),
         }
-        self.reference_hand_slice = self.geometry_feature_slices["reference_hand"]
+        self.coarse_reference_hand_slice = self.geometry_feature_slices["coarse_reference_hand"]
 
     def observation_schema(self) -> dict:
         return {
             "schema_version": GEOMETRY_OBSERVATION_SCHEMA_VERSION,
             "obs_dim": int(self.obs_dim),
             "ignored_tail_dim": int(self.action_dim),
-            "feature_slices": {name: list(value) for name, value in self.geometry_feature_slices.items()},
+            "feature_slices": {
+                name: list(value) for name, value in self.geometry_feature_slices.items()
+            },
         }
 
     def _geom_center_world(
@@ -200,7 +194,9 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
         object_position = self.xpos[:, self.object_body_id]
         tips = self._fingertip_world_positions()
         radial = tips - object_position.unsqueeze(1)
-        radial = radial / torch.clamp(torch.linalg.vector_norm(radial, dim=2, keepdim=True), min=1e-6)
+        radial = radial / torch.clamp(
+            torch.linalg.vector_norm(radial, dim=2, keepdim=True), min=1e-6
+        )
         thumb = radial[:, 4:5, :]
         scores = -(radial[:, :4, :] * thumb).sum(dim=2)
         if self.has_digit_contacts:
@@ -237,11 +233,16 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
         surface_distance = torch.linalg.vector_norm(outside, dim=2)
 
         hand_start = self.reference.arm_action_size
-        reference_hand = self.reference_controls[self.step_index, hand_start:]
+        coarse_reference_hand = self.coarse_reference_controls[self.step_index, hand_start:]
         hand_low = self.ctrl_low[hand_start:]
         hand_high = self.ctrl_high[hand_start:]
-        reference_hand = 2.0 * (reference_hand - hand_low) / torch.clamp(hand_high - hand_low, min=1e-6) - 1.0
-        reference_hand = torch.clamp(reference_hand, -1.0, 1.0).unsqueeze(0).expand(n, -1)
+        coarse_reference_hand = (
+            2.0 * (coarse_reference_hand - hand_low) / torch.clamp(hand_high - hand_low, min=1e-6)
+            - 1.0
+        )
+        coarse_reference_hand = (
+            torch.clamp(coarse_reference_hand, -1.0, 1.0).unsqueeze(0).expand(n, -1)
+        )
 
         return torch.cat(
             [
@@ -252,7 +253,7 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
                 tips_object.reshape(n, 15),
                 surface_distance,
                 self._opposition_score().unsqueeze(1),
-                reference_hand,
+                coarse_reference_hand,
             ],
             dim=1,
         ).float()
@@ -264,4 +265,3 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
         prefix = base[:, : -self.action_dim]
         tail = base[:, -self.action_dim :]
         return torch.cat([prefix, self._geometry_features(), tail], dim=1).float()
-

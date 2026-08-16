@@ -10,7 +10,10 @@ from source.envs.core.registry import register_task
 from source.envs.manipulation.arenas import PegsArena
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.objects import XmlNutSpec
-from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.placement import (
+    NUT_ASSEMBLY_REACHABLE_REGION,
+    UniformTablePlacementSampler,
+)
 from source.envs.manipulation.rewards import staged_multi_object_reward
 
 
@@ -26,11 +29,10 @@ class NutAssemblyTask(SingleArmManipulationTask):
         arena = kwargs.pop("arena", PegsArena())
         sampler = kwargs.pop(
             "placement_sampler",
-            UniformTablePlacementSampler(
-                x_range=(-0.13, 0.13),
-                y_range=(-0.16, 0.16),
-                ensure_object_boundary_in_range=False,
-                min_separation=0.10,
+            UniformTablePlacementSampler.for_object_centers(
+                NUT_ASSEMBLY_REACHABLE_REGION,
+                rotation=(-np.deg2rad(20.0), np.deg2rad(20.0)),
+                min_separation=0.11,
             ),
         )
         super().__init__(arena=arena, placement_sampler=sampler, **kwargs)

@@ -1,4 +1,5 @@
 """Geometry-aware BC-guided residual RL with state-conditioned grasp curriculum."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -7,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from source.rl.imitation.bc import load_bc_policy
+from source.rl.imitation.bc import BC_TARGET_TYPE, load_bc_policy
 from source.rl.imitation.geometry_env import GeometryAwareResidualLiftEnv
 from source.rl.residual.env import ResidualLiftConfig
 from source.rl.residual.reference import STAGE_CODES
@@ -59,19 +60,30 @@ class GuidedResidualConfig(ResidualLiftConfig):
         if not 0.0 <= self.opposition_threshold <= 1.0 or self.grasp_ready_steps <= 0:
             raise ValueError("Invalid opposition threshold/grasp_ready_steps.")
         values = (
-            self.bc_approach_blend, self.bc_close_blend, self.bc_hold_blend,
-            self.bc_lift_blend, self.bc_verify_blend,
-            self.arm_approach_gate, self.arm_close_gate, self.arm_hold_gate,
-            self.arm_lift_gate, self.arm_verify_gate, self.locked_arm_lift_gate,
-            self.hand_approach_gate, self.hand_close_gate, self.hand_hold_gate,
-            self.hand_lift_gate, self.hand_verify_gate, self.locked_hand_lift_gate,
+            self.bc_approach_blend,
+            self.bc_close_blend,
+            self.bc_hold_blend,
+            self.bc_lift_blend,
+            self.bc_verify_blend,
+            self.arm_approach_gate,
+            self.arm_close_gate,
+            self.arm_hold_gate,
+            self.arm_lift_gate,
+            self.arm_verify_gate,
+            self.locked_arm_lift_gate,
+            self.hand_approach_gate,
+            self.hand_close_gate,
+            self.hand_hold_gate,
+            self.hand_lift_gate,
+            self.hand_verify_gate,
+            self.locked_hand_lift_gate,
         )
         if any(not 0.0 <= value <= 1.0 for value in values):
             raise ValueError("BC blend and curriculum gates must lie in [0, 1].")
 
 
 class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
-    """BC hand prior + per-step 13-D PPO residual with grasp-state gating."""
+    """Coarse reference + BC hand correction + 13-D PPO residual."""
 
     def __init__(
         self,
@@ -116,7 +128,7 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
 
     def _stage_code(self) -> int:
         index = min(self.step_index, self.reference.horizon - 1)
-        return int(round(float(self.reference.stages[index])))
+        return round(float(self.reference.stages[index]))
 
     def _grasp_state(self):
         contact_signal = self._contact_signal()
@@ -148,9 +160,7 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         result = torch.full((self.num_envs, 1), float(value), device=self.torch_device)
         if stage in {STAGE_CODES["lift"], STAGE_CODES["verify"]}:
             locked = max(cfg.bc_close_blend, value)
-            result = torch.where(
-                ready.unsqueeze(1), result, torch.full_like(result, float(locked))
-            )
+            result = torch.where(ready.unsqueeze(1), result, torch.full_like(result, float(locked)))
         return result
 
     def _curriculum_gate(self, stage: int, ready: torch.Tensor) -> torch.Tensor:
@@ -184,10 +194,13 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
 
     @torch.no_grad()
     def _bc_hand_control(self, observation: torch.Tensor) -> torch.Tensor:
-        normalized = self.bc_policy(observation)
-        return self.hand_low.unsqueeze(0) + 0.5 * (normalized + 1.0) * (
-            self.hand_high - self.hand_low
-        ).unsqueeze(0)
+        correction = self.bc_policy(observation)
+        coarse = self.coarse_reference_controls[self.step_index, self.hand_start :].unsqueeze(0)
+        span = (self.hand_high - self.hand_low).unsqueeze(0)
+        return torch.maximum(
+            torch.minimum(coarse + correction * span, self.hand_high),
+            self.hand_low,
+        )
 
     def _apply_residual(self, actions: torch.Tensor) -> torch.Tensor:
         actions = torch.clamp(actions, -1.0, 1.0)
@@ -200,21 +213,19 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         )
         ready = self.grasp_ready_streak >= self.guided_config.grasp_ready_steps
 
-        reference = self.reference_controls[self.step_index].unsqueeze(0).expand(
-            self.num_envs, -1
+        reference = (
+            self.coarse_reference_controls[self.step_index].unsqueeze(0).expand(self.num_envs, -1)
         )
         target = reference.clone()
         observation = self._observation()
         blend = self._bc_blend_values(stage, ready)
         bc_hand = self._bc_hand_control(observation)
-        target[:, self.hand_start :] = (
-            (1.0 - blend) * reference[:, self.hand_start :] + blend * bc_hand
-        )
+        target[:, self.hand_start :] = (1.0 - blend) * reference[
+            :, self.hand_start :
+        ] + blend * bc_hand
 
         gate = self._curriculum_gate(stage, ready)
-        target[:, self.controlled_positions] += (
-            actions * self.residual_scale.unsqueeze(0) * gate
-        )
+        target[:, self.controlled_positions] += actions * self.residual_scale.unsqueeze(0) * gate
         target = torch.maximum(torch.minimum(target, self.ctrl_high), self.ctrl_low)
         self.ctrl[:, self.actuator_ids] = target
 
@@ -235,9 +246,7 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         lift = object_position[:, 2] - self.initial_object_z
         lift_progress = torch.clamp(lift / cfg.success_lift_height, 0.0, 1.0)
         contact_signal, thumb_contact, _, opposition_score, opposition, _ = self._grasp_state()
-        contact_progress = torch.clamp(
-            contact_signal / float(cfg.minimum_contact_digits), 0.0, 1.0
-        )
+        contact_progress = torch.clamp(contact_signal / float(cfg.minimum_contact_digits), 0.0, 1.0)
         self.episode_max_lift = torch.maximum(self.episode_max_lift, lift)
         self.episode_opposition_steps += opposition.to(torch.int32)
 
@@ -272,7 +281,11 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
             + grasp_scale * cfg.grasp_thumb_reward * thumb_contact.float()
             + opposition_scale * cfg.grasp_opposition_reward * opposition.float()
             + cfg.opposition_geometry_reward * opposition_score * thumb_contact.float()
-            + (cfg.hold_opposition_bonus * opposition.float() if stage == STAGE_CODES["hold"] else 0.0)
+            + (
+                cfg.hold_opposition_bonus * opposition.float()
+                if stage == STAGE_CODES["hold"]
+                else 0.0
+            )
             + (cfg.guided_lift_reward * gated_lift if lift_or_verify else 0.0)
             + cfg.guided_success_reward * new_success.float()
             - cfg.speed_penalty * unsafe_motion
@@ -288,19 +301,25 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         self._diagnostic_thumb_sum += thumb_contact.float().mean()
         self._diagnostic_opposition_sum += opposition.float().mean()
         self._diagnostic_stable_sum += stable.float().mean()
-        self._diagnostic_hold_max = torch.maximum(self._diagnostic_hold_max, self.success_streak.max())
+        self._diagnostic_hold_max = torch.maximum(
+            self._diagnostic_hold_max, self.success_streak.max()
+        )
         return reward, new_success
 
-    def _trajectory_for_world(self, world: int, success: bool, score: float, quality: float) -> ResidualTrajectory:
+    def _trajectory_for_world(
+        self, world: int, success: bool, score: float, quality: float
+    ) -> ResidualTrajectory:
         residual = self.action_history[:, world].detach().cpu().numpy()
-        controls = self.reference.controls.copy()
+        controls = self.coarse_reference.controls.copy()
         positions = self.controlled_positions.detach().cpu().numpy()
         physical_delta = residual * self.residual_scale.detach().cpu().numpy()[None, :]
         controls[:, positions] += physical_delta
-        controls = np.clip(controls, self.reference.ctrl_low[None, :], self.reference.ctrl_high[None, :])
+        controls = np.clip(
+            controls, self.reference.ctrl_low[None, :], self.reference.ctrl_high[None, :]
+        )
         return ResidualTrajectory(
             object_id=self.reference.object_id,
-            source_manifest=str(self.reference.source_manifest),
+            source_manifest=str(self.coarse_reference.source_manifest),
             start_stage=self.reference.start_stage,
             action_mode=self.config.action_mode,
             residual_actions=residual,
@@ -321,6 +340,9 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
                 "observation_schema": self.observation_schema(),
                 "control_dt": self.reference.control_dt,
                 "source_seed": self.reference.source_seed,
+                "input_expert_manifest": str(self.reference.source_manifest),
+                "coarse_reference_manifest": str(self.coarse_reference.source_manifest),
+                "bc_target_type": BC_TARGET_TYPE,
                 "mjwarp_max_lift": float(self.episode_max_lift[world].item()),
                 "mjwarp_opposition_steps": int(self.episode_opposition_steps[world].item()),
                 "diagnostic_quality": float(quality),
@@ -332,7 +354,9 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         returns = self.episode_return
         final_lift = self.xpos[:, self.object_body_id, 2] - self.initial_object_z
         opp_fraction = self.episode_opposition_steps.float() / float(max(self.reference.horizon, 1))
-        max_progress = torch.clamp(self.episode_max_lift / self.config.success_lift_height, -1.0, 2.0)
+        max_progress = torch.clamp(
+            self.episode_max_lift / self.config.success_lift_height, -1.0, 2.0
+        )
         final_progress = torch.clamp(final_lift / self.config.success_lift_height, -1.0, 1.5)
         quality = (
             2.0 * opp_fraction
@@ -375,8 +399,12 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
             self._last_guided_metrics.update(
                 {
                     "bc_blend": float((self._guided_bc_sum / self._guided_steps).item()),
-                    "effective_residual_abs": float((self._guided_action_sum / self._guided_steps).item()),
-                    "best_attempt_quality": float(self.best_attempt_quality) if np.isfinite(self.best_attempt_quality) else 0.0,
+                    "effective_residual_abs": float(
+                        (self._guided_action_sum / self._guided_steps).item()
+                    ),
+                    "best_attempt_quality": float(self.best_attempt_quality)
+                    if np.isfinite(self.best_attempt_quality)
+                    else 0.0,
                 }
             )
             self._guided_steps = 0

@@ -12,8 +12,18 @@ from source.rl.imitation.evaluate import evaluate_bc_checkpoint
 from source.rl.imitation.geometry_env import GeometryAwareResidualLiftEnv
 from source.rl.imitation.guided_env import BCGuidedResidualLiftEnv, GuidedResidualConfig
 from source.rl.imitation.strict_replay import StrictReplayResult, strict_replay_manifest
+from source.rl.imitation.verification import (
+    EXPERT_POOL_REJECTED,
+    EXPERT_POOL_VALID,
+    FINAL_REJECTED,
+    FINAL_VERIFIED,
+)
 
 __all__ = [
+    "EXPERT_POOL_REJECTED",
+    "EXPERT_POOL_VALID",
+    "FINAL_REJECTED",
+    "FINAL_VERIFIED",
     "BCDatasetInfo",
     "BCGuidedResidualLiftEnv",
     "BCHandPolicy",

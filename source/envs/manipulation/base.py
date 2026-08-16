@@ -13,7 +13,10 @@ from source.envs.core.tasks import RobotTask, TaskStepResult
 from source.envs.manipulation.arenas import TableArena
 from source.envs.manipulation.bindings import ObjectBinding, TaskBindings
 from source.envs.manipulation.objects import ManipulationObjectSpec
-from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.placement import (
+    DEFAULT_REACHABLE_REGION,
+    UniformTablePlacementSampler,
+)
 
 
 class SingleArmManipulationTask(RobotTask):
@@ -47,9 +50,9 @@ class SingleArmManipulationTask(RobotTask):
         self.reward_scale = reward_scale
         self.reward_shaping = reward_shaping
         self.terminate_on_success = terminate_on_success
-        self.placement_sampler = placement_sampler or UniformTablePlacementSampler(
-            x_range=(-0.08, 0.08),
-            y_range=(-0.08, 0.08),
+        self.placement_sampler = (
+            placement_sampler
+            or UniformTablePlacementSampler.for_object_centers(DEFAULT_REACHABLE_REGION)
         )
         self._objects = tuple(self.create_objects())
         self.bindings: TaskBindings | None = None

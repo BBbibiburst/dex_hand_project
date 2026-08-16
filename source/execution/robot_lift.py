@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
-from pathlib import Path
 import json
 import tempfile
-from typing import Callable
+from collections.abc import Callable
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_manipulation_env
-from source.envs.manipulation.placement import FixedTablePlacementSampler
+from source.envs.manipulation.placement import (
+    DEFAULT_REACHABLE_REGION,
+    FixedTablePlacementSampler,
+)
 from source.geometry import mat_to_quat
 from source.scripted.lift import LiftStrategy
 
@@ -38,7 +41,13 @@ def task_scene_schedule(
     if pull_step < 0.0 or maximum_pull < 0.0:
         raise ValueError("Pull distances must be non-negative.")
     rng = np.random.default_rng(seed)
-    initial_xy = rng.uniform((-0.06, -0.06), (0.06, 0.06))
+    initial_xy = np.asarray(
+        [
+            rng.uniform(*DEFAULT_REACHABLE_REGION.x_range),
+            rng.uniform(*DEFAULT_REACHABLE_REGION.y_range),
+        ],
+        dtype=np.float64,
+    )
     initial_yaw = float(rng.uniform(-np.pi, np.pi))
     scenes = []
     for index in range(scene_attempts):

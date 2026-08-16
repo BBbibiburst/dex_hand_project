@@ -4,7 +4,10 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from source.envs.manipulation.placement import FixedTablePlacementSampler
+from source.envs.manipulation.placement import (
+    DEFAULT_REACHABLE_REGION,
+    FixedTablePlacementSampler,
+)
 from source.execution.robot_lift import (
     _ik_waypoint_is_reachable,
     task_scene_schedule,
@@ -46,6 +49,17 @@ def test_task_scene_schedule_rotates_before_pulling_object() -> None:
         0.10,
     ]
     assert np.isclose(scenes[4]["object_xy"][0], scenes[0]["object_xy"][0] - 0.05)
+    initial_xy = np.asarray(scenes[0]["object_xy"])
+    assert (
+        DEFAULT_REACHABLE_REGION.x_range[0]
+        <= initial_xy[0]
+        <= DEFAULT_REACHABLE_REGION.x_range[1]
+    )
+    assert (
+        DEFAULT_REACHABLE_REGION.y_range[0]
+        <= initial_xy[1]
+        <= DEFAULT_REACHABLE_REGION.y_range[1]
+    )
 
 
 def test_fixed_table_placement_uses_explicit_pose() -> None:

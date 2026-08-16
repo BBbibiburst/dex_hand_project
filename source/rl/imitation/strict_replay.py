@@ -5,11 +5,13 @@ Two validation profiles are intentionally separated:
 ``expert``
     Admission into the behavior-cloning pool.  The trajectory must exhibit a
     real, sustained grasp and a meaningful lift, but it does not need to reach
-    the stricter final-task lift height.
+    the stricter final-task lift height. Passing this profile means only
+    ``EXPERT_POOL_VALID``.
 
 ``final``
     Authoritative success for a trained policy.  This retains the 55 mm lift
-    target and stricter hold/contact requirements.
+    target and stricter hold/contact requirements. Only this profile can emit
+    ``FINAL_VERIFIED``.
 
 The contact classifier does not rely exclusively on ``skin_*`` geoms.  Any
 robot-object contacts contribute to physical contact and opposition; tactile
@@ -28,6 +30,11 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
+from source.rl.imitation.verification import (
+    EXPERT_PROFILE,
+    FINAL_PROFILE,
+    verification_status,
+)
 from source.rl.residual.reference import (
     EpisodeRecord,
     ReferenceTrajectory,
@@ -35,10 +42,10 @@ from source.rl.residual.reference import (
 )
 from source.rl.residual.trajectory import ResidualTrajectory
 
-STRICT_REPLAY_SCHEMA_VERSION = 4
+STRICT_REPLAY_SCHEMA_VERSION = 5
 
 _PROFILE_DEFAULTS = {
-    "expert": {
+    EXPERT_PROFILE: {
         "success_lift_height": 0.040,
         "maximum_object_speed": 0.10,
         "opposition_threshold": 0.20,
@@ -49,7 +56,7 @@ _PROFILE_DEFAULTS = {
         "minimum_tail_grasp_fraction": 0.60,
         "maximum_tail_table_contact_fraction": 0.05,
     },
-    "final": {
+    FINAL_PROFILE: {
         "success_lift_height": 0.055,
         "maximum_object_speed": 0.10,
         "opposition_threshold": 0.25,
@@ -67,6 +74,7 @@ _PROFILE_DEFAULTS = {
 class StrictReplayResult:
     success: bool
     profile: str
+    verification_status: str
     frames: int
     final_lift: float
     max_lift: float
@@ -286,7 +294,10 @@ def _resolved_settings(
     maximum_tail_table_contact_fraction: float | None,
 ) -> dict[str, Any]:
     if profile not in _PROFILE_DEFAULTS:
-        raise ValueError(f"Unknown strict replay profile {profile!r}; choose 'expert' or 'final'.")
+        raise ValueError(
+            f"Unknown strict replay profile {profile!r}; "
+            f"choose {EXPERT_PROFILE!r} or {FINAL_PROFILE!r}."
+        )
     defaults = dict(_PROFILE_DEFAULTS[profile])
     overrides = {
         "success_lift_height": success_lift_height,
@@ -323,7 +334,7 @@ def strict_replay_manifest(
     trajectory_or_manifest: str | Path,
     *,
     render_mode: str | None = None,
-    profile: str = "final",
+    profile: str = FINAL_PROFILE,
     success_lift_height: float | None = None,
     maximum_object_speed: float | None = None,
     opposition_threshold: float | None = None,
@@ -522,6 +533,7 @@ def strict_replay_manifest(
         result = StrictReplayResult(
             success=success,
             profile=profile,
+            verification_status=verification_status(profile, success),
             frames=len(lifts),
             final_lift=final_lift,
             max_lift=max_lift,

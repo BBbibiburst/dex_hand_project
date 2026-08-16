@@ -10,6 +10,7 @@ from pathlib import Path
 from source.rl.common.ppo import PPOConfig, PPOTrainer
 from source.rl.imitation.guided_env import BCGuidedResidualLiftEnv, GuidedResidualConfig
 from source.rl.imitation.strict_replay import strict_replay_manifest
+from source.rl.imitation.verification import FINAL_PROFILE, FINAL_VERIFIED
 
 
 def _atomic_json(path: Path, payload: dict) -> None:
@@ -147,7 +148,7 @@ def run(args: argparse.Namespace) -> int:
             active.save(args.output / "checkpoints" / f"update_{active.update_index:05d}.pt")
 
     result = {
-        "schema_version": 3,
+        "schema_version": 4,
         "object_id": env.reference.object_id,
         "reference": str(args.reference),
         "bc_checkpoint": str(args.bc_checkpoint),
@@ -157,9 +158,10 @@ def run(args: argparse.Namespace) -> int:
     }
     try:
         print(
-            f"[train] reference={env.reference.source_manifest} object={env.reference.object_id} "
+            f"[train] coarse={env.coarse_reference.source_manifest} "
+            f"expert_input={env.reference.source_manifest} object={env.reference.object_id} "
             f"horizon={env.reference.horizon} envs={env.num_envs} obs={env.obs_dim} "
-            f"action={env.action_dim} bc_hand_prior=6d updates={args.updates}",
+            f"action={env.action_dim} bc_hand_correction=6d updates={args.updates}",
             flush=True,
         )
         trainer.train(args.updates, callback=callback)
@@ -175,13 +177,14 @@ def run(args: argparse.Namespace) -> int:
         replay = strict_replay_manifest(
             best,
             render_mode=None,
+            profile=FINAL_PROFILE,
             success_lift_height=args.success_lift_height,
             maximum_object_speed=args.maximum_object_speed,
             use_cache=False,
         )
         replay_payload = asdict(replay)
         result["replay"] = replay_payload
-        result["status"] = "VERIFIED_SUCCESS" if replay.success else "REPLAY_FAILED"
+        result["status"] = replay.verification_status
         print(
             f"[strict-replay] success={replay.success} tail_min={replay.tail_min_lift:.3f}m "
             f"grasp={replay.tail_grasp_fraction:.1%} opp={replay.tail_opposition_mean:.2f} "
@@ -196,7 +199,7 @@ def run(args: argparse.Namespace) -> int:
 
     _atomic_json(args.output / "result.json", result)
     print(f"[done] status={result['status']} result={args.output / 'result.json'}", flush=True)
-    return 0 if result["status"] == "VERIFIED_SUCCESS" else 2
+    return 0 if result["status"] == FINAL_VERIFIED else 2
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -3,13 +3,77 @@
 
 from __future__ import annotations
 
-from typing import Sequence
+from collections.abc import Sequence
+from dataclasses import dataclass
 
 import numpy as np
 
 from source.envs.manipulation.objects import ManipulationObjectSpec
 
 Placement = tuple[np.ndarray, np.ndarray]
+
+
+@dataclass(frozen=True)
+class PlacementRegion:
+    """Rectangular object-centre bounds relative to a task reference point."""
+
+    x_range: tuple[float, float]
+    y_range: tuple[float, float]
+
+    def __post_init__(self) -> None:
+        if not np.all(np.isfinite((*self.x_range, *self.y_range))):
+            raise ValueError("Placement ranges must contain only finite values.")
+        if self.x_range[0] > self.x_range[1]:
+            raise ValueError(f"Invalid x_range: {self.x_range!r}.")
+        if self.y_range[0] > self.y_range[1]:
+            raise ValueError(f"Invalid y_range: {self.y_range!r}.")
+
+    def sample_xy(
+        self,
+        rng: np.random.Generator,
+        reference_pos: np.ndarray,
+    ) -> np.ndarray:
+        """Sample one world-frame XY centre from this relative region."""
+
+        reference_pos = np.asarray(reference_pos, dtype=np.float64)
+        if reference_pos.shape not in {(2,), (3,)}:
+            raise ValueError(
+                f"reference_pos must have shape (2,) or (3,), got {reference_pos.shape}."
+            )
+        return reference_pos[:2] + np.asarray(
+            [rng.uniform(*self.x_range), rng.uniform(*self.y_range)],
+            dtype=np.float64,
+        )
+
+
+# These regions constrain object centres, rather than their complete footprint.
+# RM75B IK probes show that +X is the difficult direction because it moves the
+# wrist farther from the arm. The default windows therefore sit slightly toward
+# the robot while retaining enough Y variation for grasp-policy generalization.
+DEFAULT_REACHABLE_REGION = PlacementRegion(
+    x_range=(-0.06, 0.02),
+    y_range=(-0.05, 0.05),
+)
+STACK_REACHABLE_REGION = PlacementRegion(
+    x_range=(-0.06, 0.02),
+    y_range=(-0.08, 0.08),
+)
+PICK_PLACE_SOURCE_REGION = PlacementRegion(
+    x_range=(-0.03, 0.02),
+    y_range=(-0.025, 0.025),
+)
+NUT_ASSEMBLY_REACHABLE_REGION = PlacementRegion(
+    x_range=(0.03, 0.07),
+    y_range=(-0.085, 0.085),
+)
+PUSH_OBJECT_REACHABLE_REGION = PlacementRegion(
+    x_range=(-0.08, -0.02),
+    y_range=(-0.16, -0.10),
+)
+PUSH_TARGET_REACHABLE_REGION = PlacementRegion(
+    x_range=(-0.05, 0.03),
+    y_range=(0.10, 0.16),
+)
 
 
 class FixedTablePlacementSampler:
@@ -95,6 +159,26 @@ class UniformTablePlacementSampler:
         self.min_separation = min_separation
         self.max_attempts = max_attempts
         self.candidates_per_object = candidates_per_object
+
+    @classmethod
+    def for_object_centers(
+        cls,
+        region: PlacementRegion,
+        **kwargs,
+    ) -> UniformTablePlacementSampler:
+        """Build a sampler whose ranges directly bound object centres.
+
+        This is the intended mode for robot-reachability windows. The regular
+        constructor keeps its footprint-boundary semantics for compatibility
+        with callers that use the ranges as a containing rectangle.
+        """
+
+        return cls(
+            x_range=region.x_range,
+            y_range=region.y_range,
+            ensure_object_boundary_in_range=False,
+            **kwargs,
+        )
 
     def sample(
         self,

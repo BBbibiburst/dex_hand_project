@@ -14,7 +14,10 @@ from source.envs.manipulation.object_catalog import (
     pick_place_object_ids,
 )
 from source.envs.manipulation.objects import MeshObjectSpec
-from source.envs.manipulation.placement import UniformTablePlacementSampler
+from source.envs.manipulation.placement import (
+    PICK_PLACE_SOURCE_REGION,
+    UniformTablePlacementSampler,
+)
 from source.envs.manipulation.rewards import staged_multi_object_reward
 
 
@@ -29,8 +32,9 @@ class PickPlaceTask(SingleArmManipulationTask):
         arena = kwargs.pop("arena", BinsArena())
         sampler = kwargs.pop(
             "placement_sampler",
-            UniformTablePlacementSampler(
-                x_range=(-0.13, 0.13), y_range=(-0.13, 0.13), min_separation=0.075
+            UniformTablePlacementSampler.for_object_centers(
+                PICK_PLACE_SOURCE_REGION,
+                min_separation=0.075,
             ),
         )
         super().__init__(arena=arena, placement_sampler=sampler, **kwargs)

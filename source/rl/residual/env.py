@@ -185,6 +185,11 @@ class MjWarpResidualLiftEnv:
             source_manifest=base_manifest,
             start_stage=self.config.start_stage,
         )
+        # Keep the unedited source sequence independently from the trajectory
+        # being replayed. Geometry-aware BC uses this coarse sequence as input
+        # and learns only the expert correction; generic residual RL continues
+        # to use ``self.reference`` as its execution baseline.
+        self.coarse_reference = base_reference
 
         if residual_reference is None:
             self.reference = base_reference
@@ -227,6 +232,12 @@ class MjWarpResidualLiftEnv:
                 ctrl_high=base_reference.ctrl_high.copy(),
                 arm_action_size=base_reference.arm_action_size,
                 initial_object_position=base_reference.initial_object_position.copy(),
+            )
+        if self.coarse_reference.controls.shape != self.reference.controls.shape:
+            raise ValueError(
+                "Coarse and expert reference controls must have identical shape: "
+                f"coarse={self.coarse_reference.controls.shape}, "
+                f"expert={self.reference.controls.shape}."
             )
         if self.reference.hand_action_size != 6:
             raise ValueError(
@@ -282,6 +293,11 @@ class MjWarpResidualLiftEnv:
         )
         self.reference_controls = torch.as_tensor(
             self.reference.controls, device=self.torch_device, dtype=torch.float32
+        )
+        self.coarse_reference_controls = torch.as_tensor(
+            self.coarse_reference.controls,
+            device=self.torch_device,
+            dtype=torch.float32,
         )
         self.reference_stages = torch.as_tensor(
             self.reference.stages, device=self.torch_device, dtype=torch.float32

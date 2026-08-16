@@ -12,6 +12,48 @@
 5. **C MuJoCo 复验**：重新执行最佳控制序列，验证末段持续抬升，并检查轨迹与权威
    MuJoCo 模型、当前控制维度是否一致。
 
+## Geometry-aware BC 与 residual RL 契约
+
+BC 数据中必须保留两条独立控制序列：
+
+- `coarse reference`：原始 Ultra episode 或专家轨迹指向的未编辑模板；
+- `expert control`：已经通过专家池 C MuJoCo 检查的 Lattice / 小规模 RL 控制序列。
+
+BC 观测包含物体尺寸与形状比例、物体相对手掌姿态、指尖相对物体位置、接触几何以及
+当前 `coarse_reference_hand`，但不得包含当前时刻的专家手控制。六维监督标签为：
+
+```text
+hand_residual_target =
+    (expert_hand - coarse_reference_hand) / (actuator_high - actuator_low)
+```
+
+运行时控制按以下顺序合成：
+
+```text
+hand_control = coarse_reference
+             + BC_residual * actuator_range * stage_blend
+             + PPO_residual
+```
+
+数据集会分别保存 `coarse_reference_hand_actions`、`expert_hand_actions` 和
+`hand_residual_targets`。如果一条直接 Ultra 专家没有更粗的来源，则 coarse 与 expert
+相同，其 BC 标签必须为零；这比把专家绝对控制伪装成 reference 输入更安全。
+
+训练/验证划分以唯一 `object_id` 为组，而不是按 manifest 或帧随机切分。同一物体的多条
+专家轨迹和全部帧只能出现在训练侧或验证侧之一，避免同物体泄漏造成虚高的验证指标。
+
+## 专家池与最终验证状态
+
+严格回放提供两个互不混用的 profile：
+
+| profile | 成功状态 | 失败状态 | 含义 |
+| --- | --- | --- | --- |
+| `expert` | `EXPERT_POOL_VALID` | `EXPERT_POOL_REJECTED` | 只决定轨迹能否进入 BC 专家池 |
+| `final` | `FINAL_VERIFIED` | `FINAL_REJECTED` | 只用于训练后轨迹的最终权威验收 |
+
+`EXPERT_POOL_VALID` 不是最终成功，不计入 `verified_total`。目录汇总分别记录
+`expert_pool_valid` 与 `final_verified`；只有 `FINAL_VERIFIED` 会计入最终验证总数。
+
 ## 环境与模型检查
 
 ```bash
@@ -33,6 +75,24 @@ python -m tools.ultradexgrasp.probe \
   --device cuda:0 \
   --recalibrate-surrogate
 ```
+
+## 随机摆放可达区
+
+默认任务按物体中心采样，不再把整个桌面或料箱的大部分面积都作为出生区。区域根据当前
+RM75B 的 C MuJoCo IK 探针向机械臂侧（较小的全局 X）偏置；自定义
+`placement_sampler` 和严格回放使用的 `FixedTablePlacementSampler` 不受影响。
+
+| 任务 | 物体中心范围（米） |
+| --- | --- |
+| Lift / 通用桌面任务 | 全局 X `[0.49, 0.57]`，Y `[-0.05, 0.05]` |
+| Stack | 全局 X `[0.49, 0.57]`，Y `[-0.08, 0.08]` |
+| PickPlace 源料箱 | 全局 X `[0.43, 0.48]`，Y `[-0.225, -0.175]` |
+| NutAssembly | 全局 X `[0.58, 0.62]`，Y `[-0.085, 0.085]`；朝向限制为 `±20°` |
+| Push | 物体 X `[0.47, 0.53]`、Y `[-0.16, -0.10]`；目标 X `[0.50, 0.58]`、Y `[0.10, 0.16]` |
+
+Stack 和 NutAssembly 仍执行完整布局重试与最小中心间距检查。NutAssembly 额外避免物体在
+reset 时与固定桩或另一螺母穿插。全机器人 benchmark 的初始 task scene 也从 Lift 的同一
+可达区采样；后续 fallback 只会把物体继续向机械臂方向拉近。
 
 ## 缓存规则
 

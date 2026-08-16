@@ -32,17 +32,25 @@ from typing import Any
 from source.envs.manipulation.object_catalog import object_ids
 from source.rl.grasp_edit.templates import discover_ultra_attempts
 from source.rl.imitation.bc import BCTrainConfig, collect_bc_dataset, train_bc_policy
+from source.rl.imitation.verification import (
+    EXPERT_POOL_VALID,
+    EXPERT_PROFILE,
+    FINAL_REJECTED,
+    FINAL_VERIFIED,
+)
 
 SUCCESS_SOURCE_STATUSES = {"ULTRA_SUCCESS", "LATTICE_SUCCESS", "RL_SUCCESS"}
 FINAL_STATUSES = (
-    "EXPERT_REUSED",
-    "VERIFIED_SUCCESS",
-    "REPLAY_FAILED",
+    EXPERT_POOL_VALID,
+    FINAL_VERIFIED,
+    FINAL_REJECTED,
     "RL_NO_SUCCESS",
     "MJWARP_SUCCESS_UNVERIFIED",
     "NO_REFERENCE",
     "ERROR",
 )
+CATALOG_RESULT_SCHEMA_VERSION = 4
+BC_ARTIFACT_SCHEMA_VERSION = 5
 
 
 def _slug(value: str) -> str:
@@ -244,7 +252,7 @@ def _validate_expert(manifest: Path) -> bool:
         result = strict_replay_manifest(
             manifest,
             render_mode=None,
-            profile="expert",
+            profile=EXPERT_PROFILE,
             use_cache=True,
         )
     except Exception as exc:  # noqa: BLE001 - reject only this expert candidate
@@ -255,7 +263,8 @@ def _validate_expert(manifest: Path) -> bool:
         return False
     if not result.success:
         print(
-            f"[expert:reject] manifest={manifest} expert=False "
+            f"[expert:reject] manifest={manifest} "
+            f"status={result.verification_status} "
             f"tail_min={result.tail_min_lift:.3f} "
             f"contact={result.tail_contact_fraction:.1%} "
             f"grasp={result.tail_grasp_fraction:.1%} "
@@ -266,7 +275,7 @@ def _validate_expert(manifest: Path) -> bool:
             f"quality={result.quality_score:.2f}",
             flush=True,
         )
-    return bool(result.success)
+    return bool(result.success and result.verification_status == EXPERT_POOL_VALID)
 
 
 def _expert_candidates_for_object(
@@ -480,7 +489,7 @@ def _bootstrap_priority(
     return result
 
 
-BOOTSTRAP_RESULT_SCHEMA_VERSION = 4
+BOOTSTRAP_RESULT_SCHEMA_VERSION = 5
 
 
 def _bootstrap_job(
@@ -527,7 +536,7 @@ def _bootstrap_job(
         result = {
             "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
             "object_id": object_id,
-            "status": "EXPERT_READY",
+            "status": EXPERT_POOL_VALID,
             "pipeline_status": "REVALIDATED_EXISTING",
             "manifest": str(accepted[0]),
             "manifests": [str(path) for path in accepted],
@@ -638,7 +647,7 @@ def _bootstrap_job(
     result = {
         "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
         "object_id": object_id,
-        "status": "EXPERT_READY" if accepted else "NO_EXPERT",
+        "status": EXPERT_POOL_VALID if accepted else "NO_EXPERT",
         "pipeline_status": old_status,
         "manifest": str(accepted[0]) if accepted else "",
         "manifests": [str(path) for path in accepted],
@@ -811,7 +820,7 @@ def _parallel_bootstrap_experts(
                         if key not in path_keys:
                             path_keys.add(key)
                             experts.append(path.resolve())
-                    if result.get("status") == "EXPERT_READY":
+                    if result.get("status") == EXPERT_POOL_VALID:
                         expert_objects.add(object_id)
                     persist_bootstrap(stage_budget)
                     print(
@@ -856,6 +865,8 @@ def _bc_signature(experts: list[Path], args: argparse.Namespace) -> str:
         Path("source/rl/imitation/geometry_env.py"),
         Path("source/rl/imitation/guided_env.py"),
         Path("source/rl/imitation/strict_replay.py"),
+        Path("source/rl/imitation/verification.py"),
+        Path("source/rl/residual/env.py"),
     )
     source_hashes = {
         str(path): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -891,6 +902,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
     stored = _read_json(signature_path)
     reusable = (
         not args.rebuild_bc
+        and stored.get("schema_version") == BC_ARTIFACT_SCHEMA_VERSION
         and stored.get("signature") == signature
         and dataset.is_file()
         and dataset.with_suffix(".json").is_file()
@@ -902,20 +914,32 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
         return checkpoint
 
     bc_root.mkdir(parents=True, exist_ok=True)
-    _atomic_json(
-        bc_root / "experts.json",
-        {
-            "schema_version": 4,
-            "count": len(experts),
-            "manifests": [str(path) for path in experts],
-        },
-    )
     info = collect_bc_dataset(
         experts,
         output=dataset,
         device=args.bc_device,
         nconmax=args.nconmax,
         njmax=args.njmax,
+    )
+    _atomic_json(
+        bc_root / "experts.json",
+        {
+            "schema_version": BC_ARTIFACT_SCHEMA_VERSION,
+            "count": len(experts),
+            "status": EXPERT_POOL_VALID,
+            "experts": [
+                {
+                    "object_id": object_id,
+                    "manifest": str(path),
+                    "verification_status": EXPERT_POOL_VALID,
+                }
+                for path, object_id in zip(
+                    experts,
+                    info.expert_object_ids,
+                    strict=True,
+                )
+            ],
+        },
     )
     print(
         f"[bc:data-ready] frames={info.observations} experts={info.experts} "
@@ -937,12 +961,16 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
 
     metadata = _read_json(checkpoint.with_suffix(".json"))
     validation_ids = set(metadata.get("validation_object_ids", []))
-    validation_manifests = []
-    for path, object_id in zip(experts, info.object_ids):
-        if object_id in validation_ids:
-            validation_manifests.append(path)
-    if not validation_manifests:
-        validation_manifests = list(experts[: max(1, args.bc_validation_objects)])
+    validation_by_object: dict[str, Path] = {}
+    for path, object_id in zip(experts, info.expert_object_ids, strict=True):
+        if object_id in validation_ids and object_id not in validation_by_object:
+            validation_by_object[object_id] = path
+    if not validation_by_object:
+        for path, object_id in zip(experts, info.expert_object_ids, strict=True):
+            validation_by_object.setdefault(object_id, path)
+            if len(validation_by_object) >= max(1, args.bc_validation_objects):
+                break
+    validation_manifests = list(validation_by_object.values())
     validation = evaluate_bc_checkpoint(
         validation_manifests,
         checkpoint=checkpoint,
@@ -951,7 +979,10 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
         nconmax=args.nconmax,
         njmax=args.njmax,
     )
-    _atomic_json(bc_root / "validation.json", {"schema_version": 4, **validation})
+    _atomic_json(
+        bc_root / "validation.json",
+        {"schema_version": BC_ARTIFACT_SCHEMA_VERSION, **validation},
+    )
     print(
         f"[bc:rollout-validation] objects={validation['objects']} "
         f"success={validation['success_rate']:.1%}",
@@ -963,7 +994,10 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
             f"--bc-min-rollout-success={args.bc_min_rollout_success:.1%}; refusing full RL sweep."
         )
 
-    _atomic_json(signature_path, {"schema_version": 4, "signature": signature})
+    _atomic_json(
+        signature_path,
+        {"schema_version": BC_ARTIFACT_SCHEMA_VERSION, "signature": signature},
+    )
     try:
         import torch
 
@@ -1040,7 +1074,7 @@ def _best_reference(
             result = strict_replay_manifest(
                 path,
                 render_mode=None,
-                profile="expert",
+                profile=EXPERT_PROFILE,
                 use_cache=True,
             )
             scored.append((float(result.quality_score), bool(result.success), path))
@@ -1055,7 +1089,8 @@ def _best_reference(
     scored.sort(key=lambda row: (row[1], row[0]), reverse=True)
     quality, strict_success, path = scored[0]
     print(
-        f"[reference] object={object_id} strict={strict_success} quality={quality:.2f} path={path}",
+        f"[reference] object={object_id} expert_pool_valid={strict_success} "
+        f"quality={quality:.2f} path={path}",
         flush=True,
     )
     return path
@@ -1119,11 +1154,15 @@ def _run_object(
     output.mkdir(parents=True, exist_ok=True)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     existing = _read_json(output / "result.json")
-    if existing and existing.get("schema_version") == 3 and not args.force:
+    if (
+        existing
+        and existing.get("schema_version") == CATALOG_RESULT_SCHEMA_VERSION
+        and not args.force
+    ):
         status = existing.get("status")
-        if status == "VERIFIED_SUCCESS" or not args.retry_failed:
+        if status == FINAL_VERIFIED or not args.retry_failed:
             return dict(existing) | {"cached": True, "gpu": gpu, "log": str(log_path)}
-    elif existing and existing.get("schema_version") != 3:
+    elif existing and existing.get("schema_version") != CATALOG_RESULT_SCHEMA_VERSION:
         print(
             f"[cache:invalidate] object={object_id} old_schema={existing.get('schema_version')}",
             flush=True,
@@ -1160,7 +1199,7 @@ def _run_object(
             )
         if reference is None:
             result = {
-                "schema_version": 1,
+                "schema_version": CATALOG_RESULT_SCHEMA_VERSION,
                 "object_id": object_id,
                 "status": "NO_REFERENCE",
                 "gpu": gpu,
@@ -1227,7 +1266,7 @@ def _run_object(
     result = _read_json(output / "result.json")
     if not result:
         result = {
-            "schema_version": 1,
+            "schema_version": CATALOG_RESULT_SCHEMA_VERSION,
             "object_id": object_id,
             "status": "ERROR",
             "error": f"child_returncode={child.returncode}; no result.json",
@@ -1250,12 +1289,14 @@ def _write_summary(output: Path, catalog: list[str], rows: dict[str, dict]) -> N
     ordered = [rows[item] for item in catalog if item in rows]
     counts = Counter(str(row.get("status", "")) for row in ordered)
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "updated_at": _utc_now(),
         "selected_objects": len(catalog),
         "completed_objects": len(ordered),
-        "verified_total": counts.get("EXPERT_REUSED", 0) + counts.get("VERIFIED_SUCCESS", 0),
-        "new_verified": counts.get("VERIFIED_SUCCESS", 0),
+        "expert_pool_valid": counts.get(EXPERT_POOL_VALID, 0),
+        "final_verified": counts.get(FINAL_VERIFIED, 0),
+        "verified_total": counts.get(FINAL_VERIFIED, 0),
+        "new_verified": counts.get(FINAL_VERIFIED, 0),
         "status_counts": {status: counts.get(status, 0) for status in FINAL_STATUSES},
         "results": ordered,
     }
@@ -1361,7 +1402,7 @@ def run(args: argparse.Namespace) -> int:
         if object_id in expert_objects and not args.train_successful:
             rows[object_id] = {
                 "object_id": object_id,
-                "status": "EXPERT_REUSED",
+                "status": EXPERT_POOL_VALID,
                 "gpu": "",
                 "reference": "",
                 "runtime_sec": 0.0,
@@ -1404,6 +1445,7 @@ def run(args: argparse.Namespace) -> int:
                 )
             except Exception as exc:  # noqa: BLE001 - keep the catalogue sweep running
                 result = {
+                    "schema_version": CATALOG_RESULT_SCHEMA_VERSION,
                     "object_id": object_id,
                     "status": "ERROR",
                     "gpu": gpu,
@@ -1435,7 +1477,10 @@ def run(args: argparse.Namespace) -> int:
         if counts.get(status):
             print(f"  {status:<26} {counts[status]:3d}", flush=True)
     print(
-        f"  {'VERIFIED_TOTAL':<26} {int(summary.get('verified_total', 0)):3d}\n"
+        f"  {'EXPERT_POOL_VALID_TOTAL':<26} "
+        f"{int(summary.get('expert_pool_valid', 0)):3d}\n"
+        f"  {'FINAL_VERIFIED_TOTAL':<26} "
+        f"{int(summary.get('final_verified', 0)):3d}\n"
         f"[done] json={args.output / 'summary.json'} csv={args.output / 'summary.csv'}",
         flush=True,
     )

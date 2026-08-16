@@ -14,6 +14,12 @@ from source.envs.manipulation.arenas import PushArena
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.object_catalog import DEFAULT_PUSH_OBJECT, push_object_ids
 from source.envs.manipulation.objects import MeshObjectSpec
+from source.envs.manipulation.placement import (
+    PUSH_OBJECT_REACHABLE_REGION,
+    PUSH_TARGET_REACHABLE_REGION,
+    PlacementRegion,
+    UniformTablePlacementSampler,
+)
 
 
 @register_task("push")
@@ -28,6 +34,7 @@ class PushTask(SingleArmManipulationTask):
         object_id: str = DEFAULT_PUSH_OBJECT,
         success_radius: float = 0.055,
         stable_steps: int = 5,
+        target_region: PlacementRegion = PUSH_TARGET_REACHABLE_REGION,
         **kwargs: Any,
     ) -> None:
         if object_id not in push_object_ids():
@@ -39,12 +46,20 @@ class PushTask(SingleArmManipulationTask):
         self.object_id = object_id
         self.success_radius = float(success_radius)
         self.stable_steps = int(stable_steps)
+        self.target_region = target_region
         self.target_site_id: int | None = None
         self.target_pos = np.zeros(3, dtype=np.float64)
         self.initial_goal_distance = 1.0
         self._stable_count = 0
         kwargs["arena"] = kwargs.pop("arena", PushArena())
-        super().__init__(**kwargs)
+        sampler = kwargs.pop(
+            "placement_sampler",
+            UniformTablePlacementSampler.for_object_centers(
+                PUSH_OBJECT_REACHABLE_REGION,
+                rotation=(0.0, 0.0),
+            ),
+        )
+        super().__init__(placement_sampler=sampler, **kwargs)
 
     @property
     def name(self) -> str:
@@ -74,19 +89,16 @@ class PushTask(SingleArmManipulationTask):
         obj = self.objects[0]
         binding = bindings.objects["object"]
 
-        object_xy = np.asarray(
-            [rng.uniform(0.43, 0.53), rng.uniform(-0.22, -0.10)],
-            dtype=np.float64,
+        placements = self.placement_sampler.sample(
+            self.objects,
+            rng=rng,
+            reference_pos=self.table_offset,
         )
-        target_xy = np.asarray(
-            [rng.uniform(0.52, 0.66), rng.uniform(0.10, 0.23)],
-            dtype=np.float64,
-        )
-        object_pos = np.asarray(
-            [object_xy[0], object_xy[1], self.table_top_z + obj.bottom_offset + 0.002]
-        )
+        object_pos, object_quaternion = placements[obj.name]
+        object_xy = object_pos[:2]
+        target_xy = self.target_region.sample_xy(rng, self.table_offset)
         data.qpos[binding.qpos_adr : binding.qpos_adr + 3] = object_pos
-        data.qpos[binding.qpos_adr + 3 : binding.qpos_adr + 7] = [1.0, 0.0, 0.0, 0.0]
+        data.qpos[binding.qpos_adr + 3 : binding.qpos_adr + 7] = object_quaternion
         data.qvel[binding.qvel_adr : binding.qvel_adr + 6] = 0.0
 
         self.target_pos = np.asarray(
