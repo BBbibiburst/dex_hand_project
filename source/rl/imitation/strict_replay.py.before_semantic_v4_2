@@ -115,34 +115,7 @@ def _contact_sets(env):
         lower = name.lower()
         if "table" in lower or lower == "floor":
             table_ids.add(geom_id)
-    hand_prefix = str(
-        getattr(env.controller.hand_controller, "hand_prefix", "") or ""
-    )
-    palm_geom = -1
-    for candidate in (
-        f"{hand_prefix}skin_palm_p" if hand_prefix else "",
-        "skin_palm_p",
-    ):
-        if not candidate:
-            continue
-        palm_geom = mujoco.mj_name2id(
-            env.model, mujoco.mjtObj.mjOBJ_GEOM, candidate
-        )
-        if palm_geom >= 0:
-            break
-    if palm_geom < 0:
-        matches = [
-            geom_id
-            for geom_id in range(env.model.ngeom)
-            if (
-                mujoco.mj_id2name(
-                    env.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id
-                )
-                or ""
-            ).endswith("skin_palm_p")
-        ]
-        if len(matches) == 1:
-            palm_geom = int(matches[0])
+    palm_geom = mujoco.mj_name2id(env.model, mujoco.mjtObj.mjOBJ_GEOM, "skin_palm_p")
     palm_body = int(env.model.geom_bodyid[palm_geom]) if palm_geom >= 0 else -1
     return object_ids, robot_ids, table_ids, palm_body
 

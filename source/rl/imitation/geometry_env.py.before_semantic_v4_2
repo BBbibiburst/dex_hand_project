@@ -77,45 +77,8 @@ class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
         self.object_shape_ratios = torch.as_tensor(ratios, device=self.torch_device)
         self.object_half_extent = 0.5 * self.object_extent
 
-        hand_prefix = str(
-            getattr(self.host_env.controller.hand_controller, "hand_prefix", "") or ""
-        )
-
-        def resolve_geom_id(local_name: str) -> int:
-            """Resolve a hand-local geom name after MjSpec prefixing.
-
-            Attached Dex Hand entities are compiled as e.g.
-            ``dexhand_skin_0_2_p``.  The geometry observation is specified in
-            local hand names, so always respect the controller's actual prefix
-            and keep a suffix fallback for custom profiles.
-            """
-            candidates = []
-            if hand_prefix:
-                candidates.append(f"{hand_prefix}{local_name}")
-            candidates.append(local_name)
-            for candidate in candidates:
-                geom = mujoco.mj_name2id(
-                    self.model, mujoco.mjtObj.mjOBJ_GEOM, candidate
-                )
-                if geom >= 0:
-                    return int(geom)
-
-            suffix_matches = []
-            for geom in range(self.model.ngeom):
-                name = (
-                    mujoco.mj_id2name(
-                        self.model, mujoco.mjtObj.mjOBJ_GEOM, geom
-                    )
-                    or ""
-                )
-                if name.endswith(local_name):
-                    suffix_matches.append(int(geom))
-            if len(suffix_matches) == 1:
-                return suffix_matches[0]
-            return -1
-
         def geom_context(name: str) -> tuple[int, int, torch.Tensor]:
-            geom = resolve_geom_id(name)
+            geom = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, name)
             if geom < 0:
                 return -1, -1, torch.zeros(3, device=self.torch_device)
             body = int(self.model.geom_bodyid[geom])
