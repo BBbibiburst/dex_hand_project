@@ -18,7 +18,7 @@ from source.rl.residual.env import ResidualLiftConfig
 from source.rl.residual.reference import STAGE_CODES
 
 
-BC_SCHEMA_VERSION = 4
+BC_SCHEMA_VERSION = 3
 DEFAULT_HIDDEN_SIZES = (256, 256, 128)
 
 
@@ -403,7 +403,7 @@ def train_bc_policy(
     ]
     payload = {
         "schema_version": BC_SCHEMA_VERSION,
-        "policy_type": "grasp_hand_bc_geometry_v4",
+        "policy_type": "grasp_hand_bc_geometry_v3",
         "obs_dim": policy.obs_dim,
         "hand_action_dim": policy.hand_action_dim,
         "hidden_sizes": list(policy.hidden_sizes),
@@ -441,9 +441,9 @@ def load_bc_policy(checkpoint: str | Path, *, device: torch.device | str) -> BCH
     payload = torch.load(Path(checkpoint), map_location=device, weights_only=False)
     if (
         payload.get("schema_version") != BC_SCHEMA_VERSION
-        or payload.get("policy_type") != "grasp_hand_bc_geometry_v4"
+        or payload.get("policy_type") != "grasp_hand_bc_geometry_v3"
     ):
-        raise ValueError("Unsupported grasp BC checkpoint; rebuild BC with semantic-v4.")
+        raise ValueError("Unsupported grasp BC checkpoint; rebuild BC with semantic-v3.")
     policy = BCHandPolicy(
         int(payload["obs_dim"]),
         hidden_sizes=tuple(int(value) for value in payload["hidden_sizes"]),
@@ -452,4 +452,3 @@ def load_bc_policy(checkpoint: str | Path, *, device: torch.device | str) -> BCH
     policy.load_state_dict(payload["state_dict"])
     policy.eval()
     return policy
-

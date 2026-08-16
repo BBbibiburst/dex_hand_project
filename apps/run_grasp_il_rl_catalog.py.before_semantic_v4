@@ -158,10 +158,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--trust-rl-experts",
         action="store_true",
-        help=(
-            "Deprecated compatibility flag; semantic-v4 always replays BC experts "
-            "in classic MuJoCo and ignores this option."
-        ),
+        help="Use RL_SUCCESS trajectories without re-validating them in classic MuJoCo.",
     )
 
     # Parallel RL workers.
@@ -249,47 +246,31 @@ def _is_residual_manifest(manifest: Path) -> bool:
 
 
 def _validate_expert(manifest: Path, *, trust_rl: bool) -> bool:
-    """Admit BC experts only after the expert-profile C-MuJoCo replay.
-
-    ``--trust-rl-experts`` is retained as a deprecated CLI compatibility flag,
-    but it is intentionally ignored: bootstrap demonstrations must never bypass
-    authoritative replay validation.
-    """
     payload = _read_json(manifest)
     if not payload or not bool(payload.get("success", False)):
         return False
-    _ = trust_rl
+    residual = _is_residual_manifest(manifest)
+    if residual and trust_rl:
+        return True
     from source.rl.imitation.strict_replay import strict_replay_manifest
 
     try:
-        result = strict_replay_manifest(
-            manifest,
-            render_mode=None,
-            profile="expert",
-            use_cache=True,
-        )
+        result = strict_replay_manifest(manifest, render_mode=None, use_cache=True)
     except Exception as exc:
         print(
-            f"[expert:reject] manifest={manifest} "
-            f"expert_replay_error={type(exc).__name__}: {exc}",
+            f"[expert:reject] manifest={manifest} strict_replay_error={type(exc).__name__}: {exc}",
             flush=True,
         )
         return False
     if not result.success:
         print(
-            f"[expert:reject] manifest={manifest} expert=False "
-            f"tail_min={result.tail_min_lift:.3f} "
-            f"contact={result.tail_contact_fraction:.1%} "
-            f"grasp={result.tail_grasp_fraction:.1%} "
-            f"opp={result.tail_opposition_mean:.2f} "
-            f"speed={result.tail_max_speed:.3f} "
-            f"tail_table={result.tail_robot_table_contact_fraction:.1%} "
-            f"tail_pen={1000.0 * result.tail_max_penetration:.1f}mm "
-            f"quality={result.quality_score:.2f}",
+            f"[expert:reject] manifest={manifest} strict=False "
+            f"tail_min={result.tail_min_lift:.3f} grasp={result.tail_grasp_fraction:.1%} "
+            f"opp={result.tail_opposition_mean:.2f} speed={result.tail_max_speed:.3f} "
+            f"table={result.robot_table_contacts} quality={result.quality_score:.2f}",
             flush=True,
         )
     return bool(result.success)
-
 
 def _expert_candidates_for_object(
     object_id: str,
@@ -395,14 +376,7 @@ def _bootstrap_priority(
     rows: dict[str, dict],
     expert_objects: set[str],
 ) -> list[str]:
-    """Success-first ordering with soft dataset/shape diversity.
-
-    The previous semantic-v3 scheduler strictly round-robined every
-    dataset/shape bucket.  With no historical benchmark that placed hard EGAD
-    objects at the very front and spent 20+ minutes on each before trying easy
-    YCB candidates.  v4 keeps shape diversity but uses a 2:1 YCB:EGAD pass when
-    both datasets are present.
-    """
+    """Historically easy first, but round-robin across dataset/shape buckets."""
     status_rank = {
         "ULTRA_SUCCESS": 0,
         "LATTICE_SUCCESS": 1,
@@ -414,14 +388,11 @@ def _bootstrap_priority(
         "PIPELINE_ERROR": 7,
     }
     order = {object_id: index for index, object_id in enumerate(catalog)}
-    shape_cache: dict[str, str] = {}
 
     def lift_hint(row: dict) -> float:
         values = (
-            row.get("rl_best_final_lift_mm"),
-            row.get("rl_best_lift_mm"),
-            row.get("lattice_best_lift_mm"),
-            row.get("ultra_best_final_lift_mm"),
+            row.get("rl_best_final_lift_mm"), row.get("rl_best_lift_mm"),
+            row.get("lattice_best_lift_mm"), row.get("ultra_best_final_lift_mm"),
             row.get("ultra_best_lift_mm"),
         )
         parsed = []
@@ -433,9 +404,6 @@ def _bootstrap_priority(
         return max(parsed, default=0.0)
 
     def shape_bucket(object_id: str) -> str:
-        cached = shape_cache.get(object_id)
-        if cached is not None:
-            return cached
         dataset = object_id.split(":", 1)[0]
         try:
             import numpy as np
@@ -457,9 +425,7 @@ def _bootstrap_priority(
                 shape = "irregular"
         except Exception:
             shape = "unknown"
-        value = f"{dataset}:{shape}"
-        shape_cache[object_id] = value
-        return value
+        return f"{dataset}:{shape}"
 
     selected = [item for item in catalog if item not in expert_objects]
     buckets: dict[str, list[str]] = {}
@@ -473,49 +439,24 @@ def _bootstrap_priority(
                 order[object_id],
             )
         )
-
-    def drain_dataset(dataset: str, rounds: int) -> list[str]:
-        result: list[str] = []
-        names = sorted(name for name in buckets if name.startswith(f"{dataset}:"))
-        for _ in range(rounds):
-            for name in names:
-                if buckets[name]:
-                    result.append(buckets[name].pop(0))
-        return result
-
+    # Interleave buckets so the first 16 experts are not all boxes/cylinders.
     result: list[str] = []
-    datasets = {item.split(":", 1)[0] for item in selected}
-    while any(buckets[name] for name in buckets):
-        if "ycb" in datasets:
-            result.extend(drain_dataset("ycb", 2 if "egad" in datasets else 1))
-        if "egad" in datasets:
-            result.extend(drain_dataset("egad", 1))
-        for dataset in sorted(datasets - {"ycb", "egad"}):
-            result.extend(drain_dataset(dataset, 1))
+    names = sorted(buckets)
+    while any(buckets[name] for name in names):
+        for name in names:
+            if buckets[name]:
+                result.append(buckets[name].pop(0))
     return result
-
-
-BOOTSTRAP_RESULT_SCHEMA_VERSION = 4
-
 
 def _bootstrap_job(
     object_id: str,
     *,
     gpu: str,
-    budget: int,
     args: argparse.Namespace,
     bootstrap_root: Path,
     ultra_roots: tuple[Path, ...],
 ) -> dict[str, Any]:
-    """Run one breadth-first bootstrap stage for one object.
-
-    ``budget`` is the *maximum PPO updates for this pass*.  Ultra and wrist
-    lattice are still tried first and can finish the object with zero PPO.
-    Later passes revisit only unresolved objects with larger budgets.
-    """
-    if budget <= 0:
-        raise ValueError("bootstrap budget must be positive.")
-
+    """Re-run the proven Ultra->lattice->adaptive grasp-edit search for one object."""
     slug = _slug(object_id)
     job_root = bootstrap_root / "jobs" / slug
     benchmark_output = job_root / "benchmark"
@@ -524,55 +465,14 @@ def _bootstrap_job(
     log_path.parent.mkdir(parents=True, exist_ok=True)
     job_root.mkdir(parents=True, exist_ok=True)
 
-    # First re-score every already materialized trajectory under v4 expert
-    # semantics.  This lets a restarted run immediately recover trajectories
-    # such as the 54 mm cracker-box grasp without recomputing search.
-    preexisting = _expert_candidates_for_object(
-        object_id,
-        benchmark_root=benchmark_output,
-        output_root=args.output,
-        bootstrap_root=bootstrap_root,
-        lattice_root=args.lattice_root,
-        ultra_roots=ultra_roots,
-    )
-    accepted = [
-        path
-        for path in preexisting
-        if _validate_expert(path, trust_rl=args.trust_rl_experts)
-    ][: args.bc_max_experts_per_object]
-    if accepted:
-        result = {
-            "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
-            "object_id": object_id,
-            "status": "EXPERT_READY",
-            "pipeline_status": "REVALIDATED_EXISTING",
-            "manifest": str(accepted[0]),
-            "manifests": [str(path) for path in accepted],
-            "gpu": gpu,
-            "budget": 0,
-            "log": str(log_path),
-            "return_code": 0,
-            "runtime_sec": 0.0,
-        }
-        _atomic_json(result_path, result)
-        return result
-
     cached = _read_json(result_path)
-    cached_budget = int(cached.get("budget", 0) or 0)
-    cached_schema = int(cached.get("schema_version", 0) or 0)
-    if (
-        cached
-        and not args.force
-        and cached_schema == BOOTSTRAP_RESULT_SCHEMA_VERSION
-        and cached.get("status") in {"NO_EXPERT", "ERROR"}
-        and cached_budget >= budget
-        and not args.retry_failed
-    ):
-        return dict(cached) | {
-            "cached": True,
-            "gpu": gpu,
-            "log": str(log_path),
-        }
+    cached_manifest = Path(str(cached.get("manifest", ""))) if cached.get("manifest") else None
+    if cached and not args.force:
+        if cached_manifest is not None and cached_manifest.is_file():
+            if _validate_expert(cached_manifest, trust_rl=args.trust_rl_experts):
+                return dict(cached) | {"cached": True, "gpu": gpu, "log": str(log_path)}
+        elif cached.get("status") in {"NO_EXPERT", "ERROR"} and not args.retry_failed:
+            return dict(cached) | {"cached": True, "gpu": gpu, "log": str(log_path)}
 
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = gpu
@@ -589,14 +489,12 @@ def _bootstrap_job(
         str(benchmark_output),
         "--num-envs",
         str(args.bootstrap_num_envs),
-        # Breadth-first pass: do not let one object automatically consume the
-        # complete 5->10->15 budget.  Each catalogue pass grants one ceiling.
         "--initial-updates",
-        str(budget),
+        str(args.bootstrap_initial_updates),
         "--mid-updates",
-        str(budget),
+        str(args.bootstrap_mid_updates),
         "--max-updates",
-        str(budget),
+        str(args.bootstrap_max_updates),
         "--device",
         "cuda:0",
         "--ultra-seed-count",
@@ -615,18 +513,17 @@ def _bootstrap_job(
     for ultra_root in ultra_roots:
         command.extend(["--ultra-root", str(ultra_root)])
 
-    # Different breadth-first budgets produce different benchmark signatures.
-    # Existing Ultra attempts and lattice templates are still reused internally;
-    # --force only prevents the per-object summary from hiding a new stage.
-    if args.force or cached_budget < budget or cached_schema != BOOTSTRAP_RESULT_SCHEMA_VERSION:
+    # If this job was previously classified from files that are now missing,
+    # bypass its per-object benchmark cache and rebuild the actual trajectory.
+    stale_job = (benchmark_output / "summary.json").is_file() and (
+        cached_manifest is None or not cached_manifest.is_file()
+    )
+    if args.force or stale_job:
         command.append("--force")
 
     started = time.perf_counter()
     with log_path.open("a", encoding="utf-8") as log:
-        log.write(
-            f"\n=== bootstrap-v4 object={object_id} gpu={gpu} "
-            f"budget={budget} started={_utc_now()} ===\n"
-        )
+        log.write(f"\n=== bootstrap object={object_id} gpu={gpu} started={_utc_now()} ===\n")
         log.write(f"[command] {' '.join(command)}\n")
         log.flush()
         child = subprocess.run(
@@ -650,19 +547,17 @@ def _bootstrap_job(
         for path in candidates
         if _validate_expert(path, trust_rl=args.trust_rl_experts)
     ][: args.bc_max_experts_per_object]
-
     summary = _read_json(benchmark_output / "summary.json")
     rows = summary.get("results", []) if isinstance(summary.get("results", []), list) else []
     old_status = rows[0].get("status") if rows else ""
     result = {
-        "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
+        "schema_version": 1,
         "object_id": object_id,
         "status": "EXPERT_READY" if accepted else "NO_EXPERT",
         "pipeline_status": old_status,
         "manifest": str(accepted[0]) if accepted else "",
         "manifests": [str(path) for path in accepted],
         "gpu": gpu,
-        "budget": int(budget),
         "log": str(log_path),
         "return_code": int(child.returncode),
         "runtime_sec": round(time.perf_counter() - started, 3),
@@ -682,14 +577,6 @@ def _parallel_bootstrap_experts(
     bootstrap_root: Path,
     ultra_roots: tuple[Path, ...],
 ) -> tuple[list[Path], set[str]]:
-    """Breadth-first parallel expert bootstrap.
-
-    Every object first receives a cheap 1-update ceiling (Ultra/lattice can
-    still succeed with zero PPO).  Only if the expert target is still unmet do
-    unresolved objects receive 5, then 10, then 15 update ceilings.  This
-    prevents a hard EGAD object from monopolizing a worker for ~20 minutes while
-    easy expert candidates remain untried.
-    """
     target = min(max(0, int(args.bootstrap_experts)), len(catalog))
     if target <= len(expert_objects):
         print(
@@ -707,26 +594,16 @@ def _parallel_bootstrap_experts(
         <= args.bootstrap_max_updates
     ):
         raise ValueError(
-            "Require 0 < bootstrap-initial-updates <= bootstrap-mid-updates "
-            "<= bootstrap-max-updates."
+            "Require 0 < bootstrap-initial-updates <= bootstrap-mid-updates <= bootstrap-max-updates."
         )
 
     candidates = _bootstrap_priority(catalog, rows, expert_objects)
     slots = [gpu for gpu in gpu_ids for _ in range(args.bootstrap_workers_per_gpu)]
-    stage_budgets: list[int] = []
-    for value in (
-        1,
-        int(args.bootstrap_initial_updates),
-        int(args.bootstrap_mid_updates),
-        int(args.bootstrap_max_updates),
-    ):
-        if value > 0 and value not in stage_budgets:
-            stage_budgets.append(value)
-
     print(
         f"[bootstrap] need={target - len(expert_objects)} target={target} "
         f"candidates={len(candidates)} gpu_slots={slots} envs/job={args.bootstrap_num_envs} "
-        f"breadth_first_budgets={stage_budgets}",
+        f"budget={args.bootstrap_initial_updates}->{args.bootstrap_mid_updates}->"
+        f"{args.bootstrap_max_updates}",
         flush=True,
     )
 
@@ -739,129 +616,84 @@ def _parallel_bootstrap_experts(
             )
         return experts, expert_objects
 
+    work: queue.Queue[str] = queue.Queue()
+    for object_id in candidates:
+        work.put(object_id)
     lock = threading.Lock()
     path_keys = {str(path.resolve()) for path in experts if path.is_file()}
     attempted: dict[str, dict] = {}
 
-    # Load compatible v4 results only.  semantic-v3 NO_EXPERT cache rows are
-    # deliberately ignored because expert admission semantics changed.
-    previous_summary = _read_json(bootstrap_root / "summary.json")
-    for item in previous_summary.get("results", []):
-        if not isinstance(item, dict) or not item.get("object_id"):
-            continue
-        if int(item.get("schema_version", 0) or 0) == BOOTSTRAP_RESULT_SCHEMA_VERSION:
-            attempted[str(item["object_id"])] = dict(item)
-
-    def persist_bootstrap(stage_budget: int | None = None) -> None:
+    def persist_bootstrap() -> None:
         _atomic_json(
             bootstrap_root / "summary.json",
             {
-                "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
+                "schema_version": 1,
                 "updated_at": _utc_now(),
                 "target_expert_objects": target,
                 "expert_objects": len(expert_objects),
                 "expert_trajectories": len(experts),
-                "breadth_first_budgets": stage_budgets,
-                "active_budget": stage_budget,
                 "results": [attempted[key] for key in catalog if key in attempted],
             },
         )
 
-    def run_stage(stage_budget: int) -> None:
-        unresolved = [
-            object_id
-            for object_id in candidates
-            if object_id not in expert_objects
-            and (
-                args.retry_failed
-                or int(attempted.get(object_id, {}).get("budget", 0) or 0) < stage_budget
-                or int(attempted.get(object_id, {}).get("schema_version", 0) or 0)
-                != BOOTSTRAP_RESULT_SCHEMA_VERSION
-            )
-        ]
-        if not unresolved:
-            return
-
-        print(
-            f"[bootstrap:stage] budget={stage_budget} unresolved={len(unresolved)} "
-            f"experts={len(expert_objects)}/{target}",
-            flush=True,
-        )
-        work: queue.Queue[str] = queue.Queue()
-        for object_id in unresolved:
-            work.put(object_id)
-
-        def worker(gpu: str) -> None:
-            while True:
-                with lock:
-                    if len(expert_objects) >= target:
-                        return
-                try:
-                    object_id = work.get_nowait()
-                except queue.Empty:
+    def worker(gpu: str) -> None:
+        while True:
+            with lock:
+                if len(expert_objects) >= target:
                     return
-                try:
-                    result = _bootstrap_job(
-                        object_id,
-                        gpu=gpu,
-                        budget=stage_budget,
-                        args=args,
-                        bootstrap_root=bootstrap_root,
-                        ultra_roots=ultra_roots,
-                    )
-                except Exception as exc:
-                    result = {
-                        "schema_version": BOOTSTRAP_RESULT_SCHEMA_VERSION,
-                        "object_id": object_id,
-                        "status": "ERROR",
-                        "gpu": gpu,
-                        "budget": stage_budget,
-                        "error": f"{type(exc).__name__}: {exc}",
-                    }
+            try:
+                object_id = work.get_nowait()
+            except queue.Empty:
+                return
+            try:
+                result = _bootstrap_job(
+                    object_id,
+                    gpu=gpu,
+                    args=args,
+                    bootstrap_root=bootstrap_root,
+                    ultra_roots=ultra_roots,
+                )
+            except Exception as exc:
+                result = {
+                    "object_id": object_id,
+                    "status": "ERROR",
+                    "gpu": gpu,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
 
-                with lock:
-                    attempted[object_id] = result
-                    for value in result.get("manifests", []):
-                        path = Path(value)
-                        if not path.is_file():
-                            continue
-                        key = str(path.resolve())
-                        if key not in path_keys:
-                            path_keys.add(key)
-                            experts.append(path.resolve())
-                    if result.get("status") == "EXPERT_READY":
-                        expert_objects.add(object_id)
-                    persist_bootstrap(stage_budget)
-                    print(
-                        f"[bootstrap:done] object={object_id:<34} "
-                        f"status={result.get('status'):<12} gpu={gpu} "
-                        f"budget={int(result.get('budget', stage_budget) or 0):>2} "
-                        f"experts={len(expert_objects)}/{target} "
-                        f"runtime={float(result.get('runtime_sec', 0.0) or 0.0):.1f}s",
-                        flush=True,
-                    )
-                work.task_done()
+            with lock:
+                attempted[object_id] = result
+                for value in result.get("manifests", []):
+                    path = Path(value)
+                    if not path.is_file():
+                        continue
+                    key = str(path.resolve())
+                    if key not in path_keys:
+                        path_keys.add(key)
+                        experts.append(path.resolve())
+                if result.get("status") == "EXPERT_READY":
+                    expert_objects.add(object_id)
+                persist_bootstrap()
+                print(
+                    f"[bootstrap:done] object={object_id:<34} "
+                    f"status={result.get('status'):<12} gpu={gpu} "
+                    f"experts={len(expert_objects)}/{target} "
+                    f"runtime={float(result.get('runtime_sec', 0.0) or 0.0):.1f}s",
+                    flush=True,
+                )
+            work.task_done()
 
-        threads = [
-            threading.Thread(target=worker, args=(gpu,), daemon=False)
-            for gpu in slots
-        ]
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
+    threads = [threading.Thread(target=worker, args=(gpu,), daemon=False) for gpu in slots]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
 
-    for stage_budget in stage_budgets:
-        if len(expert_objects) >= target:
-            break
-        run_stage(stage_budget)
-
-    persist_bootstrap(None)
+    persist_bootstrap()
     if len(expert_objects) < target:
         raise RuntimeError(
-            f"Breadth-first bootstrap exhausted budgets {stage_budgets} with only "
-            f"{len(expert_objects)}/{target} validated expert objects. Inspect "
-            f"{bootstrap_root / 'summary.json'} and logs."
+            f"Parallel bootstrap exhausted the catalogue with only {len(expert_objects)}/{target} "
+            f"validated expert objects. Inspect {bootstrap_root / 'summary.json'} and logs."
         )
     print(
         f"[bootstrap:ready] expert_objects={len(expert_objects)} "
@@ -892,7 +724,7 @@ def _bc_signature(experts: list[Path], args: argparse.Namespace) -> str:
         except OSError:
             expert_hashes.append([str(path), "missing"])
     payload = {
-        "version": 4,
+        "version": 3,
         "experts": expert_hashes,
         "bc_epochs": args.bc_epochs,
         "bc_batch_size": args.bc_batch_size,
@@ -925,7 +757,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
     _atomic_json(
         bc_root / "experts.json",
         {
-            "schema_version": 4,
+            "schema_version": 3,
             "count": len(experts),
             "manifests": [str(path) for path in experts],
         },
@@ -970,7 +802,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
         nconmax=args.nconmax,
         njmax=args.njmax,
     )
-    _atomic_json(bc_root / "validation.json", {"schema_version": 4, **validation})
+    _atomic_json(bc_root / "validation.json", {"schema_version": 3, **validation})
     print(
         f"[bc:rollout-validation] objects={validation['objects']} "
         f"success={validation['success_rate']:.1%}",
@@ -982,7 +814,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
             f"--bc-min-rollout-success={args.bc_min_rollout_success:.1%}; refusing full RL sweep."
         )
 
-    _atomic_json(signature_path, {"schema_version": 4, "signature": signature})
+    _atomic_json(signature_path, {"schema_version": 3, "signature": signature})
     try:
         import torch
         if torch.cuda.is_available():
@@ -1046,12 +878,7 @@ def _best_reference(
     scored = []
     for path in unique:
         try:
-            result = strict_replay_manifest(
-                path,
-                render_mode=None,
-                profile="expert",
-                use_cache=True,
-            )
+            result = strict_replay_manifest(path, render_mode=None, use_cache=True)
             scored.append((float(result.quality_score), bool(result.success), path))
         except Exception:
             continue
@@ -1449,4 +1276,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
