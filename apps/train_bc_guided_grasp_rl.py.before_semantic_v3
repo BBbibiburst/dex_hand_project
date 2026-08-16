@@ -8,7 +8,6 @@ from pathlib import Path
 
 from source.rl.common.ppo import PPOConfig, PPOTrainer
 from source.rl.imitation.guided_env import BCGuidedResidualLiftEnv, GuidedResidualConfig
-from source.rl.imitation.strict_replay import strict_replay_manifest
 
 
 def _atomic_json(path: Path, payload: dict) -> None:
@@ -92,7 +91,7 @@ def run(args: argparse.Namespace) -> int:
         entropy_coef=args.entropy_coef,
     )
     config_payload = {
-        "schema_version": 3,
+        "schema_version": 1,
         "reference": str(args.reference),
         "bc_checkpoint": str(args.bc_checkpoint),
         "seed": args.seed,
@@ -143,8 +142,7 @@ def run(args: argparse.Namespace) -> int:
             active.save(args.output / "checkpoints" / f"update_{active.update_index:05d}.pt")
 
     result = {
-        "schema_version": 3,
-        "pipeline_version": "semantic-v3",
+        "schema_version": 1,
         "object_id": env.reference.object_id,
         "reference": str(args.reference),
         "bc_checkpoint": str(args.bc_checkpoint),
@@ -169,21 +167,15 @@ def run(args: argparse.Namespace) -> int:
 
     best = args.output / "best_trajectory" / "manifest.json"
     if best.is_file() and not args.no_replay:
-        replay = strict_replay_manifest(
-            best,
-            render_mode=None,
-            success_lift_height=args.success_lift_height,
-            maximum_object_speed=args.maximum_object_speed,
-            use_cache=False,
-        )
+        from source.rl.residual.replay import replay_residual_trajectory
+
+        replay = replay_residual_trajectory(best, render_mode=None)
         replay_payload = asdict(replay)
         result["replay"] = replay_payload
         result["status"] = "VERIFIED_SUCCESS" if replay.success else "REPLAY_FAILED"
         print(
-            f"[strict-replay] success={replay.success} tail_min={replay.tail_min_lift:.3f}m "
-            f"grasp={replay.tail_grasp_fraction:.1%} opp={replay.tail_opposition_mean:.2f} "
-            f"speed={replay.tail_max_speed:.3f}m/s table={replay.robot_table_contacts} "
-            f"penetration={1000.0 * replay.max_penetration:.1f}mm",
+            f"[replay] success={replay.success} fraction={replay.success_fraction:.1%} "
+            f"lift={replay.object_lift:.3f}m frames={replay.frames}",
             flush=True,
         )
     elif best.is_file():

@@ -130,8 +130,6 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--bc-batch-size", type=int, default=2048)
     parser.add_argument("--bc-learning-rate", type=float, default=3e-4)
     parser.add_argument("--bc-max-experts-per-object", type=int, default=4)
-    parser.add_argument("--bc-validation-objects", type=int, default=4)
-    parser.add_argument("--bc-min-rollout-success", type=float, default=0.25)
     parser.add_argument("--rebuild-bc", action="store_true")
     parser.add_argument(
         "--bootstrap-experts",
@@ -249,28 +247,23 @@ def _validate_expert(manifest: Path, *, trust_rl: bool) -> bool:
     payload = _read_json(manifest)
     if not payload or not bool(payload.get("success", False)):
         return False
-    residual = _is_residual_manifest(manifest)
-    if residual and trust_rl:
+    if not _is_residual_manifest(manifest) or trust_rl:
         return True
-    from source.rl.imitation.strict_replay import strict_replay_manifest
+    from source.rl.residual.replay import replay_residual_trajectory
 
     try:
-        result = strict_replay_manifest(manifest, render_mode=None, use_cache=True)
+        result = replay_residual_trajectory(manifest, render_mode=None)
     except Exception as exc:
-        print(
-            f"[expert:reject] manifest={manifest} strict_replay_error={type(exc).__name__}: {exc}",
-            flush=True,
-        )
+        print(f"[expert:reject] manifest={manifest} replay_error={type(exc).__name__}: {exc}")
         return False
     if not result.success:
         print(
-            f"[expert:reject] manifest={manifest} strict=False "
-            f"tail_min={result.tail_min_lift:.3f} grasp={result.tail_grasp_fraction:.1%} "
-            f"opp={result.tail_opposition_mean:.2f} speed={result.tail_max_speed:.3f} "
-            f"table={result.robot_table_contacts} quality={result.quality_score:.2f}",
+            f"[expert:reject] manifest={manifest} classic_replay=False "
+            f"lift={result.object_lift:.3f} fraction={result.success_fraction:.1%}",
             flush=True,
         )
     return bool(result.success)
+
 
 def _expert_candidates_for_object(
     object_id: str,
@@ -376,7 +369,7 @@ def _bootstrap_priority(
     rows: dict[str, dict],
     expert_objects: set[str],
 ) -> list[str]:
-    """Historically easy first, but round-robin across dataset/shape buckets."""
+    """Prioritize objects that were historically easiest, then fall back to all 127."""
     status_rank = {
         "ULTRA_SUCCESS": 0,
         "LATTICE_SUCCESS": 1,
@@ -391,8 +384,10 @@ def _bootstrap_priority(
 
     def lift_hint(row: dict) -> float:
         values = (
-            row.get("rl_best_final_lift_mm"), row.get("rl_best_lift_mm"),
-            row.get("lattice_best_lift_mm"), row.get("ultra_best_final_lift_mm"),
+            row.get("rl_best_final_lift_mm"),
+            row.get("rl_best_lift_mm"),
+            row.get("lattice_best_lift_mm"),
+            row.get("ultra_best_final_lift_mm"),
             row.get("ultra_best_lift_mm"),
         )
         parsed = []
@@ -403,50 +398,16 @@ def _bootstrap_priority(
                 parsed.append(0.0)
         return max(parsed, default=0.0)
 
-    def shape_bucket(object_id: str) -> str:
-        dataset = object_id.split(":", 1)[0]
-        try:
-            import numpy as np
-            import trimesh
-            from source.grasping.search.catalog import resolve_object
-
-            loaded = trimesh.load_mesh(resolve_object(object_id), process=False)
-            mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
-            vertices = np.asarray(mesh.vertices, dtype=float)
-            extent = np.sort(np.maximum(np.ptp(vertices, axis=0), 1e-6))[::-1]
-            a, b, c = map(float, extent)
-            if a / b >= 1.8:
-                shape = "elongated"
-            elif b / c >= 1.8:
-                shape = "flat"
-            elif a / c <= 1.35:
-                shape = "compact"
-            else:
-                shape = "irregular"
-        except Exception:
-            shape = "unknown"
-        return f"{dataset}:{shape}"
-
     selected = [item for item in catalog if item not in expert_objects]
-    buckets: dict[str, list[str]] = {}
-    for object_id in selected:
-        buckets.setdefault(shape_bucket(object_id), []).append(object_id)
-    for values in buckets.values():
-        values.sort(
-            key=lambda object_id: (
-                status_rank.get(str(rows.get(object_id, {}).get("status", "")), 8),
-                -lift_hint(rows.get(object_id, {})),
-                order[object_id],
-            )
+    selected.sort(
+        key=lambda object_id: (
+            status_rank.get(str(rows.get(object_id, {}).get("status", "")), 8),
+            -lift_hint(rows.get(object_id, {})),
+            order[object_id],
         )
-    # Interleave buckets so the first 16 experts are not all boxes/cylinders.
-    result: list[str] = []
-    names = sorted(buckets)
-    while any(buckets[name] for name in names):
-        for name in names:
-            if buckets[name]:
-                result.append(buckets[name].pop(0))
-    return result
+    )
+    return selected
+
 
 def _bootstrap_job(
     object_id: str,
@@ -704,35 +665,15 @@ def _parallel_bootstrap_experts(
 
 
 def _bc_signature(experts: list[Path], args: argparse.Namespace) -> str:
-    source_files = (
-        Path("source/rl/imitation/bc.py"),
-        Path("source/rl/imitation/geometry_env.py"),
-        Path("source/rl/imitation/guided_env.py"),
-        Path("source/rl/imitation/strict_replay.py"),
-    )
-    source_hashes = {
-        str(path): hashlib.sha256(path.read_bytes()).hexdigest()
-        for path in source_files
-        if path.is_file()
-    }
-    expert_hashes = []
-    for path in experts:
-        try:
-            expert_hashes.append(
-                [str(path.resolve()), hashlib.sha256(path.read_bytes()).hexdigest()]
-            )
-        except OSError:
-            expert_hashes.append([str(path), "missing"])
     payload = {
-        "version": 3,
-        "experts": expert_hashes,
+        "version": 1,
+        "experts": [str(path.resolve()) for path in experts],
         "bc_epochs": args.bc_epochs,
         "bc_batch_size": args.bc_batch_size,
         "bc_learning_rate": args.bc_learning_rate,
-        "bc_validation_objects": args.bc_validation_objects,
-        "source_hashes": source_hashes,
     }
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+
 
 def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
     bc_root = args.output / "bc"
@@ -747,7 +688,6 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
         and dataset.is_file()
         and dataset.with_suffix(".json").is_file()
         and checkpoint.is_file()
-        and (bc_root / "validation.json").is_file()
     )
     if reusable:
         print(f"[bc:reuse] dataset={dataset} checkpoint={checkpoint}", flush=True)
@@ -757,7 +697,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
     _atomic_json(
         bc_root / "experts.json",
         {
-            "schema_version": 3,
+            "schema_version": 1,
             "count": len(experts),
             "manifests": [str(path) for path in experts],
         },
@@ -771,7 +711,7 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
     )
     print(
         f"[bc:data-ready] frames={info.observations} experts={info.experts} "
-        f"objects={info.objects} obs={info.obs_dim} schema={info.observation_schema.get('schema_version')}",
+        f"objects={info.objects} obs={info.obs_dim}",
         flush=True,
     )
     train_bc_policy(
@@ -784,44 +724,16 @@ def _prepare_bc(experts: list[Path], args: argparse.Namespace) -> Path:
             learning_rate=args.bc_learning_rate,
         ),
     )
-
-    from source.rl.imitation.evaluate import evaluate_bc_checkpoint
-    metadata = _read_json(checkpoint.with_suffix(".json"))
-    validation_ids = set(metadata.get("validation_object_ids", []))
-    validation_manifests = []
-    for path, object_id in zip(experts, info.object_ids):
-        if object_id in validation_ids:
-            validation_manifests.append(path)
-    if not validation_manifests:
-        validation_manifests = list(experts[: max(1, args.bc_validation_objects)])
-    validation = evaluate_bc_checkpoint(
-        validation_manifests,
-        checkpoint=checkpoint,
-        device=args.bc_device,
-        maximum_objects=args.bc_validation_objects,
-        nconmax=args.nconmax,
-        njmax=args.njmax,
-    )
-    _atomic_json(bc_root / "validation.json", {"schema_version": 3, **validation})
-    print(
-        f"[bc:rollout-validation] objects={validation['objects']} "
-        f"success={validation['success_rate']:.1%}",
-        flush=True,
-    )
-    if validation["success_rate"] < args.bc_min_rollout_success:
-        raise RuntimeError(
-            f"BC-only held-out rollout success {validation['success_rate']:.1%} is below "
-            f"--bc-min-rollout-success={args.bc_min_rollout_success:.1%}; refusing full RL sweep."
-        )
-
-    _atomic_json(signature_path, {"schema_version": 3, "signature": signature})
+    _atomic_json(signature_path, {"schema_version": 1, "signature": signature})
     try:
         import torch
+
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
     except ImportError:
         pass
     return checkpoint
+
 
 def _best_reference(
     object_id: str,
@@ -832,15 +744,15 @@ def _best_reference(
     lattice_root: Path,
     ultra_roots: tuple[Path, ...],
 ) -> Path | None:
-    """Choose the physically best available full reference, not max-lift-first."""
     slug = _slug(object_id)
-    candidates: list[Path] = []
     direct = (
         primitive_root / slug / "best_attempt" / "manifest.json",
         bootstrap_root / "jobs" / slug / "benchmark" / "rl" / slug / "best_attempt" / "manifest.json",
         benchmark_root / "rl" / slug / "best_attempt" / "manifest.json",
     )
-    candidates.extend(path.resolve() for path in direct if path.is_file())
+    for path in direct:
+        if path.is_file():
+            return path.resolve()
 
     rows = _lattice_rows(lattice_root, object_id)
     rows.sort(
@@ -851,46 +763,19 @@ def _best_reference(
         ),
         reverse=True,
     )
-    for row in rows[:4]:
+    for row in rows:
         value = row.get("manifest")
         if value:
             path = _resolve_path(value, base=Path.cwd())
             if path.is_file():
-                candidates.append(path.resolve())
+                return path
 
     try:
-        attempts = discover_ultra_attempts(object_id, roots=ultra_roots, maximum=3)
+        attempts = discover_ultra_attempts(object_id, roots=ultra_roots, maximum=8)
     except (FileNotFoundError, RuntimeError, ValueError):
         attempts = []
-    candidates.extend(Path(row[0]).resolve() for row in attempts if Path(row[0]).is_file())
+    return Path(attempts[0][0]).resolve() if attempts else None
 
-    unique = []
-    seen = set()
-    for path in candidates:
-        key = str(path)
-        if key not in seen:
-            seen.add(key)
-            unique.append(path)
-    if not unique:
-        return None
-
-    from source.rl.imitation.strict_replay import strict_replay_manifest
-    scored = []
-    for path in unique:
-        try:
-            result = strict_replay_manifest(path, render_mode=None, use_cache=True)
-            scored.append((float(result.quality_score), bool(result.success), path))
-        except Exception:
-            continue
-    if not scored:
-        return unique[0]
-    scored.sort(key=lambda row: (row[1], row[0]), reverse=True)
-    quality, strict_success, path = scored[0]
-    print(
-        f"[reference] object={object_id} strict={strict_success} quality={quality:.2f} path={path}",
-        flush=True,
-    )
-    return path
 
 def _bootstrap_ultra(
     object_id: str,
@@ -950,12 +835,10 @@ def _run_object(
     output.mkdir(parents=True, exist_ok=True)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     existing = _read_json(output / "result.json")
-    if existing and existing.get("schema_version") == 3 and not args.force:
+    if existing and not args.force:
         status = existing.get("status")
         if status == "VERIFIED_SUCCESS" or not args.retry_failed:
             return dict(existing) | {"cached": True, "gpu": gpu, "log": str(log_path)}
-    elif existing and existing.get("schema_version") != 3:
-        print(f"[cache:invalidate] object={object_id} old_schema={existing.get('schema_version')}", flush=True)
     if args.force and output.exists():
         shutil.rmtree(output)
         output.mkdir(parents=True, exist_ok=True)
@@ -1114,10 +997,6 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("workers-per-gpu, num-envs and updates must be positive.")
     if args.bootstrap_experts < 0:
         raise ValueError("--bootstrap-experts must be >= 0.")
-    if args.bc_validation_objects <= 0:
-        raise ValueError("--bc-validation-objects must be positive.")
-    if not 0.0 <= args.bc_min_rollout_success <= 1.0:
-        raise ValueError("--bc-min-rollout-success must lie in [0, 1].")
     if min(
         args.bootstrap_base_candidates,
         args.bootstrap_lattice_max_templates,

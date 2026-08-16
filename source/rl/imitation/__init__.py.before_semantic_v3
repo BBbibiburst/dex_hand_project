@@ -8,22 +8,15 @@ from source.rl.imitation.bc import (
     load_bc_policy,
     train_bc_policy,
 )
-from source.rl.imitation.evaluate import evaluate_bc_checkpoint
-from source.rl.imitation.geometry_env import GeometryAwareResidualLiftEnv
 from source.rl.imitation.guided_env import BCGuidedResidualLiftEnv, GuidedResidualConfig
-from source.rl.imitation.strict_replay import StrictReplayResult, strict_replay_manifest
 
 __all__ = [
     "BCDatasetInfo",
     "BCGuidedResidualLiftEnv",
     "BCHandPolicy",
     "BCTrainConfig",
-    "GeometryAwareResidualLiftEnv",
     "GuidedResidualConfig",
-    "StrictReplayResult",
     "collect_bc_dataset",
-    "evaluate_bc_checkpoint",
     "load_bc_policy",
-    "strict_replay_manifest",
     "train_bc_policy",
 ]

@@ -1,0 +1,193 @@
+"""Geometry-aware observation wrapper for grasp imitation and residual RL."""
+from __future__ import annotations
+
+import mujoco
+import numpy as np
+import torch
+
+from source.rl.residual.env import MjWarpResidualLiftEnv, ResidualLiftConfig
+
+
+GEOMETRY_OBSERVATION_SCHEMA_VERSION = 3
+
+
+def _quat_conjugate(q: torch.Tensor) -> torch.Tensor:
+    return torch.cat([q[..., :1], -q[..., 1:]], dim=-1)
+
+
+def _quat_multiply(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
+    aw, ax, ay, az = a.unbind(dim=-1)
+    bw, bx, by, bz = b.unbind(dim=-1)
+    return torch.stack(
+        [
+            aw * bw - ax * bx - ay * by - az * bz,
+            aw * bx + ax * bw + ay * bz - az * by,
+            aw * by - ax * bz + ay * bw + az * bx,
+            aw * bz + ax * by - ay * bx + az * bw,
+        ],
+        dim=-1,
+    )
+
+
+def _quat_rotate(q: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
+    qvec = q[..., 1:]
+    uv = torch.cross(qvec, v, dim=-1)
+    uuv = torch.cross(qvec, uv, dim=-1)
+    return v + 2.0 * (q[..., :1] * uv + uuv)
+
+
+def _quat_inverse_rotate(q: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
+    return _quat_rotate(_quat_conjugate(q), v)
+
+
+class GeometryAwareResidualLiftEnv(MjWarpResidualLiftEnv):
+    """Residual environment with explicit object/hand geometry in the observation.
+
+    The base residual observation requires an MLP to infer forward kinematics from
+    qpos.  This wrapper exposes inexpensive geometry that is already authoritative
+    in MuJoCo: object size/shape, palm-object pose, fingertip-object positions,
+    approximate fingertip surface distances, geometric opposition, and the current
+    per-object reference hand target.  The final 13 entries remain ``last_action``
+    so the BC policy can continue to ignore that tail deterministically.
+    """
+
+    def __init__(
+        self,
+        reference_manifest,
+        config: ResidualLiftConfig | None = None,
+    ) -> None:
+        self._geometry_ready = False
+        super().__init__(reference_manifest, config)
+        self._prepare_geometry_context()
+        self._geometry_ready = True
+        self._reset_all()
+        self.obs_dim = int(self._observation().shape[1])
+
+    def _prepare_geometry_context(self) -> None:
+        task_object = self.host_env.task.objects[0]
+        extent = np.asarray(getattr(task_object, "_extent", ()), dtype=np.float32).reshape(-1)
+        if extent.shape != (3,) or not np.all(np.isfinite(extent)) or np.any(extent <= 0.0):
+            binding = self.host_env.task._require_bindings().objects["object"]
+            radii = [float(self.model.geom_rbound[int(g)]) for g in binding.geom_ids]
+            diameter = max(2.0 * max(radii, default=0.04), 1e-3)
+            extent = np.full(3, diameter, dtype=np.float32)
+        extent = np.maximum(extent, 1e-4)
+        ratios = extent / max(float(extent.max()), 1e-6)
+        self.object_extent = torch.as_tensor(extent, device=self.torch_device)
+        self.object_shape_ratios = torch.as_tensor(ratios, device=self.torch_device)
+        self.object_half_extent = 0.5 * self.object_extent
+
+        def body_for_geom(name: str) -> int:
+            geom = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, name)
+            if geom < 0:
+                return -1
+            return int(self.model.geom_bodyid[geom])
+
+        self.palm_body_id = body_for_geom("skin_palm_p")
+        self.fingertip_body_ids = tuple(body_for_geom(f"skin_{digit}_2_p") for digit in range(5))
+        if self.palm_body_id < 0 or any(value < 0 for value in self.fingertip_body_ids):
+            missing = [
+                name
+                for name, body in [
+                    ("skin_palm_p", self.palm_body_id),
+                    *[(f"skin_{d}_2_p", self.fingertip_body_ids[d]) for d in range(5)],
+                ]
+                if body < 0
+            ]
+            raise ValueError(f"Geometry-aware Dex Hand observation is missing geoms: {missing}")
+
+        base = super()._observation()
+        prefix_dim = int(base.shape[1] - self.action_dim)
+        # extra layout: extent3, ratios3, object_in_palm3, relative_quat4,
+        # fingertip_in_object15, fingertip_aabb_distance5, opposition_score1,
+        # reference_hand6.  last_action13 stays at the end.
+        offset = prefix_dim
+        self.geometry_feature_slices = {
+            "object_extent": (offset, offset + 3),
+            "object_shape_ratios": (offset + 3, offset + 6),
+            "object_in_palm": (offset + 6, offset + 9),
+            "object_quat_in_palm": (offset + 9, offset + 13),
+            "fingertips_in_object": (offset + 13, offset + 28),
+            "fingertip_surface_distance": (offset + 28, offset + 33),
+            "opposition_score": (offset + 33, offset + 34),
+            "reference_hand": (offset + 34, offset + 40),
+            "last_action": (offset + 40, offset + 40 + self.action_dim),
+        }
+        self.reference_hand_slice = self.geometry_feature_slices["reference_hand"]
+
+    def observation_schema(self) -> dict:
+        return {
+            "schema_version": GEOMETRY_OBSERVATION_SCHEMA_VERSION,
+            "obs_dim": int(self.obs_dim),
+            "ignored_tail_dim": int(self.action_dim),
+            "feature_slices": {name: list(value) for name, value in self.geometry_feature_slices.items()},
+        }
+
+    def _fingertip_world_positions(self) -> torch.Tensor:
+        return torch.stack([self.xpos[:, body] for body in self.fingertip_body_ids], dim=1)
+
+    def _opposition_score(self) -> torch.Tensor:
+        object_position = self.xpos[:, self.object_body_id]
+        tips = self._fingertip_world_positions()
+        radial = tips - object_position.unsqueeze(1)
+        radial = radial / torch.clamp(torch.linalg.vector_norm(radial, dim=2, keepdim=True), min=1e-6)
+        thumb = radial[:, 4:5, :]
+        scores = -(radial[:, :4, :] * thumb).sum(dim=2)
+        if self.has_digit_contacts:
+            mask = self.digit_flags[:, :4].bool()
+            scores = torch.where(mask, scores, torch.full_like(scores, -1.0))
+            result = torch.max(scores, dim=1).values
+            result = torch.where(self.digit_flags[:, 4].bool(), result, torch.zeros_like(result))
+        else:
+            result = torch.max(scores, dim=1).values
+        return torch.clamp(result, 0.0, 1.0)
+
+    def _geometry_features(self) -> torch.Tensor:
+        n = self.num_envs
+        object_position = self.xpos[:, self.object_body_id]
+        object_quat = self.xquat[:, self.object_body_id]
+        palm_position = self.xpos[:, self.palm_body_id]
+        palm_quat = self.xquat[:, self.palm_body_id]
+
+        object_in_palm = _quat_inverse_rotate(palm_quat, object_position - palm_position)
+        relative_quat = _quat_multiply(_quat_conjugate(palm_quat), object_quat)
+        relative_quat = relative_quat / torch.clamp(
+            torch.linalg.vector_norm(relative_quat, dim=1, keepdim=True), min=1e-6
+        )
+        relative_quat = torch.where(relative_quat[:, :1] < 0.0, -relative_quat, relative_quat)
+
+        tips_world = self._fingertip_world_positions()
+        object_quat_expanded = object_quat.unsqueeze(1).expand(-1, 5, -1).reshape(-1, 4)
+        tip_delta = (tips_world - object_position.unsqueeze(1)).reshape(-1, 3)
+        tips_object = _quat_inverse_rotate(object_quat_expanded, tip_delta).reshape(n, 5, 3)
+        outside = torch.relu(torch.abs(tips_object) - self.object_half_extent.view(1, 1, 3))
+        surface_distance = torch.linalg.vector_norm(outside, dim=2)
+
+        hand_start = self.reference.arm_action_size
+        reference_hand = self.reference_controls[self.step_index, hand_start:]
+        hand_low = self.ctrl_low[hand_start:]
+        hand_high = self.ctrl_high[hand_start:]
+        reference_hand = 2.0 * (reference_hand - hand_low) / torch.clamp(hand_high - hand_low, min=1e-6) - 1.0
+        reference_hand = torch.clamp(reference_hand, -1.0, 1.0).unsqueeze(0).expand(n, -1)
+
+        return torch.cat(
+            [
+                self.object_extent.view(1, 3).expand(n, -1),
+                self.object_shape_ratios.view(1, 3).expand(n, -1),
+                object_in_palm,
+                relative_quat,
+                tips_object.reshape(n, 15),
+                surface_distance,
+                self._opposition_score().unsqueeze(1),
+                reference_hand,
+            ],
+            dim=1,
+        ).float()
+
+    def _observation(self) -> torch.Tensor:
+        base = super()._observation()
+        if not self._geometry_ready:
+            return base
+        prefix = base[:, : -self.action_dim]
+        tail = base[:, -self.action_dim :]
+        return torch.cat([prefix, self._geometry_features(), tail], dim=1).float()
