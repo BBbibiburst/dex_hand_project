@@ -1,10 +1,11 @@
 """Geometry-conditioned behavior cloning for Dex Hand grasp formation."""
+
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
 import json
+from collections.abc import Iterable
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 import numpy as np
 import torch
@@ -17,8 +18,8 @@ from source.rl.imitation.geometry_env import (
 from source.rl.residual.env import ResidualLiftConfig
 from source.rl.residual.reference import STAGE_CODES
 
-
 BC_SCHEMA_VERSION = 4
+BC_POLICY_TYPE = "grasp_hand_bc_geometry"
 DEFAULT_HIDDEN_SIZES = (256, 256, 128)
 
 
@@ -204,7 +205,7 @@ def collect_bc_dataset(
             obs = env.reset()
 
             for step in range(env.reference.horizon):
-                stage = int(round(float(env.reference.stages[step])))
+                stage = round(float(env.reference.stages[step]))
                 control = env.reference.controls[step, hand_start:]
                 normalized = np.clip(2.0 * (control - hand_low) / hand_span - 1.0, -1.0, 1.0)
                 observations.append(obs[0].detach().cpu().numpy().astype(np.float32))
@@ -312,8 +313,8 @@ def train_bc_policy(
     shuffled = unique_objects.copy()
     rng.shuffle(shuffled)
     if len(shuffled) >= 4 and cfg.validation_fraction > 0.0:
-        val_count = max(1, int(round(len(shuffled) * cfg.validation_fraction)))
-        val_objects = set(int(value) for value in shuffled[:val_count])
+        val_count = max(1, round(len(shuffled) * cfg.validation_fraction))
+        val_objects = {int(value) for value in shuffled[:val_count]}
     else:
         val_objects = set()
     val_mask_np = np.asarray([int(value) in val_objects for value in object_indices], dtype=bool)
@@ -381,7 +382,9 @@ def train_bc_policy(
             metric = final_train
         if metric < best_metric:
             best_metric = metric
-            best_state = {name: value.detach().cpu().clone() for name, value in policy.state_dict().items()}
+            best_state = {
+                name: value.detach().cpu().clone() for name, value in policy.state_dict().items()
+            }
         if epoch == 1 or epoch % max(1, cfg.epochs // 10) == 0 or epoch == cfg.epochs:
             print(
                 f"[bc:train] epoch={epoch:04d}/{cfg.epochs:04d} "
@@ -397,13 +400,11 @@ def train_bc_policy(
     dataset_info = metadata.get("dataset", {})
     object_ids = list(dataset_info.get("object_ids", []))
     validation_object_ids = [
-        object_ids[index]
-        for index in sorted(val_objects)
-        if 0 <= index < len(object_ids)
+        object_ids[index] for index in sorted(val_objects) if 0 <= index < len(object_ids)
     ]
     payload = {
         "schema_version": BC_SCHEMA_VERSION,
-        "policy_type": "grasp_hand_bc_geometry_v4",
+        "policy_type": BC_POLICY_TYPE,
         "obs_dim": policy.obs_dim,
         "hand_action_dim": policy.hand_action_dim,
         "hidden_sizes": list(policy.hidden_sizes),
@@ -422,7 +423,11 @@ def train_bc_policy(
     torch.save(payload, checkpoint)
     _atomic_json(
         checkpoint.with_suffix(".json"),
-        {key: value for key, value in payload.items() if key not in {"state_dict", "dataset_metadata"}}
+        {
+            key: value
+            for key, value in payload.items()
+            if key not in {"state_dict", "dataset_metadata"}
+        }
         | {"dataset_metadata": metadata},
     )
     print(
@@ -441,9 +446,9 @@ def load_bc_policy(checkpoint: str | Path, *, device: torch.device | str) -> BCH
     payload = torch.load(Path(checkpoint), map_location=device, weights_only=False)
     if (
         payload.get("schema_version") != BC_SCHEMA_VERSION
-        or payload.get("policy_type") != "grasp_hand_bc_geometry_v4"
+        or payload.get("policy_type") != BC_POLICY_TYPE
     ):
-        raise ValueError("Unsupported grasp BC checkpoint; rebuild BC with semantic-v4.")
+        raise ValueError("Unsupported grasp BC checkpoint; rebuild it with the current pipeline.")
     policy = BCHandPolicy(
         int(payload["obs_dim"]),
         hidden_sizes=tuple(int(value) for value in payload["hidden_sizes"]),
@@ -452,4 +457,3 @@ def load_bc_policy(checkpoint: str | Path, *, device: torch.device | str) -> BCH
     policy.load_state_dict(payload["state_dict"])
     policy.eval()
     return policy
-

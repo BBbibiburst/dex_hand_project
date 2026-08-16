@@ -2,22 +2,27 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
-from datetime import datetime, timezone
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
 
 from source.evaluation.grasp_schema import (
-    BENCHMARK_SCHEMA_VERSION, DIRECT_HOLD_ONLY, SEARCH_ERROR, TRAJECTORY_STABLE,
-    UNSTABLE, VALIDATION_ERROR, VALIDATION_SEMANTICS,
+    BENCHMARK_SCHEMA_VERSION,
+    DIRECT_HOLD_ONLY,
+    SEARCH_ERROR,
+    TRAJECTORY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
+    VALIDATION_SEMANTICS,
 )
 from source.grasping.constants import GRASP_CONFIG_SCHEMA_VERSION, GRASP_SEARCH_STRATEGY
 from source.workflows.grasp_benchmark.config import GraspBenchmarkConfig
 
+
 def _format_duration(seconds: float) -> str:
-    seconds = max(0, int(round(seconds)))
+    seconds = max(0, round(seconds))
     hours, remainder = divmod(seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
     if hours:
@@ -139,7 +144,7 @@ def _pilot_stop_reason(
     return None
 
 
-def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
+def _report_parameters(args: GraspBenchmarkConfig) -> dict:
     return {
         "dataset": args.dataset,
         "object_ids": args.object_ids,
@@ -159,8 +164,6 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
         "coarse_keep": args.coarse_keep,
         "top_k": args.top_k,
         "support_margin": args.support_margin,
-        "generator": args.generator,
-        "graspqp_iterations": args.graspqp_iterations,
         "evolve": args.evolve,
         "evolution_population": args.evolution_population,
         "evolution_offspring": args.evolution_offspring,
@@ -194,7 +197,7 @@ def _report_parameters(args: "GraspBenchmarkConfig") -> dict:
 def _write_report(
     path: Path,
     *,
-    args: "GraspBenchmarkConfig",
+    args: GraspBenchmarkConfig,
     selected: list[str],
     rows: list[dict],
 ) -> None:
@@ -262,7 +265,7 @@ def _write_report(
     temporary.replace(path)
 
 
-def _load_completed(path: Path, args: "GraspBenchmarkConfig") -> list[dict]:
+def _load_completed(path: Path, args: GraspBenchmarkConfig) -> list[dict]:
     if not path.is_file():
         return []
     payload = json.loads(path.read_text(encoding="utf-8"))

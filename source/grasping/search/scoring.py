@@ -5,8 +5,8 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import nnls
 
-from source.grasping.search.common import progress
 from source.grasping.search.types import Candidate, Cloud, Device, Surface
+
 
 def friction_wrenches(
     points: np.ndarray,
@@ -71,7 +71,7 @@ def grasp_equilibrium_metrics(
         center_of_mass = np.asarray(cloud.mesh.center_mass, dtype=np.float64)
         if center_of_mass.shape != (3,) or not np.all(np.isfinite(center_of_mass)):
             raise ValueError
-    except Exception:
+    except Exception:  # noqa: BLE001 - malformed mesh mass properties fall back to centroid
         center_of_mass = np.asarray(cloud.mesh.centroid, dtype=np.float64)
 
     radius = float(np.max(np.linalg.norm(cloud.points - center_of_mass, axis=1)))

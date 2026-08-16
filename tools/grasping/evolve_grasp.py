@@ -1,10 +1,10 @@
-"""Refine a GraspQP seed with DexEvolve-style MuJoCo evolution."""
+"""Refine a geometric grasp seed with DexEvolve-style MuJoCo evolution."""
 
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
 import json
+from dataclasses import asdict
 from pathlib import Path
 
 from source.grasping.dexevolve import EvolutionConfig, evolve
@@ -49,7 +49,7 @@ def main() -> None:
                 candidate,
                 seconds=args.seconds,
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - try the next evolved candidate
             trajectory_errors.append(str(exc))
             continue
         if validation.trajectory_hold_stable:

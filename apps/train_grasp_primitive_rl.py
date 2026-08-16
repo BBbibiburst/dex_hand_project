@@ -4,10 +4,10 @@ This is an experimental sibling of :mod:`apps.train_grasp_edit_rl`.  It leaves
 that baseline untouched and expands the categorical action from ``wrist
  template`` to ``wrist template x grasp primitive``.
 """
+
 from __future__ import annotations
 
 import argparse
-import json
 from dataclasses import asdict
 from pathlib import Path
 
@@ -25,12 +25,8 @@ from source.rl.grasp_edit.templates import build_grasp_edit_templates
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", required=True)
-    parser.add_argument(
-        "--output-root", type=Path, default=Path("outputs/grasp_primitive_rl")
-    )
-    parser.add_argument(
-        "--template-root", type=Path, default=Path("outputs/grasp_edit_lattice")
-    )
+    parser.add_argument("--output-root", type=Path, default=Path("outputs/grasp_primitive_rl"))
+    parser.add_argument("--template-root", type=Path, default=Path("outputs/grasp_edit_lattice"))
     parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
     parser.add_argument("--ultra-seed-count", type=int, default=100)
     parser.add_argument("--ultra-generate-seeds", type=int, default=3)
@@ -52,8 +48,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--grasp-primitives",
         default="wrap,pinch,support,hook",
         help=(
-            "Comma-separated styles or 'all'. Available: "
-            + ",".join(available_grasp_primitives())
+            "Comma-separated styles or 'all'. Available: " + ",".join(available_grasp_primitives())
         ),
     )
     parser.add_argument("--primitive-bias-scale", type=float, default=1.0)
@@ -214,10 +209,7 @@ def run(args: argparse.Namespace) -> int:
         return ""
 
     def callback(active: HybridPPOTrainer, metrics: dict) -> None:
-        rates = [
-            metrics.get(f"template_{index}_rate", 0.0)
-            for index in range(env.template_count)
-        ]
+        rates = [metrics.get(f"template_{index}_rate", 0.0) for index in range(env.template_count)]
         top_choice = max(range(len(rates)), key=rates.__getitem__)
         primitive_rates = ",".join(
             f"{name}:{metrics.get(f'primitive_{name}_rate', 0.0):.0%}"
@@ -254,7 +246,9 @@ def run(args: argparse.Namespace) -> int:
         if env.best_trajectory is not None:
             print(f"[final] success {_trajectory_summary(env.best_trajectory)}", flush=True)
         elif env.best_attempt_trajectory is not None:
-            print(f"[final] no-success {_trajectory_summary(env.best_attempt_trajectory)}", flush=True)
+            print(
+                f"[final] no-success {_trajectory_summary(env.best_attempt_trajectory)}", flush=True
+            )
         else:
             print("[final] no trajectory captured", flush=True)
     finally:

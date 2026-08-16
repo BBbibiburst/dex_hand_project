@@ -166,7 +166,7 @@ class LiveGloveHandPlot:
             line = local_line @ rotation.T + position
             artist.set_data_3d(line[:, 0], line[:, 1], line[:, 2])
         self.trajectory.set_data_3d(trail[:, 0], trail[:, 1], trail[:, 2])
-        update_frame_axes(self.axes, self.frame_axes, position, rotation, self.axis_range * 0.16)
+        update_frame_axes(self.frame_axes, position, rotation, self.axis_range * 0.16)
         for bar, value in zip(self.finger_bars, display_values):
             bar.set_width(value)
         roll, pitch, yaw = rotation_matrix_to_rpy_degrees(rotation)

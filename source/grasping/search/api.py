@@ -4,21 +4,19 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 import numpy as np
 import trimesh
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
-from source.grasping.standalone_validator import (
-    TrajectoryValidationResult,
-    resolve_payload_mesh_path,
-    validate_grasp_config,
-    validate_grasp_trajectory_payload,
-)
 from source.grasping.search.catalog import (
-    ROOT, grasp_config_directory, grasp_config_name, load_cloud, resolve_object,
+    ROOT,
+    grasp_config_directory,
+    grasp_config_name,
+    load_cloud,
+    resolve_object,
 )
 from source.grasping.search.common import progress
 from source.grasping.search.devices import DEVICES
@@ -28,8 +26,18 @@ from source.grasping.search.planning import approach_direction_metadata, plan_ap
 from source.grasping.search.scoring import evaluate
 from source.grasping.search.serialization import payload
 from source.grasping.search.types import (
-    Candidate, Cloud, Device, GraspConfigSearchResult, ValidatedGraspConfigResult,
+    Candidate,
+    Cloud,
+    Device,
+    GraspConfigSearchResult,
+    ValidatedGraspConfigResult,
 )
+from source.grasping.standalone_validator import (
+    resolve_payload_mesh_path,
+    validate_grasp_config,
+    validate_grasp_trajectory_payload,
+)
+
 
 def _search_failure_detail(candidate: Candidate) -> str:
     reasons = ", ".join(candidate.rejection_reasons)
@@ -106,9 +114,7 @@ def select_executable_config(
         candidate.valid = False
         candidate.rejection_reasons = (
             *candidate.rejection_reasons,
-            "robot_task_infeasible"
-            if task_filter_rejected
-            else "mujoco_approach_collision",
+            "robot_task_infeasible" if task_filter_rejected else "mujoco_approach_collision",
         )
         candidate.score += 2.0
     candidates.sort(key=lambda item: (not item.valid, item.score))
@@ -131,7 +137,7 @@ def replan_evolved_payload(
     loaded = trimesh.load_mesh(mesh_path, process=True)
     mesh = loaded.to_geometry() if isinstance(loaded, trimesh.Scene) else loaded
     if not isinstance(mesh, trimesh.Trimesh):
-        raise ValueError(f"No triangle mesh in {mesh_path}")
+        raise TypeError(f"No triangle mesh in {mesh_path}")
     raw_extent = max(float(np.ptp(np.asarray(mesh.vertices), axis=0).max()), 1e-9)
     target_size = raw_extent * float(evolved["mesh_scale"])
     cloud = load_cloud(mesh_path, count=point_count, target_size=target_size, seed=seed)
@@ -208,8 +214,6 @@ def search_grasp_config(
     end_effector_name: str = "dex_hand",
     require_valid: bool = True,
     publish_invalid: bool = False,
-    generator: str = "heuristic",
-    graspqp_iterations: int = 120,
     candidate_filter: Callable[[dict], tuple[bool, dict]] | None = None,
 ) -> GraspConfigSearchResult:
     """Run the new two-stage search and write a production-schema grasp config."""
@@ -230,10 +234,6 @@ def search_grasp_config(
         raise ValueError("support_margin must be non-negative.")
     if target_size <= 0.0:
         raise ValueError("target_size must be positive.")
-    if generator not in {"heuristic", "graspqp"}:
-        raise ValueError("generator must be 'heuristic' or 'graspqp'.")
-    if graspqp_iterations <= 0:
-        raise ValueError("graspqp_iterations must be positive.")
     try:
         device = DEVICES[end_effector_name]
     except KeyError as exc:
@@ -272,8 +272,6 @@ def search_grasp_config(
         top_k=top_k,
         support_margin=support_margin,
         seed=seed,
-        generator=generator,
-        graspqp_iterations=graspqp_iterations,
     )
     config = select_executable_config(
         object_id,
@@ -371,7 +369,7 @@ def generate_validated_grasp_config(
                     settle_seconds=settle_seconds,
                     grip_preload=grip_preload,
                 )
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001 - each seed is an independent attempt
                 failures.append(f"seed={candidate_seed}: {exc}")
                 continue
             if not validation.trajectory_hold_stable:

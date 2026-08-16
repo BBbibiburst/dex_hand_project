@@ -1,9 +1,10 @@
 """Train grasp-aware residual PPO around one reference using a BC hand prior."""
+
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
 import json
+from dataclasses import asdict
 from pathlib import Path
 
 from source.rl.common.ppo import PPOConfig, PPOTrainer
@@ -118,7 +119,10 @@ def run(args: argparse.Namespace) -> int:
 
     def persist() -> None:
         nonlocal saved_best_version, saved_attempt_version
-        if env.best_attempt_trajectory is not None and env.best_attempt_version > saved_attempt_version:
+        if (
+            env.best_attempt_trajectory is not None
+            and env.best_attempt_version > saved_attempt_version
+        ):
             env.best_attempt_trajectory.save(args.output / "best_attempt")
             saved_attempt_version = env.best_attempt_version
         if env.best_trajectory is not None and env.best_version > saved_best_version:
@@ -144,7 +148,6 @@ def run(args: argparse.Namespace) -> int:
 
     result = {
         "schema_version": 3,
-        "pipeline_version": "semantic-v3",
         "object_id": env.reference.object_id,
         "reference": str(args.reference),
         "bc_checkpoint": str(args.bc_checkpoint),

@@ -33,10 +33,6 @@ learning = [
 ]
 ultradexgrasp = [
     "torch>=2.4,<2.5",
-    "h5py>=3.10",
-    "hydra-core>=1.3,<1.4",
-    "plyfile",
-    "sapien==3.0.0b1",
 ]
 mjwarp = [
     "mujoco-warp>=3.11.0",
@@ -57,9 +53,7 @@ dex-grasp-search = "tools.grasping.search_grasp:main"
 dex-grasp-validate = "tools.grasping.validate_grasp:main"
 dex-grasp-benchmark = "tools.grasping.benchmark_catalog:main"
 dex-grasp-benchmark-plot = "tools.grasping.visualize_benchmark:main"
-dex-graspqp-probe = "tools.grasping.probe_graspqp_adapter:main"
 dex-grasp-evolve = "tools.grasping.evolve_grasp:main"
-dex-ultradex-bootstrap = "tools.ultradexgrasp.bootstrap:main"
 dex-ultradex-probe = "tools.ultradexgrasp.probe:main"
 dex-ultradex-generate = "tools.ultradexgrasp.generate:main"
 dex-scripted-validate = "tools.grasping.validate_scripted_strategy:main"
@@ -119,7 +113,6 @@ pythonpath = ["."]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-extend-exclude = ["deps"]
 
 [tool.ruff.format]
 quote-style = "double"

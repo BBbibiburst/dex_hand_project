@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tactile array processing and concrete sensor implementations."""
 
 from source.sensors.tactile.signal_processing import (
@@ -7,23 +6,29 @@ from source.sensors.tactile.signal_processing import (
     TaxelPatch,
 )
 
-_DEX_HAND_EXPORTS = {
+_DEX_HAND_EXPORTS = (
     "DEFAULT_TACTILE_BACKEND",
     "SUPPORTED_TACTILE_BACKENDS",
     "DEX_HAND_PATCH_LAYOUT",
     "DexHandTactileSensorBase",
-    "DexHandTouchSensor",
     "SimpleBoxTactileSensor",
     "create_dex_hand_tactile_sensor",
     "sensor_name",
     "site_name",
-}
+)
 
 __all__ = [
-    *_DEX_HAND_EXPORTS,
-    "TaxelPatch",
+    "DEFAULT_TACTILE_BACKEND",
+    "DEX_HAND_PATCH_LAYOUT",
+    "SUPPORTED_TACTILE_BACKENDS",
+    "DexHandTactileSensorBase",
+    "SimpleBoxTactileSensor",
     "TactileSignalProcessor",
     "TactileSignalProcessorConfig",
+    "TaxelPatch",
+    "create_dex_hand_tactile_sensor",
+    "sensor_name",
+    "site_name",
 ]
 
 

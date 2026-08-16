@@ -5,10 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import mujoco
+import mujoco_warp as mjw
 import numpy as np
 import warp as wp
 
-import mujoco_warp as mjw
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
 from source.grasping.standalone_validator import (
     DirectHoldValidationResult,
@@ -35,7 +35,7 @@ def _pin_free_object(
         qvel[world, dof_address + index] = 0.0
 
 
-def _contact_counts(data, model, object_geom: int) -> np.ndarray:
+def _contact_counts(data, object_geom: int) -> np.ndarray:
     """Copy only final contact metadata and count object contacts by world."""
 
     counts = np.zeros(data.nworld, dtype=np.int32)
@@ -76,17 +76,13 @@ class MjWarpPopulationEvaluator:
         self.nconmax = int(nconmax)
         self.njmax = int(njmax)
         self.end_effector_name = seed_payload.get("end_effector_name", "dex_hand")
-        self.actuator_names = tuple(
-            get_hand(self.end_effector_name).position_actuator_names
-        )
+        self.actuator_names = tuple(get_hand(self.end_effector_name).position_actuator_names)
         self.model, _ = build_cached_direct_hold_model(
             object_mesh=resolve_payload_mesh_path(seed_payload["mesh"]),
             mesh_center=np.asarray(seed_payload["mesh_center"], dtype=np.float64),
             mesh_scale=float(seed_payload["mesh_scale"]),
             hand_translation=np.asarray(seed_payload["hand_translation"], dtype=np.float64),
-            hand_rotation_matrix=np.asarray(
-                seed_payload["hand_rotation_matrix"], dtype=np.float64
-            ),
+            hand_rotation_matrix=np.asarray(seed_payload["hand_rotation_matrix"], dtype=np.float64),
             object_table_height=seed_payload.get("object_table_height"),
             end_effector_name=self.end_effector_name,
         )
@@ -140,9 +136,7 @@ class MjWarpPopulationEvaluator:
             qpos.append(data.qpos.copy())
             qvel.append(data.qvel.copy())
             ctrl.append(data.ctrl.copy())
-            fixed_pose.append(
-                data.qpos[self.qpos_address : self.qpos_address + 7].copy()
-            )
+            fixed_pose.append(data.qpos[self.qpos_address : self.qpos_address + 7].copy())
         return (
             first_data,
             np.asarray(qpos, dtype=np.float32),
@@ -201,7 +195,7 @@ class MjWarpPopulationEvaluator:
         wp.synchronize()
         initial_position = data.xpos.numpy()[:, self.body_id].copy()
         initial_quaternion = data.xquat.numpy()[:, self.body_id].copy()
-        initial_contacts = _contact_counts(data, self.model, self.object_geom)
+        initial_contacts = _contact_counts(data, self.object_geom)
 
         steps = int(np.ceil(seconds / self.model.opt.timestep))
         seating_step = min(steps - 1, int(np.ceil(1.0 / self.model.opt.timestep)))
@@ -225,7 +219,7 @@ class MjWarpPopulationEvaluator:
             )
         final_position = data.xpos.numpy()[:, self.body_id].copy()
         final_quaternion = data.xquat.numpy()[:, self.body_id].copy()
-        final_contacts = _contact_counts(data, self.model, self.object_geom)
+        final_contacts = _contact_counts(data, self.object_geom)
         finite = np.all(np.isfinite(data.qpos.numpy()), axis=1) & np.all(
             np.isfinite(data.qvel.numpy()), axis=1
         )

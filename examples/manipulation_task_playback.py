@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Environment viewer for the migrated single-arm manipulation tasks.
 
 This demo does not solve the task, teleport objects, or drive an oracle robot
@@ -18,7 +17,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import mujoco
 import numpy as np
@@ -29,8 +28,8 @@ from source.cli.robot_config import (
     add_robot_config_args,
     make_configured_manipulation_env,
 )
-from source.runtime.pacing import RealtimePacer
 from source.envs.manipulation import registered_tasks
+from source.runtime.pacing import RealtimePacer
 from source.viz.overlays import clear_markers, draw_label
 
 
@@ -145,7 +144,7 @@ def _make_env(args: argparse.Namespace):
     if args.single_nut is not None and args.task != "nut_assembly":
         raise ValueError("--single-nut is only valid with --task nut_assembly.")
 
-    task_config: Dict[str, Any] = {"reward_shaping": True}
+    task_config: dict[str, Any] = {"reward_shaping": True}
     if args.object_id is not None:
         task_config["object_id"] = args.object_id
     if args.stack_object_ids is not None:
@@ -209,7 +208,7 @@ def _sample_action(
 def run_viewer(args: argparse.Namespace) -> None:
     env = _make_env(args)
     rng = np.random.default_rng(args.seed)
-    obs, _info = env.reset(seed=args.seed)
+    _obs, _info = env.reset(seed=args.seed)
     base_action = env.controller.current_action(env.model, env.data)
     action = base_action.copy()
 
@@ -218,7 +217,7 @@ def run_viewer(args: argparse.Namespace) -> None:
     pacer.reset(sim_start)
     last_print_second = -1
     reward = 0.0
-    reward_info: Dict[str, Any] = {}
+    reward_info: dict[str, Any] = {}
 
     try:
         with viewer.launch_passive(env.model, env.data) as handle:
@@ -228,7 +227,7 @@ def run_viewer(args: argparse.Namespace) -> None:
                 if args.random_actions:
                     action = _sample_action(env, base_action, rng, args.action_scale)
 
-                obs, reward, terminated, truncated, info = env.step(action)
+                _obs, reward, terminated, truncated, info = env.step(action)
                 reward_info = {
                     key: value
                     for key, value in info.items()
@@ -254,7 +253,7 @@ def run_viewer(args: argparse.Namespace) -> None:
                     )
 
                 if terminated or truncated:
-                    obs, _info = env.reset(seed=args.seed)
+                    _obs, _info = env.reset(seed=args.seed)
                     base_action = env.controller.current_action(env.model, env.data)
                     action = base_action.copy()
                     sim_start = float(env.data.time)

@@ -16,9 +16,10 @@ from source.grasping.standalone_validator import (
     TrajectoryValidationResult,
     is_executable_grasp_payload,
 )
-from source.scripted.lift import LiftStrategyState
 from source.scripted import registered_strategies, strategy_task_name
-from source.workflows.grasp_benchmark import GraspBenchmarkConfig, _write_report
+from source.scripted.lift import LiftStrategyState
+from source.workflows.grasp_benchmark import GraspBenchmarkConfig
+from source.workflows.grasp_benchmark.reporting import _write_report
 
 
 def test_direct_and_trajectory_validation_results_are_distinct() -> None:

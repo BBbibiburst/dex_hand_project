@@ -1,13 +1,12 @@
 """Run a resumable preflight + adaptive-budget grasp-edit diagnostic.
 
 This benchmark is intentionally a screening pass, not final policy training.
-For each object it first ensures an UltraDexGrasp prior exists.  Ultra success
-returns immediately.  Otherwise a CPU DIRECT wrist-lattice preflight is built
-before any MJWarp PPO process is started: if the lattice already contains a
-MuJoCo-successful template, the object is classified LATTICE_SUCCESS with zero
-RL updates.  Only preflight-failed lattices enter hybrid grasp-edit PPO with an
-adaptive 5 -> 10 -> 15 update budget.
+For each object it first ensures an Ultra Prior exists, builds a CPU DIRECT
+wrist-lattice preflight, and conditionally starts MJWarp PPO. By default an
+Ultra- or lattice-successful object exits early; explicit stress-test options
+can still run hybrid grasp-edit PPO with an adaptive 5 -> 10 -> 15 budget.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -23,11 +22,11 @@ import subprocess
 import sys
 import time
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
-
+from typing import Any
 
 STATUSES = (
     "ULTRA_SUCCESS",
@@ -137,6 +136,7 @@ def _repo_root() -> Path:
         ["git", "rev-parse", "--show-toplevel"],
         text=True,
         capture_output=True,
+        check=False,
     )
     if proc.returncode:
         raise RuntimeError("Run this benchmark inside dex_hand_project.")
@@ -149,12 +149,19 @@ def _sha256(path: Path) -> str:
 
 def _source_hashes(root: Path) -> dict[str, str]:
     files = (
+        "assets/grippers/dex_hand/dex_hand.xml",
+        "configs/ultradexgrasp/default.json",
         "apps/train_grasp_edit_rl.py",
-        "source/rl/grasp_edit_hybrid_ppo.py",
-        "source/rl/grasp_edit_templates.py",
-        "source/rl/mjwarp_grasp_edit_env.py",
+        "source/rl/common/ppo.py",
+        "source/rl/grasp_edit/env.py",
+        "source/rl/grasp_edit/ppo.py",
+        "source/rl/grasp_edit/templates.py",
+        "source/ultradexgrasp/executor.py",
+        "source/ultradexgrasp/hand_surrogate.py",
+        "source/ultradexgrasp/synthesizer.py",
+        "tools/ultradexgrasp/generate.py",
     )
-    return {name: _sha256(root / name) for name in files if (root / name).is_file()}
+    return {name: _sha256(root / name) for name in files}
 
 
 def _dataset_ids(dataset: str) -> tuple[str, ...]:
@@ -333,7 +340,7 @@ def _preflight_lattice(
         with contextlib.redirect_stdout(buffer), contextlib.redirect_stderr(buffer):
             templates = build_grasp_edit_templates(
                 object_id,
-                output_root=Path("outputs/grasp_edit_lattice"),
+                output_root=args.lattice_root,
                 ultra_roots=ultra_roots,
                 base_candidates=args.base_candidates,
                 maximum_templates=args.lattice_max_templates,
@@ -367,7 +374,9 @@ def _preflight_lattice(
     lattice = _parse_lattice_precheck(text)
     successful = sum(bool(template.success) for template in templates)
     total = len(templates)
-    best_lift_mm = max((1000.0 * float(template.source_lift) for template in templates), default=0.0)
+    best_lift_mm = max(
+        (1000.0 * float(template.source_lift) for template in templates), default=0.0
+    )
     return LatticePreflight(
         duration_sec=time.perf_counter() - started,
         text=text,
@@ -400,10 +409,7 @@ def _parse_update_history(text: str) -> dict[str, Any]:
     best_success = max(float(match.group("success")) / 100.0 for match in matches)
     last = matches[-1]
     latest_update = int(last.group("update"))
-    recent = [
-        match for match in matches
-        if int(match.group("update")) >= max(1, latest_update - 4)
-    ]
+    recent = [match for match in matches if int(match.group("update")) >= max(1, latest_update - 4)]
     first_recent = recent[0] if recent else last
     recent_gain = float(last.group("mean_lift")) - float(first_recent.group("mean_lift"))
 
@@ -506,7 +512,7 @@ def _adaptive_train(
             "--output-root",
             str(rl_root),
             "--template-root",
-            "outputs/grasp_edit_lattice",
+            str(args.lattice_root),
             "--no-auto-ultra",
             "--num-envs",
             str(args.num_envs),
@@ -535,8 +541,7 @@ def _adaptive_train(
 
         with log_path.open("a", encoding="utf-8") as log:
             log.write(
-                f"\n[adaptive-stage] target={target_update} "
-                f"additional={additional_updates}\n"
+                f"\n[adaptive-stage] target={target_update} additional={additional_updates}\n"
             )
 
         child = _run_child(
@@ -574,6 +579,7 @@ def _adaptive_train(
             break
 
     return ChildResult(last_returncode, total_duration, combined_text)
+
 
 def _read_json(path: Path) -> dict[str, Any]:
     if not path.is_file():
@@ -744,6 +750,7 @@ def _write_summary(
                 "base_candidates": args.base_candidates,
                 "lattice_max_templates": args.lattice_max_templates,
                 "lattice_max_executions": args.lattice_max_executions,
+                "lattice_root": str(args.lattice_root),
                 "promising_lift_mm": args.promising_lift_mm,
                 "promising_success_rate": args.promising_success_rate,
                 "early_fail_lift_mm": args.early_fail_lift_mm,
@@ -784,6 +791,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--expect-count", type=int, default=127)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--output", type=Path, default=Path("outputs/grasp_edit_benchmark"))
+    parser.add_argument(
+        "--lattice-root",
+        type=Path,
+        default=Path("outputs/grasp_edit_lattice"),
+        help="Directory for compiled Wrist Lattice trajectories.",
+    )
     parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
     parser.add_argument("--ultra-seed-count", type=int, default=100)
     parser.add_argument("--ultra-generate-seeds", type=int, default=3)
@@ -823,7 +836,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=5.0,
         help="Recent mean-lift gain that counts as meaningful training progress.",
     )
-    parser.add_argument("--force", action="store_true", help="Ignore matching cached benchmark rows.")
+    parser.add_argument(
+        "--force", action="store_true", help="Ignore matching cached benchmark rows."
+    )
     parser.add_argument("--verbose-child", action="store_true")
     parser.add_argument("--fail-fast", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -837,9 +852,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.num_envs <= 0:
         raise ValueError("--num-envs must be positive.")
     if not (0 < args.initial_updates <= args.mid_updates <= args.max_updates):
-        raise ValueError(
-            "Require 0 < --initial-updates <= --mid-updates <= --max-updates."
-        )
+        raise ValueError("Require 0 < --initial-updates <= --mid-updates <= --max-updates.")
     if args.ultra_seed_count <= 0 or args.ultra_generate_seeds <= 0:
         raise ValueError("Ultra seed counts must be positive.")
     if args.promising_lift_mm < 0.0 or not 0.0 <= args.promising_success_rate <= 1.0:
@@ -872,8 +885,9 @@ def main(argv: list[str] | None = None) -> int:
 
     source_hashes = _source_hashes(root)
     signature_payload = {
-        "version": "10.3-preflight-adaptive",
+        "pipeline": "ultra_lattice_mjwarp_ppo",
         "dataset": args.dataset,
+        "lattice_root": str(args.lattice_root.resolve()),
         "num_envs": args.num_envs,
         "initial_updates": args.initial_updates,
         "mid_updates": args.mid_updates,
@@ -929,15 +943,20 @@ def main(argv: list[str] | None = None) -> int:
 
     rows_by_id: dict[str, dict[str, Any]] = {}
     for object_id in catalog:
-        cached = None if args.force else _load_object_result(
-            object_dir / f"{_slug(object_id)}.json", signature
+        cached = (
+            None
+            if args.force
+            else _load_object_result(object_dir / f"{_slug(object_id)}.json", signature)
         )
         if cached is not None:
             rows_by_id[object_id] = cached
 
     for index, object_id in enumerate(catalog, 1):
         if object_id in rows_by_id:
-            print(_format_progress(index, len(catalog), rows_by_id[object_id]) + " [cached]", flush=True)
+            print(
+                _format_progress(index, len(catalog), rows_by_id[object_id]) + " [cached]",
+                flush=True,
+            )
             continue
 
         started = time.perf_counter()

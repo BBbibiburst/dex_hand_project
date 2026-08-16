@@ -34,6 +34,10 @@ def test_legacy_demos_package_is_removed() -> None:
     assert not (SOURCE_ROOT / "demos").exists()
 
 
+def test_repository_does_not_vendor_dependency_trees() -> None:
+    assert not (PROJECT_ROOT / "deps").exists()
+    assert not (PROJECT_ROOT / ".gitmodules").exists()
+
 
 def _source_package(module: str) -> str | None:
     parts = module.split(".")
@@ -104,7 +108,10 @@ def test_layering_regressions_stay_removed() -> None:
 
 def test_refactored_legacy_modules_do_not_regrow_implementations() -> None:
     assert not (SOURCE_ROOT / "grasping" / "robot_lift_validator.py").exists()
+    assert not (SOURCE_ROOT / "grasping" / "grasp_config_search.py").exists()
+    assert not (SOURCE_ROOT / "grasping" / "search" / "compat.py").exists()
     assert not (SOURCE_ROOT / "sensors" / "tactile" / "surface_fitting.py").exists()
+    assert not (PROJECT_ROOT / "apps" / "train_grasp_rl.py").exists()
     for legacy_rl_module in (
         "ppo.py",
         "reference.py",
@@ -116,6 +123,3 @@ def test_refactored_legacy_modules_do_not_regrow_implementations() -> None:
         "grasp_edit_hybrid_ppo.py",
     ):
         assert not (SOURCE_ROOT / "rl" / legacy_rl_module).exists()
-
-    facade = SOURCE_ROOT / "grasping" / "grasp_config_search.py"
-    assert len(facade.read_text(encoding="utf-8").splitlines()) <= 25

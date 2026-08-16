@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Interactive probe demo for any site-based tactile sensor backend.
 
 The demo builds the configured robot, injects a small free probe sphere before
@@ -12,7 +11,7 @@ from __future__ import annotations
 import argparse
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any
 
 import mujoco
 import numpy as np
@@ -161,11 +160,10 @@ def _collect_taxel_sites(
 
 
 def _initial_probe_position(
-    model: mujoco.MjModel,
     data: mujoco.MjData,
     taxels: list[TaxelSite],
     *,
-    explicit_pos: Optional[list[float]],
+    explicit_pos: list[float] | None,
     radius: float,
 ) -> np.ndarray:
     if explicit_pos is not None:
@@ -241,7 +239,6 @@ def _color_for_force(value: float, force_max: float) -> tuple[float, float, floa
 
 def _draw_heat_taxels(
     handle: viewer.Handle,
-    model: mujoco.MjModel,
     data: mujoco.MjData,
     taxels: list[TaxelSite],
     values: np.ndarray,
@@ -367,7 +364,7 @@ def _pad_to_shape(
 
 def _compose_heatmap_panel(
     cv2_module,
-    patches: Dict[str, np.ndarray],
+    patches: dict[str, np.ndarray],
     *,
     patch_filter: str,
     force_max: float,
@@ -462,7 +459,6 @@ def run_demo(args: argparse.Namespace) -> None:
     taxels = _collect_taxel_sites(model, sensor, patch_filter=args.patch)
 
     probe_pos = _initial_probe_position(
-        model,
         data,
         taxels,
         explicit_pos=args.probe_pos,
@@ -516,7 +512,6 @@ def run_demo(args: argparse.Namespace) -> None:
                     )
                     _draw_heat_taxels(
                         handle,
-                        model,
                         data,
                         taxels,
                         values,

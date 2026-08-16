@@ -9,7 +9,14 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from source.grasping import grasp_config_search
+from source.grasping.search import api as grasp_search_api
+from source.grasping.search.catalog import (
+    grasp_benchmark_report_path,
+    grasp_config_directory,
+)
+from source.grasping.search.common import PROJECT_ROOT
+from source.grasping.search.devices import DEVICES
+from source.grasping.search.scoring import _robot_execution_penalty
 from source.grasping.standalone_validator import TrajectoryValidationResult
 
 
@@ -41,17 +48,17 @@ def test_validated_grasp_publishes_first_stable_candidate(
         Path(output).write_text(f'{{"seed": {seed}}}', encoding="utf-8")
 
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "search_grasp_config",
         fake_search_grasp_config,
     )
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "validate_grasp_config",
         lambda *args, **kwargs: next(validations),
     )
 
-    result = grasp_config_search.generate_validated_grasp_config(
+    result = grasp_search_api.generate_validated_grasp_config(
         "ycb:test",
         output=output,
         attempts=3,
@@ -80,18 +87,18 @@ def test_failed_validation_preserves_existing_grasp(
         Path(output).write_text('{"candidate": true}', encoding="utf-8")
 
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "search_grasp_config",
         fake_search_grasp_config,
     )
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "validate_grasp_config",
         lambda *args, **kwargs: _validation(stable=False),
     )
 
     with pytest.raises(RuntimeError, match="No dynamically stable grasp"):
-        grasp_config_search.generate_validated_grasp_config(
+        grasp_search_api.generate_validated_grasp_config(
             "ycb:test",
             output=output,
             attempts=2,
@@ -102,18 +109,13 @@ def test_failed_validation_preserves_existing_grasp(
 
 
 def test_grasp_config_directories_are_end_effector_scoped() -> None:
-    dex = grasp_config_search.grasp_config_directory("dex_hand")
-    pika = grasp_config_search.grasp_config_directory("pika_gripper")
+    dex = grasp_config_directory("dex_hand")
+    pika = grasp_config_directory("pika_gripper")
 
-    assert dex == grasp_config_search.PROJECT_ROOT / "configs" / "grasps" / "dex_hand"
-    assert pika == grasp_config_search.PROJECT_ROOT / "configs" / "grasps" / "pika_gripper"
-    assert (
-        grasp_config_search.grasp_config_directory("dex_hand", benchmark=True) == dex / "benchmark"
-    )
-    assert (
-        grasp_config_search.grasp_benchmark_report_path("pika_gripper")
-        == pika / "grasp_catalog_benchmark.json"
-    )
+    assert dex == PROJECT_ROOT / "configs" / "grasps" / "dex_hand"
+    assert pika == PROJECT_ROOT / "configs" / "grasps" / "pika_gripper"
+    assert grasp_config_directory("dex_hand", benchmark=True) == dex / "benchmark"
+    assert grasp_benchmark_report_path("pika_gripper") == pika / "grasp_catalog_benchmark.json"
 
 
 def test_invalid_direct_search_preserves_existing_config(
@@ -129,22 +131,22 @@ def test_invalid_direct_search_preserves_existing_config(
         score=1.0,
     )
 
-    monkeypatch.setattr(grasp_config_search, "resolve_object", lambda object_id: mesh)
+    monkeypatch.setattr(grasp_search_api, "resolve_object", lambda object_id: mesh)
     cloud = SimpleNamespace(points=np.zeros((1, 3), dtype=np.float64))
-    monkeypatch.setattr(grasp_config_search, "load_cloud", lambda *args, **kwargs: cloud)
+    monkeypatch.setattr(grasp_search_api, "load_cloud", lambda *args, **kwargs: cloud)
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "search",
         lambda *args, **kwargs: [candidate],
     )
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "select_executable_config",
         lambda *args, **kwargs: {"hand_fit_success": False},
     )
 
     with pytest.raises(RuntimeError, match="approach_object_collision"):
-        grasp_config_search.search_grasp_config(
+        grasp_search_api.search_grasp_config(
             object_id="ycb:test",
             output=output,
         )
@@ -162,21 +164,21 @@ def test_debug_search_does_not_publish_invalid_result_without_opt_in(
     output.write_text('{"known": "stable"}', encoding="utf-8")
     candidate = SimpleNamespace(rejection_reasons=("invalid",), score=1.0)
 
-    monkeypatch.setattr(grasp_config_search, "resolve_object", lambda object_id: mesh)
+    monkeypatch.setattr(grasp_search_api, "resolve_object", lambda object_id: mesh)
     cloud = SimpleNamespace(points=np.zeros((1, 3), dtype=np.float64))
-    monkeypatch.setattr(grasp_config_search, "load_cloud", lambda *args, **kwargs: cloud)
+    monkeypatch.setattr(grasp_search_api, "load_cloud", lambda *args, **kwargs: cloud)
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "search",
         lambda *args, **kwargs: [candidate],
     )
     monkeypatch.setattr(
-        grasp_config_search,
+        grasp_search_api,
         "select_executable_config",
         lambda *args, **kwargs: {"hand_fit_success": False},
     )
 
-    result = grasp_config_search.search_grasp_config(
+    result = grasp_search_api.search_grasp_config(
         object_id="ycb:test",
         output=output,
         require_valid=False,
@@ -187,19 +189,19 @@ def test_debug_search_does_not_publish_invalid_result_without_opt_in(
 
 
 def test_dex_candidate_score_prefers_broader_contact_coverage() -> None:
-    device = grasp_config_search.DEVICES["dex_hand"]
+    device = DEVICES["dex_hand"]
 
-    full_coverage_penalty = grasp_config_search._robot_execution_penalty(
+    full_coverage_penalty = _robot_execution_penalty(
         device,
         device.contact_labels,
         0.03,
     )
-    sparse_coverage_penalty = grasp_config_search._robot_execution_penalty(
+    sparse_coverage_penalty = _robot_execution_penalty(
         device,
         (2, 3, 4),
         0.03,
     )
-    low_clearance_penalty = grasp_config_search._robot_execution_penalty(
+    low_clearance_penalty = _robot_execution_penalty(
         device,
         device.contact_labels,
         0.02,

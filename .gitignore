@@ -223,21 +223,13 @@ MUJOCO_LOG.TXT
 # code_summary
 code_summary.txt
 
-# Local reference checkout (assets needed by this project are copied to assets/)
-robosuite/
-
 # Demonstration datasets and recorder output
 datasets/
 recordings/
 checkpoints/
 
-# Generated grasp and approach-path cache
+# Generated outputs and caches
 configs/grasps/
-
-# UltraDexGrasp reference/development checkouts and generated episodes
-deps/ultradexgrasp/upstream/
-deps/ultradexgrasp/third_party/
-outputs/ultradexgrasp/
 configs/ultradexgrasp/cache/
 outputs/
 
@@ -249,3 +241,8 @@ assets/combined/
 # Local validation / interrupted recorder scratch files
 .tmp_*
 *.partial
+
+# Local source snapshots; Git history is the source of truth
+*.before_*
+*.bak
+*.bak.*

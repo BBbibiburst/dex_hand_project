@@ -4,16 +4,14 @@ from __future__ import annotations
 
 import argparse
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
 from source.workflows.grasp_benchmark import GraspBenchmarkConfig
 
 FULL_PIPELINE_PRESET = {
     "dataset": "all",
-    "generator": "heuristic",
-    "graspqp_iterations": 40,
     "points": 1024,
     "joint_candidates": 64,
     "surface_anchors": 12,
@@ -140,12 +138,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--coarse-keep", type=int, default=24)
     parser.add_argument("--top-k", type=int, default=8)
     parser.add_argument("--support-margin", type=float, default=0.008)
-    parser.add_argument("--generator", choices=("heuristic", "graspqp"), default="heuristic")
-    parser.add_argument("--graspqp-iterations", type=int, default=120)
     parser.add_argument(
         "--evolve",
         action="store_true",
-        help="Run DexEvolve-style MuJoCo refinement after GraspQP generation.",
+        help="Run DexEvolve-style MuJoCo refinement after geometric grasp generation.",
     )
     parser.add_argument("--evolution-population", type=int, default=32)
     parser.add_argument("--evolution-offspring", type=int, default=16)

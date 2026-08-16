@@ -1,4 +1,5 @@
 """Train a hybrid categorical-wrist + continuous-hand grasp editor on one object."""
+
 from __future__ import annotations
 
 import argparse
@@ -6,13 +7,13 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+from source.rl.common.ppo import PPOConfig
+from source.rl.grasp_edit.env import GraspEditConfig, MjWarpGraspEditEnv
+from source.rl.grasp_edit.ppo import HybridPPOTrainer
 from source.rl.grasp_edit.templates import (
     build_grasp_edit_templates,
     discover_ultra_attempts,
 )
-from source.rl.grasp_edit.env import GraspEditConfig, MjWarpGraspEditEnv
-from source.rl.grasp_edit.ppo import HybridPPOTrainer
-from source.rl.common.ppo import PPOConfig
 
 
 def _write_json(path: Path, payload) -> None:
@@ -25,12 +26,8 @@ def _write_json(path: Path, payload) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", required=True)
-    parser.add_argument(
-        "--output-root", type=Path, default=Path("outputs/grasp_edit_rl")
-    )
-    parser.add_argument(
-        "--template-root", type=Path, default=Path("outputs/grasp_edit_lattice")
-    )
+    parser.add_argument("--output-root", type=Path, default=Path("outputs/grasp_edit_rl"))
+    parser.add_argument("--template-root", type=Path, default=Path("outputs/grasp_edit_lattice"))
     parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
     parser.add_argument("--ultra-seed-count", type=int, default=100)
     parser.add_argument("--ultra-generate-seeds", type=int, default=3)
@@ -132,11 +129,16 @@ def _ensure_ultra_priors(args: argparse.Namespace, ultra_roots: tuple[Path, ...]
             flush=True,
         )
         generate_args = [
-            "--object-id", args.object_id,
-            "--seed", str(rng_seed),
-            "--seed-count", str(args.ultra_seed_count),
-            "--max-execution-candidates", str(args.ultra_max_execution_candidates),
-            "--output", str(output),
+            "--object-id",
+            args.object_id,
+            "--seed",
+            str(rng_seed),
+            "--seed-count",
+            str(args.ultra_seed_count),
+            "--max-execution-candidates",
+            str(args.ultra_max_execution_candidates),
+            "--output",
+            str(output),
         ]
         # Regeneration may target a partially created directory from a previous
         # unsuccessful run.  The CLI's overwrite flag is explicit and local to
@@ -239,7 +241,6 @@ def run(args: argparse.Namespace) -> int:
     _write_json(
         output / "config.json",
         {
-            "grasp_edit_version": 10,
             "policy": {
                 "template": "categorical",
                 "hand": "tanh_gaussian_6d",
@@ -303,10 +304,7 @@ def run(args: argparse.Namespace) -> int:
         return ""
 
     def callback(active: HybridPPOTrainer, metrics: dict) -> None:
-        rates = [
-            metrics.get(f"template_{index}_rate", 0.0)
-            for index in range(env.template_count)
-        ]
+        rates = [metrics.get(f"template_{index}_rate", 0.0) for index in range(env.template_count)]
         top_template = max(range(len(rates)), key=rates.__getitem__)
         should_log = (
             active.update_index == 1
@@ -340,7 +338,9 @@ def run(args: argparse.Namespace) -> int:
         if env.best_trajectory is not None:
             print(f"[final] success {_trajectory_summary(env.best_trajectory)}", flush=True)
         elif env.best_attempt_trajectory is not None:
-            print(f"[final] no-success {_trajectory_summary(env.best_attempt_trajectory)}", flush=True)
+            print(
+                f"[final] no-success {_trajectory_summary(env.best_attempt_trajectory)}", flush=True
+            )
         else:
             print("[final] no trajectory captured", flush=True)
     finally:

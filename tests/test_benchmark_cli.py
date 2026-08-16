@@ -1,25 +1,27 @@
 """CLI preset and benchmark progress formatting contracts."""
 
+from source.workflows.grasp_benchmark.candidates import (
+    _append_diverse_candidates,
+    _approach_bins,
+    _candidate_is_diverse,
+    _incomplete_attempt_key,
+    _payload_after_robot_lift_attempts,
+    _robot_candidate_precheck_key,
+    _write_payload_atomic,
+)
+from source.workflows.grasp_benchmark.reporting import (
+    _attempt_satisfies_goal,
+    _failure_reason,
+    _format_duration,
+    _pilot_stop_reason,
+    _progress_timing,
+    _task_outcome_label,
+    _task_scene_label,
+)
 from tools.grasping.benchmark_catalog import (
     GIB,
     _apply_full_pipeline_preset,
     _recommended_parallelism,
-)
-from source.workflows.grasp_benchmark import (
-    _attempt_satisfies_goal,
-    _append_diverse_candidates,
-    _approach_bins,
-    _candidate_is_diverse,
-    _failure_reason,
-    _format_duration,
-    _incomplete_attempt_key,
-    _pilot_stop_reason,
-    _payload_after_robot_lift_attempts,
-    _progress_timing,
-    _robot_candidate_precheck_key,
-    _task_outcome_label,
-    _task_scene_label,
-    _write_payload_atomic,
 )
 
 
@@ -30,7 +32,6 @@ def test_full_pipeline_keeps_explicit_parallelism() -> None:
 
     assert values["jobs"] == 4
     assert values["evolution_jobs"] == 1
-    assert values["generator"] == "heuristic"
 
 
 def test_full_pipeline_keeps_safe_cpu_evolution_backend() -> None:
@@ -66,9 +67,7 @@ def test_task_conditioned_progress_uses_lift_outcome_and_scene() -> None:
     }
     assert _task_outcome_label(solved, target_lift_candidates=3) == "TASK_SOLVED"
     assert _task_outcome_label(solved, target_lift_candidates=4) == "TASK_PARTIAL"
-    assert _task_scene_label(solved) == (
-        "scene=4 xy=(-0.05,+0.02)m yaw=+90deg pull=5cm "
-    )
+    assert _task_scene_label(solved) == ("scene=4 xy=(-0.05,+0.02)m yaw=+90deg pull=5cm ")
     assert (
         _task_outcome_label(
             {

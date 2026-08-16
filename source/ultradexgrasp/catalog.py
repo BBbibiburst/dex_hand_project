@@ -1,4 +1,4 @@
-"""Object loading that is independent from the legacy grasp-search package."""
+"""Object loading independent from the geometric grasp-search package."""
 
 from __future__ import annotations
 

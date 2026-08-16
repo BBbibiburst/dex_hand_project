@@ -6,16 +6,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import mujoco
+import mujoco_warp as mjw
 import numpy as np
 import torch
 import warp as wp
 
-import mujoco_warp as mjw
 from source.envs.manipulation import make_lift_env
 from source.rl.residual.reference import (
+    STAGE_CODES,
     EpisodeRecord,
     ReferenceTrajectory,
-    STAGE_CODES,
     resolve_reference_manifest,
 )
 from source.rl.residual.trajectory import ResidualTrajectory
@@ -157,9 +157,7 @@ class MjWarpResidualLiftEnv:
             object_id = self.episode.object_id
             reference_control_dt = float(self.episode.metadata.get("control_dt", 0.05))
         else:
-            source_seed = int(
-                residual_reference.metadata.get("source_seed", self.episode.seed)
-            )
+            source_seed = int(residual_reference.metadata.get("source_seed", self.episode.seed))
             object_id = residual_reference.object_id
             reference_control_dt = float(
                 residual_reference.metadata.get(
@@ -320,7 +318,7 @@ class MjWarpResidualLiftEnv:
         self.residual_scale = torch.as_tensor(
             residual_scale, device=self.torch_device, dtype=torch.float32
         )
-        self.action_dim = int(len(controlled))
+        self.action_dim = len(controlled)
 
         bindings = self.host_env.task._require_bindings()
         object_binding = bindings.objects["object"]
@@ -330,7 +328,7 @@ class MjWarpResidualLiftEnv:
         self._prepare_contact_lookup(bindings)
 
         self.physics_steps_per_control = max(
-            1, int(round(self.reference.control_dt / self.model.opt.timestep))
+            1, round(self.reference.control_dt / self.model.opt.timestep)
         )
         with wp.ScopedCapture(device=self.wp_device) as capture:
             mjw.step(self.device_model, self.data)
@@ -396,7 +394,7 @@ class MjWarpResidualLiftEnv:
     def _prepare_contact_lookup(self, bindings) -> None:
         """Build object/robot masks and map the full finger branches to 5 digits.
 
-        semantic-v3 only recognized ``skin_<digit>_*`` contact geoms.  Real
+        The previous classifier only recognized ``skin_<digit>_*`` contact geoms. Real
         grasps can contact the object through a side-link collision geom, so
         those contacts disappeared from ``digit_flags`` even though MuJoCo was
         physically supporting the object.  The v4 mapping keeps direct skin-name
@@ -445,19 +443,14 @@ class MjWarpResidualLiftEnv:
                 candidates.append(f"{hand_prefix}{local_name}")
             candidates.append(local_name)
             for candidate in candidates:
-                geom_id = mujoco.mj_name2id(
-                    self.model, mujoco.mjtObj.mjOBJ_GEOM, candidate
-                )
+                geom_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, candidate)
                 if geom_id >= 0:
                     return int(geom_id)
             matches = [
                 geom_id
                 for geom_id in range(self.model.ngeom)
                 if (
-                    mujoco.mj_id2name(
-                        self.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id
-                    )
-                    or ""
+                    mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
                 ).endswith(local_name)
             ]
             return int(matches[0]) if len(matches) == 1 else -1
@@ -474,9 +467,7 @@ class MjWarpResidualLiftEnv:
         for geom in bindings.robot_geom_ids:
             geom = int(geom)
             robot_mask[geom] = 1
-            name = mujoco.mj_id2name(
-                self.model, mujoco.mjtObj.mjOBJ_GEOM, geom
-            ) or ""
+            name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_GEOM, geom) or ""
 
             direct = -1
             for digit in range(5):
@@ -493,36 +484,21 @@ class MjWarpResidualLiftEnv:
             body_id = int(self.model.geom_bodyid[geom])
             chain = set(ancestors(body_id))
             candidates = [
-                digit
-                for digit, root in enumerate(digit_roots)
-                if root > 0 and root in chain
+                digit for digit, root in enumerate(digit_roots) if root > 0 and root in chain
             ]
             if len(candidates) == 1:
                 digit_lookup[geom] = candidates[0]
 
         self.has_digit_contacts = bool(np.any(digit_lookup >= 0))
-        self.object_mask = wp.from_numpy(
-            object_mask, dtype=wp.int32, device=self.wp_device
+        self.object_mask = wp.from_numpy(object_mask, dtype=wp.int32, device=self.wp_device)
+        self.robot_mask = wp.from_numpy(robot_mask, dtype=wp.int32, device=self.wp_device)
+        self.digit_lookup = wp.from_numpy(digit_lookup, dtype=wp.int32, device=self.wp_device)
+        self.contact_counts_wp = wp.zeros(self.num_envs, dtype=wp.int32, device=self.wp_device)
+        self.digit_flags_wp = wp.zeros(self.num_envs * 5, dtype=wp.int32, device=self.wp_device)
+        self.contact_counts = wp.to_torch(self.contact_counts_wp, requires_grad=False)
+        self.digit_flags = wp.to_torch(self.digit_flags_wp, requires_grad=False).view(
+            self.num_envs, 5
         )
-        self.robot_mask = wp.from_numpy(
-            robot_mask, dtype=wp.int32, device=self.wp_device
-        )
-        self.digit_lookup = wp.from_numpy(
-            digit_lookup, dtype=wp.int32, device=self.wp_device
-        )
-        self.contact_counts_wp = wp.zeros(
-            self.num_envs, dtype=wp.int32, device=self.wp_device
-        )
-        self.digit_flags_wp = wp.zeros(
-            self.num_envs * 5, dtype=wp.int32, device=self.wp_device
-        )
-        self.contact_counts = wp.to_torch(
-            self.contact_counts_wp, requires_grad=False
-        )
-        self.digit_flags = wp.to_torch(
-            self.digit_flags_wp, requires_grad=False
-        ).view(self.num_envs, 5)
-
 
     def _sync_torch_before_warp(self) -> None:
         torch.cuda.synchronize(self.torch_device)
@@ -612,9 +588,7 @@ class MjWarpResidualLiftEnv:
 
     def _apply_residual(self, actions: torch.Tensor) -> torch.Tensor:
         actions = torch.clamp(actions, -1.0, 1.0)
-        reference = self.reference_controls[self.step_index].unsqueeze(0).expand(
-            self.num_envs, -1
-        )
+        reference = self.reference_controls[self.step_index].unsqueeze(0).expand(self.num_envs, -1)
         target = reference.clone()
         target[:, self.controlled_positions] += actions * self.residual_scale.unsqueeze(0)
         target = torch.maximum(torch.minimum(target, self.ctrl_high), self.ctrl_low)
@@ -644,9 +618,7 @@ class MjWarpResidualLiftEnv:
         self.episode_max_lift = torch.maximum(self.episode_max_lift, lift)
         self.episode_opposition_steps += opposition.to(torch.int32)
 
-        object_velocity = self.qvel[
-            :, self.object_qvel_adr : self.object_qvel_adr + 6
-        ]
+        object_velocity = self.qvel[:, self.object_qvel_adr : self.object_qvel_adr + 6]
         object_speed = torch.linalg.vector_norm(object_velocity, dim=1)
         stable = (
             (lift >= self.config.success_lift_height)
@@ -718,12 +690,9 @@ class MjWarpResidualLiftEnv:
         attempt_lift = float(self.episode_max_lift[attempt_world].item())
         attempt_return = float(returns[attempt_world].item())
         attempt_opp_steps = int(self.episode_opposition_steps[attempt_world].item())
-        if (
-            attempt_lift > self.best_attempt_lift + 1e-6
-            or (
-                abs(attempt_lift - self.best_attempt_lift) <= 1e-6
-                and attempt_return > self.best_attempt_return
-            )
+        if attempt_lift > self.best_attempt_lift + 1e-6 or (
+            abs(attempt_lift - self.best_attempt_lift) <= 1e-6
+            and attempt_return > self.best_attempt_return
         ):
             residual = self.action_history[:, attempt_world].detach().cpu().numpy()
             controls = self.reference.controls.copy()
@@ -767,9 +736,7 @@ class MjWarpResidualLiftEnv:
             self.best_attempt_version += 1
 
         if success.any():
-            successful_indices = torch.nonzero(
-                success, as_tuple=False
-            ).flatten()
+            successful_indices = torch.nonzero(success, as_tuple=False).flatten()
             successful_returns = returns[successful_indices]
             local = int(torch.argmax(successful_returns).item())
             world = int(successful_indices[local].item())
@@ -896,4 +863,3 @@ class MjWarpResidualLiftEnv:
 
     def close(self) -> None:
         self.host_env.close()
-

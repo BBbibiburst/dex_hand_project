@@ -2,25 +2,38 @@
 
 from __future__ import annotations
 
-from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
-from dataclasses import asdict
 import multiprocessing
-from pathlib import Path
 import queue
 import time
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 
 from source.evaluation.grasp_schema import (
-    DIRECT_HOLD_ONLY, SEARCH_ERROR, TRAJECTORY_STABLE, UNSTABLE, VALIDATION_ERROR,
+    DIRECT_HOLD_ONLY,
+    SEARCH_ERROR,
+    TRAJECTORY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
 )
 from source.grasping.dexevolve import mjwarp_available
-from source.grasping.search import grasp_benchmark_report_path, grasp_config_directory, grasp_config_name
+from source.grasping.search import (
+    grasp_benchmark_report_path,
+    grasp_config_directory,
+    grasp_config_name,
+)
 from source.runtime.progress import LiveWorkerProgress
 from source.workflows.grasp_benchmark.config import GraspBenchmarkConfig, _selected_ids
 from source.workflows.grasp_benchmark.reporting import (
-    _failure_reason, _format_duration, _load_completed, _pilot_stop_reason,
-    _progress_timing, _task_outcome_label, _task_scene_label, _write_report,
+    _failure_reason,
+    _format_duration,
+    _load_completed,
+    _pilot_stop_reason,
+    _progress_timing,
+    _task_outcome_label,
+    _task_scene_label,
+    _write_report,
 )
 from source.workflows.grasp_benchmark.worker import _init_progress_worker, _run_one
+
 
 def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
     run_started = time.monotonic()
@@ -152,8 +165,6 @@ def run_grasp_benchmark(args: GraspBenchmarkConfig) -> int:
             "coarse_keep": args.coarse_keep,
             "top_k": args.top_k,
             "support_margin": args.support_margin,
-            "generator": args.generator,
-            "graspqp_iterations": args.graspqp_iterations,
             "evolve": args.evolve,
             "evolution_population": args.evolution_population,
             "evolution_offspring": args.evolution_offspring,

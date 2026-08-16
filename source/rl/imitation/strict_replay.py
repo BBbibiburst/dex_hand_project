@@ -15,11 +15,12 @@ The contact classifier does not rely exclusively on ``skin_*`` geoms.  Any
 robot-object contacts contribute to physical contact and opposition; tactile
 skin naming is kept only for digit/palm diagnostics.
 """
+
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
 import hashlib
 import json
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -27,9 +28,12 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.rl.residual.reference import EpisodeRecord, ReferenceTrajectory, resolve_reference_manifest
+from source.rl.residual.reference import (
+    EpisodeRecord,
+    ReferenceTrajectory,
+    resolve_reference_manifest,
+)
 from source.rl.residual.trajectory import ResidualTrajectory
-
 
 STRICT_REPLAY_SCHEMA_VERSION = 4
 
@@ -115,9 +119,7 @@ def _contact_sets(env):
         lower = name.lower()
         if "table" in lower or lower == "floor":
             table_ids.add(geom_id)
-    hand_prefix = str(
-        getattr(env.controller.hand_controller, "hand_prefix", "") or ""
-    )
+    hand_prefix = str(getattr(env.controller.hand_controller, "hand_prefix", "") or "")
     palm_geom = -1
     for candidate in (
         f"{hand_prefix}skin_palm_p" if hand_prefix else "",
@@ -125,21 +127,16 @@ def _contact_sets(env):
     ):
         if not candidate:
             continue
-        palm_geom = mujoco.mj_name2id(
-            env.model, mujoco.mjtObj.mjOBJ_GEOM, candidate
-        )
+        palm_geom = mujoco.mj_name2id(env.model, mujoco.mjtObj.mjOBJ_GEOM, candidate)
         if palm_geom >= 0:
             break
     if palm_geom < 0:
         matches = [
             geom_id
             for geom_id in range(env.model.ngeom)
-            if (
-                mujoco.mj_id2name(
-                    env.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id
-                )
-                or ""
-            ).endswith("skin_palm_p")
+            if (mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or "").endswith(
+                "skin_palm_p"
+            )
         ]
         if len(matches) == 1:
             palm_geom = int(matches[0])
@@ -217,13 +214,9 @@ def _contact_snapshot(env, sets) -> tuple[int, int, bool, float, int, float]:
             normal = normal / norm
             robot_object_normals.append(normal)
 
-        geom_name = mujoco.mj_id2name(
-            env.model, mujoco.mjtObj.mjOBJ_GEOM, robot_geom
-        ) or ""
+        geom_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, robot_geom) or ""
         body_id = int(env.model.geom_bodyid[robot_geom])
-        body_name = mujoco.mj_id2name(
-            env.model, mujoco.mjtObj.mjOBJ_BODY, body_id
-        ) or ""
+        body_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_BODY, body_id) or ""
         lower = f"{geom_name} {body_name}".lower()
         if "palm" in lower or body_id == palm_body:
             palm_contact = True
@@ -340,12 +333,8 @@ def strict_replay_manifest(
     minimum_tail_contact_fraction: float | None = None,
     minimum_tail_grasp_fraction: float | None = None,
     maximum_tail_table_contact_fraction: float | None = None,
-    # Kept for call-site compatibility with semantic-v3.  Full-episode contact
-    # counts are diagnostic only in v4; admission uses the tail fraction.
-    maximum_robot_table_contacts: int | None = None,
     use_cache: bool = True,
 ) -> StrictReplayResult:
-    del maximum_robot_table_contacts
     manifest = _manifest_path(trajectory_or_manifest)
     payload = _payload(manifest)
     object_id = str(payload["object_id"])
@@ -376,7 +365,7 @@ def strict_replay_manifest(
     table_fraction_limit = float(settings["maximum_tail_table_contact_fraction"])
 
     signature = _signature(manifest, {"profile": profile, **settings})
-    cache = manifest.parent / f"strict_replay_v4_{profile}.json"
+    cache = manifest.parent / f"strict_replay_{profile}.json"
     if use_cache and cache.is_file():
         try:
             cached = json.loads(cache.read_text(encoding="utf-8"))
@@ -455,9 +444,7 @@ def strict_replay_manifest(
                 penetration,
             ) = _contact_snapshot(env, sets)
 
-            grasp_valid = (
-                robot_object_contacts >= 2 and opposition >= opposition_limit
-            ) or (
+            grasp_valid = (robot_object_contacts >= 2 and opposition >= opposition_limit) or (
                 palm and robot_object_contacts >= 2
             )
 
@@ -475,9 +462,7 @@ def strict_replay_manifest(
             tactile = observation.get("tactile") if isinstance(observation, dict) else None
             if tactile is not None:
                 values = np.asarray(tactile, dtype=np.float32)
-                tactile_values.append(
-                    float(np.max(np.abs(values))) if values.size else 0.0
-                )
+                tactile_values.append(float(np.max(np.abs(values))) if values.size else 0.0)
             else:
                 tactile_values.append(0.0)
             if terminated or truncated:
@@ -519,8 +504,7 @@ def strict_replay_manifest(
             + 1.50 * tail_grasp_fraction
             + 0.75 * tail_opposition_mean
             + 0.25 * min(tail_robot_object_mean / 2.0, 1.0)
-            - 0.75
-            * max(0.0, tail_speed_max / max(speed_limit, 1e-6) - 1.0)
+            - 0.75 * max(0.0, tail_speed_max / max(speed_limit, 1e-6) - 1.0)
             - 2.0 * tail_table_fraction
             - 50.0 * max(0.0, tail_max_penetration - penetration_limit)
         )

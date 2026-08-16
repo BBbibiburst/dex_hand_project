@@ -1,4 +1,5 @@
 """Single-step hybrid wrist-template + 6D hand grasp editor backed by MuJoCo Warp."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -10,7 +11,7 @@ import warp as wp
 
 from source.envs.manipulation import make_lift_env
 from source.rl.grasp_edit.templates import GraspEditTemplate
-from source.rl.residual.reference import ReferenceTrajectory, STAGE_CODES, load_reference
+from source.rl.residual.reference import STAGE_CODES, ReferenceTrajectory, load_reference
 from source.rl.residual.trajectory import ResidualTrajectory
 from source.ultradexgrasp.contracts import DemonstrationEpisode
 from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
@@ -177,9 +178,7 @@ class MjWarpGraspEditEnv:
             # the authoritative low-level reference.  A zero RL hand edit must
             # reproduce the demonstrated closure instead of dropping preload.
             final_hand_ctrl = references[index].controls[-1, references[index].hand_slice]
-            grip = (final_hand_ctrl - hand_low_np) / np.maximum(
-                hand_high_np - hand_low_np, 1e-8
-            )
+            grip = (final_hand_ctrl - hand_low_np) / np.maximum(hand_high_np - hand_low_np, 1e-8)
             grip_fractions.append(np.clip(grip, 0.0, 1.0).astype(np.float32))
             source_seeds.append(int(episode.seed))
         self.template_candidate_fractions = torch.as_tensor(
@@ -201,7 +200,7 @@ class MjWarpGraspEditEnv:
         self.object_qvel_adr = int(object_binding.qvel_adr)
 
         self.physics_steps_per_control = max(
-            1, int(round(reference.control_dt / self.model.opt.timestep))
+            1, round(reference.control_dt / self.model.opt.timestep)
         )
         with wp.ScopedCapture(device=self.wp_device) as capture:
             mjw.step(self.device_model, self.data)
@@ -217,7 +216,7 @@ class MjWarpGraspEditEnv:
             device=self.torch_device,
             dtype=torch.float32,
         )
-        self.obs_dim = int(len(self._obs_vector))
+        self.obs_dim = len(self._obs_vector)
 
         self.completed_episodes = 0
         self.last_success_rate = 0.0
@@ -305,9 +304,9 @@ class MjWarpGraspEditEnv:
             fractions = candidate + alpha * (final_fractions - candidate)
         else:
             fractions = final_fractions
-        return self.hand_low.unsqueeze(0) + fractions * (
-            self.hand_high - self.hand_low
-        ).unsqueeze(0)
+        return self.hand_low.unsqueeze(0) + fractions * (self.hand_high - self.hand_low).unsqueeze(
+            0
+        )
 
     def _trajectory_from_world(
         self,
@@ -347,15 +346,15 @@ class MjWarpGraspEditEnv:
                 "template_rotation_offset_degrees": list(template.rotation_offset_degrees),
                 "template_pre_rl_success": bool(template.success),
                 "template_selection_mode": "categorical",
-                "base_grip_fractions": self.template_grip_fractions[
-                    template_id
-                ].detach().cpu().tolist(),
+                "base_grip_fractions": self.template_grip_fractions[template_id]
+                .detach()
+                .cpu()
+                .tolist(),
                 "hand_edit_normalized": action[1:].tolist(),
                 "grasp_edit_action": action.tolist(),
                 "mjwarp_max_lift": float(max_lift[world].item()),
                 "mjwarp_final_lift": float(final_lift[world].item()),
                 "single_step_grasp_edit": True,
-                "grasp_edit_version": 10,
             },
         )
 
@@ -406,19 +405,15 @@ class MjWarpGraspEditEnv:
         final_lift = self.xpos[:, self.object_body_id, 2] - initial_z
         object_velocity = self.qvel[:, self.object_qvel_adr : self.object_qvel_adr + 6]
         object_speed = torch.linalg.vector_norm(object_velocity, dim=1)
-        success = (
-            (tail_min_lift >= self.config.success_lift_height)
-            & (object_speed <= self.config.maximum_object_speed)
+        success = (tail_min_lift >= self.config.success_lift_height) & (
+            object_speed <= self.config.maximum_object_speed
         )
 
         max_progress = torch.clamp(max_lift / self.config.success_lift_height, 0.0, 1.0)
         final_progress = torch.clamp(final_lift / self.config.success_lift_height, 0.0, 1.0)
         hand_cost = hand_edit.square().mean(dim=1)
         reward = (
-            5.0 * max_progress
-            + 5.0 * final_progress
-            + 12.0 * success.float()
-            - 0.02 * hand_cost
+            5.0 * max_progress + 5.0 * final_progress + 12.0 * success.float() - 0.02 * hand_cost
         )
 
         self.completed_episodes += self.num_envs
@@ -434,12 +429,9 @@ class MjWarpGraspEditEnv:
         attempt_world = int(candidates[local].item())
         attempt_lift = float(max_lift[attempt_world].item())
         attempt_final = float(final_lift[attempt_world].item())
-        if (
-            attempt_lift > self.best_attempt_lift + 1e-6
-            or (
-                abs(attempt_lift - self.best_attempt_lift) <= 1e-6
-                and attempt_final > self.best_attempt_final_lift
-            )
+        if attempt_lift > self.best_attempt_lift + 1e-6 or (
+            abs(attempt_lift - self.best_attempt_lift) <= 1e-6
+            and attempt_final > self.best_attempt_final_lift
         ):
             self.best_attempt_lift = attempt_lift
             self.best_attempt_final_lift = attempt_final
@@ -475,10 +467,15 @@ class MjWarpGraspEditEnv:
                 self.best_version += 1
 
         done = torch.ones(self.num_envs, device=self.torch_device, dtype=torch.bool)
-        return self._observation(), reward, done, {
-            "success_rate": self.last_success_rate,
-            "new_successes": int(success.sum().item()),
-        }
+        return (
+            self._observation(),
+            reward,
+            done,
+            {
+                "success_rate": self.last_success_rate,
+                "new_successes": int(success.sum().item()),
+            },
+        )
 
     def training_metrics(self) -> dict[str, float]:
         result: dict[str, float] = {

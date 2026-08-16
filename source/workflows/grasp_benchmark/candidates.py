@@ -7,7 +7,6 @@ from pathlib import Path
 
 import numpy as np
 
-from source.evaluation.grasp_schema import TRAJECTORY_STABLE
 
 def _payload_after_robot_lift_attempts(
     preferred_payload: dict,

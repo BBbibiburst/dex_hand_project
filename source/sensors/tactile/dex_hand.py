@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Dex-hand tactile sensor backend.
 
 The dex hand currently uses one oriented box-shaped MuJoCo touch site per
@@ -9,8 +8,9 @@ bodies to the hand.
 from __future__ import annotations
 
 from abc import abstractmethod
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, Dict, Mapping, Optional, Sequence
+from typing import Any
 
 import mujoco
 import numpy as np
@@ -18,14 +18,14 @@ from gymnasium import spaces
 
 from source.assets import DEX_HAND_DIR
 from source.sensors.base import TactileSensorBase, TactileSiteRef, TactileSurfacePlotData
+from source.sensors.tactile.fitting.surfaces import (
+    DEX_HAND_PATCH_LAYOUT,
+    grid_points_for_kind,
+)
 from source.sensors.tactile.signal_processing import (
     TactileSignalProcessor,
     TactileSignalProcessorConfig,
     TaxelPatch,
-)
-from source.sensors.tactile.fitting.surfaces import (
-    DEX_HAND_PATCH_LAYOUT,
-    grid_points_for_kind,
 )
 
 SITE_PREFIX = "taxel_"
@@ -48,8 +48,8 @@ def _items(value):
     return value() if callable(value) else value
 
 
-def _body_by_geom_name(spec: mujoco.MjSpec) -> Dict[str, mujoco.MjsBody]:
-    result: Dict[str, mujoco.MjsBody] = {}
+def _body_by_geom_name(spec: mujoco.MjSpec) -> dict[str, mujoco.MjsBody]:
+    result: dict[str, mujoco.MjsBody] = {}
 
     def visit(body: mujoco.MjsBody) -> None:
         for geom in _items(body.geoms):
@@ -63,7 +63,7 @@ def _body_by_geom_name(spec: mujoco.MjSpec) -> Dict[str, mujoco.MjsBody]:
     return result
 
 
-def _mesh_file_map(spec: mujoco.MjSpec) -> Dict[str, str]:
+def _mesh_file_map(spec: mujoco.MjSpec) -> dict[str, str]:
     return {mesh.name: mesh.file for mesh in _items(spec.meshes) if mesh.name and mesh.file}
 
 
@@ -191,7 +191,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         patch_layout: Sequence[tuple[str, int, int, str]] = DEX_HAND_PATCH_LAYOUT,
         mesh_dir=DEX_HAND_DIR,
         image_force_max: float = 5.0,
-        signal_processor: Optional[Mapping[str, Any]] = None,
+        signal_processor: Mapping[str, Any] | None = None,
     ) -> None:
         if image_force_max <= 0.0:
             raise ValueError("image_force_max must be positive.")
@@ -200,7 +200,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         self.image_force_max = float(image_force_max)
         self.signal_processor = TactileSignalProcessor(signal_processor)
         self.name_prefix = ""
-        self._sensor_adrs: Optional[np.ndarray] = None
+        self._sensor_adrs: np.ndarray | None = None
 
         patches: list[TaxelPatch] = []
         names: list[str] = []
@@ -216,7 +216,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
         self.sensor_names = tuple(names)
 
     @property
-    def patch_shapes(self) -> Dict[str, tuple[int, int]]:
+    def patch_shapes(self) -> dict[str, tuple[int, int]]:
         return {patch.name: patch.shape for patch in self.patches}
 
     @property
@@ -405,8 +405,8 @@ class DexHandTactileSensorBase(TactileSensorBase):
         data: mujoco.MjData,
         *,
         rng: np.random.Generator,
-        options: Optional[dict],
-    ) -> Dict[str, Any]:
+        options: dict | None,
+    ) -> dict[str, Any]:
         _ = model, data, rng, options
         self.signal_processor.reset(self.total_taxels)
         return {
@@ -426,10 +426,10 @@ class DexHandTactileSensorBase(TactileSensorBase):
     def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> np.ndarray:
         return self.signal_processor.process(self.read_raw(model, data), self.patches)
 
-    def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> Dict[str, np.ndarray]:
+    def read_patches(self, model: mujoco.MjModel, data: mujoco.MjData) -> dict[str, np.ndarray]:
         return self.patches_from_values(self.read(model, data))
 
-    def patches_from_values(self, values: Any) -> Dict[str, np.ndarray]:
+    def patches_from_values(self, values: Any) -> dict[str, np.ndarray]:
         flat = np.asarray(values, dtype=np.float32).reshape(-1)
         return {
             patch.name: flat[patch.start : patch.stop].reshape(patch.shape)
@@ -441,8 +441,8 @@ class DexHandTactileSensorBase(TactileSensorBase):
         model: mujoco.MjModel,
         data: mujoco.MjData,
         *,
-        force_max: Optional[float] = None,
-    ) -> Dict[str, np.ndarray]:
+        force_max: float | None = None,
+    ) -> dict[str, np.ndarray]:
         maximum = self.image_force_max if force_max is None else float(force_max)
         if maximum <= 0.0:
             raise ValueError("force_max must be positive.")
@@ -451,7 +451,7 @@ class DexHandTactileSensorBase(TactileSensorBase):
             for name, values in self.read_patches(model, data).items()
         }
 
-    def metadata(self) -> Dict[str, Any]:
+    def metadata(self) -> dict[str, Any]:
         patches = {
             patch.name: {
                 "rows": patch.rows,
@@ -542,21 +542,16 @@ def create_dex_hand_tactile_sensor(
     return sensor_type(**kwargs)
 
 
-# Backward compatibility: the previous class name now means the fast default.
-DexHandTouchSensor = SimpleBoxTactileSensor
-
-
 __all__ = [
     "DEFAULT_TACTILE_BACKEND",
-    "SUPPORTED_TACTILE_BACKENDS",
     "DEX_HAND_PATCH_LAYOUT",
+    "SUPPORTED_TACTILE_BACKENDS",
     "DexHandTactileSensorBase",
-    "DexHandTouchSensor",
     "SimpleBoxTactileSensor",
     "TactileSignalProcessor",
     "TactileSignalProcessorConfig",
     "TaxelPatch",
     "create_dex_hand_tactile_sensor",
-    "site_name",
     "sensor_name",
+    "site_name",
 ]

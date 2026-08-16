@@ -4,10 +4,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import trimesh
 from scipy.spatial import cKDTree
+
+if TYPE_CHECKING:
+    from source.grasping.standalone_validator import TrajectoryValidationResult
+
 
 @dataclass(frozen=True)
 class Device:

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import numpy as np
 
-
 BG = "#0d1117"
 PANEL = "#161b22"
 GRID = "#30363d"
@@ -70,7 +69,7 @@ def style_panel(axis, title: str) -> None:
         spine.set_color(GRID)
 
 
-def update_frame_axes(axis, artists, position, rotation, length: float) -> None:
+def update_frame_axes(artists, position, rotation, length: float) -> None:
     colors = (RED, GREEN, CYAN)
     for index, (artist, color) in enumerate(zip(artists, colors)):
         endpoint = position + rotation[:, index] * length

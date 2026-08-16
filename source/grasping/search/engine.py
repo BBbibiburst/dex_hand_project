@@ -13,6 +13,7 @@ from source.grasping.search.planning import local_pose_candidates
 from source.grasping.search.scoring import evaluate
 from source.grasping.search.types import Candidate, Cloud, Device
 
+
 def _retain(bucket: list[Candidate], candidate: Candidate, keep: int) -> None:
     bucket.append(candidate)
     bucket.sort(key=lambda item: (not item.valid, item.score))
@@ -30,8 +31,6 @@ def search(
     top_k: int,
     support_margin: float,
     seed: int,
-    generator: str = "heuristic",
-    graspqp_iterations: int = 120,
 ) -> list[Candidate]:
     all_fractions = fraction_candidates(device, max(3, joint_candidates // 16))
     coarse_stride = max(1, len(all_fractions) // 8)
@@ -121,12 +120,6 @@ def search(
                             f"[fine] {evaluated}/{fine_total} "
                             f"best={best.score:.4f} valid={best.valid}"
                         )
-
-    if generator == "graspqp":
-        raise ValueError(
-            "GraspQP support has been removed; use generator=\"heuristic\" "
-            "or the UltraDexGrasp residual-RL pipeline."
-        )
 
     # Always preserve at least one result for visualization and debugging.
     selected = fine or coarse

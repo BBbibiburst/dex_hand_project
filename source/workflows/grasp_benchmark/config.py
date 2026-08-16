@@ -7,6 +7,7 @@ from pathlib import Path
 
 from source.grasping.constants import DEFAULT_GRIP_PRELOAD
 
+
 @dataclass
 class GraspBenchmarkConfig:
     """Configuration for a catalogue-wide grasp search and validation run."""
@@ -21,8 +22,6 @@ class GraspBenchmarkConfig:
     coarse_keep: int = 24
     top_k: int = 8
     support_margin: float = 0.008
-    generator: str = "heuristic"
-    graspqp_iterations: int = 120
     evolve: bool = False
     evolution_population: int = 32
     evolution_offspring: int = 16
@@ -64,7 +63,7 @@ class GraspBenchmarkConfig:
     output: Path | None = None
 
 
-def _selected_ids(args: "GraspBenchmarkConfig") -> list[str]:
+def _selected_ids(args: GraspBenchmarkConfig) -> list[str]:
     from source.envs.manipulation.object_catalog import object_ids
 
     available = object_ids(None if args.dataset == "all" else args.dataset)

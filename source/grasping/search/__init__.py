@@ -27,8 +27,6 @@ _EXPORTS = {
     ),
     "grasp_config_directory": ("source.grasping.search.catalog", "grasp_config_directory"),
     "grasp_config_name": ("source.grasping.search.catalog", "grasp_config_name"),
-    "manifest_objects": ("source.grasping.search.catalog", "manifest_objects"),
-    "object_mesh_path": ("source.grasping.search.catalog", "object_mesh_path"),
     "resolve_object": ("source.grasping.search.catalog", "resolve_object"),
     "generate_grasp_config": ("source.grasping.search.api", "generate_grasp_config"),
     "generate_validated_grasp_config": (

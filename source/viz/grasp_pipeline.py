@@ -10,7 +10,7 @@ from typing import Any, Final
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
-from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 DEFAULT_OUTPUT_DIR: Final = Path("artifacts/grasp_pipeline")
 NAVY: Final = "#183B64"
@@ -175,7 +175,7 @@ def _render_migration(output_dir: Path) -> Path:
     _box(ax, 3.35, 2.8, 2.15, 0.85, "Isaac Sim", TEAL)
     _arrow(ax, (2.82, 3.22), (3.3, 3.22))
     ax.text(0.6, 3.95, "DexEvolve", fontsize=17, fontweight="bold", color=BLUE)
-    _box(ax, 0.65, 1.15, 2.15, 0.85, "GraspQP", ORANGE)
+    _box(ax, 0.65, 1.15, 2.15, 0.85, "几何抓取搜索", ORANGE)
     _box(ax, 3.35, 1.15, 2.15, 0.85, "MuJoCo", NAVY)
     _arrow(ax, (2.82, 1.57), (3.3, 1.57))
     ax.text(0.6, 2.3, "本项目", fontsize=17, fontweight="bold", color=ORANGE)
@@ -196,44 +196,6 @@ def _render_migration(output_dir: Path) -> Path:
     ax.text(9.23, 2.05, "真实接触动力学", ha="center", fontsize=17, color=DARK)
     ax.text(9.23, 1.45, "127种物体统一测试", ha="center", fontsize=17, color=DARK)
     return _save(fig, output_dir, "02_method_migration.png")
-
-
-def _render_graspqp_adapter(output_dir: Path) -> Path:
-    fig, ax = _canvas()
-    ax.text(
-        6,
-        4.55,
-        "GraspQP 与欠驱动 Dex Hand 适配",
-        ha="center",
-        fontsize=23,
-        fontweight="bold",
-        color=NAVY,
-    )
-    obj = Circle((2.0, 2.5), 0.72, facecolor=LIGHT_ORANGE, edgecolor=ORANGE, linewidth=2)
-    ax.add_patch(obj)
-    ax.text(
-        2.0, 2.5, "物体\n表面", ha="center", va="center", fontsize=17, fontweight="bold", color=DARK
-    )
-    for angle_start, angle_end in [((0.85, 3.45), (1.5, 2.95)), ((0.82, 1.55), (1.5, 2.05))]:
-        _arrow(ax, angle_start, angle_end, BLUE)
-    ax.text(2.0, 1.05, "接触点 + 法向 + 摩擦锥", ha="center", fontsize=14, color=BLUE)
-    _box(ax, 4.15, 2.05, 2.15, 1.0, "6个执行器", NAVY)
-    _arrow(ax, (3.05, 2.5), (4.05, 2.5), GRAY)
-    _box(ax, 7.05, 2.05, 2.15, 1.0, "MuJoCo\n肌腱平衡", TEAL)
-    _arrow(ax, (6.32, 2.5), (6.95, 2.5))
-    _box(ax, 9.85, 2.05, 1.8, 1.0, "位置与\nJacobian", ORANGE)
-    _arrow(ax, (9.22, 2.5), (9.75, 2.5))
-    ax.text(7.05, 1.15, "被动关节由物理模型求解", fontsize=14, color=TEAL)
-    ax.text(
-        6,
-        3.65,
-        "GraspQP：用QP力闭合指标联合优化手腕位姿与手型",
-        ha="center",
-        fontsize=17,
-        color=DARK,
-        fontweight="bold",
-    )
-    return _save(fig, output_dir, "03_graspqp_closed_chain.png")
 
 
 def _render_evolution(output_dir: Path) -> Path:
@@ -261,7 +223,7 @@ def _render_evolution(output_dir: Path) -> Path:
         color=DARK,
     )
     ax.text(6, 0.88, "Genome = wrist pose + actuator[6]", ha="center", fontsize=16, color=ORANGE)
-    return _save(fig, output_dir, "04_mujoco_evolution.png")
+    return _save(fig, output_dir, "03_mujoco_evolution.png")
 
 
 def render_grasp_pipeline_figures(
@@ -273,6 +235,5 @@ def render_grasp_pipeline_figures(
         return (
             _render_dexevolve(output_dir),
             _render_migration(output_dir),
-            _render_graspqp_adapter(output_dir),
             _render_evolution(output_dir),
         )

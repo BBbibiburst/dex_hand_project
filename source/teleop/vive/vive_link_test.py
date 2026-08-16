@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import argparse
-from collections import deque
 import time
+from collections import deque
 
 import numpy as np
 
 from source.teleop.devices import ViveApiTracker
-from source.teleop.vive.hand_skeleton import make_hand_lines
 from source.teleop.vive.coordinates import (
     remap_pose,
     rotation_matrix_to_rpy_degrees,
 )
+from source.teleop.vive.hand_skeleton import make_hand_lines
 from source.teleop.vive.vive_plot_style import (
     BG,
     CYAN,
@@ -76,7 +76,7 @@ class LivePosePlot:
             transform=self.axes.transAxes,
             va="top",
             fontsize=8,
-            bbox=dict(boxstyle="round,pad=0.5", fc=BG, ec="#30363d", alpha=0.9),
+            bbox={"boxstyle": "round,pad=0.5", "fc": BG, "ec": "#30363d", "alpha": 0.9},
         )
         self.axes.legend(loc="lower left", fontsize=7)
         plt.ion()
@@ -98,7 +98,7 @@ class LivePosePlot:
             line = local_line @ rotation.T + position
             artist.set_data_3d(line[:, 0], line[:, 1], line[:, 2])
         self.trajectory.set_data_3d(trail[:, 0], trail[:, 1], trail[:, 2])
-        update_frame_axes(self.axes, self.frame_axes, position, rotation, self.axis_range * 0.16)
+        update_frame_axes(self.frame_axes, position, rotation, self.axis_range * 0.16)
         roll, pitch, yaw = rpy_degrees
         for bar, value in zip(self.position_bars, position):
             bar.set_width(value)

@@ -162,7 +162,7 @@ def read_obj(path: Path) -> tuple[np.ndarray, np.ndarray]:
     return np.asarray(vertices, dtype=np.float32), np.asarray(faces, dtype=np.int32)
 
 
-def find_obj(record: dict, manifest_path: Path) -> Path:
+def find_obj(record: dict) -> Path:
     source = Path(record["source_path"])
     source = source if source.is_absolute() else PROJECT_ROOT / source
     candidates = [
@@ -364,7 +364,7 @@ def render_dataset(
             width=5,
         )
         try:
-            mesh_path = find_obj(record, manifest_path)
+            mesh_path = find_obj(record)
             preview_width = (tile_width - 30) // 2
             preview = render_shape(mesh_path, preview_width, 220, color)
             scene = render_mujoco_scene(mesh_path, preview_width, 220, color)

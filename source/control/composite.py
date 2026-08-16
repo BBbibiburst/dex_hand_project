@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 """Composite robot controllers."""
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 import mujoco
 import numpy as np
@@ -38,15 +37,6 @@ class CompositeRobotController:
     @property
     def actuator_names(self) -> tuple[str, ...]:
         return self.arm_controller.actuator_names + self.hand_controller.actuator_names
-
-    @property
-    def arm_actuator_count(self) -> int:
-        """Number of direct position actuators owned by the arm controller.
-
-        Kept as a compatibility property for demos that need to split arm and
-        hand position targets.
-        """
-        return self.arm_controller.position_action_size
 
     @property
     def include_hand_action(self) -> bool:
@@ -85,9 +75,9 @@ class CompositeRobotController:
         data: mujoco.MjData,
         *,
         rng: np.random.Generator,
-        options: Optional[dict],
-    ) -> Dict[str, Any]:
-        info: Dict[str, Any] = {}
+        options: dict | None,
+    ) -> dict[str, Any]:
+        info: dict[str, Any] = {}
         info.update(self.arm_controller.reset(model, data, rng=rng, options=options))
         info.update(self.hand_controller.reset(model, data, rng=rng, options=options))
         info.update(
@@ -114,7 +104,7 @@ class CompositeRobotController:
         model: mujoco.MjModel,
         data: mujoco.MjData,
         action: Any,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         action_arr = np.asarray(action, dtype=np.float32)
         expected_shape = self.action_space.shape
         if action_arr.shape != expected_shape:
@@ -125,7 +115,7 @@ class CompositeRobotController:
         arm_size = self.arm_controller.action_size
         arm_action = action_arr[:arm_size]
         hand_action = action_arr[arm_size:]
-        info: Dict[str, Any] = {}
+        info: dict[str, Any] = {}
         info.update(self.arm_controller.apply_action(model, data, arm_action))
         info.update(self.hand_controller.apply_action(model, data, hand_action))
         if self.control_mode == "ik":

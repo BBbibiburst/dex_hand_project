@@ -2,28 +2,38 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
 import json
 import multiprocessing
-from pathlib import Path
 import time
-
-import numpy as np
+from dataclasses import asdict
+from pathlib import Path
 
 from source.evaluation.grasp_schema import (
-    DIRECT_HOLD_ONLY, SEARCH_ERROR, TRAJECTORY_STABLE, UNSTABLE, VALIDATION_ERROR,
+    DIRECT_HOLD_ONLY,
+    SEARCH_ERROR,
+    TRAJECTORY_STABLE,
+    UNSTABLE,
+    VALIDATION_ERROR,
 )
-from source.grasping.search import replan_evolved_payload, search_grasp_config
-from source.grasping.standalone_validator import validate_grasp_config, validate_grasp_payload_trajectory
 from source.grasping.dexevolve import EvolutionConfig, evolve, table_clearance_metrics
+from source.grasping.search import replan_evolved_payload, search_grasp_config
+from source.grasping.standalone_validator import (
+    validate_grasp_config,
+    validate_grasp_payload_trajectory,
+)
 from source.workflows.grasp_benchmark.candidates import (
-    _append_diverse_candidates, _approach_bins, _candidate_is_diverse,
-    _incomplete_attempt_key, _payload_after_robot_lift_attempts,
-    _robot_candidate_precheck_key, _write_payload_atomic,
+    _append_diverse_candidates,
+    _approach_bins,
+    _candidate_is_diverse,
+    _incomplete_attempt_key,
+    _payload_after_robot_lift_attempts,
+    _robot_candidate_precheck_key,
+    _write_payload_atomic,
 )
 from source.workflows.grasp_benchmark.reporting import _attempt_satisfies_goal
 
 _PROGRESS_QUEUE = None
+
 
 def _init_progress_worker(progress_queue) -> None:
     global _PROGRESS_QUEUE
@@ -143,8 +153,6 @@ def _run_one(task: dict) -> dict:
                     "seed": task["seed"] + attempt,
                     "target_size": task["target_size"],
                     "end_effector_name": task["end_effector"],
-                    "generator": task["generator"],
-                    "graspqp_iterations": task["graspqp_iterations"],
                     "require_valid": not task["evolve"],
                     "publish_invalid": task["evolve"],
                 }
@@ -179,7 +187,7 @@ def _run_one(task: dict) -> dict:
                 current=attempt + 1,
                 total=task["search_attempts"],
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - continue with the next search seed
             search_errors.append(f"seed={task['seed'] + attempt}: {exc}")
             continue
         try:
@@ -267,7 +275,7 @@ def _run_one(task: dict) -> dict:
                             settle_seconds=task["settle_seconds"],
                             grip_preload=task["grip_preload"],
                         )
-                    except Exception as exc:
+                    except Exception as exc:  # noqa: BLE001 - reject only this candidate
                         trajectory_errors.append(str(exc))
                         continue
                     if not result.trajectory_hold_stable:
@@ -307,10 +315,13 @@ def _run_one(task: dict) -> dict:
                     )
                     indexed_prechecks = {item["candidate_index"]: item for item in robot_prechecks}
 
-                    def robot_candidate_key(index_and_candidate):
+                    def robot_candidate_key(
+                        index_and_candidate,
+                        prechecks=indexed_prechecks,
+                    ):
                         index, candidate = index_and_candidate
-                        payload, result, individual = candidate
-                        precheck = indexed_prechecks[index]
+                        payload, _result, individual = candidate
+                        precheck = prechecks[index]
                         return _robot_candidate_precheck_key(
                             payload,
                             individual.fitness,
@@ -656,7 +667,7 @@ def _run_one(task: dict) -> dict:
                     dict(published_payload),
                     validation_path,
                 )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - preserve the best prior attempt
             validation_errors.append(f"seed={task['seed'] + attempt} validation: {exc}")
     if best_unstable is not None:
         _write_payload_atomic(best_unstable[3], best_unstable[2])

@@ -6,19 +6,20 @@ import json
 from pathlib import Path
 
 import numpy as np
-from scipy.spatial import cKDTree
 import trimesh
+from scipy.spatial import cKDTree
 
 from source.grasping.search.common import MANIFEST, ROOT
 from source.grasping.search.types import Cloud
 
-def safe_name(value: str) -> str:
+
+def _safe_name(value: str) -> str:
     return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in value)
 
 
 def grasp_config_name(object_id: str) -> str:
     """Return the canonical filesystem-safe name for an object grasp."""
-    return safe_name(object_id)
+    return _safe_name(object_id)
 
 
 def grasp_config_directory(
@@ -54,37 +55,6 @@ def resolve_object(object_id: str) -> Path:
             break
         return root / selected
     raise ValueError(f"Unknown object or missing mesh: {object_id}")
-
-
-def object_mesh_path(object_id: str) -> Path:
-    """Resolve one manifest object to its preferred local triangle mesh."""
-    return resolve_object(object_id)
-
-
-def manifest_objects() -> list[tuple[str, Path]]:
-    """Return all manifest objects that have a supported local mesh file."""
-    payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    objects: list[tuple[str, Path]] = []
-    for record in payload.get("objects", []):
-        object_id = f"{record['dataset']}:{record['object_id']}"
-        source = Path(record["source_path"])
-        root = source if source.is_absolute() else ROOT / source
-        files = record.get("model_files", ())
-        preferred = next(
-            (name for name in files if Path(name).name == "textured.obj"),
-            None,
-        )
-        selected = preferred or next(
-            (name for name in files if Path(name).suffix.lower() in {".obj", ".stl", ".ply"}),
-            None,
-        )
-        if selected is None:
-            continue
-        mesh_path = root / selected
-        if mesh_path.exists():
-            objects.append((object_id, mesh_path))
-    objects.sort(key=lambda item: item[0])
-    return objects
 
 
 def load_cloud(path: Path, *, count: int, target_size: float, seed: int) -> Cloud:
