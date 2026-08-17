@@ -20,6 +20,7 @@ class GuidedResidualConfig(ResidualLiftConfig):
     action_mode: str = "arm_hand"
     reward_version: int = 3
     maximum_object_speed: float = 0.10
+    maximum_object_angular_speed: float = 0.10
     success_hold_steps: int = 12
     opposition_threshold: float = 0.25
     grasp_ready_steps: int = 3
@@ -57,6 +58,8 @@ class GuidedResidualConfig(ResidualLiftConfig):
         super().validate()
         if self.action_mode != "arm_hand":
             raise ValueError("BC-guided residual RL requires action_mode='arm_hand'.")
+        if self.maximum_object_speed <= 0.0 or self.maximum_object_angular_speed <= 0.0:
+            raise ValueError("Object linear/angular speed limits must be positive.")
         if not 0.0 <= self.opposition_threshold <= 1.0 or self.grasp_ready_steps <= 0:
             raise ValueError("Invalid opposition threshold/grasp_ready_steps.")
         values = (
@@ -252,11 +255,13 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
 
         object_velocity = self.qvel[:, self.object_qvel_adr : self.object_qvel_adr + 6]
         translational_speed = torch.linalg.vector_norm(object_velocity[:, :3], dim=1)
+        angular_speed = torch.linalg.vector_norm(object_velocity[:, 3:], dim=1)
         stable = (
             (lift >= cfg.success_lift_height)
             & (contact_signal >= cfg.minimum_contact_digits)
             & opposition
             & (translational_speed <= cfg.maximum_object_speed)
+            & (angular_speed <= cfg.maximum_object_angular_speed)
         )
         self.success_streak = torch.where(
             stable, self.success_streak + 1, torch.zeros_like(self.success_streak)
@@ -272,7 +277,14 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
         opposition_scale = 1.0 if close_or_hold else (0.80 if lift_or_verify else 0.15)
         gated_lift = lift_progress * opposition.float()
         speed_excess = torch.relu(translational_speed - cfg.maximum_object_speed)
-        unsafe_motion = speed_excess / max(cfg.maximum_object_speed, 1e-6)
+        angular_speed_excess = torch.relu(
+            angular_speed - cfg.maximum_object_angular_speed
+        )
+        unsafe_motion = (
+            speed_excess / max(cfg.maximum_object_speed, 1e-6)
+            + angular_speed_excess
+            / max(cfg.maximum_object_angular_speed, 1e-6)
+        )
         unsafe_motion = unsafe_motion * (1.0 + (~opposition).float())
         action_cost = actions.square().mean(dim=1)
         delta_cost = (actions - self.last_action).square().mean(dim=1)
@@ -334,6 +346,10 @@ class BCGuidedResidualLiftEnv(GeometryAwareResidualLiftEnv):
                 "residual_scale": self.residual_scale.detach().cpu().numpy().tolist(),
                 "success_lift_height": self.config.success_lift_height,
                 "success_hold_steps": self.config.success_hold_steps,
+                "maximum_object_speed": self.guided_config.maximum_object_speed,
+                "maximum_object_angular_speed": (
+                    self.guided_config.maximum_object_angular_speed
+                ),
                 "minimum_contact_digits": self.config.minimum_contact_digits,
                 "opposition_threshold": self.guided_config.opposition_threshold,
                 "reward_version": self.guided_config.reward_version,

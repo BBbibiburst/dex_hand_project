@@ -9,18 +9,24 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from apps.train_grasp_edit_rl import _ensure_ultra_priors
 from source.rl.grasp_edit.graspm3_lite import (
+    TEMPORAL_PARAMETER_DIM,
     GraspM3LiteConfig,
     MjWarpGraspM3LiteEnv,
     TemporalCEMSearch,
+    TemporalWarmStart,
 )
 from source.rl.grasp_edit.primitives import (
     available_grasp_primitives,
     resolve_grasp_primitives,
 )
 from source.rl.grasp_edit.templates import build_grasp_edit_templates
-from source.rl.residual.replay import replay_residual_trajectory
+from source.rl.imitation.strict_replay import strict_replay_manifest
+from source.rl.imitation.verification import FINAL_PROFILE
+from source.rl.residual.trajectory import ResidualTrajectory
 
 
 def _write_json(path: Path, payload: Any) -> None:
@@ -71,12 +77,24 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--mode-bias-scale", type=float, default=1.0)
+    parser.add_argument("--ingress-gain-max", type=float, default=0.25)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--hand-edit-fraction", type=float, default=0.35)
     parser.add_argument("--success-lift-height", type=float, default=0.055)
-    parser.add_argument("--success-tail-steps", type=int, default=8)
-    parser.add_argument("--maximum-object-speed", type=float, default=0.65)
+    parser.add_argument("--success-tail-steps", type=int, default=20)
+    parser.add_argument("--maximum-object-speed", type=float, default=0.10)
+    parser.add_argument("--maximum-object-angular-speed", type=float, default=0.10)
+    parser.add_argument("--minimum-tail-contact-fraction", type=float, default=0.70)
+    parser.add_argument("--minimum-tail-grasp-fraction", type=float, default=0.60)
+    parser.add_argument("--minimum-flat-thumb-fraction", type=float, default=0.55)
+    parser.add_argument(
+        "--warm-start",
+        type=Path,
+        action="append",
+        default=[],
+        help="Prior GraspM3-lite trajectory directory/manifest to refine.",
+    )
     parser.add_argument("--nconmax", type=int, default=192)
     parser.add_argument("--njmax", type=int, default=768)
     parser.add_argument("--verify-tail", type=int, default=20)
@@ -113,9 +131,39 @@ def _candidate_summary(candidate, replay) -> dict[str, Any]:
         "template_label": metadata.get("template_label"),
         "mjwarp_max_lift": metadata.get("mjwarp_max_lift", 0.0),
         "mjwarp_final_lift": metadata.get("mjwarp_final_lift", 0.0),
+        "mjwarp_tail_min_lift": metadata.get("mjwarp_tail_min_lift", 0.0),
+        "mjwarp_tail_max_speed": metadata.get("mjwarp_tail_max_speed", 0.0),
+        "mjwarp_tail_max_angular_speed": metadata.get(
+            "mjwarp_tail_max_angular_speed", 0.0
+        ),
+        "mjwarp_tail_contact_fraction": metadata.get(
+            "mjwarp_tail_contact_fraction", 0.0
+        ),
+        "mjwarp_tail_grasp_fraction": metadata.get(
+            "mjwarp_tail_grasp_fraction", 0.0
+        ),
+        "mjwarp_tail_thumb_fraction": metadata.get(
+            "mjwarp_tail_thumb_fraction", 0.0
+        ),
         "c_mujoco_success": None if replay is None else replay.success,
-        "c_mujoco_success_fraction": None if replay is None else replay.success_fraction,
-        "c_mujoco_object_lift": None if replay is None else replay.object_lift,
+        "verification_status": None if replay is None else replay.verification_status,
+        "c_mujoco_final_lift": None if replay is None else replay.final_lift,
+        "c_mujoco_max_lift": None if replay is None else replay.max_lift,
+        "c_mujoco_tail_min_lift": None if replay is None else replay.tail_min_lift,
+        "c_mujoco_tail_max_speed": None if replay is None else replay.tail_max_speed,
+        "c_mujoco_tail_max_angular_speed": (
+            None if replay is None else replay.tail_max_angular_speed
+        ),
+        "c_mujoco_tail_contact_fraction": (
+            None if replay is None else replay.tail_contact_fraction
+        ),
+        "c_mujoco_tail_grasp_fraction": (
+            None if replay is None else replay.tail_grasp_fraction
+        ),
+        "c_mujoco_tail_opposition_mean": (
+            None if replay is None else replay.tail_opposition_mean
+        ),
+        "c_mujoco_quality_score": None if replay is None else replay.quality_score,
         "c_mujoco_error": metadata.get("c_mujoco_error"),
     }
 
@@ -123,6 +171,52 @@ def _candidate_summary(candidate, replay) -> dict[str, Any]:
 def _mode_names(value: str) -> tuple[str, ...]:
     modes = resolve_grasp_primitives(value)
     return tuple(mode.name for mode in modes)
+
+
+def _load_warm_starts(
+    paths: list[Path],
+    *,
+    object_id: str,
+    templates,
+    mode_names: tuple[str, ...],
+) -> tuple[TemporalWarmStart, ...]:
+    template_by_label = {item.label: index for index, item in enumerate(templates)}
+    mode_by_name = {name: index for index, name in enumerate(mode_names)}
+    rows: list[TemporalWarmStart] = []
+    for path in paths:
+        trajectory = ResidualTrajectory.load(path)
+        if trajectory.object_id != object_id:
+            raise ValueError(
+                f"Warm start {path} targets {trajectory.object_id}, not {object_id}."
+            )
+        parameters = np.asarray(
+            trajectory.metadata.get("temporal_parameters", []), dtype=np.float32
+        )
+        if parameters.ndim != 1 or not 1 <= len(parameters) <= TEMPORAL_PARAMETER_DIM:
+            raise ValueError(f"Warm start {path} has invalid temporal parameters.")
+        if len(parameters) < TEMPORAL_PARAMETER_DIM:
+            parameters = np.pad(
+                parameters,
+                (0, TEMPORAL_PARAMETER_DIM - len(parameters)),
+            )
+        template_label = str(trajectory.metadata.get("template_label", ""))
+        mode_name = str(trajectory.metadata.get("grasp_mode", ""))
+        if template_label not in template_by_label:
+            raise ValueError(
+                f"Warm-start template {template_label!r} is not in the current lattice."
+            )
+        if mode_name not in mode_by_name:
+            raise ValueError(
+                f"Warm-start mode {mode_name!r} is not among {mode_names}."
+            )
+        rows.append(
+            TemporalWarmStart(
+                parameters=parameters.astype(np.float32),
+                template_id=template_by_label[template_label],
+                mode_id=mode_by_name[mode_name],
+            )
+        )
+    return tuple(rows)
 
 
 def _prepare_output(path: Path, *, overwrite: bool) -> None:
@@ -180,15 +274,26 @@ def run(args: argparse.Namespace) -> int:
         verification_candidates=args.verification_candidates,
         grasp_modes=grasp_modes,
         mode_bias_scale=args.mode_bias_scale,
+        ingress_gain_max=args.ingress_gain_max,
         device=args.device,
         hand_edit_fraction=args.hand_edit_fraction,
         success_lift_height=args.success_lift_height,
         success_tail_steps=args.success_tail_steps,
         maximum_object_speed=args.maximum_object_speed,
+        maximum_object_angular_speed=args.maximum_object_angular_speed,
+        minimum_tail_contact_fraction=args.minimum_tail_contact_fraction,
+        minimum_tail_grasp_fraction=args.minimum_tail_grasp_fraction,
+        minimum_flat_thumb_fraction=args.minimum_flat_thumb_fraction,
         nconmax=args.nconmax,
         njmax=args.njmax,
     )
     config.validate()
+    warm_starts = _load_warm_starts(
+        args.warm_start,
+        object_id=args.object_id,
+        templates=templates,
+        mode_names=grasp_modes,
+    )
     _write_json(
         output / "config.json",
         {
@@ -196,6 +301,7 @@ def run(args: argparse.Namespace) -> int:
             "object_id": args.object_id,
             "search": asdict(config),
             "grasp_modes": list(config.grasp_modes),
+            "warm_starts": [str(path) for path in args.warm_start],
             "mode_definitions": [
                 {
                     "name": mode.name,
@@ -204,6 +310,12 @@ def run(args: argparse.Namespace) -> int:
                     "objective": mode.objective_name,
                     "score_weights": list(mode.score_weights),
                     "table_assisted": mode.table_assisted,
+                    "close_power_by_actuator": list(
+                        mode.close_power_by_actuator
+                        if mode.close_power_by_actuator is not None
+                        else (mode.close_power,) * 6
+                    ),
+                    "ingress_scale": mode.ingress_scale,
                 }
                 for mode in resolve_grasp_primitives(config.grasp_modes)
             ],
@@ -226,13 +338,26 @@ def run(args: argparse.Namespace) -> int:
     print(
         f"[graspm3-lite] object={args.object_id} templates={len(templates)} "
         f"population={config.population_size} iterations={config.iterations} "
-        f"modes={','.join(config.grasp_modes)} device={config.device}",
+        f"modes={','.join(config.grasp_modes)} warm_starts={len(warm_starts)} "
+        f"device={config.device}",
         flush=True,
     )
 
     env = MjWarpGraspM3LiteEnv(args.object_id, templates, config)
+    shape_summary = env.shape_summary()
+    print(
+        f"[geometry] family={shape_summary['family']} "
+        f"extents_mm={','.join(f'{1000.0 * value:.1f}' for value in shape_summary['extents'])} "
+        f"flatness={shape_summary['flatness_ratio']:.2f}",
+        flush=True,
+    )
     try:
-        search = TemporalCEMSearch(env, config, seed=args.seed)
+        search = TemporalCEMSearch(
+            env,
+            config,
+            seed=args.seed,
+            warm_starts=warm_starts,
+        )
 
         def report_iteration(row: dict[str, Any]) -> None:
             mode_successes = ",".join(
@@ -245,6 +370,9 @@ def run(args: argparse.Namespace) -> int:
                 f"success={row['mjwarp_successes']}/{row['population']} "
                 f"lift={1000.0 * row['best_max_lift']:.1f}mm "
                 f"tail={1000.0 * row['best_tail_min_lift']:.1f}mm "
+                f"contact={100.0 * row['best_tail_contact_fraction']:.0f}% "
+                f"grasp={100.0 * row['best_tail_grasp_fraction']:.0f}% "
+                f"omega_min={row['lowest_tail_max_angular_speed']:.3f}rad/s "
                 f"modes={mode_successes}",
                 flush=True,
             )
@@ -261,15 +389,37 @@ def run(args: argparse.Namespace) -> int:
         directory = candidate_root / f"candidate_{rank:03d}"
         candidate.trajectory.save(directory)
         try:
-            replay = replay_residual_trajectory(directory, verify_tail=args.verify_tail)
+            replay = strict_replay_manifest(
+                directory,
+                profile=FINAL_PROFILE,
+                success_lift_height=args.success_lift_height,
+                maximum_object_speed=args.maximum_object_speed,
+                maximum_object_angular_speed=args.maximum_object_angular_speed,
+                verify_tail=args.verify_tail,
+                use_cache=False,
+            )
             candidate.trajectory.metadata.update(
                 {
                     "c_mujoco_verified": bool(replay.success),
-                    "verification_status": (
-                        "C_MUJOCO_SUCCESS" if replay.success else "C_MUJOCO_REJECTED"
+                    "verification_status": replay.verification_status,
+                    "strict_replay_profile": FINAL_PROFILE,
+                    "c_mujoco_final_lift": float(replay.final_lift),
+                    "c_mujoco_max_lift": float(replay.max_lift),
+                    "c_mujoco_tail_min_lift": float(replay.tail_min_lift),
+                    "c_mujoco_tail_max_speed": float(replay.tail_max_speed),
+                    "c_mujoco_tail_max_angular_speed": float(
+                        replay.tail_max_angular_speed
                     ),
-                    "c_mujoco_success_fraction": float(replay.success_fraction),
-                    "c_mujoco_object_lift": float(replay.object_lift),
+                    "c_mujoco_tail_contact_fraction": float(
+                        replay.tail_contact_fraction
+                    ),
+                    "c_mujoco_tail_grasp_fraction": float(
+                        replay.tail_grasp_fraction
+                    ),
+                    "c_mujoco_tail_opposition_mean": float(
+                        replay.tail_opposition_mean
+                    ),
+                    "c_mujoco_quality_score": float(replay.quality_score),
                 }
             )
             candidate.trajectory.success = bool(replay.success)
@@ -287,19 +437,24 @@ def run(args: argparse.Namespace) -> int:
             candidate.trajectory.save(directory)
         verification_rows.append(_candidate_summary(candidate, replay))
         if replay is not None and replay.success:
-            candidate_rank = (not candidate.reference_schedule, candidate.score)
+            candidate_rank = (
+                not candidate.reference_schedule,
+                replay.quality_score,
+                candidate.score,
+            )
             if verified is None or candidate_rank > (
                 not verified.reference_schedule,
+                float(verified.trajectory.metadata.get("c_mujoco_quality_score", 0.0)),
                 verified.score,
             ):
                 verified = candidate
 
     if verified is not None:
         verified.trajectory.save(output / "best_trajectory")
-        status = "C_MUJOCO_SUCCESS"
+        status = "FINAL_VERIFIED"
         print(
             f"[verified] template={verified.trajectory.metadata.get('template_label')} "
-            f"lift={verified.trajectory.metadata.get('c_mujoco_object_lift', 0.0):.3f}m",
+            f"lift={verified.trajectory.metadata.get('c_mujoco_final_lift', 0.0):.3f}m",
             flush=True,
         )
     else:
@@ -313,9 +468,9 @@ def run(args: argparse.Namespace) -> int:
         status = (
             "TABLE_ASSISTED_CANDIDATE_ONLY"
             if table_candidates
-            else "NO_C_MUJOCO_SUCCESS"
+            else "NO_FINAL_VERIFIED"
         )
-        print("[verified] no candidate passed authoritative C MuJoCo replay", flush=True)
+        print("[verified] no candidate passed strict final C MuJoCo replay", flush=True)
 
     mode_stats: dict[str, dict[str, int]] = {
         name: {"candidates": 0, "mjwarp_successes": 0, "c_mujoco_successes": 0}
@@ -336,6 +491,9 @@ def run(args: argparse.Namespace) -> int:
         "object_id": args.object_id,
         "status": status,
         "config": asdict(config),
+        "geometry": shape_summary,
+        "verification_profile": FINAL_PROFILE,
+        "warm_starts": [str(path) for path in args.warm_start],
         "search_history": list(result.history),
         "template_probabilities": list(result.template_probabilities),
         "mode_probabilities": list(result.mode_probabilities),

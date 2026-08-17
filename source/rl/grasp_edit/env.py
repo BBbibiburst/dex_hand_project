@@ -26,7 +26,8 @@ class GraspEditConfig:
     hand_edit_fraction: float = 0.35
     success_lift_height: float = 0.055
     success_tail_steps: int = 8
-    maximum_object_speed: float = 0.65
+    maximum_object_speed: float = 0.10
+    maximum_object_angular_speed: float = 0.10
     nconmax: int = 192
     njmax: int = 768
 
@@ -43,6 +44,8 @@ class GraspEditConfig:
             raise ValueError("success thresholds must be positive.")
         if self.maximum_object_speed <= 0.0:
             raise ValueError("maximum_object_speed must be positive.")
+        if self.maximum_object_angular_speed <= 0.0:
+            raise ValueError("maximum_object_angular_speed must be positive.")
         if self.nconmax <= 0 or self.njmax <= 0:
             raise ValueError("MJWarp capacities must be positive.")
 
@@ -225,6 +228,7 @@ class MjWarpGraspEditEnv:
         self.last_template_histogram = np.zeros(self.template_count, dtype=np.float64)
         self.best_attempt_lift = -np.inf
         self.best_attempt_final_lift = -np.inf
+        self.best_attempt_return = -np.inf
         self.best_attempt_trajectory: ResidualTrajectory | None = None
         self.best_attempt_version = 0
         self.best_success_return = -np.inf
@@ -317,6 +321,8 @@ class MjWarpGraspEditEnv:
         reward: torch.Tensor,
         max_lift: torch.Tensor,
         final_lift: torch.Tensor,
+        tail_max_speed: torch.Tensor,
+        tail_max_angular_speed: torch.Tensor,
         success: torch.Tensor,
     ) -> ResidualTrajectory:
         template_id = int(template_ids[world].item())
@@ -354,6 +360,10 @@ class MjWarpGraspEditEnv:
                 "grasp_edit_action": action.tolist(),
                 "mjwarp_max_lift": float(max_lift[world].item()),
                 "mjwarp_final_lift": float(final_lift[world].item()),
+                "mjwarp_tail_max_speed": float(tail_max_speed[world].item()),
+                "mjwarp_tail_max_angular_speed": float(
+                    tail_max_angular_speed[world].item()
+                ),
                 "single_step_grasp_edit": True,
             },
         )
@@ -378,6 +388,10 @@ class MjWarpGraspEditEnv:
         initial_z = self.template_object_z[template_ids]
         max_lift = torch.full((self.num_envs,), -float("inf"), device=self.torch_device)
         tail_min_lift = torch.full((self.num_envs,), float("inf"), device=self.torch_device)
+        tail_max_speed = torch.zeros((self.num_envs,), device=self.torch_device)
+        tail_max_angular_speed = torch.zeros(
+            (self.num_envs,), device=self.torch_device
+        )
         controls_history = torch.empty(
             (self.horizon, self.num_envs, self.references[0].action_dim),
             device=self.torch_device,
@@ -401,19 +415,46 @@ class MjWarpGraspEditEnv:
             max_lift = torch.maximum(max_lift, lift)
             if step_index >= self.horizon - self.config.success_tail_steps:
                 tail_min_lift = torch.minimum(tail_min_lift, lift)
+                object_velocity = self.qvel[
+                    :, self.object_qvel_adr : self.object_qvel_adr + 6
+                ]
+                tail_max_speed = torch.maximum(
+                    tail_max_speed,
+                    torch.linalg.vector_norm(object_velocity[:, :3], dim=1),
+                )
+                tail_max_angular_speed = torch.maximum(
+                    tail_max_angular_speed,
+                    torch.linalg.vector_norm(object_velocity[:, 3:], dim=1),
+                )
 
         final_lift = self.xpos[:, self.object_body_id, 2] - initial_z
-        object_velocity = self.qvel[:, self.object_qvel_adr : self.object_qvel_adr + 6]
-        object_speed = torch.linalg.vector_norm(object_velocity, dim=1)
-        success = (tail_min_lift >= self.config.success_lift_height) & (
-            object_speed <= self.config.maximum_object_speed
+        success = (
+            (tail_min_lift >= self.config.success_lift_height)
+            & (tail_max_speed <= self.config.maximum_object_speed)
+            & (
+                tail_max_angular_speed
+                <= self.config.maximum_object_angular_speed
+            )
         )
 
         max_progress = torch.clamp(max_lift / self.config.success_lift_height, 0.0, 1.0)
         final_progress = torch.clamp(final_lift / self.config.success_lift_height, 0.0, 1.0)
+        speed_ratio = torch.clamp(
+            tail_max_speed / self.config.maximum_object_speed, min=0.0, max=5.0
+        )
+        angular_speed_ratio = torch.clamp(
+            tail_max_angular_speed / self.config.maximum_object_angular_speed,
+            min=0.0,
+            max=5.0,
+        )
         hand_cost = hand_edit.square().mean(dim=1)
         reward = (
-            5.0 * max_progress + 5.0 * final_progress + 12.0 * success.float() - 0.02 * hand_cost
+            5.0 * max_progress
+            + 5.0 * final_progress
+            + 12.0 * success.float()
+            - 0.25 * speed_ratio
+            - 0.50 * angular_speed_ratio
+            - 0.02 * hand_cost
         )
 
         self.completed_episodes += self.num_envs
@@ -423,18 +464,14 @@ class MjWarpGraspEditEnv:
         counts = torch.bincount(template_ids, minlength=self.template_count).float()
         self.last_template_histogram = (counts / float(self.num_envs)).detach().cpu().numpy()
 
-        best_max = torch.max(max_lift)
-        candidates = torch.nonzero(max_lift >= best_max - 1e-6, as_tuple=False).flatten()
-        local = int(torch.argmax(final_lift[candidates]).item())
-        attempt_world = int(candidates[local].item())
+        attempt_world = int(torch.argmax(reward).item())
         attempt_lift = float(max_lift[attempt_world].item())
         attempt_final = float(final_lift[attempt_world].item())
-        if attempt_lift > self.best_attempt_lift + 1e-6 or (
-            abs(attempt_lift - self.best_attempt_lift) <= 1e-6
-            and attempt_final > self.best_attempt_final_lift
-        ):
+        attempt_return = float(reward[attempt_world].item())
+        if attempt_return > self.best_attempt_return:
             self.best_attempt_lift = attempt_lift
             self.best_attempt_final_lift = attempt_final
+            self.best_attempt_return = attempt_return
             self.best_attempt_trajectory = self._trajectory_from_world(
                 attempt_world,
                 actions,
@@ -443,6 +480,8 @@ class MjWarpGraspEditEnv:
                 reward,
                 max_lift,
                 final_lift,
+                tail_max_speed,
+                tail_max_angular_speed,
                 success,
             )
             self.best_attempt_version += 1
@@ -462,6 +501,8 @@ class MjWarpGraspEditEnv:
                     reward,
                     max_lift,
                     final_lift,
+                    tail_max_speed,
+                    tail_max_angular_speed,
                     success,
                 )
                 self.best_version += 1
@@ -488,6 +529,11 @@ class MjWarpGraspEditEnv:
             "best_attempt_final_lift": (
                 float(self.best_attempt_final_lift)
                 if np.isfinite(self.best_attempt_final_lift)
+                else 0.0
+            ),
+            "best_attempt_return": (
+                float(self.best_attempt_return)
+                if np.isfinite(self.best_attempt_return)
                 else 0.0
             ),
             "best_success_return": (

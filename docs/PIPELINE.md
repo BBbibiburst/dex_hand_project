@@ -24,6 +24,12 @@ wrist template。抓取模式是 seed/prior，而不是八套 PPO。默认覆盖
 `table_assisted` 只是允许接触丰富的推/滚预抓取 seed，当前实现没有物体位姿重定位动作，
 因此不能把它当作已经解决“香蕉平放桌面”的完整规划器。
 
+搜索会根据碰撞几何包围盒自动区分 `flat`、`elongated` 和 `compact`。扁盒会优先分配
+`lateral`、`table_assisted` 与 `wrap` 候选，同时仍保留其他模式用于物理淘汰。时序参数还
+包含沿已验证 approach 方向的小幅 ingress；`lateral` 与 `table_assisted` 使用分指闭合时序，
+避免四指在拇指形成侧向限位前就把薄物体推走。已有候选可通过 `--warm-start` 注入 CEM，
+旧版 29 维轨迹会自动补齐新的 ingress 参数。
+
 单物体全流程命令：
 
 ```bash
@@ -42,9 +48,33 @@ python -m apps.run_graspm3_lite_single \
 ```
 
 输出 `summary.json` 会分别统计每个 mode 的候选数、MJWarp 成功数和 C MuJoCo 成功数。
-只有 `C_MUJOCO_SUCCESS` 才会生成 `best_trajectory/`；若只有桌面接触 seed 通过了廉价筛选，
+只有 `FINAL_VERIFIED` 才会生成 `best_trajectory/`；若只有桌面接触 seed 通过了廉价筛选，
 状态为 `TABLE_ASSISTED_CANDIDATE_ONLY`，仍不能进入最终专家池。重复使用同一对象输出目录时
 需显式加入 `--overwrite-output`，防止旧的 `best_trajectory` 与新结果混在一起。
+
+### 扁盒 ycb008 回归
+
+`ycb:008_pudding_box` 的仿真尺寸约为 `90 × 72 × 31 mm`，是检查薄物体侧夹、抗滑和抗转
+能力的固定回归对象。局部改进时可复用上一轮候选：
+
+```bash
+MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m apps.run_graspm3_lite_single \
+  --object-id ycb:008_pudding_box \
+  --output-root outputs/graspm3_ycb008 \
+  --template-root outputs/graspm3_ycb008/lattice \
+  --grasp-modes wrap,lateral,table_assisted \
+  --warm-start outputs/previous/ycb_008_pudding_box/candidates/candidate_000 \
+  --population-size 64 \
+  --iterations 4 \
+  --maximum-object-speed 0.10 \
+  --maximum-object-angular-speed 0.10 \
+  --device cuda:0 \
+  --allow-unverified
+```
+
+不能只看瞬时最大抬升。MJWarp 和严格 C MuJoCo 都要求尾段持续高度、接触、有效对向抓握、
+线速度和角速度同时通过；扁盒还要求拇指在尾段保持接触。持续接触但仍绕夹持面转动的轨迹
+会被角速度判据拒绝。
 
 ## Geometry-aware BC 与 residual RL 契约
 
@@ -87,6 +117,19 @@ hand_control = coarse_reference
 
 `EXPERT_POOL_VALID` 不是最终成功，不计入 `verified_total`。目录汇总分别记录
 `expert_pool_valid` 与 `final_verified`；只有 `FINAL_VERIFIED` 会计入最终验证总数。
+
+## 接触模型与摩擦
+
+Dex Hand 指垫使用 `condim=4`、滑动摩擦 `1.3`、扭转摩擦 `0.02`，并以更高 contact
+`priority` 提供手—物体接触的柔顺参数。这样刚性 YCB 网格不会再把机械臂默认的硬接触参数
+混入软指垫接触。所有动态加入的任务物体也会显式写入 `condim`、摩擦、`solref`、
+`solimp`、`priority` 和 `solmix`，不再依赖当前机器人 MJCF 的默认 class。
+
+MuJoCo MultiCCD 必须保持启用；它为凸网格接触提供多接触点，是当前刚体模型近似有限接触斑
+的关键部分。不要用极高滑动摩擦掩盖抓取几何或控制问题。对扁盒应优先增加合理的接触力臂、
+拇指/掌面限位和持续预紧，并同时检查 `tail_max_speed` 与
+`tail_max_angular_speed`。默认最终阈值分别为 `0.10 m/s` 和 `0.10 rad/s`；专家池角速度
+阈值放宽为 `0.20 rad/s`，但通过专家池仍不代表最终验证成功。
 
 ## 环境与模型检查
 

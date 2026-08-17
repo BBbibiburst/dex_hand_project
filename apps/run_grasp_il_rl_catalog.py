@@ -174,6 +174,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--arm-residual-radians", type=float, default=0.04)
     parser.add_argument("--success-hold-steps", type=int, default=12)
     parser.add_argument("--maximum-object-speed", type=float, default=0.10)
+    parser.add_argument("--maximum-object-angular-speed", type=float, default=0.10)
     parser.add_argument("--nconmax", type=int, default=192)
     parser.add_argument("--njmax", type=int, default=768)
 
@@ -270,6 +271,7 @@ def _validate_expert(manifest: Path) -> bool:
             f"grasp={result.tail_grasp_fraction:.1%} "
             f"opp={result.tail_opposition_mean:.2f} "
             f"speed={result.tail_max_speed:.3f} "
+            f"omega={result.tail_max_angular_speed:.3f} "
             f"tail_table={result.tail_robot_table_contact_fraction:.1%} "
             f"tail_pen={1000.0 * result.tail_max_penetration:.1f}mm "
             f"quality={result.quality_score:.2f}",
@@ -1244,6 +1246,8 @@ def _run_object(
             str(args.success_hold_steps),
             "--maximum-object-speed",
             str(args.maximum_object_speed),
+            "--maximum-object-angular-speed",
+            str(args.maximum_object_angular_speed),
             "--nconmax",
             str(args.nconmax),
             "--njmax",

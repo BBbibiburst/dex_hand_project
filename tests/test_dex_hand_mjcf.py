@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 
 from source.control.end_effectors import EndEffectorPositionController
+from source.envs.manipulation.objects import _configure_object_collision
 from source.robots.hands.dex_hand import DEX_HAND
 
 
@@ -73,6 +74,38 @@ def test_only_tactile_skin_meshes_participate_in_collision() -> None:
         if mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) in expected:
             assert model.geom_contype[geom_id] == 2
             assert model.geom_conaffinity[geom_id] == 1
+            assert model.geom_condim[geom_id] == 4
+            assert model.geom_priority[geom_id] == 1
+            np.testing.assert_allclose(model.geom_solref[geom_id], [0.01, 1.0])
+
+
+def test_task_object_contact_does_not_inherit_robot_geom_defaults() -> None:
+    spec = mujoco.MjSpec()
+    geom = spec.worldbody.add_geom()
+    geom.name = "object_collision"
+    geom.type = mujoco.mjtGeom.mjGEOM_BOX
+    geom.size = [0.02, 0.03, 0.01]
+    geom.density = 500.0
+    geom.solref = [0.2, 0.3]
+    geom.priority = 7
+
+    _configure_object_collision(
+        geom,
+        friction=(1.0, 0.005, 0.0001),
+        condim=4,
+    )
+    model = spec.compile()
+    geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "object_collision")
+
+    assert model.geom_condim[geom_id] == 4
+    assert model.geom_priority[geom_id] == 0
+    assert model.geom_solmix[geom_id] == pytest.approx(1.0)
+    np.testing.assert_allclose(model.geom_friction[geom_id], [1.0, 0.005, 0.0001])
+    np.testing.assert_allclose(model.geom_solref[geom_id], [0.001, 2.0])
+    np.testing.assert_allclose(
+        model.geom_solimp[geom_id],
+        [0.9, 0.95, 0.001, 0.5, 2.0],
+    )
 
 
 def test_finger_redistributes_tendon_travel_after_proximal_blockage() -> None:

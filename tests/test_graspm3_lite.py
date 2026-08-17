@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 import torch
 
-from apps.run_graspm3_lite_single import _prepare_output
+from apps.run_graspm3_lite_single import _load_warm_starts, _prepare_output
 from apps.train_grasp_primitive_rl import _primitive_names
 from source.rl.grasp_edit.graspm3_lite import (
     TEMPORAL_PARAMETER_DIM,
@@ -16,6 +16,9 @@ from source.rl.grasp_edit.graspm3_lite import (
     TemporalBatch,
     TemporalCandidate,
     TemporalCEMSearch,
+    TemporalWarmStart,
+    classify_object_shape,
+    geometry_mode_probabilities,
     mode_close_alpha,
     normalized_sigmoid,
 )
@@ -84,6 +87,28 @@ def test_temporal_profiles_have_normalized_endpoints_and_worldwise_close_power()
     assert torch.allclose(powered[1], torch.full((6,), 0.5))
     assert torch.allclose(powered[2], torch.full((6,), 0.25))
 
+    per_actuator = mode_close_alpha(
+        torch.full((1, 6), 0.5),
+        torch.tensor([[0.5, 0.75, 1.0, 1.25, 1.5, 2.0]]),
+    )
+    assert torch.allclose(
+        per_actuator,
+        torch.tensor([[0.5**0.5, 0.5**0.75, 0.5, 0.5**1.25, 0.5**1.5, 0.25]]),
+    )
+
+
+def test_ycb008_extents_select_flat_box_grasp_prior() -> None:
+    profile = classify_object_shape((0.0900, 0.0718, 0.0311))
+    assert profile.family == "flat"
+    assert profile.flatness_ratio == pytest.approx(0.0718 / 0.0311)
+
+    modes = available_grasp_primitives()
+    probabilities = geometry_mode_probabilities(modes, profile)
+    by_mode = dict(zip(modes, probabilities, strict=True))
+    assert probabilities.sum() == pytest.approx(1.0)
+    assert by_mode["lateral"] > by_mode["table_assisted"] > by_mode["wrap"]
+    assert by_mode["wrap"] > by_mode["spherical"]
+
 
 def test_cem_stratifies_all_modes_and_keeps_reference_schedule() -> None:
     config = GraspM3LiteConfig(num_envs=17, population_size=17, iterations=1)
@@ -108,6 +133,48 @@ def test_cem_stratifies_all_modes_and_keeps_reference_schedule() -> None:
 def test_population_must_fit_modes_and_reference() -> None:
     with pytest.raises(ValueError, match="reference schedule"):
         GraspM3LiteConfig(num_envs=8, population_size=8).validate()
+
+
+@pytest.mark.parametrize(
+    "override",
+    (
+        {"maximum_object_speed": 0.0},
+        {"maximum_object_angular_speed": 0.0},
+    ),
+)
+def test_motion_stability_limits_must_be_positive(override: dict[str, float]) -> None:
+    with pytest.raises(ValueError, match="must be positive"):
+        GraspM3LiteConfig(num_envs=9, population_size=9, **override).validate()
+
+
+def test_cem_injects_exact_warm_start() -> None:
+    config = GraspM3LiteConfig(
+        num_envs=12,
+        population_size=12,
+        iterations=1,
+        verification_candidates=3,
+        grasp_modes=("wrap", "lateral", "table_assisted"),
+    )
+    fake_env = SimpleNamespace(
+        templates=(object(), object(), object()),
+        mode_count=3,
+        mode_names=("wrap", "lateral", "table_assisted"),
+        reference_mode_id=0,
+        parameter_bounds_low=np.zeros(TEMPORAL_PARAMETER_DIM, dtype=np.float32),
+        parameter_bounds_high=np.ones(TEMPORAL_PARAMETER_DIM, dtype=np.float32),
+    )
+    parameters = np.linspace(0.0, 1.0, TEMPORAL_PARAMETER_DIM, dtype=np.float32)
+    warm_start = TemporalWarmStart(parameters=parameters, template_id=1, mode_id=2)
+    search = TemporalCEMSearch(fake_env, config, seed=3, warm_starts=(warm_start,))
+    batch = search._sample()
+
+    matches = np.flatnonzero(
+        (batch.template_ids == 1)
+        & (batch.mode_ids == 2)
+        & np.all(np.isclose(batch.parameters, parameters[None, :]), axis=1)
+    )
+    assert len(matches) == 1
+    assert not batch.reference_mask[matches[0]]
 
 
 def test_verification_pool_keeps_one_non_reference_candidate_per_mode() -> None:
@@ -176,3 +243,35 @@ def test_existing_single_object_result_requires_explicit_overwrite(tmp_path) -> 
     _prepare_output(output, overwrite=True)
     assert output.is_dir()
     assert not (output / "candidates").exists()
+
+
+def test_driver_loads_legacy_temporal_warm_start(tmp_path) -> None:
+    trajectory = ResidualTrajectory(
+        object_id="ycb:test",
+        source_manifest="source",
+        start_stage="approach",
+        action_mode="graspm3_lite_temporal",
+        residual_actions=np.zeros((1, 29), dtype=np.float32),
+        controls=np.zeros((1, 1), dtype=np.float32),
+        initial_qpos=np.zeros(1, dtype=np.float32),
+        initial_qvel=np.zeros(1, dtype=np.float32),
+        success=False,
+        episode_return=0.0,
+        metadata={
+            "temporal_parameters": np.linspace(0.0, 1.0, 29).tolist(),
+            "template_label": "template-a",
+            "grasp_mode": "wrap",
+        },
+    )
+    path = tmp_path / "warm"
+    trajectory.save(path)
+    warm_starts = _load_warm_starts(
+        [path],
+        object_id="ycb:test",
+        templates=(SimpleNamespace(label="template-a"),),
+        mode_names=("wrap",),
+    )
+
+    assert len(warm_starts) == 1
+    assert warm_starts[0].parameters.shape == (TEMPORAL_PARAMETER_DIM,)
+    assert warm_starts[0].parameters[-1] == pytest.approx(0.0)

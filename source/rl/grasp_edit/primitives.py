@@ -29,6 +29,15 @@ class GraspPrimitive:
     table_assisted: bool = False
     enclosure_bias: float = 0.0
     support_bias: float = 0.0
+    # Optional per-actuator closure exponents. Values below one close earlier;
+    # values above one delay that actuator. This is important for an
+    # underactuated edge grasp, where the thumb must establish a side stop
+    # before the four fingers finish wrapping around a thin object.
+    close_power_by_actuator: tuple[float, float, float, float, float, float] | None = None
+    # Fraction of the learned temporal ingress parameter applied along the
+    # final approach direction. Lateral/table-assisted modes use this to make a
+    # small contact-rich wedge motion instead of merely changing the mode name.
+    ingress_scale: float = 0.0
 
     def validate(self) -> None:
         if len(self.approach_bias) != 6 or len(self.final_bias) != 6:
@@ -49,6 +58,19 @@ class GraspPrimitive:
             raise ValueError(f"Primitive {self.name!r} mode biases must be non-negative.")
         if not self.mode_family or not self.objective_name:
             raise ValueError(f"Primitive {self.name!r} must define mode metadata.")
+        if self.close_power_by_actuator is not None:
+            if len(self.close_power_by_actuator) != 6 or not np.all(
+                np.isfinite(self.close_power_by_actuator)
+            ):
+                raise ValueError(
+                    f"Primitive {self.name!r} has invalid per-actuator close powers."
+                )
+            if any(value <= 0.0 for value in self.close_power_by_actuator):
+                raise ValueError(
+                    f"Primitive {self.name!r} close powers must be positive."
+                )
+        if not np.isfinite(self.ingress_scale) or not 0.0 <= self.ingress_scale <= 1.0:
+            raise ValueError(f"Primitive {self.name!r} ingress_scale must lie in [0, 1].")
 
 
 # Physical actuator order used by this project:
@@ -66,6 +88,7 @@ GRASP_PRIMITIVES: dict[str, GraspPrimitive] = {
         objective_name="enclosure_sustained_lift",
         score_weights=(0.8, 2.5, 4.5, 6.0),
         enclosure_bias=1.0,
+        ingress_scale=0.35,
     ),
     "pinch": GraspPrimitive(
         name="pinch",
@@ -123,22 +146,27 @@ GRASP_PRIMITIVES: dict[str, GraspPrimitive] = {
     ),
     "lateral": GraspPrimitive(
         name="lateral",
-        approach_bias=(0.10, 0.08, 0.02, -0.04, -0.16, 0.06),
-        final_bias=(0.12, 0.10, 0.02, -0.06, -0.20, 0.10),
-        close_power=1.20,
-        description="Thumb-side edge clamp for thin plates and box edges.",
+        approach_bias=(0.12, 0.10, 0.04, -0.02, -0.24, 0.10),
+        final_bias=(0.28, 0.24, 0.16, 0.06, -0.38, 0.30),
+        close_power=1.00,
+        description=(
+            "Thumb-leading edge clamp with a small ingress motion for thin plates "
+            "and flat box edges."
+        ),
         mode_family="lateral",
         objective_name="edge_clamp_sustained_lift",
-        score_weights=(1.0, 3.0, 3.5, 5.0),
+        score_weights=(0.5, 2.5, 4.5, 7.0),
+        close_power_by_actuator=(1.05, 1.05, 1.10, 1.15, 0.65, 0.70),
+        ingress_scale=0.75,
     ),
     "table_assisted": GraspPrimitive(
         name="table_assisted",
-        approach_bias=(0.18, 0.18, 0.16, 0.12, -0.02, -0.08),
-        final_bias=(0.10, 0.10, 0.08, 0.06, -0.05, -0.08),
-        close_power=1.35,
+        approach_bias=(0.16, 0.16, 0.12, 0.08, -0.18, 0.06),
+        final_bias=(0.24, 0.24, 0.20, 0.14, -0.30, 0.22),
+        close_power=0.80,
         description=(
-            "Contact-rich pre-grasp seed that may push/roll an object before enclosure; "
-            "it is not a full object-repositioning planner."
+            "Contact-rich thumb-leading seed that may wedge, push, or roll an object "
+            "slightly before enclosure; it is not a full repositioning planner."
         ),
         mode_family="table_assisted",
         objective_name="support_containment_tail_lift",
@@ -146,6 +174,8 @@ GRASP_PRIMITIVES: dict[str, GraspPrimitive] = {
         table_assisted=True,
         enclosure_bias=0.8,
         support_bias=1.0,
+        close_power_by_actuator=(0.70, 0.75, 0.80, 0.90, 0.60, 0.70),
+        ingress_scale=1.0,
     ),
 }
 

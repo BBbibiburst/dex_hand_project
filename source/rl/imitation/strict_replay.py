@@ -42,12 +42,13 @@ from source.rl.residual.reference import (
 )
 from source.rl.residual.trajectory import ResidualTrajectory
 
-STRICT_REPLAY_SCHEMA_VERSION = 5
+STRICT_REPLAY_SCHEMA_VERSION = 6
 
 _PROFILE_DEFAULTS = {
     EXPERT_PROFILE: {
         "success_lift_height": 0.040,
         "maximum_object_speed": 0.10,
+        "maximum_object_angular_speed": 0.20,
         "opposition_threshold": 0.20,
         "verify_tail": 20,
         "extra_hold_steps": 8,
@@ -59,6 +60,7 @@ _PROFILE_DEFAULTS = {
     FINAL_PROFILE: {
         "success_lift_height": 0.055,
         "maximum_object_speed": 0.10,
+        "maximum_object_angular_speed": 0.10,
         "opposition_threshold": 0.25,
         "verify_tail": 20,
         "extra_hold_steps": 12,
@@ -81,6 +83,7 @@ class StrictReplayResult:
     tail_min_lift: float
     tail_mean_lift: float
     tail_max_speed: float
+    tail_max_angular_speed: float
     tail_contact_fraction: float
     tail_grasp_fraction: float
     tail_opposition_mean: float
@@ -285,6 +288,7 @@ def _resolved_settings(
     *,
     success_lift_height: float | None,
     maximum_object_speed: float | None,
+    maximum_object_angular_speed: float | None,
     opposition_threshold: float | None,
     verify_tail: int | None,
     extra_hold_steps: int | None,
@@ -302,6 +306,7 @@ def _resolved_settings(
     overrides = {
         "success_lift_height": success_lift_height,
         "maximum_object_speed": maximum_object_speed,
+        "maximum_object_angular_speed": maximum_object_angular_speed,
         "opposition_threshold": opposition_threshold,
         "verify_tail": verify_tail,
         "extra_hold_steps": extra_hold_steps,
@@ -317,6 +322,8 @@ def _resolved_settings(
         raise ValueError("success_lift_height must be positive.")
     if float(defaults["maximum_object_speed"]) <= 0.0:
         raise ValueError("maximum_object_speed must be positive.")
+    if float(defaults["maximum_object_angular_speed"]) <= 0.0:
+        raise ValueError("maximum_object_angular_speed must be positive.")
     if int(defaults["verify_tail"]) <= 0 or int(defaults["extra_hold_steps"]) < 0:
         raise ValueError("verify_tail must be positive and extra_hold_steps non-negative.")
     for key in (
@@ -337,6 +344,7 @@ def strict_replay_manifest(
     profile: str = FINAL_PROFILE,
     success_lift_height: float | None = None,
     maximum_object_speed: float | None = None,
+    maximum_object_angular_speed: float | None = None,
     opposition_threshold: float | None = None,
     verify_tail: int | None = None,
     extra_hold_steps: int | None = None,
@@ -357,6 +365,7 @@ def strict_replay_manifest(
         profile,
         success_lift_height=success_lift_height,
         maximum_object_speed=maximum_object_speed,
+        maximum_object_angular_speed=maximum_object_angular_speed,
         opposition_threshold=opposition_threshold,
         verify_tail=verify_tail,
         extra_hold_steps=extra_hold_steps,
@@ -367,6 +376,7 @@ def strict_replay_manifest(
     )
     lift_height = float(settings["success_lift_height"])
     speed_limit = float(settings["maximum_object_speed"])
+    angular_speed_limit = float(settings["maximum_object_angular_speed"])
     opposition_limit = float(settings["opposition_threshold"])
     tail_size = int(settings["verify_tail"])
     hold_steps = int(settings["extra_hold_steps"])
@@ -425,6 +435,7 @@ def strict_replay_manifest(
 
         lifts: list[float] = []
         speeds: list[float] = []
+        angular_speeds: list[float] = []
         contacts: list[float] = []
         grasps: list[float] = []
         oppositions: list[float] = []
@@ -446,6 +457,9 @@ def strict_replay_manifest(
             z = float(env.data.xpos[object_binding.body_id, 2])
             lift = z - initial_z
             speed = float(np.linalg.norm(env.data.qvel[qvel_adr : qvel_adr + 3]))
+            angular_speed = float(
+                np.linalg.norm(env.data.qvel[qvel_adr + 3 : qvel_adr + 6])
+            )
             (
                 robot_object_contacts,
                 _digit_count,
@@ -461,6 +475,7 @@ def strict_replay_manifest(
 
             lifts.append(lift)
             speeds.append(speed)
+            angular_speeds.append(angular_speed)
             contacts.append(float(robot_object_contacts > 0))
             grasps.append(float(grasp_valid))
             oppositions.append(opposition)
@@ -485,6 +500,9 @@ def strict_replay_manifest(
         tail_count = min(max(1, tail_size), len(lifts))
         tail_lifts = np.asarray(lifts[-tail_count:], dtype=np.float64)
         tail_speeds = np.asarray(speeds[-tail_count:], dtype=np.float64)
+        tail_angular_speeds = np.asarray(
+            angular_speeds[-tail_count:], dtype=np.float64
+        )
         tail_contacts = np.asarray(contacts[-tail_count:], dtype=np.float64)
         tail_grasps = np.asarray(grasps[-tail_count:], dtype=np.float64)
         tail_oppositions = np.asarray(oppositions[-tail_count:], dtype=np.float64)
@@ -498,6 +516,7 @@ def strict_replay_manifest(
         tail_min = float(np.min(tail_lifts))
         tail_mean = float(np.mean(tail_lifts))
         tail_speed_max = float(np.max(tail_speeds))
+        tail_angular_speed_max = float(np.max(tail_angular_speeds))
         tail_contact_fraction = float(np.mean(tail_contacts))
         tail_grasp_fraction = float(np.mean(tail_grasps))
         tail_opposition_mean = float(np.mean(tail_oppositions))
@@ -508,6 +527,7 @@ def strict_replay_manifest(
         tail_tactile_max = float(np.max(tail_tactile))
 
         lift_scale = max(lift_height, 1e-6)
+        angular_speed_ratio = tail_angular_speed_max / max(angular_speed_limit, 1e-6)
         quality = (
             2.0 * float(np.clip(tail_min / lift_scale, -1.0, 1.5))
             + 1.5 * float(np.clip(final_lift / lift_scale, -1.0, 1.5))
@@ -516,6 +536,8 @@ def strict_replay_manifest(
             + 0.75 * tail_opposition_mean
             + 0.25 * min(tail_robot_object_mean / 2.0, 1.0)
             - 0.75 * max(0.0, tail_speed_max / max(speed_limit, 1e-6) - 1.0)
+            - 0.25 * min(angular_speed_ratio, 5.0)
+            - 0.75 * max(0.0, angular_speed_ratio - 1.0)
             - 2.0 * tail_table_fraction
             - 50.0 * max(0.0, tail_max_penetration - penetration_limit)
         )
@@ -524,6 +546,7 @@ def strict_replay_manifest(
             tail_min >= lift_height
             and final_lift >= lift_height
             and tail_speed_max <= speed_limit
+            and tail_angular_speed_max <= angular_speed_limit
             and tail_contact_fraction >= contact_fraction_limit
             and tail_grasp_fraction >= grasp_fraction_limit
             and tail_table_fraction <= table_fraction_limit
@@ -540,6 +563,7 @@ def strict_replay_manifest(
             tail_min_lift=tail_min,
             tail_mean_lift=tail_mean,
             tail_max_speed=tail_speed_max,
+            tail_max_angular_speed=tail_angular_speed_max,
             tail_contact_fraction=tail_contact_fraction,
             tail_grasp_fraction=tail_grasp_fraction,
             tail_opposition_mean=tail_opposition_mean,

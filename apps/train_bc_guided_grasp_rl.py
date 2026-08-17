@@ -41,6 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--success-lift-height", type=float, default=0.055)
     parser.add_argument("--success-hold-steps", type=int, default=12)
     parser.add_argument("--maximum-object-speed", type=float, default=0.10)
+    parser.add_argument("--maximum-object-angular-speed", type=float, default=0.10)
     parser.add_argument("--nconmax", type=int, default=192)
     parser.add_argument("--njmax", type=int, default=768)
     parser.add_argument("--bc-approach-blend", type=float, default=0.15)
@@ -79,6 +80,7 @@ def run(args: argparse.Namespace) -> int:
         success_lift_height=args.success_lift_height,
         success_hold_steps=args.success_hold_steps,
         maximum_object_speed=args.maximum_object_speed,
+        maximum_object_angular_speed=args.maximum_object_angular_speed,
         bc_approach_blend=args.bc_approach_blend,
         bc_close_blend=args.bc_close_blend,
         bc_hold_blend=args.bc_hold_blend,
@@ -180,6 +182,7 @@ def run(args: argparse.Namespace) -> int:
             profile=FINAL_PROFILE,
             success_lift_height=args.success_lift_height,
             maximum_object_speed=args.maximum_object_speed,
+            maximum_object_angular_speed=args.maximum_object_angular_speed,
             use_cache=False,
         )
         replay_payload = asdict(replay)
@@ -189,6 +192,7 @@ def run(args: argparse.Namespace) -> int:
             f"[strict-replay] success={replay.success} tail_min={replay.tail_min_lift:.3f}m "
             f"grasp={replay.tail_grasp_fraction:.1%} opp={replay.tail_opposition_mean:.2f} "
             f"speed={replay.tail_max_speed:.3f}m/s table={replay.robot_table_contacts} "
+            f"omega={replay.tail_max_angular_speed:.3f}rad/s "
             f"penetration={1000.0 * replay.max_penetration:.1f}mm",
             flush=True,
         )

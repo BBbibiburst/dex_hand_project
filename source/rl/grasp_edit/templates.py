@@ -24,7 +24,6 @@ from source.ultradexgrasp.executor import (
     rank_candidates_for_scene,
 )
 
-
 _REQUIRED_STAGES = {
     STAGE_CODES["approach"],
     STAGE_CODES["close"],
@@ -101,7 +100,22 @@ def discover_ultra_attempts(
     def key(row: tuple[Path, DemonstrationEpisode]):
         _, episode = row
         lift = float(episode.metadata.get("object_lift", 0.0))
-        return (1 if episode.success else 0, lift)
+        # Static IK reachability is not enough: a nominally reachable wrist can
+        # still miss a thin object by centimetres after the dynamic approach.
+        # Prefer references whose recorded controller actually reached the
+        # grasp pose. This makes flat-box searches favour the well-tracked
+        # side approaches instead of a high-scoring but dynamically inaccurate
+        # top approach.
+        position_error = float(episode.metadata.get("approach_position_error", np.inf))
+        orientation_error = float(
+            episode.metadata.get("approach_orientation_error", np.inf)
+        )
+        return (
+            1 if episode.success else 0,
+            lift,
+            -position_error,
+            -orientation_error,
+        )
 
     rows.sort(key=key, reverse=True)
     return rows[:maximum]
@@ -225,7 +239,7 @@ def local_wrist_lattice(
 
 
 def _code(value: float, scale: float, prefix: str) -> str:
-    integer = int(round(abs(value) * scale))
+    integer = round(abs(value) * scale)
     sign = "p" if value >= 0.0 else "m"
     return f"{prefix}{sign}{integer:03d}"
 
@@ -386,7 +400,27 @@ def build_grasp_edit_templates(
                     metrics["lattice_yaw_degrees"],
                 ]
             ) / max(rotation_step_degrees, 1e-9)
-            return float(result.score + 0.015 * (tnorm + rnorm))
+            base_index = round(metrics["lattice_base_index"])
+            source_episode = source_by_base[base_index][1]
+            dynamic_position_error = float(
+                source_episode.metadata.get(
+                    "approach_position_error", execution.position_tolerance
+                )
+            )
+            dynamic_orientation_error = float(
+                source_episode.metadata.get(
+                    "approach_orientation_error", execution.orientation_tolerance
+                )
+            )
+            tracking_penalty = (
+                0.10
+                * dynamic_position_error
+                / max(execution.position_tolerance, 1e-9)
+                + 0.05
+                * dynamic_orientation_error
+                / max(execution.orientation_tolerance, 1e-9)
+            )
+            return float(result.score + 0.015 * (tnorm + rnorm) + tracking_penalty)
 
         reachable.sort(key=compile_key)
         executions = 0
@@ -395,7 +429,7 @@ def build_grasp_edit_templates(
                 break
             candidate = result.candidate
             metrics = candidate.metrics
-            base_index = int(round(metrics["lattice_base_index"]))
+            base_index = round(metrics["lattice_base_index"])
             source_manifest, source_episode = source_by_base[base_index]
             translation = (
                 float(metrics["lattice_dx"]),

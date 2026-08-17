@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Composable task-object specifications."""
 
 from __future__ import annotations
@@ -6,13 +5,15 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Tuple
 
 import mujoco
 import numpy as np
 
 from source.assets import asset_path
 from source.envs.manipulation.object_catalog import resolve_record, resolve_record_path
+
+_OBJECT_CONTACT_SOLREF = (0.001, 2.0)
+_OBJECT_CONTACT_SOLIMP = (0.9, 0.95, 0.001, 0.5, 2.0)
 
 
 def _configure_free_joint(joint: mujoco.MjsJoint, name: str) -> None:
@@ -26,6 +27,30 @@ def _configure_free_joint(joint: mujoco.MjsJoint, name: str) -> None:
     joint.damping = np.zeros(3, dtype=np.float64)
     joint.frictionloss = 0.0
     joint.armature = 0.0
+
+
+def _configure_object_collision(
+    geom: mujoco.MjsGeom,
+    *,
+    friction: tuple[float, float, float],
+    condim: int,
+) -> None:
+    """Set object contact parameters without inheriting robot MJCF defaults.
+
+    Task objects are appended to the already-loaded arm ``MjSpec``. Without
+    explicit values they inherit the arm's default geom class, which silently
+    couples YCB contact behaviour to whichever robot happens to host the task.
+    Objects remain rigid; the higher-priority hand pad material supplies the
+    compliant side of hand-object contacts.
+    """
+    geom.condim = condim
+    geom.friction = list(friction)
+    geom.solref = list(_OBJECT_CONTACT_SOLREF)
+    geom.solimp = list(_OBJECT_CONTACT_SOLIMP)
+    geom.priority = 0
+    geom.solmix = 1.0
+    geom.contype = 1
+    geom.conaffinity = 1
 
 
 class ManipulationObjectSpec(ABC):
@@ -76,7 +101,7 @@ class MeshObjectSpec(ManipulationObjectSpec):
     object_id: str
     target_size: float = 0.09
     density: float = 500.0
-    friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001)
+    friction: tuple[float, float, float] = (1.0, 0.005, 0.0001)
 
     def __post_init__(self) -> None:
         record = resolve_record(self.object_id)
@@ -163,9 +188,7 @@ class MeshObjectSpec(ManipulationObjectSpec):
         collision.type = mujoco.mjtGeom.mjGEOM_MESH
         collision.meshname = collision_mesh.name
         collision.density = self.density
-        collision.friction = list(self.friction)
-        collision.contype = 1
-        collision.conaffinity = 1
+        _configure_object_collision(collision, friction=self.friction, condim=4)
         collision.rgba = [0.0, 0.0, 0.0, 0.0]
 
         visual = body.add_geom()
@@ -185,10 +208,10 @@ class FreeBoxSpec(ManipulationObjectSpec):
     """Free box; retained as the compatible name used by existing tasks."""
 
     name: str
-    half_size: Tuple[float, float, float]
-    rgba: Tuple[float, float, float, float]
+    half_size: tuple[float, float, float]
+    rgba: tuple[float, float, float, float]
     density: float = 500.0
-    friction: Tuple[float, float, float] = (1.0, 0.005, 0.0001)
+    friction: tuple[float, float, float] = (1.0, 0.005, 0.0001)
     duplicate_collision_geoms: bool = True
 
     @property
@@ -226,11 +249,8 @@ class FreeBoxSpec(ManipulationObjectSpec):
         geom.type = mujoco.mjtGeom.mjGEOM_BOX
         geom.size = list(self.half_size)
         geom.density = self.density
-        geom.friction = list(self.friction)
+        _configure_object_collision(geom, friction=self.friction, condim=3)
         geom.rgba = list(self.rgba)
-        geom.condim = 3
-        geom.contype = 1
-        geom.conaffinity = 1
         if self.duplicate_collision_geoms:
             visual = body.add_geom()
             visual.name = f"{self.name}_visual"
@@ -249,7 +269,7 @@ class FreeCylinderSpec(ManipulationObjectSpec):
     name: str
     radius: float
     half_height: float
-    rgba: Tuple[float, float, float, float]
+    rgba: tuple[float, float, float, float]
     density: float = 500.0
 
     @property
@@ -284,7 +304,11 @@ class FreeCylinderSpec(ManipulationObjectSpec):
         geom.size = [self.radius, self.half_height, 0.0]
         geom.density = self.density
         geom.rgba = list(self.rgba)
-        geom.friction = [1.0, 0.005, 0.0001]
+        _configure_object_collision(
+            geom,
+            friction=(1.0, 0.005, 0.0001),
+            condim=4,
+        )
 
 
 @dataclass(frozen=True)
@@ -295,7 +319,7 @@ class FreeNutSpec(ManipulationObjectSpec):
     outer_radius: float
     inner_radius: float
     half_height: float
-    rgba: Tuple[float, float, float, float]
+    rgba: tuple[float, float, float, float]
 
     @property
     def body_name(self) -> str:
@@ -341,7 +365,11 @@ class FreeNutSpec(ManipulationObjectSpec):
             geom.size = list(size)
             geom.rgba = list(self.rgba)
             geom.density = 500.0
-            geom.friction = [1.0, 0.005, 0.0001]
+            _configure_object_collision(
+                geom,
+                friction=(1.0, 0.005, 0.0001),
+                condim=4,
+            )
 
 
 @dataclass(frozen=True)
@@ -470,10 +498,11 @@ class XmlNutSpec(ManipulationObjectSpec):
         pad.pos = [0.084, 0.0, 0.0]
         pad.size = [0.014, 0.019, 0.010]
         pad.density = 100.0
-        pad.friction = [0.95, 0.3, 0.1]
-        pad.condim = 4
-        pad.contype = 1
-        pad.conaffinity = 1
+        _configure_object_collision(
+            pad,
+            friction=(0.95, 0.3, 0.1),
+            condim=4,
+        )
         pad.rgba = [0.0, 0.0, 0.0, 0.0]
 
     def _add_refined_visuals(self, body: mujoco.MjsBody, material: str) -> None:
@@ -553,10 +582,11 @@ class XmlNutSpec(ManipulationObjectSpec):
         geom.fromto = [*start, *end]
         geom.size = [radius, 0.0, 0.0]
         geom.density = 100.0
-        geom.friction = [0.95, 0.3, 0.1]
-        geom.condim = 4
-        geom.contype = 1
-        geom.conaffinity = 1
+        _configure_object_collision(
+            geom,
+            friction=(0.95, 0.3, 0.1),
+            condim=4,
+        )
         geom.rgba = [0.0, 0.0, 0.0, 0.0]
 
     @staticmethod
