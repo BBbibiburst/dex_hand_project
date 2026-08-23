@@ -73,10 +73,26 @@ def test_only_tactile_skin_meshes_participate_in_collision() -> None:
     for geom_id in range(model.ngeom):
         if mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) in expected:
             assert model.geom_contype[geom_id] == 2
-            assert model.geom_conaffinity[geom_id] == 1
+            assert model.geom_conaffinity[geom_id] == 3
             assert model.geom_condim[geom_id] == 4
             assert model.geom_priority[geom_id] == 1
             np.testing.assert_allclose(model.geom_solref[geom_id], [0.01, 1.0])
+
+
+def test_every_skin_geom_is_collision_compatible_with_every_other_skin() -> None:
+    model = _model()
+    skin_ids = [
+        geom_id
+        for geom_id in range(model.ngeom)
+        if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or "").startswith(
+            "skin_"
+        )
+    ]
+
+    for offset, first in enumerate(skin_ids):
+        for second in skin_ids[offset + 1 :]:
+            assert model.geom_contype[first] & model.geom_conaffinity[second]
+            assert model.geom_contype[second] & model.geom_conaffinity[first]
 
 
 def test_task_object_contact_does_not_inherit_robot_geom_defaults() -> None:
@@ -137,7 +153,7 @@ def test_maximum_index_thumb_flexion_releases_back_to_zero() -> None:
     for _ in range(4000):
         mujoco.mj_step(model, data)
 
-    assert model.npair == 13
+    assert model.npair == 22
     assert data.ncon >= 1
     assert min(data.contact[index].dist for index in range(data.ncon)) > -0.0005
 
@@ -148,6 +164,39 @@ def test_maximum_index_thumb_flexion_releases_back_to_zero() -> None:
     assert data.ncon == 0
     assert np.max(np.abs(data.actuator_length[actuator_ids])) < 5e-5
     assert np.max(np.abs(data.qvel)) < 1e-3
+
+
+def test_maximum_middle_thumb_flexion_generates_bounded_contact() -> None:
+    model = _model()
+    data = mujoco.MjData(model)
+    actuator_ids = np.asarray(
+        [
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
+            for name in (
+                "act_push_2_j",
+                "thumb_rotate_act_push_j",
+                "thumb_grasp_act_push_j",
+            )
+        ]
+    )
+    data.ctrl[actuator_ids] = np.asarray([0.01, 0.004, 0.01])
+    for _ in range(4000):
+        mujoco.mj_step(model, data)
+
+    middle_thumb_contacts = []
+    for index in range(data.ncon):
+        contact = data.contact[index]
+        names = {
+            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom1)),
+            mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, int(contact.geom2)),
+        }
+        if any(name.startswith("skin_2_") for name in names) and any(
+            name.startswith("skin_4_") for name in names
+        ):
+            middle_thumb_contacts.append(contact)
+
+    assert middle_thumb_contacts
+    assert min(contact.dist for contact in middle_thumb_contacts) > -0.0005
 
 
 def test_position_controller_reads_tendon_length_instead_of_joint_qpos() -> None:

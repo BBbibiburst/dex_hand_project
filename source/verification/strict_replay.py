@@ -141,10 +141,12 @@ def _digit_from_names(geom_name: str, body_name: str) -> int:
             return digit
     # Common descriptive aliases, only for diagnostics.
     aliases = {
-        0: ("index", "finger_0", "finger0"),
-        1: ("middle", "finger_1", "finger1"),
-        2: ("ring", "finger_2", "finger2"),
-        3: ("little", "pinky", "finger_3", "finger3"),
+        # The MJCF numbers the four fingers from the little-finger side
+        # towards the thumb; normalized controller inputs reverse this order.
+        0: ("little", "pinky", "finger_0", "finger0"),
+        1: ("ring", "finger_1", "finger1"),
+        2: ("middle", "finger_2", "finger2"),
+        3: ("index", "finger_3", "finger3"),
         4: ("thumb",),
     }
     for digit, names in aliases.items():

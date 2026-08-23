@@ -18,8 +18,8 @@
       <geom contype="0" conaffinity="0" group="1" density="0" />
     </default>
     <default class="padgeom">
-      <!-- Collision bit 2 against object bit 1 prevents skin-skin contacts. -->
-      <geom contype="2" conaffinity="1" group="2" density="0" condim="4"
+      <!-- Bit 1 receives task objects; bit 2 enables collision between skins. -->
+      <geom contype="2" conaffinity="3" group="2" density="0" condim="4"
         friction="1.3 0.02 0.0002" solref="0.01 1" priority="1"
         solimp="0.9 0.95 0.001 0.5 2" />
     </default>
@@ -254,36 +254,63 @@
 
   <contact>
     <!--
-      Thumb-index self contact is modeled explicitly with low friction.  The
-      remaining skin pairs ignore self collision, so adjacent fingers cannot
-      form artificial high-friction locks while wrapping around an object.
+      All skin geoms collide through their masks.  These explicit pairs tune
+      common opposition and fist-stop contacts without disabling other skin
+      combinations.
     -->
     <pair geom1="skin_3_0_p" geom2="skin_4_0_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_0_p" geom2="skin_4_1_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_0_p" geom2="skin_4_2_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_1_p" geom2="skin_4_0_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_1_p" geom2="skin_4_1_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_1_p" geom2="skin_4_2_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_2_p" geom2="skin_4_0_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_2_p" geom2="skin_4_1_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <pair geom1="skin_3_2_p" geom2="skin_4_2_p" condim="3"
-      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.015 1"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_0_p" geom2="skin_4_0_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_0_p" geom2="skin_4_1_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_0_p" geom2="skin_4_2_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_1_p" geom2="skin_4_0_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_1_p" geom2="skin_4_1_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_1_p" geom2="skin_4_2_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_2_p" geom2="skin_4_0_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_2_p" geom2="skin_4_1_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
+      solimp="0.9 0.95 0.001 0.5 2" />
+    <pair geom1="skin_2_2_p" geom2="skin_4_2_p" condim="3"
+      friction="0.25 0.25 0.002 0.0001 0.0001" solref="0.01 1"
       solimp="0.9 0.95 0.001 0.5 2" />
     <!-- Palm contact forms a physical fist stop without a high-friction lock. -->
     <pair geom1="skin_palm_p" geom2="skin_0_0_p" condim="3"
