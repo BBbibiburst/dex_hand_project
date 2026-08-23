@@ -83,14 +83,11 @@ def test_source_package_dependency_graph_is_acyclic() -> None:
 def test_layering_regressions_stay_removed() -> None:
     forbidden_edges = {
         "source.robots": {"source.control"},
-        "source.grasping": {"source.scripted", "source.execution", "source.workflows"},
         "source.sensors": {"source.viz"},
         "source.teleop": {"source.imitation"},
         "source.data": {
             "source.teleop",
             "source.imitation",
-            "source.scripted",
-            "source.grasping",
             "source.rl",
         },
     }

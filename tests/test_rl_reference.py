@@ -4,8 +4,13 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from source.rl.residual.reference import EpisodeRecord, ReferenceTrajectory, STAGE_CODES, resolve_reference_manifest
-from source.rl.residual.trajectory import ResidualTrajectory
+from source.grasp_pipeline.reference import (
+    EpisodeRecord,
+    ReferenceTrajectory,
+    STAGE_CODES,
+    resolve_reference_manifest,
+)
+from source.grasp_pipeline.trajectory import GraspTrajectory
 
 
 def _arrays() -> dict[str, np.ndarray]:
@@ -100,7 +105,7 @@ def test_reference_extracts_low_level_ctrl_from_first_approach_frame(tmp_path) -
 
 
 def test_residual_trajectory_round_trip(tmp_path) -> None:
-    trajectory = ResidualTrajectory(
+    trajectory = GraspTrajectory(
         object_id="ycb:test",
         source_manifest="episode/manifest.json",
         start_stage="approach",
@@ -114,7 +119,7 @@ def test_residual_trajectory_round_trip(tmp_path) -> None:
         metadata={"note": "test"},
     )
     manifest = trajectory.save(tmp_path / "trajectory")
-    loaded = ResidualTrajectory.load(manifest)
+    loaded = GraspTrajectory.load(manifest)
     assert loaded.success
     assert loaded.episode_return == 12.5
     np.testing.assert_array_equal(loaded.residual_actions, trajectory.residual_actions)

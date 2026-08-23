@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 from pathlib import Path
 
 import numpy as np
@@ -15,8 +14,6 @@ from source.ultradexgrasp.executor import (
     ExecutionConfig,
     candidate_world_pose,
 )
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _candidate() -> GraspCandidate:
@@ -91,25 +88,6 @@ def test_default_pipeline_config_is_valid() -> None:
 def test_execution_config_rejects_invalid_preload() -> None:
     with pytest.raises(ValueError, match="finger_preload"):
         ExecutionConfig(finger_preload=0.3).validate()
-
-
-def test_ultradexgrasp_source_does_not_import_legacy_grasping() -> None:
-    violations = []
-    for path in (PROJECT_ROOT / "source" / "ultradexgrasp").glob("*.py"):
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                modules = [alias.name for alias in node.names]
-            elif isinstance(node, ast.ImportFrom) and node.module:
-                modules = [node.module]
-            else:
-                continue
-            violations.extend(
-                f"{path.name}: {module}"
-                for module in modules
-                if module.startswith("source.grasping")
-            )
-    assert not violations
 
 
 @pytest.mark.skipif(not MANIFEST_PATH.is_file(), reason="optional ManiSkill assets are absent")

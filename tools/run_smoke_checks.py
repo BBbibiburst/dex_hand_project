@@ -180,7 +180,7 @@ def _check_imports() -> str:
         "source.teleop.vive.vive_link_test",
         "source.teleop.vive.vive_glove_hand_control",
         "apps.collect_teleop_lerobot",
-        "apps.collect_scripted_lerobot",
+        "apps.collect_generated_lerobot",
         "examples.robot_preview",
         "examples.random_control",
         "examples.ik_trajectory",
@@ -189,11 +189,10 @@ def _check_imports() -> str:
         "tools.tactile.interactive_probe",
         "tools.tactile.plot_surfaces",
         "tools.tactile.validate_contacts",
-        "tools.grasping.search_grasp",
-        "tools.grasping.validate_grasp",
-        "tools.grasping.validate_scripted_strategy",
-        "tools.grasping.benchmark_catalog",
-        "tools.grasping.visualize_benchmark",
+        "tools.grasping.batch_grasp_edit",
+        "tools.grasping.benchmark_hand_physics",
+        "tools.verification.replay_trajectory",
+        "tools.ultradexgrasp.probe",
     )
     for module in modules:
         importlib.import_module(module)

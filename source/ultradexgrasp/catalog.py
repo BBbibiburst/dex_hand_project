@@ -1,4 +1,4 @@
-"""Object loading independent from the geometric grasp-search package."""
+"""Object loading for the project-native Ultra pipeline."""
 
 from __future__ import annotations
 

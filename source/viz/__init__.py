@@ -23,8 +23,6 @@ __all__ = [
     "draw_stats_label",
     "format_stats",
     "plot_tactile_sampling_grids",
-    "render_grasp_benchmark_report",
-    "render_grasp_pipeline_figures",
 ]
 
 
@@ -33,14 +31,6 @@ def __getattr__(name: str):
         from source.viz import overlays
 
         return getattr(overlays, name)
-    if name == "render_grasp_benchmark_report":
-        from source.viz.grasp_benchmark import render_grasp_benchmark_report
-
-        return render_grasp_benchmark_report
-    if name == "render_grasp_pipeline_figures":
-        from source.viz.grasp_pipeline import render_grasp_pipeline_figures
-
-        return render_grasp_pipeline_figures
     if name == "plot_tactile_sampling_grids":
         from source.viz.tactile import plot_tactile_sampling_grids
 

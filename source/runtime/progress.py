@@ -34,7 +34,10 @@ class LiveWorkerProgress:
         self.total = total
         self.workers = workers
         self.stream = stream or sys.stdout
-        self.interactive = bool(self.stream.isatty() and os.environ.get("TERM") != "dumb")
+        self.interactive = bool(
+            self.stream.isatty()
+            and (os.environ.get("TERM") != "dumb" or columns is not None)
+        )
         self.states: dict[str, WorkerProgress] = {}
         self.worker_labels: dict[str, str] = {}
         self.completed = 0

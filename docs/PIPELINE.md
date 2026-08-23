@@ -12,111 +12,33 @@
 5. **C MuJoCo 复验**：重新执行最佳控制序列，验证末段持续抬升，并检查轨迹与权威
    MuJoCo 模型、当前控制维度是否一致。
 
-### GraspM3-lite 单物体多模式流程
+## 自动示教与 Diffusion Policy 数据
 
-参考 GraspM³ 的“多方向示教候选 + 物理筛选”思想，项目提供不依赖 ShadowHand 轨迹的
-低维时序搜索：每个候选只优化 6 个欠驱动 actuator 的开合时序、少量 residual 和可达
-wrist template。抓取模式是 seed/prior，而不是八套 PPO。默认覆盖以下八个宏观 family：
-
-`wrap`（Power Wrap）、`pinch`、`tripod`、`spherical`、`hook`、`cradle`、`lateral`、
-`table_assisted`。旧名称 `power_wrap` 和 `support` 分别兼容为 `wrap` 和 `cradle`。
-`cradle` 对香蕉、碗、盘等物体提高掌面/近端指节支撑和末段保持的权重；
-`table_assisted` 只是允许接触丰富的推/滚预抓取 seed，当前实现没有物体位姿重定位动作，
-因此不能把它当作已经解决“香蕉平放桌面”的完整规划器。
-
-搜索会根据碰撞几何包围盒自动区分 `flat`、`elongated` 和 `compact`。扁盒会优先分配
-`lateral`、`table_assisted` 与 `wrap` 候选，同时仍保留其他模式用于物理淘汰。时序参数还
-包含沿已验证 approach 方向的小幅 ingress；`lateral` 与 `table_assisted` 使用分指闭合时序，
-避免四指在拇指形成侧向限位前就把薄物体推走。已有候选可通过 `--warm-start` 注入 CEM，
-旧版 29 维轨迹会自动补齐新的 ingress 参数。
-
-单物体全流程命令：
+只有通过最终 C MuJoCo 复验、状态为 `FINAL_VERIFIED` 的 Ultra/Lattice/PPO 轨迹，才会默认
+进入自动示教数据集。采集入口在权威 MuJoCo 环境中重新执行控制序列，并同步记录机器人状态、
+相机图像、触觉和动作到 LeRobot：
 
 ```bash
-MUJOCO_GL=egl \
-CUDA_VISIBLE_DEVICES=0 \
-PYTHONUNBUFFERED=1 \
-python -m apps.run_graspm3_lite_single \
-  --object-id ycb:005_tomato_soup_can \
-  --output-root outputs/graspm3_lite_single \
-  --template-root outputs/graspm3_lite_single/lattice \
-  --ultra-root outputs/graspm3_lite_single/ultra \
-  --population-size 64 \
-  --iterations 4 \
-  --grasp-modes all \
-  --device cuda:0
+python -m apps.collect_generated_lerobot \
+  --input-root outputs/dex_hand_ppo127 \
+  --output datasets/ultra_lerobot \
+  --repo-id local/dex-hand-ultra-demonstrations
 ```
 
-输出 `summary.json` 会分别统计每个 mode 的候选数、MJWarp 成功数和 C MuJoCo 成功数。
-只有 `FINAL_VERIFIED` 才会生成 `best_trajectory/`；若只有桌面接触 seed 通过了廉价筛选，
-状态为 `TABLE_ASSISTED_CANDIDATE_ONLY`，仍不能进入最终专家池。重复使用同一对象输出目录时
-需显式加入 `--overwrite-output`，防止旧的 `best_trajectory` 与新结果混在一起。
-
-### 扁盒 ycb008 回归
-
-`ycb:008_pudding_box` 的仿真尺寸约为 `90 × 72 × 31 mm`，是检查薄物体侧夹、抗滑和抗转
-能力的固定回归对象。局部改进时可复用上一轮候选：
+随后训练与评估 Diffusion Policy：
 
 ```bash
-MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m apps.run_graspm3_lite_single \
-  --object-id ycb:008_pudding_box \
-  --output-root outputs/graspm3_ycb008 \
-  --template-root outputs/graspm3_ycb008/lattice \
-  --grasp-modes wrap,lateral,table_assisted \
-  --warm-start outputs/previous/ycb_008_pudding_box/candidates/candidate_000 \
-  --population-size 64 \
-  --iterations 4 \
-  --maximum-object-speed 0.10 \
-  --maximum-object-angular-speed 0.10 \
-  --device cuda:0 \
-  --allow-unverified
+python -m apps.train_diffusion \
+  --dataset datasets/ultra_lerobot \
+  --repo-id local/dex-hand-ultra-demonstrations
+
+python -m apps.evaluate_diffusion \
+  --checkpoint checkpoints/diffusion_policy.pt \
+  --task lift
 ```
 
-不能只看瞬时最大抬升。MJWarp 和严格 C MuJoCo 都要求尾段持续高度、接触、有效对向抓握、
-线速度和角速度同时通过；扁盒还要求拇指在尾段保持接触。持续接触但仍绕夹持面转动的轨迹
-会被角速度判据拒绝。
-
-## Geometry-aware BC 与 residual RL 契约
-
-BC 数据中必须保留两条独立控制序列：
-
-- `coarse reference`：原始 Ultra episode 或专家轨迹指向的未编辑模板；
-- `expert control`：已经通过专家池 C MuJoCo 检查的 Lattice / 小规模 RL 控制序列。
-
-BC 观测包含物体尺寸与形状比例、物体相对手掌姿态、指尖相对物体位置、接触几何以及
-当前 `coarse_reference_hand`，但不得包含当前时刻的专家手控制。六维监督标签为：
-
-```text
-hand_residual_target =
-    (expert_hand - coarse_reference_hand) / (actuator_high - actuator_low)
-```
-
-运行时控制按以下顺序合成：
-
-```text
-hand_control = coarse_reference
-             + BC_residual * actuator_range * stage_blend
-             + PPO_residual
-```
-
-数据集会分别保存 `coarse_reference_hand_actions`、`expert_hand_actions` 和
-`hand_residual_targets`。如果一条直接 Ultra 专家没有更粗的来源，则 coarse 与 expert
-相同，其 BC 标签必须为零；这比把专家绝对控制伪装成 reference 输入更安全。
-
-训练/验证划分以唯一 `object_id` 为组，而不是按 manifest 或帧随机切分。同一物体的多条
-专家轨迹和全部帧只能出现在训练侧或验证侧之一，避免同物体泄漏造成虚高的验证指标。
-
-## 专家池与最终验证状态
-
-严格回放提供两个互不混用的 profile：
-
-| profile | 成功状态 | 失败状态 | 含义 |
-| --- | --- | --- | --- |
-| `expert` | `EXPERT_POOL_VALID` | `EXPERT_POOL_REJECTED` | 只决定轨迹能否进入 BC 专家池 |
-| `final` | `FINAL_VERIFIED` | `FINAL_REJECTED` | 只用于训练后轨迹的最终权威验收 |
-
-`EXPERT_POOL_VALID` 不是最终成功，不计入 `verified_total`。目录汇总分别记录
-`expert_pool_valid` 与 `final_verified`；只有 `FINAL_VERIFIED` 会计入最终验证总数。
+`--allow-unverified` 只用于诊断，不能用于正式 DP 训练集。自动生成的数据不伪造 Vive 或手套
+字段；遥操作采集入口仍单独保留这些 operator metadata。
 
 ## 接触模型与摩擦
 
@@ -304,7 +226,7 @@ MJWarp 成功轨迹必须在 C MuJoCo 中复验：
 find outputs/dex_hand_ppo127/rl \
   -path '*/best_trajectory/manifest.json' -print0 |
 while IFS= read -r -d '' manifest; do
-  python -m tools.rl.replay_trajectory "$manifest" ||
+  python -m tools.verification.replay_trajectory "$manifest" ||
     echo "REPLAY_FAIL $manifest"
 done
 ```

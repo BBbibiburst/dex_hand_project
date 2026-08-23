@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.rl.residual.reference import STAGE_CODES
+from source.grasp_pipeline.reference import STAGE_CODES
 from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
 from source.ultradexgrasp.executor import (
     ExecutionConfig,

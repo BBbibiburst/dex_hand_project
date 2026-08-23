@@ -158,7 +158,7 @@ def _classify_child_result(
     timed_out: bool,
 ) -> tuple[str, str | None, str | None]:
     if timed_out:
-        return "timeout", None, f"subprocess exceeded the configured timeout"
+        return "timeout", None, "subprocess exceeded the configured timeout"
 
     manifest = attempt_dir / "manifest.json"
     if _manifest_is_success(manifest, object_id=object_id, seed=seed):

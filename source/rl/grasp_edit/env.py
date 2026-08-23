@@ -11,8 +11,8 @@ import warp as wp
 
 from source.envs.manipulation import make_lift_env
 from source.rl.grasp_edit.templates import GraspEditTemplate
-from source.rl.residual.reference import STAGE_CODES, ReferenceTrajectory, load_reference
-from source.rl.residual.trajectory import ResidualTrajectory
+from source.grasp_pipeline.reference import STAGE_CODES, ReferenceTrajectory, load_reference
+from source.grasp_pipeline.trajectory import GraspTrajectory
 from source.ultradexgrasp.contracts import DemonstrationEpisode
 from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
 
@@ -229,10 +229,10 @@ class MjWarpGraspEditEnv:
         self.best_attempt_lift = -np.inf
         self.best_attempt_final_lift = -np.inf
         self.best_attempt_return = -np.inf
-        self.best_attempt_trajectory: ResidualTrajectory | None = None
+        self.best_attempt_trajectory: GraspTrajectory | None = None
         self.best_attempt_version = 0
         self.best_success_return = -np.inf
-        self.best_trajectory: ResidualTrajectory | None = None
+        self.best_trajectory: GraspTrajectory | None = None
         self.best_version = 0
 
     def _validate_references(self, references: tuple[ReferenceTrajectory, ...]) -> None:
@@ -324,14 +324,14 @@ class MjWarpGraspEditEnv:
         tail_max_speed: torch.Tensor,
         tail_max_angular_speed: torch.Tensor,
         success: torch.Tensor,
-    ) -> ResidualTrajectory:
+    ) -> GraspTrajectory:
         template_id = int(template_ids[world].item())
         action = actions[world].detach().cpu().numpy().astype(np.float32)
         controls = controls_history[:, world].detach().cpu().numpy().astype(np.float32)
         repeated_action = np.repeat(action[None, :], self.horizon, axis=0)
         reference = self.references[template_id]
         template = self.templates[template_id]
-        return ResidualTrajectory(
+        return GraspTrajectory(
             object_id=self.object_id,
             source_manifest=str(template.manifest),
             start_stage="approach",

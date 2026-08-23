@@ -354,10 +354,10 @@ def run(args: argparse.Namespace) -> int:
         else output / "best_attempt"
     )
     if args.visualize and (trajectory / "manifest.json").is_file():
-        from source.rl.residual.replay import replay_residual_trajectory
+        from source.grasp_pipeline.replay import replay_grasp_trajectory
 
         print(f"[visualize] {trajectory}", flush=True)
-        result = replay_residual_trajectory(trajectory, render_mode="human")
+        result = replay_grasp_trajectory(trajectory, render_mode="human")
         print(
             f"[visualize] success={result.success} "
             f"success_fraction={result.success_fraction:.1%} "

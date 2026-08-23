@@ -26,16 +26,13 @@ monkeypatch facade；测试直接覆盖实际模块 API。
 - `source/robots`：机械臂、底座、末端执行器描述和装配。
 - `source/control`：机械臂、手和组合控制器。
 - `source/envs`：Gymnasium/MuJoCo 环境、任务、对象和场景绑定。
-- `source/grasping`：抓取搜索、几何评分、轨迹规划、MJWarp population evaluator 和验证。
 - `source/ultradexgrasp`：项目原生 Ultra Prior、Dex Hand 可微 surrogate 和 episode contract。
 - `source/rl/grasp_edit`：Wrist Lattice、六维手动作和 Hybrid PPO。
-- `source/rl/residual`：基于参考轨迹的残差控制和 C MuJoCo 回放。
-- `source/rl/imitation`：BC 数据、策略、几何观测和严格回放。
+- `source/grasp_pipeline`：Ultra/PPO 共享的参考轨迹、结果契约和 C MuJoCo 回放。
+- `source/verification`：生成轨迹的严格 C MuJoCo 最终复验。
 - `source/sensors`：触觉接口、Dex Hand/Pika 传感器和曲面拟合。
 - `source/data`：LeRobot 记录器和数据 schema。
-- `source/scripted`：分阶段自动示教策略。
 - `source/teleop`：Vive、蓝牙手套、映射、会话和轨迹处理。
-- `source/workflows`：可恢复的长运行 benchmark 工作流。
 - `source/viz`：可视化和报告绘制，不参与核心物理逻辑。
 
 ## 主流水线
@@ -50,8 +47,14 @@ source/rl/grasp_edit/templates.py
 source/rl/grasp_edit/env.py + ppo.py
   MJWarp 并行 Hybrid PPO
           ↓
-source/rl/residual/replay.py 或 source/rl/imitation/strict_replay.py
+source/grasp_pipeline/replay.py 或 source/verification/strict_replay.py
   C MuJoCo 权威复验
+          ↓
+apps/collect_generated_lerobot.py + source/data
+  重放最终验证轨迹并写入 LeRobot
+          ↓
+apps/train_diffusion.py + apps/evaluate_diffusion.py + source/imitation
+  训练与评估视觉-触觉 Diffusion Policy
 ```
 
 对应入口：
@@ -61,7 +64,10 @@ source/rl/residual/replay.py 或 source/rl/imitation/strict_replay.py
 - `python -m tools.ultradexgrasp.batch_generate`
 - `python -m apps.train_grasp_edit_rl`
 - `python -m tools.grasping.batch_grasp_edit`
-- `python -m tools.rl.replay_trajectory`
+- `python -m tools.verification.replay_trajectory`
+- `python -m apps.collect_generated_lerobot --input-root <pipeline-output>`
+- `python -m apps.train_diffusion`
+- `python -m apps.evaluate_diffusion`
 
 ## 资产与生成数据
 
@@ -93,7 +99,7 @@ Ultra、Lattice 和 PPO 输出，避免把旧手模型的轨迹当作当前结�
 
 - `source/` 不反向依赖入口层。
 - `source` 一级包依赖图无环。
-- robots/control、grasping/workflows、sensors/viz 等边界不回退。
+- robots/control、sensors/viz 等边界不回退。
 - 已迁移的旧单文件实现不会重新出现。
 - 旧入口别名和抓取搜索兼容 facade 不会重新出现。
 - 仓库中不存在 `deps/` 和 `.gitmodules`。
