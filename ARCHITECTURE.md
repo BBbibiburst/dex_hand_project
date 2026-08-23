@@ -74,7 +74,7 @@ apps/train_diffusion.py + apps/evaluate_diffusion.py + source/imitation
 - `assets/grippers/dex_hand/dex_hand.xml` 是 Dex Hand 权威物理模型。
 - `configs/ultradexgrasp/default.json` 是 Ultra Prior 默认参数。
 - `configs/ultradexgrasp/cache/` 保存可重建的手部 surrogate。
-- `assets/maniskill/` 保存可重新下载的 YCB/EGAD 资产。
+- `assets/maniskill/` 保存可重新下载的 YCB、EGAD 和 GSO 资产。
 - `outputs/` 保存 Ultra、Lattice、PPO、日志和汇总报告。
 - `datasets/`、`recordings/`、`checkpoints/` 保存训练和采集产物。
 

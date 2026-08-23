@@ -1,4 +1,4 @@
-"""Render the local YCB and EGAD assets as one labelled contact sheet."""
+"""Render local catalogue assets as labelled contact sheets."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ CATEGORY_COLORS = {
     "Sports": "#50a66f",
     "Toys & components": "#d36f82",
     "Household": "#778899",
+    "GSO scanned object": "#368f86",
     "EGAD complexity A": "#e84c3d",
     "EGAD complexity B": "#ef8b2c",
     "EGAD complexity C": "#e2bd28",
@@ -35,6 +36,11 @@ CATEGORY_COLORS = {
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
+    parser.add_argument(
+        "--selection",
+        type=Path,
+        help="Optional JSON selection whose objects contain namespaced object_id values.",
+    )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--columns", type=int, default=5)
     parser.add_argument("--tile-width", type=int, default=720)
@@ -141,6 +147,8 @@ def ycb_category(object_id: str) -> str:
 def category(record: dict) -> str:
     if record["dataset"] == "egad":
         return f"EGAD complexity {record['object_id'][0]}"
+    if record["dataset"] == "gso":
+        return "GSO scanned object"
     return ycb_category(record["object_id"])
 
 
@@ -250,6 +258,8 @@ def render_mujoco_scene(path: Path, width: int, height: int, tint: str) -> Image
     texture_path = path.parent / "texture_map.png"
     if not texture_path.is_file():
         texture_path = path.parent / "material_0.png"
+    if not texture_path.is_file():
+        texture_path = path.parent.parent / "materials" / "textures" / "texture.png"
     if texture_path.is_file():
         texture_asset = (
             f'<texture name="object_tex" type="2d" '
@@ -308,7 +318,9 @@ def display_name(record: dict) -> str:
     object_id = record["object_id"]
     if record["dataset"] == "ycb":
         return object_id.split("_", 1)[-1].replace("_", " ")
-    return f"procedural shape {object_id}"
+    if record["dataset"] == "egad":
+        return f"procedural shape {object_id}"
+    return object_id.replace("_", " ")
 
 
 def render_dataset(
@@ -329,7 +341,13 @@ def render_dataset(
         "white",
     )
     draw = ImageDraw.Draw(sheet)
-    dataset_name = "YCB real-scanned objects" if dataset == "ycb" else "EGAD evaluation objects"
+    dataset_names = {
+        "ycb": "YCB real-scanned objects",
+        "egad": "EGAD evaluation objects",
+        "gso": "Google Scanned Objects",
+        "selection": "Underactuated-hand geometry candidates",
+    }
+    dataset_name = dataset_names.get(dataset, dataset.upper())
     draw.text(
         (36, 24),
         f"{dataset_name} — {len(records)} objects",
@@ -344,9 +362,13 @@ def render_dataset(
     )
     draw.text(
         (38, 126),
-        "Ordered by semantic category."
-        if dataset == "ycb"
-        else "Ordered by complexity A–G, then difficulty 0–6.",
+        (
+            "Ordered by descending underactuated-affordance geometry prior."
+            if dataset == "selection"
+            else "Ordered by semantic category."
+            if dataset in {"ycb", "gso"}
+            else "Ordered by complexity A–G, then difficulty 0–6."
+        ),
         fill="#607080",
         font=font(20),
     )
@@ -400,6 +422,17 @@ def main() -> int:
     manifest_path = args.manifest.resolve()
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     records = payload["objects"]
+    selection_path = args.selection.resolve() if args.selection else None
+    if selection_path is not None:
+        selected_payload = json.loads(selection_path.read_text(encoding="utf-8"))
+        selected_ids = [str(item["object_id"]) for item in selected_payload.get("objects", [])]
+        records_by_id = {
+            f"{record['dataset']}:{record['object_id']}": record for record in records
+        }
+        missing = [object_id for object_id in selected_ids if object_id not in records_by_id]
+        if missing:
+            raise ValueError(f"Selection contains objects absent from manifest: {missing}")
+        records = [records_by_id[object_id] for object_id in selected_ids]
     for record in records:
         record["_category"] = category(record)
     ycb_order = [
@@ -414,23 +447,39 @@ def main() -> int:
     order.update(
         {f"EGAD complexity {letter}": 20 + index for index, letter in enumerate("ABCDEFG")}
     )
-    records.sort(key=lambda item: (order[item["_category"]], item["object_id"]))
+    order["GSO scanned object"] = 30
+    if selection_path is None:
+        records.sort(key=lambda item: (order.get(item["_category"], 100), item["object_id"]))
 
     output_dir = args.output_dir.resolve()
     failures: list[str] = []
-    for dataset in ("ycb", "egad"):
-        subset = [record for record in records if record["dataset"] == dataset]
+    if selection_path is not None:
         failures.extend(
             render_dataset(
-                subset,
-                dataset,
-                output_dir / f"object_catalog_{dataset}.png",
+                records,
+                "selection",
+                output_dir / f"{selection_path.stem}_catalog.png",
                 columns=args.columns,
                 tile_width=args.tile_width,
                 tile_height=args.tile_height,
                 manifest_path=manifest_path,
             )
         )
+    else:
+        datasets = tuple(dict.fromkeys(record["dataset"] for record in records))
+        for dataset in datasets:
+            subset = [record for record in records if record["dataset"] == dataset]
+            failures.extend(
+                render_dataset(
+                    subset,
+                    dataset,
+                    output_dir / f"object_catalog_{dataset}.png",
+                    columns=args.columns,
+                    tile_width=args.tile_width,
+                    tile_height=args.tile_height,
+                    manifest_path=manifest_path,
+                )
+            )
     if failures:
         print("\n".join(failures))
         return 1

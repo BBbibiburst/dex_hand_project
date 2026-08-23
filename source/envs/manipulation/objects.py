@@ -10,7 +10,11 @@ import mujoco
 import numpy as np
 
 from source.assets import asset_path
-from source.envs.manipulation.object_catalog import resolve_record, resolve_record_path
+from source.envs.manipulation.object_catalog import (
+    record_scale_to_meters,
+    resolve_record,
+    resolve_record_path,
+)
 
 _OBJECT_CONTACT_SOLREF = (0.001, 2.0)
 _OBJECT_CONTACT_SOLIMP = (0.9, 0.95, 0.001, 0.5, 2.0)
@@ -95,11 +99,13 @@ def _read_obj_bounds(path: Path) -> tuple[np.ndarray, np.ndarray]:
 
 @dataclass(frozen=True)
 class MeshObjectSpec(ManipulationObjectSpec):
-    """Free YCB/EGAD mesh with separate visual and collision geoms."""
+    """Free catalogue mesh with separate visual and collision geoms."""
 
     name: str
     object_id: str
-    target_size: float = 0.09
+    # None preserves physical scale. A positive value remains available for
+    # explicitly size-normalised ablations and stacking tasks.
+    target_size: float | None = None
     density: float = 500.0
     friction: tuple[float, float, float] = (1.0, 0.005, 0.0001)
 
@@ -120,7 +126,13 @@ class MeshObjectSpec(ManipulationObjectSpec):
             raise FileNotFoundError(f"No OBJ visual mesh for {self.object_id}")
         low, high = _read_obj_bounds(visual)
         extent = high - low
-        scale = self.target_size / max(float(extent.max()), 1e-8)
+        source_scale = record_scale_to_meters(record)
+        if self.target_size is None:
+            scale = source_scale
+        else:
+            if self.target_size <= 0.0:
+                raise ValueError("target_size must be positive when provided.")
+            scale = self.target_size / max(float(extent.max()), 1e-8)
         object.__setattr__(self, "_visual_path", visual)
         # MuJoCo builds a convex collision hull from OBJ meshes. The YCB bundle
         # also contains collision.ply, but MuJoCo's built-in mesh decoder does

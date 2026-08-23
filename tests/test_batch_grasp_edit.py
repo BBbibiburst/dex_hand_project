@@ -9,7 +9,9 @@ from types import SimpleNamespace
 
 import pytest
 
+from source.rl.grasp_edit import templates as grasp_edit_templates
 from tools.grasping.batch_grasp_edit import (
+    _dataset_ids,
     _format_duration,
     _format_progress,
     _gpu_ids,
@@ -21,6 +23,49 @@ from tools.grasping.batch_grasp_edit import (
     _write_summary,
     build_parser,
 )
+
+
+def test_historical_benchmark_selection_is_stable_at_127_objects() -> None:
+    selected = _dataset_ids("original127")
+
+    assert len(selected) == 127
+    assert sum(item.startswith("ycb:") for item in selected) == 78
+    assert sum(item.startswith("egad:") for item in selected) == 49
+    assert not any(item.startswith("gso:") for item in selected)
+
+
+def test_benchmark_parser_defaults_to_historical_127() -> None:
+    args = build_parser().parse_args([])
+
+    assert args.dataset == "original127"
+    assert args.expect_count == 127
+
+
+def test_ultra_discovery_accepts_batch_generate_layout(tmp_path, monkeypatch) -> None:
+    manifest = (
+        tmp_path
+        / "objects"
+        / "ycb_008_pudding_box"
+        / "seed_0000"
+        / "manifest.json"
+    )
+    manifest.parent.mkdir(parents=True)
+    manifest.touch()
+    episode = SimpleNamespace(
+        success=False,
+        metadata={
+            "object_lift": 0.01,
+            "approach_position_error": 0.0,
+            "approach_orientation_error": 0.0,
+        },
+    )
+    monkeypatch.setattr(grasp_edit_templates, "_full_episode", lambda path, object_id: episode)
+
+    rows = grasp_edit_templates.discover_ultra_attempts(
+        "ycb:008_pudding_box", roots=(tmp_path,), maximum=1
+    )
+
+    assert rows == [(manifest.resolve(), episode)]
 
 
 def _summary_args() -> SimpleNamespace:

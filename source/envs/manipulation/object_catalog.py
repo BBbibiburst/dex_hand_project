@@ -1,10 +1,12 @@
-"""Project-local YCB/EGAD manipulation-object catalogue."""
+"""Project-local manipulation-object catalogue."""
 
 from __future__ import annotations
 
 import json
 from functools import lru_cache
 from pathlib import Path
+
+import numpy as np
 
 from source.assets import asset_path
 
@@ -112,3 +114,19 @@ def resolve_record(object_id: str) -> dict:
 def resolve_record_path(record: dict, field: str) -> Path:
     value = Path(record[field])
     return value if value.is_absolute() else asset_path().parent / value
+
+
+def record_scale_to_meters(record: dict) -> float:
+    """Return the mesh-unit to metre conversion for a catalogue record.
+
+    Schema-1 manifests did not store units. YCB OBJ vertices are metres while
+    the official EGAD evaluation meshes are millimetres, so retain a narrow
+    compatibility fallback for those manifests.
+    """
+    value = record.get("scale_to_meters")
+    if value is None:
+        value = 0.001 if record.get("dataset") == "egad" else 1.0
+    scale = float(value)
+    if not np.isfinite(scale) or scale <= 0.0:
+        raise ValueError(f"Invalid scale_to_meters for {record.get('object_id')!r}: {value!r}")
+    return scale

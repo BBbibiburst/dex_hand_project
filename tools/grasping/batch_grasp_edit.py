@@ -466,6 +466,12 @@ def _dataset_ids(dataset: str) -> tuple[str, ...]:
 
     if dataset == "all":
         return object_ids()
+    if dataset == "original127":
+        return tuple(
+            object_id
+            for object_id in object_ids()
+            if object_id.startswith(("ycb:", "egad:"))
+        )
     return object_ids(dataset)
 
 
@@ -1244,7 +1250,15 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", choices=("all", "ycb", "egad"), default="all")
+    parser.add_argument(
+        "--dataset",
+        choices=("original127", "all", "ycb", "egad", "gso"),
+        default="original127",
+        help=(
+            "Object catalogue to run. original127 is the historical 78 YCB + "
+            "49 EGAD benchmark; all also includes the later GSO catalogue."
+        ),
+    )
     parser.add_argument("--object-id", action="append", dest="object_ids")
     parser.add_argument("--expect-count", type=int, default=127)
     parser.add_argument("--limit", type=int)
@@ -1361,7 +1375,7 @@ def main(argv: list[str] | None = None) -> int:
         if unknown:
             raise ValueError(f"Unknown object id(s): {sorted(unknown)}")
         catalog = [item for item in catalog if item in requested]
-    full_catalog_run = not args.object_ids and args.limit is None and args.dataset == "all"
+    full_catalog_run = not args.object_ids and args.limit is None
     if full_catalog_run and args.expect_count and len(catalog) != args.expect_count:
         raise RuntimeError(
             f"Catalogue count mismatch: expected {args.expect_count}, found {len(catalog)}."

@@ -16,7 +16,7 @@ DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "ultradexgrasp" / "default.json
 
 @dataclass(frozen=True)
 class PipelineConfig:
-    target_size: float
+    target_size: float | None
     surface_points: int
     surrogate_cache: Path
     surrogate_options: dict[str, Any]
@@ -40,10 +40,11 @@ def load_pipeline_config(path: str | Path = DEFAULT_CONFIG_PATH) -> PipelineConf
     cache = Path(payload["surrogate_cache"])
     if not cache.is_absolute():
         cache = PROJECT_ROOT / cache
-    target_size = float(payload["target_size"])
+    raw_target_size = payload.get("target_size")
+    target_size = None if raw_target_size is None else float(raw_target_size)
     surface_points = int(payload["surface_points"])
-    if target_size <= 0.0 or surface_points < 128:
-        raise ValueError("target_size must be positive and surface_points at least 128.")
+    if (target_size is not None and target_size <= 0.0) or surface_points < 128:
+        raise ValueError("target_size must be positive when set and surface_points at least 128.")
     synthesis = _dataclass_options(SynthesisConfig, dict(payload.get("synthesis", {})))
     execution = _dataclass_options(ExecutionConfig, dict(payload.get("execution", {})))
     synthesis.validate()

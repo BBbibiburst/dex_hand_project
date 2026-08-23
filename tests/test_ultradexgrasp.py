@@ -8,6 +8,12 @@ import numpy as np
 import pytest
 
 from source.ultradexgrasp.catalog import MANIFEST_PATH, load_object_geometry
+from source.ultradexgrasp.affordance import (
+    adaptive_contact_score,
+    benchmark_eligible,
+    complete_uas,
+    geometry_affordance,
+)
 from source.ultradexgrasp.config import DEFAULT_CONFIG_PATH, load_pipeline_config
 from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
 from source.ultradexgrasp.executor import (
@@ -15,6 +21,7 @@ from source.ultradexgrasp.executor import (
     candidate_world_pose,
 )
 from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
+from tools.ultradexgrasp.visualize_episode import contact_points_world
 
 
 def _candidate() -> GraspCandidate:
@@ -84,10 +91,85 @@ def test_default_pipeline_config_is_valid() -> None:
     assert config.synthesis.minimum_contact_fingers == 4
     assert config.execution.lift_height > 0.04
     assert config.surrogate_options["finger_degree"] == 7
+    assert config.target_size is None
 
 
 def test_open_hand_uses_collision_free_neutral_thumb_opposition() -> None:
     np.testing.assert_allclose(OPEN_FRACTIONS, [0.0, 0.0, 0.0, 0.0, 0.25, 0.0])
+
+
+def test_visualized_contacts_follow_current_object_pose() -> None:
+    candidate = _candidate()
+    candidate = GraspCandidate(
+        **{
+            **candidate.__dict__,
+            "contact_points": np.asarray([[1.0, 0.0, 0.0]]),
+            "contact_normals": np.asarray([[1.0, 0.0, 0.0]]),
+            "contact_distances": np.asarray([0.0]),
+        }
+    )
+    episode = DemonstrationEpisode(
+        object_id="ycb:test",
+        seed=0,
+        candidate=candidate,
+        arrays={
+            "object_position": np.asarray([[2.0, 3.0, 4.0]]),
+            "object_quaternion_wxyz": np.asarray(
+                [[np.sqrt(0.5), 0.0, 0.0, np.sqrt(0.5)]]
+            ),
+        },
+        success=False,
+        terminal_stage="verify",
+    )
+    points, normals = contact_points_world(episode, 0)
+    np.testing.assert_allclose(points, [[2.0, 4.0, 4.0]], atol=1e-7)
+    np.testing.assert_allclose(normals, [[0.0, 1.0, 0.0]], atol=1e-7)
+
+
+def test_underactuated_affordance_prefers_enclosable_body_over_thin_rod() -> None:
+    import trimesh
+
+    cylinder = geometry_affordance(
+        trimesh.creation.cylinder(radius=0.03, height=0.10),
+        scale_to_meters=1.0,
+    )
+    rod = geometry_affordance(
+        trimesh.creation.box(extents=[0.008, 0.008, 0.20]),
+        scale_to_meters=1.0,
+    )
+    assert cylinder.eligible
+    assert not rod.eligible
+    assert cylinder.geometry_prior > rod.geometry_prior
+
+
+def test_dynamic_uas_requires_measured_contact_and_robustness() -> None:
+    import trimesh
+
+    geometry = geometry_affordance(
+        trimesh.creation.icosphere(radius=0.035),
+        scale_to_meters=1.0,
+    )
+    arrays = {
+        "stage": np.asarray([4, 4, 4, 4]),
+        "robot_object_digit_contact_count": np.asarray(
+            [[0, 0, 0, 0, 0], [1, 0, 0, 0, 1], [1, 1, 0, 0, 1], [1, 1, 1, 0, 1]]
+        ),
+    }
+    adaptive = adaptive_contact_score(arrays)
+    assert adaptive is not None and adaptive > 0.7
+    assert 0.0 <= complete_uas(geometry, adaptive_contact=adaptive, robustness=0.5) <= 1.0
+    assert benchmark_eligible(
+        geometry,
+        nominal_success=True,
+        adaptive_contact=adaptive,
+        robustness=0.8,
+    )
+    assert not benchmark_eligible(
+        geometry,
+        nominal_success=False,
+        adaptive_contact=1.0,
+        robustness=1.0,
+    )
 
 
 def test_execution_config_rejects_invalid_preload() -> None:
@@ -104,3 +186,14 @@ def test_object_surface_sampling_is_seed_deterministic() -> None:
     assert np.array_equal(first.surface_normals, second.surface_normals)
     halfspace_values = first.vertices @ first.plane_normals.T - first.plane_offsets
     assert float(halfspace_values.max()) < 1e-8
+    np.testing.assert_allclose(
+        first.bounds[1] - first.bounds[0],
+        [0.102529, 0.102377, 0.140177],
+        rtol=2e-3,
+    )
+
+
+@pytest.mark.skipif(not MANIFEST_PATH.is_file(), reason="optional ManiSkill assets are absent")
+def test_egad_legacy_manifest_units_are_millimetres() -> None:
+    geometry = load_object_geometry("egad:A0", surface_points=128, seed=3)
+    assert 0.09 < float(np.max(np.ptp(geometry.vertices, axis=0))) < 0.11

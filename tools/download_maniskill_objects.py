@@ -96,6 +96,7 @@ class ObjectRecord:
     file_count: int
     size_bytes: int
     model_files: list[str]
+    scale_to_meters: float
 
 
 def parse_args() -> argparse.Namespace:
@@ -442,6 +443,7 @@ def make_record(dataset: str, object_id: str, source: Path, destination: Path) -
         file_count=len(files),
         size_bytes=sum(path.stat().st_size for path in files),
         model_files=model_files,
+        scale_to_meters=0.001 if dataset == "egad" else 1.0,
     )
 
 
@@ -451,7 +453,7 @@ def write_manifest(path: Path, records: list[ObjectRecord], mode: str) -> None:
     for record in records:
         per_dataset_counts[record.dataset] = per_dataset_counts.get(record.dataset, 0) + 1
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "datasets": ["ManiSkill YCB", "Official EGAD evaluation subset"],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "actual_count_total": len(records),

@@ -84,18 +84,24 @@ def discover_ultra_attempts(
     rows: list[tuple[Path, DemonstrationEpisode]] = []
     seen: set[Path] = set()
     for root in roots:
-        object_dir = root / slug
-        if not object_dir.is_dir():
-            continue
-        for pattern in ("seed_*/manifest.json", "seed_*/attempts/*/manifest.json"):
-            for manifest in sorted(object_dir.glob(pattern)):
-                manifest = manifest.resolve()
-                if manifest in seen:
-                    continue
-                seen.add(manifest)
-                episode = _full_episode(manifest, object_id)
-                if episode is not None:
-                    rows.append((manifest, episode))
+        # The single-object and integrated benchmark layouts use ``root/slug``.
+        # ``tools.ultradexgrasp.batch_generate`` adds an ``objects`` level so it
+        # can keep its batch state next to the generated episodes.  Accept both
+        # layouts so a 127-object Ultra screening pass can feed the historical
+        # Ultra -> Wrist Lattice -> MJWarp PPO pipeline without regeneration.
+        object_dirs = (root / slug, root / "objects" / slug)
+        for object_dir in object_dirs:
+            if not object_dir.is_dir():
+                continue
+            for pattern in ("seed_*/manifest.json", "seed_*/attempts/*/manifest.json"):
+                for manifest in sorted(object_dir.glob(pattern)):
+                    manifest = manifest.resolve()
+                    if manifest in seen:
+                        continue
+                    seen.add(manifest)
+                    episode = _full_episode(manifest, object_id)
+                    if episode is not None:
+                        rows.append((manifest, episode))
 
     def key(row: tuple[Path, DemonstrationEpisode]):
         _, episode = row

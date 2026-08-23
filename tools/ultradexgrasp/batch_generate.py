@@ -71,7 +71,9 @@ def _selected_object_ids(
         selected = list(dict.fromkeys(requested))
     else:
         selected = available
-        if dataset != "all":
+        if dataset == "original127":
+            selected = [item for item in selected if item.startswith(("ycb:", "egad:"))]
+        elif dataset != "all":
             selected = [item for item in selected if item.startswith(f"{dataset}:")]
     if limit is not None:
         if limit <= 0:
@@ -332,7 +334,12 @@ def _persist(root: Path, state: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dataset", choices=("all", "ycb", "egad"), default="all")
+    parser.add_argument(
+        "--dataset",
+        choices=("all", "original127", "ycb", "egad", "gso"),
+        default="all",
+        help="Use original127 for the 78 YCB + 49 EGAD benchmark.",
+    )
     parser.add_argument("--object-id", action="append", dest="object_ids")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--expect-count", type=int)
@@ -433,8 +440,9 @@ def main(argv: list[str] | None = None) -> int:
     seeds = [args.seed + offset for offset in range(args.max_seeds)]
     ycb_count = sum(item.startswith("ycb:") for item in object_ids)
     egad_count = sum(item.startswith("egad:") for item in object_ids)
+    gso_count = sum(item.startswith("gso:") for item in object_ids)
     print(
-        f"[plan] objects={len(object_ids)} ycb={ycb_count} egad={egad_count} "
+        f"[plan] objects={len(object_ids)} ycb={ycb_count} egad={egad_count} gso={gso_count} "
         f"seeds={seeds} output={args.output}",
         flush=True,
     )

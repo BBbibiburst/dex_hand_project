@@ -258,6 +258,8 @@ class _Recorder:
             "task_success": [],
             "robot_object_contact_count": [],
             "robot_object_normal_force": [],
+            "robot_object_digit_contact_count": [],
+            "robot_object_digit_normal_force": [],
         }
 
     def append(
@@ -282,9 +284,11 @@ class _Recorder:
         self.values["stage"].append(STAGE_CODES[stage])
         self.values["reward"].append(float(reward))
         self.values["task_success"].append(bool(success))
-        contact_count, normal_force = _robot_object_contact_summary(env)
+        contact_count, normal_force, digit_counts, digit_forces = _robot_object_contact_summary(env)
         self.values["robot_object_contact_count"].append(contact_count)
         self.values["robot_object_normal_force"].append(normal_force)
+        self.values["robot_object_digit_contact_count"].append(digit_counts)
+        self.values["robot_object_digit_normal_force"].append(digit_forces)
 
     def arrays(self) -> dict[str, np.ndarray]:
         arrays = {name: np.asarray(values) for name, values in self.values.items()}
@@ -297,26 +301,63 @@ class _Recorder:
         arrays["robot_object_normal_force"] = arrays["robot_object_normal_force"].astype(
             np.float32
         )
+        arrays["robot_object_digit_contact_count"] = arrays[
+            "robot_object_digit_contact_count"
+        ].astype(np.int16)
+        arrays["robot_object_digit_normal_force"] = arrays[
+            "robot_object_digit_normal_force"
+        ].astype(np.float32)
         return arrays
 
 
-def _robot_object_contact_summary(env) -> tuple[int, float]:
+def _contact_digit(env, geom_id: int) -> int:
+    geom_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
+    body_id = int(env.model.geom_bodyid[geom_id])
+    body_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_BODY, body_id) or ""
+    text = f"{geom_name} {body_name}".lower()
+    for digit in range(5):
+        if f"skin_{digit}_" in text:
+            return digit
+    aliases = {
+        0: ("little", "pinky", "finger_0", "finger0"),
+        1: ("ring", "finger_1", "finger1"),
+        2: ("middle", "finger_2", "finger2"),
+        3: ("index", "finger_3", "finger3"),
+        4: ("thumb",),
+    }
+    for digit, names in aliases.items():
+        if any(name in text for name in names):
+            return digit
+    return -1
+
+
+def _robot_object_contact_summary(env) -> tuple[int, float, np.ndarray, np.ndarray]:
     bindings = getattr(env.task, "bindings", None)
     if bindings is None or "object" not in bindings.objects:
-        return 0, 0.0
-    object_geoms = bindings.objects["object"].geom_ids
+        return 0, 0.0, np.zeros(5, dtype=np.int16), np.zeros(5, dtype=np.float64)
+    object_geoms = {int(value) for value in bindings.objects["object"].geom_ids}
+    robot_geoms = {int(value) for value in bindings.robot_geom_ids}
     contact_force = np.zeros(6, dtype=np.float64)
+    digit_counts = np.zeros(5, dtype=np.int16)
+    digit_forces = np.zeros(5, dtype=np.float64)
     count = 0
     normal_force = 0.0
     for index in range(env.data.ncon):
         contact = env.data.contact[index]
         pair = {int(contact.geom1), int(contact.geom2)}
-        if not pair.intersection(object_geoms) or not pair.intersection(bindings.robot_geom_ids):
+        object_pair = pair.intersection(object_geoms)
+        robot_pair = pair.intersection(robot_geoms)
+        if not object_pair or not robot_pair:
             continue
         mujoco.mj_contactForce(env.model, env.data, index, contact_force)
+        force = abs(float(contact_force[0]))
         count += 1
-        normal_force += abs(float(contact_force[0]))
-    return count, normal_force
+        normal_force += force
+        digit = _contact_digit(env, next(iter(robot_pair)))
+        if digit >= 0:
+            digit_counts[digit] += 1
+            digit_forces[digit] += force
+    return count, normal_force, digit_counts, digit_forces
 
 
 def _step(env, recorder: _Recorder, action: np.ndarray, stage: str):

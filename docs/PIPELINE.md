@@ -145,7 +145,7 @@ MUJOCO_GL=egl \
 CUDA_VISIBLE_DEVICES=0 \
 PYTHONUNBUFFERED=1 \
 python -m tools.grasping.batch_grasp_edit \
-  --dataset all \
+  --dataset original127 \
   --expect-count 127 \
   --output outputs/dex_hand_ppo127 \
   --ultra-root outputs/dex_hand_ppo127/ultra \
@@ -162,8 +162,6 @@ python -m tools.grasping.batch_grasp_edit \
   --base-candidates 3 \
   --lattice-max-templates 12 \
   --lattice-max-executions 32 \
-  --train-ultra-success \
-  --train-lattice-success \
   2>&1 | tee -a outputs/dex_hand_ppo127/console.log
 ```
 

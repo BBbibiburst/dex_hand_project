@@ -17,8 +17,27 @@ Dex Hand MJCF 与六驱动肌腱标定
 → C MuJoCo 回放验证末段持续抬升及其与权威模型的一致性
 ```
 
-当前物体目录包含 127 个 Lift 对象：78 个 YCB 和 49 个 EGAD。实际对象列表以
-`assets/maniskill/manifest.json` 为准。
+当前物体目录包含 241 个 Lift 对象：78 个 YCB、49 个 EGAD 和 114 个 GSO；历史
+`original127` 基准固定为前两者。实际对象列表以各数据集 manifest 为准。
+
+物体默认保持数据集物理尺度（YCB/GSO 为米，EGAD 自动由毫米换算为米），不再统一缩放
+到 9 cm。需要恢复当前 GSO 候选池时运行：
+
+```bash
+python -m tools.download_gso_objects \
+  --selection configs/gso_candidate_pool.txt
+```
+
+可以生成几何排序作为预筛，但它不代表已经通过抓取：
+
+```bash
+python -m tools.rank_underactuated_candidates \
+  --count 100 \
+  --minimum-prior 0.70
+```
+
+最终 100 物体列表必须结合 Ultra 全量结果、手指接触增长率、扰动鲁棒性和 C MuJoCo
+抬升/保持复验重新生成；仓库不保存尚未验证的临时 Top100。
 
 ## 快速开始
 
@@ -133,7 +152,7 @@ MUJOCO_GL=egl \
 CUDA_VISIBLE_DEVICES=0 \
 PYTHONUNBUFFERED=1 \
 python -m tools.grasping.batch_grasp_edit \
-  --dataset all \
+  --dataset original127 \
   --expect-count 127 \
   --output outputs/dex_hand_ppo127 \
   --ultra-root outputs/dex_hand_ppo127/ultra \
@@ -149,17 +168,15 @@ python -m tools.grasping.batch_grasp_edit \
   --max-updates 15 \
   --base-candidates 3 \
   --lattice-max-templates 12 \
-  --lattice-max-executions 32 \
-  --train-ultra-success \
-  --train-lattice-success
+  --lattice-max-executions 32
 ```
 
 自动调度会根据可见 GPU、空闲显存、启动利用率、环境数和 CPU 核数，为单卡或多卡分配对象
 worker；24 GB GPU 配合 64 个环境时通常采用同卡双流水线，让 Ultra/CPU 工作与单路满载 PPO
 重叠，并输出动态 ETA。详细资源规则见 `docs/PIPELINE.md`。
 
-移除最后两个 `--train-*-success` 参数后，流水线会在 Ultra 或 Lattice 已成功时提前停止，
-只把尚未解决的对象交给 PPO。中断后使用相同参数重新运行即可继续。
+这条默认生产命令与历史 127 对象实现一致：Ultra 成功即结束；Ultra 失败才进入 Wrist
+Lattice；Lattice 仍失败才进入 5→10→15 更新的自适应 PPO。中断后使用相同参数重新运行即可继续。
 
 详细的状态解释、缓存规则和 C MuJoCo 复验方法见
 [全量流水线与验证](docs/PIPELINE.md)。

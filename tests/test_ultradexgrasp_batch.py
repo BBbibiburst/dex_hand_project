@@ -26,6 +26,9 @@ def test_catalog_selection_uses_all_lift_objects(monkeypatch) -> None:
     assert batch_generate._selected_object_ids(
         dataset="egad", requested=None, limit=1
     ) == ["egad:C0"]
+    assert batch_generate._selected_object_ids(
+        dataset="original127", requested=None, limit=None
+    ) == ["ycb:a", "ycb:b", "egad:C0", "egad:C1"]
 
 
 def test_success_manifest_is_recovered_after_parent_interruption(tmp_path: Path) -> None:
