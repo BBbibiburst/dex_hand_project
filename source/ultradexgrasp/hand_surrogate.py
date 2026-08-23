@@ -18,7 +18,7 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_HAND_XML = PROJECT_ROOT / "assets" / "grippers" / "dex_hand" / "dex_hand.xml"
-SURROGATE_SCHEMA_VERSION = 2
+SURROGATE_SCHEMA_VERSION = 3
 ACTUATOR_NAMES = (
     "act_push_0_j",
     "act_push_1_j",
@@ -27,7 +27,10 @@ ACTUATOR_NAMES = (
     "thumb_rotate_act_push_j",
     "thumb_grasp_act_push_j",
 )
-OPEN_FRACTIONS = np.asarray([0.0, 0.0, 0.0, 0.0, 1.0, 0.0], dtype=np.float64)
+# A fully opposed thumb (1.0) lies inside the middle-finger closure path and
+# makes the nominally open hand self-collide.  The calibrated neutral
+# opposition used by teleoperation leaves all four finger paths unobstructed.
+OPEN_FRACTIONS = np.asarray([0.0, 0.0, 0.0, 0.0, 0.25, 0.0], dtype=np.float64)
 
 
 def _farthest_indices(points: np.ndarray, count: int) -> np.ndarray:
@@ -171,6 +174,7 @@ class DexHandSurrogate:
         metadata = {
             "schema_version": SURROGATE_SCHEMA_VERSION,
             "actuator_names": ACTUATOR_NAMES,
+            "open_fractions": OPEN_FRACTIONS.tolist(),
             "points_per_geom": self.points_per_geom,
             "finger_degree": self.finger_degree,
             "thumb_degree": self.thumb_degree,
@@ -195,6 +199,8 @@ class DexHandSurrogate:
                 raise ValueError("Unsupported Dex Hand surrogate schema.")
             if tuple(metadata.get("actuator_names", ())) != ACTUATOR_NAMES:
                 raise ValueError("Dex Hand surrogate actuator order does not match this project.")
+            if not np.allclose(metadata.get("open_fractions", ()), OPEN_FRACTIONS):
+                raise ValueError("Dex Hand surrogate open-hand calibration does not match.")
             return cls(
                 finger_coefficients=np.asarray(payload["finger_coefficients"], dtype=np.float64),
                 thumb_coefficients=np.asarray(payload["thumb_coefficients"], dtype=np.float64),
@@ -348,17 +354,21 @@ def load_or_calibrate_surrogate(
 ) -> DexHandSurrogate:
     cache_path = Path(cache_path)
     if cache_path.is_file():
-        surrogate = DexHandSurrogate.load(cache_path)
-        expected = {
-            "points_per_geom": calibration_options.get("points_per_geom"),
-            "finger_degree": calibration_options.get("finger_degree"),
-            "thumb_degree": calibration_options.get("thumb_degree"),
-        }
-        if all(
-            value is None or getattr(surrogate, name) == value
-            for name, value in expected.items()
-        ):
-            return surrogate
+        try:
+            surrogate = DexHandSurrogate.load(cache_path)
+        except ValueError:
+            surrogate = None
+        if surrogate is not None:
+            expected = {
+                "points_per_geom": calibration_options.get("points_per_geom"),
+                "finger_degree": calibration_options.get("finger_degree"),
+                "thumb_degree": calibration_options.get("thumb_degree"),
+            }
+            if all(
+                value is None or getattr(surrogate, name) == value
+                for name, value in expected.items()
+            ):
+                return surrogate
     surrogate = calibrate_dex_hand_surrogate(**calibration_options)
     surrogate.save(cache_path)
     return surrogate

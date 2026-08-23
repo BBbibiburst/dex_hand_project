@@ -14,6 +14,7 @@ from source.ultradexgrasp.executor import (
     ExecutionConfig,
     candidate_world_pose,
 )
+from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
 
 
 def _candidate() -> GraspCandidate:
@@ -83,6 +84,10 @@ def test_default_pipeline_config_is_valid() -> None:
     assert config.synthesis.minimum_contact_fingers == 4
     assert config.execution.lift_height > 0.04
     assert config.surrogate_options["finger_degree"] == 7
+
+
+def test_open_hand_uses_collision_free_neutral_thumb_opposition() -> None:
+    np.testing.assert_allclose(OPEN_FRACTIONS, [0.0, 0.0, 0.0, 0.0, 0.25, 0.0])
 
 
 def test_execution_config_rejects_invalid_preload() -> None:
