@@ -2,8 +2,9 @@
 
 ## 设计原则
 
-项目代码只保留自身实现，不在仓库中 vendor 第三方源码，也不使用 Git submodule。
-Python/CUDA 依赖由 `pyproject.toml` 管理，大型对象资产和运行结果放在 Git 忽略目录中。
+项目运行代码只保留自身实现，不 vendor 第三方运行源码。官方 DexEvolve 以只读 Git
+submodule 保存，供算法对照，不进入运行时 import。Python/CUDA 依赖由 `pyproject.toml`
+管理，大型对象资产和运行结果放在 Git 忽略目录中。
 
 依赖方向固定为：
 
@@ -26,9 +27,9 @@ monkeypatch facade；测试直接覆盖实际模块 API。
 - `source/robots`：机械臂、底座、末端执行器描述和装配。
 - `source/control`：机械臂、手和组合控制器。
 - `source/envs`：Gymnasium/MuJoCo 环境、任务、对象和场景绑定。
-- `source/ultradexgrasp`：项目原生 Ultra Prior、Dex Hand 可微 surrogate 和 episode contract。
+- `source/grasping`：项目原生 GraspQP + DexEvolve、Dex Hand 可微 surrogate 和 episode contract。
 - `source/rl/grasp_edit`：Wrist Lattice、六维手动作和 Hybrid PPO。
-- `source/grasp_pipeline`：Ultra/PPO 共享的参考轨迹、结果契约和 C MuJoCo 回放。
+- `source/grasp_pipeline`：Grasp/PPO 共享的参考轨迹、结果契约和 C MuJoCo 回放。
 - `source/verification`：生成轨迹的严格 C MuJoCo 最终复验。
 - `source/sensors`：触觉接口、Dex Hand/Pika 传感器和曲面拟合。
 - `source/data`：LeRobot 记录器和数据 schema。
@@ -38,8 +39,8 @@ monkeypatch facade；测试直接覆盖实际模块 API。
 ## 主流水线
 
 ```text
-source/ultradexgrasp
-  生成 Ultra Prior episode
+source/grasping
+  生成 GraspQP + DexEvolve episode
           ↓
 source/rl/grasp_edit/templates.py
   构建并执行 Wrist Lattice
@@ -59,9 +60,8 @@ apps/train_diffusion.py + apps/evaluate_diffusion.py + source/imitation
 
 对应入口：
 
-- `python -m tools.ultradexgrasp.probe`
-- `python -m tools.ultradexgrasp.generate`
-- `python -m tools.ultradexgrasp.batch_generate`
+- `python -m tools.grasp_generation.probe`
+- `python -m tools.grasp_generation.graspqp_evolve`
 - `python -m apps.train_grasp_edit_rl`
 - `python -m tools.grasping.batch_grasp_edit`
 - `python -m tools.verification.replay_trajectory`
@@ -72,21 +72,21 @@ apps/train_diffusion.py + apps/evaluate_diffusion.py + source/imitation
 ## 资产与生成数据
 
 - `assets/grippers/dex_hand/dex_hand.xml` 是 Dex Hand 权威物理模型。
-- `configs/ultradexgrasp/default.json` 是 Ultra Prior 默认参数。
-- `configs/ultradexgrasp/cache/` 保存可重建的手部 surrogate。
+- `configs/grasping/default.json` 是 GraspQP + DexEvolve 默认参数。
+- `configs/grasping/cache/` 保存可重建的手部 surrogate。
 - `assets/maniskill/` 保存可重新下载的 YCB、EGAD 和 GSO 资产。
-- `outputs/` 保存 Ultra、Lattice、PPO、日志和汇总报告。
+- `outputs/` 保存 Grasp、Lattice、PPO、日志和汇总报告。
 - `datasets/`、`recordings/`、`checkpoints/` 保存训练和采集产物。
 
 这些生成目录不作为源代码提交。修改 Dex Hand MJCF 后必须重新标定 surrogate，并使用新的
-Ultra、Lattice 和 PPO 输出，避免把旧手模型的轨迹当作当前结果。
+Grasp、Lattice 和 PPO 输出，避免把旧手模型的轨迹当作当前结果。
 
 ## 外部依赖策略
 
 项目不依赖本地参考仓库路径。核心依赖分组如下：
 
 - 默认依赖：MuJoCo、NumPy、SciPy、Gymnasium、Trimesh 和可视化工具。
-- `ultradexgrasp`：PyTorch，用于原生可微抓取优化。
+- `grasping`：PyTorch、GraspQP 和 ProxSuite，用于闭链抓取优化。
 - `mjwarp`：MuJoCo Warp 和 Warp，用于 GPU 并行仿真。
 - `assets`：ManiSkill 对象资产下载。
 - `learning`：LeRobot、TorchVision 和 Diffusion Policy 相关工具。
@@ -102,4 +102,4 @@ Ultra、Lattice 和 PPO 输出，避免把旧手模型的轨迹当作当前结�
 - robots/control、sensors/viz 等边界不回退。
 - 已迁移的旧单文件实现不会重新出现。
 - 旧入口别名和抓取搜索兼容 facade 不会重新出现。
-- 仓库中不存在 `deps/` 和 `.gitmodules`。
+- 仓库中不存在 `deps/`，且只允许官方 `third_party/DexEvolve` 子模块。

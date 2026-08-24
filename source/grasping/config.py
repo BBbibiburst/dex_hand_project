@@ -1,4 +1,4 @@
-"""Configuration loading for the independent UltraDexGrasp pipeline."""
+"""Configuration loading for GraspQP + DexEvolve generation."""
 
 from __future__ import annotations
 
@@ -7,11 +7,11 @@ from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import Any
 
-from source.ultradexgrasp.executor import ExecutionConfig
-from source.ultradexgrasp.synthesizer import SynthesisConfig
+from source.grasping.executor import ExecutionConfig
+from source.grasping.seeds import SeedConfig
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "ultradexgrasp" / "default.json"
+DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "grasping" / "default.json"
 
 
 @dataclass(frozen=True)
@@ -21,7 +21,7 @@ class PipelineConfig:
     surface_points: int
     surrogate_cache: Path
     surrogate_options: dict[str, Any]
-    synthesis: SynthesisConfig
+    seeds: SeedConfig
     execution: ExecutionConfig
 
 
@@ -37,7 +37,7 @@ def load_pipeline_config(path: str | Path = DEFAULT_CONFIG_PATH) -> PipelineConf
     path = Path(path)
     payload = json.loads(path.read_text(encoding="utf-8"))
     if payload.get("schema_version") != 1:
-        raise ValueError(f"Unsupported UltraDexGrasp config schema in {path}.")
+        raise ValueError(f"Unsupported grasp-generation config schema in {path}.")
     cache = Path(payload["surrogate_cache"])
     if not cache.is_absolute():
         cache = PROJECT_ROOT / cache
@@ -54,9 +54,9 @@ def load_pipeline_config(path: str | Path = DEFAULT_CONFIG_PATH) -> PipelineConf
         or surface_points < 128
     ):
         raise ValueError("Object size limits must be positive and surface_points at least 128.")
-    synthesis = _dataclass_options(SynthesisConfig, dict(payload.get("synthesis", {})))
+    seeds = _dataclass_options(SeedConfig, dict(payload.get("seeds", {})))
     execution = _dataclass_options(ExecutionConfig, dict(payload.get("execution", {})))
-    synthesis.validate()
+    seeds.validate()
     execution.validate()
     return PipelineConfig(
         target_size=target_size,
@@ -64,6 +64,6 @@ def load_pipeline_config(path: str | Path = DEFAULT_CONFIG_PATH) -> PipelineConf
         surface_points=surface_points,
         surrogate_cache=cache,
         surrogate_options=dict(payload.get("surrogate", {})),
-        synthesis=synthesis,
+        seeds=seeds,
         execution=execution,
     )

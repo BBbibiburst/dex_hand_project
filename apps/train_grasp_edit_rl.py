@@ -8,11 +8,12 @@ from dataclasses import asdict
 from pathlib import Path
 
 from source.rl.common.ppo import PPOConfig
+from source.grasping.budget import FORMAL_GENERATION_BUDGET
 from source.rl.grasp_edit.env import GraspEditConfig, MjWarpGraspEditEnv
 from source.rl.grasp_edit.ppo import HybridPPOTrainer
 from source.rl.grasp_edit.templates import (
     build_grasp_edit_templates,
-    discover_ultra_attempts,
+    discover_grasp_attempts,
 )
 
 
@@ -24,15 +25,16 @@ def _write_json(path: Path, payload) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    budget = FORMAL_GENERATION_BUDGET
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", required=True)
     parser.add_argument("--output-root", type=Path, default=Path("outputs/grasp_edit_rl"))
     parser.add_argument("--template-root", type=Path, default=Path("outputs/grasp_edit_lattice"))
-    parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
-    parser.add_argument("--ultra-seed-count", type=int, default=100)
-    parser.add_argument("--ultra-generate-seeds", type=int, default=3)
-    parser.add_argument("--ultra-max-execution-candidates", type=int, default=8)
-    parser.add_argument("--no-auto-ultra", action="store_true")
+    parser.add_argument("--grasp-root", type=Path, action="append", dest="grasp_roots")
+    parser.add_argument("--graspqp-seeds", type=int, default=budget.graspqp_seeds)
+    parser.add_argument("--generation-attempts", type=int, default=3)
+    parser.add_argument("--graspqp-executions", type=int, default=budget.graspqp_executions)
+    parser.add_argument("--no-auto-grasp", action="store_true")
     parser.add_argument(
         "--failed-only",
         action="store_true",
@@ -95,37 +97,37 @@ def _object_slug(object_id: str) -> str:
     return object_id.replace(":", "_").replace("/", "_")
 
 
-def _ensure_ultra_priors(args: argparse.Namespace, ultra_roots: tuple[Path, ...]) -> None:
-    existing = discover_ultra_attempts(
+def _ensure_grasp_priors(args: argparse.Namespace, grasp_roots: tuple[Path, ...]) -> None:
+    existing = discover_grasp_attempts(
         args.object_id,
-        roots=ultra_roots,
+        roots=grasp_roots,
         maximum=max(1, args.base_candidates),
     )
     if existing:
         print(
-            f"[ultra:reuse] object={args.object_id} full_attempts={len(existing)}",
+            f"[grasp:reuse] object={args.object_id} full_attempts={len(existing)}",
             flush=True,
         )
         return
-    if args.no_auto_ultra:
+    if args.no_auto_grasp:
         raise FileNotFoundError(
-            f"No full UltraDexGrasp attempts found for {args.object_id} and "
-            "--no-auto-ultra was requested."
+            f"No full GraspQP + DexEvolve attempts found for {args.object_id} and "
+            "--no-auto-grasp was requested."
         )
-    if args.ultra_seed_count <= 0 or args.ultra_generate_seeds <= 0:
-        raise ValueError("Ultra seed counts must be positive.")
-    if args.ultra_max_execution_candidates <= 0:
-        raise ValueError("--ultra-max-execution-candidates must be positive.")
+    if args.graspqp_seeds <= 0 or args.generation_attempts <= 0:
+        raise ValueError("Grasp seed counts must be positive.")
+    if args.graspqp_executions <= 0:
+        raise ValueError("--graspqp-executions must be positive.")
 
-    from tools.ultradexgrasp.generate import main as generate_ultra
+    from tools.grasp_generation.graspqp_evolve import main as generate_grasp
 
-    primary_root = ultra_roots[0]
-    for offset in range(args.ultra_generate_seeds):
+    primary_root = grasp_roots[0]
+    for offset in range(args.generation_attempts):
         rng_seed = args.seed + offset
         output = primary_root / _object_slug(args.object_id) / f"seed_{rng_seed:04d}"
         print(
-            f"[ultra:auto] object={args.object_id} rng_seed={rng_seed} "
-            f"grasp_seeds={args.ultra_seed_count} output={output}",
+            f"[grasp:auto] object={args.object_id} rng_seed={rng_seed} "
+            f"grasp_seeds={args.graspqp_seeds} output={output}",
             flush=True,
         )
         generate_args = [
@@ -133,34 +135,32 @@ def _ensure_ultra_priors(args: argparse.Namespace, ultra_roots: tuple[Path, ...]
             args.object_id,
             "--seed",
             str(rng_seed),
-            "--seed-count",
-            str(args.ultra_seed_count),
+            "--graspqp-seeds",
+            str(args.graspqp_seeds),
             "--device",
             args.device,
-            "--max-execution-candidates",
-            str(args.ultra_max_execution_candidates),
+            "--graspqp-executions",
+            str(args.graspqp_executions),
             "--output",
             str(output),
         ]
         # Regeneration may target a partially created directory from a previous
         # unsuccessful run.  The CLI's overwrite flag is explicit and local to
         # this auto-generation output.
-        if output.exists():
-            generate_args.append("--overwrite")
-        rc = generate_ultra(generate_args)
-        existing = discover_ultra_attempts(
+        rc = generate_grasp(generate_args)
+        existing = discover_grasp_attempts(
             args.object_id,
-            roots=ultra_roots,
+            roots=grasp_roots,
             maximum=max(1, args.base_candidates),
         )
         if existing:
-            print(f"[ultra:auto-ready] rc={rc} full_attempts={len(existing)}", flush=True)
+            print(f"[grasp:auto-ready] rc={rc} full_attempts={len(existing)}", flush=True)
             return
-        print(f"[ultra:auto-miss] rc={rc} rng_seed={rng_seed}", flush=True)
+        print(f"[grasp:auto-miss] rc={rc} rng_seed={rng_seed}", flush=True)
 
     raise FileNotFoundError(
-        f"Automatic Ultra generation produced no full attempts for {args.object_id} "
-        f"after {args.ultra_generate_seeds} RNG seed(s)."
+        f"Automatic GraspQP + DexEvolve generation produced no full attempts for {args.object_id} "
+        f"after {args.generation_attempts} RNG seed(s)."
     )
 
 
@@ -188,16 +188,16 @@ def run(args: argparse.Namespace) -> int:
         raise ValueError("--save-every must be >= 0.")
     if args.log_every <= 0:
         raise ValueError("--log-every must be positive.")
-    ultra_roots = (
-        tuple(args.ultra_roots)
-        if args.ultra_roots
-        else (Path("outputs/ultradexgrasp"), Path("outputs/ultradexgrasp_catalog"))
+    grasp_roots = (
+        tuple(args.grasp_roots)
+        if args.grasp_roots
+        else (Path("outputs/grasp_generation"),)
     )
-    _ensure_ultra_priors(args, ultra_roots)
+    _ensure_grasp_priors(args, grasp_roots)
     templates = build_grasp_edit_templates(
         args.object_id,
         output_root=args.template_root,
-        ultra_roots=ultra_roots,
+        grasp_roots=grasp_roots,
         base_candidates=args.base_candidates,
         translation_step=args.wrist_translation_step,
         rotation_step_degrees=args.wrist_rotation_step_deg,
@@ -250,7 +250,7 @@ def run(args: argparse.Namespace) -> int:
             },
             "object_id": args.object_id,
             "failed_only": bool(args.failed_only),
-            "ultra_seed_count": int(args.ultra_seed_count),
+            "graspqp_seeds": int(args.graspqp_seeds),
             "lattice": {
                 "translation_step": args.wrist_translation_step,
                 "rotation_step_degrees": args.wrist_rotation_step_deg,

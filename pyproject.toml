@@ -31,7 +31,7 @@ learning = [
     "torchcodec",
     "lerobot>=0.4",
 ]
-ultradexgrasp = [
+grasping = [
     "torch>=2.4,<2.5",
     "graspqp @ git+https://github.com/leggedrobotics/graspqp.git#subdirectory=graspqp",
     "proxsuite>=0.7",
@@ -51,10 +51,8 @@ dex-smoke-test = "tools.run_smoke_checks:main"
 dex-object-download = "tools.download_maniskill_objects:main"
 dex-object-catalog = "tools.render_object_catalog:main"
 dex-code-summary = "tools.code_summary:main"
-dex-ultradex-probe = "tools.ultradexgrasp.probe:main"
-dex-ultradex-generate = "tools.ultradexgrasp.generate:main"
-dex-graspqp-evolve = "tools.ultradexgrasp.graspqp_evolve:main"
-dex-dexevolve = "tools.ultradexgrasp.evolve:main"
+dex-grasp-generate = "tools.grasp_generation.graspqp_evolve:main"
+dex-grasp-probe = "tools.grasp_generation.probe:main"
 dex-tactile-preview = "tools.tactile.preview_layout:main"
 dex-tactile-probe = "tools.tactile.interactive_probe:main"
 dex-tactile-plot = "tools.tactile.plot_surfaces:main"
@@ -98,7 +96,7 @@ configs = [
     "current_robot.json",
     "robot_profiles/*.json",
     "teleop.json",
-    "ultradexgrasp/*.json",
+    "grasping/*.json",
 ]
 
 [tool.setuptools.exclude-package-data]

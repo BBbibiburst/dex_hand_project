@@ -6,8 +6,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from source.ultradexgrasp.catalog import ObjectGeometry
-from source.ultradexgrasp.hand_surrogate import DexHandSurrogate
+from source.grasping.catalog import ObjectGeometry
+from source.grasping.hand_surrogate import DexHandSurrogate
 
 
 @dataclass(frozen=True)

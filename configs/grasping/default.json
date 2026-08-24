@@ -3,7 +3,7 @@
   "target_size": null,
   "maximum_horizontal_diameter": 0.075,
   "surface_points": 2048,
-  "surrogate_cache": "configs/ultradexgrasp/cache/dex_hand_surrogate_adaptive.npz",
+  "surrogate_cache": "configs/grasping/cache/dex_hand_surrogate.npz",
   "surrogate": {
     "points_per_geom": 12,
     "finger_samples": 15,
@@ -12,26 +12,9 @@
     "thumb_degree": 5,
     "settle_steps": 700
   },
-  "synthesis": {
-    "seed_count": 64,
-    "optimization_steps": 220,
-    "translation_learning_rate": 0.0025,
-    "rotation_learning_rate": 0.012,
-    "actuator_learning_rate": 0.025,
-    "force_learning_rate": 0.05,
-    "contact_distance": 0.004,
-    "maximum_penetration": 0.003,
-    "penetration_allowance": 0.0005,
-    "minimum_contact_fingers": 4,
-    "top_k": 32,
-    "friction_coefficient": 0.8,
-    "contact_temperature": 0.002,
+  "seeds": {
     "table_margin": 0.0015,
-    "force_residual_threshold": 0.28,
-    "side_seed_fraction": 0.8,
-    "enclosure_prior_count": 128,
-    "contact_partition_prior_count": 32,
-    "contact_partition_steps": 100
+    "enclosure_prior_count": 128
   },
   "execution": {
     "pregrasp_distance": 0.09,

@@ -192,7 +192,7 @@ def _check_imports() -> str:
         "tools.grasping.batch_grasp_edit",
         "tools.grasping.benchmark_hand_physics",
         "tools.verification.replay_trajectory",
-        "tools.ultradexgrasp.probe",
+        "tools.grasp_generation.probe",
     )
     for module in modules:
         importlib.import_module(module)

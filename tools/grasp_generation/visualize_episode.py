@@ -1,4 +1,4 @@
-"""Visualize every stage of an UltraDexGrasp execution episode.
+"""Visualize every stage of a generated grasp execution episode.
 
 The report explains the optimized candidate in object coordinates. The MuJoCo
 viewer replays the recorded qpos/qvel exactly and draws target contact points
@@ -15,9 +15,9 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.ultradexgrasp.catalog import load_object_geometry
-from source.ultradexgrasp.contracts import DemonstrationEpisode
-from source.ultradexgrasp.executor import _contact_digit
+from source.grasping.catalog import load_object_geometry
+from source.grasping.contracts import DemonstrationEpisode
+from source.grasping.executor import _contact_digit
 from source.viz.overlays import (
     clear_markers,
     draw_label,

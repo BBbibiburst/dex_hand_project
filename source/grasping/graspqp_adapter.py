@@ -6,11 +6,11 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from source.ultradexgrasp.catalog import ObjectGeometry
-from source.ultradexgrasp.contracts import GraspCandidate
-from source.ultradexgrasp.hand_surrogate import DexHandSurrogate
-from source.ultradexgrasp.synthesizer import (
-    _convex_outside_distance,
+from source.grasping.catalog import ObjectGeometry
+from source.grasping.contracts import GraspCandidate
+from source.grasping.hand_surrogate import DexHandSurrogate
+from source.grasping.seeds import (
+    convex_outside_distance,
     _inverse_sigmoid,
     matrix_to_rotation_6d,
     rotation_6d_to_matrix,
@@ -142,7 +142,7 @@ def refine_candidates_with_graspqp(
         normals_t = torch.stack(inward_normals, dim=1)
         digit_distance_t = torch.stack(digit_distances, dim=1)
         qp_energy = metric(contacts_t, normals_t, cog=cog)
-        outside = _convex_outside_distance(hand_points, plane_normals, plane_offsets)
+        outside = convex_outside_distance(hand_points, plane_normals, plane_offsets)
         penetration = torch.relu(-outside - 0.0005)
         table = torch.relu(geometry.table_z + 0.0015 - hand_points[..., 2])
         pose_drift = torch.square((translation - initial_t_tensor) / 0.04).mean(dim=1)

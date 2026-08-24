@@ -11,8 +11,8 @@ from scipy.spatial.transform import Rotation
 
 from source.envs.manipulation import make_lift_env
 from source.geometry import mat_to_quat, normalize_quat
-from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
-from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
+from source.grasping.contracts import DemonstrationEpisode, GraspCandidate
+from source.grasping.hand_surrogate import OPEN_FRACTIONS
 
 STAGE_CODES = {
     "settle": 0,

@@ -2,9 +2,8 @@
 
 Only final-verified trajectories may be exported as automatic DP demonstrations.
 
-The contact classifier does not rely exclusively on ``skin_*`` geoms.  Any
-robot-object contacts contribute to physical contact and opposition; tactile
-skin naming is kept only for digit/palm diagnostics.
+Grasp validity uses the same DexHand ``skin_*`` classification as generation
+and MJWarp evaluation, so link collisions cannot pass final verification.
 """
 
 from __future__ import annotations
@@ -19,6 +18,7 @@ import mujoco
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
+from source.grasping.executor import _contact_digit
 from source.verification.profiles import FINAL_PROFILE, verification_status
 from source.grasp_pipeline.reference import (
     EpisodeRecord,
@@ -128,41 +128,8 @@ def _contact_sets(env):
     return object_ids, robot_ids, table_ids, palm_body
 
 
-def _digit_from_names(geom_name: str, body_name: str) -> int:
-    """Best-effort tactile/digit diagnostic classification.
-
-    Grasp validity itself does not depend on this mapping.  That is deliberate:
-    valid side-link contacts should not disappear just because their geom is not
-    named ``skin_<digit>_*``.
-    """
-    text = f"{geom_name} {body_name}".lower()
-    for digit in range(5):
-        if f"skin_{digit}_" in text:
-            return digit
-    # Common descriptive aliases, only for diagnostics.
-    aliases = {
-        # The MJCF numbers the four fingers from the little-finger side
-        # towards the thumb; normalized controller inputs reverse this order.
-        0: ("little", "pinky", "finger_0", "finger0"),
-        1: ("ring", "finger_1", "finger1"),
-        2: ("middle", "finger_2", "finger2"),
-        3: ("index", "finger_3", "finger3"),
-        4: ("thumb",),
-    }
-    for digit, names in aliases.items():
-        if any(name in text for name in names):
-            return digit
-    return -1
-
-
-def _contact_snapshot(env, sets) -> tuple[int, int, bool, float, int, float]:
-    """Return physical robot-object contact semantics for one C-MuJoCo frame.
-
-    Opposition is computed from *all* robot-object contact normals, rather than
-    only tactile skin geoms.  This makes side-link/palm-assisted grasps visible
-    while still rejecting one-sided contact because the opposing-normal score
-    remains small.
-    """
+def _contact_snapshot(env, sets) -> tuple[int, int, bool, bool, float, int, float]:
+    """Return skin-only object-contact semantics for one C-MuJoCo frame."""
     object_ids, robot_ids, table_ids, palm_body = sets
     digit_flags = [False] * 5
     palm_contact = False
@@ -194,21 +161,22 @@ def _contact_snapshot(env, sets) -> tuple[int, int, bool, float, int, float]:
         else:
             continue
 
-        robot_object_contacts += 1
-        norm = float(np.linalg.norm(normal))
-        if norm > 1e-8:
-            normal = normal / norm
-            robot_object_normals.append(normal)
-
         geom_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, robot_geom) or ""
         body_id = int(env.model.geom_bodyid[robot_geom])
         body_name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_BODY, body_id) or ""
         lower = f"{geom_name} {body_name}".lower()
-        if "palm" in lower or body_id == palm_body:
+        current_is_palm = "palm" in lower or body_id == palm_body
+        if current_is_palm:
             palm_contact = True
-        digit = _digit_from_names(geom_name, body_name)
+        digit = _contact_digit(env, robot_geom)
         if 0 <= digit < 5:
             digit_flags[digit] = True
+        elif not current_is_palm:
+            continue
+        robot_object_contacts += 1
+        norm = float(np.linalg.norm(normal))
+        if norm > 1e-8:
+            robot_object_normals.append(normal / norm)
 
     opposition = 0.0
     for first_index in range(len(robot_object_normals)):
@@ -231,6 +199,7 @@ def _contact_snapshot(env, sets) -> tuple[int, int, bool, float, int, float]:
         robot_object_contacts,
         sum(digit_flags),
         palm_contact,
+        digit_flags[4] and any(digit_flags[:4]),
         opposition,
         robot_table,
         max_penetration,
@@ -238,7 +207,7 @@ def _contact_snapshot(env, sets) -> tuple[int, int, bool, float, int, float]:
 
 
 def load_replay_controls(path: str | Path, env):
-    """Load controls and initial simulator state from an Ultra or PPO manifest."""
+    """Load controls and initial simulator state from a generated or PPO manifest."""
     path = _manifest_path(path)
     try:
         trajectory = GraspTrajectory.load(path)
@@ -440,14 +409,17 @@ def strict_replay_manifest(
             (
                 robot_object_contacts,
                 _digit_count,
-                palm,
+                _palm,
+                opposed_digits,
                 opposition,
                 table_contacts,
                 penetration,
             ) = _contact_snapshot(env, sets)
 
-            grasp_valid = (robot_object_contacts >= 2 and opposition >= opposition_limit) or (
-                palm and robot_object_contacts >= 2
+            grasp_valid = (
+                opposed_digits
+                and robot_object_contacts >= 2
+                and opposition >= opposition_limit
             )
 
             lifts.append(lift)

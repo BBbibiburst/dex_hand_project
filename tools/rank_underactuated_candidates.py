@@ -1,4 +1,4 @@
-"""Rank a geometry-only object pool for later Ultra and dynamics validation."""
+"""Rank a geometry-only object pool for grasp generation and dynamics validation."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from source.envs.manipulation.object_catalog import (
     object_records,
     record_scale_to_meters,
 )
-from source.ultradexgrasp.catalog import resolve_object_mesh
-from source.ultradexgrasp.affordance import geometry_affordance
+from source.grasping.catalog import resolve_object_mesh
+from source.grasping.affordance import geometry_affordance
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

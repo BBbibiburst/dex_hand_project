@@ -49,7 +49,7 @@ def _write_episode(directory: Path) -> Path:
         json.dumps(
             {
                 "schema_version": 1,
-                "pipeline": "ultradexgrasp-rm75b-dex-hand-v1",
+                "pipeline": "graspqp-dexevolve-rm75b-dex-hand-v1",
                 "object_id": "ycb:test",
                 "seed": 0,
                 "success": False,
@@ -127,7 +127,7 @@ def test_residual_trajectory_round_trip(tmp_path) -> None:
 
 
 def test_reference_resolver_selects_full_failed_attempt(tmp_path) -> None:
-    output = tmp_path / "ultra"
+    output = tmp_path / "grasp"
     attempt = output / "attempts" / "rank_00_seed_000"
     manifest = _write_episode(attempt)
     resolved = resolve_reference_manifest(output)

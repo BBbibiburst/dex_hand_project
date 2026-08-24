@@ -41,10 +41,9 @@ def test_benchmark_parser_defaults_to_historical_127() -> None:
     assert args.expect_count == 127
 
 
-def test_ultra_discovery_accepts_batch_generate_layout(tmp_path, monkeypatch) -> None:
+def test_grasp_discovery_accepts_seed_layout(tmp_path, monkeypatch) -> None:
     manifest = (
         tmp_path
-        / "objects"
         / "ycb_008_pudding_box"
         / "seed_0000"
         / "manifest.json"
@@ -61,7 +60,7 @@ def test_ultra_discovery_accepts_batch_generate_layout(tmp_path, monkeypatch) ->
     )
     monkeypatch.setattr(grasp_edit_templates, "_full_episode", lambda path, object_id: episode)
 
-    rows = grasp_edit_templates.discover_ultra_attempts(
+    rows = grasp_edit_templates.discover_grasp_attempts(
         "ycb:008_pudding_box", roots=(tmp_path,), maximum=1
     )
 
@@ -79,8 +78,8 @@ def _summary_args() -> SimpleNamespace:
         initial_updates=5,
         mid_updates=10,
         max_updates=15,
-        ultra_seed_count=100,
-        ultra_generate_seeds=3,
+        graspqp_seeds=100,
+        generation_attempts=3,
         base_candidates=3,
         lattice_max_templates=12,
         lattice_max_executions=32,
@@ -90,7 +89,6 @@ def _summary_args() -> SimpleNamespace:
         early_fail_lift_mm=10.0,
         continue_lift_mm=20.0,
         progress_gain_mm=5.0,
-        train_ultra_success=True,
         train_lattice_success=True,
     )
 
@@ -241,7 +239,7 @@ def test_progress_line_includes_gpu_runtime_average_and_eta() -> None:
         {
             "object_id": "ycb:test",
             "status": "RL_SUCCESS",
-            "ultra_success": False,
+            "grasp_success": False,
             "lattice_templates": 12,
             "rl_best_success_rate": 0.047,
             "rl_updates": 5,

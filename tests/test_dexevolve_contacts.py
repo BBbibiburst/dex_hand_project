@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from source.ultradexgrasp.dexevolve_contacts import _farthest_point_indices
+from source.grasping.dexevolve_contacts import _farthest_point_indices
 
 
 def test_farthest_contact_sampling_is_unique_and_spread() -> None:

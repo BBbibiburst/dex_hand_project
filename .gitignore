@@ -231,6 +231,7 @@ checkpoints/
 # Generated outputs and caches
 configs/grasps/
 configs/ultradexgrasp/cache/
+configs/grasping/cache/
 outputs/
 
 # Downloaded ManiSkill assets (large and separately licensed)

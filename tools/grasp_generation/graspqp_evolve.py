@@ -10,34 +10,42 @@ from pathlib import Path
 import numpy as np
 
 from source.envs.manipulation import make_lift_env
-from source.ultradexgrasp.catalog import load_object_geometry
-from source.ultradexgrasp.config import DEFAULT_CONFIG_PATH, load_pipeline_config
-from source.ultradexgrasp.dexevolve import (
+from source.grasping.budget import FORMAL_GENERATION_BUDGET
+from source.grasping.catalog import load_object_geometry
+from source.grasping.config import DEFAULT_CONFIG_PATH, load_pipeline_config
+from source.grasping.dexevolve import (
     DexEvolveConfig,
     disturbance_lifetime,
     episode_fitness,
     evolve_candidates,
 )
-from source.ultradexgrasp.executor import STAGE_CODES, execute_grasp, rank_candidates_for_scene
-from source.ultradexgrasp.graspqp_adapter import GraspQPConfig, refine_candidates_with_graspqp
-from source.ultradexgrasp.hand_surrogate import load_or_calibrate_surrogate
-from source.ultradexgrasp.dexevolve_mjwarp import MjWarpLifetimeConfig, MjWarpLifetimeEvaluator
-from source.ultradexgrasp.synthesizer import synthesize_enclosure_priors
+from source.grasping.executor import STAGE_CODES, execute_grasp, rank_candidates_for_scene
+from source.grasping.graspqp_adapter import GraspQPConfig, refine_candidates_with_graspqp
+from source.grasping.hand_surrogate import load_or_calibrate_surrogate
+from source.grasping.dexevolve_mjwarp import MjWarpLifetimeConfig, MjWarpLifetimeEvaluator
+from source.grasping.seeds import generate_enclosure_seeds
 
 
 def build_parser() -> argparse.ArgumentParser:
+    budget = FORMAL_GENERATION_BUDGET
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--object-id", default="ycb:002_master_chef_can")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG_PATH)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--graspqp-seeds", type=int, default=16)
-    parser.add_argument("--graspqp-steps", type=int, default=100)
-    parser.add_argument("--graspqp-executions", type=int, default=6)
-    parser.add_argument("--population", type=int, default=8)
-    parser.add_argument("--offspring", type=int, default=6)
-    parser.add_argument("--generations", type=int, default=4)
+    parser.add_argument("--graspqp-seeds", type=int, default=budget.graspqp_seeds)
+    parser.add_argument("--graspqp-steps", type=int, default=budget.graspqp_steps)
+    parser.add_argument("--graspqp-executions", type=int, default=budget.graspqp_executions)
+    parser.add_argument("--population", type=int, default=budget.population)
+    parser.add_argument("--offspring", type=int, default=budget.offspring)
+    parser.add_argument("--generations", type=int, default=budget.generations)
+    parser.add_argument(
+        "--archive-candidates",
+        type=int,
+        default=budget.archive_candidates,
+        help="Export this many ranked DexEvolve episodes for Wrist Lattice.",
+    )
     return parser
 
 
@@ -50,7 +58,12 @@ def _write(path: Path, payload: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if min(args.graspqp_seeds, args.graspqp_steps, args.graspqp_executions) <= 0:
+    if min(
+        args.graspqp_seeds,
+        args.graspqp_steps,
+        args.graspqp_executions,
+        args.archive_candidates,
+    ) <= 0:
         raise ValueError("GraspQP budgets must be positive.")
     pipeline = load_pipeline_config(args.config)
     surrogate = load_or_calibrate_surrogate(pipeline.surrogate_cache, **pipeline.surrogate_options)
@@ -62,13 +75,12 @@ def main(argv: list[str] | None = None) -> int:
         seed=args.seed,
     )
     bank_size = max(args.graspqp_seeds * 8, args.graspqp_seeds)
-    bank = synthesize_enclosure_priors(
+    bank = generate_enclosure_seeds(
         geometry,
         surrogate,
         replace(
-            pipeline.synthesis,
+            pipeline.seeds,
             enclosure_prior_count=bank_size,
-            contact_partition_prior_count=0,
             seed=args.seed,
         ),
     )
@@ -212,6 +224,17 @@ def main(argv: list[str] | None = None) -> int:
             lifetime_evaluator.close()
         env.close()
     best = archive[0]
+    exported_archive = []
+    for rank, survivor in enumerate(archive[: args.archive_candidates]):
+        if survivor.episode is None:
+            continue
+        survivor.episode.metadata["grasp_generation_archive"] = {
+            "rank": rank,
+            "fitness": survivor.fitness,
+            "source": "graspqp+dexevolve",
+        }
+        archive_manifest = survivor.episode.save(args.output / f"seed_{rank:04d}")
+        exported_archive.append(str(archive_manifest.relative_to(args.output)))
     _write(
         args.output / "dexevolve_archive.json",
         {
@@ -267,6 +290,7 @@ def main(argv: list[str] | None = None) -> int:
         "best_mujoco_lifetime": mujoco_lifetime,
         "strict_reachable_count": strict_reachable_count,
         "strict_execution_attempts": strict_execution_attempts,
+        "exported_archive": exported_archive,
     }
     manifest = final_episode.save(args.output)
     _write(
@@ -287,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
             "best_mujoco_lifetime": mujoco_lifetime,
             "strict_reachable_count": strict_reachable_count,
             "strict_execution_attempts": strict_execution_attempts,
+            "exported_archive": exported_archive,
         },
     )
     print(

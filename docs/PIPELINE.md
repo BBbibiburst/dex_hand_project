@@ -1,4 +1,4 @@
-# Ultra Prior、Wrist Lattice 与 MJWarp PPO 验证
+# GraspQP + DexEvolve、Wrist Lattice 与 MJWarp PPO 验证
 
 本文描述当前 Dex Hand 主流水线。所有命令从项目根目录运行。GraspQP 通过 Python 依赖安装；
 官方 DexEvolve 作为 `third_party/DexEvolve` 只读参考子模块，使用
@@ -7,31 +7,35 @@
 ## 流水线阶段
 
 1. **Dex Hand 标定**：从权威 MJCF 采样六个驱动下的手掌与指面轨迹，拟合可微 surrogate。
-2. **Ultra Prior**：优化物体相对手掌位姿、六个手驱动以及接触力闭合指标。
+2. **GraspQP + DexEvolve**：优化物体相对手掌位姿、六个手驱动以及接触力闭合指标。
 3. **Wrist Lattice**：围绕优先候选展开局部腕部平移和旋转，并用 RM75B IK 排除不可达姿态。
 4. **MJWarp PPO**：策略离散选择腕部模板，同时连续编辑六个手驱动，在 GPU 上并行评估。
 5. **C MuJoCo 复验**：重新执行最佳控制序列，验证末段持续抬升，并检查轨迹与权威
    MuJoCo 模型、当前控制维度是否一致。
 
+正式生成预算统一定义在 `source/grasping/budget.py`：GraspQP 使用64个种子、150步并执行
+12个候选；DexEvolve 使用24个初始个体、每代12个子代、16代，共216次候选评价；最终
+导出 Top 6 给 Wrist Lattice。单物体、自动生成和全量 batch 使用同一默认值。
+
 ## 自动示教与 Diffusion Policy 数据
 
-只有通过最终 C MuJoCo 复验、状态为 `FINAL_VERIFIED` 的 Ultra/Lattice/PPO 轨迹，才会默认
+只有通过最终 C MuJoCo 复验、状态为 `FINAL_VERIFIED` 的 Grasp/Lattice/PPO 轨迹，才会默认
 进入自动示教数据集。采集入口在权威 MuJoCo 环境中重新执行控制序列，并同步记录机器人状态、
 相机图像、触觉和动作到 LeRobot：
 
 ```bash
 python -m apps.collect_generated_lerobot \
   --input-root outputs/dex_hand_ppo127 \
-  --output datasets/ultra_lerobot \
-  --repo-id local/dex-hand-ultra-demonstrations
+  --output datasets/grasp_lerobot \
+  --repo-id local/dex-hand-grasp-demonstrations
 ```
 
 随后训练与评估 Diffusion Policy：
 
 ```bash
 python -m apps.train_diffusion \
-  --dataset datasets/ultra_lerobot \
-  --repo-id local/dex-hand-ultra-demonstrations
+  --dataset datasets/grasp_lerobot \
+  --repo-id local/dex-hand-grasp-demonstrations
 
 python -m apps.evaluate_diffusion \
   --checkpoint checkpoints/diffusion_policy.pt \
@@ -57,7 +61,7 @@ MuJoCo MultiCCD 必须保持启用；它为凸网格接触提供多接触点，�
 ## 环境与模型检查
 
 ```bash
-python -m tools.ultradexgrasp.probe \
+python -m tools.grasp_generation.probe \
   --strict \
   --mjwarp \
   --device cuda:0
@@ -69,7 +73,7 @@ python -m tools.grasping.benchmark_hand_physics --steps 4000
 修改 `assets/grippers/dex_hand/dex_hand.xml` 后使用：
 
 ```bash
-python -m tools.ultradexgrasp.probe \
+python -m tools.grasp_generation.probe \
   --strict \
   --mjwarp \
   --device cuda:0 \
@@ -99,12 +103,12 @@ reset 时与固定桩或另一螺母穿插。全机器人 benchmark 的初始 ta
 一次有效的新手模型测试必须同时满足：
 
 - surrogate 由当前 MJCF 重新标定；
-- Ultra Prior 不复用旧手模型生成的 episode；
+- GraspQP + DexEvolve 不复用旧手模型生成的 episode；
 - Wrist Lattice 不复用旧手模型执行过的轨迹；
 - PPO 使用新的输出目录和 checkpoint。
 
 `--force` 只会忽略部分 benchmark/PPO 结果。手模型变化后应使用新的输出根目录，同时把
-`--ultra-root` 和 `--lattice-root` 指向该目录下的新位置。
+`--grasp-root` 和 `--lattice-root` 指向该目录下的新位置。
 
 ## Pilot
 
@@ -118,14 +122,13 @@ MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m tools.grasping.batch_grasp_edit \
   --object-id ycb:025_mug \
   --object-id egad:C0 \
   --output outputs/dex_hand_pilot \
-  --ultra-root outputs/dex_hand_pilot/ultra \
+  --grasp-root outputs/dex_hand_pilot/grasp \
   --lattice-root outputs/dex_hand_pilot/lattice \
   --device cuda:0 \
   --num-envs 64 \
   --initial-updates 2 \
   --mid-updates 4 \
   --max-updates 6 \
-  --train-ultra-success \
   --train-lattice-success \
   --verbose-child
 ```
@@ -137,7 +140,7 @@ Pilot 应满足：没有 traceback、CUDA OOM、NaN、MJWarp capacity overflow �
 
 以下参数适合单张 24 GB GPU。调度器会读取 `CUDA_VISIBLE_DEVICES`、GPU 空闲显存、启动时
 利用率和 CPU 核心数；在空闲的 24 GB 3090、`--num-envs 64` 下通常会选择两个对象 worker
-和两个通用 GPU 任务槽，使低占用 Ultra、CPU Wrist Lattice 与 PPO 在对象间形成流水线。
+和两个通用 GPU 任务槽，使低占用 Grasp、CPU Wrist Lattice 与 PPO 在对象间形成流水线。
 实测 64-env PPO 会达到 100% GPU 利用率，因此默认仍只允许一个 PPO；显存紧张或启动时 GPU
 已高负载时，通用 GPU 槽也会自动退回一个。显存不足时可把 `--num-envs` 降为 32：
 
@@ -149,7 +152,7 @@ python -m tools.grasping.batch_grasp_edit \
   --dataset original127 \
   --expect-count 127 \
   --output outputs/dex_hand_ppo127 \
-  --ultra-root outputs/dex_hand_ppo127/ultra \
+  --grasp-root outputs/dex_hand_ppo127/grasp \
   --lattice-root outputs/dex_hand_ppo127/lattice \
   --device cuda:0 \
   --gpus auto \
@@ -169,7 +172,7 @@ python -m tools.grasping.batch_grasp_edit \
 多卡时只需扩大可见设备，例如 `CUDA_VISIBLE_DEVICES=0,1`；`--gpus auto` 会为每张卡建立
 独立槽位。自动模式最多给每张卡两个 worker/两个通用 GPU 任务，避免为了追求并发无限增加
 进程。`--ppo-jobs-per-gpu auto` 会把满算力 PPO 限制为一路，但不阻止另一个 worker 同时执行
-Ultra；只有在实测双 PPO 能提高总吞吐时才建议把它显式改为 `2`。
+Grasp；只有在实测双 PPO 能提高总吞吐时才建议把它显式改为 `2`。
 
 启动和每个对象完成时都会打印资源计划与动态 ETA：
 
@@ -180,11 +183,11 @@ Ultra；只有在实测双 PPO 能提高总吞吐时才建议把它显式改为 
 
 启动时 ETA 使用当前签名下已完成对象的实际 `runtime_sec` 均值，并除以真正允许并发的 GPU
 PPO 阶段数，所以预热前会偏保守。所有 worker 至少完成一个对象后，ETA 会切换为本轮墙钟
-吞吐率，从而把 Ultra/PPO 重叠带来的单卡加速计入估计。前几个对象差异较大时仍只是粗估，
+吞吐率，从而把 Grasp/PPO 重叠带来的单卡加速计入估计。前几个对象差异较大时仍只是粗估，
 样本增加后会自动收敛。相同信息写入
 `summary.json.progress` 和 `summary.json.resource_plan`。
 
-两个 `--train-*-success` 参数用于压力测试：即使 Ultra 或 Lattice 已经成功，只要模板可用，
+两个 `--train-*-success` 参数用于压力测试：即使 Grasp 或 Lattice 已经成功，只要模板可用，
 仍然运行 PPO。正常的分层生产流程应移除这两个参数，让已经解决的对象提前退出。
 
 任务被中断时，使用完全相同的语义参数重新运行。GPU 数量和 worker 数只影响调度，不会让
@@ -194,12 +197,11 @@ PPO 阶段数，所以预热前会偏保守。所有 worker 至少完成一个�
 
 | 状态 | 含义 |
 | --- | --- |
-| `ULTRA_SUCCESS` | Ultra episode 已成功；压力测试中仍可能包含 PPO 指标 |
 | `LATTICE_SUCCESS` | 某个可达 Wrist Lattice 模板已成功 |
 | `RL_SUCCESS` | MJWarp PPO 产生成功轨迹，需要 C MuJoCo 复验 |
 | `RL_PROMISING` | 有抬升或成功信号，但预算内未达到成功标准 |
-| `DIRECT_FAILED` | Ultra、Lattice 和当前 PPO 预算均无有效进展 |
-| `NO_ULTRA_PRIOR` | 无法生成完整 Ultra episode |
+| `DIRECT_FAILED` | Grasp、Lattice 和当前 PPO 预算均无有效进展 |
+| `NO_GRASP_GENERATED` | 无法生成完整 Grasp episode |
 | `NO_REACHABLE_TEMPLATE` | 腕部候选无法通过 IK/轨迹执行 |
 | `PIPELINE_ERROR` | 程序、依赖、CUDA 或数据错误 |
 

@@ -13,8 +13,8 @@ from source.envs.manipulation import make_lift_env
 from source.rl.grasp_edit.templates import GraspEditTemplate
 from source.grasp_pipeline.reference import STAGE_CODES, ReferenceTrajectory, load_reference
 from source.grasp_pipeline.trajectory import GraspTrajectory
-from source.ultradexgrasp.contracts import DemonstrationEpisode
-from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
+from source.grasping.contracts import DemonstrationEpisode
+from source.grasping.hand_surrogate import OPEN_FRACTIONS
 
 
 @dataclass(frozen=True)
@@ -177,7 +177,7 @@ class MjWarpGraspEditEnv:
             candidate_fractions.append(
                 np.asarray(episode.candidate.actuator_fractions, dtype=np.float32)
             )
-            # Reconstruct the actually executed Ultra grip/preload target from
+            # Reconstruct the actually executed generated grip/preload target from
             # the authoritative low-level reference.  A zero RL hand edit must
             # reproduce the demonstrated closure instead of dropping preload.
             final_hand_ctrl = references[index].controls[-1, references[index].hand_slice]

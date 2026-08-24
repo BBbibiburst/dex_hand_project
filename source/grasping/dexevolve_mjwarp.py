@@ -11,8 +11,8 @@ import torch
 import warp as wp
 
 from source.envs.manipulation import make_lift_env
-from source.ultradexgrasp.contracts import DemonstrationEpisode
-from source.ultradexgrasp.executor import STAGE_CODES, _contact_digit
+from source.grasping.contracts import DemonstrationEpisode
+from source.grasping.executor import STAGE_CODES, _contact_digit
 
 
 @dataclass(frozen=True)

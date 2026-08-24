@@ -8,23 +8,24 @@ import mujoco
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-from source.ultradexgrasp.catalog import ObjectGeometry
-from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
-from source.ultradexgrasp.dexevolve_contacts import depenetrate_pose, resample_contact_command
-from source.ultradexgrasp.executor import (
+from source.grasping.catalog import ObjectGeometry
+from source.grasping.budget import FORMAL_GENERATION_BUDGET
+from source.grasping.contracts import DemonstrationEpisode, GraspCandidate
+from source.grasping.dexevolve_contacts import depenetrate_pose, resample_contact_command
+from source.grasping.executor import (
     STAGE_CODES,
     ExecutionConfig,
     _robot_object_contact_summary,
     execute_grasp,
 )
-from source.ultradexgrasp.hand_surrogate import DexHandSurrogate
+from source.grasping.hand_surrogate import DexHandSurrogate
 
 
 @dataclass(frozen=True)
 class DexEvolveConfig:
-    population_size: int = 32
-    offspring: int = 16
-    generations: int = 32
+    population_size: int = FORMAL_GENERATION_BUDGET.population
+    offspring: int = FORMAL_GENERATION_BUDGET.offspring
+    generations: int = FORMAL_GENERATION_BUDGET.generations
     tournament_size: int = 4
     mutation_probability: float = 0.75
     translation_sigma: float = 0.025

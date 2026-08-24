@@ -1,4 +1,4 @@
-"""Serializable contracts for the new UltraDexGrasp pipeline."""
+"""Serializable contracts for the GraspQP + DexEvolve pipeline."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import numpy as np
 
 GRASP_SCHEMA_VERSION = 1
 EPISODE_SCHEMA_VERSION = 1
-PIPELINE_NAME = "ultradexgrasp-rm75b-dex-hand-v1"
+PIPELINE_NAME = "graspqp-dexevolve-rm75b-dex-hand-v1"
 
 
 def _array(value: Any, shape: tuple[int, ...], name: str) -> np.ndarray:
@@ -91,7 +91,7 @@ class GraspCandidate:
     @classmethod
     def from_dict(cls, payload: Mapping[str, Any]) -> GraspCandidate:
         if payload.get("schema_version") != GRASP_SCHEMA_VERSION:
-            raise ValueError("Unsupported UltraDexGrasp candidate schema.")
+            raise ValueError("Unsupported grasp candidate schema.")
         return cls(
             object_id=str(payload["object_id"]),
             seed_index=int(payload["seed_index"]),
@@ -172,7 +172,7 @@ class DemonstrationEpisode:
         manifest_path = path / "manifest.json" if path.is_dir() else path
         payload = json.loads(manifest_path.read_text(encoding="utf-8"))
         if payload.get("schema_version") != EPISODE_SCHEMA_VERSION:
-            raise ValueError("Unsupported UltraDexGrasp episode schema.")
+            raise ValueError("Unsupported grasp episode schema.")
         array_path = manifest_path.parent / str(payload["arrays"])
         with np.load(array_path, allow_pickle=False) as archive:
             arrays = {name: np.asarray(archive[name]) for name in archive.files}

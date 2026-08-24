@@ -1,4 +1,4 @@
-"""Replay verified Ultra/Lattice/PPO trajectories into a LeRobot dataset."""
+"""Replay verified grasp/Lattice/PPO trajectories into a LeRobot dataset."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="append",
         type=Path,
         dest="trajectories",
-        help="Verified Ultra/Lattice/PPO trajectory directory or manifest; repeat as needed.",
+        help="Verified grasp/Lattice/PPO trajectory directory or manifest; repeat as needed.",
     )
     parser.add_argument(
         "--input-root",
@@ -31,8 +31,8 @@ def build_parser() -> argparse.ArgumentParser:
         dest="input_roots",
         help="Recursively discover best_trajectory/best_attempt manifests under this directory.",
     )
-    parser.add_argument("--repo-id", default="local/dex-hand-ultra-demonstrations")
-    parser.add_argument("--output", type=Path, default=Path("datasets/ultra_lerobot"))
+    parser.add_argument("--repo-id", default="local/dex-hand-grasp-demonstrations")
+    parser.add_argument("--output", type=Path, default=Path("datasets/grasp_lerobot"))
     parser.add_argument("--fps", type=int, default=20)
     parser.add_argument("--camera", default="agentview")
     parser.add_argument("--image-width", type=int, default=640)

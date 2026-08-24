@@ -1,4 +1,4 @@
-from source.ultradexgrasp.dexevolve_mjwarp import MjWarpLifetimeConfig
+from source.grasping.dexevolve_mjwarp import MjWarpLifetimeConfig
 
 
 def test_mjwarp_lifetime_defaults_apply_five_window_pull_scale() -> None:

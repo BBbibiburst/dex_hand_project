@@ -1,4 +1,4 @@
-"""Compile a local wrist-pose lattice around UltraDexGrasp priors.
+"""Compile a local wrist-pose lattice around GraspQP + DexEvolve grasps.
 
 The lattice is built in object coordinates.  Candidate wrist pose edits are
 prechecked with the real RM75B CPU MuJoCo IK before a full approach/close/hold/
@@ -17,8 +17,8 @@ import numpy as np
 
 from source.envs.manipulation import make_lift_env
 from source.grasp_pipeline.reference import STAGE_CODES
-from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
-from source.ultradexgrasp.executor import (
+from source.grasping.contracts import DemonstrationEpisode, GraspCandidate
+from source.grasping.executor import (
     ExecutionConfig,
     execute_grasp,
     rank_candidates_for_scene,
@@ -69,12 +69,11 @@ def _full_episode(path: Path, object_id: str) -> DemonstrationEpisode | None:
     return episode
 
 
-def discover_ultra_attempts(
+def discover_grasp_attempts(
     object_id: str,
     *,
     roots: tuple[Path, ...] = (
-        Path("outputs/ultradexgrasp"),
-        Path("outputs/ultradexgrasp_catalog"),
+        Path("outputs/grasp_generation"),
     ),
     maximum: int = 3,
 ) -> list[tuple[Path, DemonstrationEpisode]]:
@@ -84,16 +83,11 @@ def discover_ultra_attempts(
     rows: list[tuple[Path, DemonstrationEpisode]] = []
     seen: set[Path] = set()
     for root in roots:
-        # The single-object and integrated benchmark layouts use ``root/slug``.
-        # ``tools.ultradexgrasp.batch_generate`` adds an ``objects`` level so it
-        # can keep its batch state next to the generated episodes.  Accept both
-        # layouts so a 127-object Ultra screening pass can feed the historical
-        # Ultra -> Wrist Lattice -> MJWarp PPO pipeline without regeneration.
-        object_dirs = (root / slug, root / "objects" / slug)
+        object_dirs = (root / slug,)
         for object_dir in object_dirs:
             if not object_dir.is_dir():
                 continue
-            for pattern in ("seed_*/manifest.json", "seed_*/attempts/*/manifest.json"):
+            for pattern in ("manifest.json", "seed_*/manifest.json"):
                 for manifest in sorted(object_dir.glob(pattern)):
                     manifest = manifest.resolve()
                     if manifest in seen:
@@ -304,10 +298,7 @@ def build_grasp_edit_templates(
     object_id: str,
     *,
     output_root: Path = Path("outputs/grasp_edit_lattice"),
-    ultra_roots: tuple[Path, ...] = (
-        Path("outputs/ultradexgrasp"),
-        Path("outputs/ultradexgrasp_catalog"),
-    ),
+    grasp_roots: tuple[Path, ...] = (Path("outputs/grasp_generation"),),
     base_candidates: int = 3,
     translation_step: float = 0.01,
     rotation_step_degrees: float = 15.0,
@@ -320,14 +311,14 @@ def build_grasp_edit_templates(
 ) -> tuple[GraspEditTemplate, ...]:
     if maximum_templates <= 0 or maximum_executions <= 0:
         raise ValueError("lattice template/execution limits must be positive.")
-    sources = discover_ultra_attempts(
+    sources = discover_grasp_attempts(
         object_id,
-        roots=ultra_roots,
+        roots=grasp_roots,
         maximum=base_candidates,
     )
     if not sources:
         raise FileNotFoundError(
-            f"No full UltraDexGrasp attempts found for {object_id}."
+            f"No full GraspQP + DexEvolve attempts found for {object_id}."
         )
 
     object_output = output_root / _slug(object_id)

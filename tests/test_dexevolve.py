@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import numpy as np
 
-from source.ultradexgrasp.contracts import GraspCandidate
-from source.ultradexgrasp.dexevolve import (
+from source.grasping.contracts import GraspCandidate
+from source.grasping.budget import FORMAL_GENERATION_BUDGET
+from source.grasping.dexevolve import (
     DexEvolveConfig,
     candidate_embedding,
     crossover_candidates,
     mutate_candidate,
 )
-from source.ultradexgrasp.graspqp_adapter import GraspQPConfig, graspqp_available
+from source.grasping.graspqp_adapter import GraspQPConfig, graspqp_available
 
 
 def _candidate(seed: int = 1) -> GraspCandidate:
@@ -65,3 +66,13 @@ def test_official_graspqp_runtime_and_adapter_config_are_available() -> None:
 def test_dexevolve_requires_sustained_opposed_contact() -> None:
     config = DexEvolveConfig()
     assert 0.0 < config.minimum_opposed_contact_fraction <= 1.0
+
+
+def test_formal_generation_budget_is_shared_by_dexevolve_defaults() -> None:
+    budget = FORMAL_GENERATION_BUDGET
+    config = DexEvolveConfig()
+    assert budget.dexevolve_evaluations == 216
+    assert config.population_size == budget.population == 24
+    assert config.offspring == budget.offspring == 12
+    assert config.generations == budget.generations == 16
+    assert budget.archive_candidates == 6

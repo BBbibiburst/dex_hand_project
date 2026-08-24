@@ -1,12 +1,12 @@
 """Run a resumable parallel preflight + adaptive-budget grasp-edit diagnostic.
 
 This benchmark is intentionally a screening pass, not final policy training.
-For each object it first ensures an Ultra Prior exists, builds a CPU DIRECT
+For each object it first ensures an Grasp Prior exists, builds a CPU DIRECT
 wrist-lattice preflight, and conditionally starts MJWarp PPO. By default an
-Ultra- or lattice-successful object exits early; explicit stress-test options
+Grasp- or lattice-successful object exits early; explicit stress-test options
 can still run hybrid grasp-edit PPO with an adaptive 5 -> 10 -> 15 budget.
 Object workers are assigned to fixed GPU slots; same-GPU workers pipeline CPU
-lattice work around a bounded Ultra/PPO phase. Progress reports include a
+lattice work around a bounded Grasp/PPO phase. Progress reports include a
 resource-derived plan and a wall-clock ETA after the worker pipeline warms up.
 """
 
@@ -33,13 +33,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from source.grasping.budget import FORMAL_GENERATION_BUDGET
+
 STATUSES = (
-    "ULTRA_SUCCESS",
     "LATTICE_SUCCESS",
     "RL_SUCCESS",
     "RL_PROMISING",
     "DIRECT_FAILED",
-    "NO_ULTRA_PRIOR",
+    "NO_GRASP_GENERATED",
     "NO_REACHABLE_TEMPLATE",
     "PIPELINE_ERROR",
 )
@@ -50,11 +51,11 @@ CSV_FIELDS = (
     "gpu",
     "status",
     "needs_motion_primitive",
-    "ultra_attempts",
-    "ultra_success",
-    "ultra_seed_index",
-    "ultra_best_lift_mm",
-    "ultra_best_final_lift_mm",
+    "grasp_attempts",
+    "grasp_success",
+    "grasp_seed_index",
+    "grasp_best_lift_mm",
+    "grasp_best_final_lift_mm",
     "lattice_candidates",
     "lattice_reachable",
     "lattice_templates",
@@ -116,7 +117,7 @@ class ObjectWorkItem:
     object_id: str
     args: argparse.Namespace
     root: Path
-    ultra_roots: tuple[Path, ...]
+    grasp_roots: tuple[Path, ...]
     object_dir: Path
     log_dir: Path
     rl_root: Path
@@ -289,7 +290,7 @@ def _resource_plan(
         else:
             # The 64-env MJWarp PPO phase saturates the observed 3090 compute
             # while using little memory. Keep PPO exclusive by default, but let
-            # lightweight Ultra work occupy the second general GPU slot.
+            # lightweight Grasp work occupy the second general GPU slot.
             ppo_jobs = 1
         ppo_jobs = max(1, min(ppo_jobs, gpu_jobs, workers))
 
@@ -428,10 +429,10 @@ def _repo_root() -> Path:
 
 
 def _prepare_shared_surrogate() -> None:
-    """Populate the shared hand-surrogate cache before parallel Ultra workers."""
+    """Populate the shared hand-surrogate cache before parallel Grasp workers."""
 
-    from source.ultradexgrasp.config import DEFAULT_CONFIG_PATH, load_pipeline_config
-    from source.ultradexgrasp.hand_surrogate import load_or_calibrate_surrogate
+    from source.grasping.config import DEFAULT_CONFIG_PATH, load_pipeline_config
+    from source.grasping.hand_surrogate import load_or_calibrate_surrogate
 
     pipeline = load_pipeline_config(DEFAULT_CONFIG_PATH)
     load_or_calibrate_surrogate(
@@ -447,16 +448,17 @@ def _sha256(path: Path) -> str:
 def _source_hashes(root: Path) -> dict[str, str]:
     files = (
         "assets/grippers/dex_hand/dex_hand.xml",
-        "configs/ultradexgrasp/default.json",
+        "configs/grasping/default.json",
         "apps/train_grasp_edit_rl.py",
         "source/rl/common/ppo.py",
         "source/rl/grasp_edit/env.py",
         "source/rl/grasp_edit/ppo.py",
         "source/rl/grasp_edit/templates.py",
-        "source/ultradexgrasp/executor.py",
-        "source/ultradexgrasp/hand_surrogate.py",
-        "source/ultradexgrasp/synthesizer.py",
-        "tools/ultradexgrasp/generate.py",
+        "source/grasping/executor.py",
+        "source/grasping/hand_surrogate.py",
+        "source/grasping/graspqp_adapter.py",
+        "source/grasping/dexevolve.py",
+        "tools/grasp_generation/graspqp_evolve.py",
     )
     return {name: _sha256(root / name) for name in files}
 
@@ -489,14 +491,14 @@ def _episode_lifts(episode: Any) -> tuple[float, float]:
     return lift, lift
 
 
-def _discover_ultra(object_id: str, roots: tuple[Path, ...]):
-    from source.rl.grasp_edit.templates import discover_ultra_attempts
+def _discover_grasp(object_id: str, roots: tuple[Path, ...]):
+    from source.rl.grasp_edit.templates import discover_grasp_attempts
 
-    return discover_ultra_attempts(object_id, roots=roots, maximum=256)
+    return discover_grasp_attempts(object_id, roots=roots, maximum=256)
 
 
-def _ultra_summary(object_id: str, roots: tuple[Path, ...]) -> dict[str, Any]:
-    attempts = _discover_ultra(object_id, roots)
+def _grasp_summary(object_id: str, roots: tuple[Path, ...]) -> dict[str, Any]:
+    attempts = _discover_grasp(object_id, roots)
     best = None
     best_key = (-1, float("-inf"), float("-inf"))
     for manifest, episode in attempts:
@@ -558,7 +560,7 @@ def _run_child(
     return ChildResult(returncode, time.perf_counter() - started, "".join(lines))
 
 
-def _ensure_ultra(
+def _ensure_grasp(
     args: argparse.Namespace,
     object_id: str,
     roots: tuple[Path, ...],
@@ -566,40 +568,38 @@ def _ensure_ultra(
     root: Path,
     log_path: Path,
 ) -> tuple[dict[str, Any], float, str]:
-    summary = _ultra_summary(object_id, roots)
+    summary = _grasp_summary(object_id, roots)
     if summary["attempts"]:
         return summary, 0.0, ""
 
     elapsed = 0.0
     combined = ""
     primary = roots[0]
-    for offset in range(args.ultra_generate_seeds):
+    for offset in range(args.generation_attempts):
         rng_seed = args.seed + offset
         output = primary / _slug(object_id) / f"seed_{rng_seed:04d}"
         command = [
             sys.executable,
             "-m",
-            "tools.ultradexgrasp.generate",
+            "tools.grasp_generation.graspqp_evolve",
             "--object-id",
             object_id,
             "--seed",
             str(rng_seed),
-            "--seed-count",
-            str(args.ultra_seed_count),
+            "--graspqp-seeds",
+            str(args.graspqp_seeds),
             "--device",
             args.device,
-            "--max-execution-candidates",
-            str(args.ultra_max_execution_candidates),
+            "--graspqp-executions",
+            str(args.graspqp_executions),
             "--output",
             str(output),
         ]
-        if output.exists():
-            command.append("--overwrite")
         with _gpu_phase():
             child = _run_child(command, cwd=root, log_path=log_path, verbose=args.verbose_child)
         elapsed += child.duration_sec
         combined += child.text
-        summary = _ultra_summary(object_id, roots)
+        summary = _grasp_summary(object_id, roots)
         if summary["attempts"]:
             return summary, elapsed, combined
     return summary, elapsed, combined
@@ -632,7 +632,7 @@ def _preflight_lattice(
     *,
     args: argparse.Namespace,
     object_id: str,
-    ultra_roots: tuple[Path, ...],
+    grasp_roots: tuple[Path, ...],
     log_path: Path,
 ) -> LatticePreflight:
     """Compile/reuse DIRECT lattice on CPU before starting any MJWarp PPO."""
@@ -647,7 +647,7 @@ def _preflight_lattice(
             templates = build_grasp_edit_templates(
                 object_id,
                 output_root=args.lattice_root,
-                ultra_roots=ultra_roots,
+                grasp_roots=grasp_roots,
                 base_candidates=args.base_candidates,
                 maximum_templates=args.lattice_max_templates,
                 maximum_executions=args.lattice_max_executions,
@@ -784,7 +784,7 @@ def _adaptive_train(
     *,
     args: argparse.Namespace,
     object_id: str,
-    ultra_roots: tuple[Path, ...],
+    grasp_roots: tuple[Path, ...],
     root: Path,
     log_path: Path,
     rl_root: Path,
@@ -819,7 +819,7 @@ def _adaptive_train(
             str(rl_root),
             "--template-root",
             str(args.lattice_root),
-            "--no-auto-ultra",
+            "--no-auto-grasp",
             "--num-envs",
             str(args.num_envs),
             "--updates",
@@ -842,8 +842,8 @@ def _adaptive_train(
         checkpoint = train_output / "checkpoint_final.pt"
         if completed_target and checkpoint.is_file():
             command.extend(["--resume", str(checkpoint)])
-        for ultra_root in ultra_roots:
-            command.extend(["--ultra-root", str(ultra_root)])
+        for grasp_root in grasp_roots:
+            command.extend(["--grasp-root", str(grasp_root)])
 
         with log_path.open("a", encoding="utf-8") as log:
             log.write(
@@ -899,7 +899,6 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 def _classify_training(
     *,
-    ultra: dict[str, Any],
     preflight: LatticePreflight,
     child: ChildResult,
     train_output: Path,
@@ -928,10 +927,7 @@ def _classify_training(
     completed = int(args.num_envs * history["updates"])
     best_exists = (train_output / "best_trajectory" / "manifest.json").is_file()
 
-    if ultra["success"]:
-        status = "ULTRA_SUCCESS"
-        failure = ""
-    elif successful_templates:
+    if successful_templates:
         status = "LATTICE_SUCCESS"
         failure = ""
     elif best_exists:
@@ -960,7 +956,7 @@ def _classify_training(
     return {
         "status": status,
         "needs_motion_primitive": status
-        in {"DIRECT_FAILED", "NO_ULTRA_PRIOR", "NO_REACHABLE_TEMPLATE"},
+        in {"DIRECT_FAILED", "NO_GRASP_GENERATED", "NO_REACHABLE_TEMPLATE"},
         "lattice_candidates": lattice["candidates"] or preflight.candidates,
         "lattice_reachable": lattice["reachable"] or preflight.reachable,
         "lattice_templates": lattice["templates"] or preflight.templates or len(templates),
@@ -986,11 +982,11 @@ def _empty_row(object_id: str) -> dict[str, Any]:
         "gpu": "",
         "status": "PIPELINE_ERROR",
         "needs_motion_primitive": False,
-        "ultra_attempts": 0,
-        "ultra_success": False,
-        "ultra_seed_index": "",
-        "ultra_best_lift_mm": 0.0,
-        "ultra_best_final_lift_mm": 0.0,
+        "grasp_attempts": 0,
+        "grasp_success": False,
+        "grasp_seed_index": "",
+        "grasp_best_lift_mm": 0.0,
+        "grasp_best_final_lift_mm": 0.0,
         "lattice_candidates": 0,
         "lattice_reachable": 0,
         "lattice_templates": 0,
@@ -1089,8 +1085,8 @@ def _write_summary(
                 "initial_updates": args.initial_updates,
                 "mid_updates": args.mid_updates,
                 "max_updates": args.max_updates,
-                "ultra_seed_count": args.ultra_seed_count,
-                "ultra_generate_seeds": args.ultra_generate_seeds,
+                "graspqp_seeds": args.graspqp_seeds,
+                "generation_attempts": args.generation_attempts,
                 "base_candidates": args.base_candidates,
                 "lattice_max_templates": args.lattice_max_templates,
                 "lattice_max_executions": args.lattice_max_executions,
@@ -1100,7 +1096,6 @@ def _write_summary(
                 "early_fail_lift_mm": args.early_fail_lift_mm,
                 "continue_lift_mm": args.continue_lift_mm,
                 "progress_gain_mm": args.progress_gain_mm,
-                "train_ultra_success": args.train_ultra_success,
                 "train_lattice_success": args.train_lattice_success,
             },
             "results": rows,
@@ -1118,14 +1113,14 @@ def _format_progress(
     cached: bool = False,
 ) -> str:
     status = str(row["status"])
-    ultra = "Y" if row.get("ultra_success") else "N"
+    grasp = "Y" if row.get("grasp_success") else "N"
     templates = int(row.get("lattice_templates") or 0)
     success = 100.0 * float(row.get("rl_best_success_rate") or 0.0)
     updates = int(row.get("rl_updates") or 0)
     lift = float(
         row.get("rl_best_lift_mm")
         or row.get("lattice_best_lift_mm")
-        or row.get("ultra_best_lift_mm")
+        or row.get("grasp_best_lift_mm")
         or 0.0
     )
     runtime = float(row.get("runtime_sec") or 0.0)
@@ -1136,7 +1131,7 @@ def _format_progress(
     cache_label = " [cached]" if cached else ""
     return (
         f"[{index:03d}/{total:03d}] {row['object_id']:<34} "
-        f"{status:<21} ultra={ultra} tpl={templates:02d} "
+        f"{status:<21} grasp={grasp} tpl={templates:02d} "
         f"u={updates:02d} rl={success:5.1f}% lift={lift:5.1f}mm "
         f"gpu={gpu} object={_format_duration(runtime)}{timing}{cache_label}"
     )
@@ -1160,34 +1155,31 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
     row["log_path"] = str(log_path)
     deferred_error: Exception | None = None
     try:
-        ultra, _, _ = _ensure_ultra(
+        grasp, _, _ = _ensure_grasp(
             args,
             object_id,
-            item.ultra_roots,
+            item.grasp_roots,
             root=item.root,
             log_path=log_path,
         )
         row.update(
             {
-                "ultra_attempts": ultra["attempts"],
-                "ultra_success": ultra["success"],
-                "ultra_seed_index": ultra["seed_index"],
-                "ultra_best_lift_mm": round(float(ultra["best_lift_mm"]), 3),
-                "ultra_best_final_lift_mm": round(float(ultra["best_final_lift_mm"]), 3),
+                "grasp_attempts": grasp["attempts"],
+                "grasp_success": grasp["success"],
+                "grasp_seed_index": grasp["seed_index"],
+                "grasp_best_lift_mm": round(float(grasp["best_lift_mm"]), 3),
+                "grasp_best_final_lift_mm": round(float(grasp["best_final_lift_mm"]), 3),
             }
         )
-        if not ultra["attempts"]:
-            row["status"] = "NO_ULTRA_PRIOR"
+        if not grasp["attempts"]:
+            row["status"] = "NO_GRASP_GENERATED"
             row["needs_motion_primitive"] = True
-            row["failure_category"] = "ultra_no_full_attempt"
-        elif ultra["success"] and not args.train_ultra_success:
-            row["status"] = "ULTRA_SUCCESS"
-            row["needs_motion_primitive"] = False
+            row["failure_category"] = "grasp_no_full_attempt"
         else:
             preflight = _preflight_lattice(
                 args=args,
                 object_id=object_id,
-                ultra_roots=item.ultra_roots,
+                grasp_roots=item.grasp_roots,
                 log_path=log_path,
             )
             row.update(
@@ -1213,14 +1205,13 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
                 child = _adaptive_train(
                     args=args,
                     object_id=object_id,
-                    ultra_roots=item.ultra_roots,
+                    grasp_roots=item.grasp_roots,
                     root=item.root,
                     log_path=log_path,
                     rl_root=item.rl_root,
                 )
                 row.update(
                     _classify_training(
-                        ultra=ultra,
                         preflight=preflight,
                         child=child,
                         train_output=train_output,
@@ -1249,6 +1240,7 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    budget = FORMAL_GENERATION_BUDGET
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--dataset",
@@ -1269,11 +1261,10 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("outputs/grasp_edit_lattice"),
         help="Directory for compiled Wrist Lattice trajectories.",
     )
-    parser.add_argument("--ultra-root", type=Path, action="append", dest="ultra_roots")
-    parser.add_argument("--ultra-seed-count", type=int, default=100)
-    parser.add_argument("--ultra-generate-seeds", type=int, default=3)
-    parser.add_argument("--ultra-max-execution-candidates", type=int, default=8)
-    parser.add_argument("--train-ultra-success", action="store_true")
+    parser.add_argument("--grasp-root", type=Path, action="append", dest="grasp_roots")
+    parser.add_argument("--graspqp-seeds", type=int, default=budget.graspqp_seeds)
+    parser.add_argument("--generation-attempts", type=int, default=3)
+    parser.add_argument("--graspqp-executions", type=int, default=budget.graspqp_executions)
     parser.add_argument(
         "--train-lattice-success",
         action="store_true",
@@ -1297,7 +1288,7 @@ def build_parser() -> argparse.ArgumentParser:
         default="auto",
         help=(
             "Pipeline workers per GPU. 'auto' infers memory/CPU headroom and caps at two "
-            "workers so CPU lattice and Ultra work can overlap PPO."
+            "workers so CPU lattice and Grasp work can overlap PPO."
         ),
     )
     parser.add_argument(
@@ -1313,7 +1304,7 @@ def build_parser() -> argparse.ArgumentParser:
         default="auto",
         help=(
             "Maximum simultaneous PPO subprocesses per card. 'auto' keeps the observed "
-            "compute-saturating PPO phase exclusive while general GPU slots overlap Ultra."
+            "compute-saturating PPO phase exclusive while general GPU slots overlap Grasp."
         ),
     )
     parser.add_argument("--seed", type=int, default=0)
@@ -1357,8 +1348,8 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("--num-envs must be positive.")
     if not (0 < args.initial_updates <= args.mid_updates <= args.max_updates):
         raise ValueError("Require 0 < --initial-updates <= --mid-updates <= --max-updates.")
-    if args.ultra_seed_count <= 0 or args.ultra_generate_seeds <= 0:
-        raise ValueError("Ultra seed counts must be positive.")
+    if args.graspqp_seeds <= 0 or args.generation_attempts <= 0:
+        raise ValueError("Grasp seed counts must be positive.")
     if args.promising_lift_mm < 0.0 or not 0.0 <= args.promising_success_rate <= 1.0:
         raise ValueError("Invalid promising thresholds.")
     if min(args.early_fail_lift_mm, args.continue_lift_mm, args.progress_gain_mm) < 0.0:
@@ -1400,7 +1391,7 @@ def main(argv: list[str] | None = None) -> int:
 
     source_hashes = _source_hashes(root)
     signature_payload = {
-        "pipeline": "ultra_lattice_mjwarp_ppo",
+        "pipeline": "graspqp_dexevolve_lattice_mjwarp_ppo",
         "dataset": args.dataset,
         "lattice_root": str(args.lattice_root.resolve()),
         "num_envs": args.num_envs,
@@ -1409,10 +1400,9 @@ def main(argv: list[str] | None = None) -> int:
         "max_updates": args.max_updates,
         "device": args.device,
         "seed": args.seed,
-        "ultra_seed_count": args.ultra_seed_count,
-        "ultra_generate_seeds": args.ultra_generate_seeds,
-        "ultra_max_execution_candidates": args.ultra_max_execution_candidates,
-        "train_ultra_success": args.train_ultra_success,
+        "graspqp_seeds": args.graspqp_seeds,
+        "generation_attempts": args.generation_attempts,
+        "graspqp_executions": args.graspqp_executions,
         "train_lattice_success": args.train_lattice_success,
         "base_candidates": args.base_candidates,
         "lattice_max_templates": args.lattice_max_templates,
@@ -1428,10 +1418,10 @@ def main(argv: list[str] | None = None) -> int:
         json.dumps(signature_payload, sort_keys=True).encode("utf-8")
     ).hexdigest()
 
-    ultra_roots = (
-        tuple(args.ultra_roots)
-        if args.ultra_roots
-        else (Path("outputs/ultradexgrasp"), Path("outputs/ultradexgrasp_catalog"))
+    grasp_roots = (
+        tuple(args.grasp_roots)
+        if args.grasp_roots
+        else (Path("outputs/grasp_generation"),)
     )
     output = args.output
     object_dir = output / "objects"
@@ -1443,7 +1433,7 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"[benchmark] objects={len(catalog)} envs={args.num_envs} "
         f"budget={args.initial_updates}->{args.mid_updates}->{args.max_updates} "
-        f"preflight=lattice-first ultra_seeds={args.ultra_seed_count} "
+        f"preflight=lattice-first graspqp_seeds={args.graspqp_seeds} "
         f"resume={not args.force} slots={list(slots)} "
         f"gpu_job_limits={resource_plan['gpu_job_limits']} "
         f"ppo_job_limits={resource_plan['ppo_job_limits']} output={output}",
@@ -1465,8 +1455,6 @@ def main(argv: list[str] | None = None) -> int:
             f"memory={memory} utilization={utilization_label}",
             flush=True,
         )
-    if not args.train_ultra_success:
-        print("[benchmark] Ultra-success objects skip RL by default.", flush=True)
     if not args.train_lattice_success:
         print("[benchmark] CPU lattice success skips PPO entirely (0 RL updates).", flush=True)
     if args.dry_run:
@@ -1578,7 +1566,7 @@ def main(argv: list[str] | None = None) -> int:
                             object_id=object_id,
                             args=args,
                             root=root,
-                            ultra_roots=ultra_roots,
+                            grasp_roots=grasp_roots,
                             object_dir=object_dir,
                             log_dir=log_dir,
                             rl_root=rl_root,

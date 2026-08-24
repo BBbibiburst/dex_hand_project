@@ -1,4 +1,4 @@
-"""Object loading for the project-native Ultra pipeline."""
+"""Object loading for GraspQP + DexEvolve generation."""
 
 from __future__ import annotations
 

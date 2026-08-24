@@ -1,9 +1,4 @@
-"""Load UltraDexGrasp episodes and expose low-level RL reference trajectories.
-
-This module intentionally does not import ``source.ultradexgrasp``.  That keeps
-RL data inspection independent from the Ultra package import side effects and
-also makes the migration compatible with older Ultra package initializers.
-"""
+"""Adapt generated or edited episodes into low-level RL reference trajectories."""
 
 from __future__ import annotations
 
@@ -14,21 +9,12 @@ from typing import Any
 
 import numpy as np
 
-STAGE_CODES = {
-    "settle": 0,
-    "transit": 1,
-    "pregrasp": 2,
-    "approach": 3,
-    "close": 4,
-    "hold": 5,
-    "lift": 6,
-    "verify": 7,
-}
+from source.grasping.executor import STAGE_CODES
 
 
 @dataclass(frozen=True)
 class EpisodeRecord:
-    """Minimal Ultra episode representation needed by residual RL."""
+    """Minimal generated grasp episode representation needed by residual RL."""
 
     object_id: str
     seed: int
@@ -53,10 +39,10 @@ class EpisodeRecord:
         }
         missing = sorted(required - arrays.keys())
         if missing:
-            raise ValueError(f"Ultra episode is missing arrays: {missing}")
+            raise ValueError(f"generated grasp episode is missing arrays: {missing}")
         lengths = {name: len(arrays[name]) for name in required}
         if len(set(lengths.values())) != 1 or next(iter(lengths.values())) <= 0:
-            raise ValueError(f"Ultra episode arrays have inconsistent lengths: {lengths}")
+            raise ValueError(f"generated grasp episode arrays have inconsistent lengths: {lengths}")
         return cls(
             object_id=str(payload["object_id"]),
             seed=int(payload.get("seed", 0)),
@@ -211,7 +197,7 @@ class ReferenceTrajectory:
 
 
 def resolve_reference_manifest(path: str | Path) -> Path:
-    """Resolve an Ultra output, attempt directory, or manifest to one full episode."""
+    """Resolve an generated grasp output, attempt directory, or manifest to one full episode."""
     path = Path(path)
     if path.is_file():
         return path
@@ -231,7 +217,7 @@ def resolve_reference_manifest(path: str | Path) -> Path:
         if required.issubset(stage_codes):
             return candidate
     raise FileNotFoundError(
-        f"No full UltraDexGrasp reference episode was found under {path}. "
+        f"No full generated grasp reference episode was found under {path}. "
         "The reference must reach lift and verify."
     )
 

@@ -107,6 +107,9 @@ def test_layering_regressions_stay_removed() -> None:
 
 
 def test_refactored_legacy_modules_do_not_regrow_implementations() -> None:
+    assert not tuple((SOURCE_ROOT / "ultradexgrasp").glob("*.py"))
+    assert not tuple((PROJECT_ROOT / "tools" / "ultradexgrasp").glob("*.py"))
+    assert not (PROJECT_ROOT / "tools" / "grasp_generation" / "evolve.py").exists()
     assert not (SOURCE_ROOT / "grasping" / "robot_lift_validator.py").exists()
     assert not (SOURCE_ROOT / "grasping" / "grasp_config_search.py").exists()
     assert not (SOURCE_ROOT / "grasping" / "search" / "compat.py").exists()
