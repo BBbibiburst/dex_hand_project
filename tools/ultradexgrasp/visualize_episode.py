@@ -17,6 +17,7 @@ import numpy as np
 from source.envs.manipulation import make_lift_env
 from source.ultradexgrasp.catalog import load_object_geometry
 from source.ultradexgrasp.contracts import DemonstrationEpisode
+from source.ultradexgrasp.executor import _contact_digit
 from source.viz.overlays import (
     clear_markers,
     draw_label,
@@ -43,6 +44,26 @@ CONTACT_COLORS = (
     (1.0, 0.75, 0.15, 1.0),
     (0.8, 0.25, 1.0, 1.0),
 )
+DIGIT_NAMES = ("little", "ring", "middle", "index", "thumb")
+
+
+def _actual_skin_contacts(env) -> list[tuple[int, np.ndarray]]:
+    """Return current object--DexHand skin contacts as (digit, world point)."""
+    binding = env.task._require_bindings().objects["object"]
+    object_geoms = set(int(value) for value in binding.geom_ids)
+    contacts: list[tuple[int, np.ndarray]] = []
+    for index in range(env.data.ncon):
+        contact = env.data.contact[index]
+        if int(contact.geom1) in object_geoms:
+            hand_geom = int(contact.geom2)
+        elif int(contact.geom2) in object_geoms:
+            hand_geom = int(contact.geom1)
+        else:
+            continue
+        digit = _contact_digit(env, hand_geom)
+        if digit >= 0:
+            contacts.append((digit, np.asarray(contact.pos, dtype=np.float64).copy()))
+    return contacts
 
 
 def _stage_names(episode: DemonstrationEpisode) -> dict[int, str]:
@@ -86,8 +107,8 @@ def save_report(episode: DemonstrationEpisode, output: Path) -> Path:
     lift_mm = 1000.0 * (object_z - baseline)
     candidate = episode.candidate
 
-    figure = plt.figure(figsize=(15, 10), constrained_layout=True)
-    grid = figure.add_gridspec(2, 2)
+    figure = plt.figure(figsize=(15, 13), constrained_layout=True)
+    grid = figure.add_gridspec(3, 2)
     ax_object = figure.add_subplot(grid[0, 0], projection="3d")
     vertices = geometry.vertices
     stride = max(1, len(vertices) // 3000)
@@ -109,7 +130,7 @@ def save_report(episode: DemonstrationEpisode, output: Path) -> Path:
         ax_object.scatter(*point_mm, s=70, color=color, depthshade=False)
         ax_object.quiver(*point_mm, *normal_mm, color=color, linewidth=2)
         ax_object.text(*point_mm, f" C{index}")
-    ax_object.set_title("Ultra target contacts in object frame")
+    ax_object.set_title(f"{candidate.backend} target contacts in object frame")
     ax_object.set_xlabel("x [mm]")
     ax_object.set_ylabel("y [mm]")
     ax_object.set_zlabel("z [mm]")
@@ -127,17 +148,42 @@ def save_report(episode: DemonstrationEpisode, output: Path) -> Path:
     ax_height.grid(alpha=0.25)
     ax_height.legend(ncol=3, fontsize=8)
 
-    ax_hand = figure.add_subplot(grid[1, 0])
+    ax_contacts = figure.add_subplot(grid[1, :])
+    recorded_contacts = np.asarray(
+        episode.arrays.get("robot_object_digit_contact_count", np.zeros((len(stages), 5)))
+    )
+    for digit, label in enumerate(DIGIT_NAMES):
+        ax_contacts.step(
+            np.arange(len(stages)),
+            recorded_contacts[:, digit] > 0,
+            where="post",
+            label=label,
+            color=CONTACT_COLORS[digit],
+            linewidth=2,
+        )
+    opposed = (recorded_contacts[:, 4] > 0) & (recorded_contacts[:, :4].max(axis=1) > 0)
+    ax_contacts.fill_between(
+        np.arange(len(stages)), 0, 1, where=opposed, color="#42b883", alpha=0.15,
+        label="thumb + opposing finger",
+    )
+    ax_contacts.set_ylim(-0.05, 1.15)
+    ax_contacts.set_yticks((0, 1), ("no contact", "skin contact"))
+    ax_contacts.set_xlabel("recorded frame")
+    ax_contacts.set_title("Actual MuJoCo object contacts (skin only)")
+    ax_contacts.grid(alpha=0.2)
+    ax_contacts.legend(ncol=6, fontsize=8)
+
+    ax_hand = figure.add_subplot(grid[2, 0])
     labels = ("index", "middle", "ring", "little", "thumb rotate", "thumb close")
     colors = [CONTACT_COLORS[index % len(CONTACT_COLORS)] for index in range(6)]
     ax_hand.barh(labels, candidate.actuator_fractions, color=colors)
     ax_hand.set_xlim(0.0, 1.0)
     ax_hand.set_xlabel("normalized actuator fraction")
-    ax_hand.set_title("Ultra closed-hand target")
+    ax_hand.set_title(f"{candidate.backend} closed-hand target")
     for index, value in enumerate(candidate.actuator_fractions):
         ax_hand.text(float(value) + 0.01, index, f"{float(value):.2f}", va="center")
 
-    ax_text = figure.add_subplot(grid[1, 1])
+    ax_text = figure.add_subplot(grid[2, 1])
     ax_text.axis("off")
     metrics = "\n".join(f"  {key}: {value:.5g}" for key, value in candidate.metrics.items())
     distances = ", ".join(f"{1000.0 * value:.2f}" for value in candidate.contact_distances)
@@ -160,7 +206,7 @@ def save_report(episode: DemonstrationEpisode, output: Path) -> Path:
         family="monospace",
         fontsize=10,
     )
-    figure.suptitle("UltraDexGrasp candidate and complete execution", fontsize=16)
+    figure.suptitle(f"{candidate.backend} candidate and complete execution", fontsize=16)
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output, dpi=180)
     plt.close(figure)
@@ -216,13 +262,24 @@ def play_episode(
                             width=0.002,
                             rgba=color,
                         )
+                    actual_contacts = _actual_skin_contacts(env)
+                    actual_digits = set()
+                    for digit, point in actual_contacts:
+                        actual_digits.add(digit)
+                        draw_sphere_marker(
+                            handle,
+                            point,
+                            radius=0.65 * marker_radius,
+                            rgba=(1.0, 1.0, 1.0, 1.0),
+                        )
                     stage = int(episode.arrays["stage"][frame])
                     stage_name = stage_names.get(stage, str(stage))
                     object_position = episode.arrays["object_position"][frame]
                     draw_label(
                         handle,
                         object_position + np.asarray([0.0, 0.0, 0.13]),
-                        f"{frame:04d}  {stage_name}",
+                        f"{frame:04d}  {stage_name}  actual skin: "
+                        + (", ".join(DIGIT_NAMES[digit] for digit in sorted(actual_digits)) or "none"),
                     )
                     if "grasp_ee_position" in episode.metadata:
                         draw_pose_frame(

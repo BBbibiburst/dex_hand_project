@@ -34,9 +34,12 @@ def test_legacy_demos_package_is_removed() -> None:
     assert not (SOURCE_ROOT / "demos").exists()
 
 
-def test_repository_does_not_vendor_dependency_trees() -> None:
+def test_repository_only_tracks_the_official_dexevolve_submodule() -> None:
     assert not (PROJECT_ROOT / "deps").exists()
-    assert not (PROJECT_ROOT / ".gitmodules").exists()
+    gitmodules = (PROJECT_ROOT / ".gitmodules").read_text(encoding="utf-8")
+    assert gitmodules.count("[submodule ") == 1
+    assert 'path = third_party/DexEvolve' in gitmodules
+    assert 'url = https://github.com/leggedrobotics/DexEvolve.git' in gitmodules
 
 
 def _source_package(module: str) -> str | None:

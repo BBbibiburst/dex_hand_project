@@ -33,6 +33,8 @@ learning = [
 ]
 ultradexgrasp = [
     "torch>=2.4,<2.5",
+    "graspqp @ git+https://github.com/leggedrobotics/graspqp.git#subdirectory=graspqp",
+    "proxsuite>=0.7",
 ]
 mjwarp = [
     "mujoco-warp>=3.11.0",
@@ -51,6 +53,8 @@ dex-object-catalog = "tools.render_object_catalog:main"
 dex-code-summary = "tools.code_summary:main"
 dex-ultradex-probe = "tools.ultradexgrasp.probe:main"
 dex-ultradex-generate = "tools.ultradexgrasp.generate:main"
+dex-graspqp-evolve = "tools.ultradexgrasp.graspqp_evolve:main"
+dex-dexevolve = "tools.ultradexgrasp.evolve:main"
 dex-tactile-preview = "tools.tactile.preview_layout:main"
 dex-tactile-probe = "tools.tactile.interactive_probe:main"
 dex-tactile-plot = "tools.tactile.plot_surfaces:main"

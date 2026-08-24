@@ -30,8 +30,8 @@ STAGE_CODES = {
 class ExecutionConfig:
     pregrasp_distance: float = 0.09
     lift_height: float = 0.065
-    finger_preload: float = 0.15
-    thumb_grasp_preload: float = 0.20
+    finger_preload: float = 0.35
+    thumb_grasp_preload: float = 0.40
     transit_clearance: float = 0.16
     settle_steps: int = 12
     transit_steps: int = 70
@@ -61,10 +61,10 @@ class ExecutionConfig:
     def validate(self) -> None:
         if self.pregrasp_distance <= 0.0 or self.lift_height <= 0.0:
             raise ValueError("pregrasp_distance and lift_height must be positive.")
-        if not 0.0 <= self.finger_preload <= 0.15:
-            raise ValueError("finger_preload must lie in [0, 0.15].")
-        if not 0.0 <= self.thumb_grasp_preload <= 0.20:
-            raise ValueError("thumb_grasp_preload must lie in [0, 0.20].")
+        if not 0.0 <= self.finger_preload <= 0.40:
+            raise ValueError("finger_preload must lie in [0, 0.40].")
+        if not 0.0 <= self.thumb_grasp_preload <= 0.40:
+            raise ValueError("thumb_grasp_preload must lie in [0, 0.40].")
         step_names = (
             "settle_steps",
             "transit_steps",
@@ -85,6 +85,38 @@ class ReachabilityResult:
     score: float
     maximum_position_error: float
     maximum_orientation_error: float
+
+
+def grasp_hand_targets(
+    candidate_fractions: np.ndarray,
+    config: ExecutionConfig,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return normalized approach and final closure targets.
+
+    Approach remains fully open.  Candidate fractions are a closed-state
+    geometry proposal and receive the configured physical preload only during
+    the stationary close stage.
+    """
+    fractions = np.asarray(candidate_fractions, dtype=np.float64)
+    if fractions.shape != (6,):
+        raise ValueError("candidate_fractions must have shape (6,).")
+    grip = np.clip(
+        fractions
+        + np.asarray(
+            [
+                config.finger_preload,
+                config.finger_preload,
+                config.finger_preload,
+                config.finger_preload,
+                0.0,
+                config.thumb_grasp_preload,
+            ],
+            dtype=np.float64,
+        ),
+        0.0,
+        1.0,
+    )
+    return OPEN_FRACTIONS.copy(), grip
 
 
 def quaternion_wxyz_to_matrix(quaternion: np.ndarray) -> np.ndarray:
@@ -318,6 +350,12 @@ def _contact_digit(env, geom_id: int) -> int:
     for digit in range(5):
         if f"skin_{digit}_" in text:
             return digit
+    # DexHand has collision on its complete mechanism, but links and actuator
+    # parts are not grasping surfaces.  Counting them as digit contacts lets a
+    # candidate pass while the visible skin (notably the thumb pad) is clear of
+    # the object.  Keep the aliases below for other supported hand models.
+    if "dexhand_" in text:
+        return -1
     aliases = {
         0: ("little", "pinky", "finger_0", "finger0"),
         1: ("ring", "finger_1", "finger1"),
@@ -441,23 +479,11 @@ def execute_grasp(
         arm = env.controller.arm_controller
         current_position = env.data.site_xpos[arm.site_id].astype(np.float64).copy()
         current_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
-        open_hand = actuator_targets_from_fractions(env, OPEN_FRACTIONS)
-        closed_hand = actuator_targets_from_fractions(env, candidate.actuator_fractions)
-        grip_fractions = np.clip(
-            candidate.actuator_fractions
-            + np.asarray(
-                [
-                    config.finger_preload,
-                    config.finger_preload,
-                    config.finger_preload,
-                    config.finger_preload,
-                    0.0,
-                    config.thumb_grasp_preload,
-                ]
-            ),
-            0.0,
-            1.0,
+        approach_fractions, grip_fractions = grasp_hand_targets(
+            candidate.actuator_fractions,
+            config,
         )
+        open_hand = actuator_targets_from_fractions(env, approach_fractions)
         grip_hand = actuator_targets_from_fractions(env, grip_fractions)
 
         observation, _, ended = _run_pose_segment(
@@ -543,7 +569,12 @@ def execute_grasp(
                     target_position=grasp_position,
                     target_quaternion=grasp_quaternion,
                     start_hand=open_hand,
-                    target_hand=closed_hand,
+                    # The synthesized fractions describe the final closed
+                    # geometry, not a safe coupled approach trajectory.
+                    # Closing while translating makes the long middle finger
+                    # reach the object early and push cylinders away before
+                    # the wrist reaches the intended enclosure center.
+                    target_hand=open_hand,
                     steps=config.approach_steps,
                 )
                 position_error, orientation_error = _target_error(
@@ -572,7 +603,7 @@ def execute_grasp(
                     stage="close",
                     target_position=grasp_position,
                     target_quaternion=grasp_quaternion,
-                    start_hand=closed_hand,
+                    start_hand=open_hand,
                     target_hand=grip_hand,
                     steps=config.close_steps,
                 )
@@ -639,6 +670,22 @@ def execute_grasp(
             metadata["object_lift"] = float(
                 arrays["object_position"][-1, 2] - arrays["object_position"][0, 2]
             )
+            initial_xy = arrays["object_position"][0, :2]
+            for stage_name in ("close", "hold"):
+                selected = arrays["stage"] == STAGE_CODES[stage_name]
+                if np.any(selected):
+                    displacement = arrays["object_position"][selected, :2] - initial_xy
+                    metadata[f"object_{stage_name}_maximum_lateral_displacement"] = float(
+                        np.linalg.norm(displacement, axis=1).max()
+                    )
+                    digit_counts = arrays["robot_object_digit_contact_count"][selected]
+                    digit_forces = arrays["robot_object_digit_normal_force"][selected]
+                    metadata[f"object_{stage_name}_digit_contact_fraction"] = (
+                        (digit_counts > 0).mean(axis=0).tolist()
+                    )
+                    metadata[f"object_{stage_name}_digit_normal_force_mean"] = (
+                        digit_forces.mean(axis=0).tolist()
+                    )
         metadata["action_layout"] = list(env.controller.ik_action_layout())
         return DemonstrationEpisode(
             object_id=candidate.object_id,

@@ -15,6 +15,7 @@ DEFAULT_LIFT_OBJECT = "ycb:002_master_chef_can"
 DEFAULT_PICK_PLACE_OBJECT = "ycb:025_mug"
 DEFAULT_PUSH_OBJECT = "ycb:006_mustard_bottle"
 DEFAULT_STACK_OBJECTS = ("ycb:070-a_colored_wood_blocks", "ycb:070-b_colored_wood_blocks")
+DEFAULT_MAX_HORIZONTAL_DIAMETER = 0.075
 
 PICK_PLACE_EXCLUDED = frozenset(
     {
@@ -130,3 +131,30 @@ def record_scale_to_meters(record: dict) -> float:
     if not np.isfinite(scale) or scale <= 0.0:
         raise ValueError(f"Invalid scale_to_meters for {record.get('object_id')!r}: {value!r}")
     return scale
+
+
+def limited_mesh_scale(
+    record: dict,
+    extent: np.ndarray,
+    *,
+    target_size: float | None = None,
+    maximum_horizontal_diameter: float | None = DEFAULT_MAX_HORIZONTAL_DIAMETER,
+) -> float:
+    """Return one uniform mesh scale with an optional horizontal size cap."""
+    extent = np.asarray(extent, dtype=np.float64)
+    if extent.shape != (3,) or np.any(~np.isfinite(extent)) or np.any(extent <= 0.0):
+        raise ValueError("extent must contain three positive finite values.")
+    if target_size is not None and target_size <= 0.0:
+        raise ValueError("target_size must be positive when provided.")
+    if maximum_horizontal_diameter is not None and maximum_horizontal_diameter <= 0.0:
+        raise ValueError("maximum_horizontal_diameter must be positive when provided.")
+    scale = (
+        record_scale_to_meters(record)
+        if target_size is None
+        else float(target_size) / float(extent.max())
+    )
+    if maximum_horizontal_diameter is not None:
+        horizontal = float(extent[:2].max()) * scale
+        if horizontal > maximum_horizontal_diameter:
+            scale *= float(maximum_horizontal_diameter) / horizontal
+    return float(scale)

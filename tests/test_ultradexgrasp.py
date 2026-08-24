@@ -18,9 +18,13 @@ from source.ultradexgrasp.config import DEFAULT_CONFIG_PATH, load_pipeline_confi
 from source.ultradexgrasp.contracts import DemonstrationEpisode, GraspCandidate
 from source.ultradexgrasp.executor import (
     ExecutionConfig,
+    ReachabilityResult,
     candidate_world_pose,
+    grasp_hand_targets,
 )
+from tools.ultradexgrasp.generate import select_execution_candidates
 from source.ultradexgrasp.hand_surrogate import OPEN_FRACTIONS
+from source.ultradexgrasp.synthesizer import SynthesisConfig
 from tools.ultradexgrasp.visualize_episode import contact_points_world
 
 
@@ -92,6 +96,9 @@ def test_default_pipeline_config_is_valid() -> None:
     assert config.execution.lift_height > 0.04
     assert config.surrogate_options["finger_degree"] == 7
     assert config.target_size is None
+    assert config.maximum_horizontal_diameter == pytest.approx(0.075)
+    assert config.synthesis.enclosure_prior_count >= 100
+    assert config.synthesis.contact_partition_prior_count > 0
 
 
 def test_open_hand_uses_collision_free_neutral_thumb_opposition() -> None:
@@ -174,7 +181,58 @@ def test_dynamic_uas_requires_measured_contact_and_robustness() -> None:
 
 def test_execution_config_rejects_invalid_preload() -> None:
     with pytest.raises(ValueError, match="finger_preload"):
-        ExecutionConfig(finger_preload=0.3).validate()
+        ExecutionConfig(finger_preload=0.41).validate()
+
+
+def test_synthesis_config_rejects_negative_enclosure_prior_count() -> None:
+    with pytest.raises(ValueError, match="enclosure_prior_count"):
+        SynthesisConfig(enclosure_prior_count=-1).validate()
+
+
+def test_grasp_approach_stays_open_and_preload_is_applied_only_at_close() -> None:
+    approach, closed = grasp_hand_targets(
+        np.asarray([0.20, 0.30, 0.40, 0.50, 0.70, 0.60]),
+        ExecutionConfig(finger_preload=0.10, thumb_grasp_preload=0.15),
+    )
+
+    np.testing.assert_allclose(approach, OPEN_FRACTIONS)
+    np.testing.assert_allclose(closed, [0.30, 0.40, 0.50, 0.60, 0.70, 0.75])
+
+
+def test_execution_selection_reserves_budget_for_diverse_enclosure_cells() -> None:
+    ranked = []
+    for index in range(8):
+        base = _candidate()
+        metrics = {"valid": 1.0}
+        backend = "native-differentiable"
+        if index >= 2:
+            metrics.update(
+                {
+                    "valid": 0.0,
+                    "enclosure_prior": 1.0,
+                    "enclosure_depth_offset": (-0.01, 0.0, 0.01)[index % 3],
+                    "enclosure_height_offset": (-0.008, 0.008)[index % 2],
+                    "enclosure_lateral_offset": (-0.02, 0.02)[index % 2],
+                    "enclosure_middle_delta": 0.08 * (index % 2),
+                }
+            )
+            backend = "pca-centered-enclosure"
+        candidate = GraspCandidate(
+            **{
+                **base.__dict__,
+                "seed_index": index,
+                "metrics": metrics,
+                "backend": backend,
+            }
+        )
+        ranked.append(ReachabilityResult(candidate, index * 0.01, 0.0, 0.0))
+
+    selected = select_execution_candidates(
+        tuple(ranked), limit=4, execution=ExecutionConfig()
+    )
+
+    assert len(selected) == 4
+    assert sum(item.candidate.metrics.get("enclosure_prior", 0.0) for item in selected) == 3
 
 
 @pytest.mark.skipif(not MANIFEST_PATH.is_file(), reason="optional ManiSkill assets are absent")
@@ -188,7 +246,7 @@ def test_object_surface_sampling_is_seed_deterministic() -> None:
     assert float(halfspace_values.max()) < 1e-8
     np.testing.assert_allclose(
         first.bounds[1] - first.bounds[0],
-        [0.102529, 0.102377, 0.140177],
+        [0.075000, 0.074889, 0.102540],
         rtol=2e-3,
     )
 
@@ -196,4 +254,5 @@ def test_object_surface_sampling_is_seed_deterministic() -> None:
 @pytest.mark.skipif(not MANIFEST_PATH.is_file(), reason="optional ManiSkill assets are absent")
 def test_egad_legacy_manifest_units_are_millimetres() -> None:
     geometry = load_object_geometry("egad:A0", surface_points=128, seed=3)
-    assert 0.09 < float(np.max(np.ptp(geometry.vertices, axis=0))) < 0.11
+    horizontal = float(np.max(np.ptp(geometry.vertices, axis=0)[:2]))
+    assert 0.074 < horizontal <= 0.0751

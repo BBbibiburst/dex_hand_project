@@ -17,6 +17,7 @@ DEFAULT_CONFIG_PATH = PROJECT_ROOT / "configs" / "ultradexgrasp" / "default.json
 @dataclass(frozen=True)
 class PipelineConfig:
     target_size: float | None
+    maximum_horizontal_diameter: float | None
     surface_points: int
     surrogate_cache: Path
     surrogate_options: dict[str, Any]
@@ -42,15 +43,24 @@ def load_pipeline_config(path: str | Path = DEFAULT_CONFIG_PATH) -> PipelineConf
         cache = PROJECT_ROOT / cache
     raw_target_size = payload.get("target_size")
     target_size = None if raw_target_size is None else float(raw_target_size)
+    raw_diameter = payload.get("maximum_horizontal_diameter", 0.075)
+    maximum_horizontal_diameter = (
+        None if raw_diameter is None else float(raw_diameter)
+    )
     surface_points = int(payload["surface_points"])
-    if (target_size is not None and target_size <= 0.0) or surface_points < 128:
-        raise ValueError("target_size must be positive when set and surface_points at least 128.")
+    if (
+        (target_size is not None and target_size <= 0.0)
+        or (maximum_horizontal_diameter is not None and maximum_horizontal_diameter <= 0.0)
+        or surface_points < 128
+    ):
+        raise ValueError("Object size limits must be positive and surface_points at least 128.")
     synthesis = _dataclass_options(SynthesisConfig, dict(payload.get("synthesis", {})))
     execution = _dataclass_options(ExecutionConfig, dict(payload.get("execution", {})))
     synthesis.validate()
     execution.validate()
     return PipelineConfig(
         target_size=target_size,
+        maximum_horizontal_diameter=maximum_horizontal_diameter,
         surface_points=surface_points,
         surrogate_cache=cache,
         surrogate_options=dict(payload.get("surrogate", {})),

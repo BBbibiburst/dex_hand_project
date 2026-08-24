@@ -44,11 +44,11 @@ python -m tools.rank_underactuated_candidates \
 ### 1. 获取项目
 
 ```bash
-git clone <repository-url> dex_hand_project
+git clone --recurse-submodules <repository-url> dex_hand_project
 cd dex_hand_project
 ```
 
-项目没有 submodule，不需要执行额外的第三方仓库初始化。
+已有检出目录使用 `git submodule update --init --recursive` 初始化官方 DexEvolve 参考实现。
 
 ### 2. 创建环境
 
@@ -121,6 +121,22 @@ MUJOCO_GL=egl python -m tools.ultradexgrasp.generate \
 ```
 
 成功目录包含 `manifest.json`、`episode.npz`、`candidates.json` 和 `run.json`。
+
+## 单物体 GraspQP + DexEvolve
+
+```bash
+MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m tools.ultradexgrasp.graspqp_evolve \
+  --object-id ycb:002_master_chef_can \
+  --output outputs/dexevolve_single/master_chef_can \
+  --device cuda:0
+
+MUJOCO_GL=glfw python -m tools.ultradexgrasp.visualize_episode \
+  --manifest outputs/dexevolve_single/master_chef_can/manifest.json \
+  --play --viewer-speed 0.4 --loop
+```
+
+该路线用 GraspQP 细化解析候选，以适配六驱动欠驱动闭链，再由 DexEvolve 搜索并在
+MJWarp 中批量执行扰动评价；最终结果必须通过 C MuJoCo 的持续拇指—对侧 skin 接触复验。
 
 ## Ultra Prior + Wrist Lattice + MJWarp PPO
 

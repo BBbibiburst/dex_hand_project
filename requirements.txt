@@ -5,6 +5,8 @@ trimesh
 mujoco
 gymnasium
 torch
+graspqp @ git+https://github.com/leggedrobotics/graspqp.git#subdirectory=graspqp
+proxsuite>=0.7
 
 # Project-native Ultra Prior and MJWarp PPO stack. Third-party source trees are
 # not vendored in this repository; install all runtime dependencies with pip.

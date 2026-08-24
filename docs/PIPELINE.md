@@ -1,7 +1,8 @@
 # Ultra Prior、Wrist Lattice 与 MJWarp PPO 验证
 
-本文描述当前 Dex Hand 主流水线。所有命令从项目根目录运行，不需要第三方源码 checkout
-或 Git submodule。
+本文描述当前 Dex Hand 主流水线。所有命令从项目根目录运行。GraspQP 通过 Python 依赖安装；
+官方 DexEvolve 作为 `third_party/DexEvolve` 只读参考子模块，使用
+`git submodule update --init --recursive` 初始化。
 
 ## 流水线阶段
 

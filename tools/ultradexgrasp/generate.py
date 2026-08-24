@@ -13,11 +13,17 @@ from source.ultradexgrasp.catalog import load_object_geometry
 from source.ultradexgrasp.config import DEFAULT_CONFIG_PATH, load_pipeline_config
 from source.ultradexgrasp.contracts import PIPELINE_NAME
 from source.ultradexgrasp.executor import (
+    ExecutionConfig,
+    ReachabilityResult,
     execute_grasp,
     rank_candidates_for_scene,
 )
 from source.ultradexgrasp.hand_surrogate import load_or_calibrate_surrogate
-from source.ultradexgrasp.synthesizer import synthesize_grasps
+from source.ultradexgrasp.synthesizer import (
+    synthesize_contact_partition_priors,
+    synthesize_enclosure_priors,
+    synthesize_grasps,
+)
 
 
 def _slug(object_id: str) -> str:
@@ -39,6 +45,51 @@ def _execution_failure_type(attempts: list[dict[str, Any]]) -> str:
     if reasons and all("IK residual is too large" in reason for reason in reasons):
         return "ik_unreachable"
     return "execution_failed"
+
+
+def select_execution_candidates(
+    ranked: tuple[ReachabilityResult, ...],
+    *,
+    limit: int,
+    execution: ExecutionConfig,
+) -> tuple[ReachabilityResult, ...]:
+    """Reserve execution budget for diverse dynamic enclosure hypotheses."""
+    reachable = [
+        item
+        for item in ranked
+        if item.maximum_position_error <= execution.position_tolerance
+        and item.maximum_orientation_error <= execution.orientation_tolerance
+    ]
+    enclosure = [
+        item
+        for item in reachable
+        if item.candidate.metrics.get("enclosure_prior", 0.0)
+        or item.candidate.metrics.get("contact_partition_prior", 0.0)
+    ]
+    enclosure_ids = {id(item) for item in enclosure}
+    optimized = [item for item in reachable if id(item) not in enclosure_ids]
+    enclosure_budget = min(len(enclosure), max(1, int(round(0.75 * limit))))
+    selected_enclosure: list[ReachabilityResult] = []
+    used_cells: set[tuple[float, float, float, float, float]] = set()
+    for item in enclosure:
+        metrics = item.candidate.metrics
+        cell = (
+            metrics.get("contact_partition_prior", 0.0),
+            metrics.get("enclosure_depth_offset", item.candidate.seed_index),
+            metrics.get("enclosure_height_offset", 0.0),
+            metrics.get("enclosure_lateral_offset", 0.0),
+            metrics.get("enclosure_middle_delta", 0.0),
+        )
+        if cell in used_cells:
+            continue
+        used_cells.add(cell)
+        selected_enclosure.append(item)
+        if len(selected_enclosure) >= enclosure_budget:
+            break
+    selected = optimized[: max(0, limit - len(selected_enclosure))] + selected_enclosure
+    selected_ids = {id(item) for item in selected}
+    selected.extend(item for item in reachable if id(item) not in selected_ids)
+    return tuple(selected[:limit])
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -93,6 +144,7 @@ def main(argv: list[str] | None = None) -> int:
         geometry = load_object_geometry(
             args.object_id,
             target_size=pipeline.target_size,
+            maximum_horizontal_diameter=pipeline.maximum_horizontal_diameter,
             surface_points=pipeline.surface_points,
             seed=args.seed,
         )
@@ -122,9 +174,22 @@ def main(argv: list[str] | None = None) -> int:
             flush=True,
         )
 
-    candidates = synthesize_grasps(geometry, surrogate, synthesis, progress=progress)
-    valid_candidates = tuple(
+    optimized_candidates = synthesize_grasps(
+        geometry, surrogate, synthesis, progress=progress
+    )
+    enclosure_candidates = synthesize_enclosure_priors(geometry, surrogate, synthesis)
+    partition_candidates = synthesize_contact_partition_priors(
+        geometry, surrogate, synthesis
+    )
+    candidates = optimized_candidates + enclosure_candidates + partition_candidates
+    optimized_valid_candidates = tuple(
         candidate for candidate in candidates if bool(candidate.metrics.get("valid", 0.0))
+    )
+    # Enclosure priors are intentionally unvalidated geometry proposals.  They
+    # must still be executed by C MuJoCo, but must not be advertised as static
+    # force-closure successes to downstream consumers.
+    execution_candidates = (
+        optimized_valid_candidates + enclosure_candidates + partition_candidates
     )
     archive_payload: dict[str, Any] = {
         "schema_version": 1,
@@ -132,14 +197,18 @@ def main(argv: list[str] | None = None) -> int:
         "object_id": args.object_id,
         "seed": args.seed,
         "candidate_count": len(candidates),
-        "valid_candidate_count": len(valid_candidates),
+        "valid_candidate_count": len(optimized_valid_candidates),
+        "execution_candidate_count": len(execution_candidates),
+        "optimized_candidate_count": len(optimized_candidates),
+        "enclosure_candidate_count": len(enclosure_candidates),
+        "contact_partition_candidate_count": len(partition_candidates),
         "candidates": [candidate.to_dict() for candidate in candidates],
     }
     _write_json(output / "candidates.json", archive_payload)
     if args.synthesis_only:
         print(f"[done] candidates={output / 'candidates.json'}", flush=True)
-        return 0 if valid_candidates else 2
-    if not valid_candidates:
+        return 0 if optimized_valid_candidates else 2
+    if not execution_candidates:
         _write_json(
             output / "run.json",
             {
@@ -167,7 +236,7 @@ def main(argv: list[str] | None = None) -> int:
         observation, _ = rank_env.reset(seed=args.seed)
         ranked = rank_candidates_for_scene(
             rank_env,
-            valid_candidates,
+            execution_candidates,
             observation["object_pos"],
             observation["object_quat"],
             pregrasp_distance=pipeline.execution.pregrasp_distance,
@@ -186,8 +255,13 @@ def main(argv: list[str] | None = None) -> int:
     ]
     _write_json(output / "candidates.json", archive_payload)
 
+    execution_queue = select_execution_candidates(
+        ranked,
+        limit=args.max_execution_candidates,
+        execution=pipeline.execution,
+    )
     attempts: list[dict[str, Any]] = []
-    for rank, result in enumerate(ranked[: args.max_execution_candidates]):
+    for rank, result in enumerate(execution_queue):
         candidate = result.candidate
         print(
             f"[execute] rank={rank} seed_index={candidate.seed_index} "
@@ -206,12 +280,26 @@ def main(argv: list[str] | None = None) -> int:
             "maximum_position_error": result.maximum_position_error,
             "maximum_orientation_error": result.maximum_orientation_error,
         }
+        hold_contacts = episode.metadata.get(
+            "object_hold_digit_contact_fraction", [0.0] * 5
+        )
+        opposed_contact = float(
+            min(float(hold_contacts[4]), max(float(value) for value in hold_contacts[:4]))
+        )
         attempt = {
             "rank": rank,
             "seed_index": candidate.seed_index,
             "success": episode.success,
             "terminal_stage": episode.terminal_stage,
             "failure_reason": episode.failure_reason,
+            "object_lift": float(episode.metadata.get("object_lift", 0.0)),
+            "close_lateral_displacement": float(
+                episode.metadata.get("object_close_maximum_lateral_displacement", 0.0)
+            ),
+            "hold_lateral_displacement": float(
+                episode.metadata.get("object_hold_maximum_lateral_displacement", 0.0)
+            ),
+            "hold_opposed_contact_fraction": opposed_contact,
         }
         attempts.append(attempt)
         if episode.success:

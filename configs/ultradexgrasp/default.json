@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "target_size": null,
+  "maximum_horizontal_diameter": 0.075,
   "surface_points": 2048,
   "surrogate_cache": "configs/ultradexgrasp/cache/dex_hand_surrogate_adaptive.npz",
   "surrogate": {
@@ -27,13 +28,16 @@
     "contact_temperature": 0.002,
     "table_margin": 0.0015,
     "force_residual_threshold": 0.28,
-    "side_seed_fraction": 0.8
+    "side_seed_fraction": 0.8,
+    "enclosure_prior_count": 128,
+    "contact_partition_prior_count": 32,
+    "contact_partition_steps": 100
   },
   "execution": {
     "pregrasp_distance": 0.09,
     "lift_height": 0.065,
-    "finger_preload": 0.15,
-    "thumb_grasp_preload": 0.2,
+    "finger_preload": 0.35,
+    "thumb_grasp_preload": 0.4,
     "transit_clearance": 0.16,
     "settle_steps": 12,
     "transit_steps": 70,

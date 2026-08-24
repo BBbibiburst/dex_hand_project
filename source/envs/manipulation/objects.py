@@ -11,7 +11,8 @@ import numpy as np
 
 from source.assets import asset_path
 from source.envs.manipulation.object_catalog import (
-    record_scale_to_meters,
+    DEFAULT_MAX_HORIZONTAL_DIAMETER,
+    limited_mesh_scale,
     resolve_record,
     resolve_record_path,
 )
@@ -106,6 +107,7 @@ class MeshObjectSpec(ManipulationObjectSpec):
     # None preserves physical scale. A positive value remains available for
     # explicitly size-normalised ablations and stacking tasks.
     target_size: float | None = None
+    maximum_horizontal_diameter: float | None = DEFAULT_MAX_HORIZONTAL_DIAMETER
     density: float = 500.0
     friction: tuple[float, float, float] = (1.0, 0.005, 0.0001)
 
@@ -126,13 +128,12 @@ class MeshObjectSpec(ManipulationObjectSpec):
             raise FileNotFoundError(f"No OBJ visual mesh for {self.object_id}")
         low, high = _read_obj_bounds(visual)
         extent = high - low
-        source_scale = record_scale_to_meters(record)
-        if self.target_size is None:
-            scale = source_scale
-        else:
-            if self.target_size <= 0.0:
-                raise ValueError("target_size must be positive when provided.")
-            scale = self.target_size / max(float(extent.max()), 1e-8)
+        scale = limited_mesh_scale(
+            record,
+            extent,
+            target_size=self.target_size,
+            maximum_horizontal_diameter=self.maximum_horizontal_diameter,
+        )
         object.__setattr__(self, "_visual_path", visual)
         # MuJoCo builds a convex collision hull from OBJ meshes. The YCB bundle
         # also contains collision.ply, but MuJoCo's built-in mesh decoder does

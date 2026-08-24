@@ -8,8 +8,9 @@ from pathlib import Path
 import numpy as np
 
 from source.envs.manipulation.object_catalog import (
+    DEFAULT_MAX_HORIZONTAL_DIAMETER,
     MANIFEST_PATH,
-    record_scale_to_meters,
+    limited_mesh_scale,
     resolve_record,
     resolve_record_path,
 )
@@ -57,6 +58,7 @@ def load_object_geometry(
     object_id: str,
     *,
     target_size: float | None = None,
+    maximum_horizontal_diameter: float | None = DEFAULT_MAX_HORIZONTAL_DIAMETER,
     surface_points: int = 2048,
     seed: int = 0,
 ) -> ObjectGeometry:
@@ -75,8 +77,12 @@ def load_object_geometry(
     raw_bounds = np.asarray(mesh.bounds, dtype=np.float64)
     center = 0.5 * (raw_bounds[0] + raw_bounds[1])
     extent = raw_bounds[1] - raw_bounds[0]
-    source_scale = record_scale_to_meters(record)
-    scale = source_scale if target_size is None else target_size / max(float(extent.max()), 1e-9)
+    scale = limited_mesh_scale(
+        record,
+        extent,
+        target_size=target_size,
+        maximum_horizontal_diameter=maximum_horizontal_diameter,
+    )
     mesh.apply_translation(-center)
     mesh.apply_scale(scale)
 

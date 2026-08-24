@@ -38,6 +38,9 @@ class SynthesisConfig:
     table_margin: float = 0.0015
     force_residual_threshold: float = 0.28
     side_seed_fraction: float = 0.8
+    enclosure_prior_count: int = 128
+    contact_partition_prior_count: int = 32
+    contact_partition_steps: int = 100
     device: str | None = None
     dtype: str = "float32"
     seed: int = 0
@@ -48,6 +51,10 @@ class SynthesisConfig:
                 raise ValueError(f"{name} must be positive.")
         if self.minimum_contact_fingers > 5:
             raise ValueError("minimum_contact_fingers cannot exceed five.")
+        if self.enclosure_prior_count < 0:
+            raise ValueError("enclosure_prior_count cannot be negative.")
+        if self.contact_partition_prior_count < 0 or self.contact_partition_steps <= 0:
+            raise ValueError("contact partition prior settings are invalid.")
         rates = (
             self.translation_learning_rate,
             self.rotation_learning_rate,
@@ -240,6 +247,106 @@ def _initialize_seeds(
     return translations, rotations, fractions, target_centers
 
 
+def synthesize_enclosure_priors(
+    geometry: ObjectGeometry,
+    surrogate: DexHandSurrogate,
+    config: SynthesisConfig,
+) -> tuple[GraspCandidate, ...]:
+    """Generate centered side-enclosure proposals without contact-QP drift.
+
+    These proposals preserve the underactuated mechanical prior: the object is
+    placed between the opposed digit groups and the final stationary close is
+    left to MuJoCo.  They intentionally bypass the free contact-force optimizer,
+    which tends to turn large cylinders into marginal fingertip pinches.
+    """
+    if config.enclosure_prior_count == 0:
+        return ()
+    # Each azimuth is expanded over a compact depth/height/closure lattice.
+    # Repeating nearly identical azimuths wastes the budget on rotationally
+    # symmetric cans while never correcting an off-centre closing resultant.
+    variants = tuple(
+        (depth, height, lateral, middle)
+        for depth in (-0.010, 0.010)
+        for height in (-0.008, 0.008)
+        for lateral in (-0.020, 0.020)
+        for middle in (0.00, 0.08)
+    )
+    base_count = int(math.ceil(config.enclosure_prior_count / len(variants)))
+    prior_config = SynthesisConfig(
+        **{
+            **config.__dict__,
+            "seed_count": base_count,
+            "side_seed_fraction": 1.0,
+            "enclosure_prior_count": 0,
+        }
+    )
+    translations, rotations, fractions, _ = _initialize_seeds(
+        geometry,
+        surrogate,
+        prior_config,
+        np.random.default_rng(config.seed + 104_729),
+    )
+    candidates: list[GraspCandidate] = []
+    object_points = np.asarray(geometry.surface_points, dtype=np.float64)
+    object_normals = np.asarray(geometry.surface_normals, dtype=np.float64)
+    expanded = []
+    for base_translation, rotation, base_fractions in zip(
+        translations, rotations, fractions, strict=True
+    ):
+        centers = _digit_centers(surrogate, base_fractions)
+        gap = centers[4] - centers[:4].mean(axis=0)
+        gap_world = rotation @ (gap / max(float(np.linalg.norm(gap)), 1e-9))
+        lateral_world = rotation[:, 0]
+        for depth, height, lateral, middle_delta in variants:
+            actuator_fractions = base_fractions.copy()
+            actuator_fractions[1] = np.clip(
+                actuator_fractions[1] + middle_delta, 0.0, 1.0
+            )
+            translation = base_translation + depth * gap_world + lateral * lateral_world
+            translation = translation.copy()
+            translation[2] += height
+            expanded.append(
+                (translation, rotation, actuator_fractions, depth, height, lateral, middle_delta)
+            )
+    for index, (translation, rotation, actuator_fractions, depth, height, lateral, middle_delta) in enumerate(
+        expanded[: config.enclosure_prior_count]
+    ):
+        hand_points = surrogate.evaluate_numpy(actuator_fractions) @ rotation.T + translation
+        contacts, normals, distances = [], [], []
+        for group in surrogate.contact_indices:
+            delta = hand_points[group, None, :] - object_points[None, :, :]
+            pair = np.unravel_index(np.argmin(np.sum(delta * delta, axis=2)), delta.shape[:2])
+            object_index = int(pair[1])
+            contacts.append(object_points[object_index])
+            normals.append(object_normals[object_index])
+            distances.append(float(np.linalg.norm(delta[pair])))
+        candidates.append(
+            GraspCandidate(
+                object_id=geometry.object_id,
+                seed_index=1_000_000 + index,
+                hand_translation=translation,
+                hand_rotation_matrix=rotation,
+                actuator_fractions=actuator_fractions,
+                contact_points=np.asarray(contacts),
+                contact_normals=np.asarray(normals),
+                contact_distances=np.asarray(distances),
+                metrics={
+                    # A geometry proposal is not a grasp until real MuJoCo
+                    # close/hold validation observes persistent opposition.
+                    "valid": 0.0,
+                    "enclosure_prior": 1.0,
+                    "mean_contact_distance": float(np.mean(distances)),
+                    "enclosure_depth_offset": depth,
+                    "enclosure_height_offset": height,
+                    "enclosure_lateral_offset": lateral,
+                    "enclosure_middle_delta": middle_delta,
+                },
+                backend="pca-centered-enclosure",
+            )
+        )
+    return tuple(candidates)
+
+
 def _friction_wrenches(contact_points, normals, coefficient: float, length_scale: float):
     import torch
 
@@ -287,6 +394,158 @@ def _convex_outside_distance(points, plane_normals, plane_offsets):
 
     plane_values = torch.einsum("bni,fi->bnf", points, plane_normals) - plane_offsets
     return plane_values.max(dim=-1).values
+
+
+def synthesize_contact_partition_priors(
+    geometry: ObjectGeometry,
+    surrogate: DexHandSurrogate,
+    config: SynthesisConfig,
+) -> tuple[GraspCandidate, ...]:
+    """Optimize a lightweight CEDex-style opposed contact partition.
+
+    The learned human-contact generator is deliberately omitted in this first
+    adapter.  Object surface normals define two semantic regions: thumb and
+    opposing fingers.  Unlike unrestricted nearest-surface optimization, the
+    digits cannot collapse onto the same side of a cylinder.
+    """
+    import torch
+
+    count = config.contact_partition_prior_count
+    if count == 0:
+        return ()
+    device_name = config.device or ("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(device_name)
+    dtype = getattr(torch, config.dtype)
+    prior_config = SynthesisConfig(
+        **{
+            **config.__dict__,
+            "seed_count": count,
+            "side_seed_fraction": 1.0,
+            "enclosure_prior_count": 0,
+            "contact_partition_prior_count": 0,
+        }
+    )
+    initial_t, rotations_np, initial_f, _ = _initialize_seeds(
+        geometry, surrogate, prior_config, np.random.default_rng(config.seed + 65_537)
+    )
+    centers = np.stack([_digit_centers(surrogate, item) for item in initial_f])
+    local_gap = centers[:, 4] - centers[:, :4].mean(axis=1)
+    local_gap /= np.maximum(np.linalg.norm(local_gap, axis=1, keepdims=True), 1e-9)
+    gap_np = np.einsum("bij,bj->bi", rotations_np, local_gap)
+
+    translation = torch.nn.Parameter(torch.as_tensor(initial_t, device=device, dtype=dtype))
+    fraction_logits = torch.nn.Parameter(
+        torch.as_tensor(_inverse_sigmoid(initial_f), device=device, dtype=dtype)
+    )
+    rotations = torch.as_tensor(rotations_np, device=device, dtype=dtype)
+    gap = torch.as_tensor(gap_np, device=device, dtype=dtype)
+    object_points = torch.as_tensor(geometry.surface_points, device=device, dtype=dtype)
+    object_normals = torch.as_tensor(geometry.surface_normals, device=device, dtype=dtype)
+    plane_normals = torch.as_tensor(geometry.plane_normals, device=device, dtype=dtype)
+    plane_offsets = torch.as_tensor(geometry.plane_offsets, device=device, dtype=dtype)
+    initial_t_tensor = torch.as_tensor(initial_t, device=device, dtype=dtype)
+    optimizer = torch.optim.Adam(
+        [
+            {"params": [translation], "lr": config.translation_learning_rate},
+            {"params": [fraction_logits], "lr": config.actuator_learning_rate},
+        ]
+    )
+    contact_indices = [
+        torch.as_tensor(group, device=device, dtype=torch.long)
+        for group in surrogate.contact_indices
+    ]
+    normal_projection = torch.einsum("oi,bi->bo", object_normals, gap)
+
+    for _ in range(config.contact_partition_steps):
+        optimizer.zero_grad(set_to_none=True)
+        fractions = torch.sigmoid(fraction_logits)
+        local_points = surrogate.evaluate_torch(fractions)
+        points = torch.einsum("bij,bnj->bni", rotations, local_points) + translation[:, None]
+        digit_losses = []
+        for digit, indices in enumerate(contact_indices):
+            digit_points = points.index_select(1, indices)
+            distance = torch.cdist(digit_points, object_points[None].expand(count, -1, -1))
+            sign = 1.0 if digit == 4 else -1.0
+            wrong_region = torch.relu(0.35 - sign * normal_projection)
+            partitioned = distance + 0.030 * wrong_region[:, None, :]
+            digit_losses.append(torch.amin(partitioned, dim=(1, 2)))
+        digit_distance = torch.stack(digit_losses, dim=1)
+        outside = _convex_outside_distance(points, plane_normals, plane_offsets)
+        penetration = torch.relu(-outside - config.penetration_allowance)
+        table_penetration = torch.relu(geometry.table_z + config.table_margin - points[..., 2])
+        finger_coupling = torch.square(
+            fractions[:, :4] - fractions[:, :4].mean(dim=1, keepdim=True)
+        ).mean(dim=1)
+        loss = (
+            torch.square(digit_distance / config.contact_distance).mean(dim=1)
+            + 8.0 * torch.square(penetration / config.maximum_penetration).mean(dim=1)
+            + 10.0 * torch.square(table_penetration / config.maximum_penetration).mean(dim=1)
+            + 0.08 * torch.square((translation - initial_t_tensor) / 0.04).mean(dim=1)
+            + 0.05 * finger_coupling
+        ).mean()
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_([translation, fraction_logits], 25.0)
+        optimizer.step()
+
+    candidates = []
+    with torch.no_grad():
+        fractions_np = torch.sigmoid(fraction_logits).cpu().numpy()
+        translations_np = translation.cpu().numpy()
+    closure_variants = (
+        (0.00, 0.00, 0.00),
+        (0.12, 0.06, 0.08),
+        (0.24, 0.00, 0.16),
+        (0.30, 0.06, 0.16),
+    )
+    for index in range(count):
+        projection = np.asarray(geometry.surface_normals) @ gap_np[index]
+        for variant_index, (common, middle, thumb) in enumerate(closure_variants):
+            variant_fractions = fractions_np[index].copy()
+            variant_fractions[:4] += common
+            variant_fractions[1] += middle
+            variant_fractions[5] += thumb
+            variant_fractions = np.clip(variant_fractions, 0.0, 1.0)
+            points = (
+                surrogate.evaluate_numpy(variant_fractions) @ rotations_np[index].T
+                + translations_np[index]
+            )
+            contacts, normals, distances = [], [], []
+            for digit, group in enumerate(surrogate.contact_indices):
+                sign = 1.0 if digit == 4 else -1.0
+                allowed = np.flatnonzero(sign * projection >= 0.20)
+                if not len(allowed):
+                    allowed = np.arange(len(geometry.surface_points))
+                delta = points[group, None] - geometry.surface_points[allowed][None]
+                pair = np.unravel_index(
+                    np.argmin(np.sum(delta * delta, axis=2)), delta.shape[:2]
+                )
+                object_index = int(allowed[pair[1]])
+                contacts.append(geometry.surface_points[object_index])
+                normals.append(geometry.surface_normals[object_index])
+                distances.append(float(np.linalg.norm(delta[pair])))
+            candidates.append(
+                GraspCandidate(
+                    object_id=geometry.object_id,
+                    seed_index=2_000_000 + 4 * index + variant_index,
+                    hand_translation=translations_np[index],
+                    hand_rotation_matrix=rotations_np[index],
+                    actuator_fractions=variant_fractions,
+                    contact_points=np.asarray(contacts),
+                    contact_normals=np.asarray(normals),
+                    contact_distances=np.asarray(distances),
+                    metrics={
+                        "valid": 0.0,
+                        "contact_partition_prior": 1.0,
+                        "contact_partition_seed": float(index),
+                        "contact_partition_common_closure": common,
+                        "contact_partition_middle_delta": middle,
+                        "contact_partition_thumb_delta": thumb,
+                        "mean_contact_distance": float(np.mean(distances)),
+                    },
+                    backend="cedex-opposed-contact-partition",
+                )
+            )
+    return tuple(candidates)
 
 
 def _contact_state(
