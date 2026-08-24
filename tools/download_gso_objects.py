@@ -1,9 +1,9 @@
-"""Download a bounded Google Scanned Objects candidate set from Gazebo Fuel.
+"""Download Google Scanned Objects from Gazebo Fuel.
 
-The tool never downloads all 13 GB implicitly. Pass a selection file (one Fuel
-model name per line), or use ``--list`` to create one after inspecting the
-official catalogue. Downloaded models are merged into the project manifest and
-tagged as metre-scale CC BY 4.0 assets.
+The full catalogue remains opt-in via ``--all``. Pass a selection file for a
+bounded download, or use ``--list`` to inspect the official catalogue.
+Downloaded models are merged into the project manifest and tagged as metre-scale
+CC BY 4.0 assets.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ import shutil
 import urllib.parse
 import urllib.request
 import zipfile
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 
@@ -62,6 +63,19 @@ def list_models() -> list[dict]:
 
 
 def _selection(path: Path) -> list[str]:
+    if path.suffix.lower() == ".json":
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        rows = payload.get("objects")
+        if not isinstance(rows, list):
+            raise ValueError(f"JSON selection must contain an objects list: {path}")
+        values = [
+            str(row["object_id"]).removeprefix("gso:")
+            for row in rows
+            if str(row.get("object_id", "")).startswith("gso:")
+        ]
+        if not values:
+            raise ValueError(f"JSON selection contains no GSO objects: {path}")
+        return list(dict.fromkeys(values))
     values: list[str] = []
     for line in path.read_text(encoding="utf-8").splitlines():
         value = line.split("#", 1)[0].strip()
@@ -173,12 +187,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--selection", type=Path)
     parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Explicitly download the complete official GSO catalogue.",
+    )
+    parser.add_argument(
         "--underactuated-candidates",
         action="store_true",
         help="Download the bounded GSO bottle/can/cup candidate pool.",
     )
     parser.add_argument("--list", action="store_true", help="Print official names and exit.")
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--force", action="store_true")
@@ -189,23 +209,42 @@ def main() -> int:
         for item in catalogue:
             print(f"{item['name']}\t{','.join(item.get('categories', []))}\t{item.get('filesize', 0)}")
         return 0
-    if args.selection is not None and args.underactuated_candidates:
-        parser.error("Use either --selection or --underactuated-candidates, not both")
-    if args.underactuated_candidates:
+    modes = sum((args.selection is not None, args.underactuated_candidates, args.all))
+    if modes > 1:
+        parser.error("Use exactly one of --selection, --underactuated-candidates, or --all")
+    if args.workers <= 0:
+        parser.error("--workers must be positive")
+    if args.all:
+        names = [str(item["name"]) for item in catalogue]
+    elif args.underactuated_candidates:
         names = underactuated_candidates(catalogue)
     elif args.selection is not None:
         names = _selection(args.selection)
     else:
-        parser.error("--selection or --underactuated-candidates is required unless --list is used")
+        parser.error("--selection, --underactuated-candidates, or --all is required unless --list is used")
     if args.limit:
         names = names[: args.limit]
     missing = sorted(set(names) - set(metadata))
     if missing:
         raise ValueError(f"Unknown GoogleResearch Fuel models: {missing}")
     root = args.root.resolve()
-    for index, name in enumerate(names, 1):
-        print(f"[{index:03d}/{len(names):03d}] {name}")
-        _download(name, root / name, force=args.force)
+    failures: list[tuple[str, str]] = []
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+        futures = {
+            executor.submit(_download, name, root / name, force=args.force): name
+            for name in names
+        }
+        for index, future in enumerate(as_completed(futures), 1):
+            name = futures[future]
+            try:
+                future.result()
+                print(f"[{index:04d}/{len(names):04d}] complete gso:{name}")
+            except Exception as exc:
+                failures.append((name, f"{type(exc).__name__}: {exc}"))
+                print(f"[{index:04d}/{len(names):04d}] failed gso:{name}: {exc}")
+    if failures:
+        details = "\n".join(f"  {name}: {error}" for name, error in failures)
+        raise RuntimeError(f"Failed to download {len(failures)} GSO objects:\n{details}")
     merge_manifest(args.manifest.resolve(), root, names, metadata)
     print(f"[done] merged {len(names)} GSO objects into {args.manifest}")
     return 0

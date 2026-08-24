@@ -17,6 +17,7 @@ from tools.grasping.batch_grasp_edit import (
     _gpu_ids,
     _init_object_worker,
     _resource_plan,
+    _selection_ids,
     _runtime_estimate,
     _wall_clock_estimate,
     _worker_gpu_identity,
@@ -34,11 +35,21 @@ def test_historical_benchmark_selection_is_stable_at_127_objects() -> None:
     assert not any(item.startswith("gso:") for item in selected)
 
 
-def test_benchmark_parser_defaults_to_historical_127() -> None:
+def test_benchmark_parser_does_not_assume_historical_count() -> None:
     args = build_parser().parse_args([])
 
     assert args.dataset == "original127"
-    assert args.expect_count == 127
+    assert args.expect_count == 0
+
+
+def test_selection_file_preserves_ranked_object_order(tmp_path) -> None:
+    path = tmp_path / "selection.json"
+    path.write_text(
+        json.dumps({"objects": [{"object_id": "ycb:008_pudding_box"}, {"object_id": "egad:A0"}]}),
+        encoding="utf-8",
+    )
+
+    assert _selection_ids(path) == ("ycb:008_pudding_box", "egad:A0")
 
 
 def test_grasp_discovery_accepts_seed_layout(tmp_path, monkeypatch) -> None:

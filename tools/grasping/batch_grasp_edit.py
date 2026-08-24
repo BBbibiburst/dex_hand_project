@@ -477,6 +477,21 @@ def _dataset_ids(dataset: str) -> tuple[str, ...]:
     return object_ids(dataset)
 
 
+def _selection_ids(path: Path) -> tuple[str, ...]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("objects")
+    if not isinstance(rows, list):
+        raise ValueError(f"Selection must contain an objects list: {path}")
+    selected = tuple(str(row["object_id"]) for row in rows)
+    if not selected or len(selected) != len(set(selected)):
+        raise ValueError("Selection must contain unique object_id values.")
+    known = set(_dataset_ids("all"))
+    unknown = sorted(set(selected).difference(known))
+    if unknown:
+        raise ValueError(f"Selection contains unknown object id(s): {unknown}")
+    return selected
+
+
 def _episode_lifts(episode: Any) -> tuple[float, float]:
     try:
         import numpy as np
@@ -1252,7 +1267,17 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--object-id", action="append", dest="object_ids")
-    parser.add_argument("--expect-count", type=int, default=127)
+    parser.add_argument(
+        "--selection",
+        type=Path,
+        help="JSON object selection in render_object_catalog/ranking format.",
+    )
+    parser.add_argument(
+        "--expect-count",
+        type=int,
+        default=0,
+        help="Optional selected-object count assertion; disabled by default.",
+    )
     parser.add_argument("--limit", type=int)
     parser.add_argument("--output", type=Path, default=Path("outputs/grasp_edit_benchmark"))
     parser.add_argument(
@@ -1359,7 +1384,7 @@ def main(argv: list[str] | None = None) -> int:
 
     root = _repo_root()
     os.chdir(root)
-    catalog = list(_dataset_ids(args.dataset))
+    catalog = list(_selection_ids(args.selection) if args.selection else _dataset_ids(args.dataset))
     if args.object_ids:
         requested = set(args.object_ids)
         unknown = requested.difference(catalog)
