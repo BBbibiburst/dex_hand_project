@@ -11,6 +11,8 @@ from source.grasping.dexevolve import (
     mutate_candidate,
 )
 from source.grasping.graspqp_adapter import GraspQPConfig, graspqp_available
+from source.grasping.executor import ExecutionConfig
+from tools.grasp_generation.graspqp_evolve import evolution_execution_config
 
 
 def _candidate(seed: int = 1) -> GraspCandidate:
@@ -76,3 +78,11 @@ def test_formal_generation_budget_is_shared_by_dexevolve_defaults() -> None:
     assert config.offspring == budget.offspring == 12
     assert config.generations == budget.generations == 16
     assert budget.archive_candidates == 6
+
+
+def test_evolution_screening_only_enables_safe_early_rejection() -> None:
+    strict = ExecutionConfig()
+    screening = evolution_execution_config(strict)
+
+    assert screening.maximum_steps == strict.maximum_steps
+    assert screening.reject_unopposed_hold

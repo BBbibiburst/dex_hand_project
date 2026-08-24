@@ -44,6 +44,9 @@ class ExecutionConfig:
     position_tolerance: float = 0.025
     orientation_tolerance: float = 0.22
     enable_tactile_sensors: bool = False
+    # Evolutionary screening may stop after hold when the strict thumb-opposed
+    # contact required by the final validator is already impossible.
+    reject_unopposed_hold: bool = False
 
     @property
     def maximum_steps(self) -> int:
@@ -624,6 +627,12 @@ def execute_grasp(
                 )
                 if ended:
                     failure_reason = "environment ended during hold"
+                elif config.reject_unopposed_hold:
+                    _, _, digit_counts, _ = _robot_object_contact_summary(env)
+                    opposed = digit_counts[4] > 0 and digit_counts[:4].max() > 0
+                    metadata["hold_opposed_contact"] = bool(opposed)
+                    if not opposed:
+                        failure_reason = "hold has no thumb-opposed skin contact"
 
             if failure_reason is None:
                 terminal_stage = "lift"

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import time
 from dataclasses import replace
 from pathlib import Path
 
@@ -19,7 +20,12 @@ from source.grasping.dexevolve import (
     episode_fitness,
     evolve_candidates,
 )
-from source.grasping.executor import STAGE_CODES, execute_grasp, rank_candidates_for_scene
+from source.grasping.executor import (
+    STAGE_CODES,
+    ExecutionConfig,
+    execute_grasp,
+    rank_candidates_for_scene,
+)
 from source.grasping.graspqp_adapter import GraspQPConfig, refine_candidates_with_graspqp
 from source.grasping.hand_surrogate import load_or_calibrate_surrogate
 from source.grasping.dexevolve_mjwarp import MjWarpLifetimeConfig, MjWarpLifetimeEvaluator
@@ -56,7 +62,23 @@ def _write(path: Path, payload: dict) -> None:
     temporary.replace(path)
 
 
+def evolution_execution_config(execution: ExecutionConfig) -> ExecutionConfig:
+    """Enable safe early rejection without changing successful dynamics."""
+    return replace(execution, reject_unopposed_hold=True)
+
+
 def main(argv: list[str] | None = None) -> int:
+    run_started = time.perf_counter()
+    phase_started = run_started
+    timings: dict[str, float] = {}
+
+    def finish_phase(name: str) -> None:
+        nonlocal phase_started
+        now = time.perf_counter()
+        timings[name] = now - phase_started
+        phase_started = now
+        print(f"[timing] {name}={timings[name]:.3f}s", flush=True)
+
     args = build_parser().parse_args(argv)
     if min(
         args.graspqp_seeds,
@@ -96,6 +118,7 @@ def main(argv: list[str] | None = None) -> int:
         seeds,
         GraspQPConfig(steps=args.graspqp_steps, device=args.device),
     )
+    finish_phase("setup_and_graspqp")
     args.output.mkdir(parents=True, exist_ok=True)
     _write(
         args.output / "graspqp_candidates.json",
@@ -147,6 +170,7 @@ def main(argv: list[str] | None = None) -> int:
             )
         _, seed_episode, seed_metrics = max(evaluated, key=lambda item: item[0])
         seed_manifest = seed_episode.save(args.output / "graspqp_seed")
+        finish_phase("seed_execution")
         print(f"[dexevolve] seed_lifetime={seed_metrics['lifetime']:.3f}", flush=True)
         lifetime_evaluator = MjWarpLifetimeEvaluator(
             args.object_id,
@@ -165,7 +189,7 @@ def main(argv: list[str] | None = None) -> int:
             geometry=geometry,
             surrogate=surrogate,
             execution=replace(
-                pipeline.execution,
+                evolution_execution_config(pipeline.execution),
                 position_tolerance=max(pipeline.execution.position_tolerance, 0.04),
                 orientation_tolerance=max(pipeline.execution.orientation_tolerance, 0.35),
             ),
@@ -179,6 +203,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
             lifetime_evaluator=lifetime_evaluator,
         )
+        finish_phase("dexevolve")
         mjwarp_metrics = lifetime_evaluator.metrics()
         for item in archive:
             gpu_lifetime = float(item.metrics.get("lifetime", 0.0))
@@ -199,6 +224,7 @@ def main(argv: list[str] | None = None) -> int:
                 - evolution_config.distance_weight * item.metrics.get("distance_energy", 0.1)
                 - evolution_config.penetration_weight * item.metrics.get("penetration_energy", 0.1)
             )
+        finish_phase("mujoco_archive_revalidation")
         archive = tuple(sorted(archive, key=lambda item: item.fitness, reverse=True))
         observation, _ = env.reset(seed=args.seed)
         strict_ranked = rank_candidates_for_scene(
@@ -217,6 +243,7 @@ def main(argv: list[str] | None = None) -> int:
         archive = tuple(item for item in archive if item.candidate.seed_index in strict_reachable)
         if not archive:
             raise RuntimeError("DexEvolve archive has no strictly RM75B-reachable survivors.")
+        finish_phase("strict_reachability")
         mujoco_lifetime = float(archive[0].metrics.get("mujoco_lifetime", 0.0))
         strict_reachable_count = len(archive)
     finally:
@@ -278,6 +305,7 @@ def main(argv: list[str] | None = None) -> int:
         raise RuntimeError(
             "DexEvolve archive has no strict execution with sustained thumb-opposed contact."
         )
+    finish_phase("strict_execution")
     mujoco_lifetime = float(best.metrics.get("mujoco_lifetime", 0.0))
     evolution_manifest = None
     if best.episode is not None:
@@ -312,8 +340,10 @@ def main(argv: list[str] | None = None) -> int:
             "strict_reachable_count": strict_reachable_count,
             "strict_execution_attempts": strict_execution_attempts,
             "exported_archive": exported_archive,
+            "timings": timings | {"total": time.perf_counter() - run_started},
         },
     )
+    finish_phase("serialization")
     print(
         f"[done] success={final_episode.success} fitness={best.fitness:.3f} manifest={manifest}",
         flush=True,
