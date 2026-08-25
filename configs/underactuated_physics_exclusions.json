@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "reason": "Failed the 2026-08-25 GraspQP + DexEvolve + Wrist Lattice + MJWarp Top100 run.",
+  "objects": [
+    "gso:Granimals_20_Wooden_ABC_Blocks_Wagon",
+    "ycb:065-e_cups",
+    "ycb:065-c_cups",
+    "gso:Ecoforms_Cup_B4_SAN",
+    "egad:A5",
+    "egad:B3",
+    "ycb:063-a_marbles",
+    "gso:RESCUE_CREW",
+    "ycb:038_padlock",
+    "gso:Lego_Friends_Mia",
+    "egad:G6",
+    "gso:SNAIL_MEASURING_TAPE",
+    "ycb:058_golf_ball",
+    "ycb:057_racquetball",
+    "ycb:063-b_marbles"
+  ]
+}

@@ -22,16 +22,30 @@ from source.grasping.affordance import geometry_affordance
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 DEFAULT_CATEGORY_QUOTAS = {
-    "cylinder": 20,
-    "box": 15,
-    "container": 15,
-    "sphere": 8,
-    "egad": 15,
-    "regular": 22,
-    "boundary": 10,
+    "cylinder": 27,
+    "box": 9,
+    "container": 4,
+    "sphere": 6,
+    "egad": 6,
+    "regular": 32,
+    "boundary": 16,
 }
 
-DEFAULT_DATASET_QUOTAS = {"gso": 60, "ycb": 30, "egad": 10}
+DEFAULT_DATASET_QUOTAS = None
+
+BENCHMARK_FAMILY_LIMITS = {
+    "supplement": 6,
+    "fruit": 5,
+    "ball": 3,
+    "ramekin": 2,
+    "building_block": 3,
+    "ink_cartridge": 2,
+    "pencil_case": 1,
+    "catalog_variant": 1,
+    "cup": 1,
+    "haircare": 1,
+    "toy_airplane": 1,
+}
 
 
 @dataclass(frozen=True)
@@ -105,6 +119,49 @@ def product_family(item: GeometryAssessment) -> str:
     return useful[0] if useful else item.object_id.lower()
 
 
+def benchmark_family(item: GeometryAssessment) -> str | None:
+    """Group semantically interchangeable objects that geometry alone misses."""
+    name = item.object_id.lower().replace("-", "_")
+    tokens = set(re.findall(r"[a-z0-9]+", name.split(":", 1)[-1]))
+    if tokens.intersection({"apple", "orange", "lemon", "peach", "pear", "plum", "strawberry"}):
+        return "fruit"
+    if "ball" in tokens:
+        return "ball"
+    if tokens.intersection({"ramekin"}):
+        return "ramekin"
+    if tokens.intersection({"lego", "duplo", "block", "blocks", "brick"}):
+        return "building_block"
+    if "ink" in tokens and "cartridge" in tokens:
+        return "ink_cartridge"
+    if "pencil" in tokens and "case" in tokens:
+        return "pencil_case"
+    if "cup" in tokens or "cups" in tokens:
+        return "cup"
+    if "airplane" in tokens:
+        return "toy_airplane"
+    if ("marc" in tokens and "anthony" in tokens) or "haircolor" in tokens:
+        return "haircare"
+    if (
+        ("same" in tokens and "200" in tokens)
+        or "labelworks" in tokens
+        or "weston" in tokens
+    ):
+        return "catalog_variant"
+    compact = "".join(sorted(tokens))
+    supplement_fragments = {
+        "5htp", "acid", "betaglucan", "bifidus", "blackcurrant", "borage", "caplets", "coq10", "creatine",
+        "dophilus", "folic", "germanium", "glucosamine", "inositol", "jarrow", "jarro",
+        "krill", "lactoferrin", "lutein", "masticgum", "mk7", "multivitamin", "natto", "omega", "pomegranate", "probiotic",
+        "prostate", "quercetin", "saccharomyces", "supplement", "theanine", "tocopherol",
+        "twinlab", "tyrosine", "whey",
+    }
+    if tokens.intersection({"dim", "multi"}) or any(
+        fragment in compact for fragment in supplement_fragments
+    ):
+        return "supplement"
+    return None
+
+
 def diverse_selection(
     ranked: list[GeometryAssessment],
     *,
@@ -112,24 +169,39 @@ def diverse_selection(
     maximum_near_duplicates: int = 2,
     quotas: dict[str, int] | None = None,
     dataset_quotas: dict[str, int] | None = None,
+    excluded_ids: set[str] | None = None,
 ) -> list[GeometryAssessment]:
-    """Stratify grasp families, then fill remaining slots by prior without clones."""
+    """Stratify grasp families, then fill remaining slots without clone fallback."""
     quotas = dict(DEFAULT_CATEGORY_QUOTAS if quotas is None else quotas)
+    excluded_ids = set() if excluded_ids is None else set(excluded_ids)
     selected: list[GeometryAssessment] = []
     selected_ids: set[str] = set()
     signature_counts: dict[tuple, int] = {}
     dataset_counts: dict[str, int] = {}
     family_counts: dict[str, int] = {}
-    base_duplicate_limit = maximum_near_duplicates
-    current_duplicate_limit = maximum_near_duplicates
-    current_family_limit = 2
+    category_counts: dict[str, int] = {}
+    benchmark_family_counts: dict[str, int] = {}
 
     def take(item: GeometryAssessment) -> bool:
         signature = shape_signature(item)
-        if item.object_id in selected_ids or signature_counts.get(signature, 0) >= current_duplicate_limit:
+        if (
+            item.object_id in excluded_ids
+            or item.object_id in selected_ids
+            or signature_counts.get(signature, 0) >= maximum_near_duplicates
+        ):
             return False
         family = product_family(item)
-        if family_counts.get(family, 0) >= current_family_limit:
+        if family_counts.get(family, 0) >= 2:
+            return False
+        benchmark_group = benchmark_family(item)
+        if (
+            benchmark_group is not None
+            and benchmark_family_counts.get(benchmark_group, 0)
+            >= BENCHMARK_FAMILY_LIMITS[benchmark_group]
+        ):
+            return False
+        category = semantic_category(item)
+        if category_counts.get(category, 0) >= quotas.get(category, count):
             return False
         if dataset_quotas is not None and dataset_counts.get(item.dataset, 0) >= dataset_quotas.get(item.dataset, count):
             return False
@@ -138,6 +210,11 @@ def diverse_selection(
         signature_counts[signature] = signature_counts.get(signature, 0) + 1
         dataset_counts[item.dataset] = dataset_counts.get(item.dataset, 0) + 1
         family_counts[family] = family_counts.get(family, 0) + 1
+        if benchmark_group is not None:
+            benchmark_family_counts[benchmark_group] = (
+                benchmark_family_counts.get(benchmark_group, 0) + 1
+            )
+        category_counts[category] = category_counts.get(category, 0) + 1
         return True
 
     for category, quota in quotas.items():
@@ -149,23 +226,13 @@ def diverse_selection(
                     break
     if dataset_quotas is not None:
         for dataset, quota in dataset_quotas.items():
-            for duplicate_limit, family_limit in ((base_duplicate_limit, 2), (base_duplicate_limit + 1, 3), (10**9, 10**9)):
-                current_duplicate_limit = duplicate_limit
-                current_family_limit = family_limit
-                for item in ranked:
-                    if item.dataset == dataset:
-                        take(item)
-                    if dataset_counts.get(dataset, 0) >= quota:
-                        break
+            for item in ranked:
+                if item.dataset == dataset:
+                    take(item)
                 if dataset_counts.get(dataset, 0) >= quota:
                     break
-    for duplicate_limit, family_limit in ((base_duplicate_limit, 2), (base_duplicate_limit + 1, 3), (10**9, 10**9)):
-        current_duplicate_limit = duplicate_limit
-        current_family_limit = family_limit
-        for item in ranked:
-            if take(item) and len(selected) >= count:
-                break
-        if len(selected) >= count:
+    for item in ranked:
+        if take(item) and len(selected) >= count:
             break
     return selected[:count]
 
@@ -207,9 +274,19 @@ def main() -> int:
         default=PROJECT_ROOT / "configs/underactuated_top100.json",
     )
     parser.add_argument(
+        "--exclude-file",
+        type=Path,
+        help="Optional JSON list (or object with an 'objects' list) of object ids to exclude.",
+    )
+    parser.add_argument(
         "--report",
         type=Path,
         default=PROJECT_ROOT / "outputs/underactuated_geometry_report.json",
+    )
+    parser.add_argument(
+        "--input-report",
+        type=Path,
+        help="Reuse assessments from an existing report instead of rescanning every mesh.",
     )
     args = parser.parse_args()
     if args.count <= 0:
@@ -219,18 +296,34 @@ def main() -> int:
     if args.maximum_near_duplicates <= 0:
         parser.error("--maximum-near-duplicates must be positive")
     assessments: list[GeometryAssessment] = []
-    for index, object_id in enumerate(object_records(), 1):
-        try:
-            item = assess(object_id)
-        except Exception as exc:
-            record = object_records()[object_id]
-            item = GeometryAssessment(
-                object_id, record["dataset"], {}, None, None, None,
-                False, [f"mesh_error:{type(exc).__name__}"],
+    excluded_ids: set[str] = set()
+    if args.exclude_file is not None:
+        payload = json.loads(args.exclude_file.read_text(encoding="utf-8"))
+        values = payload.get("objects", []) if isinstance(payload, dict) else payload
+        excluded_ids = {
+            str(value.get("object_id", value.get("id"))) if isinstance(value, dict) else str(value)
+            for value in values
+        }
+    if args.input_report is not None:
+        cached = json.loads(args.input_report.read_text(encoding="utf-8"))
+        assessments = [GeometryAssessment(**item) for item in cached["assessments"]]
+        print(f"[cache] loaded {len(assessments)} assessments from {args.input_report}")
+    else:
+        for index, object_id in enumerate(object_records(), 1):
+            try:
+                item = assess(object_id)
+            except Exception as exc:
+                record = object_records()[object_id]
+                item = GeometryAssessment(
+                    object_id, record["dataset"], {}, None, None, None,
+                    False, [f"mesh_error:{type(exc).__name__}"],
+                )
+            assessments.append(item)
+            prior = float(item.geometry.get("geometry_prior", 0.0))
+            print(
+                f"[{index:03d}/{len(object_records()):03d}] {object_id}: "
+                f"prior={prior:.3f} {item.reasons}"
             )
-        assessments.append(item)
-        prior = float(item.geometry.get("geometry_prior", 0.0))
-        print(f"[{index:03d}/{len(object_records()):03d}] {object_id}: prior={prior:.3f} {item.reasons}")
     ranked = sorted(
         (
             item
@@ -244,7 +337,8 @@ def main() -> int:
         ranked,
         count=args.count,
         maximum_near_duplicates=args.maximum_near_duplicates,
-        dataset_quotas=DEFAULT_DATASET_QUOTAS if args.count == 100 else None,
+        dataset_quotas=DEFAULT_DATASET_QUOTAS,
+        excluded_ids=excluded_ids,
     )
     report_payload = {
         "schema_version": 1,
@@ -265,12 +359,13 @@ def main() -> int:
         "schema_version": 1,
         "name": "Underactuated-hand geometry candidate pool",
         "selection_stage": "geometry_prefilter",
-        "selection_method": "stratified_underactuated_geometry_prior_v2",
+        "selection_method": "stratified_underactuated_geometry_prior_v3",
         "minimum_geometry_prior": args.minimum_prior,
         "category_quotas": DEFAULT_CATEGORY_QUOTAS,
-        "dataset_quotas": DEFAULT_DATASET_QUOTAS if args.count == 100 else None,
+        "dataset_quotas": DEFAULT_DATASET_QUOTAS,
         "maximum_near_duplicates": args.maximum_near_duplicates,
         "requires_physics_validation": True,
+        "excluded_object_ids": sorted(excluded_ids),
         "objects": [asdict(item) | {"category": semantic_category(item)} for item in selected],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

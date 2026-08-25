@@ -1,5 +1,6 @@
 from tools.rank_underactuated_candidates import (
     GeometryAssessment,
+    benchmark_family,
     diverse_selection,
     semantic_category,
 )
@@ -32,6 +33,12 @@ def test_semantic_category_separates_common_grasp_families() -> None:
     assert semantic_category(item("egad:A0", "egad", 0.9)) == "egad"
 
 
+def test_benchmark_family_groups_semantic_clones_geometry_cannot_detect() -> None:
+    assert benchmark_family(item("gso:QAbsorb_CoQ10", "gso", 0.9)) == "supplement"
+    assert benchmark_family(item("ycb:013_apple", "ycb", 0.9)) == "fruit"
+    assert benchmark_family(item("gso:Horse_Dreams_Pencil_Case", "gso", 0.9)) == "pencil_case"
+
+
 def test_diverse_selection_honours_family_quota_before_score_fill() -> None:
     ranked = [
         item("gso:bottle_a", "gso", 0.99),
@@ -47,6 +54,32 @@ def test_diverse_selection_honours_family_quota_before_score_fill() -> None:
         quotas={"sphere": 1, "box": 1, "cylinder": 1},
     )
     assert {semantic_category(value) for value in selected} == {"sphere", "box", "cylinder"}
+
+
+def test_diverse_selection_never_relaxes_duplicate_or_family_limits_to_fill() -> None:
+    ranked = [
+        item("gso:brand_a", "gso", 0.99),
+        item("gso:brand_b", "gso", 0.98),
+        item("gso:brand_c", "gso", 0.97),
+    ]
+    selected = diverse_selection(
+        ranked,
+        count=3,
+        maximum_near_duplicates=1,
+        quotas={"cylinder": 3},
+    )
+    assert len(selected) == 1
+
+
+def test_diverse_selection_honours_physics_exclusions() -> None:
+    ranked = [item("gso:bad", "gso", 0.99), item("gso:good", "gso", 0.90)]
+    selected = diverse_selection(
+        ranked,
+        count=1,
+        quotas={"cylinder": 1},
+        excluded_ids={"gso:bad"},
+    )
+    assert [value.object_id for value in selected] == ["gso:good"]
 
 
 def test_gso_downloader_accepts_shared_namespaced_json_selection(tmp_path) -> None:
