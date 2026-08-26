@@ -14,6 +14,7 @@ from source.envs.manipulation.object_catalog import (
     resolve_record,
     resolve_record_path,
 )
+from source.grasping.collision_decomposition import load_convex_parts
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class ObjectGeometry:
     bounds: np.ndarray
     plane_normals: np.ndarray
     plane_offsets: np.ndarray
+    plane_part_offsets: np.ndarray
 
     @property
     def table_z(self) -> float:
@@ -52,6 +54,22 @@ def resolve_object_mesh(object_id: str) -> Path:
     if selected is not None and (root / selected).is_file():
         return (root / selected).resolve()
     raise ValueError(f"Unknown object or missing mesh: {object_id}")
+
+
+def resolve_object_collision_mesh(object_id: str) -> Path:
+    """Resolve the source mesh used for shared convex decomposition."""
+
+    record = resolve_record(object_id)
+    root = resolve_record_path(record, "source_path")
+    collision = next(
+        (
+            root / item
+            for item in record.get("model_files", ())
+            if Path(item).name == "collision.ply"
+        ),
+        None,
+    )
+    return collision.resolve() if collision is not None and collision.is_file() else resolve_object_mesh(object_id)
 
 
 def load_object_geometry(
@@ -86,39 +104,60 @@ def load_object_geometry(
     mesh.apply_translation(-center)
     mesh.apply_scale(scale)
 
-    # MuJoCo uses a convex collision hull for the single mesh geom created by
-    # MeshObjectSpec. Synthesis must target that same geometry; optimizing on
-    # a visual concavity (the inside of a bowl, for example) would otherwise
-    # create candidates that cannot exist in the task simulator.
-    collision_mesh = mesh.convex_hull
-    collision_mesh.remove_unreferenced_vertices()
-    collision_mesh.fix_normals()
+    collision_source = resolve_object_collision_mesh(object_id)
+    surface_mesh = trimesh.load(collision_source, force="mesh", process=True)
+    if not isinstance(surface_mesh, trimesh.Trimesh) or surface_mesh.is_empty:
+        raise ValueError(f"Unable to load collision surface from {collision_source}.")
+    surface_mesh.apply_translation(-center)
+    surface_mesh.apply_scale(scale)
+    surface_mesh.remove_unreferenced_vertices()
+    surface_mesh.fix_normals()
+
+    convex_parts = []
+    for part in load_convex_parts(collision_source):
+        transformed = part.copy()
+        transformed.apply_translation(-center)
+        transformed.apply_scale(scale)
+        transformed.remove_unreferenced_vertices()
+        transformed.fix_normals()
+        convex_parts.append(transformed)
+    collision_mesh = trimesh.util.concatenate(convex_parts)
 
     points, face_ids = trimesh.sample.sample_surface_even(
-        collision_mesh,
+        surface_mesh,
         surface_points,
         seed=seed,
     )
     if len(points) < surface_points:
         extra, extra_faces = trimesh.sample.sample_surface(
-            collision_mesh,
+            surface_mesh,
             surface_points - len(points),
             seed=seed + 1,
         )
         points = np.concatenate([points, extra], axis=0)
         face_ids = np.concatenate([face_ids, extra_faces], axis=0)
-    normals = np.asarray(
-        collision_mesh.face_normals[np.asarray(face_ids, dtype=np.int64)],
+    surface_normals = np.asarray(
+        surface_mesh.face_normals[np.asarray(face_ids, dtype=np.int64)],
         dtype=np.float64,
     )
-    normals /= np.maximum(np.linalg.norm(normals, axis=1, keepdims=True), 1e-12)
-    plane_normals = np.array(collision_mesh.face_normals, dtype=np.float64, copy=True)
-    plane_normals /= np.maximum(np.linalg.norm(plane_normals, axis=1, keepdims=True), 1e-12)
-    plane_offsets = np.einsum(
-        "fi,fi->f",
-        plane_normals,
-        np.asarray(collision_mesh.triangles[:, 0], dtype=np.float64),
+    surface_normals /= np.maximum(
+        np.linalg.norm(surface_normals, axis=1, keepdims=True), 1e-12
     )
+    normal_groups, offsets, part_offsets = [], [], [0]
+    for part in convex_parts:
+        part_normals = np.array(part.face_normals, dtype=np.float64, copy=True)
+        part_normals /= np.maximum(np.linalg.norm(part_normals, axis=1, keepdims=True), 1e-12)
+        normal_groups.append(part_normals)
+        offsets.append(
+            np.einsum(
+                "fi,fi->f",
+                part_normals,
+                np.asarray(part.triangles[:, 0], dtype=np.float64),
+            )
+        )
+        part_offsets.append(part_offsets[-1] + len(part_normals))
+    plane_normals = np.concatenate(normal_groups, axis=0)
+    plane_offsets = np.concatenate(offsets, axis=0)
     return ObjectGeometry(
         object_id=object_id,
         source_path=path,
@@ -127,8 +166,9 @@ def load_object_geometry(
         vertices=np.asarray(collision_mesh.vertices, dtype=np.float64),
         faces=np.asarray(collision_mesh.faces, dtype=np.int64),
         surface_points=np.asarray(points, dtype=np.float64),
-        surface_normals=normals,
+        surface_normals=surface_normals,
         bounds=np.asarray(collision_mesh.bounds, dtype=np.float64),
         plane_normals=plane_normals,
         plane_offsets=plane_offsets,
+        plane_part_offsets=np.asarray(part_offsets, dtype=np.int64),
     )

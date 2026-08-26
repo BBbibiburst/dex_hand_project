@@ -16,6 +16,7 @@ from source.envs.manipulation.object_catalog import (
     resolve_record,
     resolve_record_path,
 )
+from source.grasping.collision_decomposition import convex_decomposition_paths
 
 _OBJECT_CONTACT_SOLREF = (0.001, 2.0)
 _OBJECT_CONTACT_SOLIMP = (0.9, 0.95, 0.001, 0.5, 2.0)
@@ -135,10 +136,13 @@ class MeshObjectSpec(ManipulationObjectSpec):
             maximum_horizontal_diameter=self.maximum_horizontal_diameter,
         )
         object.__setattr__(self, "_visual_path", visual)
-        # MuJoCo builds a convex collision hull from OBJ meshes. The YCB bundle
-        # also contains collision.ply, but MuJoCo's built-in mesh decoder does
-        # not support that file on all platforms.
-        object.__setattr__(self, "_collision_path", visual)
+        collision_source = next(
+            (root / item for item in model_files if Path(item).name == "collision.ply"),
+            visual,
+        )
+        object.__setattr__(
+            self, "_collision_paths", convex_decomposition_paths(collision_source)
+        )
         object.__setattr__(self, "_center", 0.5 * (low + high))
         object.__setattr__(self, "_extent", extent * scale)
         object.__setattr__(self, "_scale", scale)
@@ -155,7 +159,10 @@ class MeshObjectSpec(ManipulationObjectSpec):
 
     @property
     def geom_names(self) -> tuple[str, ...]:
-        return (f"{self.name}_collision",)
+        return tuple(
+            f"{self.name}_collision_{index:03d}"
+            for index in range(len(self._collision_paths))
+        )
 
     @property
     def horizontal_radius(self) -> float:
@@ -173,11 +180,14 @@ class MeshObjectSpec(ManipulationObjectSpec):
         visual_mesh.scale = [self._scale] * 3
         visual_mesh.refpos = self._center.tolist()
 
-        collision_mesh = spec.add_mesh()
-        collision_mesh.name = f"{prefix}_collision_mesh"
-        collision_mesh.file = str(self._collision_path.resolve())
-        collision_mesh.scale = [self._scale] * 3
-        collision_mesh.refpos = self._center.tolist()
+        collision_mesh_names = []
+        for index, path in enumerate(self._collision_paths):
+            collision_mesh = spec.add_mesh()
+            collision_mesh.name = f"{prefix}_collision_mesh_{index:03d}"
+            collision_mesh.file = str(path.resolve())
+            collision_mesh.scale = [self._scale] * 3
+            collision_mesh.refpos = self._center.tolist()
+            collision_mesh_names.append(collision_mesh.name)
 
         material_name = ""
         if self._texture_path is not None:
@@ -196,13 +206,14 @@ class MeshObjectSpec(ManipulationObjectSpec):
         joint = body.add_joint()
         _configure_free_joint(joint, self.joint_name)
 
-        collision = body.add_geom()
-        collision.name = self.geom_names[0]
-        collision.type = mujoco.mjtGeom.mjGEOM_MESH
-        collision.meshname = collision_mesh.name
-        collision.density = self.density
-        _configure_object_collision(collision, friction=self.friction, condim=4)
-        collision.rgba = [0.0, 0.0, 0.0, 0.0]
+        for name, mesh_name in zip(self.geom_names, collision_mesh_names, strict=True):
+            collision = body.add_geom()
+            collision.name = name
+            collision.type = mujoco.mjtGeom.mjGEOM_MESH
+            collision.meshname = mesh_name
+            collision.density = self.density
+            _configure_object_collision(collision, friction=self.friction, condim=4)
+            collision.rgba = [0.0, 0.0, 0.0, 0.0]
 
         visual = body.add_geom()
         visual.name = f"{self.name}_visual"

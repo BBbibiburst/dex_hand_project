@@ -301,9 +301,16 @@ def generate_enclosure_seeds(
     return tuple(candidates)
 
 
-def convex_outside_distance(points, plane_normals, plane_offsets):
-    """Positive distance outside a convex hull; negative values are penetration."""
+def convex_outside_distance(points, plane_normals, plane_offsets, plane_part_offsets=None):
+    """Positive outside distance for one convex hull or a union of hulls."""
     import torch
 
     values = torch.einsum("bni,pi->bnp", points, plane_normals) - plane_offsets
-    return values.max(dim=-1).values
+    if plane_part_offsets is None:
+        return values.max(dim=-1).values
+    offsets = [int(value) for value in plane_part_offsets]
+    per_part = [
+        values[..., offsets[index] : offsets[index + 1]].max(dim=-1).values
+        for index in range(len(offsets) - 1)
+    ]
+    return torch.stack(per_part, dim=-1).min(dim=-1).values

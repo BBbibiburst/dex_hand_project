@@ -17,6 +17,7 @@ dependencies = [
     "opencv-python",
     "Pillow",
     "trimesh",
+    "coacd",
 ]
 
 [project.optional-dependencies]

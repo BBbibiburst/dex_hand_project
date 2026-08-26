@@ -142,7 +142,12 @@ def refine_candidates_with_graspqp(
         normals_t = torch.stack(inward_normals, dim=1)
         digit_distance_t = torch.stack(digit_distances, dim=1)
         qp_energy = metric(contacts_t, normals_t, cog=cog)
-        outside = convex_outside_distance(hand_points, plane_normals, plane_offsets)
+        outside = convex_outside_distance(
+            hand_points,
+            plane_normals,
+            plane_offsets,
+            geometry.plane_part_offsets,
+        )
         penetration = torch.relu(-outside - 0.0005)
         table = torch.relu(geometry.table_z + 0.0015 - hand_points[..., 2])
         pose_drift = torch.square((translation - initial_t_tensor) / 0.04).mean(dim=1)

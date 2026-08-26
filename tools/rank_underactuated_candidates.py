@@ -16,7 +16,7 @@ from source.envs.manipulation.object_catalog import (
     record_scale_to_meters,
 )
 from source.grasping.catalog import resolve_object_mesh
-from source.grasping.affordance import geometry_affordance
+from source.grasping.affordance import geometry_affordance, simulate_initial_pose_stability
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -288,6 +288,11 @@ def main() -> int:
         type=Path,
         help="Reuse assessments from an existing report instead of rescanning every mesh.",
     )
+    parser.add_argument(
+        "--skip-initial-stability",
+        action="store_true",
+        help="Skip MuJoCo free-settling validation (geometry diagnostics only).",
+    )
     args = parser.parse_args()
     if args.count <= 0:
         parser.error("--count must be positive")
@@ -333,6 +338,29 @@ def main() -> int:
         ),
         key=lambda x: (-float(x.geometry["geometry_prior"]), x.object_id),
     )
+    stability_results: dict[str, dict] = {}
+    if not args.skip_initial_stability:
+        physically_stable: list[GeometryAssessment] = []
+        for index, item in enumerate(ranked, 1):
+            try:
+                stability = simulate_initial_pose_stability(item.object_id)
+                result = stability.to_dict()
+            except Exception as exc:
+                result = {
+                    "stable": False,
+                    "settled": False,
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+            else:
+                result["error"] = None
+            stability_results[item.object_id] = result
+            if result["stable"]:
+                physically_stable.append(item)
+            print(
+                f"[stability {index:03d}/{len(ranked):03d}] {item.object_id}: "
+                f"{'stable' if result['stable'] else 'unstable'}"
+            )
+        ranked = physically_stable
     selected = diverse_selection(
         ranked,
         count=args.count,
@@ -346,6 +374,8 @@ def main() -> int:
         "requested_count": args.count,
         "minimum_geometry_prior": args.minimum_prior,
         "eligible_count": len(ranked),
+        "initial_stability_validated": not args.skip_initial_stability,
+        "initial_stability": stability_results,
         "assessments": [asdict(item) for item in assessments],
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
@@ -365,8 +395,16 @@ def main() -> int:
         "dataset_quotas": DEFAULT_DATASET_QUOTAS,
         "maximum_near_duplicates": args.maximum_near_duplicates,
         "requires_physics_validation": True,
+        "initial_stability_validated": not args.skip_initial_stability,
         "excluded_object_ids": sorted(excluded_ids),
-        "objects": [asdict(item) | {"category": semantic_category(item)} for item in selected],
+        "objects": [
+            asdict(item)
+            | {
+                "category": semantic_category(item),
+                "initial_pose_stability": stability_results.get(item.object_id),
+            }
+            for item in selected
+        ],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(lock_payload, indent=2) + "\n", encoding="utf-8")

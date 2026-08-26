@@ -10,6 +10,24 @@ from source.grasping.catalog import ObjectGeometry
 from source.grasping.hand_surrogate import DexHandSurrogate
 
 
+def _union_outside_and_plane(
+    values: np.ndarray, part_offsets: np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return signed outside distance and active face for a union of hulls."""
+
+    part_values, part_planes = [], []
+    for start, stop in zip(part_offsets[:-1], part_offsets[1:], strict=True):
+        local = values[:, int(start) : int(stop)]
+        local_plane = np.argmax(local, axis=1)
+        part_values.append(local[np.arange(len(local)), local_plane])
+        part_planes.append(local_plane + int(start))
+    stacked = np.stack(part_values, axis=1)
+    winning_part = np.argmin(stacked, axis=1)
+    outside = stacked[np.arange(len(stacked)), winning_part]
+    planes = np.stack(part_planes, axis=1)[np.arange(len(stacked)), winning_part]
+    return outside, planes
+
+
 @dataclass(frozen=True)
 class AdaptiveContactCommand:
     contact_fractions: np.ndarray
@@ -139,7 +157,7 @@ def resample_contact_command(
     command = np.minimum(command, 1.0 - fractions)
 
     plane_values = hand @ geometry.plane_normals.T - geometry.plane_offsets
-    outside = plane_values.max(axis=1)
+    outside, _ = _union_outside_and_plane(plane_values, geometry.plane_part_offsets)
     penetration = np.maximum(-outside, 0.0)
     return AdaptiveContactCommand(
         contact_fractions=fractions.copy(),
@@ -168,8 +186,7 @@ def depenetrate_pose(
     for _ in range(steps):
         hand = _surface(surrogate, fractions, repaired, rotation)
         values = hand @ geometry.plane_normals.T - geometry.plane_offsets
-        plane = np.argmax(values, axis=1)
-        outside = values[np.arange(len(hand)), plane]
+        outside, plane = _union_outside_and_plane(values, geometry.plane_part_offsets)
         penetrated = outside < clearance
         if not np.any(penetrated):
             break

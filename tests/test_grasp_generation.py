@@ -13,6 +13,7 @@ from source.grasping.affordance import (
     benchmark_eligible,
     complete_uas,
     geometry_affordance,
+    initial_pose_stability_from_trajectory,
 )
 from source.grasping.config import DEFAULT_CONFIG_PATH, load_pipeline_config
 from source.grasping.contracts import DemonstrationEpisode, GraspCandidate
@@ -22,7 +23,7 @@ from source.grasping.executor import (
     grasp_hand_targets,
 )
 from source.grasping.hand_surrogate import OPEN_FRACTIONS
-from source.grasping.seeds import SeedConfig
+from source.grasping.seeds import SeedConfig, convex_outside_distance
 from tools.grasp_generation.visualize_episode import contact_points_world
 
 
@@ -38,6 +39,23 @@ def _candidate() -> GraspCandidate:
         contact_distances=np.full(5, 0.001),
         metrics={"valid": 1.0},
     )
+
+
+def test_outside_distance_uses_union_of_convex_collision_parts() -> None:
+    torch = pytest.importorskip("torch")
+    points = torch.tensor([[[-1.5, 0.0, 0.0], [0.0, 0.0, 0.0], [1.5, 0.0, 0.0]]])
+    normals = torch.tensor([[1.0, 0.0, 0.0], [-1.0, 0.0, 0.0]] * 2)
+    offsets = torch.tensor([-1.0, 2.0, 2.0, -1.0])
+
+    distance = convex_outside_distance(points, normals, offsets, [0, 2, 4])
+
+    np.testing.assert_allclose(distance.numpy(), [[-0.5, 1.0, -0.5]])
+
+
+def test_ycb_geometry_preserves_official_multiple_collision_parts() -> None:
+    geometry = load_object_geometry("ycb:025_mug", surface_points=128)
+
+    assert len(geometry.plane_part_offsets) - 1 > 1
 
 
 def test_episode_roundtrip_uses_independent_npz_contract(tmp_path: Path) -> None:
@@ -146,11 +164,70 @@ def test_underactuated_affordance_prefers_enclosable_body_over_thin_rod() -> Non
     assert cylinder.geometry_prior > rod.geometry_prior
 
 
+def test_mesh_support_estimate_is_not_a_hard_physical_gate() -> None:
+    import trimesh
+
+    box = geometry_affordance(
+        trimesh.creation.box(extents=[0.05, 0.06, 0.08]),
+        scale_to_meters=1.0,
+    )
+    sphere = geometry_affordance(
+        trimesh.creation.icosphere(radius=0.035),
+        scale_to_meters=1.0,
+    )
+
+    assert box.tipping_angle_deg > 20.0
+    assert box.initial_stability > sphere.initial_stability
+    assert sphere.eligible
+
+
+def test_measured_initial_pose_stability_rejects_motion_after_placement() -> None:
+    positions = np.zeros((5, 3), dtype=np.float64)
+    positions[:, 0] = np.linspace(0.0, 0.012, len(positions))
+    quaternions = np.tile(np.asarray([1.0, 0.0, 0.0, 0.0]), (len(positions), 1))
+    velocities = np.zeros((len(positions), 6), dtype=np.float64)
+
+    result = initial_pose_stability_from_trajectory(
+        positions, quaternions, velocities, timestep=0.1
+    )
+
+    assert not result.stable
+    assert result.horizontal_displacement_m == pytest.approx(0.012)
+
+
+def test_measured_initial_pose_stability_accepts_quiet_settling() -> None:
+    positions = np.zeros((5, 3), dtype=np.float64)
+    positions[:, 2] = np.linspace(0.002, 0.0, len(positions))
+    quaternions = np.tile(np.asarray([1.0, 0.0, 0.0, 0.0]), (len(positions), 1))
+    velocities = np.zeros((len(positions), 6), dtype=np.float64)
+
+    result = initial_pose_stability_from_trajectory(
+        positions, quaternions, velocities, timestep=0.1
+    )
+
+    assert result.stable
+    assert result.settled
+
+
+def test_contact_velocity_chatter_is_reported_without_calling_it_a_tip() -> None:
+    positions = np.zeros((5, 3), dtype=np.float64)
+    quaternions = np.tile(np.asarray([1.0, 0.0, 0.0, 0.0]), (len(positions), 1))
+    velocities = np.zeros((len(positions), 6), dtype=np.float64)
+    velocities[-3:, 5] = 0.2
+
+    result = initial_pose_stability_from_trajectory(
+        positions, quaternions, velocities, timestep=0.1
+    )
+
+    assert result.stable
+    assert not result.settled
+
+
 def test_dynamic_uas_requires_measured_contact_and_robustness() -> None:
     import trimesh
 
     geometry = geometry_affordance(
-        trimesh.creation.icosphere(radius=0.035),
+        trimesh.creation.cylinder(radius=0.035, height=0.08),
         scale_to_meters=1.0,
     )
     arrays = {
@@ -204,10 +281,16 @@ def test_object_surface_sampling_is_seed_deterministic() -> None:
     assert np.array_equal(first.surface_points, second.surface_points)
     assert np.array_equal(first.surface_normals, second.surface_normals)
     halfspace_values = first.vertices @ first.plane_normals.T - first.plane_offsets
-    assert float(halfspace_values.max()) < 1e-8
+    per_part = [
+        halfspace_values[:, start:stop].max(axis=1)
+        for start, stop in zip(
+            first.plane_part_offsets[:-1], first.plane_part_offsets[1:], strict=True
+        )
+    ]
+    assert float(np.stack(per_part, axis=1).min(axis=1).max()) < 2e-6
     np.testing.assert_allclose(
         first.bounds[1] - first.bounds[0],
-        [0.075000, 0.074889, 0.102540],
+        [0.075435, 0.075435, 0.103723],
         rtol=2e-3,
     )
 

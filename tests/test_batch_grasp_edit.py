@@ -16,6 +16,7 @@ from tools.grasping.batch_grasp_edit import (
     _format_progress,
     _gpu_ids,
     _init_object_worker,
+    _is_noncacheable_interruption,
     _resource_plan,
     _selection_ids,
     _runtime_estimate,
@@ -24,6 +25,28 @@ from tools.grasping.batch_grasp_edit import (
     _write_summary,
     build_parser,
 )
+
+
+@pytest.mark.parametrize(
+    "exc",
+    (BrokenPipeError(), EOFError(), ConnectionResetError()),
+)
+def test_ipc_interruptions_are_not_cacheable_pipeline_failures(exc) -> None:
+    assert _is_noncacheable_interruption(exc)
+
+
+def test_wrapped_ipc_interruption_is_not_cacheable() -> None:
+    try:
+        try:
+            raise BrokenPipeError("manager stopped")
+        except BrokenPipeError as cause:
+            raise RuntimeError("worker failed") from cause
+    except RuntimeError as exc:
+        assert _is_noncacheable_interruption(exc)
+
+
+def test_regular_object_error_remains_cacheable() -> None:
+    assert not _is_noncacheable_interruption(ValueError("bad object mesh"))
 
 
 def test_historical_benchmark_selection_is_stable_at_127_objects() -> None:

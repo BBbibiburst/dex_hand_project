@@ -1,0 +1,2960 @@
+{
+  "schema_version": 1,
+  "name": "Underactuated-hand Top100 with A/B failures replaced",
+  "selection_stage": "geometry_prefilter",
+  "selection_method": "preserve_92_replace_failure_classes_A_B",
+  "minimum_geometry_prior": 0.5,
+  "category_quotas": {
+    "cylinder": 27,
+    "box": 9,
+    "container": 4,
+    "sphere": 6,
+    "egad": 6,
+    "regular": 32,
+    "boundary": 16
+  },
+  "dataset_quotas": null,
+  "maximum_near_duplicates": 2,
+  "requires_physics_validation": true,
+  "excluded_object_ids": [
+    "egad:A5",
+    "egad:B3",
+    "egad:G6",
+    "gso:Ecoforms_Cup_B4_SAN",
+    "gso:Granimals_20_Wooden_ABC_Blocks_Wagon",
+    "gso:Lego_Friends_Mia",
+    "gso:RESCUE_CREW",
+    "gso:SNAIL_MEASURING_TAPE",
+    "ycb:038_padlock",
+    "ycb:057_racquetball",
+    "ycb:058_golf_ball",
+    "ycb:063-a_marbles",
+    "ycb:063-b_marbles",
+    "ycb:065-c_cups",
+    "ycb:065-e_cups"
+  ],
+  "objects": [
+    {
+      "object_id": "gso:Kong_Puppy_Teething_Rubber_Small_Pink",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04427685823779172,
+          0.04430721768953025,
+          0.07179074146619091
+        ],
+        "grasp_span_m": 0.04429203536247017,
+        "sphericity": 0.9340608420605899,
+        "axis_ratio": 1.6214054999258103,
+        "convexity": 0.9035646104562491,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9571395473393834,
+        "power_grasp_suitability": 0.987434478047263,
+        "rotational_symmetry": 0.5583769266418378,
+        "geometry_prior": 0.8978188916750292,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:JarroDophilusFOS_Value_Size",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06626240717188572,
+          0.06643322541629351,
+          0.12838210989057794
+        ],
+        "grasp_span_m": 0.06634776132075677,
+        "sphericity": 0.8786561535405705,
+        "axis_ratio": 1.9374803205919269,
+        "convexity": 0.9437130368835153,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9211264998013708,
+        "power_grasp_suitability": 0.9920908510197989,
+        "rotational_symmetry": 0.5446355633007394,
+        "geometry_prior": 0.8872314503654404,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Twinlab_Premium_Creatine_Fuel_Powder",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05921620006657588,
+          0.0596004539340246,
+          0.11281727636014456
+        ],
+        "grasp_span_m": 0.059408016329582494,
+        "sphericity": 0.8853193729814488,
+        "axis_ratio": 1.905175884864375,
+        "convexity": 0.9480355838308762,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9254575924379417,
+        "power_grasp_suitability": 0.991483648160044,
+        "rotational_symmetry": 0.5286575078751944,
+        "geometry_prior": 0.8849668117245353,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Jarrow_Formulas_Glucosamine_Hci_Mega_1000_100_ct",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.061694035904374875,
+          0.061865081057604215,
+          0.11026864912897938
+        ],
+        "grasp_span_m": 0.06177949928572501,
+        "sphericity": 0.8849911359087107,
+        "axis_ratio": 1.7873469860181406,
+        "convexity": 0.9478045293110989,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9252442383406619,
+        "power_grasp_suitability": 0.9925586897837789,
+        "rotational_symmetry": 0.5273254887084828,
+        "geometry_prior": 0.8849158297728067,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Saccharomyces_Boulardii_MOS_Value_Size",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.074645464831325,
+          0.07522522174460057,
+          0.13544863635212884
+        ],
+        "grasp_span_m": 0.07493478260571126,
+        "sphericity": 0.893450759325827,
+        "axis_ratio": 1.8145594867444346,
+        "convexity": 0.952878784435245,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9307429935617875,
+        "power_grasp_suitability": 0.9917266910997039,
+        "rotational_symmetry": 0.5160599267933437,
+        "geometry_prior": 0.8838294065240416,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Blackcurrant_Lutein",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.053960257713230125,
+          0.054019893396849455,
+          0.09714933355171179
+        ],
+        "grasp_span_m": 0.0539900673210843,
+        "sphericity": 0.8819152724260445,
+        "axis_ratio": 1.8003867599745071,
+        "convexity": 0.9421620251518241,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.923244927076929,
+        "power_grasp_suitability": 0.9923313902640302,
+        "rotational_symmetry": 0.5193536834416734,
+        "geometry_prior": 0.8827648160235744,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Borage_GLA240Gamma_Tocopherol",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.062303227081536086,
+          0.06248227849406991,
+          0.1115052952445297
+        ],
+        "grasp_span_m": 0.062392688558739126,
+        "sphericity": 0.883699677667691,
+        "axis_ratio": 1.7897194169188537,
+        "convexity": 0.9515501986624686,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9244047904839992,
+        "power_grasp_suitability": 0.9930088958261803,
+        "rotational_symmetry": 0.5165691273975062,
+        "geometry_prior": 0.882667247057046,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:STACKING_RING",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07899447602706589,
+          0.07902774610245811,
+          0.18816361134030804
+        ],
+        "grasp_span_m": 0.07901110931358751,
+        "sphericity": 0.8207785360435208,
+        "axis_ratio": 2.381984422250456,
+        "convexity": 0.8120493682368991,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8835060484282885,
+        "power_grasp_suitability": 0.9751581569668241,
+        "rotational_symmetry": 0.5692289646541008,
+        "geometry_prior": 0.8785118442795984,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:JBL_Charge_Speaker_portable_wireless_wired_Green",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07408615537988181,
+          0.07577485772316919,
+          0.17639989038430304
+        ],
+        "grasp_span_m": 0.07492574913317283,
+        "sphericity": 0.8436724983483274,
+        "axis_ratio": 2.381010183074025,
+        "convexity": 0.89286899022617,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8983871239264127,
+        "power_grasp_suitability": 0.979543626768889,
+        "rotational_symmetry": 0.545130238696712,
+        "geometry_prior": 0.8785087354131679,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:005_tomato_soup_can",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.06748621855321693,
+          0.06772627452285229,
+          0.10249819106419766
+        ],
+        "grasp_span_m": 0.06760613998923751,
+        "sphericity": 0.8692577029157385,
+        "axis_ratio": 1.5188018126007712,
+        "convexity": 0.893688321329098,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.91501750689523,
+        "power_grasp_suitability": 0.9852743737897377,
+        "rotational_symmetry": 0.48331261858733415,
+        "geometry_prior": 0.8717354938887089,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Wilton_Pearlized_Sugar_Sprinkles_525_oz_Gold",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04559993628579677,
+          0.04712518284993575,
+          0.13485642922764496
+        ],
+        "grasp_span_m": 0.04635628690278799,
+        "sphericity": 0.7988777306551789,
+        "axis_ratio": 2.9573819661158023,
+        "convexity": 0.9004056216636417,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8052370496696539,
+        "power_grasp_suitability": 0.97751450906316,
+        "rotational_symmetry": 0.5593671276779804,
+        "geometry_prior": 0.8575613152187996,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Weston_No_22_Cajun_Jerky_Tonic_12_fl_oz_nLj64ZnGwDh",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06202883191610625,
+          0.06256427931245322,
+          0.19889428005525223
+        ],
+        "grasp_span_m": 0.062295980331193795,
+        "sphericity": 0.7945123003629543,
+        "axis_ratio": 3.206481146126626,
+        "convexity": 0.9085174080530197,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7675256347781927,
+        "power_grasp_suitability": 0.9857229419281812,
+        "rotational_symmetry": 0.5861394675309303,
+        "geometry_prior": 0.8555400376827795,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Perricone_MD_No_Mascara_Mascara",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.048170746158059385,
+          0.05483950572816989,
+          0.12865738463981635
+        ],
+        "grasp_span_m": 0.05139708075236487,
+        "sphericity": 0.7619314057590518,
+        "axis_ratio": 2.6708613609110734,
+        "convexity": 0.9908500703647415,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8213348232158334,
+        "power_grasp_suitability": 0.962372122394721,
+        "rotational_symmetry": 0.5227232381991491,
+        "geometry_prior": 0.8504713840424684,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Black_Elderberry_Syrup_54_oz_Gaia_Herbs",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08055821589701584,
+          0.08110975238464777,
+          0.1468528969236695
+        ],
+        "grasp_span_m": 0.08083351374248153,
+        "sphericity": 0.769621303379961,
+        "axis_ratio": 1.8229412765471815,
+        "convexity": 0.9910274135361009,
+        "size_compatibility": 0.9583243128759236,
+        "shape_regularity": 0.8502538471969747,
+        "power_grasp_suitability": 0.9780818766351612,
+        "rotational_symmetry": 0.5222196967642055,
+        "geometry_prior": 0.8490251641736521,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Phillips_Milk_of_Magnesia_Saline_Laxative_Liquid_Original",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.057308368953366794,
+          0.07295319788237095,
+          0.17379311385649887
+        ],
+        "grasp_span_m": 0.06465932864305732,
+        "sphericity": 0.8277970264113215,
+        "axis_ratio": 3.032595710373794,
+        "convexity": 0.9246027327394428,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8135046677150278,
+        "power_grasp_suitability": 0.9260555985442886,
+        "rotational_symmetry": 0.5376649854820174,
+        "geometry_prior": 0.8424230636612325,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:HeavyDuty_Flashlight",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0745601567855064,
+          0.07635088689172546,
+          0.23229552628413985
+        ],
+        "grasp_span_m": 0.07545020939241665,
+        "sphericity": 0.7771779469832424,
+        "axis_ratio": 3.1155450350299603,
+        "convexity": 0.5899954569810925,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7689893606349132,
+        "power_grasp_suitability": 0.9349917185072716,
+        "rotational_symmetry": 0.5698882950145775,
+        "geometry_prior": 0.8399729287884616,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:010_potted_meat_can",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.05793189808928145,
+          0.08493111302812041,
+          0.10153437595491685
+        ],
+        "grasp_span_m": 0.07014428404762797,
+        "sphericity": 0.8372828281220331,
+        "axis_ratio": 1.752650600165692,
+        "convexity": 0.8438036738251045,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8942338382793216,
+        "power_grasp_suitability": 0.8842783304314916,
+        "rotational_symmetry": 0.4605097128189833,
+        "geometry_prior": 0.8367299847415,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:006_mustard_bottle",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.060103998712647135,
+          0.09726311322704284,
+          0.19209220441330138
+        ],
+        "grasp_span_m": 0.0764584987570789,
+        "sphericity": 0.8127596575507657,
+        "axis_ratio": 3.195997080521719,
+        "convexity": 0.8759588394962357,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7808541861349572,
+        "power_grasp_suitability": 0.8693674773606648,
+        "rotational_symmetry": 0.5423590511767915,
+        "geometry_prior": 0.8210272261092638,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:007_tuna_fish_can",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.03468019322932411,
+          0.08504090773072458,
+          0.08513071707727302
+        ],
+        "grasp_span_m": 0.05430686063932117,
+        "sphericity": 0.806198109583653,
+        "axis_ratio": 2.4547359501241206,
+        "convexity": 0.8166254039539586,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8740287712293745,
+        "power_grasp_suitability": 0.7982601238258369,
+        "rotational_symmetry": 0.4917784675545495,
+        "geometry_prior": 0.8164279172747128,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Nestle_Nesquik_Chocolate_Powder_Flavored_Milk_Additive_109_Oz_Canister",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06220895086655199,
+          0.10674466342064826,
+          0.14467323843653335
+        ],
+        "grasp_span_m": 0.08148910063316282,
+        "sphericity": 0.8194760982877992,
+        "axis_ratio": 2.325601644478465,
+        "convexity": 0.8989295690822663,
+        "size_compatibility": 0.925544968341859,
+        "shape_regularity": 0.8826594638870695,
+        "power_grasp_suitability": 0.828359808308494,
+        "rotational_symmetry": 0.47510230305301016,
+        "geometry_prior": 0.8004387691620505,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:013_apple",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.07671741921687773,
+          0.08112869150114785,
+          0.08297735188527633
+        ],
+        "grasp_span_m": 0.07889222925238142,
+        "sphericity": 0.9812831660444262,
+        "axis_ratio": 1.0815972791094806,
+        "convexity": 0.9787228413041494,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.987834057928877,
+        "power_grasp_suitability": 0.9810139261532139,
+        "rotational_symmetry": 0.43676320796450313,
+        "support_margin_m": 0.0030877239705403357,
+        "center_of_mass_height_m": 0.036758961776603594,
+        "tipping_angle_deg": 4.801528745227035,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.8905178532949543,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "sphere",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 5.8727484965823415e-05,
+        "vertical_displacement_m": -0.001829598754936157,
+        "orientation_change_deg": 0.0907251501489844,
+        "tail_max_linear_speed_m_s": 0.00021294086060417473,
+        "tail_max_angular_speed_rad_s": 0.005470619217601901,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "gso:Cole_Hardware_School_Bell_Solid_Brass_38",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08255637330517558,
+          0.08258975423529702,
+          0.16027845282006686
+        ],
+        "grasp_span_m": 0.08257306208341729,
+        "sphericity": 0.7894373163136846,
+        "axis_ratio": 1.9414425125918022,
+        "convexity": 0.22999583835447096,
+        "size_compatibility": 0.8713468958291356,
+        "shape_regularity": 0.863134255603895,
+        "power_grasp_suitability": 0.8118795532118337,
+        "rotational_symmetry": 0.5522753516888926,
+        "geometry_prior": 0.7906125912904515,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Marc_Anthony_Strictly_Curls_Curl_Envy_Perfect_Curl_Cream_6_fl_oz_bottle",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.056846196378950206,
+          0.0824084869416721,
+          0.22307923863197826
+        ],
+        "grasp_span_m": 0.06844420378657674,
+        "sphericity": 0.7172841496324478,
+        "axis_ratio": 3.9242597190650934,
+        "convexity": 0.9763945486250251,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.616838336591978,
+        "power_grasp_suitability": 0.9039746896573613,
+        "rotational_symmetry": 0.522193157352511,
+        "geometry_prior": 0.7846418880328371,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Nescafe_Tasters_Choice_Instant_Coffee_Decaf_House_Blend_Light_7_oz",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0805960412765814,
+          0.09580643776888796,
+          0.1856261838970389
+        ],
+        "grasp_span_m": 0.08787274670216882,
+        "sphericity": 0.8591797725348685,
+        "axis_ratio": 2.3031675124095186,
+        "convexity": 0.9188994330212794,
+        "size_compatibility": 0.6063626648915589,
+        "shape_regularity": 0.9084668521476645,
+        "power_grasp_suitability": 0.7648827837463603,
+        "rotational_symmetry": 0.5127532640850141,
+        "geometry_prior": 0.7027968612579767,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:072-d_toy_airplane",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.030584279340728632,
+          0.030707762429042457,
+          0.06646841358896474
+        ],
+        "grasp_span_m": 0.030645958690479338,
+        "sphericity": 0.8310418734227685,
+        "axis_ratio": 2.1732868984246343,
+        "convexity": 0.6529216185834517,
+        "size_compatibility": 0.5645958690479336,
+        "shape_regularity": 0.8901772177247995,
+        "power_grasp_suitability": 0.7548706845388976,
+        "rotational_symmetry": 0.5680742110384407,
+        "geometry_prior": 0.6942555784879925,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Snack_Catcher_Snack_Dispenser",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08994163014968484,
+          0.09054177629529464,
+          0.13420776554505437
+        ],
+        "grasp_span_m": 0.09024120431735656,
+        "sphericity": 0.8963802181345494,
+        "axis_ratio": 1.492165144457576,
+        "convexity": 0.700782995855236,
+        "size_compatibility": 0.48793978413217204,
+        "shape_regularity": 0.9326471417874571,
+        "power_grasp_suitability": 0.7268663423744457,
+        "rotational_symmetry": 0.5053089967518866,
+        "geometry_prior": 0.6623221056305046,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "gso:Olive_Kids_Paisley_Pencil_Case",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.09113829403384809,
+          0.09242264495928876,
+          0.21534332596962857
+        ],
+        "grasp_span_m": 0.09177822286188378,
+        "sphericity": 0.8379050387542923,
+        "axis_ratio": 2.3628193642691144,
+        "convexity": 0.8516281178921833,
+        "size_compatibility": 0.41108885690581126,
+        "shape_regularity": 0.89463827519029,
+        "power_grasp_suitability": 0.7115302853307314,
+        "rotational_symmetry": 0.5008544175143739,
+        "geometry_prior": 0.6250396807048735,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "cylinder"
+    },
+    {
+      "object_id": "ycb:061_foam_brick",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.05366864902334302,
+          0.05367541672139938,
+          0.07854638838346373
+        ],
+        "grasp_span_m": 0.0536720327657008,
+        "sphericity": 0.8137159702332464,
+        "axis_ratio": 1.4635432382376572,
+        "convexity": 0.9367774401372578,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8789153806516101,
+        "power_grasp_suitability": 0.9919303333948106,
+        "rotational_symmetry": 0.4265213774219351,
+        "geometry_prior": 0.8530157039959921,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:073-b_lego_duplo",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.04624730574203062,
+          0.047141390121452985,
+          0.047351474526508584
+        ],
+        "grasp_span_m": 0.046692207937204876,
+        "sphericity": 0.8443831522249672,
+        "axis_ratio": 1.023875310502131,
+        "convexity": 0.682326545288391,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8988490489462286,
+        "power_grasp_suitability": 0.9508178440357045,
+        "rotational_symmetry": 0.4062202631396654,
+        "geometry_prior": 0.8436607758734164,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:073-f_lego_duplo",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.0345201994941874,
+          0.03904624331942409,
+          0.046726055983671855
+        ],
+        "grasp_span_m": 0.03671354121962497,
+        "sphericity": 0.8442617742495637,
+        "axis_ratio": 1.3535859197899394,
+        "convexity": 0.7037354075801023,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8987701532622164,
+        "power_grasp_suitability": 0.9249478586275464,
+        "rotational_symmetry": 0.3949696092257231,
+        "geometry_prior": 0.8349234248175853,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:009_gelatin_box",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.02976693892276336,
+          0.07565489279873182,
+          0.09185027859712859
+        ],
+        "grasp_span_m": 0.047455395616811155,
+        "sphericity": 0.74605204250858,
+        "axis_ratio": 3.0856474303741352,
+        "convexity": 0.9657036755995632,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7529431873781981,
+        "power_grasp_suitability": 0.8137126252026162,
+        "rotational_symmetry": 0.5070817001323655,
+        "geometry_prior": 0.7930802931716767,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:008_pudding_box",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.038738202085123824,
+          0.09261096179921793,
+          0.11431917704592925
+        ],
+        "grasp_span_m": 0.05989642855359397,
+        "sphericity": 0.7516323840383627,
+        "axis_ratio": 2.9510708007233486,
+        "convexity": 0.9706131698414358,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.775411137523667,
+        "power_grasp_suitability": 0.8217861349421572,
+        "rotational_symmetry": 0.4312570264605028,
+        "geometry_prior": 0.7855507234085566,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:077_rubiks_cube",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.07971480193039693,
+          0.08831033705238261,
+          0.09361742690946515
+        ],
+        "grasp_span_m": 0.08390256865279676,
+        "sphericity": 0.8440053615669396,
+        "axis_ratio": 1.174404560287402,
+        "convexity": 0.9617980528138279,
+        "size_compatibility": 0.8048715673601622,
+        "shape_regularity": 0.8986034850185107,
+        "power_grasp_suitability": 0.8781704783073129,
+        "rotational_symmetry": 0.4251886158341111,
+        "geometry_prior": 0.7706926842063268,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "ycb:004_sugar_box",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.045118806987505755,
+          0.09488501553691456,
+          0.1767450045654798
+        ],
+        "grasp_span_m": 0.06543010547153759,
+        "sphericity": 0.7203368840693455,
+        "axis_ratio": 3.917324423370144,
+        "convexity": 0.9649939368979671,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.6197935553732544,
+        "power_grasp_suitability": 0.8382383674200358,
+        "rotational_symmetry": 0.5283739735996492,
+        "geometry_prior": 0.7701827754182524,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "gso:ReadytoUse_Rolled_Fondant_Pure_White_24_oz_box",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05085752929099363,
+          0.1301062840175361,
+          0.1744638612977757
+        ],
+        "grasp_span_m": 0.08134423243453821,
+        "sphericity": 0.7112321464641981,
+        "axis_ratio": 3.4304431168792844,
+        "convexity": 0.9940021892677753,
+        "size_compatibility": 0.9327883782730895,
+        "shape_regularity": 0.682038858838629,
+        "power_grasp_suitability": 0.7862715710091935,
+        "rotational_symmetry": 0.495752291052875,
+        "geometry_prior": 0.7460645791544575,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "gso:Nestl_Crunch_Girl_Scouts_Cookie_Flavors_Caramel_Coconut_78_oz_box",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0610509137529356,
+          0.13920849170418392,
+          0.16297910377577118
+        ],
+        "grasp_span_m": 0.092188966914205,
+        "sphericity": 0.7545981226339645,
+        "axis_ratio": 2.669560433367542,
+        "convexity": 0.992540346286047,
+        "size_compatibility": 0.3905516542897502,
+        "shape_regularity": 0.816750319040621,
+        "power_grasp_suitability": 0.556381261328998,
+        "rotational_symmetry": 0.4671597100614407,
+        "geometry_prior": 0.5538803333916179,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "box"
+    },
+    {
+      "object_id": "gso:Threshold_Ramekin_White_Porcelain",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0532233588000153,
+          0.11069659258593387,
+          0.11285613601907213
+        ],
+        "grasp_span_m": 0.07675704830919615,
+        "sphericity": 0.8518120323137114,
+        "axis_ratio": 2.1204249142397167,
+        "convexity": 0.9101173926342547,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9036778210039124,
+        "power_grasp_suitability": 0.8327413670208106,
+        "rotational_symmetry": 0.5192124918737627,
+        "geometry_prior": 0.8379472953809333,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "container"
+    },
+    {
+      "object_id": "ycb:065-a_cups",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.056739501015868526,
+          0.05686250527150441,
+          0.06526712158838378
+        ],
+        "grasp_span_m": 0.0568009698475066,
+        "sphericity": 0.8959990179901197,
+        "axis_ratio": 1.1502942468621695,
+        "convexity": 0.1867951508761491,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9323993616935778,
+        "power_grasp_suitability": 0.8574005552502565,
+        "rotational_symmetry": 0.38666473916678046,
+        "geometry_prior": 0.8247829270693147,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "container"
+    },
+    {
+      "object_id": "gso:BIA_Porcelain_Ramekin_With_Glazed_Rim_35_45_oz_cup",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04315981559247874,
+          0.08825555150350095,
+          0.08835333798891304
+        ],
+        "grasp_span_m": 0.06171785258661881,
+        "sphericity": 0.8472394901035355,
+        "axis_ratio": 2.0471203775094433,
+        "convexity": 0.3200406841882488,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9007056685672981,
+        "power_grasp_suitability": 0.7381400368318645,
+        "rotational_symmetry": 0.5212734357838207,
+        "geometry_prior": 0.8139661135065547,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "container"
+    },
+    {
+      "object_id": "gso:Cole_Hardware_Bowl_Scirocco_YellowBlue",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06269539019596294,
+          0.11329461591203645,
+          0.11346588419856177
+        ],
+        "grasp_span_m": 0.08427959510882144,
+        "sphericity": 0.8501313899932318,
+        "axis_ratio": 1.8097962839677488,
+        "convexity": 0.19371121793180238,
+        "size_compatibility": 0.7860202445589283,
+        "shape_regularity": 0.9025854034956007,
+        "power_grasp_suitability": 0.6297558021247129,
+        "rotational_symmetry": 0.5441161027103485,
+        "geometry_prior": 0.7277145953148266,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "container"
+    },
+    {
+      "object_id": "gso:Nestl_Skinny_Cow_Heavenly_Crisp_Candy_Bar_Chocolate_Raspberry_6_pack_462_oz_total",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.050079628431982465,
+          0.11509593844436064,
+          0.16650042720586777
+        ],
+        "grasp_span_m": 0.07592076021302675,
+        "sphericity": 0.7318265518008682,
+        "axis_ratio": 3.3247137093280674,
+        "convexity": 0.9927621059061714,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7102273393646349,
+        "power_grasp_suitability": 0.8296272318239651,
+        "rotational_symmetry": 0.46534342252377703,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.08201259799272716,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.784124004563316,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.0004591383632853563,
+        "vertical_displacement_m": -0.0018793874355784723,
+        "orientation_change_deg": 0.5276715345212593,
+        "tail_max_linear_speed_m_s": 0.004225790617312712,
+        "tail_max_angular_speed_rad_s": 0.07065705957198933,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "gso:Crayola_Bonus_64_Crayons",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0452753347973882,
+          0.12794168071661421,
+          0.1475840620005348
+        ],
+        "grasp_span_m": 0.07610914812941513,
+        "sphericity": 0.7018623631176019,
+        "axis_ratio": 3.259701174182118,
+        "convexity": 0.9888720845168618,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.6998523716409447,
+        "power_grasp_suitability": 0.8047675547763433,
+        "rotational_symmetry": 0.49209185859840354,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.0628694318949963,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.7797777154162076,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.0003809972176384723,
+        "vertical_displacement_m": -0.001812300575440351,
+        "orientation_change_deg": 0.6994005839058026,
+        "tail_max_linear_speed_m_s": 0.0001655408792061458,
+        "tail_max_angular_speed_rad_s": 0.005163835356754117,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "ycb:014_lemon",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.05344454316511685,
+          0.05429051297371159,
+          0.06810987393167071
+        ],
+        "grasp_span_m": 0.05386586733804502,
+        "sphericity": 0.9879589533053478,
+        "axis_ratio": 1.2744027715092512,
+        "convexity": 0.9916990982831628,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9921733196484761,
+        "power_grasp_suitability": 0.9942855419381469,
+        "rotational_symmetry": 0.5267272397146997,
+        "geometry_prior": 0.9019601633395957,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "sphere"
+    },
+    {
+      "object_id": "ycb:017_orange",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.07118125912621953,
+          0.07360681981610923,
+          0.07389294538370167
+        ],
+        "grasp_span_m": 0.07238388021367341,
+        "sphericity": 0.996754779808647,
+        "axis_ratio": 1.0380955084353558,
+        "convexity": 0.9972548308592654,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9978906068756206,
+        "power_grasp_suitability": 0.9897707377758015,
+        "rotational_symmetry": 0.49739012187816994,
+        "geometry_prior": 0.8963933605384896,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "sphere"
+    },
+    {
+      "object_id": "ycb:018_plum",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.0524038776950016,
+          0.055159032765886434,
+          0.055505553435250765
+        ],
+        "grasp_span_m": 0.053763809452438346,
+        "sphericity": 0.9913877988859441,
+        "axis_ratio": 1.0591879051069728,
+        "convexity": 0.9868584848884178,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9944020692758636,
+        "power_grasp_suitability": 0.9833670880229837,
+        "rotational_symmetry": 0.47260789700175476,
+        "geometry_prior": 0.8889638687250628,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "sphere"
+    },
+    {
+      "object_id": "ycb:015_peach",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.057844383937061705,
+          0.06009457398837924,
+          0.06313174877713532
+        ],
+        "grasp_span_m": 0.05895874498594733,
+        "sphericity": 0.9933135064450831,
+        "axis_ratio": 1.0914067102145404,
+        "convexity": 0.9866026468532665,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.995653779189304,
+        "power_grasp_suitability": 0.9870864398874268,
+        "rotational_symmetry": 0.46085996554808406,
+        "geometry_prior": 0.8878570478787995,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "sphere"
+    },
+    {
+      "object_id": "egad:F2",
+      "dataset": "egad",
+      "geometry": {
+        "extents_m": [
+          0.06039945464358677,
+          0.0687488227068919,
+          0.10018861148162901
+        ],
+        "grasp_span_m": 0.06443905181553268,
+        "sphericity": 0.8953895033474453,
+        "axis_ratio": 1.658766822860164,
+        "convexity": 0.5326706858787924,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9320031771758395,
+        "power_grasp_suitability": 0.8960264996544862,
+        "rotational_symmetry": 0.4537275582916474,
+        "geometry_prior": 0.8477529308659109,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "egad"
+    },
+    {
+      "object_id": "egad:E0",
+      "dataset": "egad",
+      "geometry": {
+        "extents_m": [
+          0.056960204607112215,
+          0.0740171668783969,
+          0.10046394131964773
+        ],
+        "grasp_span_m": 0.06493098620714348,
+        "sphericity": 0.830291989440494,
+        "axis_ratio": 1.7637566791166952,
+        "convexity": 0.9753374657101715,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8896897931363211,
+        "power_grasp_suitability": 0.9277641285820039,
+        "rotational_symmetry": 0.4342659370116278,
+        "geometry_prior": 0.8412166678319069,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "egad"
+    },
+    {
+      "object_id": "gso:Crayola_Crayons_Washable_24_crayons",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.03410837521693792,
+          0.07456428702131054,
+          0.11786713819265908
+        ],
+        "grasp_span_m": 0.05043081081547584,
+        "sphericity": 0.698724255966705,
+        "axis_ratio": 3.45566557899619,
+        "convexity": 0.9044851960726791,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.6703775853188916,
+        "power_grasp_suitability": 0.8249918102732587,
+        "rotational_symmetry": 0.4005972199237418,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.053483857740152886,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.7609035424402325,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.00042328877473436007,
+        "vertical_displacement_m": -0.0018018851015009218,
+        "orientation_change_deg": 0.4224198633877583,
+        "tail_max_linear_speed_m_s": 0.00031989244269307383,
+        "tail_max_angular_speed_rad_s": 0.005599232286588696,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "egad:G0",
+      "dataset": "egad",
+      "geometry": {
+        "extents_m": [
+          0.04568273805376276,
+          0.10218834587794902,
+          0.10255741492966099
+        ],
+        "grasp_span_m": 0.06832454490803179,
+        "sphericity": 0.7791390225366593,
+        "axis_ratio": 2.244992732461964,
+        "convexity": 0.986383410052916,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8564403646488286,
+        "power_grasp_suitability": 0.832405442550211,
+        "rotational_symmetry": 0.547936593420367,
+        "geometry_prior": 0.8317987704838333,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "egad"
+    },
+    {
+      "object_id": "egad:F6",
+      "dataset": "egad",
+      "geometry": {
+        "extents_m": [
+          0.0644484941347439,
+          0.1014343012804081,
+          0.1086011478624527
+        ],
+        "grasp_span_m": 0.08085349696291576,
+        "sphericity": 0.9305836528777732,
+        "axis_ratio": 1.6850843347153752,
+        "convexity": 0.448863892725264,
+        "size_compatibility": 0.9573251518542122,
+        "shape_regularity": 0.9548793743705526,
+        "power_grasp_suitability": 0.7889011204316354,
+        "rotational_symmetry": 0.5287473789011371,
+        "geometry_prior": 0.828892145037038,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "egad"
+    },
+    {
+      "object_id": "egad:C1",
+      "dataset": "egad",
+      "geometry": {
+        "extents_m": [
+          0.06619442052486837,
+          0.10729571840528038,
+          0.10883770612004814
+        ],
+        "grasp_span_m": 0.0842756068185628,
+        "sphericity": 0.9512582470962706,
+        "axis_ratio": 1.6442126882757324,
+        "convexity": 0.9831435042284545,
+        "size_compatibility": 0.78621965907186,
+        "shape_regularity": 0.9683178606125759,
+        "power_grasp_suitability": 0.7867631519815355,
+        "rotational_symmetry": 0.48358233390047645,
+        "geometry_prior": 0.771352617650181,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "egad"
+    },
+    {
+      "object_id": "ycb:055_baseball",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.07264621233629939,
+          0.07300573242173387,
+          0.07396150406667659
+        ],
+        "grasp_span_m": 0.0728257505232616,
+        "sphericity": 0.9974312979700035,
+        "axis_ratio": 1.0181054412622141,
+        "convexity": 0.9949730342147178,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9983303436805023,
+        "power_grasp_suitability": 0.9978934737949477,
+        "rotational_symmetry": 0.5237446667639023,
+        "geometry_prior": 0.9038048877216429,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Nikon_1_AW1_w11275mm_Lens_Silver",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06413981675727401,
+          0.06472874548649654,
+          0.08080196246569801
+        ],
+        "grasp_span_m": 0.06443360826798478,
+        "sphericity": 0.9245855357618568,
+        "axis_ratio": 1.2597785050038262,
+        "convexity": 0.9716262036385146,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9509805982452069,
+        "power_grasp_suitability": 0.9936982302690128,
+        "rotational_symmetry": 0.4586674552398082,
+        "geometry_prior": 0.8779031981765166,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Mastic_Gum",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.054527063887123264,
+          0.054805179471959814,
+          0.09794637945495846
+        ],
+        "grasp_span_m": 0.05466594481405045,
+        "sphericity": 0.8828846095782825,
+        "axis_ratio": 1.7962892639463905,
+        "convexity": 0.945025798327592,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9238749962258836,
+        "power_grasp_suitability": 0.9915087067904729,
+        "rotational_symmetry": 0.4599899942424553,
+        "geometry_prior": 0.8708439246025802,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Android_Figure_Chrome",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04673490601243441,
+          0.06863478410994492,
+          0.08125658030270583
+        ],
+        "grasp_span_m": 0.05663603256374869,
+        "sphericity": 0.9163982186789308,
+        "axis_ratio": 1.7386700270903828,
+        "convexity": 0.8323117788996807,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.945658842141305,
+        "power_grasp_suitability": 0.8823542829284301,
+        "rotational_symmetry": 0.5326370806589223,
+        "geometry_prior": 0.8635306973992183,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Android_Figure_Panda",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04705048231405252,
+          0.06954497683857803,
+          0.07608986590839163
+        ],
+        "grasp_span_m": 0.05720248860648204,
+        "sphericity": 0.9269973763851275,
+        "axis_ratio": 1.6171962999339107,
+        "convexity": 0.8394819903729696,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9525482946503329,
+        "power_grasp_suitability": 0.8820223835406571,
+        "rotational_symmetry": 0.5190507193870905,
+        "geometry_prior": 0.8624528134251657,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:YumYum_D3_Liquid",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04350015543131794,
+          0.04367361896260913,
+          0.1003130736617491
+        ],
+        "grasp_span_m": 0.04358680090488004,
+        "sphericity": 0.7493564734598633,
+        "axis_ratio": 2.3060394305977283,
+        "convexity": 0.9791856665665183,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8370817077489112,
+        "power_grasp_suitability": 0.9961929824467602,
+        "rotational_symmetry": 0.49832859468261953,
+        "geometry_prior": 0.8579843914854418,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Perricone_MD_Face_Finishing_Moisturizer",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07455421424745626,
+          0.0754186403324859,
+          0.07701000403113717
+        ],
+        "grasp_span_m": 0.07498518166678,
+        "sphericity": 0.8353755234412896,
+        "axis_ratio": 1.0329396508094069,
+        "convexity": 0.9931450303376599,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8929940902368383,
+        "power_grasp_suitability": 0.9957031442660356,
+        "rotational_symmetry": 0.42136730505297726,
+        "geometry_prior": 0.856447769636314,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:PINEAPPLE_MARACA_6_PCSSET",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05359949570683402,
+          0.06843159323976425,
+          0.10023885021125306
+        ],
+        "grasp_span_m": 0.06056318096060143,
+        "sphericity": 0.8947653236656203,
+        "axis_ratio": 1.8701453976267999,
+        "convexity": 0.8432214737933702,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9315974603826532,
+        "power_grasp_suitability": 0.9145447029084353,
+        "rotational_symmetry": 0.47104360842485316,
+        "geometry_prior": 0.8557442625077428,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Kotex_U_Barely_There_Liners_Thin_60_count",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07113019751491506,
+          0.08045281301709761,
+          0.1315445574915015
+        ],
+        "grasp_span_m": 0.07564803024888805,
+        "sphericity": 0.8152303363761555,
+        "axis_ratio": 1.8493489697384624,
+        "convexity": 0.9919869868197477,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8798997186445011,
+        "power_grasp_suitability": 0.9642333151112922,
+        "rotational_symmetry": 0.4627286041161193,
+        "geometry_prior": 0.8535789792621722,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Perricoen_MD_No_Concealer_Concealer",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.048682448840040755,
+          0.05306523194505544,
+          0.11101592710967984
+        ],
+        "grasp_span_m": 0.05082662136469488,
+        "sphericity": 0.7766505838747404,
+        "axis_ratio": 2.28040967031984,
+        "convexity": 0.9930963978573146,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8548228795185813,
+        "power_grasp_suitability": 0.9743578451406045,
+        "rotational_symmetry": 0.46695333384303633,
+        "geometry_prior": 0.8506858479334037,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:PEEKABOO_ROLLER",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04588575770878231,
+          0.06184206356624432,
+          0.06420640360759937
+        ],
+        "grasp_span_m": 0.05326978454069249,
+        "sphericity": 0.9308674063641457,
+        "axis_ratio": 1.3992665004049956,
+        "convexity": 0.906543887411436,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9550638141366947,
+        "power_grasp_suitability": 0.9106263853454907,
+        "rotational_symmetry": 0.41822847789501855,
+        "geometry_prior": 0.8500682454495501,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Thomas_Friends_Wooden_Railway_Porter_5JzRhMm3a9o",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.03733720587666288,
+          0.050323554703529866,
+          0.08780624040066323
+        ],
+        "grasp_span_m": 0.04334675215527919,
+        "sphericity": 0.8564955367566773,
+        "axis_ratio": 2.351708927837724,
+        "convexity": 0.6948704348665122,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9067220988918403,
+        "power_grasp_suitability": 0.8809801026021306,
+        "rotational_symmetry": 0.48791414047262,
+        "geometry_prior": 0.8445083784680166,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:WHALE_WHISTLE_6PCS_SET",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.038481794508511954,
+          0.05773177901177278,
+          0.07317459885161855
+        ],
+        "grasp_span_m": 0.04713409017411775,
+        "sphericity": 0.8896409546505198,
+        "axis_ratio": 1.9015381113641345,
+        "convexity": 0.854770451427347,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9282666205228379,
+        "power_grasp_suitability": 0.8811030106902562,
+        "rotational_symmetry": 0.4527588682960939,
+        "geometry_prior": 0.8428941814624922,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Great_Dinos_Triceratops_Toy",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0459713603716522,
+          0.06926000004079096,
+          0.07905862173707498
+        ],
+        "grasp_span_m": 0.056426734986315195,
+        "sphericity": 0.9262679969739169,
+        "axis_ratio": 1.719736398878153,
+        "convexity": 0.7706713268688985,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.952074198033046,
+        "power_grasp_suitability": 0.8685948729412499,
+        "rotational_symmetry": 0.4327619796611263,
+        "geometry_prior": 0.8417196636757992,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Nescafe_Momento_Mocha_Specialty_Coffee_Mix_8_ct",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0650473578721216,
+          0.09032456329183397,
+          0.16124855204903094
+        ],
+        "grasp_span_m": 0.07665098951146698,
+        "sphericity": 0.7782641056473388,
+        "axis_ratio": 2.4789408413180123,
+        "convexity": 0.9904023445400136,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8558716686707702,
+        "power_grasp_suitability": 0.9148428111544645,
+        "rotational_symmetry": 0.4935092661834598,
+        "geometry_prior": 0.8413804731930007,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:3D_Dollhouse_Refrigerator",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07612333528974809,
+          0.0804590927667368,
+          0.20966967186850233
+        ],
+        "grasp_span_m": 0.07826119406060228,
+        "sphericity": 0.7454287147602874,
+        "axis_ratio": 2.75434163611509,
+        "convexity": 0.9376115270035887,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7989208355380741,
+        "power_grasp_suitability": 0.975909539238451,
+        "rotational_symmetry": 0.47811907913267737,
+        "geometry_prior": 0.8393314095206668,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Office_Depot_Canon_CL_41_Remanufactured_Ink_Cartridge_TriColor",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.049437314912907884,
+          0.08614685412949818,
+          0.11857122615069
+        ],
+        "grasp_span_m": 0.06526001192427366,
+        "sphericity": 0.7887066492727233,
+        "axis_ratio": 2.3984155765654567,
+        "convexity": 0.9933640068202141,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8626593220272701,
+        "power_grasp_suitability": 0.8713308853357417,
+        "rotational_symmetry": 0.4995743873470203,
+        "geometry_prior": 0.833412429310157,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Office_Depot_HP_950XL_Ink_Cartridge_Black_CN045AN",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05054603574065124,
+          0.08603686199550753,
+          0.11827306130718637
+        ],
+        "grasp_span_m": 0.06594560107723943,
+        "sphericity": 0.7852107299373169,
+        "axis_ratio": 2.3399077607992553,
+        "convexity": 0.9927946154879155,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8603869744592559,
+        "power_grasp_suitability": 0.875345534399403,
+        "rotational_symmetry": 0.4853338934908891,
+        "geometry_prior": 0.8309999059128426,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:COAST_GUARD_BOAT",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07495393572003517,
+          0.08142775531443364,
+          0.11699060004144674
+        ],
+        "grasp_span_m": 0.0781238167120937,
+        "sphericity": 0.9086820714913441,
+        "axis_ratio": 1.5608333160572805,
+        "convexity": 0.6934804208744619,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9406433464693736,
+        "power_grasp_suitability": 0.9343375262362877,
+        "rotational_symmetry": 0.3059599398974057,
+        "geometry_prior": 0.8299372061558965,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Ecoforms_Plant_Container_B4_Har",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08143804240064509,
+          0.09916968904162751,
+          0.0998563272390339
+        ],
+        "grasp_span_m": 0.08986759894995999,
+        "sphericity": 0.8794192825617574,
+        "axis_ratio": 1.226163157849223,
+        "convexity": 0.12835031471273536,
+        "size_compatibility": 0.5066200525020006,
+        "shape_regularity": 0.9216225336651424,
+        "power_grasp_suitability": 0.5639037326307279,
+        "rotational_symmetry": 0.33004103888459035,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.04255775597208377,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.5976302319867526,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "container",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.00032462175156539025,
+        "vertical_displacement_m": -0.0019459618253425681,
+        "orientation_change_deg": 0.7168535750122668,
+        "tail_max_linear_speed_m_s": 0.0015644454967604405,
+        "tail_max_angular_speed_rad_s": 0.05621868832648607,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "gso:SCHOOL_BUS",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.035103814805638296,
+          0.043852030427424166,
+          0.09944974492738626
+        ],
+        "grasp_span_m": 0.03923485128015033,
+        "sphericity": 0.7857993034492535,
+        "axis_ratio": 2.8330181627842017,
+        "convexity": 0.8721258429536934,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8141470044522265,
+        "power_grasp_suitability": 0.9236210045073808,
+        "rotational_symmetry": 0.4497369425288286,
+        "geometry_prior": 0.8243893907456676,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Phillips_Stool_Softener_Liquid_Gels_30_liquid_gels",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04774094742053765,
+          0.09280902730109138,
+          0.09944534030945038
+        ],
+        "grasp_span_m": 0.06656418626057595,
+        "sphericity": 0.8028985580924262,
+        "axis_ratio": 2.083019832712202,
+        "convexity": 0.990516093907664,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.871884062760077,
+        "power_grasp_suitability": 0.8531316351251679,
+        "rotational_symmetry": 0.4463590575032984,
+        "geometry_prior": 0.8205257359719709,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Fujifilm_instax_SHARE_SP1_10_photos",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04334140844412318,
+          0.10429359285541133,
+          0.12451019508010272
+        ],
+        "grasp_span_m": 0.06723266472520235,
+        "sphericity": 0.8012953011101721,
+        "axis_ratio": 2.8727768558934663,
+        "convexity": 0.9797901983087797,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8186531858965266,
+        "power_grasp_suitability": 0.8221322258887078,
+        "rotational_symmetry": 0.5008115542783694,
+        "geometry_prior": 0.8103586638019826,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Crosley_Alarm_Clock_Vintage_Metal",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05300048182364128,
+          0.10939969883742429,
+          0.1584800374614715
+        ],
+        "grasp_span_m": 0.07614615387361817,
+        "sphericity": 0.8190625698074031,
+        "axis_ratio": 2.990162202464737,
+        "convexity": 0.6602161122293023,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8137679620297488,
+        "power_grasp_suitability": 0.798474139145957,
+        "rotational_symmetry": 0.4344216105694041,
+        "geometry_prior": 0.7899448474078072,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:LACING_SHEEP",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08423773314718147,
+          0.09220809696792341,
+          0.13350342153451789
+        ],
+        "grasp_span_m": 0.08813286030983769,
+        "sphericity": 0.9448155423745259,
+        "axis_ratio": 1.584841098480875,
+        "convexity": 0.7568010397933902,
+        "size_compatibility": 0.5933569845081156,
+        "shape_regularity": 0.9641301025434419,
+        "power_grasp_suitability": 0.7585647627725393,
+        "rotational_symmetry": 0.4505145143028233,
+        "geometry_prior": 0.6987837145419946,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Ecoforms_Plant_Pot_GP9AAvocado",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08876409726683195,
+          0.09319526831306965,
+          0.09344902915296938
+        ],
+        "grasp_span_m": 0.09095270123173811,
+        "sphericity": 0.8684874162009302,
+        "axis_ratio": 1.0527795812765848,
+        "convexity": 0.05887739158694095,
+        "size_compatibility": 0.4523649384130946,
+        "shape_regularity": 0.9145168205306046,
+        "power_grasp_suitability": 0.5499617318293107,
+        "rotational_symmetry": 0.4480323625520412,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.04979421543060546,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.5971197303968738,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.000545411312570484,
+        "vertical_displacement_m": -0.0021167136605880765,
+        "orientation_change_deg": 0.915605704758149,
+        "tail_max_linear_speed_m_s": 4.5725199074823126e-14,
+        "tail_max_angular_speed_rad_s": 1.851669569439771e-13,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "ycb:054_softball",
+      "dataset": "ycb",
+      "geometry": {
+        "extents_m": [
+          0.09481912658734151,
+          0.09549038801364315,
+          0.09584908022873927
+        ],
+        "grasp_span_m": 0.09515416537882085,
+        "sphericity": 0.9971048865432497,
+        "axis_ratio": 1.0108622983407154,
+        "convexity": 0.9936940174873613,
+        "size_compatibility": 0.2422917310589578,
+        "shape_regularity": 0.9981181762531123,
+        "power_grasp_suitability": 0.656132897664477,
+        "rotational_symmetry": 0.5545513231910819,
+        "geometry_prior": 0.5971605524353011,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Nestle_Skinny_Cow_Dreamy_Clusters_Candy_Dark_Chocolate_6_pack_1_oz_pouches",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.058913731713398296,
+          0.13769518943678316,
+          0.16423904992075222
+        ],
+        "grasp_span_m": 0.09006740502925684,
+        "sphericity": 0.746427160517246,
+        "axis_ratio": 2.7877889440060812,
+        "convexity": 0.9842140616101173,
+        "size_compatibility": 0.49662974853715836,
+        "shape_regularity": 0.7948872021753586,
+        "power_grasp_suitability": 0.5998591359270509,
+        "rotational_symmetry": 0.48175806449937825,
+        "geometry_prior": 0.5940271219866256,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Shurtape_Gaffers_Tape_Silver_2_x_60_yd",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05267743326409355,
+          0.1530586739376874,
+          0.15347141827741767
+        ],
+        "grasp_span_m": 0.08979275071988374,
+        "sphericity": 0.7582981579521249,
+        "axis_ratio": 2.913418683632564,
+        "convexity": 0.743662022481277,
+        "size_compatibility": 0.5103624640058132,
+        "shape_regularity": 0.7850151869603221,
+        "power_grasp_suitability": 0.5485022003110189,
+        "rotational_symmetry": 0.47694142341190765,
+        "geometry_prior": 0.5818763707019607,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Reebok_RETRO_RUSH_2V",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.08670970428019117,
+          0.10148902363099917,
+          0.21295386210772688
+        ],
+        "grasp_span_m": 0.09380875879537726,
+        "sphericity": 0.8145064166984696,
+        "axis_ratio": 2.4559403572591374,
+        "convexity": 0.66933308812632,
+        "size_compatibility": 0.3095620602311374,
+        "shape_regularity": 0.8794291708540052,
+        "power_grasp_suitability": 0.6001474340065117,
+        "rotational_symmetry": 0.3939487804366759,
+        "geometry_prior": 0.5415525253718056,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:3D_Dollhouse_Sink",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.09100249719246303,
+          0.09622178310972684,
+          0.13898266170256154
+        ],
+        "grasp_span_m": 0.09357575833140068,
+        "sphericity": 0.80785633973694,
+        "axis_ratio": 1.527240086704701,
+        "convexity": 0.8108349874655351,
+        "size_compatibility": 0.3212120834299662,
+        "shape_regularity": 0.875106620829011,
+        "power_grasp_suitability": 0.6533887034575567,
+        "rotational_symmetry": 0.23050719381410956,
+        "geometry_prior": 0.5245888948634537,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Philips_EcoVantage_43_W_Light_Bulbs_Natural_Light_2_pack",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06800614104471348,
+          0.13259363384150466,
+          0.1345260575452891
+        ],
+        "grasp_span_m": 0.09495884037127064,
+        "sphericity": 0.8165617618621277,
+        "axis_ratio": 1.9781457303516063,
+        "convexity": 0.987308041174554,
+        "size_compatibility": 0.2520579814364681,
+        "shape_regularity": 0.880765145210383,
+        "power_grasp_suitability": 0.5157019654862132,
+        "rotational_symmetry": 0.47941589597162315,
+        "geometry_prior": 0.5206173512994141,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular"
+    },
+    {
+      "object_id": "gso:Nintendo_Yoshi_Action_Figure",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06191211986815785,
+          0.0629815838744883,
+          0.11291959286928442
+        ],
+        "grasp_span_m": 0.062444562375948774,
+        "sphericity": 0.8479451028055452,
+        "axis_ratio": 1.8238689469807725,
+        "convexity": 0.4659560043063722,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9011643168236044,
+        "power_grasp_suitability": 0.9155582504537014,
+        "rotational_symmetry": 0.41125798570794686,
+        "geometry_prior": 0.8364322389609158,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Thomas_Friends_Wooden_Railway_Talking_Thomas_z7yi7UFHJRj",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.03810377677609095,
+          0.05533971592918637,
+          0.08736948201008211
+        ],
+        "grasp_span_m": 0.04592006296400302,
+        "sphericity": 0.8623662874651068,
+        "axis_ratio": 2.292934963468084,
+        "convexity": 0.6289964277452933,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9105380868523194,
+        "power_grasp_suitability": 0.8548361524775971,
+        "rotational_symmetry": 0.40090797008690016,
+        "geometry_prior": 0.8215251538498591,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Threshold_Bamboo_Ceramic_Soap_Dish",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.0512196020745056,
+          0.09913260774875637,
+          0.12563918049226638
+        ],
+        "grasp_span_m": 0.07125680824664653,
+        "sphericity": 0.8071159232580409,
+        "axis_ratio": 2.452951124249419,
+        "convexity": 0.5568386736728512,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8746253501177266,
+        "power_grasp_suitability": 0.791557352243722,
+        "rotational_symmetry": 0.5027674257706338,
+        "geometry_prior": 0.8170991607444889,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Shurtape_Tape_Purple_CP28",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04979743230330963,
+          0.11724210073214991,
+          0.1175863332129631
+        ],
+        "grasp_span_m": 0.07640913279384241,
+        "sphericity": 0.8029908336628538,
+        "axis_ratio": 2.3612930983421028,
+        "convexity": 0.5708610770620848,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.871944041880855,
+        "power_grasp_suitability": 0.7663104300495469,
+        "rotational_symmetry": 0.5178953239281953,
+        "geometry_prior": 0.8131426827682394,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Just_For_Men_Mustache_Beard_Brushin_Hair_Color_Gel_MediumDark_Brown_M40",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04802951589961614,
+          0.08113809101610672,
+          0.14562839524902269
+        ],
+        "grasp_span_m": 0.062426142220407946,
+        "sphericity": 0.745530974020186,
+        "axis_ratio": 3.03206044286169,
+        "convexity": 0.9923680430898093,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7601066711124843,
+        "power_grasp_suitability": 0.8766285234696727,
+        "rotational_symmetry": 0.5077878021875462,
+        "geometry_prior": 0.8107413590830483,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Squirtin_Barnyard_Friends_4pk",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.06631043943717,
+          0.08062237796579046,
+          0.1865185055592315
+        ],
+        "grasp_span_m": 0.07311706580122848,
+        "sphericity": 0.8148292875453808,
+        "axis_ratio": 2.8128075630679574,
+        "convexity": 0.4870326851287396,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8358459780749834,
+        "power_grasp_suitability": 0.871213861008035,
+        "rotational_symmetry": 0.4046939802221658,
+        "geometry_prior": 0.8077037558151878,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Nintendo_Mario_Action_Figure",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04831211879653174,
+          0.07091266105606225,
+          0.10334093435229348
+        ],
+        "grasp_span_m": 0.058531537696515964,
+        "sphericity": 0.8500857027868327,
+        "axis_ratio": 2.139027161849755,
+        "convexity": 0.4209714345737217,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9025557068114413,
+        "power_grasp_suitability": 0.8165929139008268,
+        "rotational_symmetry": 0.3782381529759011,
+        "geometry_prior": 0.8054347857732472,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Toysmith_Windem_Up_Flippin_Animals_Dog",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.03436809461865961,
+          0.05038751647230972,
+          0.05365454687582487
+        ],
+        "grasp_span_m": 0.04161397522130769,
+        "sphericity": 0.8945691419386204,
+        "axis_ratio": 1.561173159907852,
+        "convexity": 0.5791581068247884,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9314699422601033,
+        "power_grasp_suitability": 0.8448787695505778,
+        "rotational_symmetry": 0.299670335725387,
+        "geometry_prior": 0.8040212450977477,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Teenage_Mutant_Ninja_Turtles_Rahzar_Action_Figure",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07335625838590515,
+          0.08467920433339753,
+          0.14195341320605673
+        ],
+        "grasp_span_m": 0.07881465341542503,
+        "sphericity": 0.8641429402399874,
+        "axis_ratio": 1.9351234145460723,
+        "convexity": 0.13838104381286087,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.9116929111559918,
+        "power_grasp_suitability": 0.8028842723324255,
+        "rotational_symmetry": 0.35817114618923424,
+        "geometry_prior": 0.8002785251099511,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Xyli_Pure_Xylitol",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.09458072816002572,
+          0.10058741147029351,
+          0.14957969165510382
+        ],
+        "grasp_span_m": 0.09753784199269781,
+        "sphericity": 0.8841590096106917,
+        "axis_ratio": 1.581502855444533,
+        "convexity": 0.9870294313599831,
+        "size_compatibility": 0.1231079003651096,
+        "shape_regularity": 0.9247033562469497,
+        "power_grasp_suitability": 0.5858571261004779,
+        "rotational_symmetry": 0.4466859689702999,
+        "support_margin_m": 0.0,
+        "center_of_mass_height_m": 0.0736000173543039,
+        "tipping_angle_deg": 0.0,
+        "initial_stability": 0.0,
+        "geometry_prior": 0.510081569934518,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.003848232477964717,
+        "vertical_displacement_m": -0.0029976307121866164,
+        "orientation_change_deg": 3.904949454816406,
+        "tail_max_linear_speed_m_s": 4.7350317796699735e-14,
+        "tail_max_angular_speed_rad_s": 2.3839639914780244e-13,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "gso:Just_For_Men_Mustache_Beard_Brushin_Hair_Color_Gel_Kit_Jet_Black_M60",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.04431855462819514,
+          0.07929429969687482,
+          0.14378499103547915
+        ],
+        "grasp_span_m": 0.05928076208029401,
+        "sphericity": 0.7419951153725738,
+        "axis_ratio": 3.2443519930138742,
+        "convexity": 0.9901078651854799,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7280875459702305,
+        "power_grasp_suitability": 0.8664340818503893,
+        "rotational_symmetry": 0.47929584132617475,
+        "geometry_prior": 0.79448957522039,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Arm_Hammer_Diaper_Pail_Refills_12_Pack_MFWkmoweejt",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.09539862883312561,
+          0.1014143125399831,
+          0.1700607939788814
+        ],
+        "grasp_span_m": 0.09836049186725555,
+        "sphericity": 0.80198125833183,
+        "axis_ratio": 1.78263352481048,
+        "convexity": 0.9934620457154898,
+        "size_compatibility": 0.0819754066372226,
+        "shape_regularity": 0.8712878179156894,
+        "power_grasp_suitability": 0.5682749795547195,
+        "rotational_symmetry": 0.44924409935782456,
+        "support_margin_m": 0.021335485778580562,
+        "center_of_mass_height_m": 0.08382162836926407,
+        "tipping_angle_deg": 14.280499545545577,
+        "initial_stability": 0.36944114973797515,
+        "geometry_prior": 0.47974288721788155,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "regular",
+      "initial_pose_stability": {
+        "stable": true,
+        "settled": true,
+        "horizontal_displacement_m": 0.00024727254725597517,
+        "vertical_displacement_m": -0.0014765840936334929,
+        "orientation_change_deg": 0.23130408598690255,
+        "tail_max_linear_speed_m_s": 0.0034319175818965804,
+        "tail_max_angular_speed_rad_s": 0.05226340593755329,
+        "simulated_seconds": 1.5
+      }
+    },
+    {
+      "object_id": "gso:Playmates_nickelodeon_teenage_mutant_ninja_turtles_shredder",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.05142595503759175,
+          0.09145325102126442,
+          0.14141377549734405
+        ],
+        "grasp_span_m": 0.06857893827598337,
+        "sphericity": 0.8086056091657253,
+        "axis_ratio": 2.7498521980578152,
+        "convexity": 0.23967760969386281,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.8406143382296274,
+        "power_grasp_suitability": 0.7410880783137854,
+        "rotational_symmetry": 0.46602155957495295,
+        "geometry_prior": 0.7886299160508438,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Playmates_Industrial_CoSplinter_Teenage_Mutant_Ninja_Turtle_Action_Figure",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07847219809365813,
+          0.08290329052907426,
+          0.1315267945152343
+        ],
+        "grasp_span_m": 0.08065732103791699,
+        "sphericity": 0.8634011844081251,
+        "axis_ratio": 1.6760941799827558,
+        "convexity": 0.23176532920196768,
+        "size_compatibility": 0.9671339481041504,
+        "shape_regularity": 0.9112107698652813,
+        "power_grasp_suitability": 0.8395306259834473,
+        "rotational_symmetry": 0.2906556077939851,
+        "geometry_prior": 0.7859566549522243,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:BABY_CAR",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.07360829124052463,
+          0.0948850622778235,
+          0.09553226219404681
+        ],
+        "grasp_span_m": 0.08357228786219359,
+        "sphericity": 0.9358815444232735,
+        "axis_ratio": 1.2978464869111384,
+        "convexity": 0.5271578054095242,
+        "size_compatibility": 0.8213856068903207,
+        "shape_regularity": 0.9583230038751278,
+        "power_grasp_suitability": 0.7838664147828676,
+        "rotational_symmetry": 0.5133907830261738,
+        "geometry_prior": 0.7846411933368298,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    },
+    {
+      "object_id": "gso:Schleich_African_Black_Rhino",
+      "dataset": "gso",
+      "geometry": {
+        "extents_m": [
+          0.041046139345025136,
+          0.06324865074275893,
+          0.13886654021572287
+        ],
+        "grasp_span_m": 0.05095206503932996,
+        "sphericity": 0.8030921158983174,
+        "axis_ratio": 3.383181522833127,
+        "convexity": 0.5224215500263824,
+        "size_compatibility": 1.0,
+        "shape_regularity": 0.7483644621372685,
+        "power_grasp_suitability": 0.8253862359752774,
+        "rotational_symmetry": 0.44276437032501603,
+        "geometry_prior": 0.7819905485931398,
+        "eligible": true,
+        "reasons": []
+      },
+      "adaptive_contact": null,
+      "robustness": null,
+      "uas": null,
+      "eligible": true,
+      "reasons": [],
+      "category": "boundary"
+    }
+  ],
+  "replacements": {
+    "gso:OXO_Soft_Works_Can_Opener_SnapLock": "ycb:013_apple",
+    "ycb:056_tennis_ball": "gso:Nestl_Skinny_Cow_Heavenly_Crisp_Candy_Bar_Chocolate_Raspberry_6_pack_462_oz_total",
+    "ycb:016_pear": "gso:Crayola_Bonus_64_Crayons",
+    "egad:E4": "gso:Crayola_Crayons_Washable_24_crayons",
+    "gso:LADYBUG_BEAD": "gso:Ecoforms_Plant_Container_B4_Har",
+    "gso:Reebok_CLASSIC_JOGGER": "gso:Ecoforms_Plant_Pot_GP9AAvocado",
+    "gso:My_First_Wiggle_Crocodile": "gso:Xyli_Pure_Xylitol",
+    "gso:BIRD_RATTLE": "gso:Arm_Hammer_Diaper_Pail_Refills_12_Pack_MFWkmoweejt"
+  }
+}

@@ -27,7 +27,8 @@ import sys
 import time
 from collections import Counter
 from collections.abc import Iterable
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import CancelledError, ProcessPoolExecutor, as_completed
+from concurrent.futures.process import BrokenProcessPool
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -44,6 +45,32 @@ STATUSES = (
     "NO_REACHABLE_TEMPLATE",
     "PIPELINE_ERROR",
 )
+
+_NONCACHEABLE_INTERRUPTION_ERRORS = (
+    BrokenPipeError,
+    BrokenProcessPool,
+    CancelledError,
+    ConnectionResetError,
+    EOFError,
+)
+
+
+def _is_noncacheable_interruption(exc: BaseException) -> bool:
+    """Return whether *exc* indicates runner/process-pool interruption.
+
+    These failures say nothing about grasp quality and must never become a
+    resumable ``PIPELINE_ERROR`` row.  Walk chained exceptions because process
+    pools and IPC helpers may wrap the original transport error.
+    """
+
+    seen: set[int] = set()
+    current: BaseException | None = exc
+    while current is not None and id(current) not in seen:
+        if isinstance(current, _NONCACHEABLE_INTERRUPTION_ERRORS):
+            return True
+        seen.add(id(current))
+        current = current.__cause__ or current.__context__
+    return False
 
 CSV_FIELDS = (
     "object_id",
@@ -455,9 +482,14 @@ def _source_hashes(root: Path) -> dict[str, str]:
         "source/rl/grasp_edit/ppo.py",
         "source/rl/grasp_edit/templates.py",
         "source/grasping/executor.py",
+        "source/grasping/catalog.py",
+        "source/grasping/collision_decomposition.py",
+        "source/grasping/dexevolve_contacts.py",
         "source/grasping/hand_surrogate.py",
         "source/grasping/graspqp_adapter.py",
+        "source/grasping/seeds.py",
         "source/grasping/dexevolve.py",
+        "source/envs/manipulation/objects.py",
         "tools/grasp_generation/graspqp_evolve.py",
     )
     return {name: _sha256(root / name) for name in files}
@@ -1236,6 +1268,8 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
     except KeyboardInterrupt:
         raise
     except Exception as exc:  # noqa: BLE001 - preserve the rest of the catalogue sweep
+        if _is_noncacheable_interruption(exc):
+            raise
         row["status"] = "PIPELINE_ERROR"
         row["failure_category"] = f"{type(exc).__name__}: {exc}"
         with log_path.open("a", encoding="utf-8") as log:
@@ -1605,6 +1639,8 @@ def main(argv: list[str] | None = None) -> int:
                     try:
                         row = future.result()
                     except Exception as exc:
+                        if _is_noncacheable_interruption(exc):
+                            raise
                         if args.fail_fast:
                             raise
                         row = _empty_row(object_id)

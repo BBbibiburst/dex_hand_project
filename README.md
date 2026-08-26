@@ -21,11 +21,11 @@ Dex Hand MJCF 与六驱动肌腱标定
 `original127` 基准固定为前两者。实际对象列表以各数据集 manifest 为准。
 
 物体先按数据集单位恢复物理尺度，再统一限制到最大水平直径 75 mm。全新 clone 先执行
-第3节的 YCB/EGAD 下载，再用仓库锁定清单恢复当前 Top100 所需的60个 GSO：
+第3节的 YCB/EGAD 下载，再用仓库锁定的 v2 清单恢复当前 Top100 所需的 GSO：
 
 ```bash
 python -m tools.download_gso_objects \
-  --selection configs/underactuated_top100.json \
+  --selection configs/underactuated_top100_v2.json \
   --workers 12
 ```
 
@@ -43,8 +43,10 @@ python -m tools.rank_underactuated_candidates \
   --minimum-prior 0.50
 
 python -m tools.render_object_catalog \
-  --selection configs/underactuated_top100.json \
-  --output-dir outputs/object_catalog/top100
+  --selection configs/underactuated_top100_v2.json \
+  --output-dir outputs/object_catalog/top100_v2 \
+  --include-collision \
+  --collision-mode multi
 ```
 
 该清单按 GSO/YCB/EGAD 数据集配额、抓取形状族和近重复约束生成，只是物理测试候选。
@@ -91,7 +93,7 @@ python -m pip install -e ".[hardware]"
 ```bash
 python -m tools.download_maniskill_objects
 python -m tools.download_gso_objects \
-  --selection configs/underactuated_top100.json \
+  --selection configs/underactuated_top100_v2.json \
   --workers 12
 ```
 
@@ -166,18 +168,18 @@ MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m tools.grasping.batch_grasp_edit \
   --train-lattice-success
 ```
 
-当前 Top100 候选全量压力测试：
+当前 Top100 v2 全量正式生成（已剔除上一轮 A/B 失败并补入通过初始稳态检查的对象）：
 
 ```bash
 MUJOCO_GL=egl \
 CUDA_VISIBLE_DEVICES=0 \
 PYTHONUNBUFFERED=1 \
 python -m tools.grasping.batch_grasp_edit \
-  --selection configs/underactuated_top100.json \
+  --selection configs/underactuated_top100_v2.json \
   --expect-count 100 \
-  --output outputs/dex_hand_top100 \
-  --grasp-root outputs/dex_hand_top100/grasp \
-  --lattice-root outputs/dex_hand_top100/lattice \
+  --output outputs/dex_hand_top100_v2 \
+  --grasp-root outputs/dex_hand_top100_v2/grasp \
+  --lattice-root outputs/dex_hand_top100_v2/lattice \
   --device cuda:0 \
   --gpus auto \
   --workers-per-gpu auto \
@@ -205,7 +207,7 @@ worker；24 GB GPU 配合 64 个环境时通常采用同卡双流水线，让 Gr
 ## 输出目录
 
 ```text
-outputs/dex_hand_ppo127/
+outputs/dex_hand_top100_v2/
 ├── objects/             每个对象的可恢复结果
 ├── logs/                每个对象的完整日志
 ├── lattice/             Wrist Lattice 轨迹与 index.json
@@ -229,7 +231,7 @@ outputs/dex_hand_ppo127/
 
 ```bash
 python -m apps.collect_generated_lerobot \
-  --input-root outputs/dex_hand_ppo127 \
+  --input-root outputs/dex_hand_top100_v2 \
   --output datasets/grasp_lerobot \
   --repo-id local/dex-hand-grasp-demonstrations
 ```

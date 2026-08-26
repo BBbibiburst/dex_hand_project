@@ -2,6 +2,7 @@
 numpy
 scipy
 trimesh
+coacd
 mujoco
 gymnasium
 torch

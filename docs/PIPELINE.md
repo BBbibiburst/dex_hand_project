@@ -25,7 +25,7 @@
 
 ```bash
 python -m apps.collect_generated_lerobot \
-  --input-root outputs/dex_hand_ppo127 \
+  --input-root outputs/dex_hand_top100_v2 \
   --output datasets/grasp_lerobot \
   --repo-id local/dex-hand-grasp-demonstrations
 ```
@@ -110,6 +110,34 @@ reset 时与固定桩或另一螺母穿插。全机器人 benchmark 的初始 ta
 `--force` 只会忽略部分 benchmark/PPO 结果。手模型变化后应使用新的输出根目录，同时把
 `--grasp-root` 和 `--lattice-root` 指向该目录下的新位置。
 
+### 对象资产与多凸碰撞缓存迁移
+
+当前正式清单是 `configs/underactuated_top100_v2.json`。运行时使用原始视觉/碰撞 mesh，并为
+GSO/EGAD 生成确定性的 CoACD 多凸分解；YCB 则保留 ManiSkill 官方 `collision.ply` 中的多个
+凸组件。GraspQP、DexEvolve 和 C MuJoCo 读取同一组缓存分块，避免生成与复验使用不同碰撞
+几何。
+
+数据与生成缓存均被 Git 忽略。要让服务器上的 clone 免下载、免 CoACD 计算，必须从本机
+项目根目录额外复制下面两个目录，并在服务器仓库中保持完全相同的相对路径：
+
+```text
+assets/maniskill/
+.cache/collision_decomposition/
+```
+
+注意 `.cache` 是隐藏目录；不要误复制成 `assets/maniskill/maniskill`。复制完成后在服务器仓库
+根目录检查：
+
+```bash
+test -f assets/maniskill/manifest.json
+test -d .cache/collision_decomposition
+du -sh assets/maniskill .cache/collision_decomposition
+```
+
+缓存键只取决于源 mesh 内容和仓库中固定的分解参数，因此本机 manifest 内记录的绝对源路径
+只是诊断信息，不影响缓存迁移。服务器仍应通过项目依赖安装 `coacd`，以便将来遇到新增或
+变化的 mesh 时补建缺失缓存。
+
 ## Pilot
 
 建议先覆盖盒体、柱体、容器、带柄和不规则对象：
@@ -136,7 +164,7 @@ MUJOCO_GL=egl CUDA_VISIBLE_DEVICES=0 python -m tools.grasping.batch_grasp_edit \
 Pilot 应满足：没有 traceback、CUDA OOM、NaN、MJWarp capacity overflow 或
 `PIPELINE_ERROR`，并且有可达模板的对象实际产生 `rl_updates`。
 
-## 127 对象全量运行
+## Top100 v2 全量运行
 
 以下参数适合单张 24 GB GPU。调度器会读取 `CUDA_VISIBLE_DEVICES`、GPU 空闲显存、启动时
 利用率和 CPU 核心数；在空闲的 24 GB 3090、`--num-envs 64` 下通常会选择两个对象 worker
@@ -149,11 +177,11 @@ MUJOCO_GL=egl \
 CUDA_VISIBLE_DEVICES=0 \
 PYTHONUNBUFFERED=1 \
 python -m tools.grasping.batch_grasp_edit \
-  --dataset original127 \
-  --expect-count 127 \
-  --output outputs/dex_hand_ppo127 \
-  --grasp-root outputs/dex_hand_ppo127/grasp \
-  --lattice-root outputs/dex_hand_ppo127/lattice \
+  --selection configs/underactuated_top100_v2.json \
+  --expect-count 100 \
+  --output outputs/dex_hand_top100_v2 \
+  --grasp-root outputs/dex_hand_top100_v2/grasp \
+  --lattice-root outputs/dex_hand_top100_v2/lattice \
   --device cuda:0 \
   --gpus auto \
   --workers-per-gpu auto \
@@ -166,7 +194,7 @@ python -m tools.grasping.batch_grasp_edit \
   --base-candidates 3 \
   --lattice-max-templates 12 \
   --lattice-max-executions 32 \
-  2>&1 | tee -a outputs/dex_hand_ppo127/console.log
+  2>&1 | tee -a outputs/dex_hand_top100_v2/console.log
 ```
 
 多卡时只需扩大可见设备，例如 `CUDA_VISIBLE_DEVICES=0,1`；`--gpus auto` 会为每张卡建立
@@ -213,10 +241,10 @@ jq '{
   status_counts,
   ppo_eligible: ([.results[] | select(.lattice_templates > 0)] | length),
   ppo_ran: ([.results[] | select(.rl_updates > 0)] | length)
-}' outputs/dex_hand_ppo127/summary.json
+}' outputs/dex_hand_top100_v2/summary.json
 ```
 
-批处理返回 0 只表示没有 `PIPELINE_ERROR`，不等于 127 个对象全部抓取成功。压力测试还应
+批处理返回 0 只表示没有 `PIPELINE_ERROR`，不等于 100 个对象全部抓取成功。压力测试还应
 确认 `ppo_ran == ppo_eligible`。
 
 ## C MuJoCo 回放
@@ -224,7 +252,7 @@ jq '{
 MJWarp 成功轨迹必须在 C MuJoCo 中复验：
 
 ```bash
-find outputs/dex_hand_ppo127/rl \
+find outputs/dex_hand_top100_v2/rl \
   -path '*/best_trajectory/manifest.json' -print0 |
 while IFS= read -r -d '' manifest; do
   python -m tools.verification.replay_trajectory "$manifest" ||
