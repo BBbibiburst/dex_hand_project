@@ -19,12 +19,33 @@ from tools.grasping.batch_grasp_edit import (
     _is_noncacheable_interruption,
     _resource_plan,
     _selection_ids,
+    _validate_runtime_dependencies,
     _runtime_estimate,
     _wall_clock_estimate,
     _worker_gpu_identity,
     _write_summary,
     build_parser,
 )
+
+
+def test_non_ycb_catalog_requires_coacd(monkeypatch) -> None:
+    def missing(name: str):
+        assert name == "coacd"
+        raise ModuleNotFoundError(name)
+
+    monkeypatch.setattr("tools.grasping.batch_grasp_edit.importlib.import_module", missing)
+
+    with pytest.raises(RuntimeError, match="pip install coacd"):
+        _validate_runtime_dependencies(("gso:example",))
+
+
+def test_ycb_only_catalog_does_not_require_coacd(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "tools.grasping.batch_grasp_edit.importlib.import_module",
+        lambda name: pytest.fail(f"unexpected import: {name}"),
+    )
+
+    _validate_runtime_dependencies(("ycb:002_master_chef_can",))
 
 
 @pytest.mark.parametrize(

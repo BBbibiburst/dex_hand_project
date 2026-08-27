@@ -16,6 +16,7 @@ import argparse
 import contextlib
 import csv
 import hashlib
+import importlib
 import io
 import json
 import multiprocessing
@@ -468,6 +469,22 @@ def _prepare_shared_surrogate() -> None:
     )
 
 
+def _validate_runtime_dependencies(catalog: Iterable[str]) -> None:
+    """Fail before spawning workers when on-demand collision tooling is absent."""
+
+    if not any(not object_id.startswith("ycb:") for object_id in catalog):
+        return
+    try:
+        importlib.import_module("coacd")
+    except (ImportError, OSError) as exc:
+        raise RuntimeError(
+            "GSO/EGAD collision meshes require the 'coacd' package when their "
+            "decomposition cache is missing. Install current project dependencies "
+            "with `python -m pip install -e '.[grasping,mjwarp]'` or run "
+            "`python -m pip install coacd`."
+        ) from exc
+
+
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -649,6 +666,18 @@ def _ensure_grasp(
         summary = _grasp_summary(object_id, roots)
         if summary["attempts"]:
             return summary, elapsed, combined
+        if child.returncode not in (0, 2):
+            expected_failures = (
+                "GraspQP produced no RM75B-reachable candidates.",
+                "DexEvolve archive has no strictly RM75B-reachable survivors.",
+                "DexEvolve archive has no strict execution with sustained thumb-opposed contact.",
+            )
+            if not any(message in child.text for message in expected_failures):
+                tail = "\n".join(child.text.rstrip().splitlines()[-12:])
+                raise RuntimeError(
+                    f"Grasp generator exited with code {child.returncode} for {object_id}.\n"
+                    f"{tail}"
+                )
     return summary, elapsed, combined
 
 
@@ -1436,6 +1465,7 @@ def main(argv: list[str] | None = None) -> int:
         catalog = catalog[: args.limit]
     if not catalog:
         raise RuntimeError("No objects selected.")
+    _validate_runtime_dependencies(catalog)
 
     gpus = _gpu_ids(args.gpus, device=args.device)
     slots, resource_plan = _resource_plan(

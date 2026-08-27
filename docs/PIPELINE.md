@@ -138,6 +138,16 @@ du -sh assets/maniskill .cache/collision_decomposition
 只是诊断信息，不影响缓存迁移。服务器仍应通过项目依赖安装 `coacd`，以便将来遇到新增或
 变化的 mesh 时补建缺失缓存。
 
+如果未复制缓存，先确认运行该批处理的同一个 Python 环境能导入 CoACD：
+
+```bash
+python -c "import coacd; print(coacd.__file__)"
+```
+
+缺少 CoACD 时，旧版本批处理可能把生成子进程异常误记为快速出现的
+`NO_GRASP_GENERATED`。当前版本会在启动 worker 前直接报出依赖错误。修复服务器环境后，
+先对已经记录错误结果的运行加一次 `--force`；后续断点续跑再恢复默认的 resume 模式。
+
 ## Pilot
 
 建议先覆盖盒体、柱体、容器、带柄和不规则对象：
