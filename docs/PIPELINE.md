@@ -228,6 +228,37 @@ PPO 阶段数，所以预热前会偏保守。所有 worker 至少完成一个�
 两个 `--train-*-success` 参数用于压力测试：即使 Grasp 或 Lattice 已经成功，只要模板可用，
 仍然运行 PPO。正常的分层生产流程应移除这两个参数，让已经解决的对象提前退出。
 
+### 失败集修复与 PPO 续训
+
+`--resume-existing-rl` 用于结果分析后的定向加预算：它读取每个对象
+`checkpoint_final.pt` 中的绝对更新数，只补足到新的 `--max-updates`，不会删除已有策略。
+已有 `best_trajectory` 的 RL 成功对象始终只复用，不会因代码签名或汇总重建而被重新训练。
+例如把当前未解决对象继续到30次更新，同时让修复后的 Grasp/Lattice 对象重新分类：
+
+```bash
+MUJOCO_GL=egl \
+CUDA_VISIBLE_DEVICES=0 \
+PYTHONUNBUFFERED=1 \
+python -m tools.grasping.batch_grasp_edit \
+  --selection configs/underactuated_top100_v2.json \
+  --expect-count 100 \
+  --output outputs/dex_hand_top100_v2 \
+  --grasp-root outputs/dex_hand_top100_v2/grasp \
+  --lattice-root outputs/dex_hand_top100_v2/lattice \
+  --device cuda:0 \
+  --gpus auto \
+  --workers-per-gpu auto \
+  --gpu-jobs-per-gpu auto \
+  --ppo-jobs-per-gpu auto \
+  --initial-updates 5 \
+  --mid-updates 20 \
+  --max-updates 30 \
+  --resume-existing-rl
+```
+
+代码签名变化会自动让旧对象汇总失效，因此不需要 `--force`。已有 Grasp、正确场景的 Lattice
+和成功 RL 轨迹仍按内容复用；后续使用同一组参数即可断点续跑。
+
 任务被中断时，使用完全相同的语义参数重新运行。GPU 数量和 worker 数只影响调度，不会让
 已经完成且签名匹配的每对象结果失效。
 

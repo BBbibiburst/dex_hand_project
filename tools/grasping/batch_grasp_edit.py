@@ -867,7 +867,20 @@ def _adaptive_train(
 ) -> ChildResult:
     """Train 5 -> 10 -> 15 updates using grasp-edit checkpoints rather than restarting."""
     train_output = rl_root / _slug(object_id)
-    if train_output.exists():
+    if (train_output / "best_trajectory" / "manifest.json").is_file():
+        # A source-signature change may require rebuilding the summary and
+        # lattice, but must never destroy an already successful RL artifact.
+        return ChildResult(0, 0.0, "")
+    checkpoint = train_output / "checkpoint_final.pt"
+    completed_target = 0
+    if args.resume_existing_rl and checkpoint.is_file():
+        import torch
+
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        completed_target = int(payload.get("update", 0))
+        if completed_target < 0:
+            raise ValueError(f"Invalid update index in {checkpoint}: {completed_target}")
+    elif train_output.exists():
         shutil.rmtree(train_output)
 
     stage_targets = []
@@ -878,7 +891,6 @@ def _adaptive_train(
     combined_text = ""
     total_duration = 0.0
     last_returncode = 2
-    completed_target = 0
 
     for target_update in stage_targets:
         additional_updates = target_update - completed_target
@@ -915,7 +927,6 @@ def _adaptive_train(
             "--lattice-max-executions",
             str(args.lattice_max_executions),
         ]
-        checkpoint = train_output / "checkpoint_final.pt"
         if completed_target and checkpoint.is_file():
             command.extend(["--resume", str(checkpoint)])
         for grasp_root in grasp_roots:
@@ -1173,6 +1184,7 @@ def _write_summary(
                 "continue_lift_mm": args.continue_lift_mm,
                 "progress_gain_mm": args.progress_gain_mm,
                 "train_lattice_success": args.train_lattice_success,
+                "resume_existing_rl": args.resume_existing_rl,
             },
             "results": rows,
         },
@@ -1358,6 +1370,14 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run PPO even when CPU lattice preflight already has a successful template.",
     )
+    parser.add_argument(
+        "--resume-existing-rl",
+        action="store_true",
+        help=(
+            "Continue an existing per-object checkpoint up to --max-updates instead of "
+            "deleting its RL directory. Intended for targeted RL_PROMISING retries."
+        ),
+    )
     parser.add_argument("--num-envs", type=int, default=64)
     parser.add_argument("--initial-updates", type=int, default=5)
     parser.add_argument("--mid-updates", type=int, default=10)
@@ -1493,6 +1513,7 @@ def main(argv: list[str] | None = None) -> int:
         "generation_attempts": args.generation_attempts,
         "graspqp_executions": args.graspqp_executions,
         "train_lattice_success": args.train_lattice_success,
+        "resume_existing_rl": args.resume_existing_rl,
         "base_candidates": args.base_candidates,
         "lattice_max_templates": args.lattice_max_templates,
         "lattice_max_executions": args.lattice_max_executions,

@@ -58,6 +58,23 @@ def test_ycb_geometry_preserves_official_multiple_collision_parts() -> None:
     assert len(geometry.plane_part_offsets) - 1 > 1
 
 
+def test_lego_collision_drops_numerical_micro_parts_and_compiles() -> None:
+    from source.envs.manipulation import make_lift_env
+    from source.grasping.catalog import resolve_object_collision_mesh
+    from source.grasping.collision_decomposition import convex_decomposition_paths
+
+    paths = convex_decomposition_paths(resolve_object_collision_mesh("ycb:073-b_lego_duplo"))
+    assert len(paths) == 28
+
+    env = make_lift_env(
+        task_config={"object_id": "ycb:073-b_lego_duplo"},
+        control_mode="ik",
+        enable_tactile_sensors=False,
+        render_mode=None,
+    )
+    env.close()
+
+
 def test_episode_roundtrip_uses_independent_npz_contract(tmp_path: Path) -> None:
     frames = 4
     arrays = {

@@ -19,6 +19,7 @@ from tools.grasping.batch_grasp_edit import (
     _is_noncacheable_interruption,
     _resource_plan,
     _selection_ids,
+    _adaptive_train,
     _validate_runtime_dependencies,
     _runtime_estimate,
     _wall_clock_estimate,
@@ -46,6 +47,24 @@ def test_ycb_only_catalog_does_not_require_coacd(monkeypatch) -> None:
     )
 
     _validate_runtime_dependencies(("ycb:002_master_chef_can",))
+
+
+def test_adaptive_train_never_deletes_existing_success(tmp_path) -> None:
+    manifest = tmp_path / "rl" / "ycb_013_apple" / "best_trajectory" / "manifest.json"
+    manifest.parent.mkdir(parents=True)
+    manifest.write_text("{}", encoding="utf-8")
+
+    child = _adaptive_train(
+        args=SimpleNamespace(resume_existing_rl=False),
+        object_id="ycb:013_apple",
+        grasp_roots=(tmp_path / "grasp",),
+        root=tmp_path,
+        log_path=tmp_path / "object.log",
+        rl_root=tmp_path / "rl",
+    )
+
+    assert child.returncode == 0
+    assert manifest.is_file()
 
 
 @pytest.mark.parametrize(
@@ -145,6 +164,7 @@ def _summary_args() -> SimpleNamespace:
         continue_lift_mm=20.0,
         progress_gain_mm=5.0,
         train_lattice_success=True,
+        resume_existing_rl=False,
     )
 
 

@@ -343,32 +343,36 @@ def build_grasp_edit_templates(
     templates: list[GraspEditTemplate] = []
     stats = {"source": 0, "reused": 0, "compiled": 0, "rejected": 0, "skipped_success": 0}
     try:
-        observation, _ = rank_env.reset(seed=seed)
         variants: list[GraspCandidate] = []
+        ranked = []
         source_by_base: dict[int, tuple[Path, DemonstrationEpisode]] = {}
         for base_index, source in enumerate(sources):
             source_manifest, source_episode = source
             source_by_base[base_index] = source
-            for translation, rotation in local_wrist_lattice(
-                translation_step=translation_step,
-                rotation_step_degrees=rotation_step_degrees,
-            ):
-                variants.append(
-                    edit_candidate_pose(
-                        source_episode.candidate,
-                        translation_offset=translation,
-                        rotation_offset_degrees=rotation,
-                        base_index=base_index,
-                    )
+            observation, _ = rank_env.reset(seed=int(source_episode.seed))
+            source_variants = tuple(
+                edit_candidate_pose(
+                    source_episode.candidate,
+                    translation_offset=translation,
+                    rotation_offset_degrees=rotation,
+                    base_index=base_index,
                 )
-
-        ranked = rank_candidates_for_scene(
-            rank_env,
-            tuple(variants),
-            observation["object_pos"],
-            observation["object_quat"],
-            pregrasp_distance=execution.pregrasp_distance,
-        )
+                for translation, rotation in local_wrist_lattice(
+                    translation_step=translation_step,
+                    rotation_step_degrees=rotation_step_degrees,
+                )
+            )
+            variants.extend(source_variants)
+            ranked.extend(
+                rank_candidates_for_scene(
+                    rank_env,
+                    source_variants,
+                    observation["object_pos"],
+                    observation["object_quat"],
+                    pregrasp_distance=execution.pregrasp_distance,
+                )
+            )
+        ranked.sort(key=lambda result: result.score)
         reachable = [
             result
             for result in ranked
@@ -460,6 +464,12 @@ def build_grasp_edit_templates(
                     )
             else:
                 cached = None if overwrite else _full_episode(manifest, object_id)
+                if cached is not None and int(
+                    cached.metadata.get("grasp_edit_lattice", {}).get(
+                        "source_scene_seed", -1
+                    )
+                ) != int(source_episode.seed):
+                    cached = None
                 if cached is not None:
                     episode = cached
                     generated_manifest = manifest.resolve()
@@ -474,7 +484,7 @@ def build_grasp_edit_templates(
                     executions += 1
                     episode = execute_grasp(
                         candidate,
-                        seed=seed + base_index,
+                        seed=int(source_episode.seed),
                         config=execution,
                         render_mode=None,
                         environment=exec_env,
@@ -486,6 +496,7 @@ def build_grasp_edit_templates(
                         "precheck_score": float(result.score),
                         "precheck_position_error": float(result.maximum_position_error),
                         "precheck_orientation_error": float(result.maximum_orientation_error),
+                        "source_scene_seed": int(source_episode.seed),
                     }
                     generated_manifest = episode.save(directory)
                     full = _full_episode(generated_manifest, object_id)

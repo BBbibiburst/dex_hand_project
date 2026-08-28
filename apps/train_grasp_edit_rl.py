@@ -239,6 +239,8 @@ def run(args: argparse.Namespace) -> int:
     if args.resume is not None:
         trainer.load(args.resume)
         print(f"resumed={args.resume} update={trainer.update_index}", flush=True)
+    initial_update = trainer.update_index
+    target_update = initial_update + args.updates
 
     _write_json(
         output / "config.json",
@@ -309,13 +311,13 @@ def run(args: argparse.Namespace) -> int:
         rates = [metrics.get(f"template_{index}_rate", 0.0) for index in range(env.template_count)]
         top_template = max(range(len(rates)), key=rates.__getitem__)
         should_log = (
-            active.update_index == 1
+            active.update_index == initial_update + 1
             or active.update_index % args.log_every == 0
-            or active.update_index == args.updates
+            or active.update_index == target_update
         )
         if should_log:
             print(
-                f"u {active.update_index:03d}/{args.updates:03d} | "
+                f"u {active.update_index:03d}/{target_update:03d} | "
                 f"succ {metrics['episode_success_rate']:6.1%} | "
                 f"lift {1000.0 * metrics['mean_max_lift']:4.0f}/"
                 f"{1000.0 * metrics['best_attempt_lift']:4.0f}mm | "

@@ -24,6 +24,7 @@ SETTINGS = {
     "decimate": True,
     "seed": 0,
 }
+_MINIMUM_RELATIVE_PART_VOLUME = 1e-9
 
 
 @contextmanager
@@ -67,6 +68,25 @@ def _mujoco_compatible_part(vertices: np.ndarray, faces: np.ndarray) -> trimesh.
     return part
 
 
+def _drop_negligible_parts(parts: list[trimesh.Trimesh]) -> list[trimesh.Trimesh]:
+    """Discard numerical debris that MuJoCo cannot assign solid inertia.
+
+    Some official collision files contain duplicate micro-triangles many
+    orders of magnitude smaller than the actual object.  They are not useful
+    contact geometry and make MuJoCo reject the complete model with
+    ``mesh volume is too small``.  The relative threshold deliberately keeps
+    real small features and thin components.
+    """
+
+    volumes = np.asarray([abs(float(part.volume)) for part in parts], dtype=np.float64)
+    total = float(volumes.sum())
+    if not parts or total <= 0.0:
+        return parts
+    keep = volumes >= total * _MINIMUM_RELATIVE_PART_VOLUME
+    filtered = [part for part, usable in zip(parts, keep, strict=True) if bool(usable)]
+    return filtered or [parts[int(np.argmax(volumes))]]
+
+
 def convex_decomposition_paths(path: Path) -> tuple[Path, ...]:
     """Return cached OBJ files, one for every CoACD convex component."""
 
@@ -79,7 +99,16 @@ def convex_decomposition_paths(path: Path) -> tuple[Path, ...]:
             payload = json.loads(manifest_path.read_text(encoding="utf-8"))
             cached = tuple(directory / name for name in payload.get("parts", ()))
             if cached and all(item.is_file() for item in cached):
-                return cached
+                loaded_parts = [
+                    trimesh.load(item, force="mesh", process=True) for item in cached
+                ]
+                usable = _drop_negligible_parts(loaded_parts)
+                usable_ids = {id(part) for part in usable}
+                return tuple(
+                    path
+                    for path, part in zip(cached, loaded_parts, strict=True)
+                    if id(part) in usable_ids
+                )
 
         loaded = trimesh.load(source, force="mesh", process=True)
         if not isinstance(loaded, trimesh.Trimesh) or loaded.is_empty:
@@ -119,12 +148,14 @@ def convex_decomposition_paths(path: Path) -> tuple[Path, ...]:
         if not result:
             raise RuntimeError(f"No convex collision components found for {source}")
         directory.mkdir(parents=True, exist_ok=True)
+        compatible_parts = _drop_negligible_parts(
+            [_mujoco_compatible_part(vertices, faces) for vertices, faces in result]
+        )
         names: list[str] = []
-        for index, (vertices, faces) in enumerate(result):
+        for index, part in enumerate(compatible_parts):
             name = f"part_{index:03d}.obj"
             destination = directory / name
             temporary = directory / f".{name}.{os.getpid()}.partial"
-            part = _mujoco_compatible_part(vertices, faces)
             part.export(temporary, file_type="obj")
             os.replace(temporary, destination)
             names.append(name)
