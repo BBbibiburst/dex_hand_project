@@ -366,13 +366,12 @@ class MjWarpGraspEditEnv:
                 .cpu()
                 .tolist(),
                 "hand_edit_normalized": action[1:].tolist(),
+                "hand_edit_fraction": self.config.hand_edit_fraction,
                 "grasp_edit_action": action.tolist(),
                 "mjwarp_max_lift": float(max_lift[world].item()),
                 "mjwarp_final_lift": float(final_lift[world].item()),
                 "mjwarp_tail_max_speed": float(tail_max_speed[world].item()),
-                "mjwarp_tail_max_angular_speed": float(
-                    tail_max_angular_speed[world].item()
-                ),
+                "mjwarp_tail_max_angular_speed": float(tail_max_angular_speed[world].item()),
                 "single_step_grasp_edit": True,
             },
         )
@@ -398,9 +397,7 @@ class MjWarpGraspEditEnv:
         max_lift = torch.full((self.num_envs,), -float("inf"), device=self.torch_device)
         tail_min_lift = torch.full((self.num_envs,), float("inf"), device=self.torch_device)
         tail_max_speed = torch.zeros((self.num_envs,), device=self.torch_device)
-        tail_max_angular_speed = torch.zeros(
-            (self.num_envs,), device=self.torch_device
-        )
+        tail_max_angular_speed = torch.zeros((self.num_envs,), device=self.torch_device)
         controls_history = torch.empty(
             (self.horizon, self.num_envs, self.references[0].action_dim),
             device=self.torch_device,
@@ -424,9 +421,7 @@ class MjWarpGraspEditEnv:
             max_lift = torch.maximum(max_lift, lift)
             if step_index >= self.horizon - self.config.success_tail_steps:
                 tail_min_lift = torch.minimum(tail_min_lift, lift)
-                object_velocity = self.qvel[
-                    :, self.object_qvel_adr : self.object_qvel_adr + 6
-                ]
+                object_velocity = self.qvel[:, self.object_qvel_adr : self.object_qvel_adr + 6]
                 tail_max_speed = torch.maximum(
                     tail_max_speed,
                     torch.linalg.vector_norm(object_velocity[:, :3], dim=1),
@@ -440,10 +435,7 @@ class MjWarpGraspEditEnv:
         success = (
             (tail_min_lift >= self.config.success_lift_height)
             & (tail_max_speed <= self.config.maximum_object_speed)
-            & (
-                tail_max_angular_speed
-                <= self.config.maximum_object_angular_speed
-            )
+            & (tail_max_angular_speed <= self.config.maximum_object_angular_speed)
         )
 
         max_progress = torch.clamp(max_lift / self.config.success_lift_height, 0.0, 1.0)
@@ -541,9 +533,7 @@ class MjWarpGraspEditEnv:
                 else 0.0
             ),
             "best_attempt_return": (
-                float(self.best_attempt_return)
-                if np.isfinite(self.best_attempt_return)
-                else 0.0
+                float(self.best_attempt_return) if np.isfinite(self.best_attempt_return) else 0.0
             ),
             "best_success_return": (
                 float(self.best_success_return) if np.isfinite(self.best_success_return) else 0.0

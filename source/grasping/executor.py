@@ -28,6 +28,7 @@ STAGE_CODES = {
     "release": 10,
     "retreat": 11,
     "task_verify": 12,
+    "clear": 13,
 }
 
 
@@ -172,15 +173,11 @@ def rank_candidates_for_scene(
     saved_qpos = env.data.qpos.copy()
     saved_qvel = env.data.qvel.copy()
     saved_ctrl = env.data.ctrl.copy()
-    saved_previous_target = (
-        None if arm._prev_target_q is None else arm._prev_target_q.copy()
-    )
+    saved_previous_target = None if arm._prev_target_q is None else arm._prev_target_q.copy()
     saved_filtered_velocity = (
         None if arm._filtered_velocity is None else arm._filtered_velocity.copy()
     )
-    saved_previous_ee = (
-        None if arm._prev_ee_target is None else arm._prev_ee_target.copy()
-    )
+    saved_previous_ee = None if arm._prev_ee_target is None else arm._prev_ee_target.copy()
     saved_max_velocity = arm.max_joint_velocity
     saved_velocity_filter = arm.velocity_filter_alpha
     attach = hand_attach_rotation(env)
@@ -220,18 +217,12 @@ def rank_candidates_for_scene(
                 actual_position = env.data.site_xpos[arm.site_id]
                 actual_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
                 position_errors.append(float(np.linalg.norm(actual_position - position)))
-                orientation_errors.append(
-                    _orientation_error(actual_quaternion, grasp_quaternion)
-                )
+                orientation_errors.append(_orientation_error(actual_quaternion, grasp_quaternion))
                 travel += float(np.linalg.norm(actual_position - previous_position))
                 previous_position = actual_position.copy()
             maximum_position_error = max(position_errors)
             maximum_orientation_error = max(orientation_errors)
-            score = (
-                20.0 * maximum_position_error
-                + 0.6 * maximum_orientation_error
-                + 0.08 * travel
-            )
+            score = 20.0 * maximum_position_error + 0.6 * maximum_orientation_error + 0.08 * travel
             results.append(
                 ReachabilityResult(
                     candidate=candidate,
@@ -258,9 +249,9 @@ def actuator_targets_from_fractions(env, fractions: np.ndarray) -> np.ndarray:
     if fractions.shape != (6,) or np.any((fractions < 0.0) | (fractions > 1.0)):
         raise ValueError("Dex Hand actuator fractions must have shape (6,) in [0, 1].")
     controller = env.controller.hand_controller
-    return (
-        controller.ctrl_low + fractions * (controller.ctrl_high - controller.ctrl_low)
-    ).astype(np.float32)
+    return (controller.ctrl_low + fractions * (controller.ctrl_high - controller.ctrl_low)).astype(
+        np.float32
+    )
 
 
 def _slerp_wxyz(first: np.ndarray, second: np.ndarray, fraction: float) -> np.ndarray:
@@ -335,12 +326,8 @@ class _Recorder:
         arrays["stage"] = arrays["stage"].astype(np.int16)
         arrays["reward"] = arrays["reward"].astype(np.float32)
         arrays["task_success"] = arrays["task_success"].astype(np.bool_)
-        arrays["robot_object_contact_count"] = arrays[
-            "robot_object_contact_count"
-        ].astype(np.int16)
-        arrays["robot_object_normal_force"] = arrays["robot_object_normal_force"].astype(
-            np.float32
-        )
+        arrays["robot_object_contact_count"] = arrays["robot_object_contact_count"].astype(np.int16)
+        arrays["robot_object_normal_force"] = arrays["robot_object_normal_force"].astype(np.float32)
         arrays["robot_object_digit_contact_count"] = arrays[
             "robot_object_digit_contact_count"
         ].astype(np.int16)
@@ -423,6 +410,7 @@ def _run_pose_segment(
     start_hand: np.ndarray,
     target_hand: np.ndarray,
     steps: int,
+    smooth: bool = False,
 ) -> tuple[dict[str, Any], bool, bool]:
     arm = env.controller.arm_controller
     mujoco.mj_forward(env.model, env.data)
@@ -433,6 +421,10 @@ def _run_pose_segment(
     ended = False
     for index in range(steps):
         fraction = (index + 1) / steps
+        if smooth:
+            # Zero endpoint velocity avoids the Cartesian velocity step that
+            # can strip a marginally held object at a task-stage boundary.
+            fraction = fraction * fraction * (3.0 - 2.0 * fraction)
         position = (1.0 - fraction) * start_position + fraction * target_position
         quaternion = _slerp_wxyz(start_quaternion, target_quaternion, fraction)
         hand = (1.0 - fraction) * start_hand + fraction * target_hand
@@ -671,11 +663,7 @@ def execute_grasp(
         arrays = recorder.arrays()
         verify_success = arrays["task_success"][arrays["stage"] == STAGE_CODES["verify"]]
         success_fraction = float(verify_success.mean()) if len(verify_success) else 0.0
-        success = bool(
-            len(verify_success)
-            and verify_success[-1]
-            and success_fraction >= 0.8
-        )
+        success = bool(len(verify_success) and verify_success[-1] and success_fraction >= 0.8)
         metadata["verify_success_fraction"] = success_fraction
         if not success and failure_reason is None:
             failure_reason = "object did not satisfy the lift success criterion"
@@ -697,9 +685,9 @@ def execute_grasp(
                     metadata[f"object_{stage_name}_digit_contact_fraction"] = (
                         (digit_counts > 0).mean(axis=0).tolist()
                     )
-                    metadata[f"object_{stage_name}_digit_normal_force_mean"] = (
-                        digit_forces.mean(axis=0).tolist()
-                    )
+                    metadata[f"object_{stage_name}_digit_normal_force_mean"] = digit_forces.mean(
+                        axis=0
+                    ).tolist()
         metadata["action_layout"] = list(env.controller.ik_action_layout())
         return DemonstrationEpisode(
             object_id=candidate.object_id,

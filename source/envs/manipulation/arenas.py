@@ -233,12 +233,12 @@ class TableArena:
 
 @dataclass(frozen=True)
 class BinsArena(TableArena):
-    """Table arena with an accessible source tray and a target bin."""
+    """Table arena with an open source region and a visual receiving bin."""
 
     bin_half_size: Tuple[float, float, float] = (0.18, 0.10, 0.06)
     source_wall_half_height: float = 0.015
-    source_center: Tuple[float, float] = (0.46, -0.11)
-    target_center: Tuple[float, float] = (0.46, 0.13)
+    source_center: Tuple[float, float] = (0.46, -0.02)
+    target_center: Tuple[float, float] = (0.46, 0.20)
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         super().augment_spec(spec)
@@ -258,11 +258,21 @@ class BinsArena(TableArena):
                 ("front", (-hx, 0, wall_hz), (0.005, hy, wall_hz)),
                 ("back", (hx, 0, wall_hz), (0.005, hy, wall_hz)),
             ):
+                # Lift grasps require side access. The source is therefore an
+                # open table region; only the receiving target has collision
+                # walls. A source bottom would also duplicate the table and
+                # introduce 10 mm of reset penetration.
+                if prefix == "source_bin":
+                    continue
                 geom = body.add_geom()
                 geom.name = f"{prefix}_{name}"
                 geom.type = mujoco.mjtGeom.mjGEOM_BOX
                 geom.pos, geom.size = list(pos), list(size)
                 geom.rgba = [0.25, 0.35, 0.45, 1.0]
+                # The target marks the placement region. Collision-free walls
+                # keep the transferred side grasp equivalent to its Lift scene.
+                geom.contype = 0
+                geom.conaffinity = 0
 
 
 @dataclass(frozen=True)

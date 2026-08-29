@@ -208,8 +208,9 @@ Wrist Lattice；成功便退出。失败对象会自动改用独立缓存的 85 
 
 ### 从 Lift 迁移到 PickPlace
 
-成功 Lift 候选以物体相对位姿迁移到 PickPlace；程序会在新场景中自动搜索候选与 placement
-seed，然后追加越障抬升、运输、下降、松手、撤离和稳定复验：
+成功 Lift 候选会在完全相同的物体初始位姿下复现。Lattice 轨迹直接重放已验证的底层控制，
+PPO 轨迹重放实际手型编辑控制；随后搜索搬运预载，并依次尝试落桌释放和空中释放，再执行
+运输、下降、松手、撤离和稳定复验：
 
 ```bash
 MUJOCO_GL=egl python -m tools.grasping.transfer_lift_to_pick_place \
@@ -218,7 +219,25 @@ MUJOCO_GL=egl python -m tools.grasping.transfer_lift_to_pick_place \
   --output outputs/pick_place_transfer/ycb_005_tomato_soup_can
 ```
 
-查看完整 642 帧示教（包括目标箱环境）：
+Top100 可恢复批处理：
+
+```bash
+MUJOCO_GL=egl PYTHONUNBUFFERED=1 python -m tools.grasping.batch_pick_place_transfer \
+  --selection configs/underactuated_top100_v2.json \
+  --expect-count 100 \
+  --output outputs/pick_place_top100 \
+  --grasp-root outputs/dex_hand_top100_v2/grasp \
+  --lattice-root outputs/dex_hand_top100_v2/lattice \
+  --rl-root outputs/dex_hand_top100_v2/rl \
+  --workers 4 \
+  --seed-attempts 1 \
+  --maximum-candidates 12
+```
+
+批处理只复用当前 `pipeline_version` 的成功结果；迁移逻辑版本变化后会自动重新验证，避免把
+旧参数成功与新参数结果混成一个成功率。
+
+查看完整示教（表面释放通常 650 帧，空中释放通常 596 帧）：
 
 ```bash
 MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
