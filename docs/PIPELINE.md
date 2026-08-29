@@ -265,8 +265,9 @@ python -m tools.grasping.batch_grasp_edit \
 代码签名变化会自动让旧对象汇总失效，因此不需要 `--force`。已有 Grasp、正确场景的 Lattice
 和成功 RL 轨迹仍按内容复用；后续使用同一组参数即可断点续跑。
 
-`configs/underactuated_top100_v2_retry11.json` 仅保留为历史诊断快照，不再是生产流程入口。
-恢复高度只增加真实 C MuJoCo/IK 抬升轨迹，不修改 55 mm MJWarp 成功高度，也不放宽速度或
+历史失败清单不再保存在 `configs/`；正式生产入口只有
+`configs/underactuated_top100_v2.json`。恢复高度只增加真实 C MuJoCo/IK 抬升轨迹，不修改
+55 mm MJWarp 成功高度，也不放宽速度或
 角速度限制。改变恢复参数会自动使对应结果签名失效，且不会错误续接不同环境的 checkpoint。
 
 任务被中断时，使用完全相同的语义参数重新运行。GPU 数量和 worker 数只影响调度，不会让

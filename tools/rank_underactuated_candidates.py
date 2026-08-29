@@ -271,7 +271,7 @@ def main() -> int:
     parser.add_argument(
         "--output",
         type=Path,
-        default=PROJECT_ROOT / "configs/underactuated_top100.json",
+        default=PROJECT_ROOT / "outputs/underactuated_geometry_candidates.json",
     )
     parser.add_argument(
         "--exclude-file",
