@@ -206,6 +206,26 @@ Wrist Lattice；成功便退出。失败对象会自动改用独立缓存的 85 
 详细的状态解释、缓存规则和 C MuJoCo 复验方法见
 [全量流水线与验证](docs/PIPELINE.md)。
 
+### 从 Lift 迁移到 PickPlace
+
+成功 Lift 候选以物体相对位姿迁移到 PickPlace；程序会在新场景中自动搜索候选与 placement
+seed，然后追加越障抬升、运输、下降、松手、撤离和稳定复验：
+
+```bash
+MUJOCO_GL=egl python -m tools.grasping.transfer_lift_to_pick_place \
+  --lift-root outputs/dex_hand_top100_v2/lattice/ycb_005_tomato_soup_can \
+  --object-id ycb:005_tomato_soup_can \
+  --output outputs/pick_place_transfer/ycb_005_tomato_soup_can
+```
+
+查看完整 642 帧示教（包括目标箱环境）：
+
+```bash
+MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
+  --manifest outputs/pick_place_transfer/ycb_005_tomato_soup_can/best_trajectory/manifest.json \
+  --play --viewer-speed 0.4 --loop
+```
+
 ## 输出目录
 
 ```text

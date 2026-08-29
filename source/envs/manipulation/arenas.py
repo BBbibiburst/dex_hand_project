@@ -233,11 +233,12 @@ class TableArena:
 
 @dataclass(frozen=True)
 class BinsArena(TableArena):
-    """Table arena with one source bin and one undivided target bin."""
+    """Table arena with an accessible source tray and a target bin."""
 
-    bin_half_size: Tuple[float, float, float] = (0.18, 0.18, 0.06)
-    source_center: Tuple[float, float] = (0.46, -0.20)
-    target_center: Tuple[float, float] = (0.46, 0.20)
+    bin_half_size: Tuple[float, float, float] = (0.18, 0.10, 0.06)
+    source_wall_half_height: float = 0.015
+    source_center: Tuple[float, float] = (0.46, -0.11)
+    target_center: Tuple[float, float] = (0.46, 0.13)
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         super().augment_spec(spec)
@@ -249,12 +250,13 @@ class BinsArena(TableArena):
             body.name = prefix
             body.pos = [center[0], center[1], self.table_top_z]
             hx, hy, hz = self.bin_half_size
+            wall_hz = self.source_wall_half_height if prefix == "source_bin" else hz
             for name, pos, size in (
                 ("bottom", (0, 0, 0.005), (hx, hy, 0.005)),
-                ("left", (0, -hy, hz), (hx, 0.005, hz)),
-                ("right", (0, hy, hz), (hx, 0.005, hz)),
-                ("front", (-hx, 0, hz), (0.005, hy, hz)),
-                ("back", (hx, 0, hz), (0.005, hy, hz)),
+                ("left", (0, -hy, wall_hz), (hx, 0.005, wall_hz)),
+                ("right", (0, hy, wall_hz), (hx, 0.005, wall_hz)),
+                ("front", (-hx, 0, wall_hz), (0.005, hy, wall_hz)),
+                ("back", (hx, 0, wall_hz), (0.005, hy, wall_hz)),
             ):
                 geom = body.add_geom()
                 geom.name = f"{prefix}_{name}"

@@ -23,6 +23,11 @@ STAGE_CODES = {
     "hold": 5,
     "lift": 6,
     "verify": 7,
+    "transport": 8,
+    "descend": 9,
+    "release": 10,
+    "retreat": 11,
+    "task_verify": 12,
 }
 
 

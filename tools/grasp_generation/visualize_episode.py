@@ -14,7 +14,7 @@ import time
 import mujoco
 import numpy as np
 
-from source.envs.manipulation import make_lift_env
+from source.envs.manipulation import make_lift_env, make_pick_place_env
 from source.grasping.catalog import load_object_geometry
 from source.grasping.contracts import DemonstrationEpisode
 from source.grasping.executor import _contact_digit
@@ -45,6 +45,21 @@ CONTACT_COLORS = (
     (0.8, 0.25, 1.0, 1.0),
 )
 DIGIT_NAMES = ("little", "ring", "middle", "index", "thumb")
+
+
+def _episode_environment(episode: DemonstrationEpisode):
+    factory = (
+        make_pick_place_env
+        if episode.metadata.get("task") == "pick_place"
+        else make_lift_env
+    )
+    return factory(
+        task_config={"object_id": episode.object_id, "terminate_on_success": False},
+        control_mode="ik",
+        enable_tactile_sensors=False,
+        render_mode=None,
+        episode_length=max(len(episode.arrays["qpos"]) + 10, 500),
+    )
 
 
 def _actual_skin_contacts(env) -> list[tuple[int, np.ndarray]]:
@@ -224,13 +239,7 @@ def play_episode(
 
     if speed <= 0.0:
         raise ValueError("viewer speed must be positive")
-    env = make_lift_env(
-        task_config={"object_id": episode.object_id, "terminate_on_success": False},
-        control_mode="ik",
-        enable_tactile_sensors=False,
-        render_mode=None,
-        episode_length=max(len(episode.arrays["qpos"]) + 10, 500),
-    )
+    env = _episode_environment(episode)
     try:
         env.reset(seed=episode.seed)
         if episode.arrays["qpos"].shape[1:] != env.data.qpos.shape:
