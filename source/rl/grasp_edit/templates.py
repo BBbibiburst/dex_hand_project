@@ -302,6 +302,7 @@ def build_grasp_edit_templates(
     base_candidates: int = 3,
     translation_step: float = 0.01,
     rotation_step_degrees: float = 15.0,
+    execution_lift_height: float = 0.065,
     maximum_templates: int = 12,
     maximum_executions: int = 32,
     seed: int = 0,
@@ -311,6 +312,8 @@ def build_grasp_edit_templates(
 ) -> tuple[GraspEditTemplate, ...]:
     if maximum_templates <= 0 or maximum_executions <= 0:
         raise ValueError("lattice template/execution limits must be positive.")
+    if execution_lift_height <= 0.0:
+        raise ValueError("execution_lift_height must be positive.")
     sources = discover_grasp_attempts(
         object_id,
         roots=grasp_roots,
@@ -323,7 +326,7 @@ def build_grasp_edit_templates(
 
     object_output = output_root / _slug(object_id)
     object_output.mkdir(parents=True, exist_ok=True)
-    execution = ExecutionConfig()
+    execution = ExecutionConfig(lift_height=execution_lift_height)
     rank_env = make_lift_env(
         task_config={"object_id": object_id},
         control_mode="ik",
@@ -450,7 +453,17 @@ def build_grasp_edit_templates(
             )
             directory = object_output / label
             manifest = directory / "manifest.json"
-            nominal = all(abs(value) < 1e-10 for value in (*translation, *rotation))
+            nominal_pose = all(abs(value) < 1e-10 for value in (*translation, *rotation))
+            source_lift_height = float(
+                source_episode.metadata.get("execution_config", {}).get(
+                    "lift_height", ExecutionConfig().lift_height
+                )
+            )
+            nominal = nominal_pose and np.isclose(
+                source_lift_height,
+                execution.lift_height,
+                atol=1e-9,
+            )
 
             if nominal:
                 episode = source_episode
@@ -469,6 +482,16 @@ def build_grasp_edit_templates(
                         "source_scene_seed", -1
                     )
                 ) != int(source_episode.seed):
+                    cached = None
+                if cached is not None and not np.isclose(
+                    float(
+                        cached.metadata.get("grasp_edit_lattice", {}).get(
+                            "execution_lift_height", -1.0
+                        )
+                    ),
+                    execution.lift_height,
+                    atol=1e-9,
+                ):
                     cached = None
                 if cached is not None:
                     episode = cached
@@ -497,6 +520,7 @@ def build_grasp_edit_templates(
                         "precheck_position_error": float(result.maximum_position_error),
                         "precheck_orientation_error": float(result.maximum_orientation_error),
                         "source_scene_seed": int(source_episode.seed),
+                        "execution_lift_height": float(execution.lift_height),
                     }
                     generated_manifest = episode.save(directory)
                     full = _full_episode(generated_manifest, object_id)

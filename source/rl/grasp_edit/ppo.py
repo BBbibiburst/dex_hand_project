@@ -312,6 +312,7 @@ class HybridPPOTrainer:
                 "trainer_type": "grasp_edit_hybrid",
                 "template_count": int(self.env.template_count),
                 "hand_action_dim": int(self.env.hand_action_dim),
+                "environment_signature": self.env.compatibility_signature,
                 "update": self.update_index,
                 "total_steps": self.total_steps,
                 "ppo_config": asdict(self.config),
@@ -331,6 +332,15 @@ class HybridPPOTrainer:
             raise ValueError("Checkpoint template count differs from the current lattice.")
         if int(payload.get("hand_action_dim", -1)) != int(self.env.hand_action_dim):
             raise ValueError("Checkpoint hand action dimension differs from the current environment.")
+        stored_environment = payload.get("environment_signature")
+        if (
+            stored_environment is not None
+            and str(stored_environment) != self.env.compatibility_signature
+        ):
+            raise ValueError(
+                "Checkpoint reference trajectories or grasp-edit environment differ from "
+                "the current run. Start a fresh policy for the changed physical problem."
+            )
         stored_config = PPOConfig(**payload["ppo_config"])
         if stored_config != self.config:
             raise ValueError(

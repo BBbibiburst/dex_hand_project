@@ -157,6 +157,8 @@ def _summary_args() -> SimpleNamespace:
         base_candidates=3,
         lattice_max_templates=12,
         lattice_max_executions=32,
+        execution_lift_height=0.065,
+        hand_edit_fraction=0.35,
         lattice_root="lattice",
         promising_lift_mm=20.0,
         promising_success_rate=0.01,

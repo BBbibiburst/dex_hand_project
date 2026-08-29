@@ -7,6 +7,8 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+import numpy as np
+
 from source.rl.common.ppo import PPOConfig
 from source.grasping.budget import FORMAL_GENERATION_BUDGET
 from source.rl.grasp_edit.env import GraspEditConfig, MjWarpGraspEditEnv
@@ -22,6 +24,13 @@ def _write_json(path: Path, payload) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     temporary.replace(path)
+
+
+def _read_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -45,6 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--wrist-rotation-step-deg", type=float, default=15.0)
     parser.add_argument("--lattice-max-templates", type=int, default=12)
     parser.add_argument("--lattice-max-executions", type=int, default=32)
+    parser.add_argument("--execution-lift-height", type=float, default=0.065)
     parser.add_argument("--overwrite-templates", action="store_true")
     parser.add_argument("--num-envs", type=int, default=256)
     parser.add_argument("--updates", type=int, default=20)
@@ -201,6 +211,7 @@ def run(args: argparse.Namespace) -> int:
         base_candidates=args.base_candidates,
         translation_step=args.wrist_translation_step,
         rotation_step_degrees=args.wrist_rotation_step_deg,
+        execution_lift_height=args.execution_lift_height,
         maximum_templates=args.lattice_max_templates,
         maximum_executions=args.lattice_max_executions,
         seed=args.seed,
@@ -237,6 +248,21 @@ def run(args: argparse.Namespace) -> int:
     trainer = HybridPPOTrainer(env, ppo_config, seed=args.seed)
 
     if args.resume is not None:
+        previous = _read_json(output / "config.json")
+        previous_environment = previous.get("environment", {})
+        previous_lattice = previous.get("lattice", {})
+        previous_hand_edit = float(previous_environment.get("hand_edit_fraction", 0.35))
+        previous_lift_height = float(
+            previous_lattice.get("execution_lift_height", 0.065)
+        )
+        if not np.isclose(previous_hand_edit, args.hand_edit_fraction) or not np.isclose(
+            previous_lift_height, args.execution_lift_height
+        ):
+            env.close()
+            raise ValueError(
+                "Cannot resume a checkpoint after changing --hand-edit-fraction or "
+                "--execution-lift-height; start a fresh output for the changed physics."
+            )
         trainer.load(args.resume)
         print(f"resumed={args.resume} update={trainer.update_index}", flush=True)
     initial_update = trainer.update_index
@@ -258,6 +284,7 @@ def run(args: argparse.Namespace) -> int:
                 "rotation_step_degrees": args.wrist_rotation_step_deg,
                 "maximum_templates": args.lattice_max_templates,
                 "maximum_executions": args.lattice_max_executions,
+                "execution_lift_height": args.execution_lift_height,
             },
             "environment": asdict(env_config),
             "ppo": asdict(ppo_config),

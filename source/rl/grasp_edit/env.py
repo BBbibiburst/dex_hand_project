@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 
 import mujoco_warp as mjw
@@ -97,6 +99,13 @@ class MjWarpGraspEditEnv:
         )
         self._validate_references(references)
         self.references = references
+        compatibility = hashlib.sha256()
+        compatibility.update(self.object_id.encode("utf-8"))
+        compatibility.update(json.dumps(self.config.__dict__, sort_keys=True).encode("utf-8"))
+        for item in references:
+            compatibility.update(np.asarray(item.controls, dtype=np.float32).tobytes())
+            compatibility.update(np.asarray(item.initial_qpos, dtype=np.float32).tobytes())
+        self.compatibility_signature = compatibility.hexdigest()
         reference = references[0]
         self.horizon = reference.horizon
         self.template_count = len(references)

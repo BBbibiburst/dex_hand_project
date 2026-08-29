@@ -727,6 +727,7 @@ def _preflight_lattice(
                 base_candidates=args.base_candidates,
                 maximum_templates=args.lattice_max_templates,
                 maximum_executions=args.lattice_max_executions,
+                execution_lift_height=args.execution_lift_height,
                 seed=args.seed,
                 overwrite=False,
                 failed_only=False,
@@ -873,7 +874,11 @@ def _adaptive_train(
         return ChildResult(0, 0.0, "")
     checkpoint = train_output / "checkpoint_final.pt"
     completed_target = 0
-    if args.resume_existing_rl and checkpoint.is_file():
+    changed_physics = (
+        abs(float(args.execution_lift_height) - 0.065) > 1e-12
+        or abs(float(args.hand_edit_fraction) - 0.35) > 1e-12
+    )
+    if args.resume_existing_rl and checkpoint.is_file() and not changed_physics:
         import torch
 
         payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
@@ -926,6 +931,10 @@ def _adaptive_train(
             str(args.lattice_max_templates),
             "--lattice-max-executions",
             str(args.lattice_max_executions),
+            "--execution-lift-height",
+            str(args.execution_lift_height),
+            "--hand-edit-fraction",
+            str(args.hand_edit_fraction),
         ]
         if completed_target and checkpoint.is_file():
             command.extend(["--resume", str(checkpoint)])
@@ -1177,6 +1186,8 @@ def _write_summary(
                 "base_candidates": args.base_candidates,
                 "lattice_max_templates": args.lattice_max_templates,
                 "lattice_max_executions": args.lattice_max_executions,
+                "execution_lift_height": args.execution_lift_height,
+                "hand_edit_fraction": args.hand_edit_fraction,
                 "lattice_root": str(args.lattice_root),
                 "promising_lift_mm": args.promising_lift_mm,
                 "promising_success_rate": args.promising_success_rate,
@@ -1419,6 +1430,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--base-candidates", type=int, default=3)
     parser.add_argument("--lattice-max-templates", type=int, default=12)
     parser.add_argument("--lattice-max-executions", type=int, default=32)
+    parser.add_argument(
+        "--execution-lift-height",
+        type=float,
+        default=0.065,
+        help="C MuJoCo wrist lift trajectory height in metres; success remains 55 mm.",
+    )
+    parser.add_argument(
+        "--hand-edit-fraction",
+        type=float,
+        default=0.35,
+        help="Maximum normalized six-actuator edit applied around each lattice grip.",
+    )
     parser.add_argument("--promising-lift-mm", type=float, default=20.0)
     parser.add_argument("--promising-success-rate", type=float, default=0.01)
     parser.add_argument(
@@ -1464,6 +1487,10 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("Adaptive lift/progress thresholds must be non-negative.")
     if args.early_fail_lift_mm > args.continue_lift_mm:
         raise ValueError("--early-fail-lift-mm cannot exceed --continue-lift-mm.")
+    if args.execution_lift_height <= 0.0:
+        raise ValueError("--execution-lift-height must be positive.")
+    if not 0.0 < args.hand_edit_fraction <= 1.0:
+        raise ValueError("--hand-edit-fraction must lie in (0, 1].")
 
     root = _repo_root()
     os.chdir(root)
@@ -1517,6 +1544,8 @@ def main(argv: list[str] | None = None) -> int:
         "base_candidates": args.base_candidates,
         "lattice_max_templates": args.lattice_max_templates,
         "lattice_max_executions": args.lattice_max_executions,
+        "execution_lift_height": args.execution_lift_height,
+        "hand_edit_fraction": args.hand_edit_fraction,
         "promising_lift_mm": args.promising_lift_mm,
         "promising_success_rate": args.promising_success_rate,
         "early_fail_lift_mm": args.early_fail_lift_mm,
