@@ -511,6 +511,7 @@ def _source_hashes(root: Path) -> dict[str, str]:
         "source/grasping/dexevolve.py",
         "source/envs/manipulation/objects.py",
         "tools/grasp_generation/graspqp_evolve.py",
+        "tools/grasping/batch_grasp_edit.py",
     )
     return {name: _sha256(root / name) for name in files}
 
@@ -1019,6 +1020,19 @@ def _read_json(path: Path) -> dict[str, Any]:
         return {}
 
 
+def _checkpoint_update(path: Path) -> int:
+    """Recover the absolute PPO update count from a reused checkpoint."""
+    if not path.is_file():
+        return 0
+    try:
+        import torch
+
+        payload = torch.load(path, map_location="cpu", weights_only=False)
+        return max(0, int(payload.get("update", 0))) if isinstance(payload, dict) else 0
+    except (OSError, RuntimeError, TypeError, ValueError):
+        return 0
+
+
 def _classify_training(
     *,
     preflight: LatticePreflight,
@@ -1038,6 +1052,33 @@ def _classify_training(
     history = _parse_update_history(child.text)
 
     final_success_rate = float(metrics.get("episode_success_rate", 0.0))
+    updates = max(
+        int(history["updates"]),
+        _checkpoint_update(train_output / "checkpoint_final.pt"),
+    )
+    completed = max(
+        int(args.num_envs * updates),
+        int(float(metrics.get("completed_episodes", 0.0))),
+    )
+    metric_template_rates = {
+        key.removeprefix("template_").removesuffix("_rate"): float(value)
+        for key, value in metrics.items()
+        if key.startswith("template_") and key.endswith("_rate")
+    }
+    best_success_rate = max(
+        float(history["best_success_rate"]),
+        final_success_rate,
+        max(metric_template_rates.values(), default=0.0),
+    )
+    if history["top_template"]:
+        top_template = history["top_template"]
+        top_template_fraction = float(history["top_template_fraction"])
+    elif metric_template_rates:
+        top_template, top_template_fraction = max(
+            metric_template_rates.items(), key=lambda item: item[1]
+        )
+    else:
+        top_template, top_template_fraction = "", 0.0
     best_lift = max(
         float(metrics.get("best_attempt_lift", 0.0)),
         float(history.get("best_lift_mm", 0.0)) / 1000.0,
@@ -1046,7 +1087,6 @@ def _classify_training(
         float(metrics.get("best_attempt_final_lift", 0.0)),
         float(history.get("best_final_lift_mm", 0.0)) / 1000.0,
     )
-    completed = int(args.num_envs * history["updates"])
     best_exists = (train_output / "best_trajectory" / "manifest.json").is_file()
 
     if successful_templates:
@@ -1085,14 +1125,14 @@ def _classify_training(
         "lattice_successful_templates": successful_templates,
         "lattice_failed_templates": failed_templates,
         "lattice_best_lift_mm": preflight.best_lift_mm,
-        "rl_updates": history["updates"],
+        "rl_updates": updates,
         "rl_completed_episodes": completed,
-        "rl_best_success_rate": history["best_success_rate"],
+        "rl_best_success_rate": best_success_rate,
         "rl_final_success_rate": final_success_rate,
         "rl_best_lift_mm": 1000.0 * best_lift,
         "rl_best_final_lift_mm": 1000.0 * best_final_lift,
-        "rl_top_template": history["top_template"],
-        "rl_top_template_fraction": history["top_template_fraction"],
+        "rl_top_template": top_template,
+        "rl_top_template_fraction": top_template_fraction,
         "failure_category": failure,
     }
 

@@ -19,8 +19,10 @@ from tools.grasping.batch_grasp_edit import (
     _is_noncacheable_interruption,
     _resource_plan,
     _recovery_args,
+    _read_json,
     _selection_ids,
     _adaptive_train,
+    _checkpoint_update,
     _validate_runtime_dependencies,
     _runtime_estimate,
     _wall_clock_estimate,
@@ -115,6 +117,22 @@ def test_recovery_defaults_use_isolated_long_lift_lattice() -> None:
     assert recovery.hand_edit_fraction == pytest.approx(0.20)
     assert str(recovery.lattice_root).endswith("recovery_lift_085mm")
     assert recovery.lattice_root != args.lattice_root
+
+
+def test_checkpoint_update_recovers_reused_training_budget(tmp_path) -> None:
+    torch = pytest.importorskip("torch")
+    checkpoint = tmp_path / "checkpoint_final.pt"
+    torch.save({"update": 5}, checkpoint)
+
+    assert _checkpoint_update(checkpoint) == 5
+    assert _checkpoint_update(tmp_path / "missing.pt") == 0
+
+
+def test_read_json_returns_existing_payload(tmp_path) -> None:
+    path = tmp_path / "result.json"
+    path.write_text('{"status": "RL_SUCCESS"}', encoding="utf-8")
+
+    assert _read_json(path) == {"status": "RL_SUCCESS"}
 
 
 def test_selection_file_preserves_ranked_object_order(tmp_path) -> None:
