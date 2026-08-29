@@ -245,6 +245,36 @@ MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
   --play --viewer-speed 0.4 --loop
 ```
 
+### 录制五任务演示视频
+
+`tools.record_task_demo` 统一支持 `lift`、`pick_place`、`stack`、`nut_assembly` 和
+`push`。它可读取生成流水线的 `manifest.json`，也可直接读取遥操作保存的 `.npz`；程序回放
+轨迹中的 MuJoCo 状态，不重新求解动作。默认输出 480×270、20 FPS MP4，
+默认采用轨迹记录的固定相机或项目数据采集使用的 `agentview`，并在旁边写入同名 JSON 元数据。可用
+`--camera frontview|agentview|sideview|birdview` 显式选择视角。
+
+Lift：
+
+```bash
+MUJOCO_GL=egl python -m tools.record_task_demo \
+  --task lift \
+  --manifest outputs/dex_hand_top100_v2/lattice/<object>/<template>/manifest.json \
+  --output outputs/demo_videos/lift.mp4
+```
+
+PickPlace：
+
+```bash
+MUJOCO_GL=egl python -m tools.record_task_demo \
+  --task pick_place \
+  --manifest outputs/pick_place_top100/<object>/best_trajectory/manifest.json \
+  --output outputs/demo_videos/pick_place.mp4
+```
+
+需要更小的视频时可加 `--width 320 --height 180 --fps 15 --frame-stride 2`。对于 Stack
+或 NutAssembly 等多物体自定义场景，把原始任务配置写入 manifest 的
+`metadata.task_config`，或通过 `--task-config '{"single_nut":"square_nut"}'` 传入。
+
 ## 输出目录
 
 ```text
