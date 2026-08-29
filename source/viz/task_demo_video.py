@@ -12,6 +12,22 @@ import mujoco
 import numpy as np
 
 SUPPORTED_TASKS = ("lift", "pick_place", "stack", "nut_assembly", "push")
+DEFAULT_STAGE_NAMES = {
+    0: "settle",
+    1: "transit",
+    2: "pregrasp",
+    3: "approach",
+    4: "close",
+    5: "hold",
+    6: "lift",
+    7: "verify",
+    8: "transport",
+    9: "descend",
+    10: "release",
+    11: "retreat",
+    12: "task_verify",
+    13: "adaptive_grip",
+}
 
 
 @dataclass(frozen=True)
@@ -88,11 +104,12 @@ def load_recorded_task_episode(
     task_config.setdefault("terminate_on_success", False)
 
     stored_codes = metadata.get("stage_codes", {})
-    stage_names = (
+    stored_stage_names = (
         {int(code): str(name) for name, code in stored_codes.items()}
         if isinstance(stored_codes, Mapping)
         else {}
     )
+    stage_names = {**DEFAULT_STAGE_NAMES, **stored_stage_names}
     return RecordedTaskEpisode(
         manifest_path=manifest_path,
         task=resolved_task,

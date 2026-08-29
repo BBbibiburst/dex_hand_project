@@ -49,7 +49,9 @@ def test_loader_infers_task_object_and_stage_names(tmp_path) -> None:
         "object_id": "ycb:test",
         "terminate_on_success": False,
     }
-    assert episode.stage_names == {0: "settle", 1: "move"}
+    assert episode.stage_names[0] == "settle"
+    assert episode.stage_names[1] == "move"
+    assert episode.stage_names[8] == "transport"
 
 
 def test_loader_allows_task_and_config_override(tmp_path) -> None:
