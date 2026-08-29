@@ -493,7 +493,7 @@ def execute_pick_place_transfer(
             arrays=arrays,
             success=success,
             terminal_stage="task_verify" if not ended else "retreat",
-            failure_reason=None if success else "object was not released stably inside target bin",
+            failure_reason=None if success else "object was not released stably inside target region",
             metadata=metadata,
         )
     finally:

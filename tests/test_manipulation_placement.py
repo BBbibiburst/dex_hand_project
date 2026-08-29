@@ -6,7 +6,7 @@ import mujoco
 import numpy as np
 import pytest
 
-from source.envs.manipulation import make_nut_assembly_env
+from source.envs.manipulation import make_nut_assembly_env, make_pick_place_env
 from source.envs.manipulation.lift import LiftTask
 from source.envs.manipulation.nut_assembly import NutAssemblyTask
 from source.envs.manipulation.objects import FreeBoxSpec
@@ -155,3 +155,24 @@ def test_fixed_placement_replay_is_unchanged() -> None:
 
     np.testing.assert_allclose(position, [0.45, 0.02, 0.532])
     np.testing.assert_allclose(quaternion, [np.sqrt(0.5), 0.0, 0.0, np.sqrt(0.5)])
+
+
+def test_pick_place_regions_are_painted_sites_not_fake_collision_walls() -> None:
+    env = make_pick_place_env(
+        task_config={"object_id": "ycb:005_tomato_soup_can"},
+        enable_tactile_sensors=False,
+    )
+    try:
+        geom_names = {
+            mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, index)
+            for index in range(env.model.ngeom)
+        }
+        site_names = {
+            mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_SITE, index)
+            for index in range(env.model.nsite)
+        }
+        assert not any(name and "source_bin" in name for name in geom_names)
+        assert not any(name and "target_bin" in name for name in geom_names)
+        assert {"source_region", "target_region"} <= site_names
+    finally:
+        env.close()

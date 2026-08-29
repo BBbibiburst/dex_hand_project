@@ -233,46 +233,28 @@ class TableArena:
 
 @dataclass(frozen=True)
 class BinsArena(TableArena):
-    """Table arena with an open source region and a visual receiving bin."""
+    """Table arena with painted source and target placement regions."""
 
     bin_half_size: Tuple[float, float, float] = (0.18, 0.10, 0.06)
-    source_wall_half_height: float = 0.015
     source_center: Tuple[float, float] = (0.46, -0.02)
     target_center: Tuple[float, float] = (0.46, 0.20)
 
     def augment_spec(self, spec: mujoco.MjSpec) -> None:
         super().augment_spec(spec)
-        for prefix, center in (
-            ("source_bin", self.source_center),
-            ("target_bin", self.target_center),
+        hx, hy, _ = self.bin_half_size
+        for name, center, color in (
+            ("source_region", self.source_center, (0.88, 0.55, 0.16, 0.32)),
+            ("target_region", self.target_center, (0.12, 0.48, 0.88, 0.38)),
         ):
-            body = spec.worldbody.add_body()
-            body.name = prefix
-            body.pos = [center[0], center[1], self.table_top_z]
-            hx, hy, hz = self.bin_half_size
-            wall_hz = self.source_wall_half_height if prefix == "source_bin" else hz
-            for name, pos, size in (
-                ("bottom", (0, 0, 0.005), (hx, hy, 0.005)),
-                ("left", (0, -hy, wall_hz), (hx, 0.005, wall_hz)),
-                ("right", (0, hy, wall_hz), (hx, 0.005, wall_hz)),
-                ("front", (-hx, 0, wall_hz), (0.005, hy, wall_hz)),
-                ("back", (hx, 0, wall_hz), (0.005, hy, wall_hz)),
-            ):
-                # Lift grasps require side access. The source is therefore an
-                # open table region; only the receiving target has collision
-                # walls. A source bottom would also duplicate the table and
-                # introduce 10 mm of reset penetration.
-                if prefix == "source_bin":
-                    continue
-                geom = body.add_geom()
-                geom.name = f"{prefix}_{name}"
-                geom.type = mujoco.mjtGeom.mjGEOM_BOX
-                geom.pos, geom.size = list(pos), list(size)
-                geom.rgba = [0.25, 0.35, 0.45, 1.0]
-                # The target marks the placement region. Collision-free walls
-                # keep the transferred side grasp equivalent to its Lift scene.
-                geom.contype = 0
-                geom.conaffinity = 0
+            # A site is a painted task annotation, not a rigid body: it adds no
+            # mass, contact, height change, or imaginary obstacle to the scene.
+            site = spec.worldbody.add_site()
+            site.name = name
+            site.type = mujoco.mjtGeom.mjGEOM_BOX
+            site.pos = [center[0], center[1], self.table_top_z + 0.001]
+            site.size = [hx, hy, 0.001]
+            site.rgba = list(color)
+            site.group = 2
 
 
 @dataclass(frozen=True)
