@@ -18,6 +18,7 @@ from tools.grasping.batch_grasp_edit import (
     _init_object_worker,
     _is_noncacheable_interruption,
     _resource_plan,
+    _recovery_args,
     _selection_ids,
     _adaptive_train,
     _validate_runtime_dependencies,
@@ -105,6 +106,17 @@ def test_benchmark_parser_does_not_assume_historical_count() -> None:
     assert args.expect_count == 0
 
 
+def test_recovery_defaults_use_isolated_long_lift_lattice() -> None:
+    args = build_parser().parse_args([])
+    recovery = _recovery_args(args)
+
+    assert args.auto_recovery is True
+    assert recovery.execution_lift_height == pytest.approx(0.085)
+    assert recovery.hand_edit_fraction == pytest.approx(0.20)
+    assert str(recovery.lattice_root).endswith("recovery_lift_085mm")
+    assert recovery.lattice_root != args.lattice_root
+
+
 def test_selection_file_preserves_ranked_object_order(tmp_path) -> None:
     path = tmp_path / "selection.json"
     path.write_text(
@@ -159,6 +171,9 @@ def _summary_args() -> SimpleNamespace:
         lattice_max_executions=32,
         execution_lift_height=0.065,
         hand_edit_fraction=0.35,
+        auto_recovery=True,
+        recovery_lift_height=0.085,
+        recovery_hand_edit_fraction=0.20,
         lattice_root="lattice",
         promising_lift_mm=20.0,
         promising_success_rate=0.01,

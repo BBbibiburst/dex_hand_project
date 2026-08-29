@@ -228,7 +228,13 @@ PPO 阶段数，所以预热前会偏保守。所有 worker 至少完成一个�
 两个 `--train-*-success` 参数用于压力测试：即使 Grasp 或 Lattice 已经成功，只要模板可用，
 仍然运行 PPO。正常的分层生产流程应移除这两个参数，让已经解决的对象提前退出。
 
-### 失败集修复与 PPO 续训
+### 自动失败恢复与 PPO 续训
+
+正式命令默认启用统一的分层恢复流程：默认 65 mm Lattice 失败后，程序自动在
+`lattice/recovery_lift_085mm/` 编译 85 mm 轨迹；仍失败才用 `0.20` 手部编辑范围启动全新
+PPO。两级 Lattice 不会覆盖彼此，`summary.csv`/`summary.json` 的 `pipeline_route` 会记录
+`default_lattice`、`recovery_lattice`、`default_ppo` 或 `recovery_ppo`。可用
+`--no-auto-recovery` 关闭该行为，但正式 Top100 不需要这样做。
 
 `--resume-existing-rl` 用于结果分析后的定向加预算：它读取每个对象
 `checkpoint_final.pt` 中的绝对更新数，只补足到新的 `--max-updates`，不会删除已有策略。
@@ -259,34 +265,9 @@ python -m tools.grasping.batch_grasp_edit \
 代码签名变化会自动让旧对象汇总失效，因此不需要 `--force`。已有 Grasp、正确场景的 Lattice
 和成功 RL 轨迹仍按内容复用；后续使用同一组参数即可断点续跑。
 
-如果失败集已经在默认65 mm腕部行程和30次更新下收敛，但物体稳定停在目标高度以下，应把
-失败集单独放入新输出目录，用更长的物理轨迹与更保守的手部编辑重新求解。不要把旧checkpoint
-强行加载到改变后的轨迹；当前程序会校验环境签名并拒绝这种表面兼容：
-
-```bash
-MUJOCO_GL=egl \
-CUDA_VISIBLE_DEVICES=0 \
-PYTHONUNBUFFERED=1 \
-python -m tools.grasping.batch_grasp_edit \
-  --selection configs/underactuated_top100_v2_retry11.json \
-  --expect-count 11 \
-  --output outputs/dex_hand_top100_v2_lift85_retry \
-  --grasp-root outputs/dex_hand_top100_v2/grasp \
-  --lattice-root outputs/dex_hand_top100_v2_lift85_retry/lattice \
-  --device cuda:0 \
-  --gpus auto \
-  --workers-per-gpu auto \
-  --gpu-jobs-per-gpu auto \
-  --ppo-jobs-per-gpu auto \
-  --execution-lift-height 0.085 \
-  --hand-edit-fraction 0.20 \
-  --initial-updates 5 \
-  --mid-updates 10 \
-  --max-updates 15
-```
-
-`--execution-lift-height` 只增加真实C MuJoCo/IK抬升轨迹，不修改55 mm MJWarp成功高度，也不
-放宽速度或角速度限制。独立输出目录使默认65 mm基线、恢复轨迹和checkpoint保持可审计。
+`configs/underactuated_top100_v2_retry11.json` 仅保留为历史诊断快照，不再是生产流程入口。
+恢复高度只增加真实 C MuJoCo/IK 抬升轨迹，不修改 55 mm MJWarp 成功高度，也不放宽速度或
+角速度限制。改变恢复参数会自动使对应结果签名失效，且不会错误续接不同环境的 checkpoint。
 
 任务被中断时，使用完全相同的语义参数重新运行。GPU 数量和 worker 数只影响调度，不会让
 已经完成且签名匹配的每对象结果失效。

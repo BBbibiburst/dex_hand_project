@@ -198,8 +198,10 @@ python -m tools.grasping.batch_grasp_edit \
 worker；24 GB GPU 配合 64 个环境时通常采用同卡双流水线，让 Grasp/CPU 工作与单路满载 PPO
 重叠，并输出动态 ETA。详细资源规则见 `docs/PIPELINE.md`。
 
-默认流程先生成 DexEvolve Top-K 候选并展开 Wrist Lattice；Lattice 已成功可跳过 PPO，
-否则进入 5→10→15 更新的自适应 PPO。中断后使用相同参数重新运行即可继续。
+这一条命令就是完整正式流程：先生成 GraspQP + DexEvolve Top-K 候选并展开默认 65 mm
+Wrist Lattice；成功便退出。失败对象会自动改用独立缓存的 85 mm 恢复轨迹；恢复 Lattice
+仍失败才以 0.20 的保守手部编辑范围进入 5→10→15 更新的 MJWarp PPO。无需再维护失败清单
+或第二条重跑命令。中断后使用相同参数重新运行即可继续。
 
 详细的状态解释、缓存规则和 C MuJoCo 复验方法见
 [全量流水线与验证](docs/PIPELINE.md)。
@@ -211,6 +213,7 @@ outputs/dex_hand_top100_v2/
 ├── objects/             每个对象的可恢复结果
 ├── logs/                每个对象的完整日志
 ├── lattice/             Wrist Lattice 轨迹与 index.json
+│   └── recovery_lift_085mm/  仅失败对象的恢复轨迹
 ├── rl/                  PPO 配置、checkpoint、metrics 和最佳轨迹
 ├── grasp/               本次运行生成的 GraspQP + DexEvolve
 ├── summary.csv

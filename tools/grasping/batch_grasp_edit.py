@@ -78,6 +78,9 @@ CSV_FIELDS = (
     "dataset",
     "gpu",
     "status",
+    "pipeline_route",
+    "effective_lift_height_mm",
+    "effective_hand_edit_fraction",
     "needs_motion_primitive",
     "grasp_attempts",
     "grasp_success",
@@ -773,6 +776,29 @@ def _preflight_lattice(
     )
 
 
+def _recovery_args(args: argparse.Namespace) -> argparse.Namespace:
+    """Return an isolated, conservative configuration for automatic recovery."""
+    recovery = argparse.Namespace(**vars(args))
+    recovery.execution_lift_height = float(args.recovery_lift_height)
+    recovery.hand_edit_fraction = float(args.recovery_hand_edit_fraction)
+    lift_mm = int(round(1000.0 * recovery.execution_lift_height))
+    recovery.lattice_root = Path(args.lattice_root) / f"recovery_lift_{lift_mm:03d}mm"
+    return recovery
+
+
+def _apply_preflight(row: dict[str, Any], preflight: LatticePreflight) -> None:
+    row.update(
+        {
+            "lattice_candidates": preflight.candidates,
+            "lattice_reachable": preflight.reachable,
+            "lattice_templates": preflight.templates,
+            "lattice_successful_templates": preflight.successful_templates,
+            "lattice_failed_templates": preflight.failed_templates,
+            "lattice_best_lift_mm": preflight.best_lift_mm,
+        }
+    )
+
+
 def _parse_update_history(text: str) -> dict[str, Any]:
     matches = list(_UPDATE_RE.finditer(text))
     if not matches:
@@ -1077,6 +1103,9 @@ def _empty_row(object_id: str) -> dict[str, Any]:
         "dataset": object_id.split(":", 1)[0],
         "gpu": "",
         "status": "PIPELINE_ERROR",
+        "pipeline_route": "",
+        "effective_lift_height_mm": 0.0,
+        "effective_hand_edit_fraction": 0.0,
         "needs_motion_primitive": False,
         "grasp_attempts": 0,
         "grasp_success": False,
@@ -1188,6 +1217,9 @@ def _write_summary(
                 "lattice_max_executions": args.lattice_max_executions,
                 "execution_lift_height": args.execution_lift_height,
                 "hand_edit_fraction": args.hand_edit_fraction,
+                "auto_recovery": args.auto_recovery,
+                "recovery_lift_height": args.recovery_lift_height,
+                "recovery_hand_edit_fraction": args.recovery_hand_edit_fraction,
                 "lattice_root": str(args.lattice_root),
                 "promising_lift_mm": args.promising_lift_mm,
                 "promising_success_rate": args.promising_success_rate,
@@ -1224,6 +1256,7 @@ def _format_progress(
     )
     runtime = float(row.get("runtime_sec") or 0.0)
     gpu = str(row.get("gpu") or "-")
+    route = str(row.get("pipeline_route") or "-")
     timing = " eta=warming_up"
     if average_runtime is not None and eta is not None:
         timing = f" avg={_format_duration(average_runtime)}/obj eta={_format_duration(eta)}"
@@ -1232,7 +1265,7 @@ def _format_progress(
         f"[{index:03d}/{total:03d}] {row['object_id']:<34} "
         f"{status:<21} grasp={grasp} tpl={templates:02d} "
         f"u={updates:02d} rl={success:5.1f}% lift={lift:5.1f}mm "
-        f"gpu={gpu} object={_format_duration(runtime)}{timing}{cache_label}"
+        f"route={route} gpu={gpu} object={_format_duration(runtime)}{timing}{cache_label}"
     )
 
 
@@ -1281,28 +1314,54 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
                 grasp_roots=item.grasp_roots,
                 log_path=log_path,
             )
-            row.update(
-                {
-                    "lattice_candidates": preflight.candidates,
-                    "lattice_reachable": preflight.reachable,
-                    "lattice_templates": preflight.templates,
-                    "lattice_successful_templates": preflight.successful_templates,
-                    "lattice_failed_templates": preflight.failed_templates,
-                    "lattice_best_lift_mm": preflight.best_lift_mm,
-                }
-            )
+            active_args = args
+            row["pipeline_route"] = "default"
+            row["effective_lift_height_mm"] = 1000.0 * args.execution_lift_height
+            row["effective_hand_edit_fraction"] = args.hand_edit_fraction
+
+            # A failed 65 mm execution does not immediately enter PPO. First
+            # retry the same candidates with the longer real MuJoCo lift.
+            if args.auto_recovery and not preflight.successful_templates:
+                recovery_args = _recovery_args(args)
+                with log_path.open("a", encoding="utf-8") as log:
+                    log.write(
+                        "\n[recovery] default lattice had no successful template; "
+                        f"retrying lift={recovery_args.execution_lift_height:.3f}m "
+                        f"hand_edit={recovery_args.hand_edit_fraction:.3f}\n"
+                    )
+                recovery = _preflight_lattice(
+                    args=recovery_args,
+                    object_id=object_id,
+                    grasp_roots=item.grasp_roots,
+                    log_path=log_path,
+                )
+                # Prefer recovery whenever it produced usable templates. If
+                # not, retain a usable default lattice for PPO.
+                if recovery.templates or not preflight.templates:
+                    preflight = recovery
+                    active_args = recovery_args
+                    row["pipeline_route"] = "recovery"
+                    row["effective_lift_height_mm"] = (
+                        1000.0 * recovery_args.execution_lift_height
+                    )
+                    row["effective_hand_edit_fraction"] = (
+                        recovery_args.hand_edit_fraction
+                    )
+
+            _apply_preflight(row, preflight)
             if preflight.error:
                 row["status"] = "NO_REACHABLE_TEMPLATE"
                 row["needs_motion_primitive"] = True
                 row["failure_category"] = "no_reachable_template"
             elif preflight.successful_templates and not args.train_lattice_success:
                 row["status"] = "LATTICE_SUCCESS"
+                row["pipeline_route"] += "_lattice"
                 row["needs_motion_primitive"] = False
                 row["failure_category"] = ""
             else:
                 train_output = item.rl_root / _slug(object_id)
                 child = _adaptive_train(
-                    args=args,
+                    args=active_args,
                     object_id=object_id,
                     grasp_roots=item.grasp_roots,
                     root=item.root,
@@ -1314,9 +1373,10 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
                         preflight=preflight,
                         child=child,
                         train_output=train_output,
-                        args=args,
+                        args=active_args,
                     )
                 )
+                row["pipeline_route"] += "_ppo"
     except KeyboardInterrupt:
         raise
     except Exception as exc:  # noqa: BLE001 - preserve the rest of the catalogue sweep
@@ -1442,6 +1502,24 @@ def build_parser() -> argparse.ArgumentParser:
         default=0.35,
         help="Maximum normalized six-actuator edit applied around each lattice grip.",
     )
+    parser.add_argument(
+        "--auto-recovery",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="After default lattice failure, automatically try the recovery trajectory before PPO.",
+    )
+    parser.add_argument(
+        "--recovery-lift-height",
+        type=float,
+        default=0.085,
+        help="C MuJoCo lift height used only after the default lattice fails.",
+    )
+    parser.add_argument(
+        "--recovery-hand-edit-fraction",
+        type=float,
+        default=0.20,
+        help="Conservative actuator edit range for PPO after recovery-lattice failure.",
+    )
     parser.add_argument("--promising-lift-mm", type=float, default=20.0)
     parser.add_argument("--promising-success-rate", type=float, default=0.01)
     parser.add_argument(
@@ -1491,6 +1569,10 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("--execution-lift-height must be positive.")
     if not 0.0 < args.hand_edit_fraction <= 1.0:
         raise ValueError("--hand-edit-fraction must lie in (0, 1].")
+    if args.recovery_lift_height <= 0.0:
+        raise ValueError("--recovery-lift-height must be positive.")
+    if not 0.0 < args.recovery_hand_edit_fraction <= 1.0:
+        raise ValueError("--recovery-hand-edit-fraction must lie in (0, 1].")
 
     root = _repo_root()
     os.chdir(root)
@@ -1546,6 +1628,9 @@ def main(argv: list[str] | None = None) -> int:
         "lattice_max_executions": args.lattice_max_executions,
         "execution_lift_height": args.execution_lift_height,
         "hand_edit_fraction": args.hand_edit_fraction,
+        "auto_recovery": args.auto_recovery,
+        "recovery_lift_height": args.recovery_lift_height,
+        "recovery_hand_edit_fraction": args.recovery_hand_edit_fraction,
         "promising_lift_mm": args.promising_lift_mm,
         "promising_success_rate": args.promising_success_rate,
         "early_fail_lift_mm": args.early_fail_lift_mm,
