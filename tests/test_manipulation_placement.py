@@ -157,6 +157,27 @@ def test_fixed_placement_replay_is_unchanged() -> None:
     np.testing.assert_allclose(quaternion, [np.sqrt(0.5), 0.0, 0.0, np.sqrt(0.5)])
 
 
+def test_fixed_placement_can_replay_complete_world_pose() -> None:
+    expected_quaternion = np.asarray([0.5, 0.5, -0.5, 0.5])
+    sampler = FixedTablePlacementSampler(
+        xy=(-0.1, 0.02),
+        quaternion_wxyz=expected_quaternion,
+        world_z=0.537,
+    )
+    obj = FreeBoxSpec(
+        name="object",
+        half_size=(0.02, 0.02, 0.03),
+        rgba=(1.0, 1.0, 1.0, 1.0),
+    )
+
+    position, quaternion = sampler.sample(
+        (obj,), rng=np.random.default_rng(0), reference_pos=np.asarray([0.55, 0.0, 0.5])
+    )["object"]
+
+    np.testing.assert_allclose(position, [0.45, 0.02, 0.537])
+    np.testing.assert_allclose(quaternion, expected_quaternion)
+
+
 def test_pick_place_regions_are_painted_sites_not_fake_collision_walls() -> None:
     env = make_pick_place_env(
         task_config={"object_id": "ycb:005_tomato_soup_can"},

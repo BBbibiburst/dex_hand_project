@@ -19,12 +19,13 @@ from source.grasping.executor import (
     ExecutionConfig,
     _Recorder,
     _run_pose_segment,
+    _step,
     actuator_targets_from_fractions,
     execute_grasp,
     grasp_hand_targets,
 )
 
-PICK_PLACE_PIPELINE_VERSION = "pick-place-transfer-v2"
+PICK_PLACE_PIPELINE_VERSION = "pick-place-transfer-v3"
 
 
 @dataclass(frozen=True)
@@ -33,15 +34,22 @@ class PickPlaceTransferConfig:
 
     clearance_height: float = 0.065
     release_clearance: float = 0.002
+    hand_table_clearance: float = 0.006
     release_in_air: bool = False
+    table_supported_transport: bool = False
+    reuse_verified_lift_terminal_state: bool = True
+    replay_lift_from_reset: bool = False
     air_release_extra_height: float = 0.02
     target_near_edge_fraction: float = 0.0
     target_y_bias: float = 0.0
     air_release_target_y_bias: float = 0.02
     transport_grip_boost: float = 0.0
+    transport_finger_boost: float = 0.0
     clear_steps: int = 0
     adaptive_transport_grip: bool = True
     adaptive_grip_steps: int = 8
+    adaptive_release: bool = True
+    maximum_release_open_fraction: float = 0.85
     transport_steps: int = 90
     descend_steps: int = 55
     release_steps: int = 35
@@ -53,10 +61,16 @@ class PickPlaceTransferConfig:
             raise ValueError("clearance_height must be positive.")
         if self.release_clearance <= 0.0:
             raise ValueError("release_clearance must be positive.")
+        if self.hand_table_clearance < 0.0:
+            raise ValueError("hand_table_clearance must be non-negative.")
         if not 0.0 <= self.target_near_edge_fraction <= 0.75:
             raise ValueError("target_near_edge_fraction must lie in [0, 0.75].")
         if not 0.0 <= self.transport_grip_boost <= 0.20:
             raise ValueError("transport_grip_boost must lie in [0, 0.20].")
+        if not 0.0 <= self.transport_finger_boost <= 0.40:
+            raise ValueError("transport_finger_boost must lie in [0, 0.40].")
+        if not 0.0 < self.maximum_release_open_fraction <= 1.0:
+            raise ValueError("maximum_release_open_fraction must lie in (0, 1].")
         if (
             min(
                 self.transport_steps,
@@ -76,6 +90,7 @@ class PickPlaceTransferConfig:
         return (
             self.clear_steps
             + (self.adaptive_grip_steps if self.adaptive_transport_grip else 0)
+            + (self.descend_steps if self.table_supported_transport else 0)
             + self.transport_steps
             + self.descend_steps
             + self.release_steps
@@ -182,6 +197,94 @@ def _combine_arrays(
     return {name: np.concatenate((first[name], second[name]), axis=0) for name in first}
 
 
+def _hand_collision_min_z(env) -> float:
+    """Conservative lower bound of the hand's active collision geometry."""
+
+    prefix = str(getattr(env.controller.hand_controller, "hand_prefix", "") or "")
+    minimum = float("inf")
+    for geom_id in env.task._require_bindings().robot_geom_ids:
+        name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, int(geom_id)) or ""
+        if prefix and not name.startswith(prefix):
+            continue
+        if env.model.geom_contype[geom_id] == 0 and env.model.geom_conaffinity[geom_id] == 0:
+            continue
+        # MuJoCo's compiled bounding radius contains the complete geom. It is
+        # conservative for elongated links, which is preferable to allowing a
+        # finger or palm to intersect the table during placement.
+        lower = float(env.data.geom_xpos[geom_id, 2] - env.model.geom_rbound[geom_id])
+        minimum = min(minimum, lower)
+    if not np.isfinite(minimum):
+        raise RuntimeError("Could not identify active hand collision geometry.")
+    return minimum
+
+
+def _safe_descent_distance(
+    *,
+    object_position_z: float,
+    object_bottom_offset: float,
+    table_top_z: float,
+    desired_object_clearance: float,
+    hand_min_z: float,
+    hand_table_clearance: float,
+) -> tuple[float, bool]:
+    """Return a downward travel that places the object without striking the table."""
+
+    object_travel = max(
+        0.0,
+        object_position_z
+        - object_bottom_offset
+        - table_top_z
+        - desired_object_clearance,
+    )
+    hand_travel = max(0.0, hand_min_z - table_top_z - hand_table_clearance)
+    travel = min(object_travel, hand_travel)
+    return travel, hand_travel + 1e-9 < object_travel
+
+
+def _object_touches_table(env) -> bool:
+    bindings = env.task._require_bindings()
+    object_geoms = bindings.objects["object"].geom_ids
+    table_geom = mujoco.mj_name2id(
+        env.model, mujoco.mjtObj.mjOBJ_GEOM, env.task.arena.table_geom_name
+    )
+    if table_geom < 0:
+        return False
+    for index in range(env.data.ncon):
+        pair = {int(env.data.contact[index].geom1), int(env.data.contact[index].geom2)}
+        if table_geom in pair and pair.intersection(object_geoms):
+            return True
+    return False
+
+
+def _run_adaptive_release(
+    env,
+    recorder: _Recorder,
+    *,
+    position: np.ndarray,
+    quaternion: np.ndarray,
+    grip_hand: np.ndarray,
+    open_hand: np.ndarray,
+    steps: int,
+    maximum_open_fraction: float,
+) -> tuple[np.ndarray, bool, float]:
+    """Loosen only until the object has settled and separated from the hand."""
+
+    final_hand = grip_hand.copy()
+    final_fraction = 0.0
+    ended = False
+    for index in range(steps):
+        phase = (index + 1) / steps
+        fraction = maximum_open_fraction * phase * phase * (3.0 - 2.0 * phase)
+        final_fraction = fraction
+        final_hand = (1.0 - fraction) * grip_hand + fraction * open_hand
+        action = np.concatenate((position, quaternion, final_hand)).astype(np.float32)
+        _, _, ended = _step(env, recorder, action, "release")
+        touching_hand = env.task._is_robot_touching_object(env.model, env.data, "object")
+        if ended or (_object_touches_table(env) and not touching_hand):
+            break
+    return final_hand.astype(np.float32), ended, final_fraction
+
+
 def execute_pick_place_transfer(
     candidate: GraspCandidate,
     *,
@@ -217,15 +320,23 @@ def execute_pick_place_transfer(
         if position.shape != (3,) or quaternion.shape != (4,):
             raise ValueError("Source object pose must have shapes (3,) and (4,).")
         arena = BinsArena()
-        yaw = Rotation.from_quat(quaternion[[1, 2, 3, 0]]).as_euler("xyz")[2]
         task_config["arena"] = arena
-        task_config["placement_sampler"] = FixedTablePlacementSampler(
-            xy=(
-                float(position[0] - arena.source_center[0]),
-                float(position[1] - arena.source_center[1]),
-            ),
-            yaw=float(yaw),
+        placement_xy = (
+            float(position[0] - arena.source_center[0]),
+            float(position[1] - arena.source_center[1]),
         )
+        if transfer.replay_lift_from_reset:
+            yaw = Rotation.from_quat(quaternion[[1, 2, 3, 0]]).as_euler("xyz")[2]
+            task_config["placement_sampler"] = FixedTablePlacementSampler(
+                xy=placement_xy,
+                yaw=float(yaw),
+            )
+        else:
+            task_config["placement_sampler"] = FixedTablePlacementSampler(
+                xy=placement_xy,
+                quaternion_wxyz=quaternion,
+                world_z=float(position[2]),
+            )
     env = make_pick_place_env(
         task_config=task_config,
         control_mode="ik",
@@ -243,6 +354,30 @@ def execute_pick_place_transfer(
             source_actions = source_episode.arrays["action"]
             source_controls = source_episode.arrays["ctrl"]
             source_stages = source_episode.arrays["stage"]
+            settle_indices = np.flatnonzero(source_stages == STAGE_CODES["settle"])
+            if len(settle_indices) and not transfer.replay_lift_from_reset:
+                settled_index = int(settle_indices[-1])
+                source_qpos = source_episode.arrays["qpos"][settled_index]
+                source_qvel = source_episode.arrays["qvel"][settled_index]
+                source_ctrl = source_controls[settled_index]
+                if source_qpos.shape != env.data.qpos.shape:
+                    raise ValueError("Lift and PickPlace qpos layouts are incompatible.")
+                if source_qvel.shape != env.data.qvel.shape:
+                    raise ValueError("Lift and PickPlace qvel layouts are incompatible.")
+                if source_ctrl.shape != env.data.ctrl.shape:
+                    raise ValueError("Lift and PickPlace ctrl layouts are incompatible.")
+                env.data.qpos[:] = source_qpos
+                env.data.qvel[:] = source_qvel
+                env.data.ctrl[:] = source_ctrl
+                mujoco.mj_forward(env.model, env.data)
+            # ``object_initial_*`` is captured after the source Lift settle
+            # stage. Restore that complete physical state (including object
+            # velocity and passive hand state), then continue at transit.
+            if not transfer.replay_lift_from_reset:
+                after_settle = source_stages != STAGE_CODES["settle"]
+                source_actions = source_actions[after_settle]
+                source_controls = source_controls[after_settle]
+                source_stages = source_stages[after_settle]
             if source_trajectory is not None:
                 approach_code = STAGE_CODES[str(source_trajectory.start_stage)]
                 keep = source_stages < approach_code
@@ -328,6 +463,43 @@ def execute_pick_place_transfer(
                     "replayed_ppo_controls": source_trajectory is not None,
                 },
             )
+            if (
+                source_trajectory is None
+                and transfer.reuse_verified_lift_terminal_state
+                and not transfer.replay_lift_from_reset
+            ):
+                # Direct/Lattice Lift episodes already contain a complete C
+                # MuJoCo-verified physical trajectory. Preserve that prefix
+                # verbatim and continue from its exact terminal state instead
+                # of accepting numerical divergence from a second replay.
+                final_qpos = source_episode.arrays["qpos"][-1]
+                final_qvel = source_episode.arrays["qvel"][-1]
+                final_ctrl = source_episode.arrays["ctrl"][-1]
+                if final_qpos.shape != env.data.qpos.shape:
+                    raise ValueError("Lift and PickPlace qpos layouts are incompatible.")
+                if final_qvel.shape != env.data.qvel.shape:
+                    raise ValueError("Lift and PickPlace qvel layouts are incompatible.")
+                if final_ctrl.shape != env.data.ctrl.shape:
+                    raise ValueError("Lift and PickPlace ctrl layouts are incompatible.")
+                env.data.qpos[:] = final_qpos
+                env.data.qvel[:] = final_qvel
+                env.data.ctrl[:] = final_ctrl
+                mujoco.mj_forward(env.model, env.data)
+                prefix = DemonstrationEpisode(
+                    object_id=source_episode.object_id,
+                    seed=source_episode.seed,
+                    candidate=source_episode.candidate,
+                    arrays={
+                        name: np.asarray(values).copy()
+                        for name, values in source_episode.arrays.items()
+                    },
+                    success=False,
+                    terminal_stage=source_episode.terminal_stage,
+                    metadata={
+                        **source_episode.metadata,
+                        "reused_verified_lift_state": True,
+                    },
+                )
         initial_object = np.asarray(prefix.arrays["object_position"][0], dtype=np.float64)
         current_object = env.task._body_pos(env.model, env.data, "object").copy()
         lifted = current_object[2] - initial_object[2] >= 0.04
@@ -351,7 +523,6 @@ def execute_pick_place_transfer(
         arm._prev_target_q = env.data.qpos[arm.qpos_addrs].copy()
         arm._filtered_velocity = np.zeros_like(arm._prev_target_q)
         arm._prev_ee_target = np.concatenate((ee_position, ee_quaternion))
-        ee_object_offset = ee_position - current_object
         approach_fractions, _ = grasp_hand_targets(candidate.actuator_fractions, grasp)
         open_hand = actuator_targets_from_fractions(env, approach_fractions)
         grip_hand = env.controller.hand_controller.current_action(env.model, env.data).astype(
@@ -364,13 +535,23 @@ def execute_pick_place_transfer(
             out=np.zeros(6, dtype=np.float32),
             where=(hand_controller.ctrl_high - hand_controller.ctrl_low) != 0.0,
         )
-        # The thumb is the opposing digit. Tightening every underactuated
-        # finger simultaneously tends to roll or eject round objects; apply
-        # the transport preload only on the thumb closure actuator.
-        boost = np.asarray([0.0, 0.0, 0.0, 0.0, 0.0, 1.0], dtype=np.float32)
+        # Keep opposing-side boosts independently tunable: symmetric closure
+        # can eject round objects, while thin objects may need extra finger
+        # preload to survive lateral acceleration.
+        boost = np.asarray(
+            [
+                transfer.transport_finger_boost,
+                transfer.transport_finger_boost,
+                transfer.transport_finger_boost,
+                transfer.transport_finger_boost,
+                0.0,
+                transfer.transport_grip_boost,
+            ],
+            dtype=np.float32,
+        )
         transport_hand = actuator_targets_from_fractions(
             env,
-            np.clip(grip_fraction + transfer.transport_grip_boost * boost, 0.0, 1.0),
+            np.clip(grip_fraction + boost, 0.0, 1.0),
         )
         if transfer.adaptive_transport_grip:
             transport_hand = _select_transport_hand(env, grip_hand)
@@ -383,7 +564,7 @@ def execute_pick_place_transfer(
             if transfer.release_in_air
             else transfer.target_y_bias
         )
-        release_object_position = np.asarray(
+        desired_release_object_position = np.asarray(
             [
                 target_xy[0],
                 target_xy[1],
@@ -394,11 +575,13 @@ def execute_pick_place_transfer(
             dtype=np.float64,
         )
         if transfer.release_in_air:
-            release_object_position[2] = current_object[2] + transfer.air_release_extra_height
-        transport_object_position = release_object_position.copy()
+            desired_release_object_position[2] = (
+                current_object[2] + transfer.air_release_extra_height
+            )
+        ee_object_offset = ee_position - current_object
+        transport_object_position = desired_release_object_position.copy()
         transport_object_position[2] = current_object[2]
         transport_ee = transport_object_position + ee_object_offset
-        release_ee = release_object_position + ee_object_offset
         clear_ee = ee_position.copy()
 
         ended = False
@@ -425,31 +608,124 @@ def execute_pick_place_transfer(
                 target_hand=transport_hand,
                 steps=transfer.clear_steps,
             )
+        if not ended and transfer.table_supported_transport:
+            supported_descent, _ = _safe_descent_distance(
+                object_position_z=float(current_object[2]),
+                object_bottom_offset=float(env.task.objects[0].bottom_offset),
+                table_top_z=float(env.task.table_top_z),
+                desired_object_clearance=transfer.release_clearance,
+                hand_min_z=_hand_collision_min_z(env),
+                hand_table_clearance=transfer.hand_table_clearance,
+            )
+            supported_source_ee = ee_position.copy()
+            supported_source_ee[2] -= supported_descent
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="descend",
+                target_position=supported_source_ee,
+                target_quaternion=ee_quaternion,
+                start_hand=transport_hand,
+                target_hand=transport_hand,
+                steps=transfer.descend_steps,
+                smooth=True,
+            )
+            supported_ee = env.data.site_xpos[arm.site_id].astype(np.float64).copy()
+            supported_object = env.task._body_pos(env.model, env.data, "object").copy()
+            supported_offset = supported_ee - supported_object
+            transport_object_position[2] = supported_object[2]
+            transport_ee = transport_object_position + supported_offset
+        if not ended:
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="transport",
+                target_position=transport_ee,
+                target_quaternion=ee_quaternion,
+                start_hand=(
+                    transport_hand if transfer.adaptive_transport_grip else grip_hand
+                ),
+                target_hand=transport_hand,
+                steps=transfer.transport_steps,
+                smooth=True,
+            )
+
+        # The object can settle or slide inside an underactuated grasp during
+        # transport. Re-measure the relative pose here instead of reusing the
+        # offset captured immediately after Lift. Then cap the downward motion
+        # at the first of object placement or hand/table clearance.
+        transported_ee = env.data.site_xpos[arm.site_id].astype(np.float64).copy()
+        transported_object = env.task._body_pos(env.model, env.data, "object").copy()
+        transported_offset = transported_ee - transported_object
+        release_ee = desired_release_object_position + transported_offset
+        table_limited_descent = False
+        if not transfer.release_in_air:
+            descent_distance, table_limited_descent = _safe_descent_distance(
+                object_position_z=float(transported_object[2]),
+                object_bottom_offset=float(env.task.objects[0].bottom_offset),
+                table_top_z=float(env.task.table_top_z),
+                desired_object_clearance=transfer.release_clearance,
+                hand_min_z=_hand_collision_min_z(env),
+                hand_table_clearance=transfer.hand_table_clearance,
+            )
+            release_ee[2] = transported_ee[2] - descent_distance
+
+        released_hand = open_hand
+        release_open_fraction = 1.0
+        if not ended:
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="descend",
+                target_position=release_ee,
+                target_quaternion=ee_quaternion,
+                start_hand=transport_hand,
+                target_hand=transport_hand,
+                steps=transfer.descend_steps,
+                smooth=True,
+            )
+        if not ended and transfer.adaptive_release:
+            released_hand, ended, release_open_fraction = _run_adaptive_release(
+                env,
+                recorder,
+                position=release_ee,
+                quaternion=ee_quaternion,
+                grip_hand=transport_hand,
+                open_hand=open_hand,
+                steps=transfer.release_steps,
+                maximum_open_fraction=transfer.maximum_release_open_fraction,
+            )
+        elif not ended:
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="release",
+                target_position=release_ee,
+                target_quaternion=ee_quaternion,
+                start_hand=transport_hand,
+                target_hand=open_hand,
+                steps=transfer.release_steps,
+                smooth=True,
+            )
+
         for stage, position, start_hand, target_hand, steps in (
-            (
-                "transport",
-                transport_ee,
-                transport_hand if transfer.adaptive_transport_grip else grip_hand,
-                transport_hand,
-                transfer.transport_steps,
-            ),
-            ("descend", release_ee, transport_hand, transport_hand, transfer.descend_steps),
-            ("release", release_ee, transport_hand, open_hand, transfer.release_steps),
             (
                 "retreat",
                 release_ee + np.asarray([0.0, 0.0, 0.12]),
-                open_hand,
-                open_hand,
+                released_hand,
+                released_hand,
                 transfer.retreat_steps,
             ),
             (
                 "task_verify",
                 release_ee + np.asarray([0.0, 0.0, 0.12]),
-                open_hand,
-                open_hand,
+                released_hand,
+                released_hand,
                 transfer.verify_steps,
             ),
         ):
+            if ended:
+                break
             _, _, ended = _run_pose_segment(
                 env,
                 recorder,
@@ -480,7 +756,13 @@ def execute_pick_place_transfer(
                 "source_relative_hand_rotation_matrix": candidate.hand_rotation_matrix.tolist(),
                 "source_object_position": initial_object.tolist(),
                 "transfer_config": asdict(transfer),
-                "target_object_position": release_object_position.tolist(),
+                "target_object_position": desired_release_object_position.tolist(),
+                "transported_object_position": transported_object.tolist(),
+                "transported_ee_object_offset": transported_offset.tolist(),
+                "release_ee_position": release_ee.tolist(),
+                "released_hand_target": released_hand.tolist(),
+                "release_open_fraction": release_open_fraction,
+                "table_limited_descent": table_limited_descent,
                 "object_final_position": final_object.tolist(),
                 "task_verify_success_fraction": success_fraction,
                 "action_layout": list(env.controller.ik_action_layout()),

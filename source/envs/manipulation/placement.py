@@ -77,15 +77,35 @@ PUSH_TARGET_REACHABLE_REGION = PlacementRegion(
 
 
 class FixedTablePlacementSampler:
-    """Place one object at an explicit table-relative XY position and yaw."""
+    """Place one object at an explicit pose, with a yaw-only compatibility mode."""
 
-    def __init__(self, *, xy: tuple[float, float], yaw: float) -> None:
+    def __init__(
+        self,
+        *,
+        xy: tuple[float, float],
+        yaw: float | None = None,
+        quaternion_wxyz: np.ndarray | None = None,
+        world_z: float | None = None,
+    ) -> None:
         self.xy = np.asarray(xy, dtype=np.float64)
         if self.xy.shape != (2,) or not np.all(np.isfinite(self.xy)):
             raise ValueError("xy must contain two finite values.")
-        if not np.isfinite(yaw):
+        if (yaw is None) == (quaternion_wxyz is None):
+            raise ValueError("Provide exactly one of yaw or quaternion_wxyz.")
+        if yaw is not None and not np.isfinite(yaw):
             raise ValueError("yaw must be finite.")
-        self.yaw = float(yaw)
+        self.yaw = None if yaw is None else float(yaw)
+        if quaternion_wxyz is None:
+            self.quaternion_wxyz = None
+        else:
+            quaternion = np.asarray(quaternion_wxyz, dtype=np.float64)
+            norm = float(np.linalg.norm(quaternion))
+            if quaternion.shape != (4,) or not np.all(np.isfinite(quaternion)) or norm <= 0.0:
+                raise ValueError("quaternion_wxyz must contain four finite non-zero values.")
+            self.quaternion_wxyz = quaternion / norm
+        if world_z is not None and not np.isfinite(world_z):
+            raise ValueError("world_z must be finite when provided.")
+        self.world_z = None if world_z is None else float(world_z)
 
     def sample(
         self,
@@ -100,21 +120,29 @@ class FixedTablePlacementSampler:
             raise ValueError("FixedTablePlacementSampler supports exactly one object.")
         obj = objects[0]
         reference_pos = np.asarray(reference_pos, dtype=np.float64)
-        half_yaw = 0.5 * self.yaw
+        if self.quaternion_wxyz is None:
+            half_yaw = 0.5 * float(self.yaw)
+            quaternion = np.asarray(
+                [np.cos(half_yaw), 0.0, 0.0, np.sin(half_yaw)], dtype=np.float64
+            )
+        else:
+            quaternion = self.quaternion_wxyz.copy()
+        position_z = (
+            reference_pos[2] + obj.bottom_offset + z_offset
+            if self.world_z is None
+            else self.world_z
+        )
         return {
             obj.name: (
                 np.asarray(
                     [
                         reference_pos[0] + self.xy[0],
                         reference_pos[1] + self.xy[1],
-                        reference_pos[2] + obj.bottom_offset + z_offset,
+                        position_z,
                     ],
                     dtype=np.float64,
                 ),
-                np.asarray(
-                    [np.cos(half_yaw), 0.0, 0.0, np.sin(half_yaw)],
-                    dtype=np.float64,
-                ),
+                quaternion,
             )
         }
 

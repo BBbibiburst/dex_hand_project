@@ -208,9 +208,10 @@ Wrist Lattice；成功便退出。失败对象会自动改用独立缓存的 85 
 
 ### 从 Lift 迁移到 PickPlace
 
-成功 Lift 候选会在完全相同的物体初始位姿下复现。Lattice 轨迹直接重放已验证的底层控制，
-PPO 轨迹重放实际手型编辑控制；随后搜索搬运预载，并依次尝试落桌释放和空中释放，再执行
-运输、下降、松手、撤离和稳定复验：
+成功 Lift 候选会复用完整 6D 初始位姿和已验证的 C MuJoCo 终态。运输结束后重新测量
+“手腕—物体”相对位姿，下降距离同时受物体落桌高度和手—桌安全间距约束；释放阶段逐步
+卸载欠驱动控制，并在物体落桌脱手后停止，不再默认全张开。空中搬运失败时会自动尝试
+桌面支撑搬运；对极少数状态恢复敏感的边缘抓取，最后从 Lift reset 连续重放控制序列：
 
 ```bash
 MUJOCO_GL=egl python -m tools.grasping.transfer_lift_to_pick_place \
@@ -225,19 +226,23 @@ Top100 可恢复批处理：
 MUJOCO_GL=egl PYTHONUNBUFFERED=1 python -m tools.grasping.batch_pick_place_transfer \
   --selection configs/underactuated_top100_v2.json \
   --expect-count 100 \
-  --output outputs/pick_place_top100 \
+  --output outputs/pick_place_top100_final \
   --grasp-root outputs/dex_hand_top100_v2/grasp \
   --lattice-root outputs/dex_hand_top100_v2/lattice \
   --rl-root outputs/dex_hand_top100_v2/rl \
-  --workers 4 \
-  --seed-attempts 1 \
+  --workers 8 \
+  --seed-attempts 6 \
   --maximum-candidates 12
 ```
+
+若某个物体另行生成了更稳定的 Lift 恢复结果，可重复传入
+`--extra-lift-root outputs/<recovery>/grasp` 或 `--extra-lift-root outputs/<recovery>/lattice`；
+每个对象会优先评估保持高度、verify 比例和接触质量更高的来源。
 
 批处理只复用当前 `pipeline_version` 的成功结果；迁移逻辑版本变化后会自动重新验证，避免把
 旧参数成功与新参数结果混成一个成功率。
 
-查看完整示教（表面释放通常 650 帧，空中释放通常 596 帧）：
+查看完整示教（帧数会随表面、桌面支撑或连续重放后备路径变化）：
 
 ```bash
 MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \

@@ -37,6 +37,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--render-mode", choices=("human", "rgb_array"))
     parser.add_argument("--clearance-height", type=float, default=0.065)
     parser.add_argument("--release-clearance", type=float, default=0.002)
+    parser.add_argument("--transport-steps", type=int, default=90)
     parser.add_argument("--descend-steps", type=int, default=55)
     return parser
 
@@ -58,7 +59,7 @@ def discover_lift_manifests(
         if not root.is_dir():
             raise FileNotFoundError(f"Lift root does not exist: {root}")
         candidates.extend(root.glob("**/manifest.json"))
-    selected: list[Path] = []
+    selected: list[tuple[tuple[float, float, float], Path]] = []
     for path in dict.fromkeys(path.resolve() for path in candidates):
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
@@ -70,8 +71,18 @@ def discover_lift_manifests(
             continue
         if object_id is not None and payload.get("object_id") != object_id:
             continue
-        selected.append(path)
-    return tuple(selected)
+        metadata = payload.get("metadata", {})
+        lift = float(
+            metadata.get(
+                "object_lift",
+                metadata.get("mjwarp_max_lift", payload.get("mjwarp_max_lift", 0.0)),
+            )
+        )
+        verify = float(metadata.get("verify_success_fraction", 0.0))
+        contact = float(np.asarray(metadata.get("object_hold_digit_contact_fraction", 0.0)).mean())
+        selected.append(((lift, verify, contact), path))
+    selected.sort(key=lambda item: item[0], reverse=True)
+    return tuple(path for _, path in selected)
 
 
 def load_lift_source(path: Path) -> DemonstrationEpisode:
@@ -158,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
         candidate_index += 1
         seeds = (args.seed,) if args.seed is not None else tuple(range(args.seed_attempts))
         for seed in seeds:
-            for release_mode in ("surface", "air"):
+            for release_mode in ("surface", "supported", "air", "replay"):
                 result = execute_pick_place_transfer(
                     source.candidate,
                     seed=seed,
@@ -175,6 +186,10 @@ def main(argv: list[str] | None = None) -> int:
                         clearance_height=args.clearance_height,
                         release_clearance=args.release_clearance,
                         release_in_air=release_mode == "air",
+                        table_supported_transport=release_mode == "supported",
+                        reuse_verified_lift_terminal_state=release_mode != "replay",
+                        replay_lift_from_reset=release_mode == "replay",
+                        transport_steps=args.transport_steps,
                         descend_steps=1 if release_mode == "air" else args.descend_steps,
                     ),
                     render_mode=args.render_mode,

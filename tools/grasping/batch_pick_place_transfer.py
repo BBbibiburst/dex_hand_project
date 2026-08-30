@@ -43,6 +43,7 @@ def _source_roots(
     rl_root: Path,
     grasp_root: Path,
     object_id: str,
+    extra_roots: tuple[Path, ...] = (),
 ) -> tuple[Path, ...]:
     slug = _slug(object_id)
     candidates = (
@@ -50,6 +51,7 @@ def _source_roots(
         lattice_root / slug,
         lattice_root / "recovery_lift_085mm" / slug,
         rl_root / slug,
+        *(root / slug for root in extra_roots),
     )
     return tuple(path for path in candidates if path.is_dir())
 
@@ -74,7 +76,13 @@ def _run_object(
                 "failure_reason": "",
             }
 
-    roots = _source_roots(args.lattice_root, args.rl_root, args.grasp_root, object_id)
+    roots = _source_roots(
+        args.lattice_root,
+        args.rl_root,
+        args.grasp_root,
+        object_id,
+        tuple(args.extra_lift_roots or ()),
+    )
     if not roots:
         return {
             "object_id": object_id,
@@ -98,6 +106,8 @@ def _run_object(
         str(args.maximum_candidates),
         "--clearance-height",
         str(args.clearance_height),
+        "--transport-steps",
+        str(args.transport_steps),
     ]
     for root in roots:
         command.extend(("--lift-root", str(root)))
@@ -160,17 +170,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--rl-root", type=Path, default=Path("outputs/dex_hand_top100_v2/rl"))
     parser.add_argument("--grasp-root", type=Path, default=Path("outputs/dex_hand_top100_v2/grasp"))
+    parser.add_argument(
+        "--extra-lift-root",
+        action="append",
+        type=Path,
+        dest="extra_lift_roots",
+        help="Additional root containing per-object Lift directories; repeat as needed.",
+    )
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--seed-attempts", type=int, default=6)
     parser.add_argument("--maximum-candidates", type=int, default=12)
     parser.add_argument("--clearance-height", type=float, default=0.065)
+    parser.add_argument("--transport-steps", type=int, default=90)
     parser.add_argument("--force", action="store_true")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if min(args.workers, args.seed_attempts, args.maximum_candidates) <= 0:
+    if min(args.workers, args.seed_attempts, args.maximum_candidates, args.transport_steps) <= 0:
         raise ValueError("Worker and search counts must be positive.")
     objects = _selection_ids(args.selection)
     if args.expect_count and len(objects) != args.expect_count:
