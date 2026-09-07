@@ -61,7 +61,7 @@ def test_ycb_geometry_preserves_official_multiple_collision_parts() -> None:
 def test_lego_collision_drops_numerical_micro_parts_and_compiles() -> None:
     from source.envs.manipulation import make_lift_env
     from source.grasping.catalog import resolve_object_collision_mesh
-    from source.grasping.collision_decomposition import convex_decomposition_paths
+    from source.collision_decomposition import convex_decomposition_paths
 
     paths = convex_decomposition_paths(resolve_object_collision_mesh("ycb:073-b_lego_duplo"))
     assert len(paths) == 28
@@ -153,9 +153,7 @@ def test_visualized_contacts_follow_current_object_pose() -> None:
         candidate=candidate,
         arrays={
             "object_position": np.asarray([[2.0, 3.0, 4.0]]),
-            "object_quaternion_wxyz": np.asarray(
-                [[np.sqrt(0.5), 0.0, 0.0, np.sqrt(0.5)]]
-            ),
+            "object_quaternion_wxyz": np.asarray([[np.sqrt(0.5), 0.0, 0.0, np.sqrt(0.5)]]),
         },
         success=False,
         terminal_stage="verify",

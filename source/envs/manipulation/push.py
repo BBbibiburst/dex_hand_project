@@ -35,6 +35,9 @@ class PushTask(SingleArmManipulationTask):
         success_radius: float = 0.055,
         stable_steps: int = 5,
         target_region: PlacementRegion = PUSH_TARGET_REACHABLE_REGION,
+        fixed_object_position: tuple[float, float, float] | None = None,
+        fixed_object_quaternion_wxyz: tuple[float, float, float, float] | None = None,
+        fixed_target_position: tuple[float, float, float] | None = None,
         **kwargs: Any,
     ) -> None:
         if object_id not in push_object_ids():
@@ -47,6 +50,9 @@ class PushTask(SingleArmManipulationTask):
         self.success_radius = float(success_radius)
         self.stable_steps = int(stable_steps)
         self.target_region = target_region
+        self.fixed_object_position = fixed_object_position
+        self.fixed_object_quaternion_wxyz = fixed_object_quaternion_wxyz
+        self.fixed_target_position = fixed_target_position
         self.target_site_id: int | None = None
         self.target_pos = np.zeros(3, dtype=np.float64)
         self.initial_goal_distance = 1.0
@@ -95,14 +101,24 @@ class PushTask(SingleArmManipulationTask):
             reference_pos=self.table_offset,
         )
         object_pos, object_quaternion = placements[obj.name]
+        if self.fixed_object_position is not None:
+            object_pos = np.asarray(self.fixed_object_position, dtype=np.float64)
+        if self.fixed_object_quaternion_wxyz is not None:
+            object_quaternion = np.asarray(self.fixed_object_quaternion_wxyz, dtype=np.float64)
         object_xy = object_pos[:2]
-        target_xy = self.target_region.sample_xy(rng, self.table_offset)
+        target_xy = (
+            np.asarray(self.fixed_target_position, dtype=np.float64)[:2]
+            if self.fixed_target_position is not None
+            else self.target_region.sample_xy(rng, self.table_offset)
+        )
         data.qpos[binding.qpos_adr : binding.qpos_adr + 3] = object_pos
         data.qpos[binding.qpos_adr + 3 : binding.qpos_adr + 7] = object_quaternion
         data.qvel[binding.qvel_adr : binding.qvel_adr + 6] = 0.0
 
         self.target_pos = np.asarray(
-            [target_xy[0], target_xy[1], self.table_top_z + 0.001],
+            self.fixed_target_position
+            if self.fixed_target_position is not None
+            else [target_xy[0], target_xy[1], self.table_top_z + 0.001],
             dtype=np.float64,
         )
         assert self.target_site_id is not None

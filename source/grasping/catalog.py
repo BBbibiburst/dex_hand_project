@@ -14,7 +14,7 @@ from source.envs.manipulation.object_catalog import (
     resolve_record,
     resolve_record_path,
 )
-from source.grasping.collision_decomposition import load_convex_parts
+from source.collision_decomposition import load_convex_parts
 
 
 @dataclass(frozen=True)
@@ -69,7 +69,11 @@ def resolve_object_collision_mesh(object_id: str) -> Path:
         ),
         None,
     )
-    return collision.resolve() if collision is not None and collision.is_file() else resolve_object_mesh(object_id)
+    return (
+        collision.resolve()
+        if collision is not None and collision.is_file()
+        else resolve_object_mesh(object_id)
+    )
 
 
 def load_object_geometry(
@@ -140,9 +144,7 @@ def load_object_geometry(
         surface_mesh.face_normals[np.asarray(face_ids, dtype=np.int64)],
         dtype=np.float64,
     )
-    surface_normals /= np.maximum(
-        np.linalg.norm(surface_normals, axis=1, keepdims=True), 1e-12
-    )
+    surface_normals /= np.maximum(np.linalg.norm(surface_normals, axis=1, keepdims=True), 1e-12)
     normal_groups, offsets, part_offsets = [], [], [0]
     for part in convex_parts:
         part_normals = np.array(part.face_normals, dtype=np.float64, copy=True)

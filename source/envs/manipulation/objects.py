@@ -16,7 +16,7 @@ from source.envs.manipulation.object_catalog import (
     resolve_record,
     resolve_record_path,
 )
-from source.grasping.collision_decomposition import convex_decomposition_paths
+from source.collision_decomposition import convex_decomposition_paths
 
 _OBJECT_CONTACT_SOLREF = (0.001, 2.0)
 _OBJECT_CONTACT_SOLIMP = (0.9, 0.95, 0.001, 0.5, 2.0)
@@ -140,9 +140,7 @@ class MeshObjectSpec(ManipulationObjectSpec):
             (root / item for item in model_files if Path(item).name == "collision.ply"),
             visual,
         )
-        object.__setattr__(
-            self, "_collision_paths", convex_decomposition_paths(collision_source)
-        )
+        object.__setattr__(self, "_collision_paths", convex_decomposition_paths(collision_source))
         object.__setattr__(self, "_center", 0.5 * (low + high))
         object.__setattr__(self, "_extent", extent * scale)
         object.__setattr__(self, "_scale", scale)
@@ -160,8 +158,7 @@ class MeshObjectSpec(ManipulationObjectSpec):
     @property
     def geom_names(self) -> tuple[str, ...]:
         return tuple(
-            f"{self.name}_collision_{index:03d}"
-            for index in range(len(self._collision_paths))
+            f"{self.name}_collision_{index:03d}" for index in range(len(self._collision_paths))
         )
 
     @property
@@ -237,6 +234,7 @@ class FreeBoxSpec(ManipulationObjectSpec):
     density: float = 500.0
     friction: tuple[float, float, float] = (1.0, 0.005, 0.0001)
     duplicate_collision_geoms: bool = True
+    fixed_to_world: bool = False
 
     @property
     def body_name(self) -> str:
@@ -284,6 +282,16 @@ class FreeBoxSpec(ManipulationObjectSpec):
             visual.conaffinity = 0
             visual.density = 0.0
             visual.rgba = list(self.rgba)
+        if self.fixed_to_world:
+            # Retain a free joint so the object continues to satisfy the
+            # common task-object binding contract, while a physical weld
+            # makes the support an immovable part of the scene.
+            weld = spec.add_equality()
+            weld.name = f"{self.name}_world_weld"
+            weld.type = mujoco.mjtEq.mjEQ_WELD
+            weld.objtype = mujoco.mjtObj.mjOBJ_BODY
+            weld.name1 = self.body_name
+            weld.name2 = ""
 
 
 @dataclass(frozen=True)
@@ -333,6 +341,155 @@ class FreeCylinderSpec(ManipulationObjectSpec):
             friction=(1.0, 0.005, 0.0001),
             condim=4,
         )
+
+
+@dataclass(frozen=True)
+class FreeBoltSpec(ManipulationObjectSpec):
+    """Free upright bolt with a separate handle, stop shoulder, and mating shaft."""
+
+    name: str
+    polygon_sides: int
+    shaft_radius: float
+    shaft_half_height: float = 0.037
+    handle_radius: float = 0.034
+    handle_half_height: float = 0.055
+    handle_center_z: float = 0.061
+    shoulder_center_z: float = 0.0
+    shoulder_half_height: float = 0.006
+    rgba: tuple[float, float, float, float] = (0.72, 0.75, 0.80, 1.0)
+
+    def __post_init__(self) -> None:
+        if self.polygon_sides != 0 and self.polygon_sides < 3:
+            raise ValueError("polygon_sides must be zero or at least three.")
+        if (
+            min(
+                self.shaft_radius,
+                self.shaft_half_height,
+                self.handle_radius,
+                self.handle_half_height,
+            )
+            <= 0.0
+        ):
+            raise ValueError("Bolt dimensions must be positive.")
+
+    @property
+    def body_name(self) -> str:
+        return f"{self.name}_body"
+
+    @property
+    def joint_name(self) -> str:
+        return f"{self.name}_freejoint"
+
+    @property
+    def geom_names(self) -> tuple[str, ...]:
+        return (
+            f"{self.name}_shaft",
+            f"{self.name}_handle",
+            f"{self.name}_shoulder",
+        )
+
+    @property
+    def horizontal_radius(self) -> float:
+        return max(self.handle_radius, self.shoulder_radius, self.shaft_radius)
+
+    @property
+    def shoulder_radius(self) -> float:
+        return max(0.047, self.shaft_radius + 0.008)
+
+    @property
+    def bottom_offset(self) -> float:
+        return 2.0 * self.shaft_half_height
+
+    def add_to_spec(self, spec: mujoco.MjSpec, initial_pos: np.ndarray) -> None:
+        body = spec.worldbody.add_body()
+        body.name = self.body_name
+        body.pos = np.asarray(initial_pos, dtype=float).tolist()
+        joint = body.add_joint()
+        _configure_free_joint(joint, self.joint_name)
+        shaft = body.add_geom()
+        shaft.name = self.geom_names[0]
+        shaft.pos = [0.0, 0.0, -self.shaft_half_height]
+        shaft.type = mujoco.mjtGeom.mjGEOM_MESH
+        shaft.meshname = self._add_shaft_mesh(spec)
+        shaft.density = 150.0
+        shaft.rgba = list(self.rgba)
+        _configure_object_collision(
+            shaft,
+            friction=(1.2, 0.01, 0.001),
+            condim=4,
+        )
+        handle = body.add_geom()
+        handle.name = self.geom_names[1]
+        handle.type = mujoco.mjtGeom.mjGEOM_CYLINDER
+        handle.pos = [0.0, 0.0, self.handle_center_z]
+        handle.size = [self.handle_radius, self.handle_half_height, 0.0]
+        handle.density = 150.0
+        handle.rgba = [0.30, 0.34, 0.42, 1.0]
+        _configure_object_collision(
+            handle,
+            friction=(3.0, 1.0, 0.2),
+            condim=4,
+        )
+        shoulder = body.add_geom()
+        shoulder.name = self.geom_names[2]
+        shoulder.type = mujoco.mjtGeom.mjGEOM_CYLINDER
+        shoulder.pos = [0.0, 0.0, self.shoulder_center_z]
+        shoulder.size = [self.shoulder_radius, self.shoulder_half_height, 0.0]
+        shoulder.density = 150.0
+        shoulder.rgba = [0.48, 0.51, 0.58, 1.0]
+        _configure_object_collision(
+            shoulder,
+            friction=(2.0, 0.1, 0.01),
+            condim=4,
+        )
+
+    def _add_shaft_mesh(self, spec: mujoco.MjSpec) -> str:
+        sides = 24 if self.polygon_sides == 0 else self.polygon_sides
+        phase = np.pi / 4.0 if sides == 4 else 0.0
+        angles = [phase + 2.0 * np.pi * i / sides for i in range(sides)]
+        # The shaft is full-size over nearly its entire insertion length. Only
+        # the terminal 8 mm is chamfered to help initial alignment; the old
+        # full-length taper created a visually tiny, mechanically irrelevant
+        # lower pin while the oversized handle accidentally became the fit.
+        chamfer = min(0.008, 0.5 * self.shaft_half_height)
+        rings = (
+            (-self.shaft_half_height, 0.75),
+            (-self.shaft_half_height + chamfer, 1.0),
+            (self.shaft_half_height, 1.0),
+        )
+        vertices = [
+            (
+                scale * self.shaft_radius * np.cos(angle),
+                scale * self.shaft_radius * np.sin(angle),
+                z,
+            )
+            for z, scale in rings
+            for angle in angles
+        ]
+        faces: list[tuple[int, int, int]] = []
+        for index in range(1, sides - 1):
+            faces.extend(
+                (
+                    (0, index + 1, index),
+                    (2 * sides, 2 * sides + index, 2 * sides + index + 1),
+                )
+            )
+        for ring in range(len(rings) - 1):
+            lower = ring * sides
+            upper = (ring + 1) * sides
+            for index in range(sides):
+                following = (index + 1) % sides
+                faces.extend(
+                    (
+                        (lower + index, lower + following, upper + following),
+                        (lower + index, upper + following, upper + index),
+                    )
+                )
+        mesh = spec.add_mesh()
+        mesh.name = f"{self.name}_shaft_mesh"
+        mesh.uservert = np.asarray(vertices, dtype=np.float32).reshape(-1).tolist()
+        mesh.userface = np.asarray(faces, dtype=np.int32).reshape(-1).tolist()
+        return mesh.name
 
 
 @dataclass(frozen=True)
@@ -404,6 +561,15 @@ class XmlNutSpec(ManipulationObjectSpec):
     xml_filename: str
     radius: float = 0.11
     bottom: float = 0.05
+    polygon_sides: int | None = None
+    ring_radius: float = 0.0425
+    tube_radius: float = 0.0105
+
+    @property
+    def ring_segments(self) -> int:
+        if self.polygon_sides is not None:
+            return 32 if self.polygon_sides == 0 else self.polygon_sides
+        return 32 if self.xml_filename == "round-nut.xml" else 4
 
     @property
     def body_name(self) -> str:
@@ -415,7 +581,7 @@ class XmlNutSpec(ManipulationObjectSpec):
 
     @property
     def geom_names(self) -> tuple[str, ...]:
-        ring_count = 32 if self.xml_filename == "round-nut.xml" else 4
+        ring_count = self.ring_segments
         return (
             *(f"{self.name}_ring_collision_{index}" for index in range(ring_count)),
             f"{self.name}_handle_collision",
@@ -435,8 +601,12 @@ class XmlNutSpec(ManipulationObjectSpec):
         return f"{self.name}_handle_site"
 
     def add_to_spec(self, spec: mujoco.MjSpec, initial_pos: np.ndarray) -> None:
-        if self.xml_filename not in {"square-nut.xml", "round-nut.xml"}:
+        if self.xml_filename not in {"square-nut.xml", "round-nut.xml", "polygon-nut.xml"}:
             raise ValueError(f"Unknown nut design: {self.xml_filename!r}")
+        if self.ring_segments < 3:
+            raise ValueError("A polygon nut must have at least three sides.")
+        if self.ring_radius <= self.tube_radius:
+            raise ValueError("ring_radius must exceed tube_radius.")
         material = self._add_material(spec)
         object_body = spec.worldbody.add_body()
         object_body.name = self.body_name
@@ -456,7 +626,7 @@ class XmlNutSpec(ManipulationObjectSpec):
         center_site.rgba = [1.0, 0.0, 0.0, 0.0]
 
     def _add_material(self, spec: mujoco.MjSpec) -> str:
-        round_nut = self.xml_filename == "round-nut.xml"
+        round_nut = self.ring_segments == 32
         texture = spec.add_texture()
         texture.name = f"{self.name}_metal_texture"
         texture.type = mujoco.mjtTexture.mjTEXTURE_CUBE
@@ -477,27 +647,18 @@ class XmlNutSpec(ManipulationObjectSpec):
         return material.name
 
     def _add_refined_collisions(self, body: mujoco.MjsBody) -> None:
-        if self.xml_filename == "round-nut.xml":
-            segments = 32
-            radius = 0.04245
-            tube_radius = 0.01125
-            points = tuple(
-                (
-                    radius * np.cos(2.0 * np.pi * index / segments),
-                    radius * np.sin(2.0 * np.pi * index / segments),
-                    0.0,
-                )
-                for index in range(segments)
+        segments = self.ring_segments
+        # Square keeps a face horizontal like the original asset. Other
+        # regular polygons place a vertex on +x; 32 sides is the round case.
+        phase = np.pi / 4.0 if segments == 4 else 0.0
+        points = tuple(
+            (
+                self.ring_radius * np.cos(phase + 2.0 * np.pi * index / segments),
+                self.ring_radius * np.sin(phase + 2.0 * np.pi * index / segments),
+                0.0,
             )
-        else:
-            tube_radius = 0.0105
-            half = 0.03325
-            points = (
-                (-half, -half, 0.0),
-                (half, -half, 0.0),
-                (half, half, 0.0),
-                (-half, half, 0.0),
-            )
+            for index in range(segments)
+        )
 
         for index, start in enumerate(points):
             self._add_capsule_collision(
@@ -505,10 +666,10 @@ class XmlNutSpec(ManipulationObjectSpec):
                 f"{self.name}_ring_collision_{index}",
                 start,
                 points[(index + 1) % len(points)],
-                radius=tube_radius,
+                radius=self.tube_radius,
             )
 
-        handle_start = (0.040, 0.0, 0.0) if len(points) == 32 else (0.030, 0.0, 0.0)
+        handle_start = (self.ring_radius * 0.82, 0.0, 0.0)
         self._add_capsule_collision(
             body,
             f"{self.name}_handle_collision",
@@ -524,20 +685,15 @@ class XmlNutSpec(ManipulationObjectSpec):
         pad.density = 100.0
         _configure_object_collision(
             pad,
-            friction=(0.95, 0.3, 0.1),
+            friction=(3.0, 1.0, 0.2),
             condim=4,
         )
         pad.rgba = [0.0, 0.0, 0.0, 0.0]
 
     def _add_refined_visuals(self, body: mujoco.MjsBody, material: str) -> None:
-        if self.xml_filename == "round-nut.xml":
-            self._add_round_ring_visual(body, material)
-            handle_start = (0.040, 0.0, 0.0)
-            handle_end = (0.085, 0.0, 0.0)
-        else:
-            self._add_square_ring_visual(body, material)
-            handle_start = (0.030, 0.0, 0.0)
-            handle_end = (0.082, 0.0, 0.0)
+        self._add_polygon_ring_visual(body, material)
+        handle_start = (self.ring_radius * 0.82, 0.0, 0.0)
+        handle_end = (0.085, 0.0, 0.0)
         self._add_capsule_visual(
             body,
             f"{self.name}_handle_visual",
@@ -591,6 +747,27 @@ class XmlNutSpec(ManipulationObjectSpec):
                 material=material,
             )
 
+    def _add_polygon_ring_visual(self, body: mujoco.MjsBody, material: str) -> None:
+        segments = self.ring_segments
+        phase = np.pi / 4.0 if segments == 4 else 0.0
+        points = tuple(
+            (
+                self.ring_radius * np.cos(phase + 2.0 * np.pi * index / segments),
+                self.ring_radius * np.sin(phase + 2.0 * np.pi * index / segments),
+                0.0,
+            )
+            for index in range(segments)
+        )
+        for index, first in enumerate(points):
+            self._add_capsule_visual(
+                body,
+                f"{self.name}_ring_visual_{index}",
+                first,
+                points[(index + 1) % segments],
+                radius=max(self.tube_radius - 0.001, 0.004),
+                material=material,
+            )
+
     @staticmethod
     def _add_capsule_collision(
         body: mujoco.MjsBody,
@@ -608,7 +785,7 @@ class XmlNutSpec(ManipulationObjectSpec):
         geom.density = 100.0
         _configure_object_collision(
             geom,
-            friction=(0.95, 0.3, 0.1),
+            friction=(3.0, 1.0, 0.2),
             condim=4,
         )
         geom.rgba = [0.0, 0.0, 0.0, 0.0]

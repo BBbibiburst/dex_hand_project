@@ -349,3 +349,180 @@ class PegsArena(TableArena):
             cap.contype = 0
             cap.conaffinity = 0
             cap.density = 0.0
+
+
+@dataclass(frozen=True)
+class ProceduralPegArena(TableArena):
+    """One round or regular-polygon peg used by the 100-case nut benchmark."""
+
+    peg_center: Tuple[float, float] = (0.50, 0.10)
+    polygon_sides: int = 4
+    peg_radius: float = 0.022
+    peg_half_height: float = 0.065
+
+    def augment_spec(self, spec: mujoco.MjSpec) -> None:
+        super().augment_spec(spec)
+        if self.polygon_sides != 0 and self.polygon_sides < 3:
+            raise ValueError("polygon_sides must be zero (round) or at least three.")
+        body = spec.worldbody.add_body()
+        body.name = "procedural_peg_body"
+        body.pos = [
+            self.peg_center[0],
+            self.peg_center[1],
+            self.table_top_z + self.peg_half_height,
+        ]
+        geom = body.add_geom()
+        geom.name = "procedural_peg_geom"
+        if self.polygon_sides == 0:
+            geom.type = mujoco.mjtGeom.mjGEOM_CYLINDER
+            geom.size = [self.peg_radius, self.peg_half_height, 0.0]
+        else:
+            mesh_name = self._add_prism_mesh(spec)
+            geom.type = mujoco.mjtGeom.mjGEOM_MESH
+            geom.meshname = mesh_name
+        geom.rgba = [0.0, 0.0, 0.0, 0.0]
+        geom.friction = [0.9, 0.01, 0.001]
+        visual = body.add_geom()
+        visual.name = "procedural_peg_visual"
+        visual.type = geom.type
+        if self.polygon_sides == 0:
+            visual.size = list(geom.size)
+        else:
+            visual.meshname = geom.meshname
+        visual.rgba = [0.20, 0.48, 0.82, 1.0]
+        visual.contype = 0
+        visual.conaffinity = 0
+        visual.density = 0.0
+
+    def _add_prism_mesh(self, spec: mujoco.MjSpec) -> str:
+        sides = self.polygon_sides
+        phase = np.pi / 4.0 if sides == 4 else 0.0
+        ring = [
+            (
+                self.peg_radius * np.cos(phase + 2.0 * np.pi * i / sides),
+                self.peg_radius * np.sin(phase + 2.0 * np.pi * i / sides),
+            )
+            for i in range(sides)
+        ]
+        vertices = [
+            (x, y, z) for z in (-self.peg_half_height, self.peg_half_height) for x, y in ring
+        ]
+        faces: list[tuple[int, int, int]] = []
+        for i in range(1, sides - 1):
+            faces.append((0, i + 1, i))
+            faces.append((sides, sides + i, sides + i + 1))
+        for i in range(sides):
+            j = (i + 1) % sides
+            faces.extend(((i, j, sides + j), (i, sides + j, sides + i)))
+        mesh = spec.add_mesh()
+        mesh.name = "procedural_peg_mesh"
+        mesh.uservert = np.asarray(vertices, dtype=np.float32).reshape(-1).tolist()
+        mesh.userface = np.asarray(faces, dtype=np.int32).reshape(-1).tolist()
+        return mesh.name
+
+
+@dataclass(frozen=True)
+class FixedNutArena(TableArena):
+    """Table-mounted polygon socket used by the bolt-insertion benchmark."""
+
+    nut_center: Tuple[float, float] = (0.50, 0.08)
+    polygon_sides: int = 4
+    inner_apothem: float = 0.034
+    wall_thickness: float = 0.008
+    wall_half_height: float = 0.040
+    guide_height: float = 0.040
+    guide_expansion: float = 0.015
+
+    @property
+    def environment_geom_names(self) -> tuple[str, ...]:
+        segments = 24 if self.polygon_sides == 0 else self.polygon_sides
+        return tuple(
+            name
+            for index in range(segments)
+            for name in (
+                f"fixed_nut_wall_{index:02d}",
+                f"fixed_nut_guide_{index:02d}",
+            )
+        )
+
+    def augment_spec(self, spec: mujoco.MjSpec) -> None:
+        super().augment_spec(spec)
+        if self.polygon_sides != 0 and self.polygon_sides < 3:
+            raise ValueError("polygon_sides must be zero or at least three.")
+        segments = 24 if self.polygon_sides == 0 else self.polygon_sides
+        phase = np.pi / 4.0 if segments == 4 else 0.0
+        centerline_apothem = self.inner_apothem + self.wall_thickness
+        radius = centerline_apothem / np.cos(np.pi / segments)
+        points = tuple(
+            np.asarray(
+                [
+                    radius * np.cos(phase + 2.0 * np.pi * index / segments),
+                    radius * np.sin(phase + 2.0 * np.pi * index / segments),
+                ],
+                dtype=np.float64,
+            )
+            for index in range(segments)
+        )
+        body = spec.worldbody.add_body()
+        body.name = "fixed_nut_body"
+        body.pos = [
+            self.nut_center[0],
+            self.nut_center[1],
+            self.table_top_z + self.wall_half_height,
+        ]
+        for index, start in enumerate(points):
+            end = points[(index + 1) % segments]
+            edge = end - start
+            midpoint = 0.5 * (start + end)
+            yaw = float(np.arctan2(edge[1], edge[0]))
+            lower_height = 2.0 * self.wall_half_height - self.guide_height
+            geom = body.add_geom()
+            geom.name = f"fixed_nut_wall_{index:02d}"
+            geom.type = mujoco.mjtGeom.mjGEOM_BOX
+            geom.pos = [
+                float(midpoint[0]),
+                float(midpoint[1]),
+                -self.wall_half_height + 0.5 * lower_height,
+            ]
+            geom.quat = [float(np.cos(0.5 * yaw)), 0.0, 0.0, float(np.sin(0.5 * yaw))]
+            geom.size = [
+                0.5 * float(np.linalg.norm(edge)),
+                self.wall_thickness,
+                0.5 * lower_height,
+            ]
+            geom.rgba = [0.66, 0.48, 0.20, 1.0]
+            geom.friction = [1.2, 0.01, 0.001]
+
+            # A physical entry chamfer guides a slightly tilted shaft into the
+            # true-size lower socket. The underactuated hand supplies passive
+            # compliance; no object pose is teleported or numerically snapped.
+            radial = midpoint / np.linalg.norm(midpoint)
+            guide_midpoint = midpoint + 0.5 * self.guide_expansion * radial
+            half_vertical = 0.5 * self.guide_height
+            tilt = float(np.arctan2(0.5 * self.guide_expansion, half_vertical))
+            cz, sz = np.cos(0.5 * yaw), np.sin(0.5 * yaw)
+            ct, st = np.cos(0.5 * tilt), np.sin(0.5 * tilt)
+            guide = body.add_geom()
+            guide.name = f"fixed_nut_guide_{index:02d}"
+            guide.type = mujoco.mjtGeom.mjGEOM_BOX
+            guide.pos = [
+                float(guide_midpoint[0]),
+                float(guide_midpoint[1]),
+                self.wall_half_height - half_vertical,
+            ]
+            guide.quat = [
+                float(cz * ct),
+                float(cz * st),
+                float(sz * st),
+                float(sz * ct),
+            ]
+            guide.size = [
+                0.5
+                * float(np.linalg.norm(edge))
+                * (centerline_apothem + 0.5 * self.guide_expansion)
+                / centerline_apothem,
+                self.wall_thickness,
+                float(np.hypot(half_vertical, 0.5 * self.guide_expansion)),
+            ]
+            guide.rgba = [0.76, 0.57, 0.27, 1.0]
+            guide.friction = [0.8, 0.005, 0.0005]

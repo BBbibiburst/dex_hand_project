@@ -250,6 +250,25 @@ MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
   --play --viewer-speed 0.4 --loop
 ```
 
+### Lift 技能向 Stack、Push 与 NutAssembly 迁移
+
+当前迁移里程碑（2026-09-07）如下。运行产物位于 Git 忽略的 `outputs/`，因此成功率以对应
+汇总文件为准，而不是由源码 tag 单独推断：
+
+- NutAssembly：v41 在 100 个程序化形状/尺寸变体上完成 C MuJoCo 执行 100/100，独立终态
+  稳定性回放 100/100。结果见 `outputs/nut_assembly_top100_guided_v41/summary.json` 和
+  `stability_summary.json`。
+- Push：v14 已改为手心朝向、四指平面推动，手部动作固定为
+  `[0, 0, 0, 0, -0.0069, 0]`，并通过代表性罐体、砖块、苹果和碗形物体回归；当前尚未运行
+  v14 Top100 正式批次。旧 `outputs/push_top100_final` 属于触觉方向修正前的 v8，不作为当前
+  最终结论。
+- Stack：v18 正式批次为 95/100；当前 v22 正在处理最后五个难例的悬空越过平台边缘问题，
+  尚未形成新的 Top100 正式结果。结果见 `outputs/stack_top100_v18/summary.json`。
+
+对应单对象和批处理入口分别为 `tools.grasping.transfer_lift_to_{stack,push,nut}` 与
+`tools.grasping.batch_{stack,push,nut}_transfer`。任务轨迹可使用
+`python -m tools.view_task_episode <manifest-or-episode>` 在 MuJoCo viewer 中查看。
+
 ### 录制五任务演示视频
 
 `tools.record_task_demo` 统一支持 `lift`、`pick_place`、`stack`、`nut_assembly` 和

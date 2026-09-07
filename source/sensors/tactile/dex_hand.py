@@ -477,6 +477,7 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
         self,
         *,
         taxel_half_depth: float = 0.0015,
+        patch_half_depths: Mapping[str, float] | None = None,
         taxel_overlap: float = 1.0,
         taxel_min_half_size: float = 0.0005,
         site_rgba: Sequence[float] = (0.0, 0.8, 1.0, 0.25),
@@ -492,6 +493,15 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
         if taxel_min_half_size <= 0.0:
             raise ValueError("taxel_min_half_size must be positive.")
         self.taxel_half_depth = float(taxel_half_depth)
+        self.patch_half_depths = {
+            str(name): float(depth) for name, depth in dict(patch_half_depths or {}).items()
+        }
+        known_patches = {name for name, *_ in self.patch_layout}
+        unknown_patches = set(self.patch_half_depths) - known_patches
+        if unknown_patches:
+            raise ValueError(f"Unknown tactile patch depth override(s): {sorted(unknown_patches)}")
+        if any(depth <= 0.0 for depth in self.patch_half_depths.values()):
+            raise ValueError("Patch taxel half depths must be positive.")
         self.taxel_overlap = float(taxel_overlap)
         self.taxel_min_half_size = float(taxel_min_half_size)
         self.site_rgba = tuple(float(v) for v in site_rgba)
@@ -508,7 +518,7 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
         site = parent_body.add_site()
         site.name = name
         site.type = mujoco.mjtGeom.mjGEOM_BOX
-        site.size = [half_x, half_y, self.taxel_half_depth]
+        site.size = [half_x, half_y, self.patch_half_depths.get(mesh_name, self.taxel_half_depth)]
         site.pos = np.asarray(point, dtype=np.float64).tolist()
         site.quat = _rotation_matrix_to_quat(frame).tolist()
         site.group = self.site_group
@@ -521,6 +531,14 @@ class SimpleBoxTactileSensor(DexHandTactileSensorBase):
             site=name,
             noise=self.sensor_noise,
         )
+
+    def metadata(self) -> dict[str, Any]:
+        return {
+            **super().metadata(),
+            "taxel_half_depth": self.taxel_half_depth,
+            "patch_half_depths": dict(self.patch_half_depths),
+            "taxel_overlap": self.taxel_overlap,
+        }
 
 
 def create_dex_hand_tactile_sensor(

@@ -6,7 +6,14 @@ still register themselves with :func:`register_task`.
 """
 
 from source.envs.core.registry import make_task, register_task, registered_tasks
-from source.envs.manipulation.arenas import BinsArena, PegsArena, PushArena, TableArena
+from source.envs.manipulation.arenas import (
+    BinsArena,
+    FixedNutArena,
+    PegsArena,
+    ProceduralPegArena,
+    PushArena,
+    TableArena,
+)
 from source.envs.manipulation.base import SingleArmManipulationTask
 from source.envs.manipulation.factory import (
     make_lift_env,
@@ -18,6 +25,7 @@ from source.envs.manipulation.factory import (
 )
 from source.envs.manipulation.objects import (
     FreeBoxSpec,
+    FreeBoltSpec,
     FreeCylinderSpec,
     FreeNutSpec,
     ManipulationObjectSpec,
@@ -28,12 +36,15 @@ from source.envs.manipulation.placement import PlacementRegion, UniformTablePlac
 
 __all__ = [
     "BinsArena",
+    "FixedNutArena",
+    "FreeBoltSpec",
     "FreeBoxSpec",
     "FreeCylinderSpec",
     "FreeNutSpec",
     "ManipulationObjectSpec",
     "MeshObjectSpec",
     "PegsArena",
+    "ProceduralPegArena",
     "PlacementRegion",
     "PushArena",
     "SingleArmManipulationTask",

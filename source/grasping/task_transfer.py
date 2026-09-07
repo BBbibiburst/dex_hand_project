@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
-from typing import Any
+from typing import Any, Callable
 
 import mujoco
 import numpy as np
@@ -99,7 +99,7 @@ class PickPlaceTransferConfig:
         )
 
 
-def _select_transport_hand(env, grip_hand: np.ndarray) -> np.ndarray:
+def _select_transport_hand(env, grip_hand: np.ndarray, object_name: str = "object") -> np.ndarray:
     """Select a preload that survives a small lateral transport perturbation."""
 
     arm = env.controller.arm_controller
@@ -114,7 +114,7 @@ def _select_transport_hand(env, grip_hand: np.ndarray) -> np.ndarray:
     previous_ee = arm._prev_ee_target.copy()
     ee_position = env.data.site_xpos[arm.site_id].copy()
     ee_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
-    object_position = env.task._body_pos(env.model, env.data, "object").copy()
+    object_position = env.task._body_pos(env.model, env.data, object_name).copy()
     base_fraction = np.divide(
         grip_hand - hand.ctrl_low,
         hand.ctrl_high - hand.ctrl_low,
@@ -142,7 +142,7 @@ def _select_transport_hand(env, grip_hand: np.ndarray) -> np.ndarray:
             arm._filtered_velocity = previous_velocity.copy()
             arm._prev_ee_target = previous_ee.copy()
             mujoco.mj_forward(env.model, env.data)
-            probe = _Recorder()
+            probe = _Recorder(object_name)
             _run_pose_segment(
                 env,
                 probe,
@@ -165,7 +165,7 @@ def _select_transport_hand(env, grip_hand: np.ndarray) -> np.ndarray:
                 steps=12,
                 smooth=True,
             )
-            final_object = env.task._body_pos(env.model, env.data, "object").copy()
+            final_object = env.task._body_pos(env.model, env.data, object_name).copy()
             final_ee = env.data.site_xpos[arm.site_id].copy()
             relative_drift = np.linalg.norm(
                 (final_object - final_ee) - (object_position - ee_position)
@@ -192,9 +192,22 @@ def _select_transport_hand(env, grip_hand: np.ndarray) -> np.ndarray:
 def _combine_arrays(
     first: dict[str, np.ndarray], second: dict[str, np.ndarray]
 ) -> dict[str, np.ndarray]:
-    if first.keys() != second.keys():
-        raise ValueError("Transferred trajectory recorders have incompatible arrays.")
-    return {name: np.concatenate((first[name], second[name]), axis=0) for name in first}
+    combined: dict[str, np.ndarray] = {}
+    first_length = len(next(iter(first.values()))) if first else 0
+    second_length = len(next(iter(second.values()))) if second else 0
+    for name in first.keys() | second.keys():
+        left = first.get(name)
+        right = second.get(name)
+        prototype = right if left is None else left
+        assert prototype is not None
+        if left is None:
+            left = np.zeros((first_length, *prototype.shape[1:]), dtype=prototype.dtype)
+        if right is None:
+            right = np.zeros((second_length, *prototype.shape[1:]), dtype=prototype.dtype)
+        if left.shape[1:] != right.shape[1:]:
+            raise ValueError(f"Transferred trajectory array {name!r} has incompatible shapes.")
+        combined[name] = np.concatenate((left, right), axis=0)
+    return combined
 
 
 def _hand_collision_min_z(env) -> float:
@@ -231,19 +244,16 @@ def _safe_descent_distance(
 
     object_travel = max(
         0.0,
-        object_position_z
-        - object_bottom_offset
-        - table_top_z
-        - desired_object_clearance,
+        object_position_z - object_bottom_offset - table_top_z - desired_object_clearance,
     )
     hand_travel = max(0.0, hand_min_z - table_top_z - hand_table_clearance)
     travel = min(object_travel, hand_travel)
     return travel, hand_travel + 1e-9 < object_travel
 
 
-def _object_touches_table(env) -> bool:
+def _object_touches_table(env, object_name: str = "object") -> bool:
     bindings = env.task._require_bindings()
-    object_geoms = bindings.objects["object"].geom_ids
+    object_geoms = bindings.objects[object_name].geom_ids
     table_geom = mujoco.mj_name2id(
         env.model, mujoco.mjtObj.mjOBJ_GEOM, env.task.arena.table_geom_name
     )
@@ -266,6 +276,8 @@ def _run_adaptive_release(
     open_hand: np.ndarray,
     steps: int,
     maximum_open_fraction: float,
+    object_name: str = "object",
+    settled: Callable[[], bool] | None = None,
 ) -> tuple[np.ndarray, bool, float]:
     """Loosen only until the object has settled and separated from the hand."""
 
@@ -279,8 +291,9 @@ def _run_adaptive_release(
         final_hand = (1.0 - fraction) * grip_hand + fraction * open_hand
         action = np.concatenate((position, quaternion, final_hand)).astype(np.float32)
         _, _, ended = _step(env, recorder, action, "release")
-        touching_hand = env.task._is_robot_touching_object(env.model, env.data, "object")
-        if ended or (_object_touches_table(env) and not touching_hand):
+        touching_hand = env.task._is_robot_touching_object(env.model, env.data, object_name)
+        is_settled = _object_touches_table(env, object_name) if settled is None else settled()
+        if ended or (is_settled and not touching_hand):
             break
     return final_hand.astype(np.float32), ended, final_fraction
 
@@ -642,9 +655,7 @@ def execute_pick_place_transfer(
                 stage="transport",
                 target_position=transport_ee,
                 target_quaternion=ee_quaternion,
-                start_hand=(
-                    transport_hand if transfer.adaptive_transport_grip else grip_hand
-                ),
+                start_hand=(transport_hand if transfer.adaptive_transport_grip else grip_hand),
                 target_hand=transport_hand,
                 steps=transfer.transport_steps,
                 smooth=True,
@@ -775,7 +786,9 @@ def execute_pick_place_transfer(
             arrays=arrays,
             success=success,
             terminal_stage="task_verify" if not ended else "retreat",
-            failure_reason=None if success else "object was not released stably inside target region",
+            failure_reason=None
+            if success
+            else "object was not released stably inside target region",
             metadata=metadata,
         )
     finally:

@@ -132,7 +132,8 @@ class SingleArmManipulationTask(RobotTask):
 
         ee_site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, self.ee_site_name)
         environment_ids = set(object_geom_ids)
-        for name in (self.arena.table_geom_name, "floor"):
+        arena_geoms = tuple(getattr(self.arena, "environment_geom_names", ()))
+        for name in (self.arena.table_geom_name, "floor", *arena_geoms):
             geom_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, name)
             if geom_id >= 0:
                 environment_ids.add(int(geom_id))

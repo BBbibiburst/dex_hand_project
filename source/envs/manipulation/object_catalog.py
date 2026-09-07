@@ -95,8 +95,8 @@ def pick_place_object_ids() -> tuple[str, ...]:
 
 
 def push_object_ids() -> tuple[str, ...]:
-    """Objects that remain controllable in a planar pushing task."""
-    return tuple(key for key in object_ids() if key not in PUSH_EXCLUDED)
+    """All catalogue objects, including balls handled by rolling pushes."""
+    return object_ids()
 
 
 def stack_object_ids() -> tuple[str, ...]:

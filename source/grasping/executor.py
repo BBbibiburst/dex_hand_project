@@ -276,7 +276,8 @@ def _orientation_error(first: np.ndarray, second: np.ndarray) -> float:
 
 
 class _Recorder:
-    def __init__(self) -> None:
+    def __init__(self, object_name: str = "object") -> None:
+        self.object_name = object_name
         self.values: dict[str, list[Any]] = {
             "qpos": [],
             "qvel": [],
@@ -291,6 +292,9 @@ class _Recorder:
             "robot_object_normal_force": [],
             "robot_object_digit_contact_count": [],
             "robot_object_digit_normal_force": [],
+            "tactile": [],
+            "palm_object_contact": [],
+            "object_support_contact": [],
         }
 
     def append(
@@ -307,19 +311,30 @@ class _Recorder:
         self.values["ctrl"].append(env.data.ctrl.astype(np.float32).copy())
         self.values["action"].append(np.asarray(action, dtype=np.float32).copy())
         self.values["object_position"].append(
-            np.asarray(observation["object_pos"], dtype=np.float32).copy()
+            np.asarray(observation[f"{self.object_name}_pos"], dtype=np.float32).copy()
         )
         self.values["object_quaternion_wxyz"].append(
-            np.asarray(observation["object_quat"], dtype=np.float32).copy()
+            np.asarray(observation[f"{self.object_name}_quat"], dtype=np.float32).copy()
         )
         self.values["stage"].append(STAGE_CODES[stage])
         self.values["reward"].append(float(reward))
         self.values["task_success"].append(bool(success))
-        contact_count, normal_force, digit_counts, digit_forces = _robot_object_contact_summary(env)
+        contact_count, normal_force, digit_counts, digit_forces = _robot_object_contact_summary(
+            env, self.object_name
+        )
         self.values["robot_object_contact_count"].append(contact_count)
         self.values["robot_object_normal_force"].append(normal_force)
         self.values["robot_object_digit_contact_count"].append(digit_counts)
         self.values["robot_object_digit_normal_force"].append(digit_forces)
+        self.values["tactile"].append(
+            np.asarray(observation.get("tactile", np.zeros(0)), dtype=np.float32).copy()
+        )
+        self.values["palm_object_contact"].append(_palm_object_contact(env, self.object_name))
+        bindings = getattr(env.task, "bindings", None)
+        has_support = bindings is not None and "cubeB" in bindings.objects
+        self.values["object_support_contact"].append(
+            bool(has_support and env.task._objects_touching(env.data, self.object_name, "cubeB"))
+        )
 
     def arrays(self) -> dict[str, np.ndarray]:
         arrays = {name: np.asarray(values) for name, values in self.values.items()}
@@ -334,7 +349,27 @@ class _Recorder:
         arrays["robot_object_digit_normal_force"] = arrays[
             "robot_object_digit_normal_force"
         ].astype(np.float32)
+        arrays["tactile"] = arrays["tactile"].astype(np.float32)
+        arrays["palm_object_contact"] = arrays["palm_object_contact"].astype(np.bool_)
+        arrays["object_support_contact"] = arrays["object_support_contact"].astype(np.bool_)
         return arrays
+
+
+def _palm_object_contact(env, object_name: str = "object") -> bool:
+    bindings = getattr(env.task, "bindings", None)
+    if bindings is None or object_name not in bindings.objects:
+        return False
+    object_geoms = {int(value) for value in bindings.objects[object_name].geom_ids}
+    for index in range(env.data.ncon):
+        contact = env.data.contact[index]
+        pair = {int(contact.geom1), int(contact.geom2)}
+        if not pair.intersection(object_geoms):
+            continue
+        for geom_id in pair - object_geoms:
+            name = mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_GEOM, geom_id) or ""
+            if name.endswith("skin_palm_p"):
+                return True
+    return False
 
 
 def _contact_digit(env, geom_id: int) -> int:
@@ -364,11 +399,13 @@ def _contact_digit(env, geom_id: int) -> int:
     return -1
 
 
-def _robot_object_contact_summary(env) -> tuple[int, float, np.ndarray, np.ndarray]:
+def _robot_object_contact_summary(
+    env, object_name: str = "object"
+) -> tuple[int, float, np.ndarray, np.ndarray]:
     bindings = getattr(env.task, "bindings", None)
-    if bindings is None or "object" not in bindings.objects:
+    if bindings is None or object_name not in bindings.objects:
         return 0, 0.0, np.zeros(5, dtype=np.int16), np.zeros(5, dtype=np.float64)
-    object_geoms = {int(value) for value in bindings.objects["object"].geom_ids}
+    object_geoms = {int(value) for value in bindings.objects[object_name].geom_ids}
     robot_geoms = {int(value) for value in bindings.robot_geom_ids}
     contact_force = np.zeros(6, dtype=np.float64)
     digit_counts = np.zeros(5, dtype=np.int16)

@@ -47,9 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tile-width", type=int, default=720)
     parser.add_argument("--tile-height", type=int, default=350)
     parser.add_argument("--include-collision", action="store_true")
-    parser.add_argument(
-        "--collision-mode", choices=("single", "multi"), default="single"
-    )
+    parser.add_argument("--collision-mode", choices=("single", "multi"), default="single")
     parser.add_argument("--output-name")
     return parser.parse_args()
 
@@ -342,7 +340,7 @@ def render_multi_collision_scene(record: dict, width: int, height: int) -> Image
     import mujoco
 
     from source.grasping.catalog import resolve_object_collision_mesh
-    from source.grasping.collision_decomposition import convex_decomposition_paths
+    from source.collision_decomposition import convex_decomposition_paths
 
     object_id = f"{record['dataset']}:{record['object_id']}"
     parts = convex_decomposition_paths(resolve_object_collision_mesh(object_id))
@@ -353,20 +351,31 @@ def render_multi_collision_scene(record: dict, width: int, height: int) -> Image
     center = (low + high) / 2
     position = -center * scale
     position[2] += float(extent[2] * scale / 2 + 0.006)
-    palette = ((.90,.30,.25),(.22,.58,.88),(.28,.72,.42),(.94,.67,.20),(.62,.38,.82),(.15,.72,.72))
+    palette = (
+        (0.90, 0.30, 0.25),
+        (0.22, 0.58, 0.88),
+        (0.28, 0.72, 0.42),
+        (0.94, 0.67, 0.20),
+        (0.62, 0.38, 0.82),
+        (0.15, 0.72, 0.72),
+    )
     assets, geoms = [], []
     for index, path in enumerate(parts):
-        assets.append(f'<mesh name="p{index}" file="{html.escape(path.resolve().as_posix(), quote=True)}" scale="{scale} {scale} {scale}"/>')
+        assets.append(
+            f'<mesh name="p{index}" file="{html.escape(path.resolve().as_posix(), quote=True)}" scale="{scale} {scale} {scale}"/>'
+        )
         rgb = palette[index % len(palette)]
-        geoms.append(f'<geom type="mesh" mesh="p{index}" rgba="{rgb[0]} {rgb[1]} {rgb[2]} .82" contype="0" conaffinity="0"/>')
-    xml = f"""<mujoco><visual><headlight ambient=".28 .28 .28" diffuse=".75 .75 .75"/></visual><asset>{''.join(assets)}<texture name="sky" type="skybox" builtin="gradient" rgb1=".72 .82 .92" rgb2=".96 .97 .98" width="512" height="3072"/></asset><worldbody><light pos="-1 -1 2" dir=".45 .45 -1" directional="true"/><geom type="box" size=".32 .28 .025" pos="0 0 -.025" rgba=".9 .9 .9 1"/><body pos="{position[0]} {position[1]} {position[2]}">{''.join(geoms)}</body></worldbody></mujoco>"""
+        geoms.append(
+            f'<geom type="mesh" mesh="p{index}" rgba="{rgb[0]} {rgb[1]} {rgb[2]} .82" contype="0" conaffinity="0"/>'
+        )
+    xml = f"""<mujoco><visual><headlight ambient=".28 .28 .28" diffuse=".75 .75 .75"/></visual><asset>{"".join(assets)}<texture name="sky" type="skybox" builtin="gradient" rgb1=".72 .82 .92" rgb2=".96 .97 .98" width="512" height="3072"/></asset><worldbody><light pos="-1 -1 2" dir=".45 .45 -1" directional="true"/><geom type="box" size=".32 .28 .025" pos="0 0 -.025" rgba=".9 .9 .9 1"/><body pos="{position[0]} {position[1]} {position[2]}">{"".join(geoms)}</body></worldbody></mujoco>"""
     model = mujoco.MjModel.from_xml_string(xml)
     data = mujoco.MjData(model)
     mujoco.mj_forward(model, data)
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_FREE
-    camera.lookat[:] = (0, 0, .065)
-    camera.distance, camera.azimuth, camera.elevation = .48, 135, -27
+    camera.lookat[:] = (0, 0, 0.065)
+    camera.distance, camera.azimuth, camera.elevation = 0.48, 135, -27
     with mujoco.Renderer(model, height=height, width=width) as renderer:
         renderer.update_scene(data, camera=camera)
         return Image.fromarray(renderer.render())
@@ -416,7 +425,9 @@ def render_dataset(
     )
     draw.text(
         (38, 82),
-        "Each tile: shape | textured render | actual collision" if include_collision else "Each tile: normalized shape view (left)  |  MuJoCo tabletop render (right)",
+        "Each tile: shape | textured render | actual collision"
+        if include_collision
+        else "Each tile: normalized shape view (left)  |  MuJoCo tabletop render (right)",
         fill="#405060",
         font=font(25),
     )
@@ -447,7 +458,9 @@ def render_dataset(
         )
         try:
             mesh_path = find_obj(record)
-            preview_width = (tile_width - (40 if include_collision else 30)) // (3 if include_collision else 2)
+            preview_width = (tile_width - (40 if include_collision else 30)) // (
+                3 if include_collision else 2
+            )
             preview = render_shape(mesh_path, preview_width, 220, color)
             scene = render_mujoco_scene(mesh_path, preview_width, 220, color)
             sheet.paste(preview, (x + 10, y + 48))
@@ -493,9 +506,7 @@ def main() -> int:
     if selection_path is not None:
         selected_payload = json.loads(selection_path.read_text(encoding="utf-8"))
         selected_ids = [str(item["object_id"]) for item in selected_payload.get("objects", [])]
-        records_by_id = {
-            f"{record['dataset']}:{record['object_id']}": record for record in records
-        }
+        records_by_id = {f"{record['dataset']}:{record['object_id']}": record for record in records}
         missing = [object_id for object_id in selected_ids if object_id not in records_by_id]
         if missing:
             raise ValueError(f"Selection contains objects absent from manifest: {missing}")

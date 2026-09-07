@@ -12,7 +12,7 @@ import numpy as np
 import trimesh
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CACHE_ROOT = PROJECT_ROOT / ".cache" / "collision_decomposition"
 SETTINGS = {
     "schema_version": 3,
@@ -99,9 +99,7 @@ def convex_decomposition_paths(path: Path) -> tuple[Path, ...]:
             payload = json.loads(manifest_path.read_text(encoding="utf-8"))
             cached = tuple(directory / name for name in payload.get("parts", ()))
             if cached and all(item.is_file() for item in cached):
-                loaded_parts = [
-                    trimesh.load(item, force="mesh", process=True) for item in cached
-                ]
+                loaded_parts = [trimesh.load(item, force="mesh", process=True) for item in cached]
                 usable = _drop_negligible_parts(loaded_parts)
                 usable_ids = {id(part) for part in usable}
                 return tuple(

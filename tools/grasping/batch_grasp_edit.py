@@ -73,6 +73,7 @@ def _is_noncacheable_interruption(exc: BaseException) -> bool:
         current = current.__cause__ or current.__context__
     return False
 
+
 CSV_FIELDS = (
     "object_id",
     "dataset",
@@ -194,12 +195,8 @@ def _gpu_ids(spec: str, *, device: str) -> tuple[str, ...]:
     if visible_env is not None:
         visible = visible_env.strip()
         if not visible or visible == "-1":
-            raise ValueError(
-                "--device requests CUDA, but CUDA_VISIBLE_DEVICES hides every GPU."
-            )
-        values = tuple(
-            dict.fromkeys(item.strip() for item in visible.split(",") if item.strip())
-        )
+            raise ValueError("--device requests CUDA, but CUDA_VISIBLE_DEVICES hides every GPU.")
+        values = tuple(dict.fromkeys(item.strip() for item in visible.split(",") if item.strip()))
         if values:
             return values
 
@@ -339,10 +336,7 @@ def _resource_plan(
 
     maximum_workers = max(counts.values(), default=0)
     slots = tuple(
-        gpu
-        for worker_index in range(maximum_workers)
-        for gpu in gpus
-        if worker_index < counts[gpu]
+        gpu for worker_index in range(maximum_workers) for gpu in gpus if worker_index < counts[gpu]
     )
     return slots, {
         "worker_mode": "auto" if explicit_workers is None else "explicit",
@@ -503,7 +497,7 @@ def _source_hashes(root: Path) -> dict[str, str]:
         "source/rl/grasp_edit/templates.py",
         "source/grasping/executor.py",
         "source/grasping/catalog.py",
-        "source/grasping/collision_decomposition.py",
+        "source/collision_decomposition.py",
         "source/grasping/dexevolve_contacts.py",
         "source/grasping/hand_surrogate.py",
         "source/grasping/graspqp_adapter.py",
@@ -523,9 +517,7 @@ def _dataset_ids(dataset: str) -> tuple[str, ...]:
         return object_ids()
     if dataset == "original127":
         return tuple(
-            object_id
-            for object_id in object_ids()
-            if object_id.startswith(("ycb:", "egad:"))
+            object_id for object_id in object_ids() if object_id.startswith(("ycb:", "egad:"))
         )
     return object_ids(dataset)
 
@@ -679,8 +671,7 @@ def _ensure_grasp(
             if not any(message in child.text for message in expected_failures):
                 tail = "\n".join(child.text.rstrip().splitlines()[-12:])
                 raise RuntimeError(
-                    f"Grasp generator exited with code {child.returncode} for {object_id}.\n"
-                    f"{tail}"
+                    f"Grasp generator exited with code {child.returncode} for {object_id}.\n{tail}"
                 )
     return summary, elapsed, combined
 
@@ -1381,12 +1372,8 @@ def _run_object_item(item: ObjectWorkItem) -> dict[str, Any]:
                     preflight = recovery
                     active_args = recovery_args
                     row["pipeline_route"] = "recovery"
-                    row["effective_lift_height_mm"] = (
-                        1000.0 * recovery_args.execution_lift_height
-                    )
-                    row["effective_hand_edit_fraction"] = (
-                        recovery_args.hand_edit_fraction
-                    )
+                    row["effective_lift_height_mm"] = 1000.0 * recovery_args.execution_lift_height
+                    row["effective_hand_edit_fraction"] = recovery_args.hand_edit_fraction
 
             _apply_preflight(row, preflight)
             if preflight.error:
@@ -1683,9 +1670,7 @@ def main(argv: list[str] | None = None) -> int:
     ).hexdigest()
 
     grasp_roots = (
-        tuple(args.grasp_roots)
-        if args.grasp_roots
-        else (Path("outputs/grasp_generation"),)
+        tuple(args.grasp_roots) if args.grasp_roots else (Path("outputs/grasp_generation"),)
     )
     output = args.output
     object_dir = output / "objects"
@@ -1858,9 +1843,7 @@ def main(argv: list[str] | None = None) -> int:
                         )
                     rows_by_id[object_id] = row
                     completed_this_run += 1
-                    ordered_rows = [
-                        rows_by_id[item] for item in catalog if item in rows_by_id
-                    ]
+                    ordered_rows = [rows_by_id[item] for item in catalog if item in rows_by_id]
                     remaining = len(catalog) - len(ordered_rows)
                     wall_timing = _wall_clock_estimate(
                         elapsed=time.perf_counter() - parallel_run_started,
