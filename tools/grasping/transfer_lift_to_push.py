@@ -11,9 +11,9 @@ from source.grasping.push_transfer import (
     PushTransferConfig,
     execute_push_transfer,
 )
+from source.workflows.batch import atomic_write_json
 from tools.grasping.transfer_lift_to_pick_place import discover_lift_manifests, load_lift_source
 from tools.grasping.transfer_lift_to_stack import _execution_config
-from tools.grasping.batch_pick_place_transfer import _atomic_json
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -96,7 +96,7 @@ def main(argv: list[str] | None = None) -> int:
                             "attempts": attempts,
                         }
                         args.output.mkdir(parents=True, exist_ok=True)
-                        _atomic_json(args.output / "summary.json", payload)
+                        atomic_write_json(args.output / "summary.json", payload)
                         return 0
                     if (
                         result.metadata["finger_object_contact_frames"] == 0
@@ -116,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
                         }
                     )
     args.output.mkdir(parents=True, exist_ok=True)
-    _atomic_json(
+    atomic_write_json(
         args.output / "summary.json",
         {
             "task": "push",

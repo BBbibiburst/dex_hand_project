@@ -8,8 +8,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from source.verification.task_stability import replay_nut_terminal_stability
-from tools.grasping.batch_pick_place_transfer import _atomic_json
-from tools.grasping.batch_push_transfer import _memory_safe_workers
+from source.workflows.batch import atomic_write_json, memory_safe_worker_count
 
 
 def _verify(index: int, root: Path) -> dict[str, object]:
@@ -37,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--memory-per-worker-gib", type=float, default=0.3)
     args = parser.parse_args(argv)
-    workers = _memory_safe_workers(args.workers, gib_per_worker=args.memory_per_worker_gib)
+    workers = memory_safe_worker_count(args.workers, gib_per_worker=args.memory_per_worker_gib)
     rows: dict[int, dict[str, object]] = {}
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(_verify, index, args.input): index for index in range(100)}
@@ -55,7 +54,7 @@ def main(argv: list[str] | None = None) -> int:
         "success_rate": counts["SUCCESS"] / 100.0,
         "results": ordered,
     }
-    _atomic_json(args.input / "stability_summary.json", payload)
+    atomic_write_json(args.input / "stability_summary.json", payload)
     print(f"[summary] {dict(counts)}", flush=True)
     return 0 if counts["SUCCESS"] == 100 else 2
 

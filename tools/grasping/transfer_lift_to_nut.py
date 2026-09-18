@@ -10,9 +10,9 @@ from source.grasping.nut_transfer import (
     NutTransferConfig,
     execute_nut_transfer,
 )
+from source.workflows.batch import atomic_write_json
 from tools.grasping.transfer_lift_to_pick_place import load_lift_source
 from tools.grasping.transfer_lift_to_stack import _execution_config
-from tools.grasping.batch_pick_place_transfer import _atomic_json
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -72,10 +72,10 @@ def main(argv: list[str] | None = None) -> int:
                     "attempts": attempts,
                 }
                 args.output.mkdir(parents=True, exist_ok=True)
-                _atomic_json(args.output / "summary.json", payload)
+                atomic_write_json(args.output / "summary.json", payload)
                 return 0
     args.output.mkdir(parents=True, exist_ok=True)
-    _atomic_json(
+    atomic_write_json(
         args.output / "summary.json",
         {
             "task": "nut_assembly",

@@ -14,13 +14,13 @@ from typing import Any
 
 from source.grasping.stack_transfer import STACK_TRANSFER_VERSION
 from source.envs.manipulation.object_catalog import partition_task_objects
-from tools.grasping.batch_pick_place_transfer import (
-    _atomic_json,
-    _selection_ids,
-    _slug,
-    _source_roots,
+from source.workflows.batch import (
+    atomic_write_json,
+    lift_source_roots,
+    load_selection_ids,
+    memory_safe_worker_count,
+    object_slug,
 )
-from tools.grasping.batch_push_transfer import _memory_safe_workers
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -49,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _run_object(object_id: str, *, args: argparse.Namespace) -> dict[str, Any]:
     started = time.perf_counter()
-    output = args.output / _slug(object_id)
+    output = args.output / object_slug(object_id)
     summary_path = output / "summary.json"
     if not args.force and summary_path.is_file():
         cached = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -62,7 +62,7 @@ def _run_object(object_id: str, *, args: argparse.Namespace) -> dict[str, Any]:
                 "cached": True,
                 "failure_reason": "",
             }
-    roots = _source_roots(
+    roots = lift_source_roots(
         args.lattice_root,
         args.rl_root,
         args.grasp_root,
@@ -84,7 +84,7 @@ def _run_object(object_id: str, *, args: argparse.Namespace) -> dict[str, Any]:
     ]
     for root in roots:
         command.extend(("--lift-root", str(root)))
-    log = args.output / "logs" / f"{_slug(object_id)}.log"
+    log = args.output / "logs" / f"{object_slug(object_id)}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     with log.open("w", encoding="utf-8") as handle:
         child = subprocess.run(command, stdout=handle, stderr=subprocess.STDOUT, text=True)
@@ -114,7 +114,7 @@ def _write_summary(
     excluded: tuple[dict[str, str], ...],
 ) -> None:
     counts = Counter(row["status"] for row in rows)
-    _atomic_json(
+    atomic_write_json(
         output / "summary.json",
         {
             "task": "stack",
@@ -135,7 +135,7 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if min(args.workers, args.seed_attempts, args.maximum_candidates) <= 0:
         raise ValueError("Worker and search counts must be positive.")
-    selected = _selection_ids(args.selection)
+    selected = load_selection_ids(args.selection)
     if args.expect_count and len(selected) != args.expect_count:
         raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
     eligible, excluded = partition_task_objects("stack", list(selected))
@@ -146,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("No Stack-eligible objects remain in the selection.")
     args.output.mkdir(parents=True, exist_ok=True)
     rows_by_id: dict[str, dict[str, Any]] = {}
-    workers = _memory_safe_workers(
+    workers = memory_safe_worker_count(
         min(args.workers, len(objects)), gib_per_worker=args.memory_per_worker_gib
     )
     print(

@@ -12,11 +12,11 @@ from source.grasping.stack_transfer import (
     StackTransferConfig,
     execute_stack_transfer,
 )
+from source.workflows.batch import atomic_write_json
 from tools.grasping.transfer_lift_to_pick_place import (
     discover_lift_manifests,
     load_lift_source,
 )
-from tools.grasping.batch_pick_place_transfer import _atomic_json
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -123,10 +123,10 @@ def main(argv: list[str] | None = None) -> int:
                         "attempts": attempts,
                     }
                     args.output.mkdir(parents=True, exist_ok=True)
-                    _atomic_json(args.output / "summary.json", summary)
+                    atomic_write_json(args.output / "summary.json", summary)
                     return 0
     args.output.mkdir(parents=True, exist_ok=True)
-    _atomic_json(
+    atomic_write_json(
         args.output / "summary.json",
         {
             "task": "stack",

@@ -14,46 +14,12 @@ from pathlib import Path
 from typing import Any
 
 from source.grasping.task_transfer import PICK_PLACE_PIPELINE_VERSION
-
-
-def _slug(object_id: str) -> str:
-    return object_id.replace(":", "_").replace("/", "_")
-
-
-def _selection_ids(path: Path) -> tuple[str, ...]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    rows = payload.get("objects", payload) if isinstance(payload, dict) else payload
-    if not isinstance(rows, list):
-        raise ValueError(f"Selection has no object list: {path}")
-    result = tuple(str(row["object_id"] if isinstance(row, dict) else row) for row in rows)
-    if len(set(result)) != len(result):
-        raise ValueError("Selection contains duplicate object IDs.")
-    return result
-
-
-def _atomic_json(path: Path, payload: Any) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    temporary.replace(path)
-
-
-def _source_roots(
-    lattice_root: Path,
-    rl_root: Path,
-    grasp_root: Path,
-    object_id: str,
-    extra_roots: tuple[Path, ...] = (),
-) -> tuple[Path, ...]:
-    slug = _slug(object_id)
-    candidates = (
-        grasp_root / slug,
-        lattice_root / slug,
-        lattice_root / "recovery_lift_085mm" / slug,
-        rl_root / slug,
-        *(root / slug for root in extra_roots),
-    )
-    return tuple(path for path in candidates if path.is_dir())
+from source.workflows.batch import (
+    atomic_write_json,
+    lift_source_roots,
+    load_selection_ids,
+    object_slug,
+)
 
 
 def _run_object(
@@ -62,7 +28,7 @@ def _run_object(
     args: argparse.Namespace,
 ) -> dict[str, Any]:
     started = time.perf_counter()
-    object_output = args.output / _slug(object_id)
+    object_output = args.output / object_slug(object_id)
     summary_path = object_output / "summary.json"
     if not args.force and summary_path.is_file():
         cached = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -76,7 +42,7 @@ def _run_object(
                 "failure_reason": "",
             }
 
-    roots = _source_roots(
+    roots = lift_source_roots(
         args.lattice_root,
         args.rl_root,
         args.grasp_root,
@@ -111,7 +77,7 @@ def _run_object(
     ]
     for root in roots:
         command.extend(("--lift-root", str(root)))
-    log_path = args.output / "logs" / f"{_slug(object_id)}.log"
+    log_path = args.output / "logs" / f"{object_slug(object_id)}.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("w", encoding="utf-8") as log:
         child = subprocess.run(
@@ -141,7 +107,7 @@ def _run_object(
 
 def _write_summary(output: Path, rows: list[dict[str, Any]]) -> None:
     counts = Counter(row["status"] for row in rows)
-    _atomic_json(
+    atomic_write_json(
         output / "summary.json",
         {
             "task": "pick_place",
@@ -190,7 +156,7 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if min(args.workers, args.seed_attempts, args.maximum_candidates, args.transport_steps) <= 0:
         raise ValueError("Worker and search counts must be positive.")
-    objects = _selection_ids(args.selection)
+    objects = load_selection_ids(args.selection)
     if args.expect_count and len(objects) != args.expect_count:
         raise ValueError(f"Expected {args.expect_count} objects, found {len(objects)}.")
     args.output.mkdir(parents=True, exist_ok=True)

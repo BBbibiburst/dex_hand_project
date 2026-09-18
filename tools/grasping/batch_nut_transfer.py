@@ -12,8 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from source.grasping.nut_transfer import NUT_TRANSFER_VERSION
-from tools.grasping.batch_pick_place_transfer import _atomic_json
-from tools.grasping.batch_push_transfer import _memory_safe_workers
+from source.workflows.batch import atomic_write_json, memory_safe_worker_count
 
 # Earlier versions used a full-length tapered pin, 14--15 mm clearance and a
 # handle overlapping the socket. Their 100/100 artifacts are not compatible
@@ -60,7 +59,7 @@ def _run(variant: int, args: argparse.Namespace) -> dict[str, object]:
 
 def _write_summary(output: Path, rows: list[dict[str, object]]) -> None:
     counts = Counter(str(row["status"]) for row in rows)
-    _atomic_json(
+    atomic_write_json(
         output / "summary.json",
         {
             "task": "nut_assembly",
@@ -88,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
         raise ValueError("workers and seed-attempts must be positive.")
     args.output.mkdir(parents=True, exist_ok=True)
     variants = tuple(range(100))
-    workers = _memory_safe_workers(
+    workers = memory_safe_worker_count(
         min(args.workers, len(variants)), gib_per_worker=args.memory_per_worker_gib
     )
     print(f"[resource] requested_workers={args.workers} memory_safe_workers={workers}", flush=True)

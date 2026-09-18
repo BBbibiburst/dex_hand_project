@@ -12,8 +12,8 @@ from source.grasping.task_transfer import (
     _combine_arrays,
     _safe_descent_distance,
 )
+from source.workflows.batch import lift_source_roots, load_selection_ids
 from tools.grasping.transfer_lift_to_pick_place import discover_lift_manifests
-from tools.grasping.batch_pick_place_transfer import _selection_ids, _source_roots
 
 
 def test_pick_place_transfer_requires_positive_clearance() -> None:
@@ -129,5 +129,5 @@ def test_batch_selection_and_source_roots(tmp_path) -> None:
     direct.mkdir(parents=True)
     recovery.mkdir(parents=True)
 
-    assert _selection_ids(selection) == ("ycb:test",)
-    assert _source_roots(lattice, rl, grasp, "ycb:test") == (direct, recovery)
+    assert load_selection_ids(selection) == ("ycb:test",)
+    assert lift_source_roots(lattice, rl, grasp, "ycb:test") == (direct, recovery)

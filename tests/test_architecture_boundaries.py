@@ -30,6 +30,16 @@ def test_source_does_not_depend_on_entrypoint_layers() -> None:
     assert not violations, "Invalid source dependency direction:\n" + "\n".join(violations)
 
 
+def test_batch_entrypoints_do_not_depend_on_other_batch_entrypoints() -> None:
+    violations: list[str] = []
+    batch_root = PROJECT_ROOT / "tools" / "grasping"
+    for path in batch_root.glob("batch_*.py"):
+        for module in imported_modules(path):
+            if module.startswith("tools.grasping.batch_"):
+                violations.append(f"{path.relative_to(PROJECT_ROOT)} -> {module}")
+    assert not violations, "Batch entrypoint coupling:\n" + "\n".join(violations)
+
+
 def test_legacy_demos_package_is_removed() -> None:
     assert not (SOURCE_ROOT / "demos").exists()
 

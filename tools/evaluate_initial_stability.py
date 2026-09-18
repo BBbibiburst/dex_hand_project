@@ -7,14 +7,7 @@ import json
 from pathlib import Path
 
 from source.grasping.affordance import simulate_initial_pose_stability
-
-
-def _selection_ids(path: Path) -> tuple[str, ...]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    values = payload.get("objects", payload) if isinstance(payload, dict) else payload
-    return tuple(
-        str(value["object_id"] if isinstance(value, dict) else value) for value in values
-    )
+from source.workflows.batch import load_selection_ids
 
 
 def main() -> int:
@@ -24,7 +17,7 @@ def main() -> int:
     parser.add_argument("--settle-seconds", type=float, default=1.5)
     parser.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
-    object_ids = _selection_ids(args.selection)
+    object_ids = load_selection_ids(args.selection)
     results = []
     for index, object_id in enumerate(object_ids, 1):
         try:

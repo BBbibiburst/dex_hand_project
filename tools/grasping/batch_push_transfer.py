@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
 import time
@@ -14,11 +13,12 @@ from pathlib import Path
 
 from source.envs.manipulation.object_catalog import partition_task_objects
 from source.grasping.push_transfer import PUSH_TRANSFER_VERSION
-from tools.grasping.batch_pick_place_transfer import (
-    _atomic_json,
-    _selection_ids,
-    _slug,
-    _source_roots,
+from source.workflows.batch import (
+    atomic_write_json,
+    lift_source_roots,
+    load_selection_ids,
+    memory_safe_worker_count,
+    object_slug,
 )
 
 # Only reuse artifacts produced by the current physical protocol. Older
@@ -26,31 +26,9 @@ from tools.grasping.batch_pick_place_transfer import (
 _COMPATIBLE_SUCCESS_VERSIONS = frozenset({PUSH_TRANSFER_VERSION})
 
 
-def _memory_safe_workers(requested: int, *, gib_per_worker: float = 1.5) -> int:
-    """Cap concurrent MuJoCo compilers using currently available host RAM."""
-
-    # Linux MemAvailable includes reclaimable page cache and is a substantially
-    # better OOM predictor than SC_AVPHYS_PAGES. Keep a portable fallback.
-    try:
-        fields = {
-            line.split(":", 1)[0]: int(line.split()[1])
-            for line in open("/proc/meminfo", encoding="utf-8")  # noqa: SIM115
-            if ":" in line
-        }
-        available_gib = fields["MemAvailable"] / (1024**2)
-    except (OSError, KeyError, ValueError):
-        pages = os.sysconf("SC_AVPHYS_PAGES")
-        page_size = os.sysconf("SC_PAGE_SIZE")
-        available_gib = pages * page_size / (1024**3)
-    # Keep 1.5 GiB for the parent, desktop, filesystem cache, and short-lived
-    # allocator peaks.  Each child compiles an independent hand + COACD model.
-    safe = max(1, int((available_gib - 1.5) // gib_per_worker))
-    return min(requested, safe)
-
-
 def _run(oid, args):
     start = time.perf_counter()
-    out = args.output / _slug(oid)
+    out = args.output / object_slug(oid)
     summary = out / "summary.json"
     if summary.is_file() and not args.force:
         old = json.loads(summary.read_text())
@@ -62,7 +40,7 @@ def _run(oid, args):
                 "cached": True,
                 "failure_reason": "",
             }
-    roots = _source_roots(
+    roots = lift_source_roots(
         args.lattice_root, args.rl_root, args.grasp_root, oid, tuple(args.extra_lift_roots or ())
     )
     cmd = [
@@ -78,7 +56,7 @@ def _run(oid, args):
     ]
     for root in roots:
         cmd.extend(("--lift-root", str(root)))
-    log = args.output / "logs" / f"{_slug(oid)}.log"
+    log = args.output / "logs" / f"{object_slug(oid)}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     with log.open("w") as handle:
         child = subprocess.run(cmd, stdout=handle, stderr=subprocess.STDOUT, text=True)
@@ -113,7 +91,7 @@ def main(argv=None):
         help="Run every selected object as a coverage stress test instead of the Push domain.",
     )
     args = p.parse_args(argv)
-    selected = _selection_ids(args.selection)
+    selected = load_selection_ids(args.selection)
     if args.expect_count and len(selected) != args.expect_count:
         raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
     eligible, excluded = partition_task_objects("push", list(selected))
@@ -124,7 +102,7 @@ def main(argv=None):
         raise ValueError("No Push-eligible objects remain in the selection.")
     rows = {}
     args.output.mkdir(parents=True, exist_ok=True)
-    workers = _memory_safe_workers(
+    workers = memory_safe_worker_count(
         min(args.workers, len(ids)), gib_per_worker=args.memory_per_worker_gib
     )
     print(
@@ -148,7 +126,7 @@ def main(argv=None):
             rows[oid] = row
             ordered = [rows[x] for x in ids if x in rows]
             counts = Counter(x["status"] for x in ordered)
-            _atomic_json(
+            atomic_write_json(
                 args.output / "summary.json",
                 {
                     "task": "push",
