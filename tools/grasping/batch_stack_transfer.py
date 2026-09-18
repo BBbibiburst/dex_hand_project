@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from source.grasping.stack_transfer import STACK_TRANSFER_VERSION
+from source.envs.manipulation.object_catalog import partition_task_objects
 from tools.grasping.batch_pick_place_transfer import (
     _atomic_json,
     _selection_ids,
@@ -38,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--seed-attempts", type=int, default=3)
     parser.add_argument("--maximum-candidates", type=int, default=12)
     parser.add_argument("--force", action="store_true")
+    parser.add_argument(
+        "--include-ineligible",
+        action="store_true",
+        help="Run every selected object as a coverage stress test instead of the Stack domain.",
+    )
     return parser
 
 
@@ -100,13 +106,23 @@ def _run_object(object_id: str, *, args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
-def _write_summary(output: Path, rows: list[dict[str, Any]]) -> None:
+def _write_summary(
+    output: Path,
+    rows: list[dict[str, Any]],
+    *,
+    selected_count: int,
+    excluded: tuple[dict[str, str], ...],
+) -> None:
     counts = Counter(row["status"] for row in rows)
     _atomic_json(
         output / "summary.json",
         {
             "task": "stack",
             "pipeline_version": STACK_TRANSFER_VERSION,
+            "benchmark_domain": "all-selected" if not excluded else "task-valid",
+            "selected_count": selected_count,
+            "excluded_count": len(excluded),
+            "excluded": list(excluded),
             "count": len(rows),
             "status_counts": dict(counts),
             "success_rate": counts["SUCCESS"] / max(len(rows), 1),
@@ -119,9 +135,15 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if min(args.workers, args.seed_attempts, args.maximum_candidates) <= 0:
         raise ValueError("Worker and search counts must be positive.")
-    objects = _selection_ids(args.selection)
-    if args.expect_count and len(objects) != args.expect_count:
-        raise ValueError(f"Expected {args.expect_count} objects, found {len(objects)}.")
+    selected = _selection_ids(args.selection)
+    if args.expect_count and len(selected) != args.expect_count:
+        raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
+    eligible, excluded = partition_task_objects("stack", list(selected))
+    objects = selected if args.include_ineligible else eligible
+    if args.include_ineligible:
+        excluded = ()
+    if not objects:
+        raise ValueError("No Stack-eligible objects remain in the selection.")
     args.output.mkdir(parents=True, exist_ok=True)
     rows_by_id: dict[str, dict[str, Any]] = {}
     workers = _memory_safe_workers(
@@ -148,7 +170,9 @@ def main(argv: list[str] | None = None) -> int:
                 }
             rows_by_id[object_id] = row
             rows = [rows_by_id[item] for item in objects if item in rows_by_id]
-            _write_summary(args.output, rows)
+            _write_summary(
+                args.output, rows, selected_count=len(selected), excluded=excluded
+            )
             print(
                 f"[{completed:03d}/{len(objects):03d}] {object_id:<36} "
                 f"{row['status']:<14} attempts={row['attempts']:02d} "
@@ -156,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
                 flush=True,
             )
     rows = [rows_by_id[item] for item in objects]
-    _write_summary(args.output, rows)
+    _write_summary(args.output, rows, selected_count=len(selected), excluded=excluded)
     counts = Counter(row["status"] for row in rows)
     print(f"[summary] {dict(counts)}", flush=True)
     return 0 if counts["SUCCESS"] == len(objects) else 2

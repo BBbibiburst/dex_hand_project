@@ -252,18 +252,24 @@ MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
 
 ### Lift 技能向 Stack、Push 与 NutAssembly 迁移
 
-当前迁移里程碑（2026-09-07）如下。运行产物位于 Git 忽略的 `outputs/`，因此成功率以对应
+当前迁移里程碑如下。运行产物位于 Git 忽略的 `outputs/`，因此成功率以对应
 汇总文件为准，而不是由源码 tag 单独推断：
 
 - NutAssembly：v41 在 100 个程序化形状/尺寸变体上完成 C MuJoCo 执行 100/100，独立终态
   稳定性回放 100/100。结果见 `outputs/nut_assembly_top100_guided_v41/summary.json` 和
   `stability_summary.json`。
-- Push：v14 已改为手心朝向、四指平面推动，手部动作固定为
-  `[0, 0, 0, 0, -0.0069, 0]`，并通过代表性罐体、砖块、苹果和碗形物体回归；当前尚未运行
-  v14 Top100 正式批次。旧 `outputs/push_top100_final` 属于触觉方向修正前的 v8，不作为当前
-  最终结论。
+- Push：v30 使用真实 taxel 表面拟合四指接触平面，按物体高度选择接触点，并在进入目标后
+  退让机械手再做稳定性验证。最近一次全量压力测试覆盖 99 个可用输入，成功 91 个；任务有效
+  域的正式统计由批处理筛选后的 `summary.json` 给出。旧版输出仅作历史诊断，不作为当前结论。
 - Stack：v18 正式批次为 95/100；当前 v22 正在处理最后五个难例的悬空越过平台边缘问题，
   尚未形成新的 Top100 正式结果。结果见 `outputs/stack_top100_v18/summary.json`。
+
+Stack 和 Push 现在默认按任务物理定义过滤输入清单，而不是把 Lift Top100 强制解释为每个
+任务都适用。筛选只依赖预先声明的对象集合，不依赖策略执行是否成功：Stack 使用
+`STACK_OBJECTS` 中具有稳定支撑面的对象；Push 排除链条、散粒物和球类等不符合刚性四指
+平面推动定义的对象。批处理 `summary.json` 会同时写入 `selected_count`、`excluded_count`
+和逐项排除理由。需要保留原 Top100 压力测试时，加 `--include-ineligible`；旧结果不会删除。
+NutAssembly 的 100 项是程序化插销—插孔形状/尺寸变体，不属于物体目录筛选，继续完整保留。
 
 对应单对象和批处理入口分别为 `tools.grasping.transfer_lift_to_{stack,push,nut}` 与
 `tools.grasping.batch_{stack,push,nut}_transfer`。任务轨迹可使用

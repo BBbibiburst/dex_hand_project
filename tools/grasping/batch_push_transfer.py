@@ -12,6 +12,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from source.envs.manipulation.object_catalog import partition_task_objects
 from source.grasping.push_transfer import PUSH_TRANSFER_VERSION
 from tools.grasping.batch_pick_place_transfer import (
     _atomic_json,
@@ -20,9 +21,8 @@ from tools.grasping.batch_pick_place_transfer import (
     _source_roots,
 )
 
-# v9 corrects the palm-face and hand-roll signs. Earlier successes may have
-# contacted the tactile palm mesh from the dorsal side, so none are physically
-# compatible with the corrected protocol.
+# Only reuse artifacts produced by the current physical protocol. Older
+# successes may use different contact geometry or verification semantics.
 _COMPATIBLE_SUCCESS_VERSIONS = frozenset({PUSH_TRANSFER_VERSION})
 
 
@@ -54,8 +54,14 @@ def _run(oid, args):
     summary = out / "summary.json"
     if summary.is_file() and not args.force:
         old = json.loads(summary.read_text())
-        if old.get("success") and old.get("pipeline_version") in _COMPATIBLE_SUCCESS_VERSIONS:
-            return {"object_id": oid, "status": "SUCCESS", "runtime_sec": 0.0, "cached": True}
+        if old.get("pipeline_version") in _COMPATIBLE_SUCCESS_VERSIONS:
+            return {
+                "object_id": oid,
+                "status": "SUCCESS" if old.get("success") else "FAILED",
+                "runtime_sec": 0.0,
+                "cached": True,
+                "failure_reason": "",
+            }
     roots = _source_roots(
         args.lattice_root, args.rl_root, args.grasp_root, oid, tuple(args.extra_lift_roots or ())
     )
@@ -101,10 +107,21 @@ def main(argv=None):
     p.add_argument("--memory-per-worker-gib", type=float, default=1.5)
     p.add_argument("--maximum-candidates", type=int, default=12)
     p.add_argument("--force", action="store_true")
+    p.add_argument(
+        "--include-ineligible",
+        action="store_true",
+        help="Run every selected object as a coverage stress test instead of the Push domain.",
+    )
     args = p.parse_args(argv)
-    ids = _selection_ids(args.selection)
-    if args.expect_count and len(ids) != args.expect_count:
-        raise ValueError(f"Expected {args.expect_count} objects, found {len(ids)}.")
+    selected = _selection_ids(args.selection)
+    if args.expect_count and len(selected) != args.expect_count:
+        raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
+    eligible, excluded = partition_task_objects("push", list(selected))
+    ids = selected if args.include_ineligible else eligible
+    if args.include_ineligible:
+        excluded = ()
+    if not ids:
+        raise ValueError("No Push-eligible objects remain in the selection.")
     rows = {}
     args.output.mkdir(parents=True, exist_ok=True)
     workers = _memory_safe_workers(
@@ -136,6 +153,10 @@ def main(argv=None):
                 {
                     "task": "push",
                     "pipeline_version": PUSH_TRANSFER_VERSION,
+                    "benchmark_domain": "all-selected" if not excluded else "task-valid",
+                    "selected_count": len(selected),
+                    "excluded_count": len(excluded),
+                    "excluded": list(excluded),
                     "count": len(ordered),
                     "status_counts": dict(counts),
                     "success_rate": counts["SUCCESS"] / max(len(ordered), 1),

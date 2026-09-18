@@ -104,6 +104,41 @@ def stack_object_ids() -> tuple[str, ...]:
     return tuple(key for key in STACK_OBJECTS if key in available)
 
 
+def task_object_eligibility(task: str, object_id: str) -> tuple[bool, str | None]:
+    """Return whether a catalogue object belongs to a task's declared domain.
+
+    Eligibility is deliberately independent of policy success.  This keeps a
+    failed rollout from silently changing the benchmark population.
+    """
+    if object_id not in object_records():
+        return False, "object is not present in the manipulation catalogue"
+    task = task.lower()
+    if task == "stack" and object_id not in STACK_OBJECTS:
+        return False, "object is not in the stable-support Stack object set"
+    if task == "push" and object_id in PUSH_EXCLUDED:
+        return False, "object is incompatible with rigid four-finger planar pushing"
+    if task == "pick_place" and object_id in PICK_PLACE_EXCLUDED:
+        return False, "object is incompatible with rigid single-object pick-and-place"
+    if task not in {"lift", "pick_place", "push", "stack"}:
+        raise ValueError(f"Object eligibility is not defined for task {task!r}.")
+    return True, None
+
+
+def partition_task_objects(
+    task: str, object_ids_to_check: tuple[str, ...] | list[str]
+) -> tuple[tuple[str, ...], tuple[dict[str, str], ...]]:
+    """Partition a selection into eligible IDs and auditable exclusions."""
+    eligible: list[str] = []
+    excluded: list[dict[str, str]] = []
+    for object_id in object_ids_to_check:
+        accepted, reason = task_object_eligibility(task, object_id)
+        if accepted:
+            eligible.append(object_id)
+        else:
+            excluded.append({"object_id": object_id, "reason": str(reason)})
+    return tuple(eligible), tuple(excluded)
+
+
 def resolve_record(object_id: str) -> dict:
     try:
         return object_records()[object_id]

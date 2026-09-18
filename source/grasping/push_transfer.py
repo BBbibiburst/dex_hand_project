@@ -17,7 +17,7 @@ from source.grasping.executor import (
     _run_pose_segment,
 )
 
-PUSH_TRANSFER_VERSION = "four-finger-tactile-push-v14"
+PUSH_TRANSFER_VERSION = "four-finger-tactile-push-v30"
 
 
 @dataclass(frozen=True)
@@ -30,11 +30,14 @@ class PushTransferConfig:
     precontact_distance: float = 0.10
     predicted_contact_gap: float = 0.006
     contact_probe_increment: float = 0.001
-    initial_maximum_contact_probe: float = 0.10
-    maximum_contact_probe: float = 0.012
+    initial_maximum_contact_probe: float = 0.15
+    maximum_contact_probe: float = 0.040
     push_increment: float = 0.004
     maximum_push_distance: float = 0.28
-    target_stop_radius: float = 0.050
+    target_stop_radius: float = 0.035
+    post_success_push_distance: float = 0.0
+    contact_height_fraction: float = 0.50
+    minimum_contact_height: float = 0.055
     tactile_threshold: float = 1.0e-6
     required_finger_contact_frames: int = 3
     settle_steps: int = 25
@@ -54,11 +57,16 @@ class PushTransferConfig:
             self.push_increment,
             self.maximum_push_distance,
             self.target_stop_radius,
+            self.post_success_push_distance,
         )
-        if min(distances) <= 0.0:
-            raise ValueError("Push distances must be positive.")
+        if min(distances[:-1]) <= 0.0 or self.post_success_push_distance < 0.0:
+            raise ValueError("Push distances must be positive; post-success distance may be zero.")
         if self.maximum_push_distance <= self.distance:
             raise ValueError("maximum_push_distance must exceed distance.")
+        if not 0.0 <= self.contact_height_fraction <= 1.0:
+            raise ValueError("contact_height_fraction must lie in [0, 1].")
+        if self.minimum_contact_height <= 0.0:
+            raise ValueError("minimum_contact_height must be positive.")
         if self.required_finger_contact_frames < 1:
             raise ValueError("required_finger_contact_frames must be positive.")
         if (
@@ -138,7 +146,13 @@ def _palm_facing_rotation(
 def _four_finger_geometry_in_ee_frame(
     env,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Return the centre, outward normal, and span of four middle finger pads."""
+    """Fit the centre, outward normal, and span of the four tactile surfaces.
+
+    The four skin meshes share their owning link/body origins, so ``geom_xpos``
+    is not the surface centre and is identical for several pads. The generated
+    taxel sites lie on the fitted STL surfaces and carry outward-facing local
+    Z axes; use those authoritative positions instead.
+    """
 
     prefix = str(getattr(env, "hand_prefix", "") or "")
     arm = env.controller.arm_controller
@@ -148,21 +162,31 @@ def _four_finger_geometry_in_ee_frame(
     centres: list[np.ndarray] = []
     normals: list[np.ndarray] = []
     for digit in range(4):
-        names = tuple(dict.fromkeys((f"{prefix}skin_{digit}_1_p", f"skin_{digit}_1_p")))
-        geom_id = next(
-            (
-                value
-                for name in names
-                if (value := mujoco.mj_name2id(env.model, mujoco.mjtObj.mjOBJ_GEOM, name)) >= 0
-            ),
-            -1,
+        site_prefixes = tuple(
+            dict.fromkeys(
+                (
+                    f"{prefix}taxel_skin_{digit}_1_p_",
+                    f"taxel_skin_{digit}_1_p_",
+                )
+            )
         )
-        if geom_id < 0:
-            raise ValueError(f"Dex Hand middle finger pad {digit} was not found.")
-        centres.append(ee_rotation.T @ (env.data.geom_xpos[geom_id] - ee_position))
-        pad_rotation = ee_rotation.T @ env.data.geom_xmat[geom_id].reshape(3, 3)
-        # The tactile face is the mesh-local -X side for all four pads.
-        normals.append(-pad_rotation[:, 0])
+        site_ids = [
+            site_id
+            for site_id in range(env.model.nsite)
+            if any(
+                (mujoco.mj_id2name(env.model, mujoco.mjtObj.mjOBJ_SITE, site_id) or "").startswith(
+                    candidate
+                )
+                for candidate in site_prefixes
+            )
+        ]
+        if not site_ids:
+            raise ValueError(f"Dex Hand middle finger taxels for digit {digit} were not found.")
+        world_centres = env.data.site_xpos[site_ids]
+        world_normals = env.data.site_xmat[site_ids].reshape(-1, 3, 3)[:, :, 2]
+        centres.append(ee_rotation.T @ (world_centres.mean(axis=0) - ee_position))
+        normal = ee_rotation.T @ world_normals.mean(axis=0)
+        normals.append(normal / np.linalg.norm(normal))
     centre = np.mean(centres, axis=0)
     normal = np.mean(normals, axis=0)
     normal /= np.linalg.norm(normal)
@@ -307,8 +331,17 @@ def execute_push_transfer(
         )
         settled_object = env.task._body_pos(env.model, env.data, "object").copy()
         finger_contact = settled_object.copy()
-        object_top = float(settled_object[2] + env.task.objects[0].bottom_offset)
-        finger_contact[2] = max(object_top - 0.010, env.task.table_top_z + 0.070)
+        # Aim the centre of the four-finger surface at the object's body
+        # centre. Using ``object_top - 10 mm`` targets bottle caps, ring holes,
+        # and other narrow upper features instead of the load-bearing body.
+        # The floor keeps the complete finger plane and rotated-away thumb
+        # clear of the table for very low objects.
+        half_height = float(env.task.objects[0].bottom_offset)
+        object_bottom = float(settled_object[2] - half_height)
+        contact_height = object_bottom + 2.0 * half_height * transfer.contact_height_fraction
+        finger_contact[2] = max(
+            contact_height, env.task.table_top_z + transfer.minimum_contact_height
+        )
         finger_contact[:2] -= direction[:2] * (
             env.task.objects[0].horizontal_radius + transfer.predicted_contact_gap
         )
@@ -358,15 +391,21 @@ def execute_push_transfer(
 
         push_direction = direction.copy()
         feedback_probe = 0.0
-        physical_contact_seen = _four_finger_object_contact(env)
+        locked_success_direction: np.ndarray | None = None
+        post_success_distance = 0.0
         if not ended:
             for _ in range(increments):
                 current = env.task._body_pos(env.model, env.data, "object").copy()
                 target_delta = target[:2] - current[:2]
                 target_distance = float(np.linalg.norm(target_delta))
-                if env.task._stable_count >= env.task.stable_steps:
+                if (
+                    locked_success_direction is not None
+                    and post_success_distance >= transfer.post_success_push_distance
+                ):
                     break
-                if target_distance <= 1.0e-9:
+                if locked_success_direction is not None:
+                    push_direction = locked_success_direction
+                elif target_distance <= 1.0e-9:
                     push_direction = direction.copy()
                 else:
                     push_direction = np.asarray(
@@ -377,12 +416,23 @@ def execute_push_transfer(
                         ],
                         dtype=np.float64,
                     )
+                if (
+                    locked_success_direction is None
+                    and env.task._stable_count >= env.task.stable_steps
+                ):
+                    if transfer.post_success_push_distance == 0.0:
+                        break
+                    # Lock the current approach direction before adding a
+                    # small stability margin. Re-aiming at tiny residual XY
+                    # errors here can rotate the hand sharply and put the
+                    # thumb or finger edge on the table.
+                    locked_success_direction = push_direction.copy()
                 # Non-convex and round objects can redirect a fixed-axis
                 # push. Steer the finger plane from measured object motion while
                 # preserving the current four-finger plane, then advance it
                 # toward the target by one bounded increment.
                 touching = _four_finger_object_contact(env)
-                if touching or physical_contact_seen:
+                if touching:
                     finger_world = last_ee + finger_rotation @ finger_center_local
                 else:
                     finger_world = current.copy()
@@ -401,9 +451,13 @@ def execute_push_transfer(
                 # the object dissipate momentum. If it drifts out, the next
                 # iteration resumes feedback correction.
                 advance = (
-                    0.0
-                    if target_distance <= transfer.target_stop_radius
-                    else transfer.push_increment
+                    transfer.push_increment
+                    if locked_success_direction is not None
+                    else (
+                        0.0
+                        if target_distance <= transfer.target_stop_radius
+                        else transfer.push_increment
+                    )
                 )
                 finger_world += push_direction * (advance + feedback_probe)
                 last_ee = finger_world - finger_rotation @ finger_center_local
@@ -419,81 +473,48 @@ def execute_push_transfer(
                     smooth=True,
                 )
                 if _four_finger_object_contact(env):
-                    physical_contact_seen = True
                     feedback_probe = 0.0
                 else:
                     feedback_probe = min(
                         feedback_probe + transfer.contact_probe_increment,
                         transfer.maximum_contact_probe,
                     )
+                if locked_success_direction is not None:
+                    post_success_distance += advance
                 if ended:
                     break
 
+        # Once the object is inside the goal, withdraw the finger plane before
+        # judging stability. Continuing to steer while calling the stage
+        # "verification" can apply a new lateral impulse to irregular objects
+        # and does not test whether the completed push remains successful.
+        verify_ee = last_ee.copy()
+        verify_ee[:2] -= push_direction[:2] * 0.025
+        verify_ee[2] += 0.140
         if not ended:
-            remaining = transfer.verify_steps
-            while remaining > 0 and not ended:
-                current = env.task._body_pos(env.model, env.data, "object").copy()
-                target_delta = target[:2] - current[:2]
-                target_distance = float(np.linalg.norm(target_delta))
-                if target_distance > 1.0e-9:
-                    push_direction = np.asarray(
-                        [
-                            target_delta[0] / target_distance,
-                            target_delta[1] / target_distance,
-                            0.0,
-                        ],
-                        dtype=np.float64,
-                    )
-                touching = _four_finger_object_contact(env)
-                if touching or physical_contact_seen:
-                    finger_world = last_ee + finger_rotation @ finger_center_local
-                else:
-                    finger_world = current.copy()
-                    finger_world[2] = finger_contact[2]
-                    finger_world[:2] -= push_direction[:2] * (
-                        env.task.objects[0].horizontal_radius + transfer.predicted_contact_gap
-                    )
-                finger_rotation = _palm_facing_rotation(
-                    push_direction,
-                    finger_normal_local,
-                    finger_span_local,
-                    roll_degrees=transfer.finger_plane_roll_degrees,
-                )
-                finger_quaternion = mat_to_quat(finger_rotation)
-                advance = (
-                    0.0
-                    if target_distance <= transfer.target_stop_radius
-                    else min(
-                        transfer.push_increment,
-                        0.25 * (target_distance - transfer.target_stop_radius),
-                    )
-                )
-                finger_world += push_direction * (advance + feedback_probe)
-                last_ee = finger_world - finger_rotation @ finger_center_local
-                # Verification uses a faster feedback cadence than transport
-                # so irregular objects cannot coast across the target band
-                # between corrections.
-                steps = min(2, remaining)
-                _, _, ended = _run_pose_segment(
-                    env,
-                    recorder,
-                    stage="task_verify",
-                    target_position=last_ee,
-                    target_quaternion=finger_quaternion,
-                    start_hand=planar_hand,
-                    target_hand=planar_hand,
-                    steps=steps,
-                    smooth=True,
-                )
-                if _four_finger_object_contact(env):
-                    physical_contact_seen = True
-                    feedback_probe = 0.0
-                else:
-                    feedback_probe = min(
-                        feedback_probe + transfer.contact_probe_increment,
-                        transfer.maximum_contact_probe,
-                    )
-                remaining -= steps
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="retreat",
+                target_position=verify_ee,
+                target_quaternion=finger_quaternion,
+                start_hand=planar_hand,
+                target_hand=planar_hand,
+                steps=transfer.retreat_steps,
+                smooth=True,
+            )
+        if not ended:
+            _, _, ended = _run_pose_segment(
+                env,
+                recorder,
+                stage="task_verify",
+                target_position=verify_ee,
+                target_quaternion=finger_quaternion,
+                start_hand=planar_hand,
+                target_hand=planar_hand,
+                steps=transfer.verify_steps,
+                smooth=True,
+            )
 
         arrays = recorder.arrays()
         verify_mask = arrays["stage"] == STAGE_CODES["task_verify"]
