@@ -1,0 +1,1933 @@
+{
+  "schema_version": 1,
+  "name": "Stack task-valid benchmark",
+  "task": "stack",
+  "selection_stage": "task_valid",
+  "domain_version": "stack-task-domain-v1",
+  "selection_method": "geometry_and_initial_pose_stability",
+  "source_selection": "configs/underactuated_top100_v2.json",
+  "source_count": 100,
+  "count": 48,
+  "excluded_count": 52,
+  "objects": [
+    {
+      "object_id": "gso:STACKING_RING",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07899447602706589,
+        "middle_extent_m": 0.07902774610245811,
+        "maximum_extent_m": 0.18816361134030804,
+        "sphericity": 0.8207785360435208,
+        "convexity": 0.8120493682368991,
+        "axis_ratio": 2.381984422250456,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.000574678915510635,
+        "orientation_change_deg": 0.4165463735579183
+      }
+    },
+    {
+      "object_id": "gso:JBL_Charge_Speaker_portable_wireless_wired_Green",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07408615537988181,
+        "middle_extent_m": 0.07577485772316919,
+        "maximum_extent_m": 0.17639989038430304,
+        "sphericity": 0.8436724983483274,
+        "convexity": 0.89286899022617,
+        "axis_ratio": 2.381010183074025,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00010972704640627829,
+        "orientation_change_deg": 0.3300603079946282
+      }
+    },
+    {
+      "object_id": "gso:Wilton_Pearlized_Sugar_Sprinkles_525_oz_Gold",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04559993628579677,
+        "middle_extent_m": 0.04712518284993575,
+        "maximum_extent_m": 0.13485642922764496,
+        "sphericity": 0.7988777306551789,
+        "convexity": 0.9004056216636417,
+        "axis_ratio": 2.9573819661158023,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005245901146885274,
+        "orientation_change_deg": 0.4543405598713925
+      }
+    },
+    {
+      "object_id": "gso:Weston_No_22_Cajun_Jerky_Tonic_12_fl_oz_nLj64ZnGwDh",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.06202883191610625,
+        "middle_extent_m": 0.06256427931245322,
+        "maximum_extent_m": 0.19889428005525223,
+        "sphericity": 0.7945123003629543,
+        "convexity": 0.9085174080530197,
+        "axis_ratio": 3.206481146126626,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.004449182940465608,
+        "orientation_change_deg": 2.5061100572282733
+      }
+    },
+    {
+      "object_id": "gso:Perricone_MD_No_Mascara_Mascara",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.048170746158059385,
+        "middle_extent_m": 0.05483950572816989,
+        "maximum_extent_m": 0.12865738463981635,
+        "sphericity": 0.7619314057590518,
+        "convexity": 0.9908500703647415,
+        "axis_ratio": 2.6708613609110734,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0001983533148288266,
+        "orientation_change_deg": 0.17763528916044385
+      }
+    },
+    {
+      "object_id": "gso:Black_Elderberry_Syrup_54_oz_Gaia_Herbs",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.08055821589701584,
+        "middle_extent_m": 0.08110975238464777,
+        "maximum_extent_m": 0.1468528969236695,
+        "sphericity": 0.769621303379961,
+        "convexity": 0.9910274135361009,
+        "axis_ratio": 1.8229412765471815,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0009601721681459996,
+        "orientation_change_deg": 0.7832917852733011
+      }
+    },
+    {
+      "object_id": "gso:Phillips_Milk_of_Magnesia_Saline_Laxative_Liquid_Original",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.057308368953366794,
+        "middle_extent_m": 0.07295319788237095,
+        "maximum_extent_m": 0.17379311385649887,
+        "sphericity": 0.8277970264113215,
+        "convexity": 0.9246027327394428,
+        "axis_ratio": 3.032595710373794,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0021214872656517953,
+        "orientation_change_deg": 1.4120193199435482
+      }
+    },
+    {
+      "object_id": "ycb:010_potted_meat_can",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05793189808928145,
+        "middle_extent_m": 0.08493111302812041,
+        "maximum_extent_m": 0.10153437595491685,
+        "sphericity": 0.8372828281220331,
+        "convexity": 0.8438036738251045,
+        "axis_ratio": 1.752650600165692,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 8.28184714396417e-05,
+        "orientation_change_deg": 0.15134266815815503
+      }
+    },
+    {
+      "object_id": "ycb:006_mustard_bottle",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.060103998712647135,
+        "middle_extent_m": 0.09726311322704284,
+        "maximum_extent_m": 0.19209220441330138,
+        "sphericity": 0.8127596575507657,
+        "convexity": 0.8759588394962357,
+        "axis_ratio": 3.195997080521719,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005153379114119286,
+        "orientation_change_deg": 0.3972240734623173
+      }
+    },
+    {
+      "object_id": "ycb:007_tuna_fish_can",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.03468019322932411,
+        "middle_extent_m": 0.08504090773072458,
+        "maximum_extent_m": 0.08513071707727302,
+        "sphericity": 0.806198109583653,
+        "convexity": 0.8166254039539586,
+        "axis_ratio": 2.4547359501241206,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 5.3812186590392035e-05,
+        "orientation_change_deg": 0.16805766195349983
+      }
+    },
+    {
+      "object_id": "gso:Nestle_Nesquik_Chocolate_Powder_Flavored_Milk_Additive_109_Oz_Canister",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.06220895086655199,
+        "middle_extent_m": 0.10674466342064826,
+        "maximum_extent_m": 0.14467323843653335,
+        "sphericity": 0.8194760982877992,
+        "convexity": 0.8989295690822663,
+        "axis_ratio": 2.325601644478465,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0002129304739001805,
+        "orientation_change_deg": 0.2710592413464602
+      }
+    },
+    {
+      "object_id": "gso:Marc_Anthony_Strictly_Curls_Curl_Envy_Perfect_Curl_Cream_6_fl_oz_bottle",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.056846196378950206,
+        "middle_extent_m": 0.0824084869416721,
+        "maximum_extent_m": 0.22307923863197826,
+        "sphericity": 0.7172841496324478,
+        "convexity": 0.9763945486250251,
+        "axis_ratio": 3.9242597190650934,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0017374415474879206,
+        "orientation_change_deg": 1.0060368108910318
+      }
+    },
+    {
+      "object_id": "ycb:072-d_toy_airplane",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.030584279340728632,
+        "middle_extent_m": 0.030707762429042457,
+        "maximum_extent_m": 0.06646841358896474,
+        "sphericity": 0.8310418734227685,
+        "convexity": 0.6529216185834517,
+        "axis_ratio": 2.1732868984246343,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00012696284797166475,
+        "orientation_change_deg": 0.1981585773900954
+      }
+    },
+    {
+      "object_id": "gso:Olive_Kids_Paisley_Pencil_Case",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.09113829403384809,
+        "middle_extent_m": 0.09242264495928876,
+        "maximum_extent_m": 0.21534332596962857,
+        "sphericity": 0.8379050387542923,
+        "convexity": 0.8516281178921833,
+        "axis_ratio": 2.3628193642691144,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00021576285708463301,
+        "orientation_change_deg": 0.9486056326259745
+      }
+    },
+    {
+      "object_id": "ycb:061_foam_brick",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05366864902334302,
+        "middle_extent_m": 0.05367541672139938,
+        "maximum_extent_m": 0.07854638838346373,
+        "sphericity": 0.8137159702332464,
+        "convexity": 0.9367774401372578,
+        "axis_ratio": 1.4635432382376572,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 9.754847097527868e-05,
+        "orientation_change_deg": 0.34377835179647537
+      }
+    },
+    {
+      "object_id": "ycb:073-b_lego_duplo",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04624730574203062,
+        "middle_extent_m": 0.047141390121452985,
+        "maximum_extent_m": 0.047351474526508584,
+        "sphericity": 0.8443831522249672,
+        "convexity": 0.682326545288391,
+        "axis_ratio": 1.023875310502131,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00010182730908564914,
+        "orientation_change_deg": 0.247415405425054
+      }
+    },
+    {
+      "object_id": "ycb:073-f_lego_duplo",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.0345201994941874,
+        "middle_extent_m": 0.03904624331942409,
+        "maximum_extent_m": 0.046726055983671855,
+        "sphericity": 0.8442617742495637,
+        "convexity": 0.7037354075801023,
+        "axis_ratio": 1.3535859197899394,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 2.9416888303317023e-05,
+        "orientation_change_deg": 0.0989762651481627
+      }
+    },
+    {
+      "object_id": "ycb:009_gelatin_box",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.02976693892276336,
+        "middle_extent_m": 0.07565489279873182,
+        "maximum_extent_m": 0.09185027859712859,
+        "sphericity": 0.74605204250858,
+        "convexity": 0.9657036755995632,
+        "axis_ratio": 3.0856474303741352,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00010645719399254108,
+        "orientation_change_deg": 0.3672791429310277
+      }
+    },
+    {
+      "object_id": "ycb:008_pudding_box",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.038738202085123824,
+        "middle_extent_m": 0.09261096179921793,
+        "maximum_extent_m": 0.11431917704592925,
+        "sphericity": 0.7516323840383627,
+        "convexity": 0.9706131698414358,
+        "axis_ratio": 2.9510708007233486,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 9.201166628488433e-05,
+        "orientation_change_deg": 0.36984600227355424
+      }
+    },
+    {
+      "object_id": "ycb:077_rubiks_cube",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07971480193039693,
+        "middle_extent_m": 0.08831033705238261,
+        "maximum_extent_m": 0.09361742690946515,
+        "sphericity": 0.8440053615669396,
+        "convexity": 0.9617980528138279,
+        "axis_ratio": 1.174404560287402,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0001625039972443954,
+        "orientation_change_deg": 0.32267300915476493
+      }
+    },
+    {
+      "object_id": "ycb:004_sugar_box",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.045118806987505755,
+        "middle_extent_m": 0.09488501553691456,
+        "maximum_extent_m": 0.1767450045654798,
+        "sphericity": 0.7203368840693455,
+        "convexity": 0.9649939368979671,
+        "axis_ratio": 3.917324423370144,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.001987396844122422,
+        "orientation_change_deg": 1.5762989490078712
+      }
+    },
+    {
+      "object_id": "gso:ReadytoUse_Rolled_Fondant_Pure_White_24_oz_box",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05085752929099363,
+        "middle_extent_m": 0.1301062840175361,
+        "maximum_extent_m": 0.1744638612977757,
+        "sphericity": 0.7112321464641981,
+        "convexity": 0.9940021892677753,
+        "axis_ratio": 3.4304431168792844,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005333420423767855,
+        "orientation_change_deg": 0.6088650766143452
+      }
+    },
+    {
+      "object_id": "gso:Nestl_Crunch_Girl_Scouts_Cookie_Flavors_Caramel_Coconut_78_oz_box",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.0610509137529356,
+        "middle_extent_m": 0.13920849170418392,
+        "maximum_extent_m": 0.16297910377577118,
+        "sphericity": 0.7545981226339645,
+        "convexity": 0.992540346286047,
+        "axis_ratio": 2.669560433367542,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00016312979714815882,
+        "orientation_change_deg": 0.23025700133928928
+      }
+    },
+    {
+      "object_id": "gso:Nestl_Skinny_Cow_Heavenly_Crisp_Candy_Bar_Chocolate_Raspberry_6_pack_462_oz_total",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.050079628431982465,
+        "middle_extent_m": 0.11509593844436064,
+        "maximum_extent_m": 0.16650042720586777,
+        "sphericity": 0.7318265518008682,
+        "convexity": 0.9927621059061714,
+        "axis_ratio": 3.3247137093280674,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0004591383632853563,
+        "orientation_change_deg": 0.5276715345212593
+      }
+    },
+    {
+      "object_id": "gso:Crayola_Bonus_64_Crayons",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.0452753347973882,
+        "middle_extent_m": 0.12794168071661421,
+        "maximum_extent_m": 0.1475840620005348,
+        "sphericity": 0.7018623631176019,
+        "convexity": 0.9888720845168618,
+        "axis_ratio": 3.259701174182118,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0003809972176384723,
+        "orientation_change_deg": 0.6994005839058026
+      }
+    },
+    {
+      "object_id": "egad:E0",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.056960204607112215,
+        "middle_extent_m": 0.0740171668783969,
+        "maximum_extent_m": 0.10046394131964773,
+        "sphericity": 0.830291989440494,
+        "convexity": 0.9753374657101715,
+        "axis_ratio": 1.7637566791166952,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 2.011329821627012e-05,
+        "orientation_change_deg": 0.0554871426857062
+      }
+    },
+    {
+      "object_id": "gso:Crayola_Crayons_Washable_24_crayons",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.03410837521693792,
+        "middle_extent_m": 0.07456428702131054,
+        "maximum_extent_m": 0.11786713819265908,
+        "sphericity": 0.698724255966705,
+        "convexity": 0.9044851960726791,
+        "axis_ratio": 3.45566557899619,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00042328877473436007,
+        "orientation_change_deg": 0.4224198633877583
+      }
+    },
+    {
+      "object_id": "egad:G0",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04568273805376276,
+        "middle_extent_m": 0.10218834587794902,
+        "maximum_extent_m": 0.10255741492966099,
+        "sphericity": 0.7791390225366593,
+        "convexity": 0.986383410052916,
+        "axis_ratio": 2.244992732461964,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 4.725771972619298e-05,
+        "orientation_change_deg": 0.14855086191289957
+      }
+    },
+    {
+      "object_id": "gso:YumYum_D3_Liquid",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04350015543131794,
+        "middle_extent_m": 0.04367361896260913,
+        "maximum_extent_m": 0.1003130736617491,
+        "sphericity": 0.7493564734598633,
+        "convexity": 0.9791856665665183,
+        "axis_ratio": 2.3060394305977283,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0003856901854006975,
+        "orientation_change_deg": 0.43530576834972345
+      }
+    },
+    {
+      "object_id": "gso:Perricone_MD_Face_Finishing_Moisturizer",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07455421424745626,
+        "middle_extent_m": 0.0754186403324859,
+        "maximum_extent_m": 0.07701000403113717,
+        "sphericity": 0.8353755234412896,
+        "convexity": 0.9931450303376599,
+        "axis_ratio": 1.0329396508094069,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00031341538082322457,
+        "orientation_change_deg": 0.5249298471227766
+      }
+    },
+    {
+      "object_id": "gso:Kotex_U_Barely_There_Liners_Thin_60_count",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07113019751491506,
+        "middle_extent_m": 0.08045281301709761,
+        "maximum_extent_m": 0.1315445574915015,
+        "sphericity": 0.8152303363761555,
+        "convexity": 0.9919869868197477,
+        "axis_ratio": 1.8493489697384624,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0007215270658375685,
+        "orientation_change_deg": 0.6708203367864786
+      }
+    },
+    {
+      "object_id": "gso:Perricoen_MD_No_Concealer_Concealer",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.048682448840040755,
+        "middle_extent_m": 0.05306523194505544,
+        "maximum_extent_m": 0.11101592710967984,
+        "sphericity": 0.7766505838747404,
+        "convexity": 0.9930963978573146,
+        "axis_ratio": 2.28040967031984,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0002064671582222259,
+        "orientation_change_deg": 0.15400738823030488
+      }
+    },
+    {
+      "object_id": "gso:Nescafe_Momento_Mocha_Specialty_Coffee_Mix_8_ct",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.0650473578721216,
+        "middle_extent_m": 0.09032456329183397,
+        "maximum_extent_m": 0.16124855204903094,
+        "sphericity": 0.7782641056473388,
+        "convexity": 0.9904023445400136,
+        "axis_ratio": 2.4789408413180123,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005963832041897706,
+        "orientation_change_deg": 0.48217947500917235
+      }
+    },
+    {
+      "object_id": "gso:3D_Dollhouse_Refrigerator",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.07612333528974809,
+        "middle_extent_m": 0.0804590927667368,
+        "maximum_extent_m": 0.20966967186850233,
+        "sphericity": 0.7454287147602874,
+        "convexity": 0.9376115270035887,
+        "axis_ratio": 2.75434163611509,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0012803884490577943,
+        "orientation_change_deg": 0.7673836893054223
+      }
+    },
+    {
+      "object_id": "gso:Office_Depot_Canon_CL_41_Remanufactured_Ink_Cartridge_TriColor",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.049437314912907884,
+        "middle_extent_m": 0.08614685412949818,
+        "maximum_extent_m": 0.11857122615069,
+        "sphericity": 0.7887066492727233,
+        "convexity": 0.9933640068202141,
+        "axis_ratio": 2.3984155765654567,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00040344516968142836,
+        "orientation_change_deg": 0.5077638417115551
+      }
+    },
+    {
+      "object_id": "gso:Office_Depot_HP_950XL_Ink_Cartridge_Black_CN045AN",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05054603574065124,
+        "middle_extent_m": 0.08603686199550753,
+        "maximum_extent_m": 0.11827306130718637,
+        "sphericity": 0.7852107299373169,
+        "convexity": 0.9927946154879155,
+        "axis_ratio": 2.3399077607992553,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00031053760066681875,
+        "orientation_change_deg": 0.35574913576547296
+      }
+    },
+    {
+      "object_id": "gso:SCHOOL_BUS",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.035103814805638296,
+        "middle_extent_m": 0.043852030427424166,
+        "maximum_extent_m": 0.09944974492738626,
+        "sphericity": 0.7857993034492535,
+        "convexity": 0.8721258429536934,
+        "axis_ratio": 2.8330181627842017,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 7.428097618862371e-05,
+        "orientation_change_deg": 0.23188264890745305
+      }
+    },
+    {
+      "object_id": "gso:Phillips_Stool_Softener_Liquid_Gels_30_liquid_gels",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04774094742053765,
+        "middle_extent_m": 0.09280902730109138,
+        "maximum_extent_m": 0.09944534030945038,
+        "sphericity": 0.8028985580924262,
+        "convexity": 0.990516093907664,
+        "axis_ratio": 2.083019832712202,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00012206833423474373,
+        "orientation_change_deg": 0.2192648740070121
+      }
+    },
+    {
+      "object_id": "gso:Fujifilm_instax_SHARE_SP1_10_photos",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04334140844412318,
+        "middle_extent_m": 0.10429359285541133,
+        "maximum_extent_m": 0.12451019508010272,
+        "sphericity": 0.8012953011101721,
+        "convexity": 0.9797901983087797,
+        "axis_ratio": 2.8727768558934663,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0006886109875607031,
+        "orientation_change_deg": 0.9218722481273219
+      }
+    },
+    {
+      "object_id": "gso:Crosley_Alarm_Clock_Vintage_Metal",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05300048182364128,
+        "middle_extent_m": 0.10939969883742429,
+        "maximum_extent_m": 0.1584800374614715,
+        "sphericity": 0.8190625698074031,
+        "convexity": 0.6602161122293023,
+        "axis_ratio": 2.990162202464737,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.001133334588444013,
+        "orientation_change_deg": 1.184057335123133
+      }
+    },
+    {
+      "object_id": "gso:Nestle_Skinny_Cow_Dreamy_Clusters_Candy_Dark_Chocolate_6_pack_1_oz_pouches",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.058913731713398296,
+        "middle_extent_m": 0.13769518943678316,
+        "maximum_extent_m": 0.16423904992075222,
+        "sphericity": 0.746427160517246,
+        "convexity": 0.9842140616101173,
+        "axis_ratio": 2.7877889440060812,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0004753376847183085,
+        "orientation_change_deg": 0.6161110407921041
+      }
+    },
+    {
+      "object_id": "gso:Shurtape_Gaffers_Tape_Silver_2_x_60_yd",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.05267743326409355,
+        "middle_extent_m": 0.1530586739376874,
+        "maximum_extent_m": 0.15347141827741767,
+        "sphericity": 0.7582981579521249,
+        "convexity": 0.743662022481277,
+        "axis_ratio": 2.913418683632564,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00020036792790293983,
+        "orientation_change_deg": 0.8723721003572584
+      }
+    },
+    {
+      "object_id": "gso:Reebok_RETRO_RUSH_2V",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.08670970428019117,
+        "middle_extent_m": 0.10148902363099917,
+        "maximum_extent_m": 0.21295386210772688,
+        "sphericity": 0.8145064166984696,
+        "convexity": 0.66933308812632,
+        "axis_ratio": 2.4559403572591374,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.000598169071348961,
+        "orientation_change_deg": 2.41427078477887
+      }
+    },
+    {
+      "object_id": "gso:3D_Dollhouse_Sink",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.09100249719246303,
+        "middle_extent_m": 0.09622178310972684,
+        "maximum_extent_m": 0.13898266170256154,
+        "sphericity": 0.80785633973694,
+        "convexity": 0.8108349874655351,
+        "axis_ratio": 1.527240086704701,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0009319629143010055,
+        "orientation_change_deg": 0.9209564136301712
+      }
+    },
+    {
+      "object_id": "gso:Philips_EcoVantage_43_W_Light_Bulbs_Natural_Light_2_pack",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.06800614104471348,
+        "middle_extent_m": 0.13259363384150466,
+        "maximum_extent_m": 0.1345260575452891,
+        "sphericity": 0.8165617618621277,
+        "convexity": 0.987308041174554,
+        "axis_ratio": 1.9781457303516063,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0004333643247958862,
+        "orientation_change_deg": 0.5407567411832288
+      }
+    },
+    {
+      "object_id": "gso:Just_For_Men_Mustache_Beard_Brushin_Hair_Color_Gel_MediumDark_Brown_M40",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04802951589961614,
+        "middle_extent_m": 0.08113809101610672,
+        "maximum_extent_m": 0.14562839524902269,
+        "sphericity": 0.745530974020186,
+        "convexity": 0.9923680430898093,
+        "axis_ratio": 3.03206044286169,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0008232523142118455,
+        "orientation_change_deg": 0.6715882027790422
+      }
+    },
+    {
+      "object_id": "gso:Just_For_Men_Mustache_Beard_Brushin_Hair_Color_Gel_Kit_Jet_Black_M60",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.04431855462819514,
+        "middle_extent_m": 0.07929429969687482,
+        "maximum_extent_m": 0.14378499103547915,
+        "sphericity": 0.7419951153725738,
+        "convexity": 0.9901078651854799,
+        "axis_ratio": 3.2443519930138742,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00037070584956383094,
+        "orientation_change_deg": 0.3774287924089081
+      }
+    },
+    {
+      "object_id": "gso:Arm_Hammer_Diaper_Pail_Refills_12_Pack_MFWkmoweejt",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": true,
+      "reasons": [],
+      "measurements": {
+        "minimum_extent_m": 0.09539862883312561,
+        "middle_extent_m": 0.1014143125399831,
+        "maximum_extent_m": 0.1700607939788814,
+        "sphericity": 0.80198125833183,
+        "convexity": 0.9934620457154898,
+        "axis_ratio": 1.78263352481048,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00024727254725597517,
+        "orientation_change_deg": 0.23130408598690255
+      }
+    }
+  ],
+  "excluded": [
+    {
+      "object_id": "gso:Kong_Puppy_Teething_Rubber_Small_Pink",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04427685823779172,
+        "middle_extent_m": 0.04430721768953025,
+        "maximum_extent_m": 0.07179074146619091,
+        "sphericity": 0.9340608420605899,
+        "convexity": 0.9035646104562491,
+        "axis_ratio": 1.6214054999258103,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00044097168159659206,
+        "orientation_change_deg": 0.7210938841297583
+      }
+    },
+    {
+      "object_id": "gso:JarroDophilusFOS_Value_Size",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06626240717188572,
+        "middle_extent_m": 0.06643322541629351,
+        "maximum_extent_m": 0.12838210989057794,
+        "sphericity": 0.8786561535405705,
+        "convexity": 0.9437130368835153,
+        "axis_ratio": 1.9374803205919269,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00039178171479921034,
+        "orientation_change_deg": 0.4060346390994537
+      }
+    },
+    {
+      "object_id": "gso:Twinlab_Premium_Creatine_Fuel_Powder",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.05921620006657588,
+        "middle_extent_m": 0.0596004539340246,
+        "maximum_extent_m": 0.11281727636014456,
+        "sphericity": 0.8853193729814488,
+        "convexity": 0.9480355838308762,
+        "axis_ratio": 1.905175884864375,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0009277347668073785,
+        "orientation_change_deg": 0.9832363152954373
+      }
+    },
+    {
+      "object_id": "gso:Jarrow_Formulas_Glucosamine_Hci_Mega_1000_100_ct",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.061694035904374875,
+        "middle_extent_m": 0.061865081057604215,
+        "maximum_extent_m": 0.11026864912897938,
+        "sphericity": 0.8849911359087107,
+        "convexity": 0.9478045293110989,
+        "axis_ratio": 1.7873469860181406,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00045350261223099376,
+        "orientation_change_deg": 0.4898031668423648
+      }
+    },
+    {
+      "object_id": "gso:Saccharomyces_Boulardii_MOS_Value_Size",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.074645464831325,
+        "middle_extent_m": 0.07522522174460057,
+        "maximum_extent_m": 0.13544863635212884,
+        "sphericity": 0.893450759325827,
+        "convexity": 0.952878784435245,
+        "axis_ratio": 1.8145594867444346,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0006880102862746051,
+        "orientation_change_deg": 0.5719434655552156
+      }
+    },
+    {
+      "object_id": "gso:Blackcurrant_Lutein",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.053960257713230125,
+        "middle_extent_m": 0.054019893396849455,
+        "maximum_extent_m": 0.09714933355171179,
+        "sphericity": 0.8819152724260445,
+        "convexity": 0.9421620251518241,
+        "axis_ratio": 1.8003867599745071,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0003765177885651033,
+        "orientation_change_deg": 0.4665541189149065
+      }
+    },
+    {
+      "object_id": "gso:Borage_GLA240Gamma_Tocopherol",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.062303227081536086,
+        "middle_extent_m": 0.06248227849406991,
+        "maximum_extent_m": 0.1115052952445297,
+        "sphericity": 0.883699677667691,
+        "convexity": 0.9515501986624686,
+        "axis_ratio": 1.7897194169188537,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00047940802156396845,
+        "orientation_change_deg": 0.5067195908705086
+      }
+    },
+    {
+      "object_id": "ycb:005_tomato_soup_can",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06748621855321693,
+        "middle_extent_m": 0.06772627452285229,
+        "maximum_extent_m": 0.10249819106419766,
+        "sphericity": 0.8692577029157385,
+        "convexity": 0.893688321329098,
+        "axis_ratio": 1.5188018126007712,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 8.43625737422982e-05,
+        "orientation_change_deg": 0.08779261277241672
+      }
+    },
+    {
+      "object_id": "gso:HeavyDuty_Flashlight",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0745601567855064,
+        "middle_extent_m": 0.07635088689172546,
+        "maximum_extent_m": 0.23229552628413985,
+        "sphericity": 0.7771779469832424,
+        "convexity": 0.5899954569810925,
+        "axis_ratio": 3.1155450350299603,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0007549660097788671,
+        "orientation_change_deg": 0.39486945431019943
+      }
+    },
+    {
+      "object_id": "ycb:013_apple",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07671741921687773,
+        "middle_extent_m": 0.08112869150114785,
+        "maximum_extent_m": 0.08297735188527633,
+        "sphericity": 0.9812831660444262,
+        "convexity": 0.9787228413041494,
+        "axis_ratio": 1.0815972791094806,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 5.8727484965823415e-05,
+        "orientation_change_deg": 0.0907251501489844
+      }
+    },
+    {
+      "object_id": "gso:Cole_Hardware_School_Bell_Solid_Brass_38",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.08255637330517558,
+        "middle_extent_m": 0.08258975423529702,
+        "maximum_extent_m": 0.16027845282006686,
+        "sphericity": 0.7894373163136846,
+        "convexity": 0.22999583835447096,
+        "axis_ratio": 1.9414425125918022,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.000982554329419567,
+        "orientation_change_deg": 0.7896715471505019
+      }
+    },
+    {
+      "object_id": "gso:Nescafe_Tasters_Choice_Instant_Coffee_Decaf_House_Blend_Light_7_oz",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0805960412765814,
+        "middle_extent_m": 0.09580643776888796,
+        "maximum_extent_m": 0.1856261838970389,
+        "sphericity": 0.8591797725348685,
+        "convexity": 0.9188994330212794,
+        "axis_ratio": 2.3031675124095186,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0004301366508511456,
+        "orientation_change_deg": 0.3536764593123338
+      }
+    },
+    {
+      "object_id": "gso:Snack_Catcher_Snack_Dispenser",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.08994163014968484,
+        "middle_extent_m": 0.09054177629529464,
+        "maximum_extent_m": 0.13420776554505437,
+        "sphericity": 0.8963802181345494,
+        "convexity": 0.700782995855236,
+        "axis_ratio": 1.492165144457576,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0003184254741236754,
+        "orientation_change_deg": 0.7950201361028929
+      }
+    },
+    {
+      "object_id": "gso:Threshold_Ramekin_White_Porcelain",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0532233588000153,
+        "middle_extent_m": 0.11069659258593387,
+        "maximum_extent_m": 0.11285613601907213,
+        "sphericity": 0.8518120323137114,
+        "convexity": 0.9101173926342547,
+        "axis_ratio": 2.1204249142397167,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00022611270716148748,
+        "orientation_change_deg": 0.7468825798856119
+      }
+    },
+    {
+      "object_id": "ycb:065-a_cups",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.056739501015868526,
+        "middle_extent_m": 0.05686250527150441,
+        "maximum_extent_m": 0.06526712158838378,
+        "sphericity": 0.8959990179901197,
+        "convexity": 0.1867951508761491,
+        "axis_ratio": 1.1502942468621695,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0002817556618949162,
+        "orientation_change_deg": 0.5180823637397718
+      }
+    },
+    {
+      "object_id": "gso:BIA_Porcelain_Ramekin_With_Glazed_Rim_35_45_oz_cup",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04315981559247874,
+        "middle_extent_m": 0.08825555150350095,
+        "maximum_extent_m": 0.08835333798891304,
+        "sphericity": 0.8472394901035355,
+        "convexity": 0.3200406841882488,
+        "axis_ratio": 2.0471203775094433,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00023537784319459864,
+        "orientation_change_deg": 0.7365673521576817
+      }
+    },
+    {
+      "object_id": "gso:Cole_Hardware_Bowl_Scirocco_YellowBlue",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06269539019596294,
+        "middle_extent_m": 0.11329461591203645,
+        "maximum_extent_m": 0.11346588419856177,
+        "sphericity": 0.8501313899932318,
+        "convexity": 0.19371121793180238,
+        "axis_ratio": 1.8097962839677488,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00020740812329234884,
+        "orientation_change_deg": 0.5732413807191559
+      }
+    },
+    {
+      "object_id": "ycb:014_lemon",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.05344454316511685,
+        "middle_extent_m": 0.05429051297371159,
+        "maximum_extent_m": 0.06810987393167071,
+        "sphericity": 0.9879589533053478,
+        "convexity": 0.9916990982831628,
+        "axis_ratio": 1.2744027715092512,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005282961272242876,
+        "orientation_change_deg": 1.1965438479916812
+      }
+    },
+    {
+      "object_id": "ycb:017_orange",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07118125912621953,
+        "middle_extent_m": 0.07360681981610923,
+        "maximum_extent_m": 0.07389294538370167,
+        "sphericity": 0.996754779808647,
+        "convexity": 0.9972548308592654,
+        "axis_ratio": 1.0380955084353558,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00013190178773829725,
+        "orientation_change_deg": 0.11041120866917754
+      }
+    },
+    {
+      "object_id": "ycb:018_plum",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0524038776950016,
+        "middle_extent_m": 0.055159032765886434,
+        "maximum_extent_m": 0.055505553435250765,
+        "sphericity": 0.9913877988859441,
+        "convexity": 0.9868584848884178,
+        "axis_ratio": 1.0591879051069728,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 4.906187338432384e-05,
+        "orientation_change_deg": 0.1847023678277679
+      }
+    },
+    {
+      "object_id": "ycb:015_peach",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "initial_pose_is_not_stable",
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.057844383937061705,
+        "middle_extent_m": 0.06009457398837924,
+        "maximum_extent_m": 0.06313174877713532,
+        "sphericity": 0.9933135064450831,
+        "convexity": 0.9866026468532665,
+        "axis_ratio": 1.0914067102145404,
+        "initial_pose_stable": false,
+        "horizontal_displacement_m": 0.008993829740069372,
+        "orientation_change_deg": 17.68414495191514
+      }
+    },
+    {
+      "object_id": "egad:F2",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06039945464358677,
+        "middle_extent_m": 0.0687488227068919,
+        "maximum_extent_m": 0.10018861148162901,
+        "sphericity": 0.8953895033474453,
+        "convexity": 0.5326706858787924,
+        "axis_ratio": 1.658766822860164,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0002475409802599637,
+        "orientation_change_deg": 0.2863405189816079
+      }
+    },
+    {
+      "object_id": "egad:F6",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0644484941347439,
+        "middle_extent_m": 0.1014343012804081,
+        "maximum_extent_m": 0.1086011478624527,
+        "sphericity": 0.9305836528777732,
+        "convexity": 0.448863892725264,
+        "axis_ratio": 1.6850843347153752,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0003066984904579326,
+        "orientation_change_deg": 0.43443389008863526
+      }
+    },
+    {
+      "object_id": "egad:C1",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06619442052486837,
+        "middle_extent_m": 0.10729571840528038,
+        "maximum_extent_m": 0.10883770612004814,
+        "sphericity": 0.9512582470962706,
+        "convexity": 0.9831435042284545,
+        "axis_ratio": 1.6442126882757324,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 6.295205004540886e-05,
+        "orientation_change_deg": 0.13079578667808128
+      }
+    },
+    {
+      "object_id": "ycb:055_baseball",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07264621233629939,
+        "middle_extent_m": 0.07300573242173387,
+        "maximum_extent_m": 0.07396150406667659,
+        "sphericity": 0.9974312979700035,
+        "convexity": 0.9949730342147178,
+        "axis_ratio": 1.0181054412622141,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0029547224067277356,
+        "orientation_change_deg": 4.763545505498043
+      }
+    },
+    {
+      "object_id": "gso:Nikon_1_AW1_w11275mm_Lens_Silver",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06413981675727401,
+        "middle_extent_m": 0.06472874548649654,
+        "maximum_extent_m": 0.08080196246569801,
+        "sphericity": 0.9245855357618568,
+        "convexity": 0.9716262036385146,
+        "axis_ratio": 1.2597785050038262,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0002596037074846444,
+        "orientation_change_deg": 0.39104101638736666
+      }
+    },
+    {
+      "object_id": "gso:Mastic_Gum",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.054527063887123264,
+        "middle_extent_m": 0.054805179471959814,
+        "maximum_extent_m": 0.09794637945495846,
+        "sphericity": 0.8828846095782825,
+        "convexity": 0.945025798327592,
+        "axis_ratio": 1.7962892639463905,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0004968167138377374,
+        "orientation_change_deg": 0.550727490506312
+      }
+    },
+    {
+      "object_id": "gso:Android_Figure_Chrome",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04673490601243441,
+        "middle_extent_m": 0.06863478410994492,
+        "maximum_extent_m": 0.08125658030270583,
+        "sphericity": 0.9163982186789308,
+        "convexity": 0.8323117788996807,
+        "axis_ratio": 1.7386700270903828,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0006661373037804126,
+        "orientation_change_deg": 0.9097464227776715
+      }
+    },
+    {
+      "object_id": "gso:Android_Figure_Panda",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04705048231405252,
+        "middle_extent_m": 0.06954497683857803,
+        "maximum_extent_m": 0.07608986590839163,
+        "sphericity": 0.9269973763851275,
+        "convexity": 0.8394819903729696,
+        "axis_ratio": 1.6171962999339107,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00041943080021927527,
+        "orientation_change_deg": 0.6728210436388877
+      }
+    },
+    {
+      "object_id": "gso:PINEAPPLE_MARACA_6_PCSSET",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.05359949570683402,
+        "middle_extent_m": 0.06843159323976425,
+        "maximum_extent_m": 0.10023885021125306,
+        "sphericity": 0.8947653236656203,
+        "convexity": 0.8432214737933702,
+        "axis_ratio": 1.8701453976267999,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00022794352622135881,
+        "orientation_change_deg": 0.5937274089566262
+      }
+    },
+    {
+      "object_id": "gso:PEEKABOO_ROLLER",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04588575770878231,
+        "middle_extent_m": 0.06184206356624432,
+        "maximum_extent_m": 0.06420640360759937,
+        "sphericity": 0.9308674063641457,
+        "convexity": 0.906543887411436,
+        "axis_ratio": 1.3992665004049956,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00029826730023044853,
+        "orientation_change_deg": 0.6967709453856322
+      }
+    },
+    {
+      "object_id": "gso:Thomas_Friends_Wooden_Railway_Porter_5JzRhMm3a9o",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.03733720587666288,
+        "middle_extent_m": 0.050323554703529866,
+        "maximum_extent_m": 0.08780624040066323,
+        "sphericity": 0.8564955367566773,
+        "convexity": 0.6948704348665122,
+        "axis_ratio": 2.351708927837724,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0001907186483361866,
+        "orientation_change_deg": 0.5471543063750499
+      }
+    },
+    {
+      "object_id": "gso:WHALE_WHISTLE_6PCS_SET",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.038481794508511954,
+        "middle_extent_m": 0.05773177901177278,
+        "maximum_extent_m": 0.07317459885161855,
+        "sphericity": 0.8896409546505198,
+        "convexity": 0.854770451427347,
+        "axis_ratio": 1.9015381113641345,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 7.707541824371337e-05,
+        "orientation_change_deg": 0.39266895865263274
+      }
+    },
+    {
+      "object_id": "gso:Great_Dinos_Triceratops_Toy",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0459713603716522,
+        "middle_extent_m": 0.06926000004079096,
+        "maximum_extent_m": 0.07905862173707498,
+        "sphericity": 0.9262679969739169,
+        "convexity": 0.7706713268688985,
+        "axis_ratio": 1.719736398878153,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0005590254477117307,
+        "orientation_change_deg": 0.8325622702066949
+      }
+    },
+    {
+      "object_id": "gso:COAST_GUARD_BOAT",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07495393572003517,
+        "middle_extent_m": 0.08142775531443364,
+        "maximum_extent_m": 0.11699060004144674,
+        "sphericity": 0.9086820714913441,
+        "convexity": 0.6934804208744619,
+        "axis_ratio": 1.5608333160572805,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00010911133790615617,
+        "orientation_change_deg": 0.3077790908056829
+      }
+    },
+    {
+      "object_id": "gso:Ecoforms_Plant_Container_B4_Har",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.08143804240064509,
+        "middle_extent_m": 0.09916968904162751,
+        "maximum_extent_m": 0.0998563272390339,
+        "sphericity": 0.8794192825617574,
+        "convexity": 0.12835031471273536,
+        "axis_ratio": 1.226163157849223,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00032462175156539025,
+        "orientation_change_deg": 0.7168535750122668
+      }
+    },
+    {
+      "object_id": "gso:LACING_SHEEP",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.08423773314718147,
+        "middle_extent_m": 0.09220809696792341,
+        "maximum_extent_m": 0.13350342153451789,
+        "sphericity": 0.9448155423745259,
+        "convexity": 0.7568010397933902,
+        "axis_ratio": 1.584841098480875,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 9.766351551999787e-05,
+        "orientation_change_deg": 0.2825731605793673
+      }
+    },
+    {
+      "object_id": "gso:Ecoforms_Plant_Pot_GP9AAvocado",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.08876409726683195,
+        "middle_extent_m": 0.09319526831306965,
+        "maximum_extent_m": 0.09344902915296938,
+        "sphericity": 0.8684874162009302,
+        "convexity": 0.05887739158694095,
+        "axis_ratio": 1.0527795812765848,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.000545411312570484,
+        "orientation_change_deg": 0.915605704758149
+      }
+    },
+    {
+      "object_id": "ycb:054_softball",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.09481912658734151,
+        "middle_extent_m": 0.09549038801364315,
+        "maximum_extent_m": 0.09584908022873927,
+        "sphericity": 0.9971048865432497,
+        "convexity": 0.9936940174873613,
+        "axis_ratio": 1.0108622983407154,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00029304741745059807,
+        "orientation_change_deg": 0.45792588882599583
+      }
+    },
+    {
+      "object_id": "gso:Nintendo_Yoshi_Action_Figure",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06191211986815785,
+        "middle_extent_m": 0.0629815838744883,
+        "maximum_extent_m": 0.11291959286928442,
+        "sphericity": 0.8479451028055452,
+        "convexity": 0.4659560043063722,
+        "axis_ratio": 1.8238689469807725,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0009106951117197458,
+        "orientation_change_deg": 0.8763762024735352
+      }
+    },
+    {
+      "object_id": "gso:Thomas_Friends_Wooden_Railway_Talking_Thomas_z7yi7UFHJRj",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.03810377677609095,
+        "middle_extent_m": 0.05533971592918637,
+        "maximum_extent_m": 0.08736948201008211,
+        "sphericity": 0.8623662874651068,
+        "convexity": 0.6289964277452933,
+        "axis_ratio": 2.292934963468084,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0001165211642114491,
+        "orientation_change_deg": 0.3297749747704699
+      }
+    },
+    {
+      "object_id": "gso:Threshold_Bamboo_Ceramic_Soap_Dish",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.0512196020745056,
+        "middle_extent_m": 0.09913260774875637,
+        "maximum_extent_m": 0.12563918049226638,
+        "sphericity": 0.8071159232580409,
+        "convexity": 0.5568386736728512,
+        "axis_ratio": 2.452951124249419,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00010702674750180137,
+        "orientation_change_deg": 0.41609361573299875
+      }
+    },
+    {
+      "object_id": "gso:Shurtape_Tape_Purple_CP28",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04979743230330963,
+        "middle_extent_m": 0.11724210073214991,
+        "maximum_extent_m": 0.1175863332129631,
+        "sphericity": 0.8029908336628538,
+        "convexity": 0.5708610770620848,
+        "axis_ratio": 2.3612930983421028,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00023408941804545588,
+        "orientation_change_deg": 0.8565809479820179
+      }
+    },
+    {
+      "object_id": "gso:Squirtin_Barnyard_Friends_4pk",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.06631043943717,
+        "middle_extent_m": 0.08062237796579046,
+        "maximum_extent_m": 0.1865185055592315,
+        "sphericity": 0.8148292875453808,
+        "convexity": 0.4870326851287396,
+        "axis_ratio": 2.8128075630679574,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00016400990896587014,
+        "orientation_change_deg": 0.786969641702168
+      }
+    },
+    {
+      "object_id": "gso:Nintendo_Mario_Action_Figure",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.04831211879653174,
+        "middle_extent_m": 0.07091266105606225,
+        "maximum_extent_m": 0.10334093435229348,
+        "sphericity": 0.8500857027868327,
+        "convexity": 0.4209714345737217,
+        "axis_ratio": 2.139027161849755,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0006948479607682006,
+        "orientation_change_deg": 0.785248988243978
+      }
+    },
+    {
+      "object_id": "gso:Toysmith_Windem_Up_Flippin_Animals_Dog",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.03436809461865961,
+        "middle_extent_m": 0.05038751647230972,
+        "maximum_extent_m": 0.05365454687582487,
+        "sphericity": 0.8945691419386204,
+        "convexity": 0.5791581068247884,
+        "axis_ratio": 1.561173159907852,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00026335327880464953,
+        "orientation_change_deg": 0.6268058611120298
+      }
+    },
+    {
+      "object_id": "gso:Teenage_Mutant_Ninja_Turtles_Rahzar_Action_Figure",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07335625838590515,
+        "middle_extent_m": 0.08467920433339753,
+        "maximum_extent_m": 0.14195341320605673,
+        "sphericity": 0.8641429402399874,
+        "convexity": 0.13838104381286087,
+        "axis_ratio": 1.9351234145460723,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0007036545652991859,
+        "orientation_change_deg": 0.6646552227427169
+      }
+    },
+    {
+      "object_id": "gso:Xyli_Pure_Xylitol",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.09458072816002572,
+        "middle_extent_m": 0.10058741147029351,
+        "maximum_extent_m": 0.14957969165510382,
+        "sphericity": 0.8841590096106917,
+        "convexity": 0.9870294313599831,
+        "axis_ratio": 1.581502855444533,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.003848232477964717,
+        "orientation_change_deg": 3.904949454816406
+      }
+    },
+    {
+      "object_id": "gso:Playmates_nickelodeon_teenage_mutant_ninja_turtles_shredder",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.05142595503759175,
+        "middle_extent_m": 0.09145325102126442,
+        "maximum_extent_m": 0.14141377549734405,
+        "sphericity": 0.8086056091657253,
+        "convexity": 0.23967760969386281,
+        "axis_ratio": 2.7498521980578152,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0007973516506797468,
+        "orientation_change_deg": 0.804891388632424
+      }
+    },
+    {
+      "object_id": "gso:Playmates_Industrial_CoSplinter_Teenage_Mutant_Ninja_Turtle_Action_Figure",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07847219809365813,
+        "middle_extent_m": 0.08290329052907426,
+        "maximum_extent_m": 0.1315267945152343,
+        "sphericity": 0.8634011844081251,
+        "convexity": 0.23176532920196768,
+        "axis_ratio": 1.6760941799827558,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.0011603585192627149,
+        "orientation_change_deg": 1.357346440467004
+      }
+    },
+    {
+      "object_id": "gso:BABY_CAR",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "too_round_for_stable_support",
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.07360829124052463,
+        "middle_extent_m": 0.0948850622778235,
+        "maximum_extent_m": 0.09553226219404681,
+        "sphericity": 0.9358815444232735,
+        "convexity": 0.5271578054095242,
+        "axis_ratio": 1.2978464869111384,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00020864371519496654,
+        "orientation_change_deg": 0.4206761033663994
+      }
+    },
+    {
+      "object_id": "gso:Schleich_African_Black_Rhino",
+      "task": "stack",
+      "domain_version": "stack-task-domain-v1",
+      "eligible": false,
+      "reasons": [
+        "support_geometry_too_concave"
+      ],
+      "measurements": {
+        "minimum_extent_m": 0.041046139345025136,
+        "middle_extent_m": 0.06324865074275893,
+        "maximum_extent_m": 0.13886654021572287,
+        "sphericity": 0.8030921158983174,
+        "convexity": 0.5224215500263824,
+        "axis_ratio": 3.383181522833127,
+        "initial_pose_stable": true,
+        "horizontal_displacement_m": 0.00024997955891950584,
+        "orientation_change_deg": 0.6952285500546621
+      }
+    }
+  ]
+}

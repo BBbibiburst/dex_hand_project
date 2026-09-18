@@ -20,6 +20,7 @@ from source.workflows.batch import (
     memory_safe_worker_count,
     object_slug,
 )
+from source.workflows.task_domains import is_prevalidated_task_manifest
 
 # Only reuse artifacts produced by the current physical protocol. Older
 # successes may use different contact geometry or verification semantics.
@@ -94,7 +95,17 @@ def main(argv=None):
     selected = load_selection_ids(args.selection)
     if args.expect_count and len(selected) != args.expect_count:
         raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
-    eligible, excluded = partition_task_objects("push", list(selected))
+    selection_payload = json.loads(args.selection.read_text(encoding="utf-8"))
+    prevalidated = is_prevalidated_task_manifest(selection_payload, "push")
+    if prevalidated and args.include_ineligible:
+        raise ValueError(
+            "--include-ineligible requires the source Top100 selection, not a task-valid subset."
+        )
+    if prevalidated:
+        eligible = selected
+        excluded = tuple(selection_payload.get("excluded", ()))
+    else:
+        eligible, excluded = partition_task_objects("push", list(selected))
     ids = selected if args.include_ineligible else eligible
     if args.include_ineligible:
         excluded = ()
@@ -131,7 +142,11 @@ def main(argv=None):
                 {
                     "task": "push",
                     "pipeline_version": PUSH_TRANSFER_VERSION,
-                    "benchmark_domain": "all-selected" if not excluded else "task-valid",
+                    "benchmark_domain": "task-valid" if prevalidated else (
+                        "all-selected" if not excluded else "legacy-task-filter"
+                    ),
+                    "domain_version": selection_payload.get("domain_version"),
+                    "source_count": selection_payload.get("source_count", len(selected)),
                     "selected_count": len(selected),
                     "excluded_count": len(excluded),
                     "excluded": list(excluded),

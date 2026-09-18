@@ -264,16 +264,45 @@ MUJOCO_GL=glfw python -m tools.grasp_generation.visualize_episode \
 - Stack：v18 正式批次为 95/100；当前 v22 正在处理最后五个难例的悬空越过平台边缘问题，
   尚未形成新的 Top100 正式结果。结果见 `outputs/stack_top100_v18/summary.json`。
 
-Stack 和 Push 现在默认按任务物理定义过滤输入清单，而不是把 Lift Top100 强制解释为每个
-任务都适用。筛选只依赖预先声明的对象集合，不依赖策略执行是否成功：Stack 使用
-`STACK_OBJECTS` 中具有稳定支撑面的对象；Push 排除链条、散粒物和球类等不符合刚性四指
-平面推动定义的对象。批处理 `summary.json` 会同时写入 `selected_count`、`excluded_count`
-和逐项排除理由。需要保留原 Top100 压力测试时，加 `--include-ineligible`；旧结果不会删除。
+Stack 和 Push 使用事前生成的版本化 Task-valid 清单，而不是把 Lift Top100 强制解释为每个
+任务都适用。准入规则只读取对象几何和独立自由静置结果，不读取策略执行成败：Stack v1
+要求稳定初始姿态、非球形、足够规则的支撑几何；Push v1 定义为“四指触觉面准静态滑动”，
+排除球形滚动、过度内凹及接触跨度不足的对象。当前清单分别为
+`configs/stack_task_valid_v1.json`（48/100）和
+`configs/push_task_valid_v1.json`（76/100），每个排除项都保存测量值和原因。
 NutAssembly 的 100 项是程序化插销—插孔形状/尺寸变体，不属于物体目录筛选，继续完整保留。
+
+清单可从 Top100 与独立静置报告完全重建：
+
+```bash
+python -m tools.evaluate_initial_stability \
+  --selection configs/underactuated_top100_v2.json \
+  --output outputs/underactuated_top100_initial_stability.json
+
+python -m tools.build_task_valid_selection \
+  --task stack \
+  --selection configs/underactuated_top100_v2.json \
+  --stability outputs/underactuated_top100_initial_stability.json \
+  --output configs/stack_task_valid_v1.json
+
+python -m tools.build_task_valid_selection \
+  --task push \
+  --selection configs/underactuated_top100_v2.json \
+  --stability outputs/underactuated_top100_initial_stability.json \
+  --output configs/push_task_valid_v1.json
+```
+
+正式批处理应把对应 Task-valid 文件传给 `--selection`。汇总同时记录 `domain_version`、
+`source_count`、`selected_count`、`excluded_count` 和逐项排除理由。旧的 Top100 结果仍保留作
+`Full-catalogue coverage`，不能当作 Task-valid 成功率。
 
 对应单对象和批处理入口分别为 `tools.grasping.transfer_lift_to_{stack,push,nut}` 与
 `tools.grasping.batch_{stack,push,nut}_transfer`。任务轨迹可使用
 `python -m tools.view_task_episode <manifest-or-episode>` 在 MuJoCo viewer 中查看。
+
+五任务报告使用 `tools.report_five_task_benchmark` 统一生成。Lift、PickPlace 报告 Top100
+成功率，Stack、Push 分别报告 Task-valid 成功率与完整 Top100 coverage，NutAssembly 报告
+程序化变体成功率，避免把不同分母混成一个“100/100”。
 
 ### 录制五任务演示视频
 

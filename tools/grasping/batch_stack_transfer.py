@@ -21,6 +21,7 @@ from source.workflows.batch import (
     memory_safe_worker_count,
     object_slug,
 )
+from source.workflows.task_domains import is_prevalidated_task_manifest
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -111,7 +112,10 @@ def _write_summary(
     rows: list[dict[str, Any]],
     *,
     selected_count: int,
-    excluded: tuple[dict[str, str], ...],
+    excluded: tuple[dict[str, Any], ...],
+    benchmark_domain: str,
+    domain_version: str | None,
+    source_count: int,
 ) -> None:
     counts = Counter(row["status"] for row in rows)
     atomic_write_json(
@@ -119,7 +123,9 @@ def _write_summary(
         {
             "task": "stack",
             "pipeline_version": STACK_TRANSFER_VERSION,
-            "benchmark_domain": "all-selected" if not excluded else "task-valid",
+            "benchmark_domain": benchmark_domain,
+            "domain_version": domain_version,
+            "source_count": source_count,
             "selected_count": selected_count,
             "excluded_count": len(excluded),
             "excluded": list(excluded),
@@ -138,12 +144,27 @@ def main(argv: list[str] | None = None) -> int:
     selected = load_selection_ids(args.selection)
     if args.expect_count and len(selected) != args.expect_count:
         raise ValueError(f"Expected {args.expect_count} objects, found {len(selected)}.")
-    eligible, excluded = partition_task_objects("stack", list(selected))
+    selection_payload = json.loads(args.selection.read_text(encoding="utf-8"))
+    prevalidated = is_prevalidated_task_manifest(selection_payload, "stack")
+    if prevalidated and args.include_ineligible:
+        raise ValueError(
+            "--include-ineligible requires the source Top100 selection, not a task-valid subset."
+        )
+    if prevalidated:
+        eligible = selected
+        excluded = tuple(selection_payload.get("excluded", ()))
+    else:
+        eligible, excluded = partition_task_objects("stack", list(selected))
     objects = selected if args.include_ineligible else eligible
     if args.include_ineligible:
         excluded = ()
     if not objects:
         raise ValueError("No Stack-eligible objects remain in the selection.")
+    benchmark_domain = "task-valid" if prevalidated else (
+        "all-selected" if not excluded else "legacy-task-filter"
+    )
+    domain_version = selection_payload.get("domain_version")
+    source_count = int(selection_payload.get("source_count", len(selected)))
     args.output.mkdir(parents=True, exist_ok=True)
     rows_by_id: dict[str, dict[str, Any]] = {}
     workers = memory_safe_worker_count(
@@ -171,7 +192,13 @@ def main(argv: list[str] | None = None) -> int:
             rows_by_id[object_id] = row
             rows = [rows_by_id[item] for item in objects if item in rows_by_id]
             _write_summary(
-                args.output, rows, selected_count=len(selected), excluded=excluded
+                args.output,
+                rows,
+                selected_count=len(selected),
+                excluded=excluded,
+                benchmark_domain=benchmark_domain,
+                domain_version=domain_version,
+                source_count=source_count,
             )
             print(
                 f"[{completed:03d}/{len(objects):03d}] {object_id:<36} "
@@ -180,7 +207,15 @@ def main(argv: list[str] | None = None) -> int:
                 flush=True,
             )
     rows = [rows_by_id[item] for item in objects]
-    _write_summary(args.output, rows, selected_count=len(selected), excluded=excluded)
+    _write_summary(
+        args.output,
+        rows,
+        selected_count=len(selected),
+        excluded=excluded,
+        benchmark_domain=benchmark_domain,
+        domain_version=domain_version,
+        source_count=source_count,
+    )
     counts = Counter(row["status"] for row in rows)
     print(f"[summary] {dict(counts)}", flush=True)
     return 0 if counts["SUCCESS"] == len(objects) else 2
