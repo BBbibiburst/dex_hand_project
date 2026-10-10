@@ -22,7 +22,7 @@ from source.grasping.executor import (
 from source.grasping.task_transfer import _run_adaptive_release, _select_transport_hand
 from source.grasping.push_transfer import _palm_geometry_in_ee_frame
 
-STACK_TRANSFER_VERSION = "stack-transfer-v22"
+STACK_TRANSFER_VERSION = "stack-transfer-v24"
 
 
 class _StackTransferPlacement:
@@ -59,6 +59,7 @@ class StackTransferConfig:
     grip_settle_steps: int = 20
     drop_clearance: float = 0.001
     transport_clearance: float = 0.012
+    platform_crossing_clearance: float = 0.040
     platform_edge_clearance: float = 0.010
     crossing_steps: int = 45
     servo_corrections: int = 30
@@ -96,6 +97,8 @@ class StackTransferConfig:
             raise ValueError("drop_clearance must be positive.")
         if self.transport_clearance <= 0.0:
             raise ValueError("transport_clearance must be positive.")
+        if self.platform_crossing_clearance <= 0.0:
+            raise ValueError("platform_crossing_clearance must be positive.")
         if self.platform_edge_clearance <= 0.0:
             raise ValueError("platform_edge_clearance must be positive.")
         if self.servo_corrections < 1:
@@ -445,47 +448,30 @@ def execute_stack_transfer(
         # Stay at the lowest height that clears the fixed platform while
         # travelling through free space. A short local lift is performed only
         # at the platform edge, which preserves marginal underactuated grasps.
-        edge_object[2] = max(
-            float(cube_a[2]),
-            float(support_top + env.task.objects[0].bottom_offset + transfer.transport_clearance),
-        )
-        # First rise vertically so the object bottom clears the raised
-        # platform, then translate horizontally.  Both legs remain suspended.
-        raised_object = cube_a.copy()
-        raised_object[2] = edge_object[2]
-        ended, raise_error = _servo_grasped_object(
+        edge_object[2] = float(cube_a[2])
+        # Translate through unobstructed free space at the inherited Lift
+        # height. Marginal underactuated grasps are often stripped by an
+        # unnecessary vertical move immediately after state restoration. Only
+        # raise locally after reaching the outside edge of the platform.
+        raise_error = 0.0
+        ended, transport_error = _servo_grasped_object(
             env,
             recorder,
             stage="transport",
-            desired_object_position=raised_object,
+            desired_object_position=edge_object,
             quaternion=ee_quaternion,
             hand=transport_hand,
             total_steps=transfer.transport_steps,
             corrections=transfer.servo_corrections,
             tolerance=transfer.servo_position_tolerance,
             maximum_correction=transfer.servo_maximum_correction,
+            horizontal_tolerance=0.008,
         )
-        if not ended:
-            ended, transport_error = _servo_grasped_object(
-                env,
-                recorder,
-                stage="transport",
-                desired_object_position=edge_object,
-                quaternion=ee_quaternion,
-                hand=transport_hand,
-                total_steps=transfer.transport_steps,
-                corrections=transfer.servo_corrections,
-                tolerance=transfer.servo_position_tolerance,
-                maximum_correction=transfer.servo_maximum_correction,
-                horizontal_tolerance=0.008,
-            )
-        else:
-            transport_error = float("inf")
         downward_extent = _object_downward_extent(env, "cubeA")
         crossing_object = edge_object.copy()
         crossing_object[2] = max(
             float(edge_object[2]),
-            float(support_top + downward_extent + transfer.transport_clearance),
+            float(support_top + downward_extent + transfer.platform_crossing_clearance),
         )
         if not ended:
             ended, crossing_lift_error = _servo_grasped_object(
