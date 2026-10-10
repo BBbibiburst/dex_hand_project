@@ -50,7 +50,18 @@ def test_corner_prone_profiles_receive_additional_running_clearance(sides: int) 
     ]
 
     assert len(variants) == 1
-    assert variants[0].clearance == pytest.approx(0.008)
+    assert variants[0].clearance == pytest.approx(0.0045)
+
+
+def test_procedural_nut_dimensions_are_human_hand_scale() -> None:
+    variants = [procedural_nut_variant(index) for index in range(100)]
+
+    hole_diameters = [2.0 * variant.hole_apothem for variant in variants]
+    shaft_diameters = [2.0 * variant.peg_radius for variant in variants]
+    assert min(hole_diameters) >= 0.017
+    assert max(hole_diameters) <= 0.042
+    assert min(shaft_diameters) >= 0.024
+    assert max(shaft_diameters) <= 0.038
 
 
 def test_fixed_nut_has_physical_lower_walls_and_upper_guides() -> None:
@@ -67,11 +78,20 @@ def test_fixed_nut_has_physical_lower_walls_and_upper_guides() -> None:
         assert {f"fixed_nut_guide_{index:02d}" for index in range(7)} <= geom_names
 
         bolt = env.task.objects[0]
-        assert bolt.bottom_offset == pytest.approx(0.074)
+        assert bolt.bottom_offset == pytest.approx(0.049)
         assert bolt.handle_center_z - bolt.handle_half_height == pytest.approx(
             bolt.shoulder_center_z + bolt.shoulder_half_height
         )
-        assert bolt.shoulder_radius == pytest.approx(max(0.047, bolt.shaft_radius + 0.008))
+        assert bolt.shoulder_radius == pytest.approx(max(0.030, bolt.shaft_radius + 0.006))
+        assert 2.0 * bolt.handle_radius == pytest.approx(0.048)
+        assert 2.0 * bolt.handle_half_height == pytest.approx(0.072)
+        assert 2.0 * env.task.arena.wall_half_height == pytest.approx(0.050)
+
+        socket_top = env.task.table_top_z + 2.0 * env.task.arena.wall_half_height
+        seated_body_z = socket_top - bolt.shoulder_center_z + bolt.shoulder_half_height - 0.001
+        seated_tip_z = seated_body_z - bolt.bottom_offset
+        assert seated_tip_z >= env.task.table_top_z + 0.002
+        assert socket_top - seated_tip_z >= 0.038
     finally:
         env.close()
 

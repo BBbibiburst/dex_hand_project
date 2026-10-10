@@ -8,7 +8,11 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from source.envs.manipulation import make_nut_assembly_env
-from source.envs.manipulation.nut_assembly import procedural_nut_variant
+from source.envs.manipulation.nut_assembly import (
+    NUT_ASSEMBLY_DOMAIN_VERSION,
+    procedural_nut_variant,
+)
+from source.envs.manipulation.objects import FreeBoltSpec
 from source.geometry import mat_to_quat
 from source.grasping.contracts import DemonstrationEpisode
 from source.grasping.executor import (
@@ -25,7 +29,7 @@ from source.grasping.executor import (
 from source.grasping.stack_transfer import _servo_grasped_object
 from source.grasping.task_transfer import _select_transport_hand
 
-NUT_TRANSFER_VERSION = "guided-mating-shaft-transfer-v41"
+NUT_TRANSFER_VERSION = "guided-mating-shaft-transfer-v42-human-scale"
 
 
 @dataclass(frozen=True)
@@ -202,6 +206,11 @@ def execute_nut_transfer(
     """Grasp the common bolt handle, transport it, and insert its shaft."""
 
     variant = procedural_nut_variant(variant_index)
+    bolt_spec = FreeBoltSpec(
+        "assembly_bolt",
+        polygon_sides=variant.polygon_sides,
+        shaft_radius=variant.peg_radius,
+    )
     transfer = transfer_config or NutTransferConfig()
     transfer.validate()
     grasp = grasp_config or ExecutionConfig()
@@ -214,7 +223,7 @@ def execute_nut_transfer(
         object_id=object_id,
         hand_translation=(
             source_object_rotation @ handle_source.candidate.hand_translation
-            + np.asarray([0.0, 0.0, 0.061], dtype=np.float64)
+            + np.asarray([0.0, 0.0, bolt_spec.handle_center_z], dtype=np.float64)
         ),
         hand_rotation_matrix=(
             source_object_rotation @ handle_source.candidate.hand_rotation_matrix
@@ -225,9 +234,11 @@ def execute_nut_transfer(
     # Preserve the proven Lift grasp's horizontal RM75B workspace.  Moving
     # the bolt source to y=-0.10 would shift this wrist target outside the
     # arm's low-table IK envelope before contact is ever established.
-    # Rest the 74 mm mating shaft on the table while keeping the separate
+    # Rest the mating shaft on the table while keeping the separate
     # handle and shoulder entirely above it.
-    initial_position = np.asarray([0.54, -0.040, 0.576], dtype=np.float64)
+    initial_position = np.asarray(
+        [0.54, -0.040, 0.5 + bolt_spec.bottom_offset + 0.002], dtype=np.float64
+    )
     initial_quaternion = np.asarray([1.0, 0.0, 0.0, 0.0], dtype=np.float64)
     task_config = {
         "variant_index": variant_index,
@@ -474,6 +485,7 @@ def execute_nut_transfer(
                 "task": "nut_assembly",
                 "source_skill": "lift_handle_grasp",
                 "pipeline_version": NUT_TRANSFER_VERSION,
+                "domain_version": NUT_ASSEMBLY_DOMAIN_VERSION,
                 "task_config": task_config,
                 "transfer_config": asdict(transfer),
                 "variant": asdict(variant),

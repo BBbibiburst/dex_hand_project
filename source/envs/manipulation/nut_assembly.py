@@ -18,6 +18,8 @@ from source.envs.manipulation.placement import (
 )
 from source.envs.manipulation.rewards import staged_multi_object_reward
 
+NUT_ASSEMBLY_DOMAIN_VERSION = "human-scale-v2"
+
 
 @register_task("nut_assembly")
 class NutAssemblyTask(SingleArmManipulationTask):
@@ -130,24 +132,24 @@ class NutAssemblyTask(SingleArmManipulationTask):
             )
             insertion_depth = socket_top - shaft_tip
             inserted = bool(
-                insertion_depth >= 0.060
+                insertion_depth >= 0.038
                 # Keep a real gap above the table while allowing the shoulder
                 # to settle naturally a little farther down the countersink.
                 and shaft_tip >= self.table_top_z + 0.002
                 # The shoulder remains within the physical countersink. Its
                 # resting height depends on polygon phase/contact, so use the
-                # actual guide top instead of an artificial 4 mm band around
-                # the lower socket lip. The independent 60 mm shaft-depth
+                # actual guide top instead of an artificial narrow band around
+                # the lower socket lip. The independent 38 mm shaft-depth
                 # requirement still proves genuine insertion.
-                and socket_top - 0.010 <= shoulder_bottom <= socket_top + arena.guide_height
+                and socket_top - 0.007 <= shoulder_bottom <= socket_top + arena.guide_height
             )
             velocity = data.qvel[binding.qvel_adr : binding.qvel_adr + 6]
             slow = np.linalg.norm(velocity[:3]) <= 0.03 and np.linalg.norm(velocity[3:]) <= 0.4
             candidate = bool(
-                # Allow 0.5 mm for contact-solver and polygon-mesh tolerance
+                # Allow 0.4 mm for contact-solver and polygon-mesh tolerance
                 # around the declared radial clearance. The shaft must still
                 # physically pass through the straight lower socket.
-                horizontal <= max(0.0025, self.variant.clearance + 0.0005)
+                horizontal <= max(0.0015, self.variant.clearance + 0.0004)
                 and vertical
                 and inserted
                 and slow
@@ -205,17 +207,15 @@ def procedural_nut_variant(index: int) -> ProceduralNutVariant:
     shapes = (0, 4, 3, 5, 6, 7, 8, 10, 12, 16)
     sides = shapes[index % len(shapes)]
     family = index // len(shapes)
-    tube = 0.008 + 0.0005 * (family % 4)
-    hole_circumradius = 0.034 + 0.001 * (family % 5)
-    # The shaft and socket are a real mating pair. Keep only 4--4.5 mm radial
-    # clearance; the previous 14--15 mm gap let the handle enter the opening
-    # while the nominal shaft contributed almost nothing to insertion.
-    clearance = 0.004 + 0.0005 * (family // 5)
+    tube = 0.0045 + 0.00025 * (family % 4)
+    hole_circumradius = 0.017 + 0.001 * (family % 5)
+    # Keep a tight but simulation-tolerant 2.5--2.75 mm radial running gap.
+    clearance = 0.0025 + 0.00025 * (family // 5)
     # Five- and six-sided shafts have broad corners that bind much more
-    # readily than round/high-sided profiles during passive insertion.  Give
-    # those two families a still-visible 8--8.5 mm radial running clearance.
+    # readily than round/high-sided profiles during passive insertion. Give
+    # those families another 2 mm without turning the socket into a funnel.
     if sides in {3, 5, 6, 7}:
-        clearance += 0.004
+        clearance += 0.002
     cosine = 1.0 if sides == 0 else float(np.cos(np.pi / sides))
     hole_apothem = hole_circumradius * cosine
     ring_radius = (hole_apothem + tube) / cosine

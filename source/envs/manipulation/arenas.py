@@ -427,11 +427,11 @@ class FixedNutArena(TableArena):
 
     nut_center: Tuple[float, float] = (0.50, 0.08)
     polygon_sides: int = 4
-    inner_apothem: float = 0.034
-    wall_thickness: float = 0.008
-    wall_half_height: float = 0.040
-    guide_height: float = 0.040
-    guide_expansion: float = 0.015
+    inner_apothem: float = 0.020
+    wall_thickness: float = 0.0045
+    wall_half_height: float = 0.025
+    guide_height: float = 0.022
+    guide_expansion: float = 0.007
 
     @property
     def environment_geom_names(self) -> tuple[str, ...]:

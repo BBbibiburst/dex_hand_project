@@ -350,12 +350,16 @@ class FreeBoltSpec(ManipulationObjectSpec):
     name: str
     polygon_sides: int
     shaft_radius: float
-    shaft_half_height: float = 0.037
-    handle_radius: float = 0.034
-    handle_half_height: float = 0.055
-    handle_center_z: float = 0.061
+    # Human-hand-scale tool geometry. The original benchmark used a 68 mm
+    # diameter, 110 mm tall handle on a 74 mm shaft, which made the complete
+    # part almost 190 mm tall. These dimensions keep it readily graspable by
+    # the dexterous hand without making it look like an industrial fixture.
+    shaft_half_height: float = 0.0245
+    handle_radius: float = 0.024
+    handle_half_height: float = 0.036
+    handle_center_z: float = 0.040
     shoulder_center_z: float = 0.0
-    shoulder_half_height: float = 0.006
+    shoulder_half_height: float = 0.004
     rgba: tuple[float, float, float, float] = (0.72, 0.75, 0.80, 1.0)
 
     def __post_init__(self) -> None:
@@ -394,7 +398,7 @@ class FreeBoltSpec(ManipulationObjectSpec):
 
     @property
     def shoulder_radius(self) -> float:
-        return max(0.047, self.shaft_radius + 0.008)
+        return max(0.030, self.shaft_radius + 0.006)
 
     @property
     def bottom_offset(self) -> float:
@@ -448,10 +452,10 @@ class FreeBoltSpec(ManipulationObjectSpec):
         phase = np.pi / 4.0 if sides == 4 else 0.0
         angles = [phase + 2.0 * np.pi * i / sides for i in range(sides)]
         # The shaft is full-size over nearly its entire insertion length. Only
-        # the terminal 8 mm is chamfered to help initial alignment; the old
+        # the terminal 5 mm is chamfered to help initial alignment; the old
         # full-length taper created a visually tiny, mechanically irrelevant
         # lower pin while the oversized handle accidentally became the fit.
-        chamfer = min(0.008, 0.5 * self.shaft_half_height)
+        chamfer = min(0.005, 0.5 * self.shaft_half_height)
         rings = (
             (-self.shaft_half_height, 0.75),
             (-self.shaft_half_height + chamfer, 1.0),
