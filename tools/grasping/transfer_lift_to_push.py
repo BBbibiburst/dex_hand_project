@@ -43,10 +43,12 @@ def main(argv: list[str] | None = None) -> int:
         for roll_degrees, height_fraction, minimum_height in (
             (225.0, 0.50, 0.055),
             (210.0, 0.70, 0.075),
-            (225.0, 0.80, 0.085),
-            (225.0, 0.85, 0.105),
+            (205.0, 0.70, 0.080),
+            (215.0, 0.70, 0.080),
+            (225.0, 0.80, 0.090),
+            (225.0, 0.85, 0.110),
         ):
-            for margin in (0.0, 0.008):
+            for margin in (0.0, 0.008, 0.012, 0.016):
                 try:
                     result = execute_push_transfer(
                         source,
@@ -64,6 +66,7 @@ def main(argv: list[str] | None = None) -> int:
                         / "attempts"
                         / (
                             f"c{index:02d}_h{round(100 * height_fraction):03d}"
+                            f"_r{round(roll_degrees):03d}"
                             f"_m{round(1000 * margin):03d}"
                         )
                     )

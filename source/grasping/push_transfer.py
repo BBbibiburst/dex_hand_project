@@ -17,7 +17,7 @@ from source.grasping.executor import (
     _run_pose_segment,
 )
 
-PUSH_TRANSFER_VERSION = "four-finger-tactile-push-v30"
+PUSH_TRANSFER_VERSION = "four-finger-tactile-push-v32"
 
 
 @dataclass(frozen=True)
@@ -30,9 +30,12 @@ class PushTransferConfig:
     precontact_distance: float = 0.10
     predicted_contact_gap: float = 0.006
     contact_probe_increment: float = 0.001
+    approach_probe_increment: float = 0.003
     initial_maximum_contact_probe: float = 0.15
     maximum_contact_probe: float = 0.040
     push_increment: float = 0.004
+    minimum_push_increment: float = 0.00075
+    near_target_radius: float = 0.080
     maximum_push_distance: float = 0.28
     target_stop_radius: float = 0.035
     post_success_push_distance: float = 0.0
@@ -41,8 +44,9 @@ class PushTransferConfig:
     tactile_threshold: float = 1.0e-6
     required_finger_contact_frames: int = 3
     settle_steps: int = 25
-    transit_steps: int = 80
-    precontact_steps: int = 70
+    transit_steps: int = 50
+    precontact_steps: int = 40
+    approach_increment_steps: int = 3
     increment_steps: int = 8
     retreat_steps: int = 70
     verify_steps: int = 80
@@ -52,9 +56,12 @@ class PushTransferConfig:
             self.distance,
             self.precontact_distance,
             self.contact_probe_increment,
+            self.approach_probe_increment,
             self.initial_maximum_contact_probe,
             self.maximum_contact_probe,
             self.push_increment,
+            self.minimum_push_increment,
+            self.near_target_radius,
             self.maximum_push_distance,
             self.target_stop_radius,
             self.post_success_push_distance,
@@ -63,6 +70,14 @@ class PushTransferConfig:
             raise ValueError("Push distances must be positive; post-success distance may be zero.")
         if self.maximum_push_distance <= self.distance:
             raise ValueError("maximum_push_distance must exceed distance.")
+        if self.approach_probe_increment > self.initial_maximum_contact_probe:
+            raise ValueError(
+                "approach_probe_increment must not exceed initial_maximum_contact_probe."
+            )
+        if self.minimum_push_increment > self.push_increment:
+            raise ValueError("minimum_push_increment must not exceed push_increment.")
+        if self.near_target_radius <= self.target_stop_radius:
+            raise ValueError("near_target_radius must exceed target_stop_radius.")
         if not 0.0 <= self.contact_height_fraction <= 1.0:
             raise ValueError("contact_height_fraction must lie in [0, 1].")
         if self.minimum_contact_height <= 0.0:
@@ -74,6 +89,7 @@ class PushTransferConfig:
                 self.settle_steps,
                 self.transit_steps,
                 self.precontact_steps,
+                self.approach_increment_steps,
                 self.increment_steps,
                 self.retreat_steps,
                 self.verify_steps,
@@ -225,6 +241,16 @@ def _four_finger_object_contact(env, object_name: str = "object") -> bool:
     return False
 
 
+def _push_advance(target_distance: float, transfer: PushTransferConfig) -> float:
+    """Return a bounded step that decelerates before entering the goal."""
+    if target_distance <= transfer.target_stop_radius:
+        return 0.0
+    if target_distance >= transfer.near_target_radius:
+        return transfer.push_increment
+    remaining = target_distance - transfer.target_stop_radius
+    return float(np.clip(0.5 * remaining, transfer.minimum_push_increment, transfer.push_increment))
+
+
 def _hand_table_contact_frames(env, arrays: dict[str, np.ndarray], mask: np.ndarray) -> int:
     """Count recorded frames where any Dex Hand geom touches the table."""
 
@@ -281,8 +307,10 @@ def execute_push_transfer(
         "terminate_on_success": False,
     }
     increments = int(transfer.maximum_push_distance / transfer.push_increment)
-    probes = int(transfer.initial_maximum_contact_probe / transfer.contact_probe_increment)
-    maximum_steps = 400 + (increments + probes) * transfer.increment_steps
+    probes = int(transfer.initial_maximum_contact_probe / transfer.approach_probe_increment)
+    maximum_steps = (
+        400 + increments * transfer.increment_steps + probes * transfer.approach_increment_steps
+    )
     env = make_push_env(
         task_config=task_config,
         control_mode="ik",
@@ -370,7 +398,9 @@ def execute_push_transfer(
         last_ee = precontact_ee.copy()
         if not ended:
             for index in range(probes):
-                last_ee = precontact_ee + direction * transfer.contact_probe_increment * (index + 1)
+                last_ee = precontact_ee + direction * transfer.approach_probe_increment * (
+                    index + 1
+                )
                 _, _, ended = _run_pose_segment(
                     env,
                     recorder,
@@ -379,7 +409,7 @@ def execute_push_transfer(
                     target_quaternion=finger_quaternion,
                     start_hand=planar_hand,
                     target_hand=planar_hand,
-                    steps=transfer.increment_steps,
+                    steps=transfer.approach_increment_steps,
                     smooth=True,
                 )
                 physical_finger_contact = _four_finger_object_contact(env)
@@ -453,11 +483,7 @@ def execute_push_transfer(
                 advance = (
                     transfer.push_increment
                     if locked_success_direction is not None
-                    else (
-                        0.0
-                        if target_distance <= transfer.target_stop_radius
-                        else transfer.push_increment
-                    )
+                    else _push_advance(target_distance, transfer)
                 )
                 finger_world += push_direction * (advance + feedback_probe)
                 last_ee = finger_world - finger_rotation @ finger_center_local
@@ -576,6 +602,8 @@ def execute_push_transfer(
                 "hand_table_contact_frames": hand_table_contacts,
                 "finger_tactile_max": finger_tactile_max,
                 "finger_tactile_contact_frames": tactile_contact_frames,
+                "task_verify_success_fraction": float(verify.mean()) if len(verify) else 0.0,
+                "task_verify_tail_success": bool(len(stable_tail) and np.all(stable_tail)),
                 "tactile_metadata": env.tactile_sensor.metadata(),
                 "finger_plane_center_in_ee": finger_center_local.tolist(),
                 "finger_plane_normal_in_ee": finger_normal_local.tolist(),
