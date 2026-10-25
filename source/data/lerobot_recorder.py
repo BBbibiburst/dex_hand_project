@@ -43,6 +43,7 @@ class LeRobotEpisodeRecorder:
             ) from exc
 
         self.has_tactile = bool(np.prod(tactile_shape, dtype=np.int64))
+        self.state_dim = int(state_dim)
         self.include_operator_metadata = bool(include_operator_metadata)
         features = {
             STATE_KEY: {
@@ -147,10 +148,16 @@ class LeRobotEpisodeRecorder:
         task: str,
         glove=None,
         vive=None,
+        state=None,
     ) -> None:
-        state = np.concatenate(
-            [observation["qpos"], observation["qvel"], observation["ctrl"]]
-        ).astype(np.float32)
+        if state is None:
+            state = np.concatenate(
+                [observation["qpos"], observation["qvel"], observation["ctrl"]]
+            ).astype(np.float32)
+        else:
+            state = np.asarray(state, dtype=np.float32)
+        if state.shape != (self.state_dim,):
+            raise ValueError(f"State must have shape {(self.state_dim,)}, got {state.shape}.")
         frame = {
             STATE_KEY: state,
             AGENTVIEW_IMAGE_KEY: np.asarray(image, dtype=np.uint8),

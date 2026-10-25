@@ -11,6 +11,7 @@ import numpy as np
 
 from source.data.lerobot_recorder import LeRobotEpisodeRecorder
 from source.envs.manipulation import make_lift_env
+from source.imitation.observation import real_observable_state, validate_position_action_contract
 from source.verification.profiles import FINAL_PROFILE
 from source.verification.strict_replay import load_replay_controls, strict_replay_manifest
 
@@ -38,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--image-width", type=int, default=640)
     parser.add_argument("--image-height", type=int, default=480)
     parser.add_argument("--no-video", action="store_true")
+    parser.add_argument(
+        "--reexecute-export",
+        action="store_true",
+        help="Re-execute controls while exporting instead of restoring verified recorded frames.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--allow-unverified",
@@ -65,6 +71,36 @@ def discover_trajectory_manifests(
         for pattern in ("**/best_trajectory/manifest.json", "**/best_attempt/manifest.json"):
             candidates.extend(path.resolve() for path in root.glob(pattern))
     return tuple(dict.fromkeys(sorted(candidates)))
+
+
+def recorded_pre_action_indices(
+    recorded: dict[str, np.ndarray], controls: np.ndarray
+) -> np.ndarray:
+    """Map replay controls to the recorded state immediately before each control.
+
+    Generated grasp episodes store Cartesian IK commands in ``action`` but the
+    strict replay contract exposes executable arm-joint + hand position targets
+    in ``controls``.  The episode recorder snapshots simulator state *after*
+    each command.  Therefore control ``i`` must be paired with recorded state
+    ``start + i - 1``, never with the Cartesian ``recorded['action']`` row.
+    """
+
+    controls = np.asarray(controls, dtype=np.float32)
+    recorded_ctrl = np.asarray(recorded["ctrl"], dtype=np.float32)
+    if controls.ndim != 2 or recorded_ctrl.ndim != 2:
+        raise ValueError("Replay controls and recorded ctrl must both be 2-D.")
+    start = len(recorded_ctrl) - len(controls)
+    if start < 1:
+        raise ValueError("Recorded episode must contain a pre-action state before replay controls.")
+    # Current RM75B + Dex Hand models use one direct position actuator per
+    # policy action, in identical arm-then-hand order.  Refuse silent export if
+    # that invariant stops holding.
+    replay_rows = recorded_ctrl[start : start + len(controls), : controls.shape[1]]
+    if replay_rows.shape != controls.shape or not np.allclose(
+        replay_rows, controls, rtol=1e-5, atol=1e-6
+    ):
+        raise ValueError("Strict replay controls do not match recorded actuator targets.")
+    return np.arange(start - 1, start - 1 + len(controls), dtype=np.int64)
 
 
 def _export_one(
@@ -105,6 +141,7 @@ def _export_one(
     renderer = None
     try:
         observation, _ = env.reset(seed=source_seed)
+        validate_position_action_contract(env)
         controls, initial_qpos, initial_qvel, initial_ctrl = load_replay_controls(manifest, env)
         env.data.qpos[:] = initial_qpos
         env.data.qvel[:] = initial_qvel
@@ -127,7 +164,7 @@ def _export_one(
                 repo_id=args.repo_id,
                 root=args.output,
                 fps=args.fps,
-                state_dim=env.model.nq + env.model.nv + env.model.nu,
+                state_dim=real_observable_state(env).size,
                 action_dim=env.action_space.shape[0],
                 tactile_shape=np.asarray(observation["tactile"]).shape,
                 image_shape=first_image.shape,
@@ -136,15 +173,54 @@ def _export_one(
             )
 
         saved_frames = 0
-        for control in np.asarray(controls, dtype=np.float32):
-            observation, _, terminated, truncated, _ = env.step(control)
-            renderer.update_scene(env.data, camera=args.camera)
-            recorder.add_frame(
-                observation=observation,
-                image=renderer.render().copy(),
-                action=control,
-                task=f"lift:{object_id}",
-            )
+        array_path = manifest.parent / str(payload.get("arrays", "episode.npz"))
+        with np.load(array_path, allow_pickle=False) as archive:
+            recorded = {name: np.asarray(archive[name]) for name in archive.files}
+        if not args.reexecute_export and not all(
+            name in recorded for name in ("qpos", "qvel", "ctrl", "action", "tactile")
+        ):
+            raise ValueError(f"Recorded trajectory arrays are incomplete: {array_path}")
+        pre_action_indices = recorded_pre_action_indices(recorded, controls)
+        frame_count = len(controls)
+        for index in range(frame_count):
+            control = np.asarray(controls[index], dtype=np.float32)
+            if args.reexecute_export:
+                # Pair the current observation with the command that will be
+                # executed from it.  Recording after env.step creates a
+                # one-step anti-causal imitation-learning target.
+                observation = env._get_observation()
+                renderer.update_scene(env.data, camera=args.camera)
+                image = renderer.render().copy()
+                state = real_observable_state(env)
+                recorder.add_frame(
+                    observation=observation,
+                    image=image,
+                    action=control,
+                    task=f"lift:{object_id}",
+                    state=state,
+                )
+                observation, _, terminated, truncated, _ = env.step(control)
+            else:
+                state_index = int(pre_action_indices[index])
+                env.data.qpos[:] = recorded["qpos"][state_index]
+                env.data.qvel[:] = recorded["qvel"][state_index]
+                env.data.ctrl[:] = recorded["ctrl"][state_index]
+                mujoco.mj_forward(env.model, env.data)
+                observation = {
+                    "qpos": env.data.qpos.copy(),
+                    "qvel": env.data.qvel.copy(),
+                    "ctrl": env.data.ctrl.copy(),
+                    "tactile": recorded["tactile"][state_index],
+                }
+                terminated = truncated = False
+                renderer.update_scene(env.data, camera=args.camera)
+                recorder.add_frame(
+                    observation=observation,
+                    image=renderer.render().copy(),
+                    action=control,
+                    task=f"lift:{object_id}",
+                    state=real_observable_state(env),
+                )
             saved_frames += 1
             if terminated or truncated:
                 break

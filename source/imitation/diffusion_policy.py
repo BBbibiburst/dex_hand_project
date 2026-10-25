@@ -18,6 +18,27 @@ class DiffusionPolicyConfig:
     horizon: int = 16
     diffusion_steps: int = 50
     feature_dim: int = 256
+    noise_schedule: str = "linear"
+    clip_sample: float | None = 5.0
+
+
+def diffusion_betas(steps: int, schedule: str) -> torch.Tensor:
+    """Build a schedule whose terminal distribution matches inference noise."""
+
+    if steps <= 0:
+        raise ValueError("diffusion_steps must be positive.")
+    if schedule == "linear":
+        return torch.linspace(1e-4, 0.02, steps)
+    if schedule != "cosine":
+        raise ValueError("noise_schedule must be 'linear' or 'cosine'.")
+    # Improved-DDPM cosine alpha-bar schedule.  Unlike a 10/50-step copy of
+    # the 1000-step linear schedule, this reaches an approximately Gaussian
+    # terminal distribution, consistent with sample() starting from N(0, I).
+    s = 0.008
+    time = torch.linspace(0, steps, steps + 1, dtype=torch.float64) / steps
+    alpha_bar = torch.cos((time + s) / (1.0 + s) * math.pi / 2.0).square()
+    alpha_bar = alpha_bar / alpha_bar[0]
+    return (1.0 - alpha_bar[1:] / alpha_bar[:-1]).clamp(max=0.999).float()
 
 
 class SinusoidalTimeEmbedding(nn.Module):
@@ -79,12 +100,15 @@ class DiffusionPolicy(nn.Module):
             nn.SiLU(),
             nn.Linear(1024, input_dim),
         )
-        betas = torch.linspace(1e-4, 0.02, config.diffusion_steps)
+        betas = diffusion_betas(config.diffusion_steps, config.noise_schedule)
         alphas = 1 - betas
         alpha_bars = torch.cumprod(alphas, dim=0)
+        previous_alpha_bars = torch.cat((torch.ones(1), alpha_bars[:-1]))
+        posterior_variance = betas * (1.0 - previous_alpha_bars) / (1.0 - alpha_bars)
         self.register_buffer("betas", betas)
         self.register_buffer("alphas", alphas)
         self.register_buffer("alpha_bars", alpha_bars)
+        self.register_buffer("posterior_variance", posterior_variance)
         self.register_buffer("state_mean", torch.zeros(config.state_dim))
         self.register_buffer("state_std", torch.ones(config.state_dim))
         self.register_buffer("tactile_mean", torch.zeros(config.tactile_dim))
@@ -114,6 +138,20 @@ class DiffusionPolicy(nn.Module):
         flat = noisy.reshape(batch, -1)
         return self.denoiser(torch.cat([flat, self.time(time), condition], -1)).reshape_as(noisy)
 
+    def _predict_clean(self, noisy, predicted_noise, step: int):
+        alpha_bar = self.alpha_bars[step]
+        clean = (noisy - torch.sqrt(1.0 - alpha_bar) * predicted_noise) / torch.sqrt(alpha_bar)
+        if self.config.clip_sample is not None:
+            clean = clean.clamp(-self.config.clip_sample, self.config.clip_sample)
+        return clean
+
+    def _ddpm_mean(self, noisy, predicted_noise, step: int):
+        alpha = self.alphas[step]
+        alpha_bar = self.alpha_bars[step]
+        return (noisy - (1.0 - alpha) / torch.sqrt(1.0 - alpha_bar) * predicted_noise) / torch.sqrt(
+            alpha
+        )
+
     def loss(self, image, tactile, state, action):
         action = (action - self.action_mean) / self.action_std
         batch = action.shape[0]
@@ -124,26 +162,64 @@ class DiffusionPolicy(nn.Module):
         predicted = self._predict_noise(noisy, time, self.encode(image, tactile, state))
         return F.mse_loss(predicted, noise)
 
-    @torch.no_grad()
-    def sample(self, image, tactile, state):
+    @torch.inference_mode()
+    def sample(self, image, tactile, state, *, inference_steps: int | None = None):
         condition = self.encode(image, tactile, state)
         action = torch.randn(
             image.shape[0], self.config.horizon, self.config.action_dim, device=image.device
         )
+        if inference_steps is not None and inference_steps <= 0:
+            raise ValueError("inference_steps must be positive.")
+        if inference_steps is not None and inference_steps < self.config.diffusion_steps:
+            sampled = self._sample_ddim(action, condition, inference_steps)
+            return sampled * self.action_std + self.action_mean
         for step in reversed(range(self.config.diffusion_steps)):
             time = torch.full((image.shape[0],), step, device=image.device, dtype=torch.long)
             noise = self._predict_noise(action, time, condition)
-            alpha, alpha_bar, beta = self.alphas[step], self.alpha_bars[step], self.betas[step]
-            action = (action - (1 - alpha) / torch.sqrt(1 - alpha_bar) * noise) / torch.sqrt(alpha)
+            action = self._ddpm_mean(action, noise, step)
             if step:
-                action += beta.sqrt() * torch.randn_like(action)
+                action += self.posterior_variance[step].sqrt() * torch.randn_like(action)
         return action * self.action_std + self.action_mean
+
+    def _sample_ddim(self, action, condition, inference_steps: int):
+        """Deterministic DDIM sampling over a uniformly spaced subset of training steps."""
+        steps = (
+            torch.linspace(
+                self.config.diffusion_steps - 1,
+                0,
+                inference_steps,
+                device=action.device,
+            )
+            .round()
+            .long()
+            .unique_consecutive()
+        )
+        batch = action.shape[0]
+        for index, step_tensor in enumerate(steps):
+            step = int(step_tensor.item())
+            time = torch.full((batch,), step, device=action.device, dtype=torch.long)
+            predicted_noise = self._predict_noise(action, time, condition)
+            predicted_clean = self._predict_clean(action, predicted_noise, step)
+            if index + 1 == len(steps):
+                action = predicted_clean
+            else:
+                previous_alpha_bar = self.alpha_bars[int(steps[index + 1].item())]
+                action = (
+                    torch.sqrt(previous_alpha_bar) * predicted_clean
+                    + torch.sqrt(1.0 - previous_alpha_bar) * predicted_noise
+                )
+        return action
 
     def checkpoint(self):
         return {"config": asdict(self.config), "model": self.state_dict()}
 
     @classmethod
     def from_checkpoint(cls, checkpoint, device="cpu"):
-        model = cls(DiffusionPolicyConfig(**checkpoint["config"]))
-        model.load_state_dict(checkpoint["model"])
+        config = dict(checkpoint["config"])
+        # P0/P1 checkpoints predate the explicit schedule field and used the
+        # short linear schedule. Their stored buffers remain loadable exactly.
+        config.setdefault("noise_schedule", "linear")
+        config.setdefault("clip_sample", 5.0)
+        model = cls(DiffusionPolicyConfig(**config))
+        model.load_state_dict(checkpoint["model"], strict=False)
         return model.to(device)

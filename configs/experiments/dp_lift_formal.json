@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "purpose": "Reproducible post-smoke Lift diffusion-policy experiment matrix",
+  "dataset": {
+    "objects": 20,
+    "verified_episodes_per_object": 10,
+    "state_schema": "actuator_position_velocity_command_v1",
+    "action_schema": "arm7_hand6_position_command_v1",
+    "image_size": [240, 320],
+    "fps": 20,
+    "strict_profile": "final"
+  },
+  "training": {
+    "modalities": ["vision_state", "vision_tactile_state"],
+    "seeds": [1011, 1012, 1013],
+    "horizon": 16,
+    "epochs": 100,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "validation_fraction": 0.1,
+    "split_unit": "episode"
+  },
+  "evaluation": {
+    "seen_reset_episodes": 50,
+    "unseen_object_episodes": 50,
+    "action_steps": 4,
+    "maximum_steps": 500,
+    "metrics": [
+      "closed_loop_success",
+      "drop_rate",
+      "contact_stability",
+      "episode_length",
+      "mean_inference_latency_ms",
+      "p95_inference_latency_ms"
+    ]
+  },
+  "stop_conditions": {
+    "maximum_training_hours_per_run": 6,
+    "abort_on_non_finite_loss": true,
+    "minimum_sim_success_before_real_deployment": 0.6
+  }
+}

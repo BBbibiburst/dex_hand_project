@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "purpose": "First bounded P1 Diffusion Policy comparison",
+  "generation": {
+    "primary_objects": [
+      "ycb:004_sugar_box",
+      "ycb:005_tomato_soup_can",
+      "ycb:007_tuna_fish_can",
+      "ycb:010_potted_meat_can",
+      "ycb:077_rubiks_cube"
+    ],
+    "replacement_object": "ycb:006_mustard_bottle",
+    "cases_per_object": 10,
+    "xy_mm": 3.0,
+    "yaw_degrees": 0.0,
+    "candidate_retries": 2,
+    "finger_preload": 0.25,
+    "thumb_preload": 0.30,
+    "lift_height_m": 0.085,
+    "verify_steps": 120,
+    "strict_profile": "final"
+  },
+  "training": {
+    "modalities": ["vision_state", "vision_tactile_state"],
+    "seed": 1011,
+    "horizon": 16,
+    "epochs": 5,
+    "batch_size": 32,
+    "learning_rate": 0.0001,
+    "validation_fraction": 0.2,
+    "split_unit": "episode",
+    "diffusion_steps": 50,
+    "frame_stride": 2
+  },
+  "evaluation": {
+    "environment_seed_start": 22011,
+    "episodes_per_object": 5,
+    "maximum_steps": 300,
+    "action_steps": 4,
+    "success_hold_steps": 5,
+    "inference_step_candidates": [10, 20, 50]
+  },
+  "stop_conditions": {
+    "minimum_verified_episodes_before_training": 30,
+    "maximum_candidates_per_perturbation": 2,
+    "maximum_training_epochs": 5
+  }
+}
