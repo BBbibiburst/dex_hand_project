@@ -225,7 +225,12 @@ MUJOCO_LOG.TXT
 tools/code_summary.txt
 *.pptx
 ~$*.pptx
+*.doc
+*.docx
 tools/*meeting*ppt*.py
+tools/build_p3_p10_ppt.py
+tools/render_pptx_preview.py
+docs/progress/*ppt讲稿.md
 
 # Demonstration datasets and recorder output
 datasets/
