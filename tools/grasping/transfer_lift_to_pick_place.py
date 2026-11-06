@@ -85,8 +85,19 @@ def discover_lift_manifests(
     return tuple(path for _, path in selected)
 
 
+def project_source_path(path: Path) -> Path:
+    """Prefer the bundled project copy over a stale absolute historic path."""
+    path = Path(path)
+    if 'outputs' in path.parts:
+        local = Path.cwd().joinpath(*path.parts[path.parts.index('outputs'):])
+        if local.is_file():
+            return local
+    return path
+
+
 def load_lift_source(path: Path) -> DemonstrationEpisode:
     """Load a direct Lift episode or reconstruct the candidate refined by PPO."""
+    path = project_source_path(path)
     payload = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(payload.get("candidate"), dict):
         source = DemonstrationEpisode.load(path)
@@ -95,10 +106,10 @@ def load_lift_source(path: Path) -> DemonstrationEpisode:
         return source
 
     trajectory = GraspTrajectory.load(path)
-    source_manifest = Path(trajectory.source_manifest)
+    source_manifest = project_source_path(Path(trajectory.source_manifest))
     if not source_manifest.is_file():
         fallback = trajectory.metadata.get("template_manifest")
-        source_manifest = Path(str(fallback)) if fallback else source_manifest
+        source_manifest = project_source_path(Path(str(fallback))) if fallback else source_manifest
     if not source_manifest.is_file() and "outputs" in source_manifest.parts:
         output_index = source_manifest.parts.index("outputs")
         source_manifest = Path.cwd().joinpath(*source_manifest.parts[output_index:])

@@ -1,0 +1,32 @@
+{
+  "schema": "five-task-production-config-v1",
+  "dataset_root": "/mnt/f/dex_hand_dataset_1000h",
+  "queue_database": "outputs/five_task_production_control/queue.sqlite",
+  "template_library": "configs/five_task_templates.json",
+  "object_registry": "outputs/five_task_p31/object_registry.json",
+  "task_hours": {
+    "lift": 200.0,
+    "pick_place": 200.0,
+    "stack": 200.0,
+    "push": 200.0,
+    "nut_assembly": 200.0
+  },
+  "minimum_independent_assets": 100,
+  "count_failed_episodes": false,
+  "workers": 2,
+  "disk_reserve_fraction": 0.2,
+  "physics_hz": 1000,
+  "control_hz": 20,
+  "rgb_width": 1920,
+  "rgb_height": 1080,
+  "rgb_fps": 20,
+  "state_dimension": 39,
+  "action_dimension": 13,
+  "tactile_dimension": 712,
+  "episode_wall_timeout_seconds": 180,
+  "maximum_retries": 3,
+  "auto_rebuild_inventory": true,
+  "efficiency_minimum_attempts": 3,
+  "efficiency_exploration_interval": 10,
+  "integrity_audit_interval_attempts": 10
+}

@@ -21,6 +21,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+production = ["imageio-ffmpeg", "psutil"]
 hardware = [
     "openvr",
     "pyserial",

@@ -405,6 +405,9 @@ def execute_pick_place_transfer(
                 # arm IK branch. Re-solving identical Cartesian actions in a
                 # scene with extra target-bin bodies can select a different
                 # branch and miss the grasp despite an identical object pose.
+                prepare = getattr(env, "prepare_recorded_control", None)
+                if prepare is not None:
+                    prepare()
                 env.data.ctrl[:] = control
                 env.step_physics(env.physics_steps_per_control, control_updates=1)
                 env.elapsed_steps += 1
@@ -443,6 +446,9 @@ def execute_pick_place_transfer(
                         if trajectory_index >= len(source_trajectory.controls):
                             break
                         control = source_trajectory.controls[trajectory_index]
+                        prepare = getattr(env, "prepare_recorded_control", None)
+                        if prepare is not None:
+                            prepare()
                         env.data.ctrl[:] = control
                         env.step_physics(env.physics_steps_per_control, control_updates=1)
                         env.elapsed_steps += 1
