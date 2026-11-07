@@ -23,6 +23,8 @@ PYTHONPATH=. python apps/expand_existing_dataset.py --output outputs/expanded_co
 
 ## 新采集配置
 
+若启动时出现 `Template dependency changed`，先停止采集，在项目目录运行 `python apps/restore_production_inputs.py --archive five_task_production.zip`。它先核验迁移包，再备份并恢复不一致的模板/资产；不修改代码或迁移包以外的采集结果。恢复后用新的 `serve --output` 控制目录启动，不要修改清单哈希来绕过错误。
+
 `configs/five_task_speed.json` 将RGB改为640×360、5Hz、x264 ultrafast CRF28；状态、动作和触觉仍按20Hz记录。每张图像保存对应控制行索引，中间动作不会因图像降频而删除。合法失败轨迹允许计入时长，但不会标成成功。新采集链路仍保留去重；允许重复扩容使用上面的独立入口。
 
 服务器无需预先填写硬件规格。程序检测CPU配额、可用内存并限制并发启动；内存不足会等待。默认每worker预留2GiB，最多64个，子进程计算线程默认2个。这是资源准入控制，不保证所有硬件上都能达到最佳吞吐，GPU显存尚未自动调优。

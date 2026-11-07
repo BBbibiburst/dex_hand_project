@@ -77,7 +77,7 @@ def build_delivery(project, output):
     management = ['run_production_canary.py', 'probe_production_compatibility.py',
                   'verify_production_inventory.py', 'build_production_catalogue.py',
                   'build_p31_registry.py', 'build_production_delivery.py',
-                  'expand_existing_dataset.py']
+                  'expand_existing_dataset.py', 'restore_production_inputs.py']
     for path in application_dependencies(project, [project / 'apps' / name for name in management]):
         add(path)
     for path in (project / 'tests').glob('test_production_*.py'):
