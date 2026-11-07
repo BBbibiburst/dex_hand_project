@@ -25,6 +25,19 @@ FIELDS = {"state": "state", "action": "position_action", "tactile": "sensor_tact
           "next_timestamp": "next_timestamp", "stage": "stage", "success": "task_success"}
 
 
+def model_object_identities(task, asset_hash, model_proof):
+    """Bind the catalogue identity to the task's actual manipulated body."""
+    primary = {'stack': 'cubeA', 'nut_assembly': 'assembly_bolt'}.get(task, 'object')
+    identities = [{**entity,
+        'identity_kind': 'catalogue_asset' if entity['name'] == primary else 'model_entity',
+        'identity_sha256': asset_hash if entity['name'] == primary else canonical_hash({
+            'model': model_proof['compiled_model_sha256'], 'entity': entity})}
+        for entity in model_proof['objects']]
+    if sum(row['identity_kind'] == 'catalogue_asset' for row in identities) != 1:
+        raise ValueError('Formal primary object cannot be resolved in compiled model')
+    return identities
+
+
 def copy_source_contents(source, destination):
     """Copy regular content without Unix attributes unsupported by DrvFS.
 
@@ -204,12 +217,7 @@ def verify_episode(directory, *, _video_proof=None):
         worker = json.loads((directory / 'worker_result.json').read_text())
         if (not worker.get('complete') or not worker.get('replay_passed') or worker.get('success') != meta['success']):
             raise ValueError('Formal worker outcome differs from Episode')
-        primary = "cubeA" if meta["task"] == "stack" else "object"
-        expected_identities = [{**entity,
-            "identity_kind": "catalogue_asset" if entity["name"] == primary else "model_entity",
-            "identity_sha256": meta["asset_hash"] if entity["name"] == primary else canonical_hash({
-                "model": model_provenance["compiled_model_sha256"], "entity": entity})}
-            for entity in model_provenance["objects"]]
+        expected_identities = model_object_identities(meta['task'], meta['asset_hash'], model_provenance)
         if (meta.get("object_identities") != expected_identities
                 or sum(row["identity_kind"] == "catalogue_asset" for row in expected_identities) != 1):
             raise ValueError("Formal object identities differ from model and asset payload")
@@ -290,14 +298,7 @@ def package_episode(case, root, job_id, asset_hash, *, fault=None, job_payload=N
         model_proof = verify_provenance(stage / "source_episode", contract)
         if not model_proof.get("passed"):
             raise ValueError("Formal packaging requires a compiled model")
-        primary = "cubeA" if result["task"] == "stack" else "object"
-        identities = []
-        for entity in model_proof["objects"]:
-            identities.append({**entity, "identity_kind": "catalogue_asset" if entity["name"] == primary else "model_entity",
-                               "identity_sha256": asset_hash if entity["name"] == primary else canonical_hash({
-                                   "model": model_proof["compiled_model_sha256"], "entity": entity})})
-        if sum(row["identity_kind"] == "catalogue_asset" for row in identities) != 1:
-            raise ValueError("Formal primary object cannot be resolved in compiled model")
+        identities = model_object_identities(result['task'], asset_hash, model_proof)
         metadata.update(admission="production_verified", objects_need_asset_role_resolution=False,
                         object_identities=identities)
     write_json(stage / "episode.json", metadata)

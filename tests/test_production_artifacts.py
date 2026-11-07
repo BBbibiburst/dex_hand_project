@@ -13,6 +13,22 @@ from source.data.production_inventory import audit_inventory
 from source.data.five_task_dataset import sha256_file
 
 
+def test_formal_nut_identity_binds_bolt_not_fixed_nut():
+    from source.data.production_artifacts import model_object_identities
+
+    bolt = {'name': 'assembly_bolt', 'model_kind': 'body', 'model_name': 'assembly_bolt_body'}
+    fixture = {'name': 'fixed_nut_body', 'model_kind': 'body', 'model_name': 'fixed_nut_body'}
+    proof = {'compiled_model_sha256': 'a' * 64, 'objects': [bolt, fixture]}
+    identities = model_object_identities('nut_assembly', 'b' * 64, proof)
+    assert identities[0]['identity_kind'] == 'catalogue_asset'
+    assert identities[0]['identity_sha256'] == 'b' * 64
+    assert identities[1]['identity_kind'] == 'model_entity'
+    with pytest.raises(ValueError, match='primary object'):
+        model_object_identities('nut_assembly', 'b' * 64, {**proof, 'objects': [fixture]})
+    with pytest.raises(ValueError, match='primary object'):
+        model_object_identities('nut_assembly', 'b' * 64, {**proof, 'objects': [bolt, bolt, fixture]})
+
+
 def test_packaging_does_not_copy_linux_file_attributes(tmp_path, synthetic_case, monkeypatch):
     def unsupported(*args, **kwargs):
         raise PermissionError('DrvFS does not permit copying POSIX metadata')
