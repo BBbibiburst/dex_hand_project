@@ -39,10 +39,24 @@ export MUJOCO_GL=egl
 export DEX_DATASET_ROOT=/data/dex_hand_dataset_speed
 python -m pip install -e '.[production]'
 python apps/five_task_production.py preflight --config configs/five_task_speed.json
-python apps/five_task_production.py serve --config configs/five_task_speed.json
+python apps/five_task_production.py serve --config configs/five_task_speed.json --output outputs/speed_server_control
 ```
 
 数据路径必须换成服务器实际数据盘。启动前检查会保留20%磁盘空间；模板中的旧项目绝对路径会优先解析到当前项目。旧1080p20配置保持独立。
+
+## 实时看板
+
+在另一个终端进入项目目录，使用采集时相同的环境和数据路径：
+
+```bash
+export PYTHONPATH=.
+export DEX_DATASET_ROOT="/media/ftcl/外置存储/dex_hand_dataset"
+python apps/watch_collection.py --config configs/five_task_speed.json
+```
+
+看板每5秒显示已校验并登记的唯一有效小时数、各任务配额进度、成功/失败条数、运行数量、物体覆盖、实测效率和剩余时间。当前快速配置允许合法失败Episode计入时长，失败不会被显示成成功。启动后不足30秒或无有效产出时不估算ETA；有近期数据后优先使用最近约5分钟速率。总时长ETA与各任务配额ETA分别显示，物体覆盖另列，不能把总量预测当成所有验收条件的完成时间。
+
+此看板只读数据库，Ctrl+C只关闭看板。它是独立新脚本，更新看板无需重启采集。单次输出可用 `--once`；机器可读输出可用 `--once --json`。
 
 ## 一周工期
 
