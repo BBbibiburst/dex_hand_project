@@ -153,8 +153,8 @@ class ProductionQueue:
                    (int(good), int(failed), int(duplicate), int(failed), int(duplicate), template))
 
     @contextmanager
-    def connect(self):
-        db = sqlite3.connect(self.path, timeout=30, isolation_level=None)
+    def connect(self, *, timeout=30):
+        db = sqlite3.connect(self.path, timeout=timeout, isolation_level=None)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys=ON")
         db.execute("PRAGMA synchronous=FULL")
@@ -262,13 +262,33 @@ class ProductionQueue:
             raise ValueError("Lease expired")
         return row
 
-    def heartbeat(self, job_id, token, lease_seconds=300):
+    def heartbeat(self, job_id, token, lease_seconds=300, *, cancelled=None):
         if lease_seconds <= 0:
             raise ValueError("Lease duration must be positive")
-        with self.transaction() as db:
-            self.owned(db, job_id, token)
-            db.execute("UPDATE jobs SET lease_until=? WHERE job_id=?",
-                       (time.time() + lease_seconds, job_id))
+        deadline = time.monotonic() + 30
+        while cancelled is None or not cancelled.is_set():
+            try:
+                with self.connect(timeout=.25) as db:
+                    db.execute('BEGIN IMMEDIATE')
+                    try:
+                        if cancelled is not None and cancelled.is_set():
+                            db.rollback()
+                            return
+                        self.owned(db, job_id, token)
+                        db.execute('UPDATE jobs SET lease_until=? WHERE job_id=?',
+                                   (time.time() + lease_seconds, job_id))
+                        db.commit()
+                    except BaseException:
+                        db.rollback()
+                        raise
+                return
+            except sqlite3.OperationalError as error:
+                if 'locked' not in str(error).lower() or time.monotonic() >= deadline:
+                    raise
+                if cancelled is not None:
+                    cancelled.wait(.05)
+                else:
+                    time.sleep(.05)
 
     def validating(self, job_id, token):
         with self.transaction() as db:

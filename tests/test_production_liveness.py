@@ -124,3 +124,46 @@ def test_failure_reporting_error_does_not_hide_original_guard_error(tmp_path):
     with pytest.raises(RuntimeError, match='Primary guard failure'):
         keeper.check()
     keeper.close()
+
+
+def test_twenty_four_blocked_heartbeats_cancel_without_releasing_writer(tmp_path):
+    """Actual SQLite contention: close must not wait for the 30-second writer lock."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    queue = ProductionQueue(tmp_path / 'queue.sqlite')
+    keepers = []
+    stopped = threading.Event()
+    for i in range(24):
+        queue.enqueue(f'fixture{i}', 'lift', 'a' * 64, {})
+        claimed = queue.claim(lease_seconds=300)
+        keeper = LeaseKeeper(queue, claimed, stopped, interval=.02)
+        keeper.start()
+        keepers.append(keeper)
+    with queue.connect() as writer:
+        writer.execute('BEGIN IMMEDIATE')
+        try:
+            time.sleep(.08)
+            started = time.monotonic()
+            with ThreadPoolExecutor(max_workers=24) as pool:
+                list(pool.map(lambda keeper: keeper.close(), keepers))
+            assert time.monotonic() - started < 3
+            assert not stopped.is_set()
+            assert all(not k.thread.is_alive() for k in keepers)
+        finally:
+            writer.rollback()
+            for keeper in keepers:
+                keeper.close()
+
+
+def test_quarantined_job_is_normal_lease_completion(tmp_path):
+    queue, claimed = job(tmp_path)
+    stopped = threading.Event()
+    keeper = LeaseKeeper(queue, claimed, stopped, interval=.02)
+    keeper.start()
+    try:
+        queue.fail(claimed['job_id'], claimed['lease_token'], 'Invalid test output', retryable=False)
+        assert keeper.finished.wait(1)
+        assert not stopped.is_set()
+        keeper.check()
+    finally:
+        keeper.close()

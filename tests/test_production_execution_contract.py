@@ -1,6 +1,54 @@
 from source.data.production_execution_contract import execution_fingerprint
 
 
+def test_shared_runtime_guard_does_not_rehash_unchanged_files_and_detects_edits(tmp_path, monkeypatch):
+    import concurrent.futures
+    import os
+    import pytest
+    import source.data.production_execution_contract as module
+
+    source = tmp_path / 'source'
+    source.mkdir()
+    (source / 'module.py').write_text('value = 1\n')
+    apps = tmp_path / 'apps'
+    apps.mkdir()
+    for name in ('production_worker.py', 'run_p32_online_contract.py', 'replay_p32_task.py',
+                 'produce_five_task_dataset.py', 'five_task_production.py'):
+        (apps / name).write_text('# fixture\n')
+    frozen = execution_fingerprint(tmp_path)
+    guard = module.RuntimeExecutionGuard(tmp_path, frozen, interval=0)
+    original = module.file_digest
+    reads = []
+    monkeypatch.setattr(module, 'file_digest', lambda p: (reads.append(p), original(p))[1])
+    with concurrent.futures.ThreadPoolExecutor(max_workers=24) as pool:
+        list(pool.map(lambda _: guard.check(), range(24)))
+    assert not reads
+    path = source / 'module.py'
+    old = path.stat()
+    path.write_text('value = 2\n')
+    os.utime(path, ns=(old.st_atime_ns, old.st_mtime_ns))
+    with pytest.raises(RuntimeError, match='contents changed'):
+        guard.check()
+    assert reads == [path]  # ctime detects an edit even if mtime was restored.
+    with pytest.raises(RuntimeError, match='contents changed'):
+        guard.check()
+
+
+def test_shared_runtime_guard_detects_added_source_files(tmp_path):
+    import pytest
+    from source.data.production_execution_contract import RuntimeExecutionGuard
+
+    (tmp_path / 'source').mkdir()
+    (tmp_path / 'apps').mkdir()
+    for name in ('production_worker.py', 'run_p32_online_contract.py', 'replay_p32_task.py',
+                 'produce_five_task_dataset.py', 'five_task_production.py'):
+        (tmp_path / 'apps' / name).write_text('# fixture\n')
+    guard = RuntimeExecutionGuard(tmp_path, execution_fingerprint(tmp_path), interval=0)
+    (tmp_path / 'source/new.py').write_text('# unexpected code\n')
+    with pytest.raises(RuntimeError, match='file set changed'):
+        guard.check()
+
+
 def test_source_changes_and_additions_change_execution_identity(tmp_path):
     source = tmp_path / 'source'
     apps = tmp_path / 'apps'

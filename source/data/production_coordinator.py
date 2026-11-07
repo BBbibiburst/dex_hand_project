@@ -18,7 +18,7 @@ from source.data.production_artifacts import package_episode, reconcile_episode,
 from source.data.production_templates import load_templates
 from source.data.production_scheduler import enqueue_next
 from source.data.production_liveness import LeaseKeeper
-from source.data.production_execution_contract import execution_fingerprint
+from source.data.production_execution_contract import execution_fingerprint, RuntimeExecutionGuard
 from source.data.production_resources import memory_status, canary_storage_status
 from source.data.production_monitor import write_worker_status, record_runtime_failure
 from source.data.production_failures import failure_policy, WorkerFailure
@@ -104,6 +104,7 @@ def _coordinate(config, root, max_episodes, sampling_seed, resume=False, append_
                         'template_sha256': hashlib.sha256(Path(config['template_library']).read_bytes()).hexdigest(),
                         'registry_sha256': hashlib.sha256(Path(config['object_registry']).read_bytes()).hexdigest(),
                         'execution': execution_fingerprint(project)}
+    execution_guard = RuntimeExecutionGuard(project, run_contract['execution']) if guarded else None
     from source.data.production_bootstrap import reserve_bootstrap, install_metadata, finish_bootstrap
 
     database_path = Path(config['queue_database']) if formal else root / 'inventory.sqlite'
@@ -252,8 +253,7 @@ def _coordinate(config, root, max_episodes, sampling_seed, resume=False, append_
                         volume = storage_check()
                         if not volume['ready']:
                             raise RuntimeError('Volume identity or water level changed: ' + json.dumps(volume))
-                        if execution_fingerprint(project) != run_contract['execution']:
-                            raise RuntimeError('Executable source, shared resources or package versions changed during production')
+                        execution_guard.check()
                         write_worker_status(root, slot, {'job_id': job['job_id'], 'task': job['task'],
                             'phase': phase, 'state': 'ACTIVE', 'memory': memory, 'volume': volume})
 

@@ -78,7 +78,8 @@ def test_startup_integrity_failure_stops_before_worker_launch(tmp_path, monkeypa
     import source.data.production_periodic_audit as module
 
     config = load_config(Path('configs/five_task_production.json'))
-    monkeypatch.setattr(coordinator, 'execution_fingerprint', lambda _: {})
+    monkeypatch.setattr(coordinator, 'execution_fingerprint', lambda _: {
+        'source_sha256': {}, 'shared_resource_sha256': {}})
     monkeypatch.setattr(coordinator, 'load_templates', lambda *_: [
         {'template_id': 'fixture', 'task': 'lift', 'asset_hash': 'a' * 64,
          'base_seed': 0, 'perturbation_fields': ['dx_m']}])

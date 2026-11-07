@@ -29,15 +29,22 @@ class LeaseKeeper:
                 print(f'Runtime failure reporting also failed: {report_error}', file=sys.stderr, flush=True)
 
     def _pulse(self):
+        if self.finished.is_set():
+            return
         if self.guard is not None:
             self.guard()
+        if self.finished.is_set():
+            return
         try:
-            self.queue.heartbeat(self.job['job_id'], self.job['lease_token'], self.lease_seconds)
+            self.queue.heartbeat(self.job['job_id'], self.job['lease_token'], self.lease_seconds,
+                                 cancelled=self.finished)
         except ValueError:
+            if self.finished.is_set():
+                return
             # Registration can finish while the last pulse waits for SQLite.
             with self.queue.connect() as db:
                 row = db.execute('SELECT state FROM jobs WHERE job_id=?', (self.job['job_id'],)).fetchone()
-            if row is not None and row['state'] in ('EXPORTED', 'DUPLICATE'):
+            if row is not None and row['state'] in ('EXPORTED', 'DUPLICATE', 'QUARANTINED'):
                 self.finished.set()
                 return
             raise

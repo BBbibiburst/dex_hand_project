@@ -58,6 +58,18 @@ python apps/watch_collection.py --config configs/five_task_speed.json
 
 此看板只读数据库，Ctrl+C只关闭看板。它是独立新脚本，更新看板无需重启采集。单次输出可用 `--once`；机器可读输出可用 `--once --json`。
 
+## 租约线程修复后的续跑
+
+旧版本若报 `Episode lease thread did not stop` 并已退出，拉取修复后执行：
+
+```bash
+export PYTHONPATH=.
+export DEX_DATASET_ROOT="/media/ftcl/外置存储/dex_hand_dataset_batch2"
+python apps/upgrade_collection_runtime.py --config configs/five_task_speed_batch2.json
+```
+
+该工具只允许从 `44187c5` 升级本次四个租约/运行检查模块，要求采集、worker和编码器都已停止，环境、物理资源、模板、配置不变；备份旧版本记录，不修改数据库和Episode。中途失败保留恢复记录，可重跑同一命令。成功后，使用相同配置和数据目录，以新的 `serve --output` 控制目录启动；程序自动进入resume。其他版本变化不通过此工具放行。
+
 ## 一周工期
 
 本机单条Push F2实测：31.3秒物理时长，626行20Hz控制数据，157帧640×360@5Hz图像，完整运行33.66秒，独立文件验收通过，任务成功。相同条件旧1080p测试约99.9秒；这是单条开发对照，不能代表五任务或服务器持续吞吐。

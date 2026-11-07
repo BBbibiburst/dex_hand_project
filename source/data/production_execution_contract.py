@@ -4,6 +4,8 @@ import hashlib
 import ast
 from importlib.metadata import version
 import sys
+import threading
+import time
 
 
 def application_dependencies(project, seeds):
@@ -72,3 +74,61 @@ def file_digest(path):
         for block in iter(lambda: stream.read(1024 * 1024), b''):
             digest.update(block)
     return digest.hexdigest()
+
+
+class RuntimeExecutionGuard:
+    """Share checks across workers; rehash files only when their metadata changes.
+
+    The coordinator has just computed the full startup fingerprint. Normal
+    source edits, replacement, additions and removals remain fatal; unchanged
+    shared meshes no longer get reread by every lease thread every ten seconds.
+    """
+    def __init__(self, project, expected, interval=2.):
+        self.project = project
+        self.expected = expected
+        self.hashes = {**expected['source_sha256'], **expected['shared_resource_sha256']}
+        self.signatures = {name: self.signature(project / name) for name in self.hashes}
+        self.interval = interval
+        self.checked = 0.
+        self.lock = threading.Lock()
+        self.error = None
+
+    @staticmethod
+    def signature(path):
+        s = path.stat()
+        return s.st_dev, s.st_ino, s.st_size, s.st_mtime_ns, s.st_ctime_ns
+
+    def check(self):
+        if self.error is not None:
+            raise RuntimeError(self.error)
+        if time.monotonic() - self.checked < self.interval or not self.lock.acquire(blocking=False):
+            return
+        try:
+            actual_sources = {str(p.relative_to(self.project)) for p in (self.project / 'source').rglob('*.py')}
+            expected_sources = {p for p in self.expected['source_sha256'] if p.startswith('source/')}
+            if actual_sources != expected_sources:
+                raise RuntimeError('Executable source file set changed during production')
+            resources = {str(p.relative_to(self.project))
+                for name in ('robots', 'grippers', 'arenas', 'bases', 'textures')
+                for p in (self.project / 'assets' / name).rglob('*')
+                if p.is_file() and '__pycache__' not in p.parts}
+            manifest = self.project / 'assets/maniskill/manifest.json'
+            if manifest.is_file():
+                resources.add(str(manifest.relative_to(self.project)))
+            if resources != set(self.expected['shared_resource_sha256']):
+                raise RuntimeError('Shared resource file set changed during production')
+            for name, digest in self.hashes.items():
+                path = self.project / name
+                signature = self.signature(path)
+                if signature != self.signatures[name]:
+                    if file_digest(path) != digest:
+                        raise RuntimeError('Executable source or shared resource contents changed: ' + name)
+                    self.signatures[name] = signature
+            if sys.version != self.expected['python'] or any(version(p) != v for p, v in self.expected['packages'].items()):
+                raise RuntimeError('Runtime package versions changed during production')
+            self.checked = time.monotonic()
+        except Exception as error:
+            self.error = str(error)
+            raise
+        finally:
+            self.lock.release()
