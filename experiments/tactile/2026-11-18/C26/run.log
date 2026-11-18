@@ -1,0 +1,11 @@
+SHARED_ENCODED Real_train 5153
+SHARED_ENCODED Natural_train 4049
+SHARED_ENCODED Real_validation 780
+SHARED_ENCODED Natural_validation 905
+SUPPORT raw_Euclidean
+SUPPORT RealTrain_standardized
+SUPPORT RealTrain_whitened
+SUPPORT cosine
+DECODED Real_validation 780
+DECODED Natural_validation 905
+C26 INFERENCE COMPLETE C0_ALLOWED True

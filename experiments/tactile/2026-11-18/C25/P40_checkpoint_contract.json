@@ -1,0 +1,14 @@
+{
+  "keys": [
+    "model",
+    "amplitude_scale",
+    "target_mean",
+    "target_std",
+    "feature_dim",
+    "name",
+    "lambda",
+    "selected_epoch",
+    "parameters",
+    "scope"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "A": "FAILED_FOR_DEFAULT_NATIVE_LATENT_COST; legacy alternatives explicitly inventoried",
+  "B": "WITHIN_DOMAIN_ONLY_COMPLETE; CROSS_DOMAIN_UNDEFINED",
+  "C": "NOT_RUN_GATE_A_FAILED",
+  "D": "WEAK_PROXY_STATISTICS_COMPLETE; NO_PHYSICAL_CONDITION_CERTIFIED",
+  "E": "NOT_RUN_GATES_A_D_FAILED",
+  "F": "NOT_RUN_NO_VALID_OT_PLAN",
+  "neural_training_epochs": 0,
+  "optimizer_steps": 0,
+  "new_GMM_fits": 0,
+  "OT_solves": 0,
+  "C0_evaluations": 0,
+  "new_712D_outputs": 0
+}

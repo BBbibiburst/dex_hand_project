@@ -1,0 +1,12 @@
+{
+  "taxel_participation": {
+    "global_positive_gain_invariant": true,
+    "Taxel_permutation_invariant": true,
+    "not_temporal_rate_or_physical_contact": true
+  },
+  "scale_free_frame_delta": {
+    "global_positive_gain_invariant": true,
+    "Taxel_permutation_invariant": true,
+    "not_temporal_rate_or_physical_contact": true
+  }
+}

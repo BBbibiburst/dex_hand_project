@@ -1,0 +1,15 @@
+{
+  "epochs": 24,
+  "best_epoch": 14,
+  "steps": 1536,
+  "natural_unique": 4049,
+  "natural_visits": 97176,
+  "paired_unique": 1200,
+  "paired_visits": 98304,
+  "trainable_parameters": 181824,
+  "seconds": 55.004838943481445,
+  "device": "cuda:0",
+  "GPU_peak_bytes": 176014336,
+  "VAE_frozen": true,
+  "new_probe_training": 0
+}

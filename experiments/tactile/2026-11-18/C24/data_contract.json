@@ -1,0 +1,18 @@
+{
+  "Real_windows": 780,
+  "reconstructed_windows": 780,
+  "shape": [
+    780,
+    4,
+    712
+  ],
+  "Session_count": 4,
+  "Trial_count": 120,
+  "numeric_loading": "only exact registered780 Real Validation row indices streamed from source NPZ; other numeric rows/keys not materialized",
+  "source_npz": "outputs/tactile_p37_full_data_revalidation_2026-11-15/validation.npz",
+  "source_groups_matched": true,
+  "no_Natural_dataset_opened": true,
+  "no_Test_Holdout_rows_selected": true,
+  "generated_model_sha256": "c07a457c199df315c70dd543e3e642319c0cc9b8d47b92f32e5a8c4f299c6109",
+  "generated_values_sha256": "aec9f0c62baca831e9537e19045610ad72c7344a57a57963530d3bbca0097e02"
+}

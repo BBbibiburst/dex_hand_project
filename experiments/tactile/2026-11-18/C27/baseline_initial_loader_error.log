@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/baseline.py", line 5, in <module>
+    save(O/'protected_hashes_before.json',protected);y=convert(R,S,T,n['x']);assert y.shape==(905,4,712) and np.isfinite(y).all() and (y>=0).all();np.savez_compressed(O/'baseline/translated_validation.npz',values=y,groups=n['g'],stage=n['s'],units=n['u'],tasks=n['tasks']);rows=evaluate(O/'baseline',y,r,n)
+  File "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/common.py", line 39, in evaluate
+    else:ck=torch.load(p/'checkpoint.pt',map_location='cpu',weights_only=False);net=Deep(kind);net.load_state_dict(ck['model']);net.eval();net.requires_grad_(False)
+  File "outputs/tactile_p35_deep_probe_2026-11-15/code/run.py", line 25, in __init__
+    if kind=='mlp':self.net=Probe(2848,'mlp')
+NameError: name 'Probe' is not defined

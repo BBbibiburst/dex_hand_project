@@ -1,0 +1,15 @@
+baseline mlp_11 0.59155 False
+baseline mlp_12 0.59831 False
+baseline mlp_13 0.61041 False
+baseline gru_11 0.23941 False
+baseline gru_12 0.23715 False
+baseline gru_13 0.3833 False
+baseline transformer_11 0.28257 False
+baseline transformer_12 0.21729 False
+baseline transformer_13 0.69827 False
+baseline logistic 0.68252 False
+baseline knn 0.50054 True
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/baseline.py", line 9, in <module>
+    table(O/'baseline_reproduction.csv',delta);assert max(r['absolute_difference'] for r in delta)<1e-5;assert sum(r['passed_joint'] for r in rows)==1;assert all(sha(p)==h for p,h in protected.items());save(O/'baseline_reproduced.json',dict(passed=True,joint_pass_count=1,windows=905,Real_reference=780,seconds=time.time()-start,history='C11F C3 original Validation scalar record, no Test/Holdout'))
+AssertionError

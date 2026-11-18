@@ -1,0 +1,9 @@
+{
+  "MSE": 0.026319601646693502,
+  "Mask_IoU": 0.5117154774848552,
+  "finite": true,
+  "nonnegative": true,
+  "alignment": "same Real window/Taxel/frame",
+  "no_amplitude_clipping": true,
+  "interpretation": "decomposition descriptive; positive-only errors conditional on both masks are not isolated amplitude-head causal errors"
+}

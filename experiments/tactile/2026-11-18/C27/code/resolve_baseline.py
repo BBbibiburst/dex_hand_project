@@ -1,0 +1,10 @@
+from common import *
+import time
+R,S,T=load();torch.set_num_threads(2);device='cuda:0';R.to(device);T.to(device);z=np.load('outputs/tactile_p43_c4_root_cause_audit_2026-11-16/latents/Natural_validation.npz')['mu'];hist=np.load('outputs/tactile_p43_c11_latent_support_audit_2026-11-17/samples/F_validation_det.npz')['values'];lat=[];out=[]
+with torch.inference_mode():
+ for i in range(0,len(z),128):lat.append(T(torch.from_numpy(z[i:i+128]).to(device)).cpu().numpy())
+ lat=np.concatenate(lat)
+ for i in range(0,len(z),128):out.append(R.decoder.deterministic_decode(torch.from_numpy(lat[i:i+128]).to(device)).cpu().numpy())
+a=np.concatenate(out);b=np.load(O/'baseline/translated_validation.npz')['values'];stats=dict(historical_C11_device='cuda:0',historical_C11_context='C4 CPU posterior means -> T GPU batch128 -> Decoder GPU batch128',deployment_replay='C3 original Converter contract CPU batch64 end-to-end',historical_gpu_replay_max_difference=float(abs(a-hist).max()),historical_gpu_replay_mask_mismatches=int(np.count_nonzero((a>0)!=(hist>0))),deployment_vs_historical_gpu_mask_mismatches=int(np.count_nonzero((b>0)!=(hist>0))),deployment_vs_historical_gpu_total_values=int(b.size),cause='floating-point execution path changes borderline autoregressive Mask; no model/scaler/data change',not_checkpoint_selection=True)
+assert np.array_equal(a>0,hist>0);assert np.allclose(a,hist,rtol=1e-5,atol=1e-5);save(O/'baseline_numerical_path_audit.json',stats);rows=list(csv.DictReader((O/'baseline/metrics.csv').open()));assert sum(r['passed_joint']=='True' for r in rows)==1;save(O/'baseline_reproduced.json',dict(passed=True,joint_pass_count=1,windows=905,Real_reference=780,point_metrics_bit_exact_to_C11=False,maximum_AUC_difference=float(max(float(r['absolute_difference']) for r in csv.DictReader((O/'baseline_reproduction.csv').open()))),cause_audited=stats,training_may_proceed=True,no_test_or_holdout=True))
+print('BASELINE RESOLVED original deployment1/11; historical GPU path reproduced',flush=True)

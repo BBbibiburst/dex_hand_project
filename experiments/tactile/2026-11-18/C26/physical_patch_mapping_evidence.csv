@@ -1,0 +1,17 @@
+real_patch,real_label_from_task,rows,cols,current_canonical_sim_patch,anatomical_candidate_sim_patch,current_permutation_source,anatomical_source,status,row_direction,column_direction,rotation_flip_transpose,physical_correspondence_certified
+0,thumb tip,7,8,14,14,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False
+1,thumb middle,4,8,12,13,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+2,thumb root,4,8,13,12,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+3,index tip,7,8,2,2,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False
+4,index middle,4,8,0,1,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+5,index root,4,8,1,0,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+6,middle tip,7,8,5,5,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False
+7,middle middle,4,8,3,4,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+8,middle root,4,8,4,3,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+9,ring tip,7,8,8,8,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False
+10,ring middle,4,8,6,7,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+11,ring root,4,8,7,6,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+12,little tip,7,8,11,11,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False
+13,little middle,4,8,9,10,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+14,little root,4,8,10,9,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,ANATOMICAL_ORDER_CONFLICT_IF_USER_TABLE_CORRECT,UNKNOWN,UNKNOWN,UNKNOWN,False
+15,palm,7,16,15,15,apps/train_tactile_712d_gan.py:24,P41 user table only; not Collect_HZ code,PATCH_CANDIDATE_ONLY_NO_DIRECTION_PROOF,UNKNOWN,UNKNOWN,UNKNOWN,False

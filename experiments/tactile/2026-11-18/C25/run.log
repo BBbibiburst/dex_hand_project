@@ -1,0 +1,9 @@
+WITHIN_GEOMETRY Real raw_native_Euclidean
+WITHIN_GEOMETRY Real Train_only_standardized
+WITHIN_GEOMETRY Real Train_only_whitened
+WITHIN_GEOMETRY Real native_cosine
+WITHIN_GEOMETRY Natural raw_native_Euclidean
+WITHIN_GEOMETRY Natural Train_only_standardized
+WITHIN_GEOMETRY Natural Train_only_whitened
+WITHIN_GEOMETRY Natural native_cosine
+C25 AUDIT COMPLETE 29.67203187942505

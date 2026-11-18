@@ -1,0 +1,8 @@
+{
+  "python": "3.10.20",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4",
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "inference_device": "CPU",
+  "torch_num_threads": 2
+}

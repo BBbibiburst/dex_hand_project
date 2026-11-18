@@ -1,0 +1,14 @@
+{
+  "/home/zmy/dex_hand_project/outputs/tactile_c27_D090_acceptance_2026-11-18/models/real_vae.pt": {
+    "source": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/real_vae/checkpoint.pt",
+    "sha256": "99beaf8e6402b1c34a59add2a86036f56ebc8fd1b69c472c2542198774a1e815"
+  },
+  "/home/zmy/dex_hand_project/outputs/tactile_c27_D090_acceptance_2026-11-18/models/sim_vae.pt": {
+    "source": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/sim_vae/checkpoint.pt",
+    "sha256": "c92af67fd97d29cc600a7a338899ad47b293b495b25896155dde2707ccc6db62"
+  },
+  "/home/zmy/dex_hand_project/outputs/tactile_c27_D090_acceptance_2026-11-18/models/gru_translator.pt": {
+    "source": "outputs/tactile_c27_c3_route_improvement_2026-11-18/candidate/checkpoint.pt",
+    "sha256": "8a0f9aa0441a44f372d0c5b1d9367fee39e2c93b0d86ccab9cb94bb207d31685"
+  }
+}

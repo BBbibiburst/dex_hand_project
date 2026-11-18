@@ -1,0 +1,4 @@
+# Preserve the original SHA256 inventory, including CSV line endings.
+* -text
+# csv.writer outputs CRLF; this is part of the checksummed evidence.
+*.csv whitespace=cr-at-eol

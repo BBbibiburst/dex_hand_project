@@ -1,0 +1,14 @@
+{
+  "status": "NO_GO_CURRENT_NATIVE_LATENT_GMM_OT",
+  "scope": "direct conditional Gaussian W2 transport between independent C3_Sim and C13_Real posterior coordinates",
+  "not_global_impossibility": true,
+  "verified_common_native_coordinates": false,
+  "latent_overlap": "UNKNOWN_UNDEFINED_UNTIL_COMMON_COST_SPACE",
+  "GMM_stability": "NOT_EVALUATED_GATE_A_FAILED",
+  "common_conditions": "some mathematically comparable weak response descriptors; no certified shared physical state",
+  "OT_plan_stability": "NOT_EVALUATED",
+  "stochastic_advantage": "UNKNOWN_NOT_EVALUATED",
+  "next_single_prerequisite": "Before reopening: validate one fixed common cost representation compatible with C13 Decoder, and input structure retention. Reusing C13 Real Encoder on both domains is a hypothesis, not established support; no new neural training authorized.",
+  "no_C26": true,
+  "no_primary_acceptance_claim": true
+}

@@ -1,0 +1,14 @@
+{
+  "numeric_contract_passed": true,
+  "shape_channel_block_sizes_match": true,
+  "channel_permutation_unchanged": true,
+  "physical_same_Taxel_position": "UNKNOWN",
+  "finger_middle_root_conflict": "conditional320Taxels if historical user anatomical table is correct; not confirmed driver mapping",
+  "row_col_orientation": "UNKNOWN",
+  "physical_sign_and_units": "UNKNOWN: both stored nonnegative response, not verified same physical quantity",
+  "Real_processing": "Calibration/driver missing; gate flag mixed and execution unverified",
+  "Sim_processing": "native touch force -> project deadzone/saturation/power/lowpass/crosstalk; not certified same real transfer function",
+  "actual_incompatibility_proven": false,
+  "proceed_scope": "index-space zero-shot diagnostic permitted by StageD physical-UNKNOWN branch; no physical correspondence claim",
+  "not_uniform_shared_temporal_sampling": true
+}

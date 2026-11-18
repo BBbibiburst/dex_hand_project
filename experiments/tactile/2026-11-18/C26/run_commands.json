@@ -1,0 +1,21 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "executed": [
+    "python /home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/run.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/finish.py"
+  ],
+  "not_executed": [
+    "/home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/evaluate.py"
+  ],
+  "rerun": "fresh result directory required; no overwrite",
+  "code_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/finish.py": "314e5d2ea2daa1a45a2b69658c2653844c15452abdc2bdd10c472e23315fd328",
+    "/home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/run.py": "2addb44ce2490b1ea49566c8583307734e5b9bbf6fbda557e578c3be3da7c98c",
+    "/home/zmy/dex_hand_project/outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/evaluate.py": "5029044ea4054e6c0c7910cf415a791e916821a17cbeb139325487aa5323446c"
+  }
+}

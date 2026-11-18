@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/train.py", line 64, in <module>
+    if __name__=='__main__':main()
+  File "/home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/train.py", line 31, in main
+    cache[role]=dict(h=torch.cat(hs),mask=torch.cat(ms),mu=torch.cat(mus),target=torch.from_numpy(x).to(device));assert np.array_equal(cache[role]['mask'].cpu().numpy()>0,np.load(P/f'{role}_outputs.npz')['values']>0)
+AssertionError

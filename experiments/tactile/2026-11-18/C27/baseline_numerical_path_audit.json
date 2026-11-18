@@ -1,0 +1,11 @@
+{
+  "historical_C11_device": "cuda:0",
+  "historical_C11_context": "C4 CPU posterior means -> T GPU batch128 -> Decoder GPU batch128",
+  "deployment_replay": "C3 original Converter contract CPU batch64 end-to-end",
+  "historical_gpu_replay_max_difference": 1.239776611328125e-05,
+  "historical_gpu_replay_mask_mismatches": 0,
+  "deployment_vs_historical_gpu_mask_mismatches": 113,
+  "deployment_vs_historical_gpu_total_values": 2577440,
+  "cause": "floating-point execution path changes borderline autoregressive Mask; no model/scaler/data change",
+  "not_checkpoint_selection": true
+}

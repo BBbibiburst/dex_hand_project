@@ -1,0 +1,4 @@
+# These are exact historical snapshots with source hashes.
+* -text
+# csv.writer outputs CRLF; retain it without flagging CR as trailing space.
+*.csv whitespace=cr-at-eol

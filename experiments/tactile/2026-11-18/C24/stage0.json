@@ -1,0 +1,22 @@
+{
+  "status": "PASS_ORDERED_ADJACENT_DECIMATED_SAMPLES",
+  "windows": 5933,
+  "all_original_numeric_frames_exact": true,
+  "within_same_Trial_and_stage": true,
+  "not_uniform_20Hz": true,
+  "consecutive": "consecutive retained complete frames in historical greedy20Hz downsampling; not every hardware sample",
+  "loss_interpretation": "ordered retained-frame increment consistency, NOT physical derivative per second",
+  "C23_delta_implementation": "np.diff on axis1 within each registered4-frame window; no cross-window or cross-Trial pairs",
+  "C23_statistics_index_error": false,
+  "train_epochs_actual_C13": 18,
+  "C13_best_epoch": 3,
+  "trainable_parameters": 594512,
+  "allowed": [
+    "decoder.current",
+    "decoder.amplitude"
+  ],
+  "original_loss": "per-window positive Gamma2 mixture NLL in original nonnegative processed response units; positive_scale is likelihood parameterization, not target relabelling",
+  "new_loss": "mean abs discrepancy of adjacent log1p(decoded_response) increments; full3x712, no thresholding",
+  "training_can_proceed": true,
+  "wall_seconds": 61.589698791503906
+}

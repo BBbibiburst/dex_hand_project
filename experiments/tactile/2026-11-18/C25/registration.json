@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-18",
+  "stage_A_gate": "native independent64D encoders require verified common cost coordinates; otherwise cross-domain distances,GMM,OT and sampling skipped",
+  "roles": [
+    "train",
+    "validation"
+  ],
+  "bootstrap_draws": 300,
+  "seed": 2501,
+  "max_seconds": 600,
+  "max_new_bytes": 500000000,
+  "no_neural_training": true,
+  "no_C0_evaluation": true,
+  "no_712D_generation": true,
+  "no_Test_Holdout": true,
+  "K_if_and_only_if_gate_passes": [
+    2,
+    4,
+    8,
+    16
+  ],
+  "condition_thresholds": "exact0; relative per-frame peak .001,.01,.05 (descriptive only)",
+  "no_auto_C26": true,
+  "git_HEAD": "7faeb53fe7e3136f436a976587bacea13e8e4eed"
+}

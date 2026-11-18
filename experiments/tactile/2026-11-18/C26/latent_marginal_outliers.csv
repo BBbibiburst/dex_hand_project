@@ -1,0 +1,5 @@
+dataset,fraction_coordinate_values_outside_RealTrain_P005_P995,fraction_windows_with_any_coordinate_outside,mean_fraction_outside_per_window,high_dimensional_warning
+Real_train,0.01009120900446342,0.5443431011061518,0.01009120900446342,"any-coordinate exceedance not calibrated OOD, no sample filtering"
+Natural_train,0.07555009724623364,0.7315386515188935,0.07555009724623364,"any-coordinate exceedance not calibrated OOD, no sample filtering"
+Real_validation,0.010601963141025642,0.441025641025641,0.010601963141025642,"any-coordinate exceedance not calibrated OOD, no sample filtering"
+Natural_validation,0.08743093922651933,0.7580110497237569,0.08743093922651933,"any-coordinate exceedance not calibrated OOD, no sample filtering"

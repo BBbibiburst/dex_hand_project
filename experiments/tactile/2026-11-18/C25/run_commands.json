@@ -1,0 +1,17 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "commands": [
+    "python /home/zmy/dex_hand_project/outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/audit.py > /home/zmy/dex_hand_project/outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/run.log 2>&1",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/finish.py"
+  ],
+  "code_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/finish.py": "e15bc429a9ba49af8ad0a8c478af8302861c7c8e0eaae9109433ecc7bd535021",
+    "/home/zmy/dex_hand_project/outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/audit.py": "47f2b720651bd05cd3ffdddb013ead580064e3c30b177969f9a8f0e04d4f634e"
+  },
+  "rerun": "Historical commands; fresh output directory required, no overwrite."
+}

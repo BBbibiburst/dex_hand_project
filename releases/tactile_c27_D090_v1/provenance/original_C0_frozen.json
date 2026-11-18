@@ -1,0 +1,76 @@
+{
+  "timestamp": 1794831968.5352197,
+  "instances": [
+    {
+      "name": "mlp_11",
+      "kind": "mlp",
+      "seed": 11
+    },
+    {
+      "name": "mlp_12",
+      "kind": "mlp",
+      "seed": 12
+    },
+    {
+      "name": "mlp_13",
+      "kind": "mlp",
+      "seed": 13
+    },
+    {
+      "name": "gru_11",
+      "kind": "gru",
+      "seed": 11
+    },
+    {
+      "name": "gru_12",
+      "kind": "gru",
+      "seed": 12
+    },
+    {
+      "name": "gru_13",
+      "kind": "gru",
+      "seed": 13
+    },
+    {
+      "name": "transformer_11",
+      "kind": "transformer",
+      "seed": 11
+    },
+    {
+      "name": "transformer_12",
+      "kind": "transformer",
+      "seed": 12
+    },
+    {
+      "name": "transformer_13",
+      "kind": "transformer",
+      "seed": 13
+    },
+    {
+      "name": "logistic",
+      "kind": "logistic",
+      "seed": null
+    },
+    {
+      "name": "knn",
+      "kind": "knn",
+      "seed": null
+    }
+  ],
+  "files": {
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/scaler.npz": "cd549b3720d08e55ddafed817c294fba4910db5cf1f4ea558c4ca030c5468921",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_12/checkpoint.pt": "eebfcd5db39978e4aa0b12a80a5b0ea4ada6fc6e7ca324505241fe43ae616420",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_11/checkpoint.pt": "fe761d858c994bc65343e3cba53e95554e5ae0b10d2fbaff16afe085c10b4865",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_12/checkpoint.pt": "e49381065bd5647bd1e66482f8f174f6907162b8c2c89cada285c23d2a5bb3a8",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/logistic/checkpoint.pt": "4b2d2472af896dd1ed028ee0899003970e0be10ef79d635b2f95786d4e282b01",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_12/checkpoint.pt": "301e6274dd4772fe54a48da6e865e04f24b523eca30187991d05cbead31cecee",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_11/checkpoint.pt": "a69353fe458cf372cf1fabd7bebfe3d996d615e0494b173ab5128ad7a179ec91",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_13/checkpoint.pt": "483f99a36d5aa78dbd156c991a9ade333c4b9786e203dea33ce7ecb5590f62df",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_11/checkpoint.pt": "60dac23f7cdd9a59318b7aef8824c0944fc855b7798bd9f70b27f1a6af458dc1",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_13/checkpoint.pt": "aa5e903e66be197f528ded0902138748f71728a07e2865f44b791e6f829b2e34",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_13/checkpoint.pt": "57f581cb96712d41a81f0ff325b0ae5c8ce095c9d33502fd966cfc6be434f156",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/knn/checkpoint.npz": "6fcfd1854498407d0e1eae178c5f6bed40d096c9a6530c49bdcfc0f46ca841ae"
+  },
+  "test_evaluated": false,
+  "never_refit_after_transfer": true
+}

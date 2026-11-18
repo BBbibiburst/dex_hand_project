@@ -1,0 +1,12 @@
+instance,status,BA,AUC,D,joint_pass,reason
+mlp_11,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+mlp_12,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+mlp_13,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+gru_11,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+gru_12,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+gru_13,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+transformer_11,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+transformer_12,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+transformer_13,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+logistic,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted
+knn,NOT_RUN_STAGE_D_STOP,UNKNOWN,UNKNOWN,UNKNOWN,NOT_EVALUATED,response/tail/time structure failed before classifier selection; no old score substituted

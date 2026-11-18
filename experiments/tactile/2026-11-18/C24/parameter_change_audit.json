@@ -1,0 +1,12 @@
+{
+  "changed_keys": [
+    "decoder.current.0.weight",
+    "decoder.current.0.bias",
+    "decoder.amplitude.0.weight",
+    "decoder.amplitude.0.bias",
+    "decoder.amplitude.2.weight",
+    "decoder.amplitude.2.bias"
+  ],
+  "all_frozen_bit_identical": true,
+  "Mask_and_Encoder_bit_identical": true
+}

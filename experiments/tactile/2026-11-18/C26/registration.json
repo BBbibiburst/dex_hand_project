@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-18",
+  "roles": [
+    "train",
+    "validation"
+  ],
+  "shared_checkpoint": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/checkpoint.pt",
+  "Encoder": "original frozen C13 posterior mean, CPU batch64 for all domains",
+  "Decoder": "original frozen C13 deterministic_decode, same GPU/CPU device batch64 for both validation roles",
+  "numeric_scope": "unchanged canonical INDEX space; physical channel correspondence UNKNOWN is retained, not certified",
+  "Stage0_hard_stops": [
+    "nonfinite or negative input",
+    "shape/order metadata mismatch",
+    "nonincreasing timestamps",
+    "source indices misalignment"
+  ],
+  "StageD_hard_stops": [
+    "nonfinite or negative output",
+    "constant output: <2 unique windows or mean window-std<1e-8 despite varying input",
+    ">=95% of nonzero-input windows decoded completely zero"
+  ],
+  "StageD_other_diagnostics": "Do not claim semantic/physical retention from numeric gates or correlation alone; severe retention problems may still invalidate result",
+  "no_model_training": true,
+  "no_scaler_fitting": true,
+  "no_GMM": true,
+  "no_OT": true,
+  "no_C0_fitting": true,
+  "no_input_edit": true,
+  "no_Test_Holdout": true,
+  "no_server_change": true,
+  "bootstrap": 300,
+  "seed": 2601,
+  "budget_seconds": 600,
+  "budget_bytes": 500000000,
+  "primary_selection": "single candidate only, original11C0 once if A-D numeric gates pass",
+  "auto_C27": false,
+  "git_HEAD": "7faeb53fe7e3136f436a976587bacea13e8e4eed"
+}

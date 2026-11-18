@@ -1,0 +1,12 @@
+{
+  "primary_pass_count": 2,
+  "required": 11,
+  "all_11_passed": false,
+  "primary_metric_achieved": false,
+  "keep_as_new_default": false,
+  "retain_candidate_for_reproducibility": true,
+  "reason": "only2/11, mixed per-instance AUC and input-structure results; latent moment improvement does not establish output alignment",
+  "candidate_count": 1,
+  "more_search_started": false,
+  "next": "No new model search automatically. If continued, prioritize pseudo-pair support/ambiguity in original C3 route, not epoch extension, GAN, diffusion or independent-latent OT."
+}

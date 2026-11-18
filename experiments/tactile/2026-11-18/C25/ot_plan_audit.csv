@@ -1,0 +1,2 @@
+scope,status,reason,result
+W2 conditional cost epsilon K plan sensitivity condition shuffle,NOT_RUN,original native coordinate gate failed; user explicitly requires stopping correspondence calculations,UNKNOWN_NOT_FAILURE

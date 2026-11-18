@@ -1,0 +1,12 @@
+candidate mlp_11 0.60016 False
+candidate mlp_12 0.63016 False
+candidate mlp_13 0.61724 False
+candidate gru_11 0.57192 False
+candidate gru_12 0.48796 True
+candidate gru_13 0.54811 False
+candidate transformer_11 0.35794 False
+candidate transformer_12 0.30724 False
+candidate transformer_13 0.6436 False
+candidate logistic 0.67306 False
+candidate knn 0.50999 True
+CANDIDATE EVALUATED NO_NEW_TRAINING

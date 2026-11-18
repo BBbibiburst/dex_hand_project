@@ -1,0 +1,21 @@
+{
+  "keys": [
+    "model",
+    "statistics",
+    "epoch",
+    "candidate",
+    "parameters",
+    "config",
+    "scope"
+  ],
+  "state_prefixes": [
+    "DR",
+    "DS",
+    "ER",
+    "ES",
+    "proxy_mean",
+    "proxy_std",
+    "stage",
+    "structure"
+  ]
+}

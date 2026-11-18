@@ -1,0 +1,5 @@
+metric,source,P95
+raw_Euclidean,RealTrain crossSession nearest-neighbor P95 only,14.120428060799439
+RealTrain_standardized,RealTrain crossSession nearest-neighbor P95 only,11.183612370137869
+RealTrain_whitened,RealTrain crossSession nearest-neighbor P95 only,13.354189905129612
+cosine,RealTrain crossSession nearest-neighbor P95 only,0.14167962458535585

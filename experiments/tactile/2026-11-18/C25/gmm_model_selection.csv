@@ -1,0 +1,2 @@
+scope,status,reason,result
+K2/4/8/16 AIC BIC likelihood occupancy covariance init stability,NOT_RUN,original native coordinate gate failed; user explicitly requires stopping correspondence calculations,UNKNOWN_NOT_FAILURE

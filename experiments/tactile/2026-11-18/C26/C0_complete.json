@@ -1,0 +1,9 @@
+{
+  "status": "NOT_RUN_STAGE_D_STOP",
+  "new_C0_inferences": 0,
+  "new_probe_fits": 0,
+  "joint_pass_count": null,
+  "not_zero_of_11": true,
+  "reason": "conditional evaluation gate: finite alone not sufficient",
+  "no_old_C23_C13_scores_relabelled_C26": true
+}

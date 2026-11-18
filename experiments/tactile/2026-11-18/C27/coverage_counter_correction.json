@@ -1,0 +1,6 @@
+{
+  "original_fancy_index_sum": 98252,
+  "correct_replayed_index_sum": 98304,
+  "reason": "np array indexed += undercounts repeated indices at concatenated permutation boundaries; no data omitted or training altered",
+  "training_seed_replay": true
+}

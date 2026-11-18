@@ -1,0 +1,3 @@
+role,independent_Roots,task_categories,task_explained_Root_centroid_variance,label_permutation_mean,label_permutation_P95,descriptive
+train,50,5,0.7151682608350444,0.07858642269476519,0.1390608218994197,"native Sim coordinates, group-level association; task not randomized, not causal/Real correspondence"
+validation,10,5,0.923859385561251,0.4433287917031387,0.8004115345573306,"native Sim coordinates, group-level association; task not randomized, not causal/Real correspondence"

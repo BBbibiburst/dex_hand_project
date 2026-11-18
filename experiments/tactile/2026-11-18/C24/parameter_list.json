@@ -1,0 +1,230 @@
+[
+  {
+    "name": "encoder.input.0.weight",
+    "shape": [
+      128,
+      1424
+    ],
+    "numel": 182272,
+    "trainable": false
+  },
+  {
+    "name": "encoder.input.0.bias",
+    "shape": [
+      128
+    ],
+    "numel": 128,
+    "trainable": false
+  },
+  {
+    "name": "encoder.input.2.weight",
+    "shape": [
+      128
+    ],
+    "numel": 128,
+    "trainable": false
+  },
+  {
+    "name": "encoder.input.2.bias",
+    "shape": [
+      128
+    ],
+    "numel": 128,
+    "trainable": false
+  },
+  {
+    "name": "encoder.gru.weight_ih_l0",
+    "shape": [
+      384,
+      128
+    ],
+    "numel": 49152,
+    "trainable": false
+  },
+  {
+    "name": "encoder.gru.weight_hh_l0",
+    "shape": [
+      384,
+      128
+    ],
+    "numel": 49152,
+    "trainable": false
+  },
+  {
+    "name": "encoder.gru.bias_ih_l0",
+    "shape": [
+      384
+    ],
+    "numel": 384,
+    "trainable": false
+  },
+  {
+    "name": "encoder.gru.bias_hh_l0",
+    "shape": [
+      384
+    ],
+    "numel": 384,
+    "trainable": false
+  },
+  {
+    "name": "encoder.mean.weight",
+    "shape": [
+      64,
+      128
+    ],
+    "numel": 8192,
+    "trainable": false
+  },
+  {
+    "name": "encoder.mean.bias",
+    "shape": [
+      64
+    ],
+    "numel": 64,
+    "trainable": false
+  },
+  {
+    "name": "encoder.logvar.weight",
+    "shape": [
+      64,
+      128
+    ],
+    "numel": 8192,
+    "trainable": false
+  },
+  {
+    "name": "encoder.logvar.bias",
+    "shape": [
+      64
+    ],
+    "numel": 64,
+    "trainable": false
+  },
+  {
+    "name": "decoder.bos",
+    "shape": [
+      32
+    ],
+    "numel": 32,
+    "trainable": false
+  },
+  {
+    "name": "decoder.previous.0.weight",
+    "shape": [
+      32,
+      712
+    ],
+    "numel": 22784,
+    "trainable": false
+  },
+  {
+    "name": "decoder.previous.0.bias",
+    "shape": [
+      32
+    ],
+    "numel": 32,
+    "trainable": false
+  },
+  {
+    "name": "decoder.cell.weight_ih",
+    "shape": [
+      384,
+      96
+    ],
+    "numel": 36864,
+    "trainable": false
+  },
+  {
+    "name": "decoder.cell.weight_hh",
+    "shape": [
+      384,
+      128
+    ],
+    "numel": 49152,
+    "trainable": false
+  },
+  {
+    "name": "decoder.cell.bias_ih",
+    "shape": [
+      384
+    ],
+    "numel": 384,
+    "trainable": false
+  },
+  {
+    "name": "decoder.cell.bias_hh",
+    "shape": [
+      384
+    ],
+    "numel": 384,
+    "trainable": false
+  },
+  {
+    "name": "decoder.mask.weight",
+    "shape": [
+      712,
+      128
+    ],
+    "numel": 91136,
+    "trainable": false
+  },
+  {
+    "name": "decoder.mask.bias",
+    "shape": [
+      712
+    ],
+    "numel": 712,
+    "trainable": false
+  },
+  {
+    "name": "decoder.current.0.weight",
+    "shape": [
+      32,
+      712
+    ],
+    "numel": 22784,
+    "trainable": true
+  },
+  {
+    "name": "decoder.current.0.bias",
+    "shape": [
+      32
+    ],
+    "numel": 32,
+    "trainable": true
+  },
+  {
+    "name": "decoder.amplitude.0.weight",
+    "shape": [
+      128,
+      160
+    ],
+    "numel": 20480,
+    "trainable": true
+  },
+  {
+    "name": "decoder.amplitude.0.bias",
+    "shape": [
+      128
+    ],
+    "numel": 128,
+    "trainable": true
+  },
+  {
+    "name": "decoder.amplitude.2.weight",
+    "shape": [
+      4272,
+      128
+    ],
+    "numel": 546816,
+    "trainable": true
+  },
+  {
+    "name": "decoder.amplitude.2.bias",
+    "shape": [
+      4272
+    ],
+    "numel": 4272,
+    "trainable": true
+  }
+]

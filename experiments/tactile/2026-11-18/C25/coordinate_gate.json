@@ -1,0 +1,14 @@
+{
+  "native_R_S_shared_weights": false,
+  "Real_C13_Encoder_equals_C3_Real": true,
+  "encoder_R_hash": "8ae093a78ed7f01cfebb7b321f8986d2095c166ee603d88baaad8273062d85fb",
+  "encoder_S_hash": "d517567b37607b96465df3c669c234d4488fa61dd3054def897bb61c1ef3ed8c",
+  "native_shared_coordinate_verified": false,
+  "cross_native_distances_forbidden": true,
+  "GMM_OT_blocked": true,
+  "P40_shared_encoder_exists": true,
+  "P40_not_C13_coordinate": true,
+  "legacy_joint_VAE_exists": true,
+  "legacy_latent4x32_not_C13_4x64": true,
+  "why": "same dimension/standard Gaussian KL does not identify orientation/semantic axes across independently fitted models; Translator is a candidate mapping not common-coordinate proof"
+}

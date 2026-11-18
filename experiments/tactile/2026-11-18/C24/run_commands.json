@@ -1,0 +1,16 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "commands": [
+    "python /home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/audit.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/prepare_evaluation.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/train.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/evaluate.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/report.py"
+  ],
+  "warning": "Historical execution only. Fresh output directory required; never rerun training over these artifacts."
+}

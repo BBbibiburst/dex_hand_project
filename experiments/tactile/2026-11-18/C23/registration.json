@@ -1,0 +1,34 @@
+{
+  "scope": "C23 target-side Real reconstruction readout diagnostic, NOT Natural Sim PRIMARY",
+  "inputs": [
+    "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/validation_outputs.npz",
+    "outputs/tactile_p43_latent_translator_integrated_2026-11-16/real_validation/index.json"
+  ],
+  "candidate": "existing C13 frozen Encoder/Decoder free reconstruction; no new converter inference",
+  "classifier_registry": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/frozen.json",
+  "instances": 11,
+  "preprocessing": "unchanged original log1p/Scaler/channel order/0.5 threshold",
+  "labels": "Original Real reference=1, generated/reconstructed comparison side=0, exactly as C11 A. Both raw source domains remain Real; reconstruction is NOT relabelled Natural Sim.",
+  "criteria": {
+    "BA": [
+      0.45,
+      0.55
+    ],
+    "AUC": [
+      0.475,
+      0.525
+    ],
+    "D_min": 0.9,
+    "D": "1-2*abs(BA-.5)",
+    "BA_D_redundant": true
+  },
+  "history": "C11 A Real-reconstruction / F Natural historical METRICS ONLY; C13 Natural historical METRICS ONLY; no Natural data/array inference",
+  "kNN_reference": "Required original frozen C0 Train reference embedded in checkpoint, no new Natural files opened",
+  "budget_seconds": 300,
+  "budget_bytes": 200000000,
+  "bootstrap_replicates": 300,
+  "new_model_or_probe_training": false,
+  "new_GMM_Translator_GAN_Diffusion_VAE": false,
+  "Test_Holdout_read": false,
+  "autostart_next": false
+}

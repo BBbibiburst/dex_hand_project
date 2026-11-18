@@ -1,0 +1,19 @@
+{
+  "case": "B_or_mixed",
+  "temporal_loss_improved": true,
+  "time_probes_closer_to_half": 1,
+  "time_probes_farther_from_half": 5,
+  "time_probe_count": 6,
+  "joint_pass_C23": 6,
+  "joint_pass_C24": 2,
+  "Mask_bit_identical": true,
+  "unique_windows": 780,
+  "C24_P99_over_Real": 0.7198156736239054,
+  "C24_abs_delta_over_Real": 4.001127702899657,
+  "C24_MSE_over_C13": 1.0318335956815237,
+  "criterion": "Qualitative A/B/C mechanism decision; no newly fitted acceptance threshold",
+  "status": "COMPLETED_STOPPED_NO_C25",
+  "not_Sim_to_Real_acceptance": true,
+  "next": "Stop this repair configuration. Any next latent-correspondence study requires human authorization; no new training started.",
+  "no_weight_or_checkpoint_search": true
+}

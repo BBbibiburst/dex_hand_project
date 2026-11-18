@@ -1,0 +1,51 @@
+{
+  "method": "C3 GRU-only Natural coverage adaptation with paired anchors and target-chart distribution/response-share losses",
+  "single_candidate": true,
+  "seed": 4303,
+  "Real_Encoder_Decoder": "original frozen C3, NOT C13 or C26",
+  "Sim_Encoder_Decoder": "original frozen C3, independent ofReal",
+  "Translator": "original C3 two-layer GRU181824 parameters, initialized from C3 best checkpoint",
+  "GMM": "existing dictionary480 and physical paired1200/240 unchanged, no new pairing or physics",
+  "training_pairs": 1200,
+  "natural_train": 4049,
+  "real_train": 5153,
+  "natural_validation": 905,
+  "real_validation": 780,
+  "paired_validation": 240,
+  "loss": "original pairHuber+.1 frozenRealDecoder NLL + lambda_m Real-chart mean/covariance + lambda_s source patch response-share",
+  "moment_scope": "Translator output vs Real posterior ONLY in Real-chart; no direct independent-latent distance, no OT",
+  "source_structure": "squared patch share difference, array-index proxy NOT certified physical map; sigmoidMask*GammaMean smooth readout for training only; original hardMAP decoder at deployment",
+  "lambda_m": 0.2985902260964023,
+  "lambda_s": 0.42934519902173574,
+  "weight_rule": "each new term initially25% of Train anchor magnitude (Huber+.1 abs NLL); one fixed choice, no C0 feedback",
+  "initial_losses": {
+    "train": {
+      "Huber": 0.2556515649954478,
+      "Decoder_NLL": -4.245308113098145,
+      "anchor": -0.16887924631436674,
+      "moment": 0.5694948434829712,
+      "structure": 0.39605798426013605
+    },
+    "validation": {
+      "Huber": 0.32591042915980023,
+      "Decoder_NLL": -1.7468545277913412,
+      "anchor": 0.1512249763806661,
+      "moment": 1.06495201587677,
+      "structure": 0.49039838788259094
+    }
+  },
+  "loss_scaling_mean_std": "RealTrain-only loss coordinates, NOT input/C0 Scaler; never applied to deployed tactile",
+  "batch64": true,
+  "learning_rate": 0.0003,
+  "weight_decay": 0.0001,
+  "gradient_clip": 5,
+  "max_epochs": 45,
+  "min_checkpoint_epoch": 10,
+  "patience": 10,
+  "selection": "Validation same composite objective, no C0; both paired and Natural validation/Real reference latent moments",
+  "budget_seconds": 900,
+  "optimizer": "AdamW new state, original GRU lr",
+  "Test_Holdout": false,
+  "additional_seed": false,
+  "no_future_GAN": true
+}

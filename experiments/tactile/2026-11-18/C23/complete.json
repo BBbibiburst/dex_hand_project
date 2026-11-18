@@ -1,0 +1,14 @@
+{
+  "joint_pass_count": 6,
+  "instances": 11,
+  "all_11_joint_passed": false,
+  "scope": "REAL_RECONSTRUCTION_READOUT_DIAGNOSTIC_ONLY_NOT_SIM_PRIMARY",
+  "BA_pass_count": 11,
+  "AUC_pass_count": 6,
+  "D_pass_count": 11,
+  "wall_seconds": 3.5699961185455322,
+  "new_training_epochs": 0,
+  "new_optimizer_steps": 0,
+  "new_Probe_fits": 0,
+  "stopped_after_C23": true
+}

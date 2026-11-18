@@ -1,0 +1,28 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "executed": [
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/baseline.py",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/resolve_baseline.py",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/train.py",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/evaluate_candidate.py",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/sensitivity.py",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/report.py"
+  ],
+  "inference_example": "python /home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/infer.py --input INPUT.npz --key values --output NEW_OUTPUT.npz",
+  "warning": "Preserve all existing artifacts; rerun into a fresh directory. Errors/recovery paths documented, never retrain to change C0 scores.",
+  "code_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/infer.py": "db42755cc026e87f174d2da04fbe36642634109cc08ace3c6cce43e683275fbc",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/sensitivity.py": "ef6e5a23a76f22ac446a400b79f51c1c3620e0793726d780240f1c6aa5e511a5",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/common.py": "d1744224578e6116c21c62a2e0567b7e7655f44773f5fb3368ce292afd926813",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/resolve_baseline.py": "21ab5e6ffd08ed36f73e1ae3640e59e9cff8af0d6008061bcd75449a4203ef1d",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/report.py": "a6e9777de61c502db4c514240396cede4f65c8e2876b3560c89261c9e261eb82",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/evaluate_candidate.py": "bc64dcd3c33bef8420fc376938cc2ad5f0f316c49b64632b2fe876a36d2b428e",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/baseline.py": "6ab0f49f1b28834b6e5a88ab9b11ba2a7abb90a874e9e32a92fcd8762ef776fa",
+    "/home/zmy/dex_hand_project/outputs/tactile_c27_c3_route_improvement_2026-11-18/code/train.py": "4634ba37a707289bd4505b7b985319ef51d1b9312d191a271f824f163f11872e"
+  }
+}

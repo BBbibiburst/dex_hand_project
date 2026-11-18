@@ -1,0 +1,11 @@
+enc changed []
+storedg ['20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session']
+xg ['20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session'
+ '20260611_145025_hardness_slip_session']
+cpu maxdiff 0.0 mean 0.0 scales 0.14118273556232452 0.14118273556232452
+cuda:0 maxdiff 0.0007390976 mean 9.495821e-05 scales 0.14118273556232452 0.14118273556232452

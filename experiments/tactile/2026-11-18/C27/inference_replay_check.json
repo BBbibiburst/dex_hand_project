@@ -1,0 +1,1 @@
+{"bit_identical": true, "shape": [905, 4, 712], "CLI_reproducible": true, "threads": 2, "note": "CLI default thread-count variation corrected to same two-thread inference path; original replay retained, no checkpoint/data/acceptance changes"}

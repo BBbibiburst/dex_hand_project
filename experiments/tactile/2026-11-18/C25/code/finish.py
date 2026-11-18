@@ -1,0 +1,73 @@
+import ast,csv,json,hashlib,time
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+O=Path(__file__).resolve().parents[1]
+def save(n,d):(O/n).write_text(json.dumps(d,ensure_ascii=False,indent=2,allow_nan=False))
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def table(n,r):pd.DataFrame(r).to_csv(O/n,index=False)
+# Supplement per-task/group diagnostics in each native coordinate system; no cross-domain metric.
+rng=np.random.default_rng(2501);taskrows=[]
+for role in ['train','validation']:
+ d=np.load(O/f'Natural_{role}_native_latents.npz');mu=d['mu'].reshape(len(d['mu']),-1);roots=np.unique(d['groups']);centers=np.stack([mu[d['groups']==g].mean(0) for g in roots]);labels=np.array([d['tasks'][d['groups']==g][0] for g in roots]);assert all(len(set(d['tasks'][d['groups']==g]))==1 for g in roots)
+ def eta(lab):
+  total=((centers-centers.mean(0))**2).sum();between=sum(np.sum(lab==t)*((centers[lab==t].mean(0)-centers.mean(0))**2).sum() for t in np.unique(lab));return float(between/total)
+ observed=eta(labels);null=np.array([eta(rng.permutation(labels)) for _ in range(300)]);taskrows.append(dict(role=role,independent_Roots=len(roots),task_categories=len(set(labels)),task_explained_Root_centroid_variance=observed,label_permutation_mean=float(null.mean()),label_permutation_P95=float(np.quantile(null,.95)),descriptive='native Sim coordinates, group-level association; task not randomized, not causal/Real correspondence'))
+table('native_task_association.csv',taskrows)
+# Correct first-frame logvar column to actual frame0 (original numeric analysis never uses this annotation).
+p=O/'latent_dimensions.csv';dim=pd.read_csv(p)
+for name in dim.dataset.unique():
+ z=np.load(O/f'{name}_native_latents.npz');ix=dim.dataset==name;dim.loc[ix,'posterior_logvar_mean']=[float(z['logvar'][:,int(r.frame),int(r.dimension)].mean()) for r in dim[ix].itertuples()]
+dim.to_csv(p,index=False)
+p=O/'code/audit.py';s=p.read_text();s=s.replace("float(d['lv'][:,:,j%64].mean()) if j<64 else float(d['lv'][:,j//64,j%64].mean())", "float(d['lv'][:,j//64,j%64].mean())");p.write_text(s)
+# Statistics-only descriptor semantics tests; not fitted and no new signal files loaded.
+conditions=[]
+def concentration(a):return (a.sum(-1)**2/np.maximum((a*a).sum(-1),1e-300)/a.shape[-1])
+def delta(a):
+ mass=a.sum(-1);den=mass[:,:-1]+mass[:,1:];return np.divide(np.abs(np.diff(a,axis=1)).sum(-1),den,out=np.zeros_like(den),where=den>0)
+x=rng.lognormal(-2,1,size=(10,4,712));x[rng.random(x.shape)<.8]=0;perm=rng.permutation(712);tests={}
+for name,fn in [('taxel_participation',concentration),('scale_free_frame_delta',delta)]:tests[name]=dict(global_positive_gain_invariant=bool(np.allclose(fn(x),fn(x*10),rtol=1e-12,atol=1e-12)),Taxel_permutation_invariant=bool(np.allclose(fn(x),fn(x[:,:,perm]),rtol=1e-12,atol=1e-12)),not_temporal_rate_or_physical_contact=True)
+save('weak_condition_invariance_tests.json',tests)
+for name,formula,meaning,limit,verdict in [
+ ('total_response','mean_t sum_j x[t,j]','sum of processed sensor response','units/gain not cross-calibrated; cannot call force or energy','REJECT_PHYSICAL_OT_COST'),
+ ('positive_log_mean','sum log1p(x)/count(x>0)','nonzero processed response intensity','depends on domain units, weak positives and processing','REJECT_UNCALIBRATED_COST'),
+ ('taxel_participation','mean_t (sum x)^2/(712 sum x^2); zero-frame=0','scale/permutation-invariant response concentration','processing/background alters concentration; not contact area; no certified semantic alignment','WEAK_STATISTICAL_PROXY_ONLY'),
+ ('patch_response_entropy/effective_patch_number','p_patch=sum_patch x/sum_all x; H(p),1/sum(p^2)','response concentration among fixed16 blocks','blockwise aggregation certified in array only; physical identities/orientations unverified; not number of contacts','EXPLORATORY_WEAK_PROXY'),
+ ('scale_free_frame_delta','mean_t sum|x[t]-x[t-1]|/(sum x[t]+sum x[t-1]); 0 denominator=0','scale/permutation-invariant retained-frame relative variation','Real uneven intervals and Natural20Hz; neither derivative nor matched motion stage','EXPLORATORY_WEAK_PROXY_REQUIRES_TIME_CONTRACT'),
+ ('exact_active_patch/transition01/transition10','x>0 existence and conditional positive transitions','exact-zero pattern of processed values','threshold-sensitive, tails/background/filters differ; never infer physical contact count','REJECT_PHYSICAL_CONTACT_CONDITION'),
+ ('patch_index_centroid','weighted mean of fixed taxel index coordinates','index-space center only','Real/Sim row-column physical map not certified','REJECT_COMMON_PHYSICAL_POSITION'),
+ ('task/stage','metadata literal values','recorded labels','Real task not5task classification; same name stage not equal physical state','STRATIFY_ONLY_NOT_MATCH')]:conditions.append(dict(condition=name,formula=formula,shared_observable_semantics=meaning,limitations=limit,decision=verdict,OT_now=False))
+table('condition_comparability.csv',conditions)
+# Historical latent-mapper references: weights only hashed, not opened for inference.
+inv=pd.read_csv(O/'encoder_inventory.csv').to_dict('records');refs=[]
+for name,path in [('C10_epsilon','outputs/tactile_p43_c10_conditional_latent_diffusion_2026-11-17/seed_11/checkpoint.pt'),('C10R1_v_prediction','outputs/tactile_p43_c10_r1_v_prediction_2026-11-17/checkpoint.pt')]:
+ p=Path(path)
+ if p.is_file():
+  refs.append(dict(model=name,path=str(p),sha256=sha(p),role='latent mapper only; reuses C3 independent encoders; not a common-encoder certificate',inference_performed=False))
+save('historical_mapper_hashes.json',refs)
+# Separate plots: never concatenate independently defined latent coordinates into a common PCA.
+view=np.load(O/'separate_native_PCA_views.npz');fig,ax=plt.subplots(1,2,figsize=(10,4))
+for a,dom in zip(ax,['Real','Natural']):
+ for role in ['train','validation']:
+  v=view[dom+'_'+role];a.scatter(v[:,0],v[:,1],s=4,alpha=.25,label=role)
+ a.set_title(dom+' native PCA (separate basis)');a.set_xlabel('native PC1');a.set_ylabel('native PC2');a.legend()
+fig.suptitle('Axes across panels are NOT shared coordinates');fig.tight_layout();fig.savefig(O/'separate_native_PCA.png',dpi=160);plt.close(fig)
+spec=pd.read_csv(O/'latent_eigenspectrum.csv');fig,ax=plt.subplots(figsize=(7,4))
+for name in spec.dataset.unique():
+ q=spec[spec.dataset==name];ax.plot(q.PC[:30],q.cumulative_variance[:30],label=name)
+ax.set(xlabel='Native PC count',ylabel='Cumulative explained variance');ax.legend();fig.tight_layout();fig.savefig(O/'native_spectral_structure.png',dpi=160);plt.close(fig)
+sens=pd.read_csv(O/'threshold_sensitivity.csv');fig,ax=plt.subplots(figsize=(7,4))
+for name in sens.dataset.unique():
+ q=sens[sens.dataset==name];ax.plot(range(len(q)),q.mean_active_patch,'o-',label=name)
+ax.set_xticks(range(4),['>0','>0.1% peak','>1% peak','>5% peak']);ax.set_ylabel('Mean active patches (diagnostic only)');ax.legend();fig.tight_layout();fig.savefig(O/'threshold_sensitivity.png',dpi=160);plt.close(fig)
+ls=pd.read_csv(O/'latent_summary.csv');ds=pd.read_csv(O/'data_inventory.csv');st=pd.read_csv(O/'within_domain_support_stability.csv');feat=pd.read_csv(O/'condition_distributions.csv');support=pd.read_csv(O/'weak_descriptor_overlap.csv');decision=dict(status='NO_GO_CURRENT_NATIVE_LATENT_GMM_OT',scope='direct conditional Gaussian W2 transport between independent C3_Sim and C13_Real posterior coordinates',not_global_impossibility=True,verified_common_native_coordinates=False,latent_overlap='UNKNOWN_UNDEFINED_UNTIL_COMMON_COST_SPACE',GMM_stability='NOT_EVALUATED_GATE_A_FAILED',common_conditions='some mathematically comparable weak response descriptors; no certified shared physical state',OT_plan_stability='NOT_EVALUATED',stochastic_advantage='UNKNOWN_NOT_EVALUATED',next_single_prerequisite='Before reopening: validate one fixed common cost representation compatible with C13 Decoder, and input structure retention. Reusing C13 Real Encoder on both domains is a hypothesis, not established support; no new neural training authorized.',no_C26=True,no_primary_acceptance_claim=True)
+save('decision.json',decision)
+for filename,scope in [('gmm_model_selection.csv','K2/4/8/16 AIC BIC likelihood occupancy covariance init stability'),('ot_plan_audit.csv','W2 conditional cost epsilon K plan sensitivity condition shuffle'),('stochastic_sampling_audit.csv','hard mapping argmax OT stochasticOT directtargetGMM diversity support')]:table(filename,[dict(scope=scope,status='NOT_RUN',reason='original native coordinate gate failed; user explicitly requires stopping correspondence calculations',result='UNKNOWN_NOT_FAILURE')])
+reg=json.loads((O/'registration.json').read_text());integ=json.loads((O/'integrity.json').read_text());lines=['# C25：Real-Sim潜空间与Conditional GMM-OT可行性审计','', '**结论：NO-GO——停止在当前独立Encoder潜空间中直接构造GMM-Wasserstein/OT对应。** 这不是触觉迁移或OT方法被证明不可行，而是当前代价坐标系未被认证。本轮不训练网络、不运行C0、不生成712D迁移数据、不读取Test/Holdout；完成后停止，没有进入C26。','', '## 1. 数据与实际执行','',ds.to_markdown(index=False),'', 'Real Train为32Session/755Trial，Validation为4Session/120Trial；Natural为五任务Train50Root/50源Episode、Validation10Root/10源Episode。4049/905是当前Natural采集去重窗口，不是旧P37的1824/406，也不是服务器新增小时数。旧GMM/Dual-VAE和P40的数据来源另见模型清单，未把旧Sim与Natural混合。','', '仅复用经过冻结Encoder首批64窗CPU数值重放核对的C4后验均值/logvar，逐角色核验全部groups、stage、units一致。保存当前Train/Validation副本和来源Hash。只读模型：C13 Real、C3 Sim及历史模型合同；未执行Decoder或Translator。', '', '## 2. Stage A：公共坐标系未成立','', 'C13 Encoder与C3原Real Encoder逐位相同；幅值修复没有改变编码器。Real和Sim是两个独立GRU VAE，均为4×64，但使用不同权重和各自训练scale。输入为exact-positive Mask拼接log1p(x)/encoder.scale；输出posterior mean与clamp[-8,4]的logvar。其训练没有Real/Sim共同参数或潜空间联合对齐损失，Translator是在两者冻结后以统计伪配对训练。','', '即使两个VAE的先验都是标准正态，也不能据此认定第j维有相同语义。潜变量旋转/置换与相应Decoder补偿可保持自身重建，却改变跨域欧氏或Gaussian W2代价。直接把两个256维向量放在一起会把这种任意坐标选择当成接触对应。','', '因此本轮没有计算native Real–Sim距离、交集率、联合PCA或跨域W2，也没有拟合GMM来规避这个前提。各自标准化/白化不能建立共同语义；未经配对/共同函数验证的标准化仍然不够。','', '### 历史上存在的其他模型不能被忽略','', '- 旧GMM+Joint Dual-VAE：Real/Sim为独立ER/ES，4×32，经过MMD/CORAL及共享代理头联合约束；它是名义共享表征候选，并非“从未对齐过”。但没有认证Natural数据对应，且不能直接接收/输出C13的4×64坐标。','- P40：确实用同一个共享Encoder处理两域，4×64是同一函数坐标。但训练Sim为P37转换数据，不是当前五任务Natural；其feature Z不是C13 VAE后验，也没有与C13 Decoder的接口映射。不能因形状相同而直接接入。此次未重新跑P40或训练新网络。','- 历史空间GMM：是固定Patch索引坐标上的响应先验，不是神经Encoder；物理Taxel行列映射未认证。','- C3 GRU、C10、C10R1：是映射候选，复用C3独立Encoder；不能用待验证的映射本身证明坐标已对齐。分层Mask的global8/patch8随机变量也不是这套4×64 VAE潜变量。','', '完整模型合同和Hash见encoder_inventory.csv、historical_mapper_hashes.json。','', '## 3. Stage B：各域内部结构与稳定性','',ls.to_markdown(index=False,floatfmt='.6g'),'', '结果表明两边自身都呈低有效秩结构，但相近有效秩、范数或PCA曲线不能证明它们共享同一个低维流形。PCA图分面、分别使用各自Train拟合的基底，不共享坐标轴语义。256维逐维均值/标准差、协方差、特征谱和64维每帧logvar已保存。','', st.to_markdown(index=False,floatfmt='.6g'),'', '上表“域内参考包络”是各域Train跨Session/Root最近邻距离P95，统计Validation有多少落在该阈值内；阈值只用相应Train拟合。它不是Real–Sim覆盖率，也不证明源/目标语义可转移。排除自身与排除同组两种Train参考均保存；高比例可能受训练组异质性影响。','', pd.DataFrame(taskrows).to_markdown(index=False,floatfmt='.6g'),'', '五任务的原生Sim latent可按任务/阶段分层，Root均值的任务关联统计见上表；任务并非随机分派，阶段构成/物体/控制方式也不同，因此不是因果任务效应或Real对应证据。Real记录未具有同一五任务标签体系，不能完成跨域任务匹配。所有逐Root、Session、stage、task结果见latent_group_stage_task.csv和condition_group_stage_task.csv。','', '## 4. Stage D：共同condition能支持到什么程度','',pd.DataFrame(conditions).to_markdown(index=False),'', '存在弱统计共同量，不应把它们说成完全没有语义：taxel participation是对712个响应通道的集中程度，整体正增益与通道置换不改变它；relative frame delta也是相同定义的相对响应变化。这些性质经数值测试核验。但它们不是共同的力、接触面积、物体位置或机器人状态。时间跨度、噪声、门控和滤波的差异仍然改变数值分布。','', 'Patch energy shares/entropy只在固定数组分块上成立；物理指节对应不能默认认证。Real缺原驱动源码、处理开关运行效应未知，Sim存在串扰/时间滤波，因此exact positive不能当作实际接触。总响应的单位与增益也未跨域标定。','',sens.to_markdown(index=False,floatfmt='.6g'),'', 'Real Train精确正值Patch均值15.46，在5%帧峰值诊断阈值下为5.79；Natural对应7.84→4.24。这说明不能拿15.46直接当物理接触数量或OT目标。阈值只用于本表，未改任何输出或C0。','', support.to_markdown(index=False,floatfmt='.6g'),'', '弱描述子边际区间存在部分交叠，但这个表只回答可观测统计是否有共同数值区域，既不证明条件等价，也不等于潜空间交集或迁移成功。没有为提高交叠筛样本。每域分组均值、300次完整Session/Root等权Bootstrap区间、逐任务/阶段统计均保留；没有用相邻窗口数作为独立单位。','', '## 5. Stage C/E/F：按停止条件未执行','', '|阶段|状态|原因|','|---|---|---|','|GMM K=2/4/8/16|未拟合|公共代价坐标未成立；不能报告AIC/BIC或稳定性|','|Gaussian W2、条件OT|未求解|跨独立原生坐标的代价缺依据；弱condition不能自动修复|','|OT条件打乱/epsilon/K稳定性|未运行|没有合法可解释的基础plan|','|四种随机/硬匹配对照|未运行|没有合格GMM/OT；随机性优势UNKNOWN|','', '未运行不是GMM数值失败，也不证明随机映射无效。当前无法证明OT概率采样优于直接目标GMM抽样；不能把后者的Real-like随机生成当作输入响应保持。','', '## 6. 八项最终回答','', '1. **可信共同latent坐标？** 默认C13 Real/C3 Sim没有。P40有共同函数特征，但不是C13兼容坐标；旧联合32维也不是当前接口。','2. **共同支持？** 跨native空间UNKNOWN，未进行无依据的距离计算；各域内部有低秩且部分Validation落在Train参考包络内。','3. **GMM稳定？** UNKNOWN，按前提停止，未拟合。低秩提示即使未来坐标成立，也应使用Train确定的降维/正则化，不能直接用不受约束256维全协方差宣称稳定。','4. **共同condition？** 有定义一致、尺度/置换不变的弱响应统计候选；没有认证为共同物理接触状态，不能使用未验证质心或exact positive数量。','5. **OT多对多与稳定性？** UNKNOWN，未求解。','6. **随机对应有优势？** UNKNOWN，未模拟；不能凭多样性或finite就认定保留源输入。','7. **值得继续当前Conditional GMM-OT？** 当前直接native→native方案NO-GO，不批准直接进入C26。','8. **具体缺失？** 首要缺失是与目标C13接口兼容、并保留源输入信息的共同代价坐标/对应依据。弱条件只能辅助，不能定义两个独立VAE轴之间的关系。','', '## 7. 唯一下一步建议与边界','', '**如要重新评估这条路线，先只验证一个固定公共代价表示，而不是拟合新的Transport。** 可把“同一个冻结C13 Real Encoder用于两域”作为候选假设：它在数学上定义共同轴，但Natural是否落在有效区域、是否保留输入响应与空间/时间结构仍须核验，不能直接假定可用。该建议不要求相同物理状态的精确配对，也不承诺能够通过C0。','', '另一种历史共享Encoder不能仅靠4×64同形接入C13 Decoder；那需要额外桥接，会超出本轮及最小下一步。此次不训练新Encoder、不重新修Decoder、不替换C0，也不生成正式迁移数据。没有共同表示证据之前不继续GMM-OT。C25完成后停止，等待人工决定。','', '## 文件与复现','', 'code/audit.py与finish.py为本轮代码；registration.json固定允许范围。native_latents/covariance、latent_summary/dimensions/eigenspectrum、逐组分层统计、域内距离、条件敏感性与Bootstrap、encoder_inventory及全部Hash均保留。run.log记录实际执行，integrity.json核验原权重/数据/C0文件未变；没有读取Test/Holdout文件或任何新C0分数。']
+(O/'REPORT.md').write_text('\n'.join(lines)+'\n')
+protected=json.loads((O/'protected_hashes_before.json').read_text());assert all(sha(p)==h for p,h in protected.items());assert all(sha(r['path'])==r['sha256'] for r in refs);save('final_integrity.json',dict(all_protected_unchanged=True,additional_mapper_weights_unchanged=True,no_neural_training=True,no_GMM_fitting=True,no_OT_solving=True,no_C0_inference=True,no_formal_712D_output=True,no_Test_Holdout=True,no_C26=True,fix='latent_dimensions first-frame logvar annotation corrected from frame-average to frame0; no latent values/statistical decisions changed'))
+save('run_commands.json',dict(python='/home/zmy/miniconda3/envs/mujoco/bin/python',environment={'PYTHONDONTWRITEBYTECODE':'1','OPENBLAS_NUM_THREADS':'1','OMP_NUM_THREADS':'1'},commands=[f'python {O}/code/audit.py > {O}/run.log 2>&1',f'python {O}/code/finish.py'],code_hashes={str(p):sha(p) for p in (O/'code').glob('*.py')},rerun='Historical commands; fresh output directory required, no overwrite.'))
+save('artifact_manifest.json',{str(p.relative_to(O)):sha(p) for p in O.rglob('*') if p.is_file() and p.name!='artifact_manifest.json'});print('C25 REPORT COMPLETE NO_GO_CURRENT_NATIVE_GMM_OT',flush=True)

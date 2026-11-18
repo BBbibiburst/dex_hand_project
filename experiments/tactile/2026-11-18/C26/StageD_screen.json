@@ -1,0 +1,27 @@
+{
+  "hard_stop": true,
+  "C0_allowed": false,
+  "numeric_screen_passed": true,
+  "structural_screen_failed": true,
+  "reasons": [
+    {
+      "reason": "gross_unclipped_output_tail",
+      "evidence": "maximum=1207.838013 vs RealTrain max=12.269110; 38/905 windows exceed RealTrain observed maximum",
+      "interpretation": "observed support exceedance diagnostic, not a clipping/saturation rule"
+    },
+    {
+      "reason": "temporal_structure_not_retained",
+      "evidence": "lag1 correlation 0.984564 -> 0.454248; mean abs increment 0.000524808 -> 0.010742",
+      "interpretation": "actual ordered windows; Real/Sim sample intervals differ"
+    },
+    {
+      "reason": "weak_input_response_retention",
+      "evidence": "total response Spearman=-0.03865; positive fraction=-0.49589; temporal delta=-0.00720; Root/task breakdown retained",
+      "interpretation": "pooled association alone is not causal proof; combined with tail and temporal failure stops selection"
+    }
+  ],
+  "stopped_before_any_C0_inference": true,
+  "no_outputs_filtered_or_clipped": true,
+  "not_global_latent_collapse": true,
+  "scope": "current zero-shot readout candidate fails; does not establish every common-representation method impossible"
+}

@@ -1,0 +1,12 @@
+{
+  "all_protected_unchanged": true,
+  "additional_mapper_weights_unchanged": true,
+  "no_neural_training": true,
+  "no_GMM_fitting": true,
+  "no_OT_solving": true,
+  "no_C0_inference": true,
+  "no_formal_712D_output": true,
+  "no_Test_Holdout": true,
+  "no_C26": true,
+  "fix": "latent_dimensions first-frame logvar annotation corrected from frame-average to frame0; no latent values/statistical decisions changed"
+}

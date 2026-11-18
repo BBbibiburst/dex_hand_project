@@ -1,0 +1,39 @@
+{
+  "seed": 4313,
+  "train_windows": 5153,
+  "train_Sessions": 32,
+  "validation_windows": 780,
+  "validation_Sessions": 4,
+  "epochs_fixed": 18,
+  "epoch_basis": "C13 actual18 epochs; fixed18, no early stopping or extension",
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "gradient_clip": 5,
+  "optimizer": "AdamW new state as C13; continuation from C13 best model",
+  "trainable_prefixes": [
+    "decoder.current.",
+    "decoder.amplitude."
+  ],
+  "trainable_parameters": 594512,
+  "all_parameters": 1094232,
+  "loss": "original per-window positive Gamma mixture NLL + lambda mean3x712 absolute log1p increment discrepancy",
+  "lambda_temporal": 269.8845743604945,
+  "lambda_rule": "0.1 * mean(abs(initial per-window Real TRAIN NLL)) / initial Real TRAIN temporal loss; exactly one weight, no C0/Validation used",
+  "lambda_initial_train": {
+    "nll": -4.683198305692817,
+    "absolute_per_window_nll": 4.683198305692817,
+    "temporal": 0.0017352597186370872
+  },
+  "checkpoint_rule": "unchanged C13: minimum Real Validation POSITIVE NLL, improvement tolerance1e-5; no C0-based selection; final endpoint also saved",
+  "budget_seconds": 900,
+  "max_new_bytes": 1000000000,
+  "latent_context": "reuse exact C13 cached Real posterior means; original CPU Encoder recomputation checked, not substituted, avoids roundoff-driven Mask changes",
+  "units": "original uncalibrated processed tactile response units, no claim of Newton/Pa; decoder positive_scale restored before log1p; log1p applied once",
+  "initial_checkpoint_sha256": "6dea2be871e03d4fedc5c9b8022b98c1d8866fed6bf4ed496a2ea6ccd1ddc2c7",
+  "Test_Holdout_read": false,
+  "Natural_read": false,
+  "epochs_or_seed_search": false,
+  "autostart_next": false,
+  "git_HEAD": "7faeb53fe7e3136f436a976587bacea13e8e4eed"
+}

@@ -1,0 +1,9 @@
+condition,formula,shared_observable_semantics,limitations,decision,OT_now
+total_response,"mean_t sum_j x[t,j]",sum of processed sensor response,units/gain not cross-calibrated; cannot call force or energy,REJECT_PHYSICAL_OT_COST,False
+positive_log_mean,sum log1p(x)/count(x>0),nonzero processed response intensity,"depends on domain units, weak positives and processing",REJECT_UNCALIBRATED_COST,False
+taxel_participation,mean_t (sum x)^2/(712 sum x^2); zero-frame=0,scale/permutation-invariant response concentration,processing/background alters concentration; not contact area; no certified semantic alignment,WEAK_STATISTICAL_PROXY_ONLY,False
+patch_response_entropy/effective_patch_number,"p_patch=sum_patch x/sum_all x; H(p),1/sum(p^2)",response concentration among fixed16 blocks,blockwise aggregation certified in array only; physical identities/orientations unverified; not number of contacts,EXPLORATORY_WEAK_PROXY,False
+scale_free_frame_delta,mean_t sum|x[t]-x[t-1]|/(sum x[t]+sum x[t-1]); 0 denominator=0,scale/permutation-invariant retained-frame relative variation,Real uneven intervals and Natural20Hz; neither derivative nor matched motion stage,EXPLORATORY_WEAK_PROXY_REQUIRES_TIME_CONTRACT,False
+exact_active_patch/transition01/transition10,x>0 existence and conditional positive transitions,exact-zero pattern of processed values,"threshold-sensitive, tails/background/filters differ; never infer physical contact count",REJECT_PHYSICAL_CONTACT_CONDITION,False
+patch_index_centroid,weighted mean of fixed taxel index coordinates,index-space center only,Real/Sim row-column physical map not certified,REJECT_COMMON_PHYSICAL_POSITION,False
+task/stage,metadata literal values,recorded labels,Real task not5task classification; same name stage not equal physical state,STRATIFY_ONLY_NOT_MATCH,False

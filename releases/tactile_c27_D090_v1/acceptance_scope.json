@@ -1,0 +1,21 @@
+{
+  "name": "C27完整712D触觉迁移：D≥0.90专项验收候选",
+  "date": "2026-11-18",
+  "release": "C27-D090-v1",
+  "scope": "原迁移前冻结11C0上的D专项指标，历史开发Validation",
+  "criterion": "D=1-2*abs(BA-.5)>=.90 for all11",
+  "D_pass_count": 11,
+  "D_min": 0.976044765547528,
+  "D_max": 0.999468763280918,
+  "D_mean": 0.9924216667310591,
+  "BA_D_equivalent": true,
+  "AUC_in_current_scope": false,
+  "original_joint_BA_AUC_D_pass_count": 2,
+  "original_joint_criterion_achieved": false,
+  "new_blind_test": false,
+  "input_response_preservation_fully_validated": false,
+  "scope_change": "本次按用户要求单独整理D专项口径，不覆盖或改写原联合验收结果",
+  "no_new_model_training": true,
+  "no_model_checkpoint_change": true,
+  "formal_project_adoption": "该材料提供D专项证据，不宣称原BA/AUC/D联合目标已完成"
+}

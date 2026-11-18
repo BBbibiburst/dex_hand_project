@@ -1,0 +1,2 @@
+comparison,Euclidean,Wasserstein,support_overlap,common_low_dimensional_semantics,reason
+Natural_native_mu vs Real_native_mu,NOT_COMPUTED,NOT_COMPUTED,UNKNOWN,UNKNOWN,independent coordinate gauges; same4x64 shape not certified common metric

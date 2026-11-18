@@ -1,0 +1,2 @@
+scope,status,reason,result
+hard mapping argmax OT stochasticOT directtargetGMM diversity support,NOT_RUN,original native coordinate gate failed; user explicitly requires stopping correspondence calculations,UNKNOWN_NOT_FAILURE

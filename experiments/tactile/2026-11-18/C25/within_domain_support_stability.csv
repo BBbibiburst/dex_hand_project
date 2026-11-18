@@ -1,0 +1,9 @@
+domain,metric,Train_cross_group_NN_P95,validation_fraction_within_Train_cross_group_P95,interpretation
+Real,raw_native_Euclidean,14.120428060799439,1.0,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Real,Train_only_standardized,11.183612370137869,1.0,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Real,Train_only_whitened,13.354189905129612,0.926923076923077,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Real,native_cosine,0.14167962458535585,1.0,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Natural,raw_native_Euclidean,7.912814060665933,0.9414364640883978,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Natural,Train_only_standardized,7.293215713885836,0.9546961325966851,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Natural,Train_only_whitened,11.176590638138999,0.8839779005524862,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"
+Natural,native_cosine,0.0610905856029398,0.949171270718232,"within-domain descriptive reference envelope, NOT Real-Sim support or coverage guarantee"

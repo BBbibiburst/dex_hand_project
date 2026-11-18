@@ -1,0 +1,5 @@
+dataset,windows,groups,trials_or_episode_units,group_type,unique_numeric_windows,latent_shape,cached_encoder_checked,common_coordinate
+Real_train,5153,32,755,Session,5153,"[5153, 4, 64]",True,False
+Natural_train,4049,50,50,Root,4049,"[4049, 4, 64]",True,False
+Real_validation,780,4,120,Session,780,"[780, 4, 64]",True,False
+Natural_validation,905,10,10,Root,905,"[905, 4, 64]",True,False

@@ -1,0 +1,6 @@
+{
+  "checkpoint_sha256": "c07a457c199df315c70dd543e3e642319c0cc9b8d47b92f32e5a8c4f299c6109",
+  "outputs_sha256": "aec9f0c62baca831e9537e19045610ad72c7344a57a57963530d3bbca0097e02",
+  "frozen_before_C0_evaluation_unix": 1794985251.2338388,
+  "no_more_model_training": true
+}

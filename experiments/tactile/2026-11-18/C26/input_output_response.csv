@@ -1,0 +1,6 @@
+feature,Spearman,Pearson,interpretation
+total_response,-0.03865044592443894,-0.03364729931192417,"association across unchanged windows, NOT intervention or physical correspondence"
+response_max,-0.11258659770880577,-0.037023250370151334,"association across unchanged windows, NOT intervention or physical correspondence"
+index_positive_fraction,-0.4958940144832045,-0.4995303632939161,"association across unchanged windows, NOT intervention or physical correspondence"
+concentration,0.1199279835333433,0.09292025629296083,"association across unchanged windows, NOT intervention or physical correspondence"
+absolute_frame_delta,-0.00719807612457211,-0.07769422062496803,"association across unchanged windows, NOT intervention or physical correspondence"

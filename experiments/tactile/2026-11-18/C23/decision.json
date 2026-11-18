@@ -1,0 +1,40 @@
+{
+  "result_type": "C_INTERMEDIATE",
+  "C23_readout_joint_passes": 6,
+  "required_instances": 11,
+  "readout_fully_established": false,
+  "usable_as_partial_research_baseline": true,
+  "primary_Sim_to_Real_new_evaluation": "NOT_EVALUATED (no Natural input permitted)",
+  "passed_instances": [
+    "mlp_11",
+    "mlp_12",
+    "mlp_13",
+    "gru_13",
+    "logistic",
+    "knn"
+  ],
+  "failed_instances": [
+    "gru_11",
+    "gru_12",
+    "transformer_11",
+    "transformer_12",
+    "transformer_13"
+  ],
+  "gained_vs_C11_A": [
+    "mlp_11",
+    "mlp_12",
+    "mlp_13",
+    "gru_13",
+    "logistic"
+  ],
+  "lost_vs_C11_A": [
+    "gru_11",
+    "gru_12",
+    "transformer_13"
+  ],
+  "most_actionable_branch": "conditional positive amplitude and temporal readout, not a proved sole causal source",
+  "next_proposal": "single fixed-configuration C13 amplitude temporal-consistency repair; frozen Mask; requires separate confirmation",
+  "next_experiment_executed": false,
+  "fallback": "freeze model search and write honest difference/reconstruction exploration results",
+  "stop_after_C23": true
+}

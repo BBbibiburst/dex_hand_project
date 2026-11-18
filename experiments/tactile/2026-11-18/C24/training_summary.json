@@ -1,0 +1,15 @@
+{
+  "epochs": 18,
+  "best_epoch": 2,
+  "optimizer_steps": 1458,
+  "total_sample_visits": 92754,
+  "all_5153_windows_covered_every_epoch": true,
+  "seconds": 21.175437688827515,
+  "device": "cuda:0",
+  "GPU_name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "GPU_peak_bytes": 235430400,
+  "new_probe_fits": 0,
+  "protected_unchanged": true,
+  "only_one_lambda": true,
+  "C0_not_accessed_before_freeze": true
+}

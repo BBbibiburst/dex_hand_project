@@ -1,0 +1,7 @@
+source,feature,Spearman,array_index_Mask_IoU,physical_channel_certified,not_causal_intervention
+C3_baseline,total_response,-0.19312232580117214,0.07530479672260194,False,True
+C3_baseline,positive_fraction,0.36026573844758253,0.07530479672260194,False,True
+C3_baseline,frame_variation,-0.20247360777193604,0.07530479672260194,False,True
+C27_candidate,total_response,-0.11849982911873447,0.07749436180792127,False,True
+C27_candidate,positive_fraction,0.26830922272728475,0.07749436180792127,False,True
+C27_candidate,frame_variation,-0.09124258285250686,0.07749436180792127,False,True

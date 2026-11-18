@@ -1,0 +1,10 @@
+{
+  "hard_stop": false,
+  "zero_output_fraction_among_nonzero_inputs": 0.0,
+  "unique_outputs": 880,
+  "mean_window_std": 0.06664362753302397,
+  "numeric_nonconstant_screen_only": true,
+  "physical_semantics_retention": "UNKNOWN",
+  "C0_allowed": true,
+  "all_samples_retained": true
+}

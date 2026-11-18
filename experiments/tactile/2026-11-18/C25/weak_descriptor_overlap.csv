@@ -1,0 +1,5 @@
+dataset,features,fraction_in_all_Real_Train_marginal_P05_P95,interpretation
+Real_train,taxel_participation|effective_patch_number|scale_free_frame_delta,0.7708131185717058,descriptive axis-aligned weak-feature overlap; not common latent/physical correspondence proof
+Natural_train,taxel_participation|effective_patch_number|scale_free_frame_delta,0.5090145714991355,descriptive axis-aligned weak-feature overlap; not common latent/physical correspondence proof
+Real_validation,taxel_participation|effective_patch_number|scale_free_frame_delta,0.8282051282051283,descriptive axis-aligned weak-feature overlap; not common latent/physical correspondence proof
+Natural_validation,taxel_participation|effective_patch_number|scale_free_frame_delta,0.4353591160220994,descriptive axis-aligned weak-feature overlap; not common latent/physical correspondence proof

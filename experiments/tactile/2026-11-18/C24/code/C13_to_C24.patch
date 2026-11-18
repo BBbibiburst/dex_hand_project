@@ -1,0 +1,148 @@
+--- C13/code/run.py
++++ C24/code/train.py
+@@ -1,95 +1,64 @@
+-"""One-seed predicted-Mask-context amplitude repair. Never reads Test data."""
+-import sys,json,time,csv,subprocess
++"""C24 one fixed Real-only continuation; no classifier feedback and no alternate weight."""
++import ast,json,csv,time,hashlib,importlib.util,sys,zipfile,subprocess
+ from pathlib import Path
+ import numpy as np
+ import torch
+-import pandas as pd
+-import matplotlib
+-matplotlib.use('Agg')
+-import matplotlib.pyplot as plt
+-OUT=Path(__file__).resolve().parents[1]
+-sys.path.insert(0,'outputs/tactile_p43_c10_conditional_latent_diffusion_2026-11-17/code')
+-import common10 as H
+-C12=Path('outputs/tactile_p43_c12_real_decoder_feedback_audit_2026-11-17')
+-def save(n,d): (OUT/n).write_text(json.dumps(d,ensure_ascii=False,indent=2,allow_nan=False))
+-def table(n,rows):
+- with (OUT/n).open('w') as f:
+-  w=csv.DictWriter(f,fieldnames=list(dict.fromkeys(k for r in rows for k in r)));w.writeheader();w.writerows(rows)
++O=Path(__file__).resolve().parents[1];P=Path('outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18');B=Path('outputs/tactile_p43_latent_translator_integrated_2026-11-16');C3=Path('outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16');C23=Path('outputs/tactile_c23_real_reconstruction_c0_2026-11-18')
++def save(n,d):(O/n).write_text(json.dumps(d,ensure_ascii=False,indent=2,allow_nan=False))
++def table(n,rs):
++ with (O/n).open('w') as f:
++  w=csv.DictWriter(f,fieldnames=list(dict.fromkeys(k for r in rs for k in r)));w.writeheader();w.writerows(rs)
++def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+ def main():
+- torch.set_num_threads(2);assert not (OUT/'registration.json').exists();start=time.time();device='cuda:0' if torch.cuda.is_available() else 'cpu';seed=4313
+- save('registration.json',dict(seed=seed,train_windows=5153,validation_windows=780,max_epochs=100,patience=15,batch_size=64,lr=.001,weight_decay=.0001,gradient_clip=5,loss='original positive Gamma-mixture NLL, average per window on true positive target Taxels; unchanged distribution/scale',only_change='amplitude training context is frozen free-running predicted current Mask instead of true Mask',trainable=['decoder.current','decoder.amplitude'],frozen=['encoder','decoder.cell','decoder.mask','decoder.previous','decoder.bos','positive_scale','Sim VAE','Translator','GMM','C0'],checkpoint_selection='Real Validation positive NLL only, no minimum epoch restriction',gate='Real Val full MSE<=80% old; positive conditional amplitude MSE improves; no Session full MSE worsens>10%; masks bit-identical. Tail quantiles reported without clipping.',budget_seconds=900,budget_bytes=1_000_000_000,Test_access=False,loss_added=False,head_reparameterized=False))
+- paths=[H.C3/'real_vae/checkpoint.pt',H.C3/'code/models.py',C12/'metrics.csv',C12/'integrity.json',Path('docs/tactile_090_long_term_goal_2026-11-18.md')]
+- for role in ['train','validation']:paths.extend([H.C4/f'latents/Real_{role}.npz',H.BASE/f'real_{role}/index.json',C12/f'{role}_FR.npz'])
+- protected={str(p):H.sha(p) for p in paths};save('protected_hashes_before.json',protected);ck=torch.load(H.C3/'real_vae/checkpoint.pt',map_location='cpu',weights_only=False);R=H.M.DomainVAE(ck['encoder_scale'],ck['positive_scale']).to(device);R.load_state_dict(ck['model']);R.requires_grad_(False);R.eval();D=R.decoder
++ assert json.loads((O/'stage0.json').read_text())['training_can_proceed'];assert not (O/'registration.json').exists();start=time.time();torch.set_num_threads(2);device='cuda:0' if torch.cuda.is_available() else 'cpu';seed=4313;torch.manual_seed(seed)
++ env=dict(np=np,zipfile=zipfile);tree=ast.parse(Path('outputs/tactile_p43_c10_conditional_latent_diffusion_2026-11-17/code/common10.py').read_text());exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='npz_rows'],type_ignores=[]),'getrows','exec'),env);get=env['npz_rows']
++ spec=importlib.util.spec_from_file_location('c24_existing_vae',C3/'code/models.py');M=importlib.util.module_from_spec(spec);spec.loader.exec_module(M)
++ ck=torch.load(P/'checkpoint.pt',map_location='cpu',weights_only=False);R=M.DomainVAE(ck['encoder_scale'],ck['positive_scale']).to(device);R.load_state_dict(ck['model']);R.requires_grad_(False);R.eval();D=R.decoder
+  for p in list(D.current.parameters())+list(D.amplitude.parameters()):p.requires_grad_(True)
+- params=[p for p in R.parameters() if p.requires_grad];assert sum(p.numel() for p in params)==594512;initial={k:v.detach().cpu().clone() for k,v in R.state_dict().items()};data={};cache={};visits=np.zeros(5153,int)
+- if torch.cuda.is_available():torch.cuda.reset_peak_memory_stats()
++ params=[p for p in R.parameters() if p.requires_grad];assert sum(p.numel() for p in params)==594512;initial={k:v.detach().cpu().clone() for k,v in R.state_dict().items()};torch.save(ck,O/'initial_checkpoint.pt')
++ protected=dict(json.loads((C3/'c0/frozen.json').read_text())['files'])
++ for p in [P/'checkpoint.pt',P/'train_outputs.npz',P/'validation_outputs.npz',P/'code/run.py',C3/'code/models.py',C23/'metrics.csv',C23/'code/evaluate.py']+[Path('outputs/tactile_p43_c4_root_cause_audit_2026-11-16/latents')/f'Real_{r}.npz' for r in ['train','validation']]+[B/f'real_{role}/index.json' for role in ['train','validation']]:protected[str(p)]=sha(p)
++ assert all(sha(p)==h for p,h in protected.items());save('protected_hashes_before.json',protected);data={};cache={}
++ if device.startswith('cuda'):torch.cuda.reset_peak_memory_stats()
+  for role in ['train','validation']:
+-  source=H.real(role);mu=np.load(H.C4/f'latents/Real_{role}.npz')['mu'];data[role]=dict(**source,mu=mu);hs=[];ms=[]
++  idx=json.loads((B/f'real_{role}/index.json').read_text());x=get(idx['source'],'real',idx['indices']); stored_mu=np.load('outputs/tactile_p43_c4_root_cause_audit_2026-11-16/latents/Real_'+role+'.npz')['mu']; g=get(idx['source'],'real_group',idx['indices']);s=get(idx['source'],'real_stage',idx['indices']);u=get(idx['source'],'real_unit',idx['indices']);assert len(x)==(5153 if role=='train' else 780);data[role]=dict(x=x,g=g,s=s,u=u);hs=[];ms=[];mus=[]
+   with torch.no_grad():
+-   for i in range(0,len(mu),128):
+-    z=torch.from_numpy(mu[i:i+128]).to(device);h=z.new_zeros((len(z),128));prev=z.new_zeros((len(z),712));hh=[];mm=[]
++   for i in range(0,len(x),128):
++    recomputed=R.encoder.cpu()(torch.from_numpy(x[i:i+128]))[0];z=torch.from_numpy(stored_mu[i:i+128]).to(device); assert torch.allclose(z.cpu(),recomputed,rtol=1e-5,atol=1e-5);mus.append(z);h=z.new_zeros((len(z),128));prev=z.new_zeros((len(z),712));hh=[];mm=[]
+     for t in range(4):
+      context=D.bos[None].expand(len(z),-1) if t==0 else D.previous(prev);h=D.cell(torch.cat([z[:,t],context],1),h);prev=(D.mask(h)>=0).float();hh.append(h);mm.append(prev)
+     hs.append(torch.stack(hh,1));ms.append(torch.stack(mm,1))
+-  cache[role]=dict(h=torch.cat(hs),mask=torch.cat(ms),target=torch.from_numpy(source['x']).to(device));old=np.load(C12/f'{role}_FR.npz')['values'];assert np.array_equal(cache[role]['mask'].cpu().numpy()>0,old>0)
+- def laws(role,ix):
+-  c=cache[role];n=len(ix);law=D.parameters_for(c['h'][ix].reshape(-1,128),c['mask'][ix].reshape(-1,712));return tuple(v.reshape(n,4,712,2) for v in law)
+- def loss_vector(role,ix):
+-  mix,k,rate=laws(role,ix);target=cache[role]['target'][ix];active=target>0;scale=D.positive_scale.double();x=torch.where(active,target,torch.ones_like(target)).double()/scale;rr=rate.double();kk=k.double();logp=kk*rr.log()-torch.lgamma(kk)+(kk-1)*x[...,None].log()-rr*x[...,None];logp=torch.logsumexp(mix.double().log_softmax(-1)+logp,-1)-scale.log();return -(logp*active).sum((1,2))/active.sum((1,2)).clamp_min(1)
++  cache[role]=dict(h=torch.cat(hs),mask=torch.cat(ms),mu=torch.cat(mus),target=torch.from_numpy(x).to(device));assert np.array_equal(cache[role]['mask'].cpu().numpy()>0,np.load(P/f'{role}_outputs.npz')['values']>0)
++ def forward(role,ix):
++  c=cache[role];n=len(ix);mix,k,rate=tuple(v.reshape(n,4,712,2) for v in D.parameters_for(c['h'][ix].reshape(-1,128),c['mask'][ix].reshape(-1,712)));target=c['target'][ix];active=target>0;scale=D.positive_scale.double();x=torch.where(active,target,torch.ones_like(target)).double()/scale;rr=rate.double();kk=k.double();logp=kk*rr.log()-torch.lgamma(kk)+(kk-1)*x[...,None].log()-rr*x[...,None];logp=torch.logsumexp(mix.double().log_softmax(-1)+logp,-1)-scale.log();nll=-(logp*active).sum((1,2))/active.sum((1,2)).clamp_min(1)
++  # Deterministic expectation in ORIGINAL nonnegative response units, with frozen free-run Mask.
++  amp=(mix.softmax(-1)*k/rate).sum(-1)*D.positive_scale;y=amp*c['mask'][ix];dy=torch.diff(torch.log1p(y.double()),dim=1);dt=torch.diff(torch.log1p(target.double()),dim=1);temp=(dy-dt).abs().mean((1,2));return nll,temp,y
+  def ev(role):
+-  R.eval();out=[]
++  n=[];t=[]
+   with torch.no_grad():
+-   for i in range(0,len(data[role]['mu']),64):out.append(loss_vector(role,np.arange(i,min(i+64,len(data[role]['mu'])))).cpu().numpy())
+-  return float(np.concatenate(out).mean())
+- torch.manual_seed(seed);opt=torch.optim.AdamW(params,lr=.001,weight_decay=.0001);best=float('inf');stale=0;steps=0;history=[];baseNLL={role:ev(role) for role in data};save('original_positive_NLL.json',baseNLL);trainstart=time.time()
+- for epoch in range(1,101):
+-  assert time.time()-start<900;order=np.random.default_rng(seed+epoch).permutation(5153);R.eval();D.current.train();D.amplitude.train();online=0.
++   for i in range(0,len(data[role]['x']),64):
++    a,b,_=forward(role,np.arange(i,min(i+64,len(data[role]['x']))));n.append(a.cpu().numpy());t.append(b.cpu().numpy())
++  n=np.concatenate(n);t=np.concatenate(t);return dict(nll=float(n.mean()),absolute_per_window_nll=float(np.abs(n).mean()),temporal=float(t.mean()))
++ initialscale=ev('train');lam=.1*initialscale['absolute_per_window_nll']/initialscale['temporal'];assert np.isfinite(lam) and lam>0
++ reg=dict(seed=seed,train_windows=5153,train_Sessions=32,validation_windows=780,validation_Sessions=4,epochs_fixed=18,epoch_basis='C13 actual18 epochs; fixed18, no early stopping or extension',batch_size=64,learning_rate=.001,weight_decay=.0001,gradient_clip=5,optimizer='AdamW new state as C13; continuation from C13 best model',trainable_prefixes=['decoder.current.','decoder.amplitude.'],trainable_parameters=594512,all_parameters=1094232,loss='original per-window positive Gamma mixture NLL + lambda mean3x712 absolute log1p increment discrepancy',lambda_temporal=lam,lambda_rule='0.1 * mean(abs(initial per-window Real TRAIN NLL)) / initial Real TRAIN temporal loss; exactly one weight, no C0/Validation used',lambda_initial_train=initialscale,checkpoint_rule='unchanged C13: minimum Real Validation POSITIVE NLL, improvement tolerance1e-5; no C0-based selection; final endpoint also saved',budget_seconds=900,max_new_bytes=1_000_000_000,latent_context='reuse exact C13 cached Real posterior means; original CPU Encoder recomputation checked, not substituted, avoids roundoff-driven Mask changes',units='original uncalibrated processed tactile response units, no claim of Newton/Pa; decoder positive_scale restored before log1p; log1p applied once',initial_checkpoint_sha256=sha(P/'checkpoint.pt'),Test_Holdout_read=False,Natural_read=False,epochs_or_seed_search=False,autostart_next=False,git_HEAD=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
++ save('registration.json',reg);save('parameter_list.json',[dict(name=k,shape=list(v.shape),numel=v.numel(),trainable=v.requires_grad) for k,v in R.named_parameters()]);save('code_hashes_at_registration.json',{str(p):sha(p) for p in (O/'code').glob('*.py')});print('REGISTERED',json.dumps(reg),flush=True)
++ initialval=ev('validation');save('initial_loss.json',dict(train=initialscale,validation=initialval));opt=torch.optim.AdamW(params,lr=.001,weight_decay=.0001);best=float('inf');bestep=0;hist=[];visits=np.zeros(5153,int);steps=0;trainstart=time.time()
++ for epoch in range(1,19):
++  assert time.time()-start<900;order=np.random.default_rng(seed+epoch).permutation(5153);R.eval();D.current.train();D.amplitude.train();online=[]
+   for i in range(0,5153,64):
+-   ix=order[i:i+64];visits[ix]+=1;opt.zero_grad(set_to_none=True);loss=loss_vector('train',ix).mean();assert torch.isfinite(loss);loss.backward();norm=torch.nn.utils.clip_grad_norm_(params,5);assert torch.isfinite(norm);opt.step();steps+=1;online+=float(loss.detach())*len(ix)
+-  tr=ev('train');va=ev('validation');assert np.isfinite(tr) and np.isfinite(va)
+-  if va<best-1e-5:
+-   best=va;bestep=epoch;stale=0;torch.save(dict(model={k:v.detach().cpu().clone() for k,v in R.state_dict().items()},encoder_scale=ck['encoder_scale'],positive_scale=ck['positive_scale'],epoch=epoch,optimizer_steps=steps,seed=seed,kind='real_vae_amplitude_context_repair',validation_positive_NLL=va),OUT/'checkpoint.pt')
+-  else:stale+=1
+-  history.append(dict(epoch=epoch,optimizer_steps=steps,total_sample_visits=int(visits.sum()),online_positive_NLL=online/5153,train_positive_NLL=tr,validation_positive_NLL=va,best_epoch=bestep,stale=stale,seconds=time.time()-trainstart));table('training_history.csv',history)
+-  if epoch%5==0:print('TRAIN',epoch,'train',tr,'val',va,'best',bestep,'seconds',round(time.time()-trainstart,1),flush=True)
+-  if stale>=15:break
+- trainsec=time.time()-trainstart;bestck=torch.load(OUT/'checkpoint.pt',map_location='cpu',weights_only=False);R.load_state_dict(bestck['model']);R.eval();R.requires_grad_(False);changed=[k for k,v in R.state_dict().items() if not torch.equal(v.cpu(),initial[k])];assert all(k.startswith(('decoder.current.','decoder.amplitude.')) for k in changed);save('parameter_change_audit.json',dict(changed_keys=changed,frozen_parameters_bit_identical=True,trainable_parameters=594512,all_model_parameters=1094232));np.savez(OUT/'coverage.npz',visits=visits)
+- rows=[];sessionrows=[];qrows=[];boot=[]
+- def summarize(y,amp,target,ix):
+-  a=y[ix].astype('float64');t=target[ix];m=t>0;pred=a>0;union=(pred|m).sum((1,2));inter=(pred&m).sum((1,2));return dict(windows=int(ix.sum()),decoded_MSE=float(((a-t)**2).mean()),positive_amplitude_MSE=float((((amp[ix].astype('float64')-t)**2)*m).sum()/m.sum()),Mask_IoU=float(np.divide(inter,union,out=np.ones(len(a)),where=union>0).mean()),zero_fraction=float((~pred).mean()),positive_max=float(a.max()))
+- for role in ['train','validation']:
+-  c=cache[role];N=len(data[role]['mu']);target=data[role]['x'];out=[];amps=[]
+-  with torch.no_grad():
+-   for i in range(0,N,64):
+-    ix=np.arange(i,min(i+64,N));mix,k,rate=laws(role,ix);amp=(mix.softmax(-1)*k/rate).sum(-1)*D.positive_scale;amps.append(amp.cpu().numpy());out.append((amp*c['mask'][ix]).cpu().numpy())
+-  y=np.concatenate(out);amp=np.concatenate(amps);old=np.load(C12/f'{role}_FR.npz');oy=old['values'];oa=old['amplitude'];assert np.array_equal(y>0,oy>0);assert np.isfinite(y).all() and (y>=0).all();actual=H.infer(D.deterministic_decode,data[role]['mu'],device=device);assert np.allclose(actual,y,rtol=1e-5,atol=1e-5);save(f'{role}_decode_equivalence.json',dict(max_absolute_difference=float(np.abs(actual-y).max()),rtol=1e-5,atol=1e-5,Mask_bit_identical=bool(np.array_equal(actual>0,y>0))));np.savez_compressed(OUT/f'{role}_outputs.npz',values=y,groups=data[role]['g'],stage=data[role]['s'])
+-  for label,v,a in [('original',oy,oa),('repaired',y,amp)]:
+-   rows.append(dict(role=role,model=label,**summarize(v,a,target,np.ones(N,bool))))
+-   for g in sorted(set(data[role]['g'])):sessionrows.append(dict(role=role,model=label,Session=str(g),**summarize(v,a,target,data[role]['g']==g)))
+-   positive=v[v>0];qrows.append(dict(role=role,model=label,P10=float(np.quantile(positive,.1)),P50=float(np.quantile(positive,.5)),P90=float(np.quantile(positive,.9)),P95=float(np.quantile(positive,.95)),P99=float(np.quantile(positive,.99)),maximum=float(positive.max())))
+-  unique,inv=np.unique(data[role]['g'],return_inverse=True);counts=np.random.default_rng(4313).multinomial(len(unique),np.full(len(unique),1/len(unique)),size=300);w=counts[:,inv];den=w.sum(1);mse=((y.astype('float64')-target)**2).mean((1,2));omse=((oy.astype('float64')-target)**2).mean((1,2));delta=w@(mse-omse)/den;boot.append(dict(role=role,metric='decoded_MSE_delta_repaired_minus_original',low=float(np.quantile(delta,.025)),high=float(np.quantile(delta,.975)),groups=len(unique),draws=300,unit='Session',paired=True))
+- table('metrics.csv',rows);table('session_metrics.csv',sessionrows);table('amplitude_quantiles.csv',qrows);save('bootstrap.json',boot);v=pd.DataFrame(rows).query('role=="validation"').set_index('model');s=pd.DataFrame(sessionrows).query('role=="validation"').pivot(index='Session',columns='model',values='decoded_MSE');gate=dict(full_MSE_20pct_reduction=bool(v.loc['repaired','decoded_MSE']<=.8*v.loc['original','decoded_MSE']),positive_amplitude_MSE_improves=bool(v.loc['repaired','positive_amplitude_MSE']<v.loc['original','positive_amplitude_MSE']),no_Session_MSE_worse_10pct=bool((s.repaired<=1.1*s.original).all()),Mask_bit_identical=True)
+- save('decision.json',dict(gate=gate,passed=all(gate.values()),status='REAL_SCREEN_PASSED_NOT_DOMAIN_ACCEPTED' if all(gate.values()) else 'STOP_THIS_CONFIGURATION',Natural_data_read=False,Test_read=False,new_Probe_training=False,tail_not_clipped=True));save('training_summary.json',dict(seed=seed,epochs=epoch,best_epoch=bestep,optimizer_steps=steps,total_sample_visits=int(visits.sum()),all_train_windows_each_epoch=bool(np.all(visits==epoch)),training_seconds=trainsec,GPU_peak_allocated_bytes=int(torch.cuda.max_memory_allocated()) if torch.cuda.is_available() else None,device=device,trainable_parameters=594512))
+- fig,ax=plt.subplots(figsize=(7,4));h=pd.DataFrame(history);ax.plot(h.epoch,h.train_positive_NLL,label='Train');ax.plot(h.epoch,h.validation_positive_NLL,label='Validation');ax.set(xlabel='Epoch',ylabel='Positive Gamma mixture NLL',title='Predicted-Mask-context amplitude repair');ax.legend();ax.grid(alpha=.2);fig.tight_layout();fig.savefig(OUT/'training_curves.png',dpi=180);plt.close(fig)
+- report=f'''# C13：幅值分支Mask上下文一致性修复
+-
+-日期：2026-11-18。一个Seed，冻结Real Encoder、循环骨干及Mask；只训练`decoder.current`和`decoder.amplitude`，共594512参数。训练唯一改动是将当前幅值条件从真值Mask换成冻结模型自由生成的Mask，原Gamma混合NLL、正值单位和参数化保持不变。使用Real Train5153窗口、32 Session、755 Trial；Validation780窗口、4 Session、120 Trial。没有读取Natural或Test，没有Oracle上下文部署。
+-
+-## 完整Real结果
+-
+-{pd.DataFrame(rows).to_markdown(index=False,floatfmt='.7g')}
+-
+-## 门槛与训练
+-
+-```json
+-{json.dumps(gate,indent=2)}
+-```
+-
+-原定筛选门槛为Validation完整MSE降低20%、条件正值幅值误差改善、每个Session MSE不恶化超过10%，Mask逐值不变。分位数与尾部另列，不裁剪。该门槛只是进入下一步的开发筛选，不是0.90验收。
+-
+-实际Epoch={epoch}，最佳Epoch={bestep}，Optimizer Step={steps}，窗口访问={int(visits.sum())}。每轮5153窗口完整覆盖，81步。训练耗时{trainsec:.2f}秒；Checkpoint只按Validation正值NLL选择，没有用Test或C0。训练上限/停止并不等于收敛。所有冻结state_dict项逐位不变，Mask与原模型逐位相同；缓存与真实解码按rtol=1e-5、atol=1e-5复核，逐角色最大绝对误差另存；不同batch的浮点GEMM差异不影响Mask。
+-
+-完整逐Session、幅值分位数、300次配对Session Bootstrap、训练曲线、参数变化清单及输出均保存。没有改善时停止当前配置，不增加额外Seed或偷偷改损失；有改善也不能直接声称跨域目标完成。Natural迁移及新独立Probe尚未评价。
+-''';(OUT/'REPORT.md').write_text(report);assert all(H.sha(p)==h for p,h in protected.items());assert sum(p.stat().st_size for p in OUT.rglob('*') if p.is_file())<1_000_000_000;save('integrity.json',dict(protected_inputs_unchanged=True,files={str(p.relative_to(OUT)):H.sha(p) for p in OUT.rglob('*') if p.is_file() and p.name!='integrity.json' and p.suffix!='.log'},wall_seconds=time.time()-start,Natural_data_read=False,Test_read=False,model_original_unchanged=True,git_HEAD=subprocess.run(['git','rev-parse','HEAD'],check=True,capture_output=True,text=True).stdout.strip()));print('COMPLETE',gate,flush=True)
++   assert time.time()-start<900;ix=order[i:i+64];visits[ix]+=1;opt.zero_grad(set_to_none=True);n,t,_=forward('train',ix);loss=(n+lam*t).mean();assert torch.isfinite(loss);loss.backward();norm=torch.nn.utils.clip_grad_norm_(params,5);assert torch.isfinite(norm);opt.step();steps+=1;online.append((float(n.mean().detach()),float(t.mean().detach()),len(ix)))
++  tr=ev('train');va=ev('validation');state=dict(model={k:v.detach().cpu().clone() for k,v in R.state_dict().items()},encoder_scale=ck['encoder_scale'],positive_scale=ck['positive_scale'],epoch=epoch,optimizer_steps=steps,seed=seed,validation_positive_NLL=va['nll'],kind='C24_single_temporal_amplitude_repair',lambda_temporal=lam)
++  if va['nll']<best-1e-5:best=va['nll'];bestep=epoch;torch.save(state,O/'checkpoint.pt')
++  row=dict(epoch=epoch,optimizer_steps=steps,total_sample_visits=int(visits.sum()),train_NLL=tr['nll'],train_temporal=tr['temporal'],train_total=tr['nll']+lam*tr['temporal'],validation_NLL=va['nll'],validation_temporal=va['temporal'],validation_total=va['nll']+lam*va['temporal'],best_epoch=bestep,seconds=time.time()-trainstart);hist.append(row);table('training_history.csv',hist);print('EPOCH',json.dumps(row),flush=True)
++ torch.save(state,O/'endpoint_checkpoint.pt');selected=torch.load(O/'checkpoint.pt',map_location='cpu',weights_only=False);R.load_state_dict(selected['model']);R.requires_grad_(False);R.eval();changed=[k for k,v in R.state_dict().items() if not torch.equal(v.cpu(),initial[k])];assert all(k.startswith(('decoder.current.','decoder.amplitude.')) for k in changed);save('parameter_change_audit.json',dict(changed_keys=changed,all_frozen_bit_identical=True,Mask_and_Encoder_bit_identical=True));np.savez(O/'sample_visits.npz',visits=visits);out=[]
++ with torch.no_grad():
++  for i in range(0,780,64):
++   ix=np.arange(i,min(i+64,780));_,_,y=forward('validation',ix);out.append(y.cpu().numpy())
++ y=np.concatenate(out);assert np.isfinite(y).all() and (y>=0).all();old=np.load(P/'validation_outputs.npz')['values'];assert np.array_equal(y>0,old>0)
++ # Audit cached differentiable readout against unchanged architecture's actual free-running decode.
++ check=[]
++ with torch.no_grad():
++  for i in range(0,780,64):check.append(D.deterministic_decode(cache['validation']['mu'][i:i+64]).cpu().numpy())
++ actual=np.concatenate(check);assert np.allclose(actual,y,rtol=1e-5,atol=1e-5);np.savez_compressed(O/'validation_outputs.npz',values=y,groups=data['validation']['g'],stage=data['validation']['s']);save('decode_equivalence.json',dict(max_abs_diff=float(np.abs(actual-y).max()),Mask_bit_identical_C13=True,allclose_rtol=1e-5,atol=1e-5))
++ assert np.all(visits==18);assert all(sha(p)==h for p,h in protected.items());save('training_summary.json',dict(epochs=18,best_epoch=bestep,optimizer_steps=steps,total_sample_visits=int(visits.sum()),all_5153_windows_covered_every_epoch=True,seconds=time.time()-trainstart,device=device,GPU_name=torch.cuda.get_device_name() if device.startswith('cuda') else None,GPU_peak_bytes=torch.cuda.max_memory_allocated() if device.startswith('cuda') else None,new_probe_fits=0,protected_unchanged=True,only_one_lambda=True,C0_not_accessed_before_freeze=True));save('training_freeze.json',dict(checkpoint_sha256=sha(O/'checkpoint.pt'),outputs_sha256=sha(O/'validation_outputs.npz'),frozen_before_C0_evaluation_unix=time.time(),no_more_model_training=True));print('TRAINING COMPLETE selected',bestep,flush=True)
+ if __name__=='__main__':main()

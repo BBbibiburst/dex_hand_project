@@ -1,0 +1,9 @@
+{
+  "standalone_workdir": "/tmp",
+  "inference_bit_identical": true,
+  "BA_D_confusion_matrix_exactly_reproduced": true,
+  "D_only_pass_count": 11,
+  "original_joint_pass_count": 2,
+  "max_AUC_float_difference": 0,
+  "original_models_not_changed": true
+}

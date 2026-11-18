@@ -1,0 +1,5 @@
+domain,role,dt_min,dt_P50,dt_max,source,fixed_20Hz
+Real,train,0.050095319747924805,0.06523799896240234,1.3534266948699951,C24 raw processed/sync_id exact audit,False
+Natural,train,0.04999999999988347,0.0500000000000315,0.05000000000006111,registered4 consecutive source frames + timestamp span,True
+Real,validation,0.05028223991394043,0.06529080867767334,0.7703595161437988,C24 raw processed/sync_id exact audit,False
+Natural,validation,0.04999999999988347,0.0500000000000167,0.05000000000006111,registered4 consecutive source frames + timestamp span,True

@@ -1,0 +1,15 @@
+{
+  "cwd": "/home/zmy/dex_hand_project",
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "scripts": [
+    "code/evaluate.py",
+    "code/report.py"
+  ],
+  "no_training": true,
+  "no_next_experiment": true
+}

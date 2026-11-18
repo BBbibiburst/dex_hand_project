@@ -1,0 +1,8 @@
+{
+  "max_absolute_difference": 2.86102294921875e-05,
+  "allclose": true,
+  "rtol": 1e-05,
+  "atol": 1e-05,
+  "Mask_bit_identical": true,
+  "inference": "cuda:0"
+}

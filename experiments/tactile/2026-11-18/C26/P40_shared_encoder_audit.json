@@ -1,0 +1,29 @@
+{
+  "checkpoint": "outputs/tactile_p40_shared_features_2026-11-15/selected_model/checkpoint.pt",
+  "sha256": "c386da79557303794f7e706ec635b6516595d406fb0ec4b0f5eb4847d2a5767b",
+  "checkpoint_keys": [
+    "model",
+    "amplitude_scale",
+    "target_mean",
+    "target_std",
+    "feature_dim",
+    "name",
+    "lambda",
+    "selected_epoch",
+    "parameters",
+    "scope"
+  ],
+  "shared_same_function": true,
+  "latent_shape": "4x64 feature Z, not VAE posterior",
+  "posterior_mean_logvar": false,
+  "train_Real": 5153,
+  "train_Sim": 1824,
+  "Sim_source": "P37 transformed Sim, not current Natural5task",
+  "preprocessing": "Mask branch and log1p(x)/fixed common amplitude_scale branch",
+  "Decoder_present": false,
+  "C13_Decoder_coordinate_compatible": false,
+  "may_be_separate_representation_candidate": true,
+  "no_mixing_with_C26": true,
+  "source": "outputs/tactile_p40_shared_features_2026-11-15/code/model.py",
+  "evidence": "outputs/tactile_p40_shared_features_2026-11-15/p40_report.md"
+}

@@ -1,0 +1,15 @@
+{
+  "status": "CONDITIONAL_GO_INPUT_OOD_ANALYSIS_ONLY",
+  "zero_shot_conversion": "NO_GO_CURRENT_CANDIDATE_STAGE_D_FAILED",
+  "shared_numeric_coordinates": true,
+  "shared_physical_channels": "UNKNOWN",
+  "common_latent_numeric_support": "partial_and_metric_sensitive",
+  "semantic_correspondence": "NOT_ESTABLISHED",
+  "latent_collapse": false,
+  "Decoder_response_retention": "not supported for current Natural inputs",
+  "primary_C0": "NOT_RUN_STAGE_D_STOP",
+  "can_start_GMM_OT": false,
+  "can_start_C27": false,
+  "next_single_recommendation": "Read-only localization of which source index/processing differences place Natural inputs outside Real effective support; compare common-Encoder posterior and readout failures. Do not retrain Decoder or start GMM/OT without separate instruction.",
+  "no_autostart": true
+}

@@ -1,0 +1,17 @@
+dataset,threshold_type,threshold,mean_active_patch,equal_group_mean,no_output_threshold_change
+Real_train,relative_frame_peak,0,15.462400543372793,15.397754617839166,True
+Real_train,relative_frame_peak,0.001,12.513923927809044,11.409023632838203,True
+Real_train,relative_frame_peak,0.01,7.770085387153115,7.350646518412314,True
+Real_train,relative_frame_peak,0.05,5.79288763826897,5.559071053022719,True
+Natural_train,relative_frame_peak,0,7.838169918498394,7.213674086749325,True
+Natural_train,relative_frame_peak,0.001,4.552729068905903,4.352712083074043,True
+Natural_train,relative_frame_peak,0.01,4.392010372931588,4.208961815553352,True
+Natural_train,relative_frame_peak,0.05,4.237713015559398,4.068362622248926,True
+Real_validation,relative_frame_peak,0,15.125961538461539,15.133125,True
+Real_validation,relative_frame_peak,0.001,12.81698717948718,13.065989583333334,True
+Real_validation,relative_frame_peak,0.01,7.351602564102564,7.703802083333334,True
+Real_validation,relative_frame_peak,0.05,5.584294871794872,5.643802083333332,True
+Natural_validation,relative_frame_peak,0,6.645027624309392,5.9818322951295375,True
+Natural_validation,relative_frame_peak,0.001,3.8767955801104974,3.7058034576831913,True
+Natural_validation,relative_frame_peak,0.01,3.684806629834254,3.5341472022326093,True
+Natural_validation,relative_frame_peak,0.05,3.5397790055248617,3.411707871715926,True

@@ -1,0 +1,32 @@
+{
+  "all_protected_unchanged": true,
+  "files": {
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/scaler.npz": "cd549b3720d08e55ddafed817c294fba4910db5cf1f4ea558c4ca030c5468921",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_12/checkpoint.pt": "eebfcd5db39978e4aa0b12a80a5b0ea4ada6fc6e7ca324505241fe43ae616420",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_11/checkpoint.pt": "fe761d858c994bc65343e3cba53e95554e5ae0b10d2fbaff16afe085c10b4865",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_12/checkpoint.pt": "e49381065bd5647bd1e66482f8f174f6907162b8c2c89cada285c23d2a5bb3a8",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/logistic/checkpoint.pt": "4b2d2472af896dd1ed028ee0899003970e0be10ef79d635b2f95786d4e282b01",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_12/checkpoint.pt": "301e6274dd4772fe54a48da6e865e04f24b523eca30187991d05cbead31cecee",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_11/checkpoint.pt": "a69353fe458cf372cf1fabd7bebfe3d996d615e0494b173ab5128ad7a179ec91",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_13/checkpoint.pt": "483f99a36d5aa78dbd156c991a9ade333c4b9786e203dea33ce7ecb5590f62df",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_11/checkpoint.pt": "60dac23f7cdd9a59318b7aef8824c0944fc855b7798bd9f70b27f1a6af458dc1",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_13/checkpoint.pt": "aa5e903e66be197f528ded0902138748f71728a07e2865f44b791e6f829b2e34",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_13/checkpoint.pt": "57f581cb96712d41a81f0ff325b0ae5c8ce095c9d33502fd966cfc6be434f156",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/knn/checkpoint.npz": "6fcfd1854498407d0e1eae178c5f6bed40d096c9a6530c49bdcfc0f46ca841ae",
+    "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/checkpoint.pt": "6dea2be871e03d4fedc5c9b8022b98c1d8866fed6bf4ed496a2ea6ccd1ddc2c7",
+    "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/validation_outputs.npz": "23e70ebb843be8622047f342d56ba05c0078671dce63a9e8f11d1b1b73821bd4",
+    "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/integrity.json": "e919795244efe10b30ad2f7db7556e2c726b43ed0a06c34a05fff856deced3c8",
+    "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/protocol_clarification.json": "9c4e9d95c402aa43ea67ef759f8438aea7d911dbfb0bfbb3cce43b98dffadaab",
+    "outputs/tactile_p43_latent_translator_integrated_2026-11-16/real_validation/index.json": "6c50b9b629c71f5a6eaac9502410d77bf3a197ae34fb335d54cddfe18bd7a43f",
+    "outputs/tactile_p35_deep_probe_2026-11-15/code/run.py": "2d87e24453cb7fc74dd9dba0d723ed16cbaa27fda3a559620bdc87d115b3d557",
+    "apps/evaluate_tactile_712d_gan.py": "c792fa3dd91730b83f196c4d4d1e4a2a49b7a8d05674899fb76edd773893b193",
+    "outputs/tactile_p37_full_data_revalidation_2026-11-15/code/common.py": "f6d3ebaeffd33910ea89a9c029b4df4781a4fba091f6ef3bf86cf75266a216d4",
+    "outputs/tactile_p43_c11_latent_support_audit_2026-11-17/code/common11.py": "e833033574b68bf8e09960ebb347a3b10e3efb59b52d84bcf8186ef91ec42d51"
+  },
+  "Encoder_Decoder_not_modified": true,
+  "C0_not_refit": true,
+  "scaler_not_refit": true,
+  "Test_Holdout_not_accessed": true,
+  "Natural_tactile_files_not_accessed": true,
+  "only_historical_scalar_Natural_metrics_read": true
+}

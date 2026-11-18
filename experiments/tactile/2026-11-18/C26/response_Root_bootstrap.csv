@@ -1,0 +1,6 @@
+feature,independent_units,Root_count,replicates,valid_replicates,Spearman_CI_low,Spearman_CI_high,scope
+total_response,Root,10,300,300,-0.21597884057228922,0.23931321914679024,grouped descriptive association; no intervention and not physical correspondence
+response_max,Root,10,300,300,-0.24331224548067248,0.058677005560108415,grouped descriptive association; no intervention and not physical correspondence
+index_positive_fraction,Root,10,300,300,-0.6811375432736542,-0.17092727994273826,grouped descriptive association; no intervention and not physical correspondence
+concentration,Root,10,300,300,-0.14955086023338784,0.4592777592031989,grouped descriptive association; no intervention and not physical correspondence
+absolute_frame_delta,Root,10,300,300,-0.18455454774773283,0.1993729429140757,grouped descriptive association; no intervention and not physical correspondence

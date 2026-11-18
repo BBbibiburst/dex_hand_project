@@ -1,0 +1,10 @@
+{
+  "Real_only_groups": 0,
+  "generated_only_groups": 0,
+  "shared_Real_source_groups": 4,
+  "replicates": 300,
+  "shared_group_resampling": "joint across original and reconstructed outputs",
+  "synthetic_prior_draws_are_not_physical_Roots": true,
+  "synthetic_prior_draws_in_C23": false,
+  "context_note": "No synthetic prior samples; only original/reconstructed shared Real Sessions. Legacy generic helper annotations do not describe an additional C23 source."
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "model": "C10_epsilon",
+    "path": "outputs/tactile_p43_c10_conditional_latent_diffusion_2026-11-17/seed_11/checkpoint.pt",
+    "sha256": "b8a93cc720663127ea892ab8178639fafaaf7920efc0fdced2a366500928e76b",
+    "role": "latent mapper only; reuses C3 independent encoders; not a common-encoder certificate",
+    "inference_performed": false
+  },
+  {
+    "model": "C10R1_v_prediction",
+    "path": "outputs/tactile_p43_c10_r1_v_prediction_2026-11-17/checkpoint.pt",
+    "sha256": "29de9774a6fc4ec6e857d1c9754bd4d4cce301329a5bc14ca989be7a54a7b1b6",
+    "role": "latent mapper only; reuses C3 independent encoders; not a common-encoder certificate",
+    "inference_performed": false
+  }
+]

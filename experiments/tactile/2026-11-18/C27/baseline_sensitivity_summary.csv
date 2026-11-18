@@ -1,0 +1,12 @@
+instance,most_sensitive_frame,frame_mean_abs_score_change,most_sensitive_index_patch,patch_mean_abs_score_change,not_physical_causal_importance
+mlp_11,frame_0,0.0029835104942321,patch_11,0.0092173395678401,True
+mlp_12,frame_0,0.0014120548730716,patch_11,0.0096458001062273,True
+mlp_13,frame_0,0.0030187249649316,patch_11,0.0085898842662572,True
+gru_11,frame_3,0.0004539638757705,patch_2,0.0008765816455706,True
+gru_12,frame_3,3.8886071706656367e-05,patch_11,0.0028765685856342,True
+gru_13,frame_3,0.0011907458538189,patch_2,0.0048980442807078,True
+transformer_11,frame_0,0.3605440258979797,patch_2,0.0124921044334769,True
+transformer_12,frame_3,0.007968665100634,patch_12,0.012360873632133,True
+transformer_13,frame_0,0.5509398579597473,patch_12,0.0124167492613196,True
+logistic,frame_3,0.0003521649571377,patch_11,0.0017932142419887,True
+knn,frame_0,0.005,patch_6,0.025,True
