@@ -1,0 +1,24 @@
+{
+  "fit": {
+    "CE": 0.016482100991486878,
+    "BA": 0.9983332368321374,
+    "AUC": 0.9999892637270235,
+    "JSD_proxy": 0.6766650795684584,
+    "Real_acceptance_macro": 0.9979166666666646,
+    "FR_macro": 0.0012501930023921543,
+    "FR_micro": 0.0015389350569405972,
+    "confusion_matrix": "[[3244, 5], [12, 4205]]"
+  },
+  "inner": {
+    "CE": 0.28323492708839815,
+    "BA": 0.9241506549974292,
+    "AUC": 0.9692990226448349,
+    "JSD_proxy": 0.40991225347154714,
+    "Real_acceptance_macro": 0.8708333333333338,
+    "FR_macro": 0.02253202333847495,
+    "FR_micro": 0.02875,
+    "confusion_matrix": "[[777, 23], [248, 688]]"
+  },
+  "valid": false,
+  "failure": "insufficientfit/innergroupgeneralization;stopnoextraepochs"
+}

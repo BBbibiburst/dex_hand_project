@@ -1,0 +1,4 @@
+QUALITY F0 SWD 0.20660925215170187 MMD 0.343677926989022 HSIC 0.5071467909414283 gates {'distribution': True, 'PRDC': True, 'dependency': True, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 14.2
+QUALITY Original SWD 0.4113430117241668 MMD 0.39255359721971717 HSIC 1.0 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 13.6
+QUALITY F0_PairShuffle SWD 0.20660925215170187 MMD 0.34367792698902205 HSIC 0.3321834647126102 gates {'distribution': True, 'PRDC': True, 'dependency': False, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 14.2
+P49 BASELINE AUDIT COMPLETE

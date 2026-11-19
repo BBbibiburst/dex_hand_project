@@ -1,0 +1,25 @@
+FROZEN_INFERENCE A_K1 train seconds 3.7
+FROZEN_INFERENCE A_K2 train seconds 7.9
+FROZEN_INFERENCE A_K4 train seconds 14.2
+FROZEN_INFERENCE A_K8 train seconds 25.3
+FROZEN_INFERENCE A_K1 validation seconds 26.3
+FROZEN_INFERENCE A_K2 validation seconds 27.7
+FROZEN_INFERENCE A_K4 validation seconds 29.7
+FROZEN_INFERENCE A_K8 validation seconds 33.3
+FROZEN_INFERENCE B_K1 train seconds 36.7
+FROZEN_INFERENCE B_K2 train seconds 40.9
+FROZEN_INFERENCE B_K4 train seconds 47.3
+FROZEN_INFERENCE B_K8 train seconds 58.2
+FROZEN_INFERENCE B_K1 validation seconds 59.2
+FROZEN_INFERENCE B_K2 validation seconds 60.6
+FROZEN_INFERENCE B_K4 validation seconds 62.9
+FROZEN_INFERENCE B_K8 validation seconds 66.5
+FROZEN_INFERENCE C_K1 train seconds 70.3
+FROZEN_INFERENCE C_K2 train seconds 74.8
+FROZEN_INFERENCE C_K4 train seconds 81.2
+FROZEN_INFERENCE C_K8 train seconds 92.0
+FROZEN_INFERENCE C_K1 validation seconds 93.0
+FROZEN_INFERENCE C_K2 validation seconds 94.5
+FROZEN_INFERENCE C_K4 validation seconds 96.8
+FROZEN_INFERENCE C_K8 validation seconds 100.6
+P48 GENERATE COMPLETE

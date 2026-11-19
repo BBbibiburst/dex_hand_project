@@ -1,0 +1,50 @@
+[
+  {
+    "K": 1,
+    "field_calls": 1,
+    "unique_field_instances": 1,
+    "field_parameter_count": 306176,
+    "finite": true,
+    "shape": [
+      8,
+      4,
+      712
+    ]
+  },
+  {
+    "K": 2,
+    "field_calls": 2,
+    "unique_field_instances": 1,
+    "field_parameter_count": 306176,
+    "finite": true,
+    "shape": [
+      8,
+      4,
+      712
+    ]
+  },
+  {
+    "K": 4,
+    "field_calls": 4,
+    "unique_field_instances": 1,
+    "field_parameter_count": 306176,
+    "finite": true,
+    "shape": [
+      8,
+      4,
+      712
+    ]
+  },
+  {
+    "K": 8,
+    "field_calls": 8,
+    "unique_field_instances": 1,
+    "field_parameter_count": 306176,
+    "finite": true,
+    "shape": [
+      8,
+      4,
+      712
+    ]
+  }
+]

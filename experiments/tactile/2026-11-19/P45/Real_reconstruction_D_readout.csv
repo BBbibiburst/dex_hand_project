@@ -1,0 +1,4 @@
+group,scope,balanced_accuracy,roc_auc,domain_confusion,confusion_matrix,recall_real,recall_sim
+A,"Real processed vs own C3 reconstruction, BOTH sourceReal; NOT Natural transfer",0.882051282051282,0.958785338593031,0.23589743589743595,"[[703, 77], [107, 673]]",0.8628205128205129,0.9012820512820513
+B,"Real processed vs own C3 reconstruction, BOTH sourceReal; NOT Natural transfer",0.5769230769230769,0.8185930309007232,0.8461538461538463,"[[120, 660], [0, 780]]",1.0,0.15384615384615385
+C,"Real processed vs own C3 reconstruction, BOTH sourceReal; NOT Natural transfer",0.641025641025641,0.7582815581854043,0.7179487179487181,"[[221, 559], [1, 779]]",0.9987179487179487,0.2833333333333333

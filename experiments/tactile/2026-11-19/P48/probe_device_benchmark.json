@@ -1,0 +1,22 @@
+[
+  {
+    "device": "cpu",
+    "kind": "mlp",
+    "seconds": 0.07968997955322266
+  },
+  {
+    "device": "cpu",
+    "kind": "gru",
+    "seconds": 0.0692739486694336
+  },
+  {
+    "device": "cuda",
+    "kind": "mlp",
+    "seconds": 0.27539515495300293
+  },
+  {
+    "device": "cuda",
+    "kind": "gru",
+    "seconds": 0.06294369697570801
+  }
+]

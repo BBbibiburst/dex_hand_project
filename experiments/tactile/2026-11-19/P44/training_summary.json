@@ -1,0 +1,24 @@
+{
+  "completed_epochs": 20,
+  "G_steps": 1152,
+  "D_steps": 1280,
+  "K_step_counts": {
+    "1": 320,
+    "2": 320,
+    "4": 320,
+    "8": 320
+  },
+  "teacher_is_original_C3": true,
+  "all_Natural_Train_seen": true,
+  "all_Real_Train_seen": true,
+  "Natural_visits": 80980,
+  "Real_visits": 103060,
+  "train_seconds": 49.43649888038635,
+  "stopped_by_time": false,
+  "checkpoint_rule": "last fully completed epoch",
+  "smoke_GPU_bytes": 246575104,
+  "GPU_peak_bytes": 323681280,
+  "VAE_bit_identical": true,
+  "models_G1_D1": true,
+  "extra_network_or_seed": false
+}

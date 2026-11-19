@@ -1,0 +1,8 @@
+{
+  "Real_only_groups": 4,
+  "generated_only_groups": 10,
+  "shared_Real_source_groups": 0,
+  "replicates": 300,
+  "shared_group_resampling": "joint across original and reconstructed outputs",
+  "synthetic_prior_draws_are_not_physical_Roots": true
+}

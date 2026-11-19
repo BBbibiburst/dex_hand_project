@@ -1,0 +1,10 @@
+{
+  "seconds": 1277.2208769321442,
+  "expected_instances": 91,
+  "migration_epochs": 0,
+  "migration_optimizer_steps": 0,
+  "deep_epochs_each": 40,
+  "deep_instances": 78,
+  "Logistic_instances": 13,
+  "validation_never_used_for_selection": true
+}

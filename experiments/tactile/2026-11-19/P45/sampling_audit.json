@@ -1,0 +1,7 @@
+{
+  "A_C_full20epoch_order_equal": true,
+  "P44_same_seed_and_explicit_sampling_algorithm": true,
+  "full_visitation_counts_equal_P44": true,
+  "source_P44_train_sha256": "87841875cf1a79db5dd96c15de502f34ebae4cf0dc75baf4e94397662a344285",
+  "same_Real5153_Natural4049_each_epoch": true
+}

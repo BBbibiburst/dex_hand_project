@@ -1,0 +1,18 @@
+{
+  "RealTrain": {
+    "windows": 5153,
+    "groups": 32
+  },
+  "RealValidation": {
+    "windows": 780,
+    "groups": 4
+  },
+  "NaturalTrain": {
+    "windows": 4049,
+    "groups": 50
+  },
+  "NaturalValidation": {
+    "windows": 905,
+    "groups": 10
+  }
+}

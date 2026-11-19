@@ -1,0 +1,22 @@
+{
+  "classification": "C",
+  "all_quality_pass": false,
+  "negative_controls_rejected": true,
+  "Refiner_SWD_MMD_improves_over_disabled_endpoint": false,
+  "overall_distribution_worse_than_F0": true,
+  "severe_collapse": false,
+  "quality_gates": {
+    "distribution": false,
+    "PRDC": false,
+    "dependency": true,
+    "diversity": true,
+    "amplitude": false,
+    "temporal": true,
+    "spatial": false,
+    "zero_structure": false
+  },
+  "no_next_experiment": true,
+  "primary_acceptance_pass": false,
+  "Joint_Root_FR_at_least90": true,
+  "Real_joint_acceptance_at_least90": false
+}

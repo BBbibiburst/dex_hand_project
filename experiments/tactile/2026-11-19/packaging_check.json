@@ -1,0 +1,28 @@
+{
+  "purpose": "standalone archived CLI packaging smoke using synthetic zeros; not scientific evaluation",
+  "training_steps": 0,
+  "results": [
+    {
+      "model": "P49/F0.pt",
+      "shape": [
+        3,
+        4,
+        712
+      ],
+      "finite": true,
+      "nonnegative": true,
+      "metadata_preserved": true
+    },
+    {
+      "model": "P50/F50.pt",
+      "shape": [
+        3,
+        4,
+        712
+      ],
+      "finite": true,
+      "nonnegative": true,
+      "metadata_preserved": true
+    }
+  ]
+}

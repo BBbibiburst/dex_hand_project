@@ -1,0 +1,8 @@
+{
+  "reference_backend": "historical CPU F0 exact",
+  "training_backend": "CPU Encoder, CUDA field and Decoder",
+  "initialCUDA_vs_reference_max_abs": 1.5591305494308472,
+  "initialCUDA_mask_different_entries": 169,
+  "identity_smoke_exact_same_backend": true,
+  "no_backend_claim_of_bitwise_identity": true
+}

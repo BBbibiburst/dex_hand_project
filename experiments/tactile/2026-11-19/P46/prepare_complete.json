@@ -1,0 +1,10 @@
+{
+  "RealTrain_Sessions": 32,
+  "RealVal_Sessions": 4,
+  "NaturalTrain_Roots": 50,
+  "NaturalVal_Roots": 10,
+  "minimum_group_windows": 7,
+  "all_source_hashes_verified": true,
+  "candidate_count": 12,
+  "B_P44_P45same": true
+}

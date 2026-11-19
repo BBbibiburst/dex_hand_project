@@ -1,0 +1,26 @@
+[
+  {
+    "branch": "Global",
+    "field_grad": 0.40297528038413877,
+    "refiner_grad": 3.846574939271005,
+    "finite": true,
+    "active_input_gradient_channels": 712,
+    "zero_residual_exact_identity": true
+  },
+  {
+    "branch": "Spatial",
+    "field_grad": 0.755231227883381,
+    "refiner_grad": 0.3435631265736904,
+    "finite": true,
+    "active_input_gradient_channels": 712,
+    "zero_residual_exact_identity": true
+  },
+  {
+    "branch": "Temporal",
+    "field_grad": 0.835278713792267,
+    "refiner_grad": 0.5719730814222501,
+    "finite": true,
+    "active_input_gradient_channels": 712,
+    "zero_residual_exact_identity": true
+  }
+]

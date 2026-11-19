@@ -1,0 +1,17 @@
+{
+  "protected_historical_files": 603,
+  "protected_hashes_all_unchanged": true,
+  "D090_pack_files": 71,
+  "D090_pack_unchanged": true,
+  "Validation_endpoints_bit_equal_all12": true,
+  "model_count_actual": 43,
+  "model_count_stopped": 48,
+  "TrainVal_group_disjoint": true,
+  "no_Test_Holdout": true,
+  "no_C0_inference": true,
+  "migration_training_epochs": 0,
+  "migration_optimizer_steps": 0,
+  "no_server_changes": true,
+  "no_commit_push": true,
+  "P49_started": false
+}

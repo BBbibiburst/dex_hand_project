@@ -1,0 +1,13 @@
+model,K,latent_mean_PathRatio,latent_end_distance_from_K8,interpretation
+A,1,0.9999999999999999,0.8530362499313768,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+A,2,1.0001802322717523,0.3552592940911109,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+A,4,1.0002103702601608,0.1174076881003199,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+A,8,1.000213651751242,0.0,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+B,1,0.9999999999999999,1.6418948223339385,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+B,2,1.000113591567167,0.6606384178075889,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+B,4,1.000108548908028,0.21073922038976003,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+B,8,1.0000984767338066,0.0,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+C,1,0.9999999999999999,0.7898184944051172,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+C,2,1.0000568319110237,0.32142784880926123,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+C,4,1.0000616686396926,0.10491311492861338,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution
+C,8,1.0000603708439744,0.0,same target-coordinate trajectory only;K8 is observedgridreference not exactODEsolution

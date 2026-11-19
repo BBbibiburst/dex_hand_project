@@ -1,0 +1,26 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "executed": [
+    "python /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/train.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/evaluate.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/gradient_audit.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/report.py"
+  ],
+  "inference": "python /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/infer.py --checkpoint /home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/generator.pt --input NATURAL.npz --K 8 --output NEW.npz",
+  "warning": "Training requires fresh result directory and original registered Train/Validation; never overwrite historical artifacts",
+  "code_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/gradient_audit.py": "2264f8ef5b58e37a32e9c21bb7061c11cee856369d73bc149109337b61d3e0fa",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/infer.py": "20e61f36c8f9938de6e97ab3b53875b61caeca24a3905df11cc83e9cfdc601fb",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/c0_support.py": "d1744224578e6116c21c62a2e0567b7e7655f44773f5fb3368ce292afd926813",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/vae.py": "e90dd0cd08f250d85ce5c89df16f1b760ab915fae41d81a934c251cbe4e694f0",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/evaluate.py": "677ea5071edae55a1049ae125bcd4ffceea9eac65d7f79d79750e2f0635dedeb",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/report.py": "87a29310ca9f9b6ca989ef15c380fbf37103463b13f18ac683234ba16c708048",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/model.py": "5023615d96964482c85ad6a5be68d763f31588d6bf6022f4de038b86f7a006c5",
+    "/home/zmy/dex_hand_project/outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/train.py": "87841875cf1a79db5dd96c15de502f34ebae4cf0dc75baf4e94397662a344285"
+  }
+}

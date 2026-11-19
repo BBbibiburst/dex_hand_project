@@ -1,0 +1,27 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "executed": [
+    "python /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/train.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/evaluate.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/diagnostics.py",
+    "python /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/report.py"
+  ],
+  "inference_example": "python /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/infer.py --checkpoint /home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/A/generator.pt --input NATURAL.npz --K 8 --output NEW.npz",
+  "training_requires": "fresh result directory and registered original data; never overwrite historical outputs",
+  "code_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/infer.py": "2cb74fa8db25a278d88d364f427bc20353416e09269c9a181bef6816a44ba240",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/c0_support.py": "d1744224578e6116c21c62a2e0567b7e7655f44773f5fb3368ce292afd926813",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/discriminator.py": "1d90f808a932d87dcfda204efcb31f08a688c9f95511f8f6360cf36ae52832b6",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/diagnostics.py": "1c1346b3926d6f39678c02f4bdbd0a3c050ddeefdd6d1ec360b13c9dec4fcae9",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/vae.py": "e90dd0cd08f250d85ce5c89df16f1b760ab915fae41d81a934c251cbe4e694f0",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/evaluate.py": "39d19b74d9b62cc3e25152eddfce88aeb6588dc4ddd5bd7944e34d31eac39b64",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/report.py": "6f08eff57a0ec6114955466d2ca95392c9048d2572b451c92ad4cc5be4fcd024",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/model.py": "5023615d96964482c85ad6a5be68d763f31588d6bf6022f4de038b86f7a006c5",
+    "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/train.py": "05bbfcfc65bb6fbc8a99d6b5900078979897ba5f70557fcfc4b8e9f0d2d9e782"
+  }
+}

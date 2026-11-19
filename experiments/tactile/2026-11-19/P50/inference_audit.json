@@ -1,0 +1,25 @@
+{
+  "output_shape": [
+    905,
+    4,
+    712
+  ],
+  "finite": true,
+  "nonnegative": true,
+  "CUDA_replay_max_abs": 8.58306884765625e-06,
+  "CUDA_replay_Mask_identical": false,
+  "CUDA_replay_allclose": true,
+  "replay_tolerance": {
+    "rtol": 1e-05,
+    "atol": 2e-05
+  },
+  "CUDA_replay_mask_difference_entries": 5695,
+  "all_metadata_preserved": true,
+  "residual_response_RMS": 0.4942193925380707,
+  "residual_response_max_abs": 21.913223266601562,
+  "residual_fraction_changed": 0.6352900552486188,
+  "mask_disagreement_max_response": 4.76837158203125e-07,
+  "stored_zero_fraction": 0.49124247315165437,
+  "stored_positive_below_1e_7": 6074,
+  "stored_positive_below_1e_6": 6275
+}

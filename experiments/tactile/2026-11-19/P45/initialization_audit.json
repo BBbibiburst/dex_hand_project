@@ -1,0 +1,32 @@
+[
+  {
+    "group": "A",
+    "Generator_initial_state_hash": "88b99c2991c45478c6b1975e3edb5142b0e7438eb74ac3984a386c367feadc5d",
+    "source_initial_file_sha256": "6866dc8efd423ee46f0dbf1e602ea07fc3b2e18698a56af04bcf508cacd95719",
+    "D_common_tensors_exact": true,
+    "D_first_layer": "original amplitude columns2848:5696",
+    "Generator_parameters": 2494640,
+    "field_trainable_parameters": 306176,
+    "D_parameters": 559809
+  },
+  {
+    "group": "B",
+    "Generator_initial_state_hash": "88b99c2991c45478c6b1975e3edb5142b0e7438eb74ac3984a386c367feadc5d",
+    "source_initial_file_sha256": "6866dc8efd423ee46f0dbf1e602ea07fc3b2e18698a56af04bcf508cacd95719",
+    "D_common_tensors_exact": true,
+    "D_first_layer": "original full5696columns",
+    "Generator_parameters": 2494640,
+    "field_trainable_parameters": 306176,
+    "D_parameters": 1106625
+  },
+  {
+    "group": "C",
+    "Generator_initial_state_hash": "88b99c2991c45478c6b1975e3edb5142b0e7438eb74ac3984a386c367feadc5d",
+    "source_initial_file_sha256": "6866dc8efd423ee46f0dbf1e602ea07fc3b2e18698a56af04bcf508cacd95719",
+    "D_common_tensors_exact": true,
+    "D_first_layer": "original full5696columns",
+    "Generator_parameters": 2494640,
+    "field_trainable_parameters": 306176,
+    "D_parameters": 1106625
+  }
+]

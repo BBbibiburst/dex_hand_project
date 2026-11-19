@@ -1,0 +1,10 @@
+{
+  "hardforward_exact": true,
+  "continuousGgradient_nonzero": true,
+  "D_hardMask_gradient_stillzero": true,
+  "known_limitation_not_silently_fixed": true,
+  "optimizer_steps": 0,
+  "device": "cuda",
+  "estimated_opt_minutes": "3to8;cap30",
+  "field_trainable": 306176
+}

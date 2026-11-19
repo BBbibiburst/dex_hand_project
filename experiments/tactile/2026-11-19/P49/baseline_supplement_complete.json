@@ -1,0 +1,6 @@
+{
+  "no_training": true,
+  "Original_baseline_in": "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/stopped_audit",
+  "PairShuffle_in": "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/stopped_audit",
+  "states_not_modified": true
+}

@@ -1,0 +1,60 @@
+{
+  "Spearman_undefined_rows": 3,
+  "reason": "constant descriptor ties; correlation mathematically undefined, never interpreted as zero or evidence",
+  "rows": [
+    {
+      "model": "Constant",
+      "information": "paired_descriptor",
+      "scope": "global descriptive, no windowindependent CI",
+      "units": "",
+      "HSIC": "",
+      "normalized_HSIC": "",
+      "constant_kernel": "",
+      "null_mean": "",
+      "permutation_tail_fraction": "",
+      "interpretation": "association only, not correctsemantic mapping",
+      "Root": "",
+      "task": "",
+      "windows": "",
+      "unique_stages": "",
+      "descriptor": "frame0_mean",
+      "Spearman": "nan"
+    },
+    {
+      "model": "Constant",
+      "information": "paired_descriptor",
+      "scope": "global descriptive, no windowindependent CI",
+      "units": "",
+      "HSIC": "",
+      "normalized_HSIC": "",
+      "constant_kernel": "",
+      "null_mean": "",
+      "permutation_tail_fraction": "",
+      "interpretation": "association only, not correctsemantic mapping",
+      "Root": "",
+      "task": "",
+      "windows": "",
+      "unique_stages": "",
+      "descriptor": "frame0_active_fraction",
+      "Spearman": "nan"
+    },
+    {
+      "model": "Constant",
+      "information": "paired_descriptor",
+      "scope": "global descriptive, no windowindependent CI",
+      "units": "",
+      "HSIC": "",
+      "normalized_HSIC": "",
+      "constant_kernel": "",
+      "null_mean": "",
+      "permutation_tail_fraction": "",
+      "interpretation": "association only, not correctsemantic mapping",
+      "Root": "",
+      "task": "",
+      "windows": "",
+      "unique_stages": "",
+      "descriptor": "frame01_absolute_delta",
+      "Spearman": "nan"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "Real": {
+    "20260706_160808_bootleB30-1": {
+      "fold": 0,
+      "pseudo_domain": 0
+    },
+    "20260814_165556_stable_3D_liulengzhu_30": {
+      "fold": 0,
+      "pseudo_domain": 0
+    },
+    "20260817_101100_slip_3D_xiaokaikoubeizi_30": {
+      "fold": 0,
+      "pseudo_domain": 0
+    },
+    "20260611_163154_hardness_slip_session": {
+      "fold": 0,
+      "pseudo_domain": 0
+    },
+    "20260813_152800_stable_shuirongC_20": {
+      "fold": 1,
+      "pseudo_domain": 0
+    },
+    "20260814_145553_stable_maidong_30": {
+      "fold": 1,
+      "pseudo_domain": 0
+    },
+    "20260816_173936_slip_3D_bottle_A_30": {
+      "fold": 1,
+      "pseudo_domain": 0
+    },
+    "20260814_153130_stable_3D_xiaokaikoubeizi_30": {
+      "fold": 1,
+      "pseudo_domain": 0
+    },
+    "20260817_101910_slip_3D_xiaokaikoubeizi_30": {
+      "fold": 2,
+      "pseudo_domain": 0
+    },
+    "20260817_103306_slip_3D_dakaikoubeizi_30": {
+      "fold": 2,
+      "pseudo_domain": 0
+    },
+    "20260813_165855_stable_3D_h13r3_20": {
+      "fold": 2,
+      "pseudo_domain": 0
+    },
+    "20260706_163616_yuanzhuD7H13-20-1": {
+      "fold": 2,
+      "pseudo_domain": 0
+    },
+    "20260813_162744_stable_3D_bottle_C_20": {
+      "fold": 3,
+      "pseudo_domain": 0
+    },
+    "20260611_151944_hardness_slip_session": {
+      "fold": 3,
+      "pseudo_domain": 0
+    },
+    "20260611_145025_hardness_slip_session": {
+      "fold": 3,
+      "pseudo_domain": 0
+    },
+    "20260814_143310_stable_wood_30": {
+      "fold": 3,
+      "pseudo_domain": 0
+    },
+    "20260816_165241_slip_h13r3_30": {
+      "fold": 0,
+      "pseudo_domain": 1
+    },
+    "20260817_105909_slip_3D_liulengzhui_30": {
+      "fold": 0,
+      "pseudo_domain": 1
+    },
+    "20260705_213030_hardness_slip_session": {
+      "fold": 0,
+      "pseudo_domain": 1
+    },
+    "20260813_165122_stable_3D_h13r3_20": {
+      "fold": 0,
+      "pseudo_domain": 1
+    },
+    "20260817_104124_slip_3D_dakaikoubeizi_30": {
+      "fold": 1,
+      "pseudo_domain": 1
+    },
+    "20260706_164601_bottleA-20-1": {
+      "fold": 1,
+      "pseudo_domain": 1
+    },
+    "20260817_093609_slip_3D_6512_30": {
+      "fold": 1,
+      "pseudo_domain": 1
+    },
+    "20260814_155240_stable_3D_6512_30": {
+      "fold": 1,
+      "pseudo_domain": 1
+    },
+    "20260813_163756_stable_3D_h13r3_20": {
+      "fold": 2,
+      "pseudo_domain": 1
+    },
+    "20260611_163853_hardness_slip_session": {
+      "fold": 2,
+      "pseudo_domain": 1
+    },
+    "20260817_094253_slip_3D_6512_30": {
+      "fold": 2,
+      "pseudo_domain": 1
+    },
+    "20260814_144025_stable_wood_30": {
+      "fold": 2,
+      "pseudo_domain": 1
+    },
+    "20260615_143952_hardness_slip_session": {
+      "fold": 3,
+      "pseudo_domain": 1
+    },
+    "20260814_154235_stable_3D_xiaokaikoubeizi_30": {
+      "fold": 3,
+      "pseudo_domain": 1
+    },
+    "20260813_151901_stable_shuirongC_20": {
+      "fold": 3,
+      "pseudo_domain": 1
+    },
+    "20260814_164757_stable_3D_liulengzhu_30": {
+      "fold": 3,
+      "pseudo_domain": 1
+    }
+  },
+  "Sim": {
+    "root_c8ea2a58e971a844baa3": 0,
+    "root_a35b1d38a36b84fba394": 0,
+    "root_32ce89a0c4ec573b3c38": 0,
+    "root_71ea56df13392fbde451": 1,
+    "root_8e9703fc727cc13d69da": 1,
+    "root_19966accad2776e253d6": 1,
+    "root_d47731d1bf4917f418a6": 2,
+    "root_55c074628e52d016a51c": 2,
+    "root_46e28191f08086b211fc": 3,
+    "root_aa59d9e75d30badb725f": 3,
+    "root_c3801bac90da9161e8be": 0,
+    "root_e58ab186ee6cf6e4b8b6": 0,
+    "root_b3b7dbd1ccc46279660c": 0,
+    "root_d5f4941bfb08637ceae5": 1,
+    "root_49a636963f20db841483": 1,
+    "root_4e9f5b2551a34f5b74a4": 1,
+    "root_8e55651649ecfc3fedfb": 2,
+    "root_afd580d15945a9c8c5b3": 2,
+    "root_b7b9cbfa86f613c46020": 3,
+    "root_f0981887e8c5270f5b8d": 3,
+    "root_1793a890681bb7154c7f": 0,
+    "root_ad9d04fdc8b38c3adabb": 0,
+    "root_2c2ed01b1478b0455c43": 0,
+    "root_3a6cc0b5c9a6fcf925b0": 1,
+    "root_9f4385c657d6597c0427": 1,
+    "root_2ac853324c277975cfb9": 1,
+    "root_88431cefd3cd54e23628": 2,
+    "root_eea8a3940811deb25374": 2,
+    "root_28a4d9bcb3084ca7cee6": 3,
+    "root_215c938aa454f5ca091b": 3,
+    "root_59899552b8d6b4f51619": 0,
+    "root_8a8162c8f0bb22215f59": 0,
+    "root_7d49c618bff33e574119": 0,
+    "root_6ce29f21e9c3e3c82129": 1,
+    "root_7d65fb4f91f611c89347": 1,
+    "root_818afff1e044710e2a7b": 1,
+    "root_77db2996aa9e53583762": 2,
+    "root_9b87bd60e908f215302d": 2,
+    "root_40f6d4e41aa030d782ef": 3,
+    "root_636ae18147fd13ecff7f": 3,
+    "root_dc7da4bc42db7f6bc36f": 0,
+    "root_e71b2eac390250816491": 0,
+    "root_3c02853a646859be1c8a": 0,
+    "root_f799a99574fb757393bd": 1,
+    "root_0cdc8ada9c14dbbd2a8d": 1,
+    "root_358b4775faa098154767": 1,
+    "root_8b9ef2e560bf5742b6f0": 2,
+    "root_c2f4583a750fbf1fbd49": 2,
+    "root_96c5dec434427f7a252b": 3,
+    "root_84f5baa49e768850d163": 3
+  },
+  "seed": 4601,
+  "roles": "Train only",
+  "preprocessing": "Real fit-fold only"
+}

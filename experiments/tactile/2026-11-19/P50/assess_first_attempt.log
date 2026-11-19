@@ -1,0 +1,22 @@
+ALL D50 acceptance complete
+QUALITY F0 SWD 0.20660925215170187 MMD 0.343677926989022 HSIC 0.5071467909414283 gates {'distribution': True, 'PRDC': True, 'dependency': True, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 14.8
+QUALITY Original SWD 0.4113430117241668 MMD 0.39255359721971717 HSIC 1.0 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 13.5
+QUALITY P49_F3 SWD 0.4113299756912987 MMD 0.6768059340116337 HSIC 0.4925660263497681 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': True, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': True} seconds 13.8
+QUALITY F50 SWD 4.247227259017046 MMD 0.8821400323571661 HSIC 0.514820013695973 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': True, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 17.0
+QUALITY F50_without_refiner SWD 0.3403651960851213 MMD 0.36550345430385656 HSIC 0.43395194764212197 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': True, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 14.1
+QUALITY Constant SWD 0.33275542572175565 MMD 0.5226020463325001 HSIC 0.0 gates {'distribution': False, 'PRDC': False, 'dependency': False, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 16.6
+QUALITY RealDonor SWD 0.22026635544009374 MMD 0.3157805700531839 HSIC 0.11622618930326387 gates {'distribution': True, 'PRDC': False, 'dependency': False, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 14.0
+QUALITY PairShuffle SWD 4.247227259017046 MMD 0.8821400323571662 HSIC 0.3126310739984096 gates {'distribution': False, 'PRDC': False, 'dependency': False, 'diversity': True, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 14.5
+Traceback (most recent call last):
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/numpy/lib/index_tricks.py", line 385, in __getitem__
+    axis = int(item)
+ValueError: invalid literal for int() with base 10: 'ALL'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p50_residual_multiview_2026-11-19/code/assess.py", line 30, in <module>
+    for g in np.r_['ALL',np.unique(gg)]:
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/numpy/lib/index_tricks.py", line 388, in __getitem__
+    raise ValueError("unknown special directive") from e
+ValueError: unknown special directive

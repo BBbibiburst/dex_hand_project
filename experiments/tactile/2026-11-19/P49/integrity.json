@@ -1,0 +1,11 @@
+{
+  "protected_files_checked": 959,
+  "protected_files_changed": [],
+  "original_registration_unchanged": true,
+  "D1_unchanged_since_review": true,
+  "all_validation_outputs_valid": true,
+  "python_AST_valid": true,
+  "round_and_budget_verified": true,
+  "classification": "B: FR passed, quality failed",
+  "no_additional_training": true
+}

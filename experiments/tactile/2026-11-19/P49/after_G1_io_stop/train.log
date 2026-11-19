@@ -1,0 +1,49 @@
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py", line 34, in <module>
+    assert torch.equal(yy,hard);smokeloss=F.softplus(-D(yy)).mean();gg=torch.autograd.grad(smokeloss,list(G.field.parameters()));assert all(torch.isfinite(v).all() for v in gg) and any(v.abs().sum()>0 for v in gg);save(O/'smoke.json',dict(hardforward_exact=True,continuousGgradient_nonzero=True,D_hardMask_gradient_stillzero=True,known_limitation_not_silently_fixed=True,optimizer_steps=0,device=device,estimated_opt_minutes='3to8;cap30',field_trainable=sum(p.numel() for p in G.field.parameters())));D.requires_grad_(True);save(O/'code_hashes_before_training.json',{str(p):sha(p) for p in (O/'code').glob('*.py')});snapshotF('F0')
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/autograd/__init__.py", line 515, in grad
+    result = _engine_run_backward(
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/autograd/graph.py", line 865, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+RuntimeError: cudnn RNN backward can only be called in training mode
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py", line 79, in <module>
+    trainD(s['x'],0,20);d0valid,fit,inner=validateD(s['x'],'D0');rawmetrics,_,_=disc_metrics('D0/Original',sv['x'],rv['x'],None,'validation');row=roundevaluate(0,F0['validation'],F0['validation'],fit,inner,d0valid);row.update(stage='F0underRawD0;notnewadversarialgain',D0_Original_BA=rawmetrics['BA'],D0_Original_AUC=rawmetrics['AUC']);roundrows.append(row);saveout('F0',F0['validation']);table(O/'round_metrics.csv',roundrows);print('D0_GATE',d0valid,fit,inner,'F0FR',row['FR_post'],flush=True)
+  File "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py", line 72, in roundevaluate
+    mpre,lr,lpre=disc_metrics(f'D{round_}/pre',pre,rv['x'],None,'validation');mpost,_,lpost=disc_metrics(f'D{round_}/post',post,rv['x'],None,'validation');bank=np.load(P48/'group_bootstrap_indices.npz');rmeans=np.array([(lr[rv['g']==g]>=0).mean() for g in bank['Real_groups']]);spre=np.array([(lpre[sv['g']==g]>=0).mean() for g in bank['Sim_groups']]);spost=np.array([(lpost[sv['g']==g]>=0).mean() for g in bank['Sim_groups']]);bpre=spre[bank['Sim']].mean(1);bpost=spost[bank['Sim']].mean(1);br=rmeans[bank['Real']].mean(1);row=dict(round=round_,D=f'D{round_}',F_pre=f'F{max(0,round_-1)}',F_post=f'F{round_}',FR_pre=mpre['FR_macro'],FR_post=mpost['FR_macro'],FR_gain=mpost['FR_macro']-mpre['FR_macro'],FR_micro=mpost['FR_micro'],Real_acceptance=mpost['Real_acceptance_macro'],FR_CI_low=float(np.quantile(bpost,.025)),FR_CI_high=float(np.quantile(bpost,.975)),FR_gain_CI_low=float(np.quantile(bpost-bpre,.025)),FR_gain_CI_high=float(np.quantile(bpost-bpre,.975)),Real_CI_low=float(np.quantile(br,.025)),Real_CI_high=float(np.quantile(br,.975)),BA_pre=mpre['BA'],AUC_pre=mpre['AUC'],BA_post=mpost['BA'],AUC_post=mpost['AUC'],confusion_matrix_pre=mpre['confusion_matrix'],confusion_matrix_post=mpost['confusion_matrix'],D_fit_BA=fit['BA'],D_inner_BA=inner['BA'],D_inner_AUC=inner['AUC'],D_valid=bool(Dvalid),numeric_FR_pass=mpost['FR_macro']>=.9 and mpost['Real_acceptance_macro']>=.9)
+NameError: name 'P48' is not defined. Did you mean: 'P44'?
+RESUMED_EXACT_D0 1320 steps 4.882083070975568 optimizationseconds
+D0_GATE True {'CE': 5.9409112861741186e-05, 'BA': 1.0, 'AUC': 1.000000000000004, 'JSD_proxy': 0.6930877714470836, 'Real_acceptance_macro': 0.9999999999999978, 'FR_macro': 0.0, 'FR_micro': 0.0, 'confusion_matrix': '[[3249, 0], [0, 4217]]'} {'CE': 0.10442758935606686, 'BA': 0.9782822219797009, 'AUC': 0.9999999999999971, 'JSD_proxy': 0.5887195912038784, 'Real_acceptance_macro': 1.0000000000000007, 'FR_macro': 0.04343555604059806, 'FR_micro': 0.02375, 'confusion_matrix': '[[781, 19], [0, 936]]'} F0FR 0.9999999999999999
+QUALITY F0 SWD 0.20660925215170187 MMD 0.343677926989022 HSIC 0.5071467909414283 gates {'distribution': True, 'PRDC': True, 'dependency': True, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 15.9
+QUALITY Constant SWD 0.33275542572175565 MMD 0.5226020463325001 HSIC 0.0 gates {'distribution': False, 'PRDC': False, 'dependency': False, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 14.2
+QUALITY RealDonor SWD 0.22026635544009374 MMD 0.3157805700531839 HSIC 0.11622618930326387 gates {'distribution': True, 'PRDC': False, 'dependency': False, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 14.2
+P49 TRAIN/EVALUATION COMPLETE D1failedGeneralizationGate;stopbeforeG optimization seconds 8.426052248958513
+RESUMED_D1_EXACT_NO_RETRAIN 1980 0 8.426052248958513
+QUALITY F0 SWD 0.20660925215170187 MMD 0.343677926989022 HSIC 0.5071467909414283 gates {'distribution': True, 'PRDC': True, 'dependency': True, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 12.6
+QUALITY Constant SWD 0.33275542572175565 MMD 0.5226020463325001 HSIC 0.0 gates {'distribution': False, 'PRDC': False, 'dependency': False, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 12.4
+QUALITY RealDonor SWD 0.22026635544009374 MMD 0.3157805700531839 HSIC 0.11622618930326387 gates {'distribution': True, 'PRDC': False, 'dependency': False, 'diversity': True, 'amplitude': True, 'temporal': True, 'spatial': True, 'zero_structure': True} seconds 13.6
+D1ALREADY_FROZEN;DIRECTG1_AFTER_REVIEW
+QUALITY F1 SWD 0.530662295753659 MMD 0.8335668176956493 HSIC 0.412774767441892 gates {'distribution': False, 'PRDC': False, 'dependency': True, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 13.5
+QUALITY F1_PairShuffle SWD 0.530662295753659 MMD 0.8335668176956493 HSIC 0.2440829956505491 gates {'distribution': False, 'PRDC': False, 'dependency': False, 'diversity': False, 'amplitude': False, 'temporal': True, 'spatial': False, 'zero_structure': False} seconds 14.7
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py", line 102, in <module>
+    row.update(stage='completedfrozenD_thenG',all_quality_pass=q['all_quality_pass'],severe_collapse=q['severe_collapse'],negative_controls_rejected=negOK,complete_A_pass=row['numeric_FR_pass'] and q['all_quality_pass'] and negOK);roundrows.append(row);previousTrain,previousVal=postTrain,postVal;table(O/'round_metrics.csv',roundrows);table(O/'negative_controls.csv',negatives);save(O/'quality_cache_summary.json',{k:{kk:vv for kk,vv in val.items() if kk not in ['PRDC']} for k,val in E.cache.items()});print('ROUND_COMPLETE',round_,json.dumps(row),flush=True)
+  File "/home/zmy/dex_hand_project/outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/common.py", line 7, in save
+    def save(p,d):Path(p).write_text(json.dumps(d,ensure_ascii=False,indent=2,allow_nan=False))
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 201, in encode
+    chunks = list(chunks)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 431, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+    yield from chunks
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 438, in _iterencode
+    o = _default(o)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/json/encoder.py", line 179, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bool_ is not JSON serializable

@@ -1,0 +1,2 @@
+ALL D50 acceptance complete
+P50 ASSESS COMPLETE C {'CE': 1.3074882462476154, 'BA': 0.34041666666666665, 'AUC': 0.02726444844879738, 'JSD_proxy': -0.6143410656876701, 'model': 'F50', 'branch': 'Joint', 'FR_macro': 1.0, 'FR_micro': 1.0, 'Real_acceptance_macro': 0.6808333333333334, 'FR_CI_low': 1.0, 'FR_CI_high': 1.0, 'Real_CI_low': 0.4866666666666667, 'Real_CI_high': 0.875, 'confusion_matrix': '[[0, 905], [214, 566]]'}

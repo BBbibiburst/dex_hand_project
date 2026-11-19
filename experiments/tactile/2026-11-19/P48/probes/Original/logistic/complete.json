@@ -1,0 +1,31 @@
+{
+  "model": "Original",
+  "instance": "logistic",
+  "kind": "logistic",
+  "seed": 0,
+  "epochs": 0,
+  "optimizer_steps": 177,
+  "parameters": 2849,
+  "seconds": 3.307377576828003,
+  "Train_windows": 9202,
+  "RealTrain_Sessions": 32,
+  "SimTrain_Roots": 50,
+  "all_deep_epochs_full_coverage": null,
+  "device": "CPUfloat64",
+  "converged": true,
+  "train_validation_mismatch": true,
+  "valid_for_JSD_claim": false,
+  "gradient_max": 8.584816202355524e-09,
+  "Train": {
+    "CE": 0.016178531117685788,
+    "BA": 0.9957488755684858,
+    "AUC": 0.9999972286316299,
+    "JSD_proxy": 0.6769686494422595
+  },
+  "Validation": {
+    "CE": 0.2986613351333363,
+    "BA": 0.9785986711347683,
+    "AUC": 0.990964333470173,
+    "JSD_proxy": 0.39448584542660897
+  }
+}

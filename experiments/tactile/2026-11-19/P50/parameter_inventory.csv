@@ -1,0 +1,5 @@
+module,parameters,trainable,phase_note
+base,2494640,306176,G phase; VAE frozen
+field,306176,306176,G phase; VAE frozen
+refiner,120968,120968,G phase; VAE frozen
+D50,688643,688643,"trainable during D phase only, frozen during G"

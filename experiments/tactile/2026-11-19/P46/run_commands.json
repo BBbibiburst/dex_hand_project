@@ -1,0 +1,19 @@
+{
+  "cwd": "/home/zmy/dex_hand_project",
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "ordered_commands": [
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/prepare.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/compute_distances.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/c2st.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/report.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/finalize.py"
+  ],
+  "fresh_output_required": true,
+  "git_HEAD": "b3373da0a276a3cff044f1f6d70807bd46e4f456",
+  "python_version": "3.10.20"
+}

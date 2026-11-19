@@ -1,0 +1,36 @@
+F0 identity train 0.0
+F0 identity validation 0.0
+/home/zmy/dex_hand_project/outputs/tactile_p50_residual_multiview_2026-11-19/code/train.py:74: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  loss=ce+(.1/2)*16*pen if lazy else ce;assert torch.isfinite(loss);loss.backward();torch.nn.utils.clip_grad_norm_(D.parameters(),5);dopt.step();ds+=1;sync();used+=time.perf_counter()-tic;logs.append(dict(phase='D',epoch=epoch,step=step,loss=float(loss.detach()),CE=float(ce.detach()),global_CE=float(.5*(F.softplus(-rl[:,0]).mean()+F.softplus(fl[:,0]).mean())),spatial_CE=float(.5*(F.softplus(-rl[:,1]).mean()+F.softplus(fl[:,1]).mean())),temporal_CE=float(.5*(F.softplus(-rl[:,2]).mean()+F.softplus(fl[:,2]).mean())),optimization_seconds=used));checkpoint('resume.pt','D' if step+1<steps or epoch<10 else 'G',epoch if step+1<steps else (epoch+1 if epoch<10 else 1),step+1 if step+1<steps else 0)
+D epoch 1 steps 66 seconds 1.0100192869958846
+D epoch 2 steps 132 seconds 1.8990555199980008
+D epoch 3 steps 198 seconds 2.870452747996751
+D epoch 4 steps 264 seconds 3.833652903995244
+D epoch 5 steps 330 seconds 4.84918506199574
+D epoch 6 steps 396 seconds 5.801026463999733
+D epoch 7 steps 462 seconds 6.704911467004422
+D epoch 8 steps 528 seconds 7.594282630005182
+D epoch 9 steps 594 seconds 8.59684202300923
+D epoch 10 steps 660 seconds 9.50918081000782
+G epoch 1 steps 64 seconds 11.32001184600449
+G epoch 2 steps 128 seconds 13.180056077004338
+G epoch 3 steps 192 seconds 15.298413410013382
+G epoch 4 steps 256 seconds 17.472890038017795
+G epoch 5 steps 320 seconds 19.36819936201391
+G epoch 6 steps 384 seconds 21.478562553014854
+G epoch 7 steps 448 seconds 23.596616572011044
+G epoch 8 steps 512 seconds 25.739461901010145
+G epoch 9 steps 576 seconds 27.828358953012867
+G epoch 10 steps 640 seconds 29.88564373200643
+G epoch 11 steps 704 seconds 32.06780093800444
+G epoch 12 steps 768 seconds 34.08415777200207
+G epoch 13 steps 832 seconds 36.21754833900559
+G epoch 14 steps 896 seconds 38.195591637999314
+G epoch 15 steps 960 seconds 40.221442157004276
+G epoch 16 steps 1024 seconds 42.206805257996166
+G epoch 17 steps 1088 seconds 44.30695938899953
+G epoch 18 steps 1152 seconds 46.35627833399667
+G epoch 19 steps 1216 seconds 48.36821189199691
+G epoch 20 steps 1280 seconds 50.46572116799325
+P50 TRAIN COMPLETE 50.46572116799325

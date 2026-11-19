@@ -1,0 +1,31 @@
+COHORT_DONE reference_block_0 elapsed 4.1
+COHORT_DONE reference_block_1 elapsed 7.0
+COHORT_DONE reference_block_2 elapsed 9.8
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/statistics.py", line 38, in <module>
+    vals=[distances(x[ii],R[jj],sigma) for ii,jj in zip(query_banks['Sim:'+g],refbank)];a=aggregate(vals);values.append(a);rootrows.append(dict(cohort=name,model=model,Root=g,task=str(root_tasks[allroots.index(g)]),query_windows=M,reference_windows=M,MC_draws=draws,**a))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/statistics.py", line 38, in <listcomp>
+    vals=[distances(x[ii],R[jj],sigma) for ii,jj in zip(query_banks['Sim:'+g],refbank)];a=aggregate(vals);values.append(a);rootrows.append(dict(cohort=name,model=model,Root=g,task=str(root_tasks[allroots.index(g)]),query_windows=M,reference_windows=M,MC_draws=draws,**a))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/common.py", line 32, in distances
+    aa=cdist(x,x,'sqeuclidean');bb=cdist(y,y,'sqeuclidean');ab=cdist(x,y,'sqeuclidean');n,m=len(x),len(y);out={};kernels=[]
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/scipy/spatial/distance.py", line 3127, in cdist
+    return cdist_fn(XA, XB, out=out, **kwargs)
+KeyboardInterrupt
+COHORT_DONE reference_block_0 elapsed 3.8
+COHORT_DONE reference_block_1 elapsed 6.1
+COHORT_DONE reference_block_2 elapsed 8.0
+COHORT_DONE reference_block_3 elapsed 9.9
+FULL_MARGINAL Original 12.4
+FULL_MARGINAL B_K1 14.6
+FULL_MARGINAL B_K2 16.8
+FULL_MARGINAL B_K4 19.1
+FULL_MARGINAL B_K8 21.5
+FULL_MARGINAL A_K1 23.8
+FULL_MARGINAL A_K2 26.1
+FULL_MARGINAL A_K4 28.6
+FULL_MARGINAL A_K8 30.8
+FULL_MARGINAL C_K1 33.2
+FULL_MARGINAL C_K2 35.3
+FULL_MARGINAL C_K4 37.4
+FULL_MARGINAL C_K8 39.6
+P46 STATISTICS COMPLETE

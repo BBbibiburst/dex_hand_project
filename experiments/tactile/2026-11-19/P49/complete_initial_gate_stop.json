@@ -1,0 +1,15 @@
+{
+  "stop_reason": "D1failedGeneralizationGate;stopbeforeG",
+  "rounds_G_completed": 0,
+  "D_optimizer_steps": 1980,
+  "F_optimizer_steps": 0,
+  "cumulative_optimization_wall_seconds": 8.426052248958513,
+  "whole_experiment_seconds": 54.87129592895508,
+  "device": "cuda",
+  "originalVAE_bit_identical": true,
+  "single_F_D_parameter_objects": true,
+  "GPU_peak_bytes": 226050048,
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_P50": true
+}

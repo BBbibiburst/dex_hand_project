@@ -1,0 +1,21 @@
+{
+  "protected_files": 1090,
+  "changed": [],
+  "D_frozen": true,
+  "VAE_frozen": true,
+  "AST_valid": true,
+  "unique_D_steps": 660,
+  "unique_G_steps": 1280,
+  "budget_seconds": 50.46572116799325,
+  "all20_checkpoints": true,
+  "endpoint20": true,
+  "output_valid": true,
+  "metadata_preserved": true,
+  "CLI_inference_allclose": true,
+  "CLI_mask_difference_entries": 5695,
+  "CLI_mask_disagreement_not_hidden": true,
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_P51": true,
+  "no_commit_push": true
+}

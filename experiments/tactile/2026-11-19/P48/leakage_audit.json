@@ -1,0 +1,9 @@
+{
+  "RealTrainVal_Session_disjoint": true,
+  "NaturalTrainVal_Root_disjoint": true,
+  "registered_WindowID_disjoint": true,
+  "Test_Holdout_numeric_loaded": false,
+  "Validation_used_for_earlystop": false,
+  "Validation_used_for_modelselection": false,
+  "historical_Validation_exposed": true
+}

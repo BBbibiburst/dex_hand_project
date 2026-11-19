@@ -1,0 +1,18 @@
+{
+  "RealTrain": [
+    5153,
+    32
+  ],
+  "RealVal": [
+    780,
+    4
+  ],
+  "NaturalTrain": [
+    4049,
+    50
+  ],
+  "NaturalVal": [
+    905,
+    10
+  ]
+}

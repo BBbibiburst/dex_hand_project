@@ -1,0 +1,443 @@
+{
+  "20260611_145025_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": true,
+    "sensor_fake": false
+  },
+  "20260611_151944_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": true,
+    "sensor_fake": false
+  },
+  "20260611_163154_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": true,
+    "sensor_fake": false
+  },
+  "20260611_163853_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": true,
+    "sensor_fake": false
+  },
+  "20260615_143952_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": true,
+    "sensor_fake": false
+  },
+  "20260705_213030_hardness_slip_session": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260706_160808_bootleB30-1": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260706_163616_yuanzhuD7H13-20-1": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260706_164601_bottleA-20-1": {
+    "object_label": "3D-CYLINDER-6-13",
+    "task_labels": [
+      "hardness",
+      "slip"
+    ],
+    "processed_gated_filter": true,
+    "zero_on_baseline": true,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_151901_stable_shuirongC_20": {
+    "object_label": "ShuiRongC",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_152800_stable_shuirongC_20": {
+    "object_label": "ShuiRongC",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_162744_stable_3D_bottle_C_20": {
+    "object_label": "3D_bottle_C",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_163756_stable_3D_h13r3_20": {
+    "object_label": "3D_h13r3",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_165122_stable_3D_h13r3_20": {
+    "object_label": "3D_h13r3",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260813_165855_stable_3D_h13r3_20": {
+    "object_label": "3D_h13r3",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_143310_stable_wood_30": {
+    "object_label": "wood",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_144025_stable_wood_30": {
+    "object_label": "wood",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_145553_stable_maidong_30": {
+    "object_label": "maidong",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_153130_stable_3D_xiaokaikoubeizi_30": {
+    "object_label": "xiaokaikoubeizi",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_154235_stable_3D_xiaokaikoubeizi_30": {
+    "object_label": "xiaokaikoubeizi",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_155240_stable_3D_6512_30": {
+    "object_label": "3D_6512",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_164757_stable_3D_liulengzhu_30": {
+    "object_label": "3D_liulengzhu",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_165556_stable_3D_liulengzhu_30": {
+    "object_label": "3D_liulengzhu",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260816_165241_slip_h13r3_30": {
+    "object_label": "h13r3",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260816_173936_slip_3D_bottle_A_30": {
+    "object_label": "3D_bottle_A",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_093609_slip_3D_6512_30": {
+    "object_label": "3D_6512",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_094253_slip_3D_6512_30": {
+    "object_label": "3D_6512",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_101100_slip_3D_xiaokaikoubeizi_30": {
+    "object_label": "3D_xiaokaikoubeizi",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_101910_slip_3D_xiaokaikoubeizi_30": {
+    "object_label": "3D_xiaokaikoubeizi",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_103306_slip_3D_dakaikoubeizi_30": {
+    "object_label": "3D_dakaikoubeizi",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_104124_slip_3D_dakaikoubeizi_30": {
+    "object_label": "3D_dakaikoubeizi",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260817_105909_slip_3D_liulengzhui_30": {
+    "object_label": "3D_liulengzhui",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_150537_stable_maidong_30": {
+    "object_label": "maidong",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260814_151336_stable_maidong_30": {
+    "object_label": "maidong",
+    "task_labels": [
+      "stable"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260816_172352_slip_3D_bottle_C_30": {
+    "object_label": "3D_bottle_C",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  },
+  "20260816_173235_slip_3D_bottle_A_30": {
+    "object_label": "3D_bottle_A",
+    "task_labels": [
+      "slip"
+    ],
+    "processed_gated_filter": false,
+    "zero_on_baseline": false,
+    "sensor_class": "Usb32",
+    "mapping_file": "Usb_API_stable_Tujian_/spliter/config_mapping_zyhand.json",
+    "dry_run": false,
+    "sensor_fake": false
+  }
+}

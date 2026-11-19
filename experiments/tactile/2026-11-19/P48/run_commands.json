@@ -1,0 +1,52 @@
+{
+  "cwd": "/home/zmy/dex_hand_project",
+  "date": "2026-11-19",
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "SWD_environment_override": {
+    "OPENBLAS_NUM_THREADS": "2",
+    "OMP_NUM_THREADS": "2"
+  },
+  "ordered_commands": [
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/register.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/historical_manifest_audit.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/generate.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/probes.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/gate_baselines.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/swd_paths.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/equivalence.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/quality.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/shared_audit.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/latent_path_audit.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/checks.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/jsd_summary.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/report.py",
+    "/home/zmy/miniconda3/envs/mujoco/bin/python /home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/finalize.py"
+  ],
+  "probes_gate": "integrated inprobes.py afterOriginal;gate_baselines.py explicit report;no manualmetadata needed forreplication",
+  "device": "CPU2threads selectedbysyntheticbenchmark",
+  "git_HEAD": "b3373da0a276a3cff044f1f6d70807bd46e4f456",
+  "code_hashes": {
+    "code/probes.py": "95d21ff291316d77d9e4336a6f5e55d3bc2e06f8ca0a53d3ced3928224ded2c0",
+    "code/shared_audit.py": "002e13722a019cc81d8c0a431aa1915713c384cfd127540a5d5b92947004b243",
+    "code/gate_baselines.py": "326d6ec8167e4634f06160e3f58616162f0a50ec20c639f1b4c53a4d73a6deff",
+    "code/equivalence.py": "c5e7bd5ab786ba384a45f050f4367177c748c490bd49e50906bc17150b65c0b3",
+    "code/quality.py": "1687b4e26fbf3961d33047750440326e319a2ec3360f5bde22d05f63458b8b8f",
+    "code/checks.py": "eb4c19028b7447b4791b2d61ad146f89774993f4b0b533799c6e910e7b699ed2",
+    "code/audit_utils.py": "820c3db4c93b4a787ee95749f477f91386075f1a169b330284eb253ba536dd97",
+    "code/historical_manifest_audit.py": "c2dccf5fd7aa098d32b483c4f73693628cb4a35b78887052544e3ad8257dbd3e",
+    "code/register.py": "faffa3d52ea746f845bd0808cd97027650247140ffe8eece16993d0226ae8c55",
+    "code/latent_path_audit.py": "1568fb17db4c99be05f41af1cc3bb974a28bb80da0864a1ef771bd681704b799",
+    "code/jsd_summary.py": "f5d0206f5ce7f82c92a9e2e97370264f342a8e2104471b5f5be37e0075ab8b9a",
+    "code/common.py": "76607fb6408ac3e1d88cda449dd19f9634a6035aa610b7662dab7786fecdccf0",
+    "code/finalize.py": "82180e43159441acdb7cdc285491963a330d8479615b3129e7b2893a2479849c",
+    "code/generate.py": "93f26c3209f5ba7fb9a837c8a862c99e4185346deb972ebaf051639b43cb4c4f",
+    "code/report.py": "08a4e129cec0b67211e6cf402b163a114f902aa52cc19ccb9d457db7c24c8151",
+    "code/swd_paths.py": "9a51037477750b24ac769d5f71b9718d69e9d2a20634386c260e1beca08c4c58"
+  },
+  "Python": "3.10.20"
+}

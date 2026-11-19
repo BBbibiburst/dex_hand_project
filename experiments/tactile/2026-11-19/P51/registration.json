@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-19",
+  "purpose": "P51 readonly frozenD50 reliability; no training",
+  "classification_threshold": 0.5,
+  "Real_joint_acceptance_necessary_for_GO": 0.9,
+  "original_discrimination": "report BA/AUC/recalls; no posthoc hard threshold added",
+  "envelope": {
+    "calibration": "8 historical D-inner Real Sessions; no D gradients, development exposed",
+    "evaluation": "4 existing external Real Validation Sessions and10 Sim Roots; also development exposed",
+    "quantiles": [
+      0.025,
+      0.975
+    ],
+    "fit_weights": "equal Sessions, uniform within each",
+    "coordinate": "raw logits per view and minlogit Joint",
+    "interpretation": "auxiliary description only, not threshold or acceptance replacement",
+    "LOSO": "8calibrationSessions: fit7evaluate1 diagnostic; no selecting best split",
+    "no_envelope_hard_gate": "no empirically justified stability tolerance; report uncertainty rather than invent one"
+  },
+  "decision": "NO-GO if existing fixed Real90 requirement fails; GO only if mandatory acceptance and discriminator reliability supported; UNKNOWN otherwise; no P52 on NO-GO/UNKNOWN",
+  "no_Test_Holdout": true,
+  "no_new_model": true,
+  "no_threshold_search": true,
+  "no_C0": true,
+  "no_production": true,
+  "no_commit_push": true
+}

@@ -1,0 +1,32 @@
+{
+  "fit": {
+    "CE": 0.016482100991486878,
+    "BA": 0.9983332368321374,
+    "AUC": 0.9999892637270235,
+    "JSD_proxy": 0.6766650795684584,
+    "Real_acceptance_macro": 0.9979166666666646,
+    "FR_macro": 0.0012501930023921543,
+    "FR_micro": 0.0015389350569405972,
+    "confusion_matrix": "[[3244, 5], [12, 4205]]"
+  },
+  "inner": {
+    "CE": 0.28323492708839815,
+    "BA": 0.9241506549974292,
+    "AUC": 0.9692990226448349,
+    "JSD_proxy": 0.40991225347154714,
+    "Real_acceptance_macro": 0.8708333333333338,
+    "FR_macro": 0.02253202333847495,
+    "FR_micro": 0.02875,
+    "confusion_matrix": "[[777, 23], [248, 688]]",
+    "worst_Real_group_recall": 0.13333333333333333,
+    "worst_Sim_group_recall": 0.8468468468468469,
+    "weak_Real_groups_below_half": 1
+  },
+  "CE_gap": 0.26675282609691126,
+  "CE_gap_diagnostic_flag": true,
+  "CE_hard_stop": false,
+  "valid": true,
+  "group_generalization_alert": true,
+  "failure": "none",
+  "amendment": "protocol_amendment_2026-11-19.json"
+}

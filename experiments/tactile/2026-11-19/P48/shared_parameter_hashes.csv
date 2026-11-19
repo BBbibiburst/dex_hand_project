@@ -1,0 +1,217 @@
+group,K,parameter,shape,sha256,unchanged
+A,1,translator.gru.weight_ih_l0,"(384, 64)",9235fe022a52fb92bf9fe42ea4584be82ea2874ad3f221d56bb3594a3fd82a07,True
+A,1,translator.gru.weight_hh_l0,"(384, 128)",ab60fbf5b1ec26c1244cc1444d511ba75dbbb8c5bdcae71e9abd9ddd631b1b97,True
+A,1,translator.gru.bias_ih_l0,"(384,)",058c02ae2e54068733d40c505a64e4537959d5ee256d28641e4cc1f4314330e0,True
+A,1,translator.gru.bias_hh_l0,"(384,)",e79843fa43ac57516a3bdc49cdd27701b4b9b6bab1c389409a7f2079b8f17994,True
+A,1,translator.gru.weight_ih_l1,"(384, 128)",92ea2a01a6b23a35e6b97ae5e1e5878c8b9ca6c1948e6a91e4fb72e0112fe9c6,True
+A,1,translator.gru.weight_hh_l1,"(384, 128)",72a2c305c0048b22183f4d0c38ebdbc2304fd51bd2afd0c4bf6c8e05f3fb9af7,True
+A,1,translator.gru.bias_ih_l1,"(384,)",4a9bd11cd3fb51602740bde66a1d4f6fe95850107533617a0df296231186fbe8,True
+A,1,translator.gru.bias_hh_l1,"(384,)",f6cf19e2449f9110492fd17e27b8f68b885a8c52483d65b462bf932bc972ecf7,True
+A,1,translator.projection.weight,"(64, 128)",a5e78059f0223843b0e522e29b6f799fd4f8cc724fae8c039574afcb5b23183e,True
+A,1,translator.projection.bias,"(64,)",e16354669e33833aebe97484def14975963a7178fb7855a90b25d6f144cec23b,True
+A,1,project.0.weight,"(128, 132)",89aae8643b58d9986092ce5b239371dace21b32d769216e6b4c1e2c217c1eb5f,True
+A,1,project.0.bias,"(128,)",500268fa67976d0c4fb62a9f32b5bf7858f583d294bb2c245a34554eec33dd63,True
+A,1,temporal.weight_ih_l0,"(384, 128)",1bf3faa9c8f5d1f0ae809f6cf44a2355dc582d8c7dcec7a2cb4a5ec24508a064,True
+A,1,temporal.weight_hh_l0,"(384, 128)",e2d6ff26df44831acb4861a83d4bd0ef4e47650a3e9ed02c7b266ce4d69fe650,True
+A,1,temporal.bias_ih_l0,"(384,)",0803d7fd72b9857ed608b14133fbfebbd62b1255c771b3dde26cd9fe21c5ef30,True
+A,1,temporal.bias_hh_l0,"(384,)",0c50ffbacadcc8fddd59147c352b37ce6879973d004126485783de72524147be,True
+A,1,out.weight,"(64, 128)",9d742c52679856af924382dfdacd6ccfd4b04bcd06059f647a2f4e1211919bd1,True
+A,1,out.bias,"(64,)",d8c878ef1234602392b7304a2986b402f440c26bd83c24a52a977b86bed74120,True
+A,2,translator.gru.weight_ih_l0,"(384, 64)",9235fe022a52fb92bf9fe42ea4584be82ea2874ad3f221d56bb3594a3fd82a07,True
+A,2,translator.gru.weight_hh_l0,"(384, 128)",ab60fbf5b1ec26c1244cc1444d511ba75dbbb8c5bdcae71e9abd9ddd631b1b97,True
+A,2,translator.gru.bias_ih_l0,"(384,)",058c02ae2e54068733d40c505a64e4537959d5ee256d28641e4cc1f4314330e0,True
+A,2,translator.gru.bias_hh_l0,"(384,)",e79843fa43ac57516a3bdc49cdd27701b4b9b6bab1c389409a7f2079b8f17994,True
+A,2,translator.gru.weight_ih_l1,"(384, 128)",92ea2a01a6b23a35e6b97ae5e1e5878c8b9ca6c1948e6a91e4fb72e0112fe9c6,True
+A,2,translator.gru.weight_hh_l1,"(384, 128)",72a2c305c0048b22183f4d0c38ebdbc2304fd51bd2afd0c4bf6c8e05f3fb9af7,True
+A,2,translator.gru.bias_ih_l1,"(384,)",4a9bd11cd3fb51602740bde66a1d4f6fe95850107533617a0df296231186fbe8,True
+A,2,translator.gru.bias_hh_l1,"(384,)",f6cf19e2449f9110492fd17e27b8f68b885a8c52483d65b462bf932bc972ecf7,True
+A,2,translator.projection.weight,"(64, 128)",a5e78059f0223843b0e522e29b6f799fd4f8cc724fae8c039574afcb5b23183e,True
+A,2,translator.projection.bias,"(64,)",e16354669e33833aebe97484def14975963a7178fb7855a90b25d6f144cec23b,True
+A,2,project.0.weight,"(128, 132)",89aae8643b58d9986092ce5b239371dace21b32d769216e6b4c1e2c217c1eb5f,True
+A,2,project.0.bias,"(128,)",500268fa67976d0c4fb62a9f32b5bf7858f583d294bb2c245a34554eec33dd63,True
+A,2,temporal.weight_ih_l0,"(384, 128)",1bf3faa9c8f5d1f0ae809f6cf44a2355dc582d8c7dcec7a2cb4a5ec24508a064,True
+A,2,temporal.weight_hh_l0,"(384, 128)",e2d6ff26df44831acb4861a83d4bd0ef4e47650a3e9ed02c7b266ce4d69fe650,True
+A,2,temporal.bias_ih_l0,"(384,)",0803d7fd72b9857ed608b14133fbfebbd62b1255c771b3dde26cd9fe21c5ef30,True
+A,2,temporal.bias_hh_l0,"(384,)",0c50ffbacadcc8fddd59147c352b37ce6879973d004126485783de72524147be,True
+A,2,out.weight,"(64, 128)",9d742c52679856af924382dfdacd6ccfd4b04bcd06059f647a2f4e1211919bd1,True
+A,2,out.bias,"(64,)",d8c878ef1234602392b7304a2986b402f440c26bd83c24a52a977b86bed74120,True
+A,4,translator.gru.weight_ih_l0,"(384, 64)",9235fe022a52fb92bf9fe42ea4584be82ea2874ad3f221d56bb3594a3fd82a07,True
+A,4,translator.gru.weight_hh_l0,"(384, 128)",ab60fbf5b1ec26c1244cc1444d511ba75dbbb8c5bdcae71e9abd9ddd631b1b97,True
+A,4,translator.gru.bias_ih_l0,"(384,)",058c02ae2e54068733d40c505a64e4537959d5ee256d28641e4cc1f4314330e0,True
+A,4,translator.gru.bias_hh_l0,"(384,)",e79843fa43ac57516a3bdc49cdd27701b4b9b6bab1c389409a7f2079b8f17994,True
+A,4,translator.gru.weight_ih_l1,"(384, 128)",92ea2a01a6b23a35e6b97ae5e1e5878c8b9ca6c1948e6a91e4fb72e0112fe9c6,True
+A,4,translator.gru.weight_hh_l1,"(384, 128)",72a2c305c0048b22183f4d0c38ebdbc2304fd51bd2afd0c4bf6c8e05f3fb9af7,True
+A,4,translator.gru.bias_ih_l1,"(384,)",4a9bd11cd3fb51602740bde66a1d4f6fe95850107533617a0df296231186fbe8,True
+A,4,translator.gru.bias_hh_l1,"(384,)",f6cf19e2449f9110492fd17e27b8f68b885a8c52483d65b462bf932bc972ecf7,True
+A,4,translator.projection.weight,"(64, 128)",a5e78059f0223843b0e522e29b6f799fd4f8cc724fae8c039574afcb5b23183e,True
+A,4,translator.projection.bias,"(64,)",e16354669e33833aebe97484def14975963a7178fb7855a90b25d6f144cec23b,True
+A,4,project.0.weight,"(128, 132)",89aae8643b58d9986092ce5b239371dace21b32d769216e6b4c1e2c217c1eb5f,True
+A,4,project.0.bias,"(128,)",500268fa67976d0c4fb62a9f32b5bf7858f583d294bb2c245a34554eec33dd63,True
+A,4,temporal.weight_ih_l0,"(384, 128)",1bf3faa9c8f5d1f0ae809f6cf44a2355dc582d8c7dcec7a2cb4a5ec24508a064,True
+A,4,temporal.weight_hh_l0,"(384, 128)",e2d6ff26df44831acb4861a83d4bd0ef4e47650a3e9ed02c7b266ce4d69fe650,True
+A,4,temporal.bias_ih_l0,"(384,)",0803d7fd72b9857ed608b14133fbfebbd62b1255c771b3dde26cd9fe21c5ef30,True
+A,4,temporal.bias_hh_l0,"(384,)",0c50ffbacadcc8fddd59147c352b37ce6879973d004126485783de72524147be,True
+A,4,out.weight,"(64, 128)",9d742c52679856af924382dfdacd6ccfd4b04bcd06059f647a2f4e1211919bd1,True
+A,4,out.bias,"(64,)",d8c878ef1234602392b7304a2986b402f440c26bd83c24a52a977b86bed74120,True
+A,8,translator.gru.weight_ih_l0,"(384, 64)",9235fe022a52fb92bf9fe42ea4584be82ea2874ad3f221d56bb3594a3fd82a07,True
+A,8,translator.gru.weight_hh_l0,"(384, 128)",ab60fbf5b1ec26c1244cc1444d511ba75dbbb8c5bdcae71e9abd9ddd631b1b97,True
+A,8,translator.gru.bias_ih_l0,"(384,)",058c02ae2e54068733d40c505a64e4537959d5ee256d28641e4cc1f4314330e0,True
+A,8,translator.gru.bias_hh_l0,"(384,)",e79843fa43ac57516a3bdc49cdd27701b4b9b6bab1c389409a7f2079b8f17994,True
+A,8,translator.gru.weight_ih_l1,"(384, 128)",92ea2a01a6b23a35e6b97ae5e1e5878c8b9ca6c1948e6a91e4fb72e0112fe9c6,True
+A,8,translator.gru.weight_hh_l1,"(384, 128)",72a2c305c0048b22183f4d0c38ebdbc2304fd51bd2afd0c4bf6c8e05f3fb9af7,True
+A,8,translator.gru.bias_ih_l1,"(384,)",4a9bd11cd3fb51602740bde66a1d4f6fe95850107533617a0df296231186fbe8,True
+A,8,translator.gru.bias_hh_l1,"(384,)",f6cf19e2449f9110492fd17e27b8f68b885a8c52483d65b462bf932bc972ecf7,True
+A,8,translator.projection.weight,"(64, 128)",a5e78059f0223843b0e522e29b6f799fd4f8cc724fae8c039574afcb5b23183e,True
+A,8,translator.projection.bias,"(64,)",e16354669e33833aebe97484def14975963a7178fb7855a90b25d6f144cec23b,True
+A,8,project.0.weight,"(128, 132)",89aae8643b58d9986092ce5b239371dace21b32d769216e6b4c1e2c217c1eb5f,True
+A,8,project.0.bias,"(128,)",500268fa67976d0c4fb62a9f32b5bf7858f583d294bb2c245a34554eec33dd63,True
+A,8,temporal.weight_ih_l0,"(384, 128)",1bf3faa9c8f5d1f0ae809f6cf44a2355dc582d8c7dcec7a2cb4a5ec24508a064,True
+A,8,temporal.weight_hh_l0,"(384, 128)",e2d6ff26df44831acb4861a83d4bd0ef4e47650a3e9ed02c7b266ce4d69fe650,True
+A,8,temporal.bias_ih_l0,"(384,)",0803d7fd72b9857ed608b14133fbfebbd62b1255c771b3dde26cd9fe21c5ef30,True
+A,8,temporal.bias_hh_l0,"(384,)",0c50ffbacadcc8fddd59147c352b37ce6879973d004126485783de72524147be,True
+A,8,out.weight,"(64, 128)",9d742c52679856af924382dfdacd6ccfd4b04bcd06059f647a2f4e1211919bd1,True
+A,8,out.bias,"(64,)",d8c878ef1234602392b7304a2986b402f440c26bd83c24a52a977b86bed74120,True
+B,1,translator.gru.weight_ih_l0,"(384, 64)",94fd2bf9e19dcf7c805d51b30fc89a36c6ce88f5f5dda394d75d63becd92e5bd,True
+B,1,translator.gru.weight_hh_l0,"(384, 128)",f641166d512a104f3cb41e2d8a7382fb3216698cebadf37ab8a33ffaf529d507,True
+B,1,translator.gru.bias_ih_l0,"(384,)",c06ceaa814649c60dad5da8d8b91f080b1def596121ba17dadaf4137ce341326,True
+B,1,translator.gru.bias_hh_l0,"(384,)",90f2eb7528e58360573e18745e19916a72db078d7eb3f173bda1673f5fd450bb,True
+B,1,translator.gru.weight_ih_l1,"(384, 128)",d2760abad18729bad44bad2fc608dae75c27139dcfab0aea0ad99b5f0f3f3fec,True
+B,1,translator.gru.weight_hh_l1,"(384, 128)",72bbc19103ee37c605f919c18cd35878d4f136ea89f2034d48f6b8a0009eaeea,True
+B,1,translator.gru.bias_ih_l1,"(384,)",1c9fea72e12769f8ba9615f68bc9f3b94afd9171987284f7d087686c7842da7a,True
+B,1,translator.gru.bias_hh_l1,"(384,)",f4eff4e2bbf2ae2af3d620aba56f1f972c6eb913b2f3e75572cd29098f5ad250,True
+B,1,translator.projection.weight,"(64, 128)",b329c4e4d7eec29cbad4957edbd306d2fb6cc329a592a4f7fbd80d86a5bd6f73,True
+B,1,translator.projection.bias,"(64,)",7ab6d1c1dc13945d73c1198c6b88b6d8e48b5511c71b7c00317f0b033a586292,True
+B,1,project.0.weight,"(128, 132)",ae141974f6523447701d4ad111a241916e3b5fa78aff104a9d15eb2ec39f351a,True
+B,1,project.0.bias,"(128,)",4cb320e0fb7c106dc25d1309d91d65c9ef80f4e800a9b73574025dca20c41632,True
+B,1,temporal.weight_ih_l0,"(384, 128)",bf4ecb7194715118a1c4d7c56c369434a6212ef8902c5fa655f38eb374f48c8b,True
+B,1,temporal.weight_hh_l0,"(384, 128)",da7b6022b125d03ed6a21ea98e99b9bd1e7805c0f7df1be81d561255af0e9936,True
+B,1,temporal.bias_ih_l0,"(384,)",5e9070b8aaab40a92b2632fc646f96a9f4d3e7e673ed5a5a1f3ec61c3fd6770b,True
+B,1,temporal.bias_hh_l0,"(384,)",2052a727c8c04ad66b28a3941555968661790ffdf51e1ce8448ec2d13c3c72a4,True
+B,1,out.weight,"(64, 128)",70ad261429ac6b251920a07f31299c4ccf2affc6fea762fce69d7028a6c9084d,True
+B,1,out.bias,"(64,)",23965cfa44b859026a88dc9648a10d266d6d6913a4f9cff2409eaf1280008260,True
+B,2,translator.gru.weight_ih_l0,"(384, 64)",94fd2bf9e19dcf7c805d51b30fc89a36c6ce88f5f5dda394d75d63becd92e5bd,True
+B,2,translator.gru.weight_hh_l0,"(384, 128)",f641166d512a104f3cb41e2d8a7382fb3216698cebadf37ab8a33ffaf529d507,True
+B,2,translator.gru.bias_ih_l0,"(384,)",c06ceaa814649c60dad5da8d8b91f080b1def596121ba17dadaf4137ce341326,True
+B,2,translator.gru.bias_hh_l0,"(384,)",90f2eb7528e58360573e18745e19916a72db078d7eb3f173bda1673f5fd450bb,True
+B,2,translator.gru.weight_ih_l1,"(384, 128)",d2760abad18729bad44bad2fc608dae75c27139dcfab0aea0ad99b5f0f3f3fec,True
+B,2,translator.gru.weight_hh_l1,"(384, 128)",72bbc19103ee37c605f919c18cd35878d4f136ea89f2034d48f6b8a0009eaeea,True
+B,2,translator.gru.bias_ih_l1,"(384,)",1c9fea72e12769f8ba9615f68bc9f3b94afd9171987284f7d087686c7842da7a,True
+B,2,translator.gru.bias_hh_l1,"(384,)",f4eff4e2bbf2ae2af3d620aba56f1f972c6eb913b2f3e75572cd29098f5ad250,True
+B,2,translator.projection.weight,"(64, 128)",b329c4e4d7eec29cbad4957edbd306d2fb6cc329a592a4f7fbd80d86a5bd6f73,True
+B,2,translator.projection.bias,"(64,)",7ab6d1c1dc13945d73c1198c6b88b6d8e48b5511c71b7c00317f0b033a586292,True
+B,2,project.0.weight,"(128, 132)",ae141974f6523447701d4ad111a241916e3b5fa78aff104a9d15eb2ec39f351a,True
+B,2,project.0.bias,"(128,)",4cb320e0fb7c106dc25d1309d91d65c9ef80f4e800a9b73574025dca20c41632,True
+B,2,temporal.weight_ih_l0,"(384, 128)",bf4ecb7194715118a1c4d7c56c369434a6212ef8902c5fa655f38eb374f48c8b,True
+B,2,temporal.weight_hh_l0,"(384, 128)",da7b6022b125d03ed6a21ea98e99b9bd1e7805c0f7df1be81d561255af0e9936,True
+B,2,temporal.bias_ih_l0,"(384,)",5e9070b8aaab40a92b2632fc646f96a9f4d3e7e673ed5a5a1f3ec61c3fd6770b,True
+B,2,temporal.bias_hh_l0,"(384,)",2052a727c8c04ad66b28a3941555968661790ffdf51e1ce8448ec2d13c3c72a4,True
+B,2,out.weight,"(64, 128)",70ad261429ac6b251920a07f31299c4ccf2affc6fea762fce69d7028a6c9084d,True
+B,2,out.bias,"(64,)",23965cfa44b859026a88dc9648a10d266d6d6913a4f9cff2409eaf1280008260,True
+B,4,translator.gru.weight_ih_l0,"(384, 64)",94fd2bf9e19dcf7c805d51b30fc89a36c6ce88f5f5dda394d75d63becd92e5bd,True
+B,4,translator.gru.weight_hh_l0,"(384, 128)",f641166d512a104f3cb41e2d8a7382fb3216698cebadf37ab8a33ffaf529d507,True
+B,4,translator.gru.bias_ih_l0,"(384,)",c06ceaa814649c60dad5da8d8b91f080b1def596121ba17dadaf4137ce341326,True
+B,4,translator.gru.bias_hh_l0,"(384,)",90f2eb7528e58360573e18745e19916a72db078d7eb3f173bda1673f5fd450bb,True
+B,4,translator.gru.weight_ih_l1,"(384, 128)",d2760abad18729bad44bad2fc608dae75c27139dcfab0aea0ad99b5f0f3f3fec,True
+B,4,translator.gru.weight_hh_l1,"(384, 128)",72bbc19103ee37c605f919c18cd35878d4f136ea89f2034d48f6b8a0009eaeea,True
+B,4,translator.gru.bias_ih_l1,"(384,)",1c9fea72e12769f8ba9615f68bc9f3b94afd9171987284f7d087686c7842da7a,True
+B,4,translator.gru.bias_hh_l1,"(384,)",f4eff4e2bbf2ae2af3d620aba56f1f972c6eb913b2f3e75572cd29098f5ad250,True
+B,4,translator.projection.weight,"(64, 128)",b329c4e4d7eec29cbad4957edbd306d2fb6cc329a592a4f7fbd80d86a5bd6f73,True
+B,4,translator.projection.bias,"(64,)",7ab6d1c1dc13945d73c1198c6b88b6d8e48b5511c71b7c00317f0b033a586292,True
+B,4,project.0.weight,"(128, 132)",ae141974f6523447701d4ad111a241916e3b5fa78aff104a9d15eb2ec39f351a,True
+B,4,project.0.bias,"(128,)",4cb320e0fb7c106dc25d1309d91d65c9ef80f4e800a9b73574025dca20c41632,True
+B,4,temporal.weight_ih_l0,"(384, 128)",bf4ecb7194715118a1c4d7c56c369434a6212ef8902c5fa655f38eb374f48c8b,True
+B,4,temporal.weight_hh_l0,"(384, 128)",da7b6022b125d03ed6a21ea98e99b9bd1e7805c0f7df1be81d561255af0e9936,True
+B,4,temporal.bias_ih_l0,"(384,)",5e9070b8aaab40a92b2632fc646f96a9f4d3e7e673ed5a5a1f3ec61c3fd6770b,True
+B,4,temporal.bias_hh_l0,"(384,)",2052a727c8c04ad66b28a3941555968661790ffdf51e1ce8448ec2d13c3c72a4,True
+B,4,out.weight,"(64, 128)",70ad261429ac6b251920a07f31299c4ccf2affc6fea762fce69d7028a6c9084d,True
+B,4,out.bias,"(64,)",23965cfa44b859026a88dc9648a10d266d6d6913a4f9cff2409eaf1280008260,True
+B,8,translator.gru.weight_ih_l0,"(384, 64)",94fd2bf9e19dcf7c805d51b30fc89a36c6ce88f5f5dda394d75d63becd92e5bd,True
+B,8,translator.gru.weight_hh_l0,"(384, 128)",f641166d512a104f3cb41e2d8a7382fb3216698cebadf37ab8a33ffaf529d507,True
+B,8,translator.gru.bias_ih_l0,"(384,)",c06ceaa814649c60dad5da8d8b91f080b1def596121ba17dadaf4137ce341326,True
+B,8,translator.gru.bias_hh_l0,"(384,)",90f2eb7528e58360573e18745e19916a72db078d7eb3f173bda1673f5fd450bb,True
+B,8,translator.gru.weight_ih_l1,"(384, 128)",d2760abad18729bad44bad2fc608dae75c27139dcfab0aea0ad99b5f0f3f3fec,True
+B,8,translator.gru.weight_hh_l1,"(384, 128)",72bbc19103ee37c605f919c18cd35878d4f136ea89f2034d48f6b8a0009eaeea,True
+B,8,translator.gru.bias_ih_l1,"(384,)",1c9fea72e12769f8ba9615f68bc9f3b94afd9171987284f7d087686c7842da7a,True
+B,8,translator.gru.bias_hh_l1,"(384,)",f4eff4e2bbf2ae2af3d620aba56f1f972c6eb913b2f3e75572cd29098f5ad250,True
+B,8,translator.projection.weight,"(64, 128)",b329c4e4d7eec29cbad4957edbd306d2fb6cc329a592a4f7fbd80d86a5bd6f73,True
+B,8,translator.projection.bias,"(64,)",7ab6d1c1dc13945d73c1198c6b88b6d8e48b5511c71b7c00317f0b033a586292,True
+B,8,project.0.weight,"(128, 132)",ae141974f6523447701d4ad111a241916e3b5fa78aff104a9d15eb2ec39f351a,True
+B,8,project.0.bias,"(128,)",4cb320e0fb7c106dc25d1309d91d65c9ef80f4e800a9b73574025dca20c41632,True
+B,8,temporal.weight_ih_l0,"(384, 128)",bf4ecb7194715118a1c4d7c56c369434a6212ef8902c5fa655f38eb374f48c8b,True
+B,8,temporal.weight_hh_l0,"(384, 128)",da7b6022b125d03ed6a21ea98e99b9bd1e7805c0f7df1be81d561255af0e9936,True
+B,8,temporal.bias_ih_l0,"(384,)",5e9070b8aaab40a92b2632fc646f96a9f4d3e7e673ed5a5a1f3ec61c3fd6770b,True
+B,8,temporal.bias_hh_l0,"(384,)",2052a727c8c04ad66b28a3941555968661790ffdf51e1ce8448ec2d13c3c72a4,True
+B,8,out.weight,"(64, 128)",70ad261429ac6b251920a07f31299c4ccf2affc6fea762fce69d7028a6c9084d,True
+B,8,out.bias,"(64,)",23965cfa44b859026a88dc9648a10d266d6d6913a4f9cff2409eaf1280008260,True
+C,1,translator.gru.weight_ih_l0,"(384, 64)",2fe6c388b5639ed262025ffe5eddc3bbfc27aa3a25287ddfb424f754f60ccfe1,True
+C,1,translator.gru.weight_hh_l0,"(384, 128)",7fa93b65c9714e4b44338cab293be1d4a818aca3e960ebd697a55ee30055135c,True
+C,1,translator.gru.bias_ih_l0,"(384,)",fb920d88409b815fd4e01bec08339caa05966821cd3c9cd427ede131d4ef74c5,True
+C,1,translator.gru.bias_hh_l0,"(384,)",6fa7023e30f2e2f3f56494ed90580920f58ce491441b249696c059a4f1cf6102,True
+C,1,translator.gru.weight_ih_l1,"(384, 128)",25f834813873ae13b6ea093dfc5749891cecdd71a181b37d9f30435efc78123f,True
+C,1,translator.gru.weight_hh_l1,"(384, 128)",1c187ffd5d42c1940c7869cda2379a14f3613765ba1be03b0b829495ea3c0e6f,True
+C,1,translator.gru.bias_ih_l1,"(384,)",6480a556689e1aee5fd8f2e52e6a2d95478cdd4a5c1e91c1b4cedbcfb58aec52,True
+C,1,translator.gru.bias_hh_l1,"(384,)",9b925c76f59b722b6cebe6383e8388f3a5b02db83a19416cb4604241ada9ebe7,True
+C,1,translator.projection.weight,"(64, 128)",873e71fd3ea08f7a1bca55f1fd0d22bf88659d7900d7a2019b156ec2ca9ed54a,True
+C,1,translator.projection.bias,"(64,)",95b134d542e1200f9b8b3cbff06890356d6837bf26087bbf57752e316508803e,True
+C,1,project.0.weight,"(128, 132)",b88e8f81e4ea6f0fab81e31019b568e53dfb801b90291a5acbbacce47d91b735,True
+C,1,project.0.bias,"(128,)",494e9cb14694125bfd76a73491e4b73dff3415eb0a8ac9e9ae07f411687e8fca,True
+C,1,temporal.weight_ih_l0,"(384, 128)",0a4603a551d2044138143aae169ad33cb3760205ba6f9aff6503bdf83a64601d,True
+C,1,temporal.weight_hh_l0,"(384, 128)",d5ba96495f6cd20acb2851c4228d0175ef09bbed8b5393ba87fb99c8b727483c,True
+C,1,temporal.bias_ih_l0,"(384,)",140d409eeba4c220da044a4547c045cb845e397561f0f6ea8562b8bd741fb3cd,True
+C,1,temporal.bias_hh_l0,"(384,)",3722a2940e875b13119bcc461af62ffac36c220fa633f780143706b7a0a57a8f,True
+C,1,out.weight,"(64, 128)",d0c4e571cde833e6dae97810718459133f445f1f621aad6b90556d191911833b,True
+C,1,out.bias,"(64,)",5192b952147664c3381c18f2eda17aa7ce1a10b875cdc9382d1df297063617b6,True
+C,2,translator.gru.weight_ih_l0,"(384, 64)",2fe6c388b5639ed262025ffe5eddc3bbfc27aa3a25287ddfb424f754f60ccfe1,True
+C,2,translator.gru.weight_hh_l0,"(384, 128)",7fa93b65c9714e4b44338cab293be1d4a818aca3e960ebd697a55ee30055135c,True
+C,2,translator.gru.bias_ih_l0,"(384,)",fb920d88409b815fd4e01bec08339caa05966821cd3c9cd427ede131d4ef74c5,True
+C,2,translator.gru.bias_hh_l0,"(384,)",6fa7023e30f2e2f3f56494ed90580920f58ce491441b249696c059a4f1cf6102,True
+C,2,translator.gru.weight_ih_l1,"(384, 128)",25f834813873ae13b6ea093dfc5749891cecdd71a181b37d9f30435efc78123f,True
+C,2,translator.gru.weight_hh_l1,"(384, 128)",1c187ffd5d42c1940c7869cda2379a14f3613765ba1be03b0b829495ea3c0e6f,True
+C,2,translator.gru.bias_ih_l1,"(384,)",6480a556689e1aee5fd8f2e52e6a2d95478cdd4a5c1e91c1b4cedbcfb58aec52,True
+C,2,translator.gru.bias_hh_l1,"(384,)",9b925c76f59b722b6cebe6383e8388f3a5b02db83a19416cb4604241ada9ebe7,True
+C,2,translator.projection.weight,"(64, 128)",873e71fd3ea08f7a1bca55f1fd0d22bf88659d7900d7a2019b156ec2ca9ed54a,True
+C,2,translator.projection.bias,"(64,)",95b134d542e1200f9b8b3cbff06890356d6837bf26087bbf57752e316508803e,True
+C,2,project.0.weight,"(128, 132)",b88e8f81e4ea6f0fab81e31019b568e53dfb801b90291a5acbbacce47d91b735,True
+C,2,project.0.bias,"(128,)",494e9cb14694125bfd76a73491e4b73dff3415eb0a8ac9e9ae07f411687e8fca,True
+C,2,temporal.weight_ih_l0,"(384, 128)",0a4603a551d2044138143aae169ad33cb3760205ba6f9aff6503bdf83a64601d,True
+C,2,temporal.weight_hh_l0,"(384, 128)",d5ba96495f6cd20acb2851c4228d0175ef09bbed8b5393ba87fb99c8b727483c,True
+C,2,temporal.bias_ih_l0,"(384,)",140d409eeba4c220da044a4547c045cb845e397561f0f6ea8562b8bd741fb3cd,True
+C,2,temporal.bias_hh_l0,"(384,)",3722a2940e875b13119bcc461af62ffac36c220fa633f780143706b7a0a57a8f,True
+C,2,out.weight,"(64, 128)",d0c4e571cde833e6dae97810718459133f445f1f621aad6b90556d191911833b,True
+C,2,out.bias,"(64,)",5192b952147664c3381c18f2eda17aa7ce1a10b875cdc9382d1df297063617b6,True
+C,4,translator.gru.weight_ih_l0,"(384, 64)",2fe6c388b5639ed262025ffe5eddc3bbfc27aa3a25287ddfb424f754f60ccfe1,True
+C,4,translator.gru.weight_hh_l0,"(384, 128)",7fa93b65c9714e4b44338cab293be1d4a818aca3e960ebd697a55ee30055135c,True
+C,4,translator.gru.bias_ih_l0,"(384,)",fb920d88409b815fd4e01bec08339caa05966821cd3c9cd427ede131d4ef74c5,True
+C,4,translator.gru.bias_hh_l0,"(384,)",6fa7023e30f2e2f3f56494ed90580920f58ce491441b249696c059a4f1cf6102,True
+C,4,translator.gru.weight_ih_l1,"(384, 128)",25f834813873ae13b6ea093dfc5749891cecdd71a181b37d9f30435efc78123f,True
+C,4,translator.gru.weight_hh_l1,"(384, 128)",1c187ffd5d42c1940c7869cda2379a14f3613765ba1be03b0b829495ea3c0e6f,True
+C,4,translator.gru.bias_ih_l1,"(384,)",6480a556689e1aee5fd8f2e52e6a2d95478cdd4a5c1e91c1b4cedbcfb58aec52,True
+C,4,translator.gru.bias_hh_l1,"(384,)",9b925c76f59b722b6cebe6383e8388f3a5b02db83a19416cb4604241ada9ebe7,True
+C,4,translator.projection.weight,"(64, 128)",873e71fd3ea08f7a1bca55f1fd0d22bf88659d7900d7a2019b156ec2ca9ed54a,True
+C,4,translator.projection.bias,"(64,)",95b134d542e1200f9b8b3cbff06890356d6837bf26087bbf57752e316508803e,True
+C,4,project.0.weight,"(128, 132)",b88e8f81e4ea6f0fab81e31019b568e53dfb801b90291a5acbbacce47d91b735,True
+C,4,project.0.bias,"(128,)",494e9cb14694125bfd76a73491e4b73dff3415eb0a8ac9e9ae07f411687e8fca,True
+C,4,temporal.weight_ih_l0,"(384, 128)",0a4603a551d2044138143aae169ad33cb3760205ba6f9aff6503bdf83a64601d,True
+C,4,temporal.weight_hh_l0,"(384, 128)",d5ba96495f6cd20acb2851c4228d0175ef09bbed8b5393ba87fb99c8b727483c,True
+C,4,temporal.bias_ih_l0,"(384,)",140d409eeba4c220da044a4547c045cb845e397561f0f6ea8562b8bd741fb3cd,True
+C,4,temporal.bias_hh_l0,"(384,)",3722a2940e875b13119bcc461af62ffac36c220fa633f780143706b7a0a57a8f,True
+C,4,out.weight,"(64, 128)",d0c4e571cde833e6dae97810718459133f445f1f621aad6b90556d191911833b,True
+C,4,out.bias,"(64,)",5192b952147664c3381c18f2eda17aa7ce1a10b875cdc9382d1df297063617b6,True
+C,8,translator.gru.weight_ih_l0,"(384, 64)",2fe6c388b5639ed262025ffe5eddc3bbfc27aa3a25287ddfb424f754f60ccfe1,True
+C,8,translator.gru.weight_hh_l0,"(384, 128)",7fa93b65c9714e4b44338cab293be1d4a818aca3e960ebd697a55ee30055135c,True
+C,8,translator.gru.bias_ih_l0,"(384,)",fb920d88409b815fd4e01bec08339caa05966821cd3c9cd427ede131d4ef74c5,True
+C,8,translator.gru.bias_hh_l0,"(384,)",6fa7023e30f2e2f3f56494ed90580920f58ce491441b249696c059a4f1cf6102,True
+C,8,translator.gru.weight_ih_l1,"(384, 128)",25f834813873ae13b6ea093dfc5749891cecdd71a181b37d9f30435efc78123f,True
+C,8,translator.gru.weight_hh_l1,"(384, 128)",1c187ffd5d42c1940c7869cda2379a14f3613765ba1be03b0b829495ea3c0e6f,True
+C,8,translator.gru.bias_ih_l1,"(384,)",6480a556689e1aee5fd8f2e52e6a2d95478cdd4a5c1e91c1b4cedbcfb58aec52,True
+C,8,translator.gru.bias_hh_l1,"(384,)",9b925c76f59b722b6cebe6383e8388f3a5b02db83a19416cb4604241ada9ebe7,True
+C,8,translator.projection.weight,"(64, 128)",873e71fd3ea08f7a1bca55f1fd0d22bf88659d7900d7a2019b156ec2ca9ed54a,True
+C,8,translator.projection.bias,"(64,)",95b134d542e1200f9b8b3cbff06890356d6837bf26087bbf57752e316508803e,True
+C,8,project.0.weight,"(128, 132)",b88e8f81e4ea6f0fab81e31019b568e53dfb801b90291a5acbbacce47d91b735,True
+C,8,project.0.bias,"(128,)",494e9cb14694125bfd76a73491e4b73dff3415eb0a8ac9e9ae07f411687e8fca,True
+C,8,temporal.weight_ih_l0,"(384, 128)",0a4603a551d2044138143aae169ad33cb3760205ba6f9aff6503bdf83a64601d,True
+C,8,temporal.weight_hh_l0,"(384, 128)",d5ba96495f6cd20acb2851c4228d0175ef09bbed8b5393ba87fb99c8b727483c,True
+C,8,temporal.bias_ih_l0,"(384,)",140d409eeba4c220da044a4547c045cb845e397561f0f6ea8562b8bd741fb3cd,True
+C,8,temporal.bias_hh_l0,"(384,)",3722a2940e875b13119bcc461af62ffac36c220fa633f780143706b7a0a57a8f,True
+C,8,out.weight,"(64, 128)",d0c4e571cde833e6dae97810718459133f445f1f621aad6b90556d191911833b,True
+C,8,out.bias,"(64,)",5192b952147664c3381c18f2eda17aa7ce1a10b875cdc9382d1df297063617b6,True

@@ -1,0 +1,19 @@
+{
+  "authority": "explicit user reply torequest_user_input_async",
+  "decision": "用户于2026-11-19明确授权继续原定P49：CE差距0.2改为诊断；原registration和停止记录保留；先复核D1分组隔离与分类能力；不重训D1，从D1/F0与优化器恢复；其他FR/质量/Seed/轮数/GPU预算不变。",
+  "original_registration_sha256": "fa136dd49add47b7d75c7d8bd133dc96dda31cbdb02f926fa88ae7a7ae44c181",
+  "original_stop_record_sha256": "8bfcdbbcd583ea9eeb95fabbe5761dc79b575b8de56a4133f41e634ee041b801",
+  "CE_gap_threshold_is_hard_stop": false,
+  "CE_gap_diagnostic_reference": 0.2,
+  "unchanged": [
+    "FRthreshold.5",
+    "FRtarget.90",
+    "Realacceptance.90",
+    "qualitygates",
+    "Seed4901",
+    "K1",
+    "max3rounds",
+    "1800sec cumulative optimization"
+  ],
+  "no_D1_retraining": true
+}

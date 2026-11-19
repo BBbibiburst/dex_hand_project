@@ -1,0 +1,8 @@
+phase,epochs,first_D_steps,last_D_steps,first_G_steps,last_G_steps,epochs_unique
+D0,20,66,1320,0,0,True
+D1,10,1386,1980,0,0,True
+G1,20,1980,1980,64,1280,True
+D2,10,2046,2640,1280,1280,True
+G2,20,2640,2640,1344,2560,True
+D3,10,2706,3300,2560,2560,True
+G3,20,3300,3300,2624,3840,True

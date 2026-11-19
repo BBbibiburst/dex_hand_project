@@ -1,0 +1,3 @@
+role,Real_windows,Real_Sessions,Natural_windows,Natural_Roots,latent_shape,processed_dtype,Real_time,Natural_time,physical_mapping
+train,5153,32,4049,50,"[4049, 4, 64]",float32,historical irregular retained frames,source continuous20Hz,UNKNOWN; index-space only
+validation,780,4,905,10,"[905, 4, 64]",float32,historical irregular retained frames,source continuous20Hz,UNKNOWN; index-space only

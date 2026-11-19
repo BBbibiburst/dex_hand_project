@@ -1,0 +1,7 @@
+{
+  "K8_forward_backward_finite": true,
+  "straight_through_forward_bit_identical_to_original_hard_decoder": true,
+  "R1_second_derivatives_finite": true,
+  "no_optimizer_steps": true,
+  "peak_GPU_bytes": 246575104
+}

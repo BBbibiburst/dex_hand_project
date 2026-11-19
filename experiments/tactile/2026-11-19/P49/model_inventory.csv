@@ -1,0 +1,81 @@
+model,name,shape,count,trainable,source
+F,real.encoder.input.0.weight,"(128, 1424)",182272,False,P45Aendpoint
+F,real.encoder.input.0.bias,"(128,)",128,False,P45Aendpoint
+F,real.encoder.input.2.weight,"(128,)",128,False,P45Aendpoint
+F,real.encoder.input.2.bias,"(128,)",128,False,P45Aendpoint
+F,real.encoder.gru.weight_ih_l0,"(384, 128)",49152,False,P45Aendpoint
+F,real.encoder.gru.weight_hh_l0,"(384, 128)",49152,False,P45Aendpoint
+F,real.encoder.gru.bias_ih_l0,"(384,)",384,False,P45Aendpoint
+F,real.encoder.gru.bias_hh_l0,"(384,)",384,False,P45Aendpoint
+F,real.encoder.mean.weight,"(64, 128)",8192,False,P45Aendpoint
+F,real.encoder.mean.bias,"(64,)",64,False,P45Aendpoint
+F,real.encoder.logvar.weight,"(64, 128)",8192,False,P45Aendpoint
+F,real.encoder.logvar.bias,"(64,)",64,False,P45Aendpoint
+F,real.decoder.bos,"(32,)",32,False,P45Aendpoint
+F,real.decoder.previous.0.weight,"(32, 712)",22784,False,P45Aendpoint
+F,real.decoder.previous.0.bias,"(32,)",32,False,P45Aendpoint
+F,real.decoder.cell.weight_ih,"(384, 96)",36864,False,P45Aendpoint
+F,real.decoder.cell.weight_hh,"(384, 128)",49152,False,P45Aendpoint
+F,real.decoder.cell.bias_ih,"(384,)",384,False,P45Aendpoint
+F,real.decoder.cell.bias_hh,"(384,)",384,False,P45Aendpoint
+F,real.decoder.mask.weight,"(712, 128)",91136,False,P45Aendpoint
+F,real.decoder.mask.bias,"(712,)",712,False,P45Aendpoint
+F,real.decoder.current.0.weight,"(32, 712)",22784,False,P45Aendpoint
+F,real.decoder.current.0.bias,"(32,)",32,False,P45Aendpoint
+F,real.decoder.amplitude.0.weight,"(128, 160)",20480,False,P45Aendpoint
+F,real.decoder.amplitude.0.bias,"(128,)",128,False,P45Aendpoint
+F,real.decoder.amplitude.2.weight,"(4272, 128)",546816,False,P45Aendpoint
+F,real.decoder.amplitude.2.bias,"(4272,)",4272,False,P45Aendpoint
+F,sim.encoder.input.0.weight,"(128, 1424)",182272,False,P45Aendpoint
+F,sim.encoder.input.0.bias,"(128,)",128,False,P45Aendpoint
+F,sim.encoder.input.2.weight,"(128,)",128,False,P45Aendpoint
+F,sim.encoder.input.2.bias,"(128,)",128,False,P45Aendpoint
+F,sim.encoder.gru.weight_ih_l0,"(384, 128)",49152,False,P45Aendpoint
+F,sim.encoder.gru.weight_hh_l0,"(384, 128)",49152,False,P45Aendpoint
+F,sim.encoder.gru.bias_ih_l0,"(384,)",384,False,P45Aendpoint
+F,sim.encoder.gru.bias_hh_l0,"(384,)",384,False,P45Aendpoint
+F,sim.encoder.mean.weight,"(64, 128)",8192,False,P45Aendpoint
+F,sim.encoder.mean.bias,"(64,)",64,False,P45Aendpoint
+F,sim.encoder.logvar.weight,"(64, 128)",8192,False,P45Aendpoint
+F,sim.encoder.logvar.bias,"(64,)",64,False,P45Aendpoint
+F,sim.decoder.bos,"(32,)",32,False,P45Aendpoint
+F,sim.decoder.previous.0.weight,"(32, 712)",22784,False,P45Aendpoint
+F,sim.decoder.previous.0.bias,"(32,)",32,False,P45Aendpoint
+F,sim.decoder.cell.weight_ih,"(384, 96)",36864,False,P45Aendpoint
+F,sim.decoder.cell.weight_hh,"(384, 128)",49152,False,P45Aendpoint
+F,sim.decoder.cell.bias_ih,"(384,)",384,False,P45Aendpoint
+F,sim.decoder.cell.bias_hh,"(384,)",384,False,P45Aendpoint
+F,sim.decoder.mask.weight,"(712, 128)",91136,False,P45Aendpoint
+F,sim.decoder.mask.bias,"(712,)",712,False,P45Aendpoint
+F,sim.decoder.current.0.weight,"(32, 712)",22784,False,P45Aendpoint
+F,sim.decoder.current.0.bias,"(32,)",32,False,P45Aendpoint
+F,sim.decoder.amplitude.0.weight,"(128, 160)",20480,False,P45Aendpoint
+F,sim.decoder.amplitude.0.bias,"(128,)",128,False,P45Aendpoint
+F,sim.decoder.amplitude.2.weight,"(4272, 128)",546816,False,P45Aendpoint
+F,sim.decoder.amplitude.2.bias,"(4272,)",4272,False,P45Aendpoint
+F,field.translator.gru.weight_ih_l0,"(384, 64)",24576,True,P45Aendpoint
+F,field.translator.gru.weight_hh_l0,"(384, 128)",49152,True,P45Aendpoint
+F,field.translator.gru.bias_ih_l0,"(384,)",384,True,P45Aendpoint
+F,field.translator.gru.bias_hh_l0,"(384,)",384,True,P45Aendpoint
+F,field.translator.gru.weight_ih_l1,"(384, 128)",49152,True,P45Aendpoint
+F,field.translator.gru.weight_hh_l1,"(384, 128)",49152,True,P45Aendpoint
+F,field.translator.gru.bias_ih_l1,"(384,)",384,True,P45Aendpoint
+F,field.translator.gru.bias_hh_l1,"(384,)",384,True,P45Aendpoint
+F,field.translator.projection.weight,"(64, 128)",8192,True,P45Aendpoint
+F,field.translator.projection.bias,"(64,)",64,True,P45Aendpoint
+F,field.project.0.weight,"(128, 132)",16896,True,P45Aendpoint
+F,field.project.0.bias,"(128,)",128,True,P45Aendpoint
+F,field.temporal.weight_ih_l0,"(384, 128)",49152,True,P45Aendpoint
+F,field.temporal.weight_hh_l0,"(384, 128)",49152,True,P45Aendpoint
+F,field.temporal.bias_ih_l0,"(384,)",384,True,P45Aendpoint
+F,field.temporal.bias_hh_l0,"(384,)",384,True,P45Aendpoint
+F,field.out.weight,"(64, 128)",8192,True,P45Aendpoint
+F,field.out.bias,"(64,)",64,True,P45Aendpoint
+D,net.0.weight,"(192, 5696)",1093632,True,freshSeed4901 thenpersistent
+D,net.0.bias,"(192,)",192,True,freshSeed4901 thenpersistent
+D,net.1.weight,"(192,)",192,True,freshSeed4901 thenpersistent
+D,net.1.bias,"(192,)",192,True,freshSeed4901 thenpersistent
+D,net.3.weight,"(64, 192)",12288,True,freshSeed4901 thenpersistent
+D,net.3.bias,"(64,)",64,True,freshSeed4901 thenpersistent
+D,net.5.weight,"(1, 64)",64,True,freshSeed4901 thenpersistent
+D,net.5.bias,"(1,)",1,True,freshSeed4901 thenpersistent

@@ -1,0 +1,25 @@
+{
+  "seconds": 1277.2208769321442,
+  "expected_instances": 91,
+  "migration_epochs": 0,
+  "migration_optimizer_steps": 0,
+  "deep_epochs_each": 40,
+  "deep_instances": 42,
+  "Logistic_instances": 13,
+  "validation_never_used_for_selection": true,
+  "actual_training_counts": {
+    "migration_epochs": 0,
+    "migration_optimizer_steps": 0,
+    "planned_audit_models": 91,
+    "actual_audit_models": 43,
+    "skipped_audit_models": 48,
+    "actual_deep_epochs_total": 1680,
+    "actual_deep_optimizer_steps": 241920,
+    "actual_Logistic_LBFGS_steps": 177,
+    "skips_not_trained": true,
+    "synthetic_device_benchmark_not_researchtraining": true
+  },
+  "actual_audit_models": 43,
+  "skipped_audit_models": 48,
+  "planned_deep_instances": 78
+}

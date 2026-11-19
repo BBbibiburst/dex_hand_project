@@ -1,0 +1,11 @@
+{
+  "decision": "B",
+  "description": "部分指标有价值；需要改进统计设计和语义条件证据，尚不具备新0.90验收基础",
+  "PRDC": "CONDITIONAL_GO descriptive fidelity/coverage with strong k/representation limits",
+  "HSIC": "CONDITIONAL_GO statistical dependence only; Root/Stage offsets and temporal null assumptions remain",
+  "TaskStage": "DESCRIPTIVE_ONLY;2Roots/task;not semanticcorrectness",
+  "FJD": "NOT_APPLICABLE",
+  "new_090_defined": false,
+  "generator_accepted": false,
+  "P48_started": false
+}

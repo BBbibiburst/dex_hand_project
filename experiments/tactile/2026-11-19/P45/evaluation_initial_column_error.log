@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p45_mask_ablation_2026-11-18/code/evaluate.py", line 14, in <module>
+    if row['candidate'] in ['K1','K2','K4','K8']:target.append(dict(group='B',**row))
+TypeError: dict() got multiple values for keyword argument 'group'

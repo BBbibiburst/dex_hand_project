@@ -1,0 +1,18 @@
+[
+  {
+    "event": "D0restoredafterposttrainingloggingerror",
+    "D_steps": 1320,
+    "G_steps": 0,
+    "D_state_hash": "595dd6ad0d4c88d3ea0585922989cfb81ffa124c10d275abd04f888adfa60e39",
+    "optimizer_restored": true,
+    "no_D0_retraining": true
+  },
+  {
+    "event": "D_frozen_before_G",
+    "round": 1,
+    "D_steps": 1980,
+    "G_steps": 0,
+    "D_state_hash": "e4a74a57b30b10960f2d99acf7d39314cb5314e1a65d22a9745ad5d86f9c00d7",
+    "G_state_hash": "80f1cda4d0eac9159c1713da85e47cedb40984952d6af7f12549b15fa7164a1e"
+  }
+]

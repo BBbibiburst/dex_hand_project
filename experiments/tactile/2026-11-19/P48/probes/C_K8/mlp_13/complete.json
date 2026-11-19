@@ -1,0 +1,10 @@
+{
+  "model": "C_K8",
+  "instance": "mlp_13",
+  "status": "NOT_TRAINED_BASELINE_INVALID",
+  "epochs": 0,
+  "optimizer_steps": 0,
+  "valid_for_JSD_claim": false,
+  "reason": "P48 requiredbranchstop:Original baseline nonconverged,mismatch ornonpositiveJ0bootstrap;NO invented candidate scores",
+  "baseline_source": "/home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/probes/Original/mlp_13/complete.json"
+}

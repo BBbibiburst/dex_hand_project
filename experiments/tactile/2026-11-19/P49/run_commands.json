@@ -1,0 +1,25 @@
+{
+  "scope": "执行入口顺序，非逐字shell历史；恢复细节见REPORT和日志",
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "entrypoints": [
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/register.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/review_D1.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/resume_after_review.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/baseline_audit.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/snapshot_audit.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/infer.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/final_tables.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/report.py",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/finalize.py"
+  ],
+  "recovery_records": [
+    "initial_stop_record/",
+    "after_G1_io_stop/",
+    "io_recovery_note_2026-11-19.json",
+    "protocol_amendment_2026-11-19.md"
+  ],
+  "inference_arguments": "--device cuda --checkpoint checkpoints/F3.pt --input INPUT.npz --output OUTPUT.npz",
+  "no_new_training_after_complete": true
+}

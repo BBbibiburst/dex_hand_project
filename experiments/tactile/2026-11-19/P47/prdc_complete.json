@@ -1,0 +1,11 @@
+{
+  "seconds": 298.8052237033844,
+  "spaces": [
+    "full2848",
+    "descriptor52"
+  ],
+  "candidates": 30,
+  "formula_handcheck": true,
+  "pair_multiset_invariance": true,
+  "no_training": true
+}

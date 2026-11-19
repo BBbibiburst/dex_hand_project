@@ -1,0 +1,4 @@
+group,epochs,G_steps,D_steps,train_seconds,GPU_peak_MiB,source
+A,20,1152,1280,44.31659269332886,256.59912109375,new controlled run
+B,20,1152,1280,49.43649888038635,308.6865234375,historical P44
+C,20,1152,1280,45.752349615097046,266.56884765625,new controlled run

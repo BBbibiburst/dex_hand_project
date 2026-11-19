@@ -1,0 +1,13 @@
+{
+  "epsilon_RR": 0.3685706084178158,
+  "CI_low": 0.3204880775163016,
+  "CI_high": 0.40728294434771084,
+  "CI_relative_width": 0.23549047278620114,
+  "valid_bootstraps": 1000,
+  "valid": true,
+  "independent_Sessions": 32,
+  "partitions": 1000,
+  "partition_draws_not_independent": true,
+  "fixed7windowbank": true,
+  "does_not_certify_physical_exchangeability": true
+}

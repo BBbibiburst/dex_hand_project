@@ -1,0 +1,13 @@
+model,pair_output_multiset_identical,within_RootStage,frames_insidewindow_unchanged,temporal_shuffle_changes_values,temporal_reverse_NOT_always_detectable_by_lag_delta
+B_K1,True,True,True,905,True
+B_K2,True,True,True,905,True
+B_K4,True,True,True,905,True
+B_K8,True,True,True,905,True
+A_K1,True,True,True,905,True
+A_K2,True,True,True,905,True
+A_K4,True,True,True,905,True
+A_K8,True,True,True,905,True
+C_K1,True,True,True,905,True
+C_K2,True,True,True,905,True
+C_K4,True,True,True,905,True
+C_K8,True,True,True,905,True

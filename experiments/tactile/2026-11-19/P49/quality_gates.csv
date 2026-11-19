@@ -1,0 +1,10 @@
+model,distribution,PRDC,dependency,diversity,amplitude,temporal,spatial,zero_structure,all_quality_pass,severe_collapse,reference
+F0,True,True,True,True,True,True,True,True,True,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+Constant,False,False,False,False,False,True,False,False,False,True,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+RealDonor,True,False,False,True,True,True,True,True,False,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F1,False,False,True,False,False,True,False,False,False,True,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F1_PairShuffle,False,False,False,False,False,True,False,False,False,True,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F2,False,False,True,False,False,True,False,True,False,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F2_PairShuffle,False,False,False,False,False,True,False,True,False,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F3,False,False,True,True,False,True,False,True,False,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"
+F3_PairShuffle,False,False,False,True,False,True,False,True,False,False,"fixedF0A_K1,predeclaredtolerances;notuniversalstandards"

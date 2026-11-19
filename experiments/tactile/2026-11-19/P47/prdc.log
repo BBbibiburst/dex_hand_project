@@ -1,0 +1,73 @@
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p47_conditional_transfer_evaluation_2026-11-18/code/prdc_eval.py", line 3, in <module>
+    assert (O/'design_complete.json').exists() and not (O/'prdc_complete.json').exists()
+AssertionError
+PRDC full2848 Original seconds 10.4
+PRDC full2848 B_K1 seconds 12.9
+PRDC full2848 B_K2 seconds 15.5
+PRDC full2848 B_K4 seconds 18.0
+PRDC full2848 B_K8 seconds 20.5
+PRDC full2848 A_K1 seconds 23.2
+PRDC full2848 A_K2 seconds 25.8
+PRDC full2848 A_K4 seconds 28.5
+PRDC full2848 A_K8 seconds 31.1
+PRDC full2848 C_K1 seconds 33.8
+PRDC full2848 C_K2 seconds 36.9
+PRDC full2848 C_K4 seconds 40.1
+PRDC full2848 C_K8 seconds 43.3
+PRDC full2848 Constant seconds 46.2
+PRDC full2848 RealDonor seconds 49.4
+PRDC full2848 Original_TemporalShuffle seconds 52.6
+PRDC full2848 B_K1_TemporalShuffle seconds 55.7
+PRDC full2848 B_K2_TemporalShuffle seconds 58.9
+PRDC full2848 B_K4_TemporalShuffle seconds 62.1
+PRDC full2848 B_K8_TemporalShuffle seconds 65.2
+PRDC full2848 A_K1_TemporalShuffle seconds 68.4
+PRDC full2848 A_K2_TemporalShuffle seconds 71.5
+PRDC full2848 A_K4_TemporalShuffle seconds 74.6
+PRDC full2848 A_K8_TemporalShuffle seconds 77.9
+PRDC full2848 C_K1_TemporalShuffle seconds 81.1
+PRDC full2848 C_K2_TemporalShuffle seconds 84.4
+PRDC full2848 C_K4_TemporalShuffle seconds 87.7
+PRDC full2848 C_K8_TemporalShuffle seconds 90.8
+PRDC full2848 Original_TemporalReverse seconds 93.9
+PRDC full2848 A_K1_TemporalReverse seconds 97.0
+RR_PRDC full2848 reference_block_0 131.3
+RR_PRDC full2848 reference_block_1 166.0
+RR_PRDC full2848 reference_block_2 200.8
+RR_PRDC full2848 reference_block_3 235.7
+PRDC descriptor52 Original seconds 237.2
+PRDC descriptor52 B_K1 seconds 238.7
+PRDC descriptor52 B_K2 seconds 240.3
+PRDC descriptor52 B_K4 seconds 241.8
+PRDC descriptor52 B_K8 seconds 243.3
+PRDC descriptor52 A_K1 seconds 244.9
+PRDC descriptor52 A_K2 seconds 246.4
+PRDC descriptor52 A_K4 seconds 247.9
+PRDC descriptor52 A_K8 seconds 249.4
+PRDC descriptor52 C_K1 seconds 250.8
+PRDC descriptor52 C_K2 seconds 252.4
+PRDC descriptor52 C_K4 seconds 254.0
+PRDC descriptor52 C_K8 seconds 255.5
+PRDC descriptor52 Constant seconds 256.7
+PRDC descriptor52 RealDonor seconds 258.3
+PRDC descriptor52 Original_TemporalShuffle seconds 259.9
+PRDC descriptor52 B_K1_TemporalShuffle seconds 261.4
+PRDC descriptor52 B_K2_TemporalShuffle seconds 262.9
+PRDC descriptor52 B_K4_TemporalShuffle seconds 264.4
+PRDC descriptor52 B_K8_TemporalShuffle seconds 266.0
+PRDC descriptor52 A_K1_TemporalShuffle seconds 267.5
+PRDC descriptor52 A_K2_TemporalShuffle seconds 269.0
+PRDC descriptor52 A_K4_TemporalShuffle seconds 270.5
+PRDC descriptor52 A_K8_TemporalShuffle seconds 272.0
+PRDC descriptor52 C_K1_TemporalShuffle seconds 273.5
+PRDC descriptor52 C_K2_TemporalShuffle seconds 275.0
+PRDC descriptor52 C_K4_TemporalShuffle seconds 276.5
+PRDC descriptor52 C_K8_TemporalShuffle seconds 278.0
+PRDC descriptor52 Original_TemporalReverse seconds 279.6
+PRDC descriptor52 A_K1_TemporalReverse seconds 281.1
+RR_PRDC descriptor52 reference_block_0 285.3
+RR_PRDC descriptor52 reference_block_1 289.6
+RR_PRDC descriptor52 reference_block_2 294.0
+RR_PRDC descriptor52 reference_block_3 298.3
+P47 PRDC COMPLETE

@@ -1,0 +1,9 @@
+{
+  "all_group_gradients_finite": true,
+  "A_continuous_to_field_nonzero": true,
+  "B_Mask_to_field_zero": true,
+  "C_Mask_to_field_nonzero": true,
+  "K8_hard_forward_bit_identical": true,
+  "R1_finite": true,
+  "no_optimizer_steps_during_audit": true
+}

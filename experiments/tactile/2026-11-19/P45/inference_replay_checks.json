@@ -1,0 +1,46 @@
+{
+  "outside_repo_cwd": true,
+  "checks": [
+    {
+      "group": "A",
+      "K": 1,
+      "bit_identical": true,
+      "shape": [
+        905,
+        4,
+        712
+      ]
+    },
+    {
+      "group": "A",
+      "K": 8,
+      "bit_identical": true,
+      "shape": [
+        905,
+        4,
+        712
+      ]
+    },
+    {
+      "group": "C",
+      "K": 1,
+      "bit_identical": true,
+      "shape": [
+        905,
+        4,
+        712
+      ]
+    },
+    {
+      "group": "C",
+      "K": 8,
+      "bit_identical": true,
+      "shape": [
+        905,
+        4,
+        712
+      ]
+    }
+  ],
+  "no_training": true
+}

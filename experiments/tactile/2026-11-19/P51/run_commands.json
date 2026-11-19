@@ -1,0 +1,15 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1
+  },
+  "commands": [
+    "python -u outputs/tactile_p51_discriminator_trust_audit_2026-11-19/code/run.py",
+    "python outputs/tactile_p51_discriminator_trust_audit_2026-11-19/code/report.py"
+  ],
+  "read_only_models": true,
+  "optimizer_steps": 0,
+  "outputs_only_in_new_P51_directory": true
+}

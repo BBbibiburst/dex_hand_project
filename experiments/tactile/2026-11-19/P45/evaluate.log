@@ -1,0 +1,113 @@
+OUTPUT A 1 67.68551635742188
+OUTPUT A 2 71.11473083496094
+OUTPUT A 4 71.30294036865234
+OUTPUT A 8 68.33119201660156
+K1 mlp_11 0.66375 False
+K1 mlp_12 0.69239 False
+K1 mlp_13 0.68859 False
+K1 gru_11 0.61775 False
+K1 gru_12 0.52474 True
+K1 gru_13 0.59074 False
+K1 transformer_11 0.38621 False
+K1 transformer_12 0.31325 False
+K1 transformer_13 0.67956 False
+K1 logistic 0.71685 False
+K1 knn 0.54005 False
+K2 mlp_11 0.66295 False
+K2 mlp_12 0.69508 False
+K2 mlp_13 0.68984 False
+K2 gru_11 0.63068 False
+K2 gru_12 0.53592 False
+K2 gru_13 0.60086 False
+K2 transformer_11 0.38327 False
+K2 transformer_12 0.3188 False
+K2 transformer_13 0.68524 False
+K2 logistic 0.71868 False
+K2 knn 0.5495 False
+K4 mlp_11 0.66714 False
+K4 mlp_12 0.69786 False
+K4 mlp_13 0.69295 False
+K4 gru_11 0.63068 False
+K4 gru_12 0.53662 False
+K4 gru_13 0.59977 False
+K4 transformer_11 0.38076 False
+K4 transformer_12 0.32155 False
+K4 transformer_13 0.68351 False
+K4 logistic 0.72068 False
+K4 knn 0.54726 False
+K8 mlp_11 0.66825 False
+K8 mlp_12 0.69801 False
+K8 mlp_13 0.69311 False
+K8 gru_11 0.63332 False
+K8 gru_12 0.5363 False
+K8 gru_13 0.60172 False
+K8 transformer_11 0.38597 False
+K8 transformer_12 0.32065 False
+K8 transformer_13 0.68486 False
+K8 logistic 0.72175 False
+K8 knn 0.55058 False
+D_EVAL A train 1 0.9922517183136502
+D_EVAL A train 2 0.9921223118870299
+D_EVAL A train 4 0.9921643929398346
+D_EVAL A train 8 0.992147282534537
+D_EVAL A validation 1 0.9879798838362375
+D_EVAL A validation 2 0.9877163904235727
+D_EVAL A validation 4 0.9873579827170987
+D_EVAL A validation 8 0.9874302309108939
+OUTPUT C 1 4.413948059082031
+OUTPUT C 2 4.427122592926025
+OUTPUT C 4 4.430721282958984
+OUTPUT C 8 4.448317050933838
+K1 mlp_11 0.41282 False
+K1 mlp_12 0.37855 False
+K1 mlp_13 0.3816 False
+K1 gru_11 0.07032 False
+K1 gru_12 0.09812 False
+K1 gru_13 0.0182 False
+K1 transformer_11 0.68465 False
+K1 transformer_12 0.30514 False
+K1 transformer_13 0.25317 False
+K1 logistic 0.36403 False
+K1 knn 0.52721 False
+K2 mlp_11 0.41282 False
+K2 mlp_12 0.37158 False
+K2 mlp_13 0.37301 False
+K2 gru_11 0.06562 False
+K2 gru_12 0.09867 False
+K2 gru_13 0.01729 False
+K2 transformer_11 0.67734 False
+K2 transformer_12 0.30533 False
+K2 transformer_13 0.22462 False
+K2 logistic 0.3603 False
+K2 knn 0.52333 True
+K4 mlp_11 0.41282 False
+K4 mlp_12 0.37158 False
+K4 mlp_13 0.3688 False
+K4 gru_11 0.06295 False
+K4 gru_12 0.09804 False
+K4 gru_13 0.01671 False
+K4 transformer_11 0.68033 False
+K4 transformer_12 0.30537 False
+K4 transformer_13 0.21617 False
+K4 logistic 0.36053 False
+K4 knn 0.52443 True
+K8 mlp_11 0.41282 False
+K8 mlp_12 0.37115 False
+K8 mlp_13 0.36836 False
+K8 gru_11 0.06285 False
+K8 gru_12 0.09816 False
+K8 gru_13 0.01669 False
+K8 transformer_11 0.67972 False
+K8 transformer_12 0.30541 False
+K8 transformer_13 0.2111 False
+K8 logistic 0.36047 False
+K8 knn 0.52441 True
+D_EVAL C train 1 0.9997779481575808
+D_EVAL C train 2 0.9997959212723891
+D_EVAL C train 4 0.9998063696431311
+D_EVAL C train 8 0.9998075199224788
+D_EVAL C validation 1 0.9999943334749964
+D_EVAL C validation 2 1.0
+D_EVAL C validation 4 1.0
+D_EVAL C validation 8 0.9999943334749964
+P45 EVALUATION COMPLETE NO_P46

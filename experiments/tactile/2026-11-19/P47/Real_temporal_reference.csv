@@ -1,0 +1,6 @@
+dataset,Session,windows,lag1_correlation,mean_absolute_frame_delta,mean_window_range,time
+RealValidation,ALL,780,0.9993104673658011,0.0006311996257863939,0.0016838442534208298,irregular retainedframe indices;not persecond
+RealValidation,20260814_150537_stable_maidong_30,240,0.9996002935769288,0.0005683203344233334,0.0015235895989462733,irregular retainedframe indices;not persecond
+RealValidation,20260814_151336_stable_maidong_30,240,0.9994212335764612,0.0006128897075541317,0.0016524253878742456,irregular retainedframe indices;not persecond
+RealValidation,20260816_172352_slip_3D_bottle_C_30,150,0.9985696988486714,0.000800395617261529,0.002132473047822714,irregular retainedframe indices;not persecond
+RealValidation,20260816_173235_slip_3D_bottle_A_30,150,0.9979883611817335,0.0005919057875871658,0.001541894394904375,irregular retainedframe indices;not persecond

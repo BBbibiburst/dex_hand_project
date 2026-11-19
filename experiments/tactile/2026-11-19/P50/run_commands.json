@@ -1,0 +1,21 @@
+{
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "training_env": {
+    "PYTHONDONTWRITEBYTECODE": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "OMP_NUM_THREADS": 1
+  },
+  "evaluation_BLAS_threads": 2,
+  "script_order": [
+    "register.py",
+    "train.py",
+    "assess.py",
+    "audit.py",
+    "figures.py",
+    "report.py",
+    "infer.py --checkpoint checkpoints/F50.pt --input original Natural Validation NPZ --output outputs/F50_cli_validation.npz --device cuda",
+    "finalize.py"
+  ],
+  "training_restarts": 0,
+  "notes": "preoptimization syntax/backend checks corrected; assess postprocessing recovery reused all saved quality metrics; no repeated optimizersteps"
+}

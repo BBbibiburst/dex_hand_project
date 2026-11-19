@@ -1,0 +1,15 @@
+{
+  "migration_epochs": 0,
+  "migration_optimizer_steps": 0,
+  "planned_audit_models": 91,
+  "actual_audit_models": 43,
+  "skipped_audit_models": 48,
+  "actual_deep_epochs_total": 1680,
+  "actual_deep_optimizer_steps": 241920,
+  "actual_Logistic_LBFGS_steps": 177,
+  "skips_not_trained": true,
+  "synthetic_device_benchmark_not_researchtraining": true,
+  "synthetic_device_benchmark_runs": 2,
+  "synthetic_probe_optimizer_steps": 160,
+  "synthetic_steps_not_migration_training": true
+}

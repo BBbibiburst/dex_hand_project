@@ -1,0 +1,9 @@
+{
+  "pair_invariance": true,
+  "RR1000disjoint_partitions": true,
+  "projection_count": 1024,
+  "unit_norm": true,
+  "Scaler_unchanged": true,
+  "migration_epochs": 0,
+  "migration_optimizer_steps": 0
+}

@@ -1,0 +1,50 @@
+PROBE_DEVICE cpu [{'device': 'cpu', 'kind': 'mlp', 'seconds': 0.11910843849182129}, {'device': 'cpu', 'kind': 'gru', 'seconds': 0.10805320739746094}, {'device': 'cuda', 'kind': 'mlp', 'seconds': 0.9794261455535889}, {'device': 'cuda', 'kind': 'gru', 'seconds': 0.14551830291748047}]
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/probes.py", line 21, in <module>
+    assert (O/'generate_complete.json').exists();start=time.time();reg=json.loads((O/'registration.json').read_text());r=real('train');rv=real('validation');s=natural('train');sv=natural('validation');yr=np.ones(len(r['x']));ys=np.zeros(len(s['x']));y=np.r_[yr,ys];yv=np.r_[np.ones(len(rv['x'])),np.zeros(len(sv['x']))];w=np.r_[.5*weights(r['g']),.5*weights(s['g'])];wv=np.r_[.5*weights(rv['g']),.5*weights(sv['g'])];N=len(y);trainrx=feature(r['x']);valrx=feature(rv['x']);audits=[];folder=O/'probes';folder.mkdir(exist_ok=True)
+AssertionError
+PROBE_DEVICE cpu [{'device': 'cpu', 'kind': 'mlp', 'seconds': 0.07968997955322266}, {'device': 'cpu', 'kind': 'gru', 'seconds': 0.0692739486694336}, {'device': 'cuda', 'kind': 'mlp', 'seconds': 0.27539515495300293}, {'device': 'cuda', 'kind': 'gru', 'seconds': 0.06294369697570801}]
+PROBE_COMPLETE Original logistic secs 3.3 TrainCE 0.0162 ValCE 0.2987 valid False
+PROBE_COMPLETE Original mlp_11 secs 17.2 TrainCE 0.004 ValCE 1.2469 valid False
+PROBE_COMPLETE Original mlp_12 secs 17.4 TrainCE 0.0821 ValCE 1.5124 valid False
+PROBE_COMPLETE Original mlp_13 secs 28.5 TrainCE 0.0012 ValCE 1.2779 valid False
+PROBE_COMPLETE Original gru_11 secs 50.4 TrainCE 0.0 ValCE 0.1703 valid True
+PROBE_COMPLETE Original gru_12 secs 47.0 TrainCE 0.0001 ValCE 0.1966 valid True
+PROBE_COMPLETE Original gru_13 secs 28.8 TrainCE 0.0 ValCE 0.1975 valid True
+PROBE_COMPLETE A_K1 gru_11 secs 29.1 TrainCE 0.0 ValCE 0.0132 valid True
+PROBE_COMPLETE A_K1 gru_12 secs 31.3 TrainCE 0.0 ValCE 0.0116 valid True
+PROBE_COMPLETE A_K1 gru_13 secs 29.5 TrainCE 0.0 ValCE 0.0137 valid True
+PROBE_COMPLETE A_K2 gru_11 secs 30.4 TrainCE 0.0 ValCE 0.0063 valid True
+PROBE_COMPLETE A_K2 gru_12 secs 29.7 TrainCE 0.0 ValCE 0.0183 valid True
+PROBE_COMPLETE A_K2 gru_13 secs 29.4 TrainCE 0.0 ValCE 0.0136 valid True
+PROBE_COMPLETE A_K4 gru_11 secs 29.3 TrainCE 0.0 ValCE 0.0051 valid True
+PROBE_COMPLETE A_K4 gru_12 secs 29.6 TrainCE 0.0 ValCE 0.0036 valid True
+PROBE_COMPLETE A_K4 gru_13 secs 29.1 TrainCE 0.0 ValCE 0.008 valid True
+PROBE_COMPLETE A_K8 gru_11 secs 29.4 TrainCE 0.0 ValCE 0.0061 valid True
+PROBE_COMPLETE A_K8 gru_12 secs 29.0 TrainCE 0.0 ValCE 0.0042 valid True
+PROBE_COMPLETE A_K8 gru_13 secs 29.3 TrainCE 0.0 ValCE 0.0195 valid True
+PROBE_COMPLETE B_K1 gru_11 secs 33.9 TrainCE 0.0 ValCE 0.0496 valid True
+PROBE_COMPLETE B_K1 gru_12 secs 31.3 TrainCE 0.0 ValCE 0.0511 valid True
+PROBE_COMPLETE B_K1 gru_13 secs 30.1 TrainCE 0.0 ValCE 0.0492 valid True
+PROBE_COMPLETE B_K2 gru_11 secs 30.2 TrainCE 0.0 ValCE 0.0017 valid True
+PROBE_COMPLETE B_K2 gru_12 secs 30.1 TrainCE 0.0 ValCE 0.0074 valid True
+PROBE_COMPLETE B_K2 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0051 valid True
+PROBE_COMPLETE B_K4 gru_11 secs 29.8 TrainCE 0.0 ValCE 0.001 valid True
+PROBE_COMPLETE B_K4 gru_12 secs 29.9 TrainCE 0.0 ValCE 0.0254 valid True
+PROBE_COMPLETE B_K4 gru_13 secs 29.7 TrainCE 0.0 ValCE 0.0058 valid True
+PROBE_COMPLETE B_K8 gru_11 secs 30.6 TrainCE 0.0 ValCE 0.001 valid True
+PROBE_COMPLETE B_K8 gru_12 secs 29.9 TrainCE 0.0 ValCE 0.0367 valid True
+PROBE_COMPLETE B_K8 gru_13 secs 29.9 TrainCE 0.0 ValCE 0.0048 valid True
+PROBE_COMPLETE C_K1 gru_11 secs 30.1 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K1 gru_12 secs 30.0 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K1 gru_13 secs 30.1 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K2 gru_11 secs 29.7 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K2 gru_12 secs 30.2 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K2 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K4 gru_11 secs 30.0 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K4 gru_12 secs 29.7 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K4 gru_13 secs 30.7 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K8 gru_11 secs 29.9 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K8 gru_12 secs 30.1 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K8 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0005 valid True
+P48 PROBES COMPLETE

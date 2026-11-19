@@ -1,0 +1,31 @@
+{
+  "model": "Original",
+  "instance": "mlp_13",
+  "kind": "mlp",
+  "seed": 13,
+  "epochs": 40,
+  "optimizer_steps": 5760,
+  "parameters": 559425,
+  "seconds": 28.504905700683594,
+  "Train_windows": 9202,
+  "RealTrain_Sessions": 32,
+  "SimTrain_Roots": 50,
+  "all_deep_epochs_full_coverage": true,
+  "device": "cpu",
+  "converged": false,
+  "train_validation_mismatch": true,
+  "valid_for_JSD_claim": false,
+  "gradient_max": null,
+  "Train": {
+    "CE": 0.0011582564995872555,
+    "BA": 1.0,
+    "AUC": 1.0000000000000187,
+    "JSD_proxy": 0.6919889240603581
+  },
+  "Validation": {
+    "CE": 1.2778940316646796,
+    "BA": 0.9868011047336185,
+    "AUC": 0.9860534632327046,
+    "JSD_proxy": -0.5847468511047343
+  }
+}

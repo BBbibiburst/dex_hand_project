@@ -1,0 +1,20 @@
+{
+  "protected_files": 1202,
+  "all_unchanged": true,
+  "group_disjoint": true,
+  "no_training": true,
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_server": true,
+  "no_P52": true,
+  "code_hashes": {
+    "code/audit_utils.py": "820c3db4c93b4a787ee95749f477f91386075f1a169b330284eb253ba536dd97",
+    "code/run.py": "4744a3b26a1cb74ec97fb17738748d4560df64f395256764e9008846f3f84f26",
+    "code/common.py": "a665e4799e49edcec2b97dbf2a24e25e243cc6315db5a7ea190db797cf2f645b",
+    "code/vae.py": "e90dd0cd08f250d85ce5c89df16f1b760ab915fae41d81a934c251cbe4e694f0",
+    "code/report.py": "6ea0883f3b45d186eb1b3212621939695f30606d018efa41444f6c17a6741afb",
+    "code/architecture.py": "d51217cc808d6d9fc650baefb19e1ea2aa5f01e113d00b5a830278e0b569c6b5",
+    "code/model.py": "5023615d96964482c85ad6a5be68d763f31588d6bf6022f4de038b86f7a006c5"
+  },
+  "final_check": true
+}

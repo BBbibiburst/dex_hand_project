@@ -1,0 +1,68 @@
+{
+  "seed": 5001,
+  "maximum_rounds": 1,
+  "K": 1,
+  "D_epochs": 10,
+  "G_epochs": 20,
+  "max_D_steps": 660,
+  "max_G_steps": 1280,
+  "batch": 64,
+  "max_optimization_seconds": 1800,
+  "loss": {
+    "adv": "BCEWithLogits frozenD targetReal1",
+    "preserve_lambda": 0.5295653698327406,
+    "preserve": "originalP44Patch shares squared+relativeadjacent changes,groupweighted",
+    "flow_lambda": 0.001,
+    "flow_scale": "originalC3RealTrain posteriorstd floor.1;no parameterfit fromValidation",
+    "teacher": 0,
+    "teacher_reason": "P45Aepoch20 endpoint already teacherweight0;no reset or newloss"
+  },
+  "quality": {
+    "reference": "F0A_K1 andRealTrain deriveddescriptors;no afterseeingresults retuning",
+    "SWD_MMD_max_ratio_toF0": 1.1,
+    "PRDC_k": [
+      3,
+      5,
+      10,
+      20
+    ],
+    "PRDC_draws": 100,
+    "PRDC_max_absolute_drop": 0.02,
+    "HSIC_scales": [
+      0.5,
+      1,
+      2
+    ],
+    "HSIC_min_ratio_toF0": 0.8,
+    "HSIC_shuffle_difference_bootCI_low_positive": true,
+    "windowstd_min_ratio_toF0": 0.5,
+    "unique_min_ratio_toF0": 0.9,
+    "tail_log_error_max_ratio_toF0": 1.1,
+    "max_output_maxratio_toF0": 1.5,
+    "temporal_log_error_maxratio_toF0": 1.1,
+    "spatial_error_maxratio_toF0": 1.1,
+    "zeroerror_maxratio_toF0": 1.1,
+    "numeric_tolerance": 1e-08,
+    "severe_collapse_std_ratio": 0.1,
+    "severe_dependence_ratio": 0.2,
+    "decision": "predeclareddevelopment nonworsening guards,NOT universalphysicalstandards;no previousP47hardthresholds existed",
+    "C_class": "FRfailure OR Dgatefailure ORseverecollapse/dependence loss;B FRandRealpass butqualityunproven;A allgates andcontrols"
+  },
+  "optimizer": {
+    "G": "Adam lr1e-4 betas(0,.99)",
+    "D": "Adam lr1e-4 betas(0,.99)",
+    "clip": 5,
+    "R1_gamma": 0.1,
+    "R1_every_D_steps": 16,
+    "persistent_moments": true
+  },
+  "checkpoint_rule": "fixed endpoint20;no Validation selection",
+  "refiner": "776to64 GELU GRU64 Linear712;zero final; log response residual with clamp_min atzero; no thresholdsearch",
+  "D": "3continuousviews global/spatialindexedPatch/temporal indexedframe;equalBCE",
+  "group_split": "exact P49fitinner;not new random split;seed5001training only",
+  "hard_stop": "constant branch predictions, nonfinite gradient/output, group leakage, cumulativebudget;CE gap diagnosticonly",
+  "classification": "C if FR fails OR D failure OR severe collapse OR no Refiner improvement OR overall quality worse thanF0; B FR passes but qualityfails absent C; A allqualitypasses",
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_production": true
+}

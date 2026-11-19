@@ -1,0 +1,12 @@
+{
+  "D_steps": 660,
+  "G_steps": 1280,
+  "optimization_seconds": 50.46572116799325,
+  "GPU_peak_bytes": 253104640,
+  "D_frozen_hash": "37f2bd71869e914fc200d76dd5f1cc915fa862b92d1d3b4a83af3f5015074d35",
+  "D_after_hash": "37f2bd71869e914fc200d76dd5f1cc915fa862b92d1d3b4a83af3f5015074d35",
+  "VAE_bit_identical": true,
+  "seed": 5001,
+  "rounds": 1,
+  "endpoint": 20
+}

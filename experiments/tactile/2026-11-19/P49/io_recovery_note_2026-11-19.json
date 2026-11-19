@@ -1,0 +1,10 @@
+{
+  "error": "numpy.bool_ JSONserializationafterG1metrics",
+  "F1_complete": true,
+  "D1_frozen": true,
+  "No_G1_retraining": true,
+  "D_steps": 1980,
+  "G_steps": 1280,
+  "cumulative_optimization_seconds": 29.59834791497633,
+  "fix": "serializationonly;resumeallmodelandAdamstates;no metric/loss/threshold change"
+}

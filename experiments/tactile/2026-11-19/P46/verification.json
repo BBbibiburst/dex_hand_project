@@ -1,0 +1,13 @@
+{
+  "protected_files": 76,
+  "protected_unchanged": true,
+  "D090_package_files": 71,
+  "D090_package_unchanged": true,
+  "distance_symmetry_pass": true,
+  "identity_distance_pass": true,
+  "code_AST_pass": true,
+  "Test_Holdout_loaded": false,
+  "neural_generator_training": false,
+  "C0_modified": false,
+  "server_access": false
+}

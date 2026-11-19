@@ -1,0 +1,241 @@
+group,model,name,shape,numel,sha256,trainable
+A,D,net.0.weight,"[192, 2848]",546816,a05a3ca75b0eccc33b8c8ddae694f26b7f5a94ce4247283ecfe4f36b0783bce5,True
+A,D,net.0.bias,[192],192,cee265bc8847e6c57d85cd8568fec4e346e6449e808c6e4c1eba752edc055a31,True
+A,D,net.1.weight,[192],192,0f8f7fd3f212c1b636c8e3deb0ab9554626311388bcb1340aa247212dcc86d03,True
+A,D,net.1.bias,[192],192,559b10e88c43e4cd0a23e31e34e4473a3ebfe787410c628279be150c2ec2fc52,True
+A,D,net.3.weight,"[64, 192]",12288,b6cb440fbf1a01f4acbf6cf900ebb21ccb61b365ce37f7eea2963eec844fb0bc,True
+A,D,net.3.bias,[64],64,c6a67a582459dd36e5301429df7883250070a6045a6c216f734bbd0ca3a73a3e,True
+A,D,net.5.weight,"[1, 64]",64,a6f2d634d42f84bd469c0b9b9dadc7a1efa2328a29307ab9505702e873167c17,True
+A,D,net.5.bias,[1],1,f6621392d0840e520e0fbbdca176813afb1200063cec577dc67e424eea5a12a3,True
+A,G,real.encoder.input.0.weight,"[128, 1424]",182272,8143b65b1369aa47e4f60114a1957ddc18dc9b381da1de634e5432e5748e0806,False
+A,G,real.encoder.input.0.bias,[128],128,057750e3b262ae46522a72484b776550209790bcf22b7692e603c623e53935f2,False
+A,G,real.encoder.input.2.weight,[128],128,9a572f1690fc2f9fe87cbf6794ff7a4c9516a637ff261769052767e58a609451,False
+A,G,real.encoder.input.2.bias,[128],128,27557922a557ed842435e9a01828ff76658d093cd25a303b1e22f6d2dbf886df,False
+A,G,real.encoder.gru.weight_ih_l0,"[384, 128]",49152,7dc5d363ce58b315d310018ac25429f36e37b1083df5efde1fa239a21dff7f1a,False
+A,G,real.encoder.gru.weight_hh_l0,"[384, 128]",49152,bd7d1951d53126e7172146164141850c9254c9a4dbfbbf5b45b2fc2038bf0476,False
+A,G,real.encoder.gru.bias_ih_l0,[384],384,928c696656a0fa6b193f3f706ef319c11893e53dd9a98f79f995e81d2bf2a536,False
+A,G,real.encoder.gru.bias_hh_l0,[384],384,c7cbae8d925de42589ec2805e1fa06f137a6edeac0a6cfab7755551ca99c9a57,False
+A,G,real.encoder.mean.weight,"[64, 128]",8192,1e0a5cffed014bb5775a472337462eebbe139b93239f10a2377931a89b975b54,False
+A,G,real.encoder.mean.bias,[64],64,d4c633978769384acf8e9a678f31d30cf8a7ea32a8eb8874021ed9698c4732f6,False
+A,G,real.encoder.logvar.weight,"[64, 128]",8192,e7809398a427b66186dc35b21dd4028b5a6b9caf565d82e76fcfbf122b62ae57,False
+A,G,real.encoder.logvar.bias,[64],64,7dfacd2ae7e559877ba7fc8ca9b231c92d1805fd782dd20a4d2867eea3f1567d,False
+A,G,real.decoder.bos,[32],32,7a4aff09d6c8c3e1da42dcced5cb2f0b88bde00c984f4b43294c1df096b4e794,False
+A,G,real.decoder.previous.0.weight,"[32, 712]",22784,2faefa496d321c3d2d0b357e8b417454acaf0b7a267c7c1fa3f5d116c8df3236,False
+A,G,real.decoder.previous.0.bias,[32],32,240784e777da7f7d759cf93b2955af8c040510d26ebc6c21d7857b3ea854a65a,False
+A,G,real.decoder.cell.weight_ih,"[384, 96]",36864,00fd0b93b3a40249be577b7e69a0b00e5c1e5286183c30e2b7a0f765b4302c67,False
+A,G,real.decoder.cell.weight_hh,"[384, 128]",49152,44649739a6ce2796b9609aef98ed6b0077e6e4108667c49e05d515d6f0c6b4f1,False
+A,G,real.decoder.cell.bias_ih,[384],384,8fdfe2e56cd14afc7ab3387d48729e72e4463e92950f76af4e8f9add4c0cfad2,False
+A,G,real.decoder.cell.bias_hh,[384],384,5cc75543f671db30deced5e4590dc191abd3c19e44f562e297ffb9b05a9ce95e,False
+A,G,real.decoder.mask.weight,"[712, 128]",91136,46d6ba6bf4e45e08ea1d05ff31e3c1811d448199cac4367308b1e2223981b629,False
+A,G,real.decoder.mask.bias,[712],712,5699d5cf57730c1cd257f7c0397ef9e8939ecee2e35801c1ab52eacce12f0093,False
+A,G,real.decoder.current.0.weight,"[32, 712]",22784,8ff7a45d36ac55f3e0f968e1c8eb62bc8b5ba77032c7ea0d07f04d7f7394d4c3,False
+A,G,real.decoder.current.0.bias,[32],32,78e934da3a76c601abcdec9d49fe1adf82ed035ae669393402722310716257b7,False
+A,G,real.decoder.amplitude.0.weight,"[128, 160]",20480,45d9e6b094d2f436adb1361bfc8e5e33862595d54ab191c46a693218c5082023,False
+A,G,real.decoder.amplitude.0.bias,[128],128,6f6dddf40812ffd8a535666c8b718737a4ed49ce32be6edd6368752fd03be008,False
+A,G,real.decoder.amplitude.2.weight,"[4272, 128]",546816,ce98b04fbf3a2138e425f47b752c9009343a2ec006c625e191117fdf2cc2b17e,False
+A,G,real.decoder.amplitude.2.bias,[4272],4272,4dc1bcc8e7b68c35fd9f2022e9e0678c102c3a93c5450ff7e3c13cdcd0b28f89,False
+A,G,sim.encoder.input.0.weight,"[128, 1424]",182272,ec09ceadf45038473402725a3b4badf1ad2d9deba53ec597cdd3da052cdef68a,False
+A,G,sim.encoder.input.0.bias,[128],128,690d1c950d3874e199c44d4c2f7049ebcf2ba9e1ecab465f1d9d54632e2928fe,False
+A,G,sim.encoder.input.2.weight,[128],128,4e2f7b4aec75d6a51ddc331cc2e87f72bc579828d24f37318e4090ecfbe90fc2,False
+A,G,sim.encoder.input.2.bias,[128],128,4ae361a6503f90628fb74337452689c83321fda5d006973f6b9a2901de5e4d3d,False
+A,G,sim.encoder.gru.weight_ih_l0,"[384, 128]",49152,bbc088bdf2a3ffe9ecdcff2ddcf5e0fb5182583c6ae36de2f6853cd5fd2600ff,False
+A,G,sim.encoder.gru.weight_hh_l0,"[384, 128]",49152,f56117ad9d24a9ea971a0fa73215fe364fd650c3c8f14ff608920827108d987d,False
+A,G,sim.encoder.gru.bias_ih_l0,[384],384,8e3eb8c266191fc01fae018789fd87913c65aaa90623866056f99ec9b941b861,False
+A,G,sim.encoder.gru.bias_hh_l0,[384],384,67a408110a52b07d1498f7b3492bd425f78691165b447dc489e2147c1332501e,False
+A,G,sim.encoder.mean.weight,"[64, 128]",8192,76dfec31941687caf961458577c3833db87cbafc6af63395cfc311b1335d723c,False
+A,G,sim.encoder.mean.bias,[64],64,c336e7f0e72fbb29bb2d4475957d3800c058f2125ac7a02b01426a5bcbb2fd2b,False
+A,G,sim.encoder.logvar.weight,"[64, 128]",8192,022f5f032464e0fdf5d9f2faee8185f9ee07b2cb95f8dd8917a441cf4cab57aa,False
+A,G,sim.encoder.logvar.bias,[64],64,57992bce51b83260b8105d372fb84d3c33803692ca490708686e604f1880eb5c,False
+A,G,sim.decoder.bos,[32],32,fe74806bb0bed79afeca3a541546274eb50c5b117912df8ada64571daf4c5143,False
+A,G,sim.decoder.previous.0.weight,"[32, 712]",22784,181521efc2d1b8afbc2beb448755acbfe8e8a591e4f7c44de35718f8dd11b79c,False
+A,G,sim.decoder.previous.0.bias,[32],32,6ad8484f0f8442fa6e9aaaded837ec6cf268d8c89aaf8b4ce0b1fc137d219649,False
+A,G,sim.decoder.cell.weight_ih,"[384, 96]",36864,e0fdf2e7ced7061de9f077e862b2b060628dc7e69ec82325740e13231b82287f,False
+A,G,sim.decoder.cell.weight_hh,"[384, 128]",49152,dcb3ae30a2c4047d16ac46cd181f90ef4774a5bbe3548be6a40d9973f14de4f3,False
+A,G,sim.decoder.cell.bias_ih,[384],384,e3e96aa2203911ef6895d67b08ec51b7eef0416fb6e8c3ae3bf916751654220d,False
+A,G,sim.decoder.cell.bias_hh,[384],384,976396909419911a095ac412ca739106bc61c4defe44ea3073ec1984ae483ad8,False
+A,G,sim.decoder.mask.weight,"[712, 128]",91136,fc4b20908a761bd81b22e4937303821e83fb4a877a57355cb6be3fb754cbe26d,False
+A,G,sim.decoder.mask.bias,[712],712,6a02abe544a78843836949e4f46a11426cb1e017fee188ba6d946b6643dded9c,False
+A,G,sim.decoder.current.0.weight,"[32, 712]",22784,9b43dd8a1aa1a3166c94f2ce2a92eaecb356efeaab073329a5f2e4653a680aaa,False
+A,G,sim.decoder.current.0.bias,[32],32,cab288b29cfe8f8483bd3dba518025338ef0e5c2e0cb91d66b8acb75f22ef835,False
+A,G,sim.decoder.amplitude.0.weight,"[128, 160]",20480,103f7cf034c2496558a386de2e0fae6075afd32c88d34fa0eef17029e4bdf5be,False
+A,G,sim.decoder.amplitude.0.bias,[128],128,d81fa0c4c73968cbf973ed5e249f3051efc18de5608edcc8cf3ae56f23998da4,False
+A,G,sim.decoder.amplitude.2.weight,"[4272, 128]",546816,1528519ffa60fdb445baff4c802a9839830619dabfa342deb4222d1441bf7c29,False
+A,G,sim.decoder.amplitude.2.bias,[4272],4272,bd6d2edeac9e179ba526eb507b6ced012a9c5eac8a7aa9e1c2c974a315157a5e,False
+A,G,field.translator.gru.weight_ih_l0,"[384, 64]",24576,4cd94942f6690682f21b97b44cc9d7c15d6aca1193b82fddd00848e41a264bf7,True
+A,G,field.translator.gru.weight_hh_l0,"[384, 128]",49152,3ad0d45c2438c8807d62ee7fe1a7c3501fc583b96be675e012262dc0e2dd3834,True
+A,G,field.translator.gru.bias_ih_l0,[384],384,800590fdd4ad7e0443a310ffa304db6181cf1c3abb469f45905ed436568f6362,True
+A,G,field.translator.gru.bias_hh_l0,[384],384,97d18d722762aa5bc9f0e5c552355929940b8b8d6d59fe7c51d536ae237b8c72,True
+A,G,field.translator.gru.weight_ih_l1,"[384, 128]",49152,5f5b554d7013c95c113c9190d490f4d3c28e56eef24e9eca33a4106daabb8bea,True
+A,G,field.translator.gru.weight_hh_l1,"[384, 128]",49152,d1a31952a6ab1a7d39f86729c4465dffe6a79db047a23abea7caa1c42bc433c0,True
+A,G,field.translator.gru.bias_ih_l1,[384],384,6e80fd984a1fd056743c4ce113aa8a9d72c8762146743dc7cd2c4fc92a6e0440,True
+A,G,field.translator.gru.bias_hh_l1,[384],384,a3977383c181cc77e43fd9a75d67588f9a29aeab3feced19917ce5f146c7f250,True
+A,G,field.translator.projection.weight,"[64, 128]",8192,e5f4f2765e805caef472f9866f6640db508f158f1d9008df4fef40f969d7e1fc,True
+A,G,field.translator.projection.bias,[64],64,c83347610b2e3c890e8c5fc95f9382478d2c44128926acc9238e3483e4b548dc,True
+A,G,field.project.0.weight,"[128, 132]",16896,11bcec64049f931776f32c4a8da7e94dee4d65caebd25e1d44083c26ec90eb6e,True
+A,G,field.project.0.bias,[128],128,e4c08e95de70887546c00983790a0208339dd2d570bbdd6ff329527f9594f8c3,True
+A,G,field.temporal.weight_ih_l0,"[384, 128]",49152,25903915076f88e7ec5a05a1402d69499cb248d9fe01fa60f044db75bddd6c1d,True
+A,G,field.temporal.weight_hh_l0,"[384, 128]",49152,82da35a19e5ac19aa0c330dcc46a642241fd2300d4bbc12a134c82fbd2217413,True
+A,G,field.temporal.bias_ih_l0,[384],384,a88510d621500ad53d0412c409205c6ea835d4c491553cfd6ef7489424efb6c5,True
+A,G,field.temporal.bias_hh_l0,[384],384,16bb11946eeb8999aa52ad3a5f033d3598a2dfe8c3671179466816f328990390,True
+A,G,field.out.weight,"[64, 128]",8192,f0acd1d015520c4fe4c6f23ed660e1f38550dda0d9da9b7437c0342132ca2323,True
+A,G,field.out.bias,[64],64,592880da8b2a8a5521a2070f2007a0a8dc8b918ba49792ed089bfa544fd3289c,True
+B,D,net.0.weight,"[192, 5696]",1093632,37b28dab5647533285fcd9dbf0391d00576fe83377c0ebdf3b0cbc025e74d6ac,True
+B,D,net.0.bias,[192],192,cee265bc8847e6c57d85cd8568fec4e346e6449e808c6e4c1eba752edc055a31,True
+B,D,net.1.weight,[192],192,0f8f7fd3f212c1b636c8e3deb0ab9554626311388bcb1340aa247212dcc86d03,True
+B,D,net.1.bias,[192],192,559b10e88c43e4cd0a23e31e34e4473a3ebfe787410c628279be150c2ec2fc52,True
+B,D,net.3.weight,"[64, 192]",12288,b6cb440fbf1a01f4acbf6cf900ebb21ccb61b365ce37f7eea2963eec844fb0bc,True
+B,D,net.3.bias,[64],64,c6a67a582459dd36e5301429df7883250070a6045a6c216f734bbd0ca3a73a3e,True
+B,D,net.5.weight,"[1, 64]",64,a6f2d634d42f84bd469c0b9b9dadc7a1efa2328a29307ab9505702e873167c17,True
+B,D,net.5.bias,[1],1,f6621392d0840e520e0fbbdca176813afb1200063cec577dc67e424eea5a12a3,True
+B,G,real.encoder.input.0.weight,"[128, 1424]",182272,8143b65b1369aa47e4f60114a1957ddc18dc9b381da1de634e5432e5748e0806,False
+B,G,real.encoder.input.0.bias,[128],128,057750e3b262ae46522a72484b776550209790bcf22b7692e603c623e53935f2,False
+B,G,real.encoder.input.2.weight,[128],128,9a572f1690fc2f9fe87cbf6794ff7a4c9516a637ff261769052767e58a609451,False
+B,G,real.encoder.input.2.bias,[128],128,27557922a557ed842435e9a01828ff76658d093cd25a303b1e22f6d2dbf886df,False
+B,G,real.encoder.gru.weight_ih_l0,"[384, 128]",49152,7dc5d363ce58b315d310018ac25429f36e37b1083df5efde1fa239a21dff7f1a,False
+B,G,real.encoder.gru.weight_hh_l0,"[384, 128]",49152,bd7d1951d53126e7172146164141850c9254c9a4dbfbbf5b45b2fc2038bf0476,False
+B,G,real.encoder.gru.bias_ih_l0,[384],384,928c696656a0fa6b193f3f706ef319c11893e53dd9a98f79f995e81d2bf2a536,False
+B,G,real.encoder.gru.bias_hh_l0,[384],384,c7cbae8d925de42589ec2805e1fa06f137a6edeac0a6cfab7755551ca99c9a57,False
+B,G,real.encoder.mean.weight,"[64, 128]",8192,1e0a5cffed014bb5775a472337462eebbe139b93239f10a2377931a89b975b54,False
+B,G,real.encoder.mean.bias,[64],64,d4c633978769384acf8e9a678f31d30cf8a7ea32a8eb8874021ed9698c4732f6,False
+B,G,real.encoder.logvar.weight,"[64, 128]",8192,e7809398a427b66186dc35b21dd4028b5a6b9caf565d82e76fcfbf122b62ae57,False
+B,G,real.encoder.logvar.bias,[64],64,7dfacd2ae7e559877ba7fc8ca9b231c92d1805fd782dd20a4d2867eea3f1567d,False
+B,G,real.decoder.bos,[32],32,7a4aff09d6c8c3e1da42dcced5cb2f0b88bde00c984f4b43294c1df096b4e794,False
+B,G,real.decoder.previous.0.weight,"[32, 712]",22784,2faefa496d321c3d2d0b357e8b417454acaf0b7a267c7c1fa3f5d116c8df3236,False
+B,G,real.decoder.previous.0.bias,[32],32,240784e777da7f7d759cf93b2955af8c040510d26ebc6c21d7857b3ea854a65a,False
+B,G,real.decoder.cell.weight_ih,"[384, 96]",36864,00fd0b93b3a40249be577b7e69a0b00e5c1e5286183c30e2b7a0f765b4302c67,False
+B,G,real.decoder.cell.weight_hh,"[384, 128]",49152,44649739a6ce2796b9609aef98ed6b0077e6e4108667c49e05d515d6f0c6b4f1,False
+B,G,real.decoder.cell.bias_ih,[384],384,8fdfe2e56cd14afc7ab3387d48729e72e4463e92950f76af4e8f9add4c0cfad2,False
+B,G,real.decoder.cell.bias_hh,[384],384,5cc75543f671db30deced5e4590dc191abd3c19e44f562e297ffb9b05a9ce95e,False
+B,G,real.decoder.mask.weight,"[712, 128]",91136,46d6ba6bf4e45e08ea1d05ff31e3c1811d448199cac4367308b1e2223981b629,False
+B,G,real.decoder.mask.bias,[712],712,5699d5cf57730c1cd257f7c0397ef9e8939ecee2e35801c1ab52eacce12f0093,False
+B,G,real.decoder.current.0.weight,"[32, 712]",22784,8ff7a45d36ac55f3e0f968e1c8eb62bc8b5ba77032c7ea0d07f04d7f7394d4c3,False
+B,G,real.decoder.current.0.bias,[32],32,78e934da3a76c601abcdec9d49fe1adf82ed035ae669393402722310716257b7,False
+B,G,real.decoder.amplitude.0.weight,"[128, 160]",20480,45d9e6b094d2f436adb1361bfc8e5e33862595d54ab191c46a693218c5082023,False
+B,G,real.decoder.amplitude.0.bias,[128],128,6f6dddf40812ffd8a535666c8b718737a4ed49ce32be6edd6368752fd03be008,False
+B,G,real.decoder.amplitude.2.weight,"[4272, 128]",546816,ce98b04fbf3a2138e425f47b752c9009343a2ec006c625e191117fdf2cc2b17e,False
+B,G,real.decoder.amplitude.2.bias,[4272],4272,4dc1bcc8e7b68c35fd9f2022e9e0678c102c3a93c5450ff7e3c13cdcd0b28f89,False
+B,G,sim.encoder.input.0.weight,"[128, 1424]",182272,ec09ceadf45038473402725a3b4badf1ad2d9deba53ec597cdd3da052cdef68a,False
+B,G,sim.encoder.input.0.bias,[128],128,690d1c950d3874e199c44d4c2f7049ebcf2ba9e1ecab465f1d9d54632e2928fe,False
+B,G,sim.encoder.input.2.weight,[128],128,4e2f7b4aec75d6a51ddc331cc2e87f72bc579828d24f37318e4090ecfbe90fc2,False
+B,G,sim.encoder.input.2.bias,[128],128,4ae361a6503f90628fb74337452689c83321fda5d006973f6b9a2901de5e4d3d,False
+B,G,sim.encoder.gru.weight_ih_l0,"[384, 128]",49152,bbc088bdf2a3ffe9ecdcff2ddcf5e0fb5182583c6ae36de2f6853cd5fd2600ff,False
+B,G,sim.encoder.gru.weight_hh_l0,"[384, 128]",49152,f56117ad9d24a9ea971a0fa73215fe364fd650c3c8f14ff608920827108d987d,False
+B,G,sim.encoder.gru.bias_ih_l0,[384],384,8e3eb8c266191fc01fae018789fd87913c65aaa90623866056f99ec9b941b861,False
+B,G,sim.encoder.gru.bias_hh_l0,[384],384,67a408110a52b07d1498f7b3492bd425f78691165b447dc489e2147c1332501e,False
+B,G,sim.encoder.mean.weight,"[64, 128]",8192,76dfec31941687caf961458577c3833db87cbafc6af63395cfc311b1335d723c,False
+B,G,sim.encoder.mean.bias,[64],64,c336e7f0e72fbb29bb2d4475957d3800c058f2125ac7a02b01426a5bcbb2fd2b,False
+B,G,sim.encoder.logvar.weight,"[64, 128]",8192,022f5f032464e0fdf5d9f2faee8185f9ee07b2cb95f8dd8917a441cf4cab57aa,False
+B,G,sim.encoder.logvar.bias,[64],64,57992bce51b83260b8105d372fb84d3c33803692ca490708686e604f1880eb5c,False
+B,G,sim.decoder.bos,[32],32,fe74806bb0bed79afeca3a541546274eb50c5b117912df8ada64571daf4c5143,False
+B,G,sim.decoder.previous.0.weight,"[32, 712]",22784,181521efc2d1b8afbc2beb448755acbfe8e8a591e4f7c44de35718f8dd11b79c,False
+B,G,sim.decoder.previous.0.bias,[32],32,6ad8484f0f8442fa6e9aaaded837ec6cf268d8c89aaf8b4ce0b1fc137d219649,False
+B,G,sim.decoder.cell.weight_ih,"[384, 96]",36864,e0fdf2e7ced7061de9f077e862b2b060628dc7e69ec82325740e13231b82287f,False
+B,G,sim.decoder.cell.weight_hh,"[384, 128]",49152,dcb3ae30a2c4047d16ac46cd181f90ef4774a5bbe3548be6a40d9973f14de4f3,False
+B,G,sim.decoder.cell.bias_ih,[384],384,e3e96aa2203911ef6895d67b08ec51b7eef0416fb6e8c3ae3bf916751654220d,False
+B,G,sim.decoder.cell.bias_hh,[384],384,976396909419911a095ac412ca739106bc61c4defe44ea3073ec1984ae483ad8,False
+B,G,sim.decoder.mask.weight,"[712, 128]",91136,fc4b20908a761bd81b22e4937303821e83fb4a877a57355cb6be3fb754cbe26d,False
+B,G,sim.decoder.mask.bias,[712],712,6a02abe544a78843836949e4f46a11426cb1e017fee188ba6d946b6643dded9c,False
+B,G,sim.decoder.current.0.weight,"[32, 712]",22784,9b43dd8a1aa1a3166c94f2ce2a92eaecb356efeaab073329a5f2e4653a680aaa,False
+B,G,sim.decoder.current.0.bias,[32],32,cab288b29cfe8f8483bd3dba518025338ef0e5c2e0cb91d66b8acb75f22ef835,False
+B,G,sim.decoder.amplitude.0.weight,"[128, 160]",20480,103f7cf034c2496558a386de2e0fae6075afd32c88d34fa0eef17029e4bdf5be,False
+B,G,sim.decoder.amplitude.0.bias,[128],128,d81fa0c4c73968cbf973ed5e249f3051efc18de5608edcc8cf3ae56f23998da4,False
+B,G,sim.decoder.amplitude.2.weight,"[4272, 128]",546816,1528519ffa60fdb445baff4c802a9839830619dabfa342deb4222d1441bf7c29,False
+B,G,sim.decoder.amplitude.2.bias,[4272],4272,bd6d2edeac9e179ba526eb507b6ced012a9c5eac8a7aa9e1c2c974a315157a5e,False
+B,G,field.translator.gru.weight_ih_l0,"[384, 64]",24576,4cd94942f6690682f21b97b44cc9d7c15d6aca1193b82fddd00848e41a264bf7,True
+B,G,field.translator.gru.weight_hh_l0,"[384, 128]",49152,3ad0d45c2438c8807d62ee7fe1a7c3501fc583b96be675e012262dc0e2dd3834,True
+B,G,field.translator.gru.bias_ih_l0,[384],384,800590fdd4ad7e0443a310ffa304db6181cf1c3abb469f45905ed436568f6362,True
+B,G,field.translator.gru.bias_hh_l0,[384],384,97d18d722762aa5bc9f0e5c552355929940b8b8d6d59fe7c51d536ae237b8c72,True
+B,G,field.translator.gru.weight_ih_l1,"[384, 128]",49152,5f5b554d7013c95c113c9190d490f4d3c28e56eef24e9eca33a4106daabb8bea,True
+B,G,field.translator.gru.weight_hh_l1,"[384, 128]",49152,d1a31952a6ab1a7d39f86729c4465dffe6a79db047a23abea7caa1c42bc433c0,True
+B,G,field.translator.gru.bias_ih_l1,[384],384,6e80fd984a1fd056743c4ce113aa8a9d72c8762146743dc7cd2c4fc92a6e0440,True
+B,G,field.translator.gru.bias_hh_l1,[384],384,a3977383c181cc77e43fd9a75d67588f9a29aeab3feced19917ce5f146c7f250,True
+B,G,field.translator.projection.weight,"[64, 128]",8192,e5f4f2765e805caef472f9866f6640db508f158f1d9008df4fef40f969d7e1fc,True
+B,G,field.translator.projection.bias,[64],64,c83347610b2e3c890e8c5fc95f9382478d2c44128926acc9238e3483e4b548dc,True
+B,G,field.project.0.weight,"[128, 132]",16896,11bcec64049f931776f32c4a8da7e94dee4d65caebd25e1d44083c26ec90eb6e,True
+B,G,field.project.0.bias,[128],128,e4c08e95de70887546c00983790a0208339dd2d570bbdd6ff329527f9594f8c3,True
+B,G,field.temporal.weight_ih_l0,"[384, 128]",49152,25903915076f88e7ec5a05a1402d69499cb248d9fe01fa60f044db75bddd6c1d,True
+B,G,field.temporal.weight_hh_l0,"[384, 128]",49152,82da35a19e5ac19aa0c330dcc46a642241fd2300d4bbc12a134c82fbd2217413,True
+B,G,field.temporal.bias_ih_l0,[384],384,a88510d621500ad53d0412c409205c6ea835d4c491553cfd6ef7489424efb6c5,True
+B,G,field.temporal.bias_hh_l0,[384],384,16bb11946eeb8999aa52ad3a5f033d3598a2dfe8c3671179466816f328990390,True
+B,G,field.out.weight,"[64, 128]",8192,f0acd1d015520c4fe4c6f23ed660e1f38550dda0d9da9b7437c0342132ca2323,True
+B,G,field.out.bias,[64],64,592880da8b2a8a5521a2070f2007a0a8dc8b918ba49792ed089bfa544fd3289c,True
+C,D,net.0.weight,"[192, 5696]",1093632,37b28dab5647533285fcd9dbf0391d00576fe83377c0ebdf3b0cbc025e74d6ac,True
+C,D,net.0.bias,[192],192,cee265bc8847e6c57d85cd8568fec4e346e6449e808c6e4c1eba752edc055a31,True
+C,D,net.1.weight,[192],192,0f8f7fd3f212c1b636c8e3deb0ab9554626311388bcb1340aa247212dcc86d03,True
+C,D,net.1.bias,[192],192,559b10e88c43e4cd0a23e31e34e4473a3ebfe787410c628279be150c2ec2fc52,True
+C,D,net.3.weight,"[64, 192]",12288,b6cb440fbf1a01f4acbf6cf900ebb21ccb61b365ce37f7eea2963eec844fb0bc,True
+C,D,net.3.bias,[64],64,c6a67a582459dd36e5301429df7883250070a6045a6c216f734bbd0ca3a73a3e,True
+C,D,net.5.weight,"[1, 64]",64,a6f2d634d42f84bd469c0b9b9dadc7a1efa2328a29307ab9505702e873167c17,True
+C,D,net.5.bias,[1],1,f6621392d0840e520e0fbbdca176813afb1200063cec577dc67e424eea5a12a3,True
+C,G,real.encoder.input.0.weight,"[128, 1424]",182272,8143b65b1369aa47e4f60114a1957ddc18dc9b381da1de634e5432e5748e0806,False
+C,G,real.encoder.input.0.bias,[128],128,057750e3b262ae46522a72484b776550209790bcf22b7692e603c623e53935f2,False
+C,G,real.encoder.input.2.weight,[128],128,9a572f1690fc2f9fe87cbf6794ff7a4c9516a637ff261769052767e58a609451,False
+C,G,real.encoder.input.2.bias,[128],128,27557922a557ed842435e9a01828ff76658d093cd25a303b1e22f6d2dbf886df,False
+C,G,real.encoder.gru.weight_ih_l0,"[384, 128]",49152,7dc5d363ce58b315d310018ac25429f36e37b1083df5efde1fa239a21dff7f1a,False
+C,G,real.encoder.gru.weight_hh_l0,"[384, 128]",49152,bd7d1951d53126e7172146164141850c9254c9a4dbfbbf5b45b2fc2038bf0476,False
+C,G,real.encoder.gru.bias_ih_l0,[384],384,928c696656a0fa6b193f3f706ef319c11893e53dd9a98f79f995e81d2bf2a536,False
+C,G,real.encoder.gru.bias_hh_l0,[384],384,c7cbae8d925de42589ec2805e1fa06f137a6edeac0a6cfab7755551ca99c9a57,False
+C,G,real.encoder.mean.weight,"[64, 128]",8192,1e0a5cffed014bb5775a472337462eebbe139b93239f10a2377931a89b975b54,False
+C,G,real.encoder.mean.bias,[64],64,d4c633978769384acf8e9a678f31d30cf8a7ea32a8eb8874021ed9698c4732f6,False
+C,G,real.encoder.logvar.weight,"[64, 128]",8192,e7809398a427b66186dc35b21dd4028b5a6b9caf565d82e76fcfbf122b62ae57,False
+C,G,real.encoder.logvar.bias,[64],64,7dfacd2ae7e559877ba7fc8ca9b231c92d1805fd782dd20a4d2867eea3f1567d,False
+C,G,real.decoder.bos,[32],32,7a4aff09d6c8c3e1da42dcced5cb2f0b88bde00c984f4b43294c1df096b4e794,False
+C,G,real.decoder.previous.0.weight,"[32, 712]",22784,2faefa496d321c3d2d0b357e8b417454acaf0b7a267c7c1fa3f5d116c8df3236,False
+C,G,real.decoder.previous.0.bias,[32],32,240784e777da7f7d759cf93b2955af8c040510d26ebc6c21d7857b3ea854a65a,False
+C,G,real.decoder.cell.weight_ih,"[384, 96]",36864,00fd0b93b3a40249be577b7e69a0b00e5c1e5286183c30e2b7a0f765b4302c67,False
+C,G,real.decoder.cell.weight_hh,"[384, 128]",49152,44649739a6ce2796b9609aef98ed6b0077e6e4108667c49e05d515d6f0c6b4f1,False
+C,G,real.decoder.cell.bias_ih,[384],384,8fdfe2e56cd14afc7ab3387d48729e72e4463e92950f76af4e8f9add4c0cfad2,False
+C,G,real.decoder.cell.bias_hh,[384],384,5cc75543f671db30deced5e4590dc191abd3c19e44f562e297ffb9b05a9ce95e,False
+C,G,real.decoder.mask.weight,"[712, 128]",91136,46d6ba6bf4e45e08ea1d05ff31e3c1811d448199cac4367308b1e2223981b629,False
+C,G,real.decoder.mask.bias,[712],712,5699d5cf57730c1cd257f7c0397ef9e8939ecee2e35801c1ab52eacce12f0093,False
+C,G,real.decoder.current.0.weight,"[32, 712]",22784,8ff7a45d36ac55f3e0f968e1c8eb62bc8b5ba77032c7ea0d07f04d7f7394d4c3,False
+C,G,real.decoder.current.0.bias,[32],32,78e934da3a76c601abcdec9d49fe1adf82ed035ae669393402722310716257b7,False
+C,G,real.decoder.amplitude.0.weight,"[128, 160]",20480,45d9e6b094d2f436adb1361bfc8e5e33862595d54ab191c46a693218c5082023,False
+C,G,real.decoder.amplitude.0.bias,[128],128,6f6dddf40812ffd8a535666c8b718737a4ed49ce32be6edd6368752fd03be008,False
+C,G,real.decoder.amplitude.2.weight,"[4272, 128]",546816,ce98b04fbf3a2138e425f47b752c9009343a2ec006c625e191117fdf2cc2b17e,False
+C,G,real.decoder.amplitude.2.bias,[4272],4272,4dc1bcc8e7b68c35fd9f2022e9e0678c102c3a93c5450ff7e3c13cdcd0b28f89,False
+C,G,sim.encoder.input.0.weight,"[128, 1424]",182272,ec09ceadf45038473402725a3b4badf1ad2d9deba53ec597cdd3da052cdef68a,False
+C,G,sim.encoder.input.0.bias,[128],128,690d1c950d3874e199c44d4c2f7049ebcf2ba9e1ecab465f1d9d54632e2928fe,False
+C,G,sim.encoder.input.2.weight,[128],128,4e2f7b4aec75d6a51ddc331cc2e87f72bc579828d24f37318e4090ecfbe90fc2,False
+C,G,sim.encoder.input.2.bias,[128],128,4ae361a6503f90628fb74337452689c83321fda5d006973f6b9a2901de5e4d3d,False
+C,G,sim.encoder.gru.weight_ih_l0,"[384, 128]",49152,bbc088bdf2a3ffe9ecdcff2ddcf5e0fb5182583c6ae36de2f6853cd5fd2600ff,False
+C,G,sim.encoder.gru.weight_hh_l0,"[384, 128]",49152,f56117ad9d24a9ea971a0fa73215fe364fd650c3c8f14ff608920827108d987d,False
+C,G,sim.encoder.gru.bias_ih_l0,[384],384,8e3eb8c266191fc01fae018789fd87913c65aaa90623866056f99ec9b941b861,False
+C,G,sim.encoder.gru.bias_hh_l0,[384],384,67a408110a52b07d1498f7b3492bd425f78691165b447dc489e2147c1332501e,False
+C,G,sim.encoder.mean.weight,"[64, 128]",8192,76dfec31941687caf961458577c3833db87cbafc6af63395cfc311b1335d723c,False
+C,G,sim.encoder.mean.bias,[64],64,c336e7f0e72fbb29bb2d4475957d3800c058f2125ac7a02b01426a5bcbb2fd2b,False
+C,G,sim.encoder.logvar.weight,"[64, 128]",8192,022f5f032464e0fdf5d9f2faee8185f9ee07b2cb95f8dd8917a441cf4cab57aa,False
+C,G,sim.encoder.logvar.bias,[64],64,57992bce51b83260b8105d372fb84d3c33803692ca490708686e604f1880eb5c,False
+C,G,sim.decoder.bos,[32],32,fe74806bb0bed79afeca3a541546274eb50c5b117912df8ada64571daf4c5143,False
+C,G,sim.decoder.previous.0.weight,"[32, 712]",22784,181521efc2d1b8afbc2beb448755acbfe8e8a591e4f7c44de35718f8dd11b79c,False
+C,G,sim.decoder.previous.0.bias,[32],32,6ad8484f0f8442fa6e9aaaded837ec6cf268d8c89aaf8b4ce0b1fc137d219649,False
+C,G,sim.decoder.cell.weight_ih,"[384, 96]",36864,e0fdf2e7ced7061de9f077e862b2b060628dc7e69ec82325740e13231b82287f,False
+C,G,sim.decoder.cell.weight_hh,"[384, 128]",49152,dcb3ae30a2c4047d16ac46cd181f90ef4774a5bbe3548be6a40d9973f14de4f3,False
+C,G,sim.decoder.cell.bias_ih,[384],384,e3e96aa2203911ef6895d67b08ec51b7eef0416fb6e8c3ae3bf916751654220d,False
+C,G,sim.decoder.cell.bias_hh,[384],384,976396909419911a095ac412ca739106bc61c4defe44ea3073ec1984ae483ad8,False
+C,G,sim.decoder.mask.weight,"[712, 128]",91136,fc4b20908a761bd81b22e4937303821e83fb4a877a57355cb6be3fb754cbe26d,False
+C,G,sim.decoder.mask.bias,[712],712,6a02abe544a78843836949e4f46a11426cb1e017fee188ba6d946b6643dded9c,False
+C,G,sim.decoder.current.0.weight,"[32, 712]",22784,9b43dd8a1aa1a3166c94f2ce2a92eaecb356efeaab073329a5f2e4653a680aaa,False
+C,G,sim.decoder.current.0.bias,[32],32,cab288b29cfe8f8483bd3dba518025338ef0e5c2e0cb91d66b8acb75f22ef835,False
+C,G,sim.decoder.amplitude.0.weight,"[128, 160]",20480,103f7cf034c2496558a386de2e0fae6075afd32c88d34fa0eef17029e4bdf5be,False
+C,G,sim.decoder.amplitude.0.bias,[128],128,d81fa0c4c73968cbf973ed5e249f3051efc18de5608edcc8cf3ae56f23998da4,False
+C,G,sim.decoder.amplitude.2.weight,"[4272, 128]",546816,1528519ffa60fdb445baff4c802a9839830619dabfa342deb4222d1441bf7c29,False
+C,G,sim.decoder.amplitude.2.bias,[4272],4272,bd6d2edeac9e179ba526eb507b6ced012a9c5eac8a7aa9e1c2c974a315157a5e,False
+C,G,field.translator.gru.weight_ih_l0,"[384, 64]",24576,4cd94942f6690682f21b97b44cc9d7c15d6aca1193b82fddd00848e41a264bf7,True
+C,G,field.translator.gru.weight_hh_l0,"[384, 128]",49152,3ad0d45c2438c8807d62ee7fe1a7c3501fc583b96be675e012262dc0e2dd3834,True
+C,G,field.translator.gru.bias_ih_l0,[384],384,800590fdd4ad7e0443a310ffa304db6181cf1c3abb469f45905ed436568f6362,True
+C,G,field.translator.gru.bias_hh_l0,[384],384,97d18d722762aa5bc9f0e5c552355929940b8b8d6d59fe7c51d536ae237b8c72,True
+C,G,field.translator.gru.weight_ih_l1,"[384, 128]",49152,5f5b554d7013c95c113c9190d490f4d3c28e56eef24e9eca33a4106daabb8bea,True
+C,G,field.translator.gru.weight_hh_l1,"[384, 128]",49152,d1a31952a6ab1a7d39f86729c4465dffe6a79db047a23abea7caa1c42bc433c0,True
+C,G,field.translator.gru.bias_ih_l1,[384],384,6e80fd984a1fd056743c4ce113aa8a9d72c8762146743dc7cd2c4fc92a6e0440,True
+C,G,field.translator.gru.bias_hh_l1,[384],384,a3977383c181cc77e43fd9a75d67588f9a29aeab3feced19917ce5f146c7f250,True
+C,G,field.translator.projection.weight,"[64, 128]",8192,e5f4f2765e805caef472f9866f6640db508f158f1d9008df4fef40f969d7e1fc,True
+C,G,field.translator.projection.bias,[64],64,c83347610b2e3c890e8c5fc95f9382478d2c44128926acc9238e3483e4b548dc,True
+C,G,field.project.0.weight,"[128, 132]",16896,11bcec64049f931776f32c4a8da7e94dee4d65caebd25e1d44083c26ec90eb6e,True
+C,G,field.project.0.bias,[128],128,e4c08e95de70887546c00983790a0208339dd2d570bbdd6ff329527f9594f8c3,True
+C,G,field.temporal.weight_ih_l0,"[384, 128]",49152,25903915076f88e7ec5a05a1402d69499cb248d9fe01fa60f044db75bddd6c1d,True
+C,G,field.temporal.weight_hh_l0,"[384, 128]",49152,82da35a19e5ac19aa0c330dcc46a642241fd2300d4bbc12a134c82fbd2217413,True
+C,G,field.temporal.bias_ih_l0,[384],384,a88510d621500ad53d0412c409205c6ea835d4c491553cfd6ef7489424efb6c5,True
+C,G,field.temporal.bias_hh_l0,[384],384,16bb11946eeb8999aa52ad3a5f033d3598a2dfe8c3671179466816f328990390,True
+C,G,field.out.weight,"[64, 128]",8192,f0acd1d015520c4fe4c6f23ed660e1f38550dda0d9da9b7437c0342132ca2323,True
+C,G,field.out.bias,[64],64,592880da8b2a8a5521a2070f2007a0a8dc8b918ba49792ed089bfa544fd3289c,True

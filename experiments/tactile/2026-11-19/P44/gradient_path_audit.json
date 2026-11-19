@@ -1,0 +1,12 @@
+{
+  "decoder_ST_forward_matches_hard": true,
+  "decoder_ST_backward_only": true,
+  "D_hard_occupancy_requires_grad": false,
+  "D_occupancy_branch_to_input_gradient": "zero/not defined through Boolean comparison",
+  "D_log_amplitude_branch_to_input_gradient_finite": true,
+  "D_log_amplitude_branch_to_input_mean_abs_gradient": 0.019754532724618912,
+  "D_feature_Mask_gradient_mean_abs": 0.026865506544709206,
+  "D_feature_amplitude_gradient_mean_abs": 0.0029485682025551796,
+  "interpretation": "Generator receives adversarial gradients through amplitude/log-input branch; D binary occupancy features are detached. This is a configuration gradient-path limitation, not proof of sole cause or capacity shortage.",
+  "no_new_training": true
+}

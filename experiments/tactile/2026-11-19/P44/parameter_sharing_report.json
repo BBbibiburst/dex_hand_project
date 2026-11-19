@@ -1,0 +1,58 @@
+{
+  "one_field_module": 1,
+  "one_training_discriminator": true,
+  "shared_generator_checkpoint_sha": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+  "shared_D_checkpoint_sha": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e",
+  "field_state_sha256": "3cc61acf53f453080a0e29b6e71bd5b9bac103bd42b84d9ed620edd7929dd02c",
+  "parameter_count": 306176,
+  "D_parameter_count": 1106625,
+  "K_call_audit": [
+    {
+      "K": 1,
+      "field_calls": 1,
+      "unique_field_instances": 1,
+      "field_id": 129695065567536,
+      "generator_checkpoint_sha256": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+      "D_checkpoint_sha256": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e"
+    },
+    {
+      "K": 2,
+      "field_calls": 2,
+      "unique_field_instances": 1,
+      "field_id": 129695065567536,
+      "generator_checkpoint_sha256": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+      "D_checkpoint_sha256": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e"
+    },
+    {
+      "K": 4,
+      "field_calls": 4,
+      "unique_field_instances": 1,
+      "field_id": 129695065567536,
+      "generator_checkpoint_sha256": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+      "D_checkpoint_sha256": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e"
+    },
+    {
+      "K": 8,
+      "field_calls": 8,
+      "unique_field_instances": 1,
+      "field_id": 129695065567536,
+      "generator_checkpoint_sha256": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+      "D_checkpoint_sha256": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e"
+    }
+  ],
+  "G_updates_by_K": {
+    "1": 288,
+    "2": 288,
+    "4": 288,
+    "8": 288
+  },
+  "D_updates_by_K": {
+    "1": 320,
+    "2": 320,
+    "4": 320,
+    "8": 320
+  },
+  "no_distinct_G1_G2_G4_G8": true,
+  "VAE_bit_identical_to_original_C3": true,
+  "deploy_source_encoder_once_decoder_once": true
+}

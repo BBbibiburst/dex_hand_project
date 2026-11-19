@@ -1,0 +1,9 @@
+{
+  "PRDC_paper": "https://proceedings.mlr.press/v119/naeem20a.html",
+  "precision_recall": "https://proceedings.neurips.cc/paper/2019/hash/0234c510bc6d908b28c70ff313743079-Abstract.html",
+  "FJD": "https://arxiv.org/abs/1907.08175",
+  "official_source": {
+    "prdc.py": "https://raw.githubusercontent.com/clovaai/generative-evaluation-prdc/master/prdc/prdc.py",
+    "PRDC_LICENSE": "https://raw.githubusercontent.com/clovaai/generative-evaluation-prdc/master/LICENSE.txt"
+  }
+}

@@ -1,0 +1,109 @@
+P46 PREPARE COMPLETE m 7 sigma 30.251723236178087
+
+P46 continuation: compute_distances.py, c2st.py, report.py, finalize.py.
+
+statistics.log
+COHORT_DONE reference_block_0 elapsed 4.1
+COHORT_DONE reference_block_1 elapsed 7.0
+COHORT_DONE reference_block_2 elapsed 9.8
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/statistics.py", line 38, in <module>
+    vals=[distances(x[ii],R[jj],sigma) for ii,jj in zip(query_banks['Sim:'+g],refbank)];a=aggregate(vals);values.append(a);rootrows.append(dict(cohort=name,model=model,Root=g,task=str(root_tasks[allroots.index(g)]),query_windows=M,reference_windows=M,MC_draws=draws,**a))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/statistics.py", line 38, in <listcomp>
+    vals=[distances(x[ii],R[jj],sigma) for ii,jj in zip(query_banks['Sim:'+g],refbank)];a=aggregate(vals);values.append(a);rootrows.append(dict(cohort=name,model=model,Root=g,task=str(root_tasks[allroots.index(g)]),query_windows=M,reference_windows=M,MC_draws=draws,**a))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/common.py", line 32, in distances
+    aa=cdist(x,x,'sqeuclidean');bb=cdist(y,y,'sqeuclidean');ab=cdist(x,y,'sqeuclidean');n,m=len(x),len(y);out={};kernels=[]
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/scipy/spatial/distance.py", line 3127, in cdist
+    return cdist_fn(XA, XB, out=out, **kwargs)
+KeyboardInterrupt
+COHORT_DONE reference_block_0 elapsed 3.8
+COHORT_DONE reference_block_1 elapsed 6.1
+COHORT_DONE reference_block_2 elapsed 8.0
+COHORT_DONE reference_block_3 elapsed 9.9
+FULL_MARGINAL Original 12.4
+FULL_MARGINAL B_K1 14.6
+FULL_MARGINAL B_K2 16.8
+FULL_MARGINAL B_K4 19.1
+FULL_MARGINAL B_K8 21.5
+FULL_MARGINAL A_K1 23.8
+FULL_MARGINAL A_K2 26.1
+FULL_MARGINAL A_K4 28.6
+FULL_MARGINAL A_K8 30.8
+FULL_MARGINAL C_K1 33.2
+FULL_MARGINAL C_K2 35.3
+FULL_MARGINAL C_K4 37.4
+FULL_MARGINAL C_K8 39.6
+P46 STATISTICS COMPLETE
+
+c2st.log
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/c2st.py", line 3, in <module>
+    from sklearn.linear_model import LogisticRegression
+ModuleNotFoundError: No module named 'sklearn'
+COHORT_DONE reference_block_0 elapsed 3.7
+COHORT_DONE reference_block_1 elapsed 5.5
+COHORT_DONE reference_block_2 elapsed 7.3
+COHORT_DONE reference_block_3 elapsed 9.0
+FULL_MARGINAL Original 10.9
+FULL_MARGINAL B_K1 12.6
+FULL_MARGINAL B_K2 14.2
+FULL_MARGINAL B_K4 15.8
+FULL_MARGINAL B_K8 17.6
+FULL_MARGINAL A_K1 19.4
+FULL_MARGINAL A_K2 21.2
+FULL_MARGINAL A_K4 23.0
+FULL_MARGINAL A_K8 24.8
+FULL_MARGINAL C_K1 26.5
+FULL_MARGINAL C_K2 28.2
+FULL_MARGINAL C_K4 29.9
+FULL_MARGINAL C_K8 31.6
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/c2st.py", line 40, in <module>
+    warnings.simplefilter('always');model.fit(x[fit],y[fit])
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/c2st.py", line 15, in fit
+    torch.set_num_threads(1);xx=torch.tensor(x,dtype=torch.float64);yy=torch.tensor(y,dtype=torch.float64);w=torch.zeros(x.shape[1],dtype=torch.float64,requires_grad=True);b=torch.zeros((),dtype=torch.float64,requires_grad=True);weights=torch.tensor(np.where(y==1,.5/(y==1).sum(),.5/(y==0).sum()),dtype=torch.float64);opt=torch.optim.LBFGS([w,b],lr=1.,max_iter=100,tolerance_grad=1e-7,tolerance_change=1e-10,line_search_fn='strong_wolfe');calls=[0]
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/optim/lbfgs.py", line 272, in __init__
+    super().__init__(params, defaults)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/optim/optimizer.py", line 408, in __init__
+    self.add_param_group(cast(dict, param_group))
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_compile.py", line 47, in inner
+    import torch._dynamo
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/__init__.py", line 13, in <module>
+    from . import (
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/aot_compile.py", line 14, in <module>
+    from torch._dynamo.convert_frame import GraphRuntimeEnv
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/convert_frame.py", line 60, in <module>
+    from torch._dynamo.symbolic_convert import TensorifyState
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/symbolic_convert.py", line 53, in <module>
+    from torch._dynamo.exc import ObservedException, TensorifyScalarRestartAnalysis
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/exc.py", line 44, in <module>
+    from .utils import counters
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/_dynamo/utils.py", line 2500, in <module>
+    if has_triton_package():
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/torch/utils/_triton.py", line 9, in has_triton_package
+    import triton  # noqa: F401
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/triton/__init__.py", line 27, in <module>
+    from . import testing
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/triton/testing.py", line 4, in <module>
+    import statistics
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/statistics.py", line 77, in <module>
+    ix=n['task']==task;v=distances(x[ix],RV,sigma);stage.append(dict(model=model,task=task,view='task-specific source vs fullReal reference, task confounded',N_source=int(ix.sum()),N_Real=len(RV),**v))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/code/common.py", line 32, in distances
+    aa=cdist(x,x,'sqeuclidean');bb=cdist(y,y,'sqeuclidean');ab=cdist(x,y,'sqeuclidean');n,m=len(x),len(y);out={};kernels=[]
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/scipy/spatial/distance.py", line 3127, in cdist
+    return cdist_fn(XA, XB, out=out, **kwargs)
+KeyboardInterrupt
+Real_vs_Real 0 {'BA': 0.3019644460833001, 'AUC': 0.27832923949827226, 'D': 0.6039288921666002, 'loss': 7.634947414370153, 'confusion_matrix': '[[211, 396], [412, 142]]'} seconds 2.2
+OriginalSim_vs_Real 0 {'BA': 0.8575366063738157, 'AUC': 0.925706518078994, 'D': 0.28492678725236864, 'loss': 1.4419519797364089, 'confusion_matrix': '[[1008, 207], [133, 1028]]'} seconds 1.89
+Real_vs_Real 1 {'BA': 0.42539682539682544, 'AUC': 0.5768219505767398, 'D': 0.8507936507936509, 'loss': 6.494841657900785, 'confusion_matrix': '[[174, 696], [198, 369]]'} seconds 1.02
+OriginalSim_vs_Real 1 {'BA': 0.951229735046966, 'AUC': 0.9766185611159031, 'D': 0.0975405299060681, 'loss': 0.5065598605033071, 'confusion_matrix': '[[1181, 80], [49, 1388]]'} seconds 1.61
+Real_vs_Real 2 {'BA': 0.36494478319316936, 'AUC': 0.4975041177469157, 'D': 0.7298895663863387, 'loss': 6.238459037316056, 'confusion_matrix': '[[136, 543], [302, 340]]'} seconds 0.86
+OriginalSim_vs_Real 2 {'BA': 0.9869452529480583, 'AUC': 0.9968935581940436, 'D': 0.0261094941038833, 'loss': 0.08183667073860532, 'confusion_matrix': '[[733, 15], [8, 1313]]'} seconds 1.78
+Real_vs_Real 3 {'BA': 0.0418991825613079, 'AUC': 0.021534059945504086, 'D': 0.08379836512261585, 'loss': 5.7992003331092015, 'confusion_matrix': '[[31, 469], [718, 16]]'} seconds 1.03
+OriginalSim_vs_Real 3 {'BA': 0.9739290801041207, 'AUC': 0.9973822503806297, 'D': 0.05214183979175857, 'loss': 0.15933184515895685, 'confusion_matrix': '[[788, 37], [9, 1225]]'} seconds 1.7
+P46 C2ST COMPLETE
+
+report.log
+P46 REPORT COMPLETE {"protected_files": 76, "protected_unchanged": true, "D090_package_files": 71, "D090_package_unchanged": true, "distance_symmetry_pass": true, "identity_distance_pass": true, "code_AST_pass": true, "Test_Holdout_loaded": false, "neural_generator_training": false, "C0_modified": false, "server_access": false}
+
+FINAL CHECK PASS: numeric roles valid; 76 registered historical files unchanged; 71 acceptance snapshot files unchanged; no new generator training; P46 STOP.

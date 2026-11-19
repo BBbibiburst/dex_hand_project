@@ -1,0 +1,13 @@
+model,K,field_hash,field_parameter_ids_shared,interval,dt,source_latent,internal_h0,decoder,max_difference_old_validation,bit_equal_old,K_is_training_epochs
+A_K1,1,d431001835a757006ce6ee031acb35c786e4c5c519896ea79bfbbdd5f6e81d94,True,0to1,1.0,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+A_K2,2,d431001835a757006ce6ee031acb35c786e4c5c519896ea79bfbbdd5f6e81d94,True,0to1,0.5,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+A_K4,4,d431001835a757006ce6ee031acb35c786e4c5c519896ea79bfbbdd5f6e81d94,True,0to1,0.25,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+A_K8,8,d431001835a757006ce6ee031acb35c786e4c5c519896ea79bfbbdd5f6e81d94,True,0to1,0.125,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+B_K1,1,09de384582140cad2b604a8410b8802bc129ec92cbcce35b79941f8762fa8c84,True,0to1,1.0,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+B_K2,2,09de384582140cad2b604a8410b8802bc129ec92cbcce35b79941f8762fa8c84,True,0to1,0.5,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+B_K4,4,09de384582140cad2b604a8410b8802bc129ec92cbcce35b79941f8762fa8c84,True,0to1,0.25,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+B_K8,8,09de384582140cad2b604a8410b8802bc129ec92cbcce35b79941f8762fa8c84,True,0to1,0.125,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+C_K1,1,56470660cb14545eef9146d812ecd0a54798430c5c82bf777b67a085b9baf52e,True,0to1,1.0,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+C_K2,2,56470660cb14545eef9146d812ecd0a54798430c5c82bf777b67a085b9baf52e,True,0to1,0.5,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+C_K4,4,56470660cb14545eef9146d812ecd0a54798430c5c82bf777b67a085b9baf52e,True,0to1,0.25,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False
+C_K8,8,56470660cb14545eef9146d812ecd0a54798430c5c82bf777b67a085b9baf52e,True,0to1,0.125,same frozen Sim posterior mean,"Real-coordinate zeros, NOT Original Sim",same frozen RealDecoder,0.0,True,False

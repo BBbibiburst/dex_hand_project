@@ -1,0 +1,2 @@
+# Preserve exact research snapshot bytes; generated CSV/SVG whitespace is evidence.
+* -text -whitespace

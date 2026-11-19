@@ -1,0 +1,37 @@
+{
+  "calibration_groups": [
+    "20260611_145025_hardness_slip_session",
+    "20260611_163853_hardness_slip_session",
+    "20260705_213030_hardness_slip_session",
+    "20260706_164601_bottleA-20-1",
+    "20260813_165855_stable_3D_h13r3_20",
+    "20260814_143310_stable_wood_30",
+    "20260814_155240_stable_3D_6512_30",
+    "20260817_105909_slip_3D_liulengzhui_30"
+  ],
+  "evaluation_groups": [
+    "20260814_150537_stable_maidong_30",
+    "20260814_151336_stable_maidong_30",
+    "20260816_172352_slip_3D_bottle_C_30",
+    "20260816_173235_slip_3D_bottle_A_30"
+  ],
+  "bounds": {
+    "Global": {
+      "lower": -3.871066808700562,
+      "upper": 3.6676604747772203
+    },
+    "Spatial": {
+      "lower": -1.9045411388079332,
+      "upper": 3.8505043983459397
+    },
+    "Temporal": {
+      "lower": -0.5731133323907853,
+      "upper": 1.827313168446223
+    },
+    "Joint": {
+      "lower": -3.8710668087005615,
+      "upper": 1.8254182934761047
+    }
+  },
+  "auxiliary_only": true
+}

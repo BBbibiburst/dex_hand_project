@@ -1,0 +1,8 @@
+dimension,Real,Sim,common_semantics,evidence,missing
+Task,hardness/slip/stable acquisition protocols,lift/pick_place/stack/push/nut_assembly,NOT_CERTIFIED,P46/session_configs.json; C3 natural_sim_validation/windows_manifest.csv,same manipulation/contact protocol and independently registered correspondence
+Stage,CLOSE/HOLD/LIFT retained-frame labels,task-specific stage from actual recorded sourceEpisode,NAME_ONLY,registered real_stage and natural stage arrays; manifest,same physical event definition and comparable control protocol
+Intensity,processed nonnegative sensor response,project processed MuJoCo touch response,NOT_CERTIFIED,P44REPORT input audit; P46condition_audit.csv,traceable common force/response units and calibration
+Time,strictly increasing irregular retained samples,continuous source about20Hz,ORDER_ONLY,C24 train/validation_time_contract.npz;Natural timestamp_first/last,matched physical sampling intervals; derivative-time interpretation unsupported
+Sensor position,Usb32 mapping referenced but original driver unavailable,canonical712 ordering from simulation processor,UNKNOWN,P46/session_configs.json mapping_file;P44 mapping audit,certified physical Taxel position/orientation/channel correspondence
+Output representation,full2848 indexed log responses,"same mathematical transform, no sharedphysicalsemantic certification",NUMERICAL_ONLY,P46/RealTrain_preprocessing.npz,validated common output/condition embedding; dimensional equality insufficient
+FJD decision,none,none,NOT_APPLICABLE,prerequisites above unmet,do not concatenate unrelated latent or run GMM/OT

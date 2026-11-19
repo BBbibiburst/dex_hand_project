@@ -1,0 +1,15 @@
+{
+  "stop_reason": "maximum3roundsReached",
+  "rounds_G_completed": 3,
+  "D_optimizer_steps": 3300,
+  "F_optimizer_steps": 3840,
+  "cumulative_optimization_wall_seconds": 81.80186819698793,
+  "whole_experiment_seconds": 188.9100124835968,
+  "device": "cuda",
+  "originalVAE_bit_identical": true,
+  "single_F_D_parameter_objects": true,
+  "GPU_peak_bytes": 239222784,
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_P50": true
+}

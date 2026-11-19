@@ -1,0 +1,7 @@
+{
+  "no_training": true,
+  "all_initial_final_gradients_finite": true,
+  "readout_scope": "target self-reconstruction diagnostic only",
+  "B_trajectory_inference_only": true,
+  "no_new_C0_evaluation": true
+}

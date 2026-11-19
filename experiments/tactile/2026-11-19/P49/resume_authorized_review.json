@@ -1,0 +1,28 @@
+{
+  "user_approved": true,
+  "D1_review_complete": true,
+  "D1_retraining": false,
+  "CE_hardstop_disabled_by_user": true,
+  "thresholds_and_budget_unchanged": true,
+  "decision": "continue G1 as controlled development: bothclassmacrorecalls strong;oneweakRealSession explicitly retained,not allgroupgeneralizationcertification",
+  "weak_Real_Sessions": [
+    {
+      "role": "inner",
+      "domain": "Real",
+      "group": "20260814_155240_stable_3D_6512_30",
+      "windows": 240,
+      "Recall": 0.13333333333333333,
+      "CE": 3.6637976045638307,
+      "p_real_mean": 0.17428407180400024,
+      "p_real_std": 0.3238513271183362,
+      "p_real_P1": 0.00021803001102902134,
+      "p_real_P5": 0.0005469205330540821,
+      "p_real_P50": 0.022816283055391233,
+      "p_real_P95": 0.9986915242556624,
+      "p_real_P99": 0.9993529070773911
+    }
+  ],
+  "restored_F0": "checkpoints/F0.pt",
+  "restored_D1": "checkpoints/D1.pt",
+  "optimization_seconds_already_used": 8.426052248958513
+}

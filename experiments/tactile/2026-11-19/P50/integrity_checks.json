@@ -1,0 +1,14 @@
+{
+  "protected_files": 1090,
+  "changed": [],
+  "D50_bit_identical_during_G": true,
+  "VAE_bit_identical": true,
+  "all_epochs_saved": true,
+  "fixed_endpoint20": true,
+  "seed5001": true,
+  "only_one_round": true,
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_server": true,
+  "no_P51": true
+}

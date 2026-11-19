@@ -1,0 +1,66 @@
+[
+  {
+    "group": "A",
+    "K": 1,
+    "calls": 1,
+    "one_field_instance": true,
+    "generator_sha256": "869085a888009a875b1559c3551d12bd3398f6622c959df7463cea1dfe218230",
+    "D_sha256": "55a3fa4b8c4fe350e762dddefd7799e85dfb19ee016343432b3a2cfecf0f95e6"
+  },
+  {
+    "group": "A",
+    "K": 2,
+    "calls": 2,
+    "one_field_instance": true,
+    "generator_sha256": "869085a888009a875b1559c3551d12bd3398f6622c959df7463cea1dfe218230",
+    "D_sha256": "55a3fa4b8c4fe350e762dddefd7799e85dfb19ee016343432b3a2cfecf0f95e6"
+  },
+  {
+    "group": "A",
+    "K": 4,
+    "calls": 4,
+    "one_field_instance": true,
+    "generator_sha256": "869085a888009a875b1559c3551d12bd3398f6622c959df7463cea1dfe218230",
+    "D_sha256": "55a3fa4b8c4fe350e762dddefd7799e85dfb19ee016343432b3a2cfecf0f95e6"
+  },
+  {
+    "group": "A",
+    "K": 8,
+    "calls": 8,
+    "one_field_instance": true,
+    "generator_sha256": "869085a888009a875b1559c3551d12bd3398f6622c959df7463cea1dfe218230",
+    "D_sha256": "55a3fa4b8c4fe350e762dddefd7799e85dfb19ee016343432b3a2cfecf0f95e6"
+  },
+  {
+    "group": "C",
+    "K": 1,
+    "calls": 1,
+    "one_field_instance": true,
+    "generator_sha256": "48056cea47f21c5136b9d00a8ce09a4b83a55f317394e0ada6d013264eabb62e",
+    "D_sha256": "06bda78d2588b19ef9f1c3295f27a3f520a77ef3a4ae6f427782369adda0d044"
+  },
+  {
+    "group": "C",
+    "K": 2,
+    "calls": 2,
+    "one_field_instance": true,
+    "generator_sha256": "48056cea47f21c5136b9d00a8ce09a4b83a55f317394e0ada6d013264eabb62e",
+    "D_sha256": "06bda78d2588b19ef9f1c3295f27a3f520a77ef3a4ae6f427782369adda0d044"
+  },
+  {
+    "group": "C",
+    "K": 4,
+    "calls": 4,
+    "one_field_instance": true,
+    "generator_sha256": "48056cea47f21c5136b9d00a8ce09a4b83a55f317394e0ada6d013264eabb62e",
+    "D_sha256": "06bda78d2588b19ef9f1c3295f27a3f520a77ef3a4ae6f427782369adda0d044"
+  },
+  {
+    "group": "C",
+    "K": 8,
+    "calls": 8,
+    "one_field_instance": true,
+    "generator_sha256": "48056cea47f21c5136b9d00a8ce09a4b83a55f317394e0ada6d013264eabb62e",
+    "D_sha256": "06bda78d2588b19ef9f1c3295f27a3f520a77ef3a4ae6f427782369adda0d044"
+  }
+]

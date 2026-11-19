@@ -1,0 +1,14 @@
+{
+  "decision": "NO-GO",
+  "scope": "RVC as replacement formal equivalence acceptance",
+  "exploratory_distances_usable": true,
+  "new_090_claim": false,
+  "main_reasons": [
+    "constant-output negative control accepted",
+    "Session/Root nonexchangeability and task confounding",
+    "reference/kernel sensitivity",
+    "24calibrationSessions and10developmentRoots",
+    "translatedTrain C2ST unavailable"
+  ],
+  "P47_started": false
+}

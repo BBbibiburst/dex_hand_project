@@ -1,0 +1,12 @@
+domain,role,three_view_envelope_AND_macro
+Real,Dfit,0.9010587839722001
+Real,calibration_inner,0.8528571428571432
+Real,evaluation,0.8647916666666671
+Original,evaluation,0.9841403532008189
+F0,evaluation,0.12693960265388188
+P49_F3,evaluation,0.5776474528191853
+F50,evaluation,0.003875968992248062
+F50_without_refiner,evaluation,0.8449282157139296
+Constant,evaluation,0.9999999999999999
+RealDonor,evaluation,0.8559347446216029
+PairShuffle,evaluation,0.003875968992248062

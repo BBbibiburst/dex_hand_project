@@ -1,0 +1,40 @@
+{
+  "cwd": "/home/zmy/dex_hand_project",
+  "python": "/home/zmy/miniconda3/envs/mujoco/bin/python",
+  "git_HEAD": "b3373da0a276a3cff044f1f6d70807bd46e4f456",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1"
+  },
+  "commands": [
+    "design.py",
+    "prdc_eval.py",
+    "dependence.py",
+    "rr_bootstrap.py",
+    "report.py",
+    "verify_controls.py",
+    "finalize.py"
+  ],
+  "all_scripts_in": "/home/zmy/dex_hand_project/outputs/tactile_p47_conditional_transfer_evaluation_2026-11-18/code",
+  "code_hashes": {
+    "code/verify_controls.py": "08e5c811ecbf048b666864cd59fcbc7575a06fb2f4c2c11ca08789934772fdfd",
+    "code/design.py": "a609b23aa1d01ab54eaa1bfaa1952aa99fc5be9099f1439734bae0bfd4581c22",
+    "code/support47.py": "c2238aea639bd0268f57e6d3918da6fea36fd2c61704d83d9d06a5d12a16b3c6",
+    "code/prdc_eval.py": "111fe22ca8fb30571bfa60578ba9ef3c2714f65585feaf908da4dfc06c7c2e54",
+    "code/common.py": "76607fb6408ac3e1d88cda449dd19f9634a6035aa610b7662dab7786fecdccf0",
+    "code/finalize.py": "0494d0064ff8640881c1d4b952fa5f5e6f8e2b32658181d13f4654639bed586d",
+    "code/dependence.py": "646df293c023f9af2acf2173c08f799a2a56cf13579cf2b1b715d8a630417c0b",
+    "code/report.py": "1397476436ec10730fee3901e42fb48050d5343b1db4f763946813a1c969425d",
+    "code/rr_bootstrap.py": "7aa1b22e48d8bbdaa7b2e61b08601315136270aae63d8fc66602c83ece251c35"
+  },
+  "log_files": [
+    "run.log",
+    "prdc.log",
+    "dependence.log",
+    "rr_bootstrap.log",
+    "report.log",
+    "control_checks.log",
+    "finalize.log"
+  ]
+}

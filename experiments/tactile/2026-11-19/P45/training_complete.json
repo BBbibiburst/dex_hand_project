@@ -1,0 +1,11 @@
+{
+  "groups": [
+    "A",
+    "C"
+  ],
+  "B_reused": true,
+  "models_frozen_before_any_C0": true,
+  "same_sampling_orders": true,
+  "steps_match_P44": true,
+  "no_further_training": true
+}

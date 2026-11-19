@@ -1,0 +1,7 @@
+{
+  "diagnostic_only": "Analytical loss invariance check, no generated candidate or weight selection",
+  "first64_Train_max_preserve_change_under_uniform_output_scaling_2": 0.0,
+  "flow_depends_on": "base.field correction only; Refiner absent",
+  "implication": "uniform amplitude scaling not constrained by preserve; Refiner magnitude absent from flow; adversarial score can increase outside Real support",
+  "no_training": true
+}

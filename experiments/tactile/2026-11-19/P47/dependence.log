@@ -1,0 +1,57 @@
+DEPENDENCE Original seconds 7.5
+DEPENDENCE B_K1 seconds 14.4
+DEPENDENCE B_K2 seconds 21.2
+DEPENDENCE B_K4 seconds 28.2
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p47_conditional_transfer_evaluation_2026-11-18/code/dependence.py", line 20, in <module>
+    kx,sx=kernel(X,scale);ky,sy=kernel(Y,scale);globalvalue=hsic_from_centered(center(kx),center(ky));hsics.append(dict(model=model,scope='all905window global descriptive',bandwidth_scale=scale,units=10,X_sigma=sx,Y_sigma=sy,**globalvalue,inference='no window-iid pvalue'))
+  File "/home/zmy/dex_hand_project/outputs/tactile_p47_conditional_transfer_evaluation_2026-11-18/code/support47.py", line 30, in kernel
+    dd=cdist(x,x,'sqeuclidean');sig=bandwidth(dd)
+  File "/home/zmy/miniconda3/envs/mujoco/lib/python3.10/site-packages/scipy/spatial/distance.py", line 3127, in cdist
+    return cdist_fn(XA, XB, out=out, **kwargs)
+KeyboardInterrupt
+DEPENDENCE Original seconds 7.3
+DEPENDENCE B_K1 seconds 14.3
+DEPENDENCE B_K2 seconds 21.4
+DEPENDENCE B_K4 seconds 28.3
+DEPENDENCE B_K8 seconds 34.9
+DEPENDENCE A_K1 seconds 41.8
+DEPENDENCE A_K2 seconds 48.3
+DEPENDENCE A_K4 seconds 55.2
+DEPENDENCE A_K8 seconds 61.6
+DEPENDENCE C_K1 seconds 68.2
+DEPENDENCE C_K2 seconds 75.1
+DEPENDENCE C_K4 seconds 82.0
+DEPENDENCE C_K8 seconds 88.9
+/home/zmy/dex_hand_project/outputs/tactile_p47_conditional_transfer_evaluation_2026-11-18/code/dependence.py:47: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  aa,bb=dx[:,j],dy[:,j];rho=float(spearmanr(aa,bb).statistic) if np.std(aa)>0 and np.std(bb)>0 else None;retention.append(dict(model=model,information='paired_descriptor',scope='global descriptive, no windowindependent CI',descriptor=label,Spearman=rho,interpretation='association only, not correctsemantic mapping'))
+DEPENDENCE Constant seconds 95.8
+DEPENDENCE RealDonor seconds 102.6
+DEPENDENCE Original_TemporalShuffle seconds 109.5
+DEPENDENCE B_K1_TemporalShuffle seconds 116.2
+DEPENDENCE B_K2_TemporalShuffle seconds 123.0
+DEPENDENCE B_K4_TemporalShuffle seconds 129.9
+DEPENDENCE B_K8_TemporalShuffle seconds 136.4
+DEPENDENCE A_K1_TemporalShuffle seconds 143.3
+DEPENDENCE A_K2_TemporalShuffle seconds 150.1
+DEPENDENCE A_K4_TemporalShuffle seconds 156.9
+DEPENDENCE A_K8_TemporalShuffle seconds 163.8
+DEPENDENCE C_K1_TemporalShuffle seconds 170.4
+DEPENDENCE C_K2_TemporalShuffle seconds 177.1
+DEPENDENCE C_K4_TemporalShuffle seconds 183.9
+DEPENDENCE C_K8_TemporalShuffle seconds 190.5
+DEPENDENCE Original_TemporalReverse seconds 197.3
+DEPENDENCE A_K1_TemporalReverse seconds 204.0
+DEPENDENCE B_K1_PairShuffle seconds 210.7
+DEPENDENCE B_K2_PairShuffle seconds 217.2
+DEPENDENCE B_K4_PairShuffle seconds 223.4
+DEPENDENCE B_K8_PairShuffle seconds 229.7
+DEPENDENCE A_K1_PairShuffle seconds 235.9
+DEPENDENCE A_K2_PairShuffle seconds 241.8
+DEPENDENCE A_K4_PairShuffle seconds 247.5
+DEPENDENCE A_K8_PairShuffle seconds 253.3
+DEPENDENCE C_K1_PairShuffle seconds 259.1
+DEPENDENCE C_K2_PairShuffle seconds 264.7
+DEPENDENCE C_K4_PairShuffle seconds 270.2
+DEPENDENCE C_K8_PairShuffle seconds 275.9
+P47 DEPENDENCE COMPLETE

@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-19",
+  "seed": 4801,
+  "models": [
+    "Original",
+    "A_K1",
+    "A_K2",
+    "A_K4",
+    "A_K8",
+    "B_K1",
+    "B_K2",
+    "B_K4",
+    "B_K8",
+    "C_K1",
+    "C_K2",
+    "C_K4",
+    "C_K8"
+  ],
+  "K_interpretation": "same shared field Euler on t[0,1],dt1/K,h0zero;K not adversarial epochs",
+  "preprocessing": "outputs/tactile_p46_real_variability_envelope_audit_2026-11-18/RealTrain_preprocessing.npz",
+  "weights": "equal domains .5 each;equal Session/Root totalweight,uniform windows within group;no stage reweight;window sensitivity separate",
+  "bootstrap": 1000,
+  "bootstrap_seed": 4802,
+  "bootstrap_sim": "taskstratified2Roots perValtask;paired counts allmethods",
+  "JSD": {
+    "instances": [
+      "logistic",
+      "mlp_11",
+      "mlp_12",
+      "mlp_13",
+      "gru_11",
+      "gru_12",
+      "gru_13"
+    ],
+    "deep_epochs": 40,
+    "batch_size": 64,
+    "optimizer": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.001,
+    "gradient_clip": 5.0,
+    "checkpoint": "fixedepoch40 endpoint;NOValidation earlystopping/selection",
+    "scaler": "frozenP46 same allcandidates",
+    "Logistic": "float64 L2/C1equivalent LBFGS max1000,maxeval1500,grad<=1e-6 required, no extension",
+    "train_convergence": "last5eval weightedCE range<=.02; diagnostic only",
+    "mismatch": "ValCE-TrainCE>.2 flags invalid branch; no tuning or continuing",
+    "baseline_min": 0.01,
+    "denominator": "J0>.01 andgroupbootstrap lower95>0",
+    "negative_proxy": "keep signed ln2-CE;negative proxy NOT proof of negative trueJSD and not valid90claim",
+    "family90": "all7instances valid andpointR>=.90;CI reported independently;no model/seed selection"
+  },
+  "SWD": {
+    "directions": 1024,
+    "seed": 4803,
+    "metric": "mean exact weighted1D Wasserstein1,notfullhighdimW1",
+    "bootstrap": 1000,
+    "denominator": "positive lowergroupbootstrap CI;no projection search"
+  },
+  "equivalence": {
+    "realTrain32": true,
+    "groups_A": 4,
+    "groups_B": 10,
+    "windows_pergroup": 7,
+    "windowbank": "fixed7 sampled once perRealTrainSession andValSession/Root,seed4804",
+    "RRdraws": 1000,
+    "RRdisjoint": true,
+    "epsilon": "q95sqrt multiscaleMMD V;RealTrain only",
+    "calibration_bootstrap": "1000 empirical32Session cluster resamples;in each resample1000weightedwithoutreplacement disjoint4+10uniqueSession partitions;fixed7windowbank;partitions notindependent units",
+    "validation_bootstrap": "4Session resampling,taskstrat10Root resampling,same7banks;epsilon reestimated in same replicate",
+    "pass_rule": "95%two-sided percentileCI upper ofMMD-epsilon<0;development marginal only",
+    "stability": "report epsilon clusterCI plus independentgroup count;stop iftoo few uniqueSessions14 or nonpositive/undefined calibration;not certify universalphysicalmargin"
+  },
+  "path": {
+    "source": "Original separate fromdecoded h0=Dr(zeros),never call Drzeros Original",
+    "save_all_steps": true,
+    "K": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "metrics": "full2848 log1p fixedP46 metric plusrawphysicalresponse update stats; no crossindependentlatents"
+  },
+  "quality": "reuseP47 verifiedoutputs PRDC/HSIC;noP47acceptance thresholds existed,do notinvent",
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_generator_optimizer": true,
+  "no_P49": true
+}

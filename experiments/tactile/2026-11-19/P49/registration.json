@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-19",
+  "seed": 4901,
+  "K": 1,
+  "maximum_rounds": 3,
+  "max_GPU_optimization_seconds": 1800,
+  "D0_epochs": 20,
+  "D_perround_epochs": 10,
+  "G_perround_epochs": 20,
+  "batch_size": 64,
+  "initial_generator": "outputs/tactile_p45_mask_ablation_2026-11-18/A/generator.pt",
+  "F": "originalGenerator:freeze entireReal/Sim VAEs;onlysharedfieldinclbaseTranslator trainable306176",
+  "D": "P44fullglobal5696Mask+logresponse-192-LayerNorm-LeakyReLU-64-1;notP45AcontinuousD,notSTE",
+  "D_initialization": "freshsingleSeed4901;thenonepersistentD andAdam throughD0/D1/D2/D3",
+  "known_D_Mask_gradient": "hardx>0 zeroVJP;continuousbranch still givesGgradient;do notsilentlychangeD",
+  "optimizers": {
+    "G": "Adam lr1e-4 betas(0,.99)",
+    "D": "Adam lr1e-4 betas(0,.99)",
+    "clip": 5,
+    "R1_gamma": 0.1,
+    "R1_every_D_steps": 16,
+    "persistent_moments": true
+  },
+  "loss": {
+    "adv": "BCEWithLogits frozenD targetReal1",
+    "preserve_lambda": 0.5295653698327406,
+    "preserve": "originalP44Patch shares squared+relativeadjacent changes,groupweighted",
+    "flow_lambda": 0.001,
+    "flow_scale": "originalC3RealTrain posteriorstd floor.1;no parameterfit fromValidation",
+    "teacher": 0,
+    "teacher_reason": "P45Aepoch20 endpoint already teacherweight0;no reset or newloss"
+  },
+  "D_internal_holdout": {
+    "real_Sessions": 8,
+    "sim_Roots_perTask": 2,
+    "only_registered_Train": true,
+    "persistent_across_rounds": true,
+    "no_D_grad_on_inner": true,
+    "G_may_use_all_NaturalTrain": true,
+    "meaning": "D-generalization withinTrain,not unseenGeneratorvalidation"
+  },
+  "D_validity": {
+    "fit_BA_min": 0.8,
+    "inner_BA_min": 0.8,
+    "inner_AUC_min": 0.85,
+    "inner_Real_acceptance_min": 0.8,
+    "inner_CE_minusfit_max": 0.2,
+    "on_failure": "stop correspondingexperiment;noextraepochs;differentiateunderfit/overfit"
+  },
+  "FR": {
+    "primary": "mean10Root acceptance",
+    "secondary": "windowmicro,taskmeans,4Session Realmacro",
+    "threshold": 0.5,
+    "target": 0.9,
+    "Real_target": 0.9,
+    "bootstrap": 1000,
+    "seed": 4802,
+    "stopping": "earlyonlyif FR andReal andallqualitygatespass"
+  },
+  "quality": {
+    "reference": "F0A_K1 andRealTrain deriveddescriptors;no afterseeingresults retuning",
+    "SWD_MMD_max_ratio_toF0": 1.1,
+    "PRDC_k": [
+      3,
+      5,
+      10,
+      20
+    ],
+    "PRDC_draws": 100,
+    "PRDC_max_absolute_drop": 0.02,
+    "HSIC_scales": [
+      0.5,
+      1,
+      2
+    ],
+    "HSIC_min_ratio_toF0": 0.8,
+    "HSIC_shuffle_difference_bootCI_low_positive": true,
+    "windowstd_min_ratio_toF0": 0.5,
+    "unique_min_ratio_toF0": 0.9,
+    "tail_log_error_max_ratio_toF0": 1.1,
+    "max_output_maxratio_toF0": 1.5,
+    "temporal_log_error_maxratio_toF0": 1.1,
+    "spatial_error_maxratio_toF0": 1.1,
+    "zeroerror_maxratio_toF0": 1.1,
+    "numeric_tolerance": 1e-08,
+    "severe_collapse_std_ratio": 0.1,
+    "severe_dependence_ratio": 0.2,
+    "decision": "predeclareddevelopment nonworsening guards,NOT universalphysicalstandards;no previousP47hardthresholds existed",
+    "C_class": "FRfailure OR Dgatefailure ORseverecollapse/dependence loss;B FRandRealpass butqualityunproven;A allgates andcontrols"
+  },
+  "no_Test_Holdout": true,
+  "no_C0": true,
+  "no_production_access": true,
+  "no_commit_push": true,
+  "no_P50": true
+}

@@ -1,0 +1,11 @@
+discriminator,model,FR_macro,FR_micro,Real_acceptance_macro,G_optimizer_steps,scope
+D0,F0,1.0,1.0,1.0,0,stopped baseline diagnosis;not F1 result
+D0,Original,0.0005780346820809248,0.0011049723756906078,1.0,0,stopped baseline diagnosis;not F1 result
+D0,Constant,1.0,1.0,1.0,0,stopped baseline diagnosis;not F1 result
+D0,RealDonor,1.0,1.0,1.0,0,stopped baseline diagnosis;not F1 result
+D0,PairShuffle,1.0,1.0,1.0,0,stopped baseline diagnosis;not F1 result
+D1,F0,0.0007751937984496124,0.0011049723756906078,0.9989583333333334,0,stopped baseline diagnosis;not F1 result
+D1,Original,0.46660356320981755,0.5049723756906077,0.9989583333333334,0,stopped baseline diagnosis;not F1 result
+D1,Constant,1.0,1.0,0.9989583333333334,0,stopped baseline diagnosis;not F1 result
+D1,RealDonor,0.9511529438373192,0.9480662983425414,0.9989583333333334,0,stopped baseline diagnosis;not F1 result
+D1,PairShuffle,0.0007751937984496124,0.0011049723756906078,0.9989583333333334,0,stopped baseline diagnosis;not F1 result

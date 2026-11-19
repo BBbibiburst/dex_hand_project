@@ -1,0 +1,4 @@
+group,kind,peak_GPU_bytes,all_finite
+A,"post-training frozen-weight K8 backward smoke, no optimizer",50573824,True
+B,"post-training frozen-weight K8 backward smoke, no optimizer",59866624,True
+C,"post-training frozen-weight K8 backward smoke, no optimizer",62482944,True

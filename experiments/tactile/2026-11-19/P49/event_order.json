@@ -1,0 +1,46 @@
+[
+  {
+    "event": "restoredcompletedFandfrozenDafterJSONerror",
+    "round": 1,
+    "D_steps": 1980,
+    "G_steps": 1280,
+    "D_state_hash": "e4a74a57b30b10960f2d99acf7d39314cb5314e1a65d22a9745ad5d86f9c00d7",
+    "G_state_hash": "fb656e44de1328e48332344192a339c4b341b52341f0ad3872f9470f6d997083",
+    "optimizer_restored": true,
+    "no_repeated_training": true
+  },
+  {
+    "event": "D_frozen_before_G",
+    "round": 2,
+    "D_steps": 2640,
+    "G_steps": 1280,
+    "D_state_hash": "89de608e88a31637eec73e58cbee2e583170f1009d9c6eb014f0e6d5bbe966fa",
+    "G_state_hash": "fb656e44de1328e48332344192a339c4b341b52341f0ad3872f9470f6d997083"
+  },
+  {
+    "event": "G_finished_D_bit_identical",
+    "round": 2,
+    "D_steps": 2640,
+    "G_steps": 2560,
+    "D_state_hash": "89de608e88a31637eec73e58cbee2e583170f1009d9c6eb014f0e6d5bbe966fa",
+    "D_checkpoint_sha": "b9ab78ccd5629841614f1f449850d18f60046556fc8468be46357fe4bdab5139",
+    "G_state_hash": "0b980c81653da2fd856e93c419270ec122e7e58b2d831142fe565a28a4295a85"
+  },
+  {
+    "event": "D_frozen_before_G",
+    "round": 3,
+    "D_steps": 3300,
+    "G_steps": 2560,
+    "D_state_hash": "95f3c02e03b458cc53e6c11ce1bd8d9b9547f2d6cf428468fa010abc2872d4a7",
+    "G_state_hash": "0b980c81653da2fd856e93c419270ec122e7e58b2d831142fe565a28a4295a85"
+  },
+  {
+    "event": "G_finished_D_bit_identical",
+    "round": 3,
+    "D_steps": 3300,
+    "G_steps": 3840,
+    "D_state_hash": "95f3c02e03b458cc53e6c11ce1bd8d9b9547f2d6cf428468fa010abc2872d4a7",
+    "D_checkpoint_sha": "30d52a20d1ceb796311d53583e6ab76d13ca2d05d110ed07077fe66465b4faae",
+    "G_state_hash": "14557f90da5990dd44cb8e8de14b1ac6fa2a320e3c56e3700d39eb6e2eeef4ee"
+  }
+]

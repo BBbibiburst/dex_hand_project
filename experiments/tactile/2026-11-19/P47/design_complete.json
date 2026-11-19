@@ -1,0 +1,39 @@
+{
+  "all_hashes_pass": true,
+  "data_counts": {
+    "RealTrain": {
+      "windows": 5153,
+      "groups": 32
+    },
+    "RealValidation": {
+      "windows": 780,
+      "groups": 4
+    },
+    "NaturalTrain": {
+      "windows": 4049,
+      "groups": 50
+    },
+    "NaturalValidation": {
+      "windows": 905,
+      "groups": 10
+    }
+  },
+  "root_quota": [
+    31,
+    63,
+    111,
+    41,
+    103,
+    79,
+    54,
+    107,
+    42,
+    149
+  ],
+  "code_hashes": {
+    "design.py": "a609b23aa1d01ab54eaa1bfaa1952aa99fc5be9099f1439734bae0bfd4581c22",
+    "support47.py": "c2238aea639bd0268f57e6d3918da6fea36fd2c61704d83d9d06a5d12a16b3c6",
+    "prdc_eval.py": "111fe22ca8fb30571bfa60578ba9ef3c2714f65585feaf908da4dfc06c7c2e54",
+    "common.py": "76607fb6408ac3e1d88cda449dd19f9634a6035aa610b7662dab7786fecdccf0"
+  }
+}

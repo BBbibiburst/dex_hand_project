@@ -1,0 +1,31 @@
+{
+  "model": "A_K4",
+  "instance": "gru_12",
+  "kind": "gru",
+  "seed": 12,
+  "epochs": 40,
+  "optimizer_steps": 5760,
+  "parameters": 323713,
+  "seconds": 29.588032722473145,
+  "Train_windows": 9202,
+  "RealTrain_Sessions": 32,
+  "SimTrain_Roots": 50,
+  "all_deep_epochs_full_coverage": true,
+  "device": "cpu",
+  "converged": true,
+  "train_validation_mismatch": false,
+  "valid_for_JSD_claim": true,
+  "gradient_max": null,
+  "Train": {
+    "CE": 9.291932644144618e-06,
+    "BA": 1.0,
+    "AUC": 1.0000000000000067,
+    "JSD_proxy": 0.6931378886273012
+  },
+  "Validation": {
+    "CE": 0.0036212214053035156,
+    "BA": 0.9991329479768787,
+    "AUC": 1.0000000000000082,
+    "JSD_proxy": 0.6895259591546418
+  }
+}

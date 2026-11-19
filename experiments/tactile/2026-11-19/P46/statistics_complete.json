@@ -1,0 +1,11 @@
+{
+  "seconds": 95.64495730400085,
+  "full712D_preserved": true,
+  "independent_RealTrain_Sessions": 32,
+  "primary_calibration_Sessions": 24,
+  "reference_Sessions": 8,
+  "SimVal_Roots": 10,
+  "MC_draws_are_not_independent": true,
+  "no_new_generator_inference": true,
+  "not_formal_equivalence_acceptance": true
+}

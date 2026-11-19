@@ -1,0 +1,9 @@
+{
+  "all_K_evaluated": true,
+  "shared_weights_preserved": true,
+  "no_model_or_C0_training_during_evaluation": true,
+  "C0_required_each": 11,
+  "full_validations_retained": true,
+  "seconds": 21.355453491210938,
+  "Test_Holdout": false
+}

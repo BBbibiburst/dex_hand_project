@@ -1,0 +1,16 @@
+metric,seed,K,order,not_model_selection,family
+GRU JSD_proxy lowerbetter,11,1,"[""B_K1"", ""A_K1"", ""C_K1""]",True,
+GRU JSD_proxy lowerbetter,11,2,"[""A_K2"", ""B_K2"", ""C_K2""]",True,
+GRU JSD_proxy lowerbetter,11,4,"[""A_K4"", ""B_K4"", ""C_K4""]",True,
+GRU JSD_proxy lowerbetter,11,8,"[""A_K8"", ""B_K8"", ""C_K8""]",True,
+GRU JSD_proxy lowerbetter,12,1,"[""B_K1"", ""A_K1"", ""C_K1""]",True,
+GRU JSD_proxy lowerbetter,12,2,"[""A_K2"", ""B_K2"", ""C_K2""]",True,
+GRU JSD_proxy lowerbetter,12,4,"[""B_K4"", ""A_K4"", ""C_K4""]",True,
+GRU JSD_proxy lowerbetter,12,8,"[""B_K8"", ""A_K8"", ""C_K8""]",True,
+GRU JSD_proxy lowerbetter,13,1,"[""B_K1"", ""A_K1"", ""C_K1""]",True,
+GRU JSD_proxy lowerbetter,13,2,"[""A_K2"", ""B_K2"", ""C_K2""]",True,
+GRU JSD_proxy lowerbetter,13,4,"[""A_K4"", ""B_K4"", ""C_K4""]",True,
+GRU JSD_proxy lowerbetter,13,8,"[""A_K8"", ""B_K8"", ""C_K8""]",True,
+SWD lowerbetter,,,"[""A_K1"", ""A_K2"", ""A_K4"", ""A_K8""]",True,A
+SWD lowerbetter,,,"[""B_K1"", ""B_K2"", ""B_K4"", ""B_K8""]",True,B
+SWD lowerbetter,,,"[""C_K1"", ""C_K8"", ""C_K4"", ""C_K2""]",True,C

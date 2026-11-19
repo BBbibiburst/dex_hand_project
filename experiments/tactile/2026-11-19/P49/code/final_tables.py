@@ -1,0 +1,26 @@
+from audit_utils import *
+import shutil
+assert (O/'complete.json').exists();P48=Path('outputs/tactile_p48_unified_four_route_audit_2026-11-19');r=real('validation');s=natural('validation');bank=np.load(P48/'group_bootstrap_indices.npz');rows=list(csv.DictReader((O/'round_metrics.csv').open()));runtime=O/'round_metrics_runtime.csv'
+if not runtime.exists():shutil.copyfile(O/'round_metrics.csv',runtime)
+oldgroups=list(csv.DictReader((O/'group_metrics.csv').open()));fitgroups=[v for v in oldgroups if v['role'] in ['fit','inner']];fitgroups=[v for v in fitgroups if not v['evaluation'].startswith('D1/')]
+for v in csv.DictReader((O/'D1_review_group_metrics.csv').open()):fitgroups.append(dict(evaluation='D1/review',role=v['role'],domain=v['domain'],group=v['group'],windows=v['windows'],acceptance=float(v['Recall']) if v['domain']=='Real' else 1-float(v['Recall']),probability_mean=v['p_real_mean'],device='CPU verifiedreplay'))
+groups=fitgroups;boots=[];diagnostics=[]
+for row in rows:
+ k=int(row['round']);z=np.load(O/f'outputs/round{k}_predictions.npz');lr=z['Real_logits'];pre=z['pre_logits'];post=z['post_logits'];rg=z['Real_groups'];sg=z['Sim_groups'];assert np.array_equal(rg,r['g']) and np.array_equal(sg,s['g']);realrate=np.array([(lr[rg==g]>=0).mean() for g in bank['Real_groups']]);prerate=np.array([(pre[sg==g]>=0).mean() for g in bank['Sim_groups']]);postrate=np.array([(post[sg==g]>=0).mean() for g in bank['Sim_groups']]);bp=prerate[bank['Sim']].mean(1);bq=postrate[bank['Sim']].mean(1);br=realrate[bank['Real']].mean(1);row.update(FR_pre=float(prerate.mean()),FR_post=float(postrate.mean()),FR_gain=float(postrate.mean()-prerate.mean()),FR_micro=float((post>=0).mean()),Real_acceptance=float(realrate.mean()))
+ for i in range(1000):boots.append(dict(route='FR',round=k,replicate=i,FR_pre=float(bp[i]),FR_post=float(bq[i]),gain=float(bq[i]-bp[i]),Real_acceptance=float(br[i])))
+ for which,ll in [('pre',pre),('post',post)]:
+  for domain,gids,values in [('Real',rg,lr),('Sim',sg,ll)]:
+   for g in np.unique(gids):ix=gids==g;groups.append(dict(evaluation=f'D{k}/{which}',role='validation',domain=domain,group=g,windows=int(ix.sum()),acceptance=float((values[ix]>=0).mean()),probability_mean=float(expit(values[ix]).mean()),device='registeredGPUstoredlogits'))
+  for task in np.unique(s['task']):
+   ix=s['task']==task;rates=[float((ll[ix][sg[ix]==g]>=0).mean()) for g in np.unique(sg[ix])];groups.append(dict(evaluation=f'D{k}/{which}',role='validation',domain='SimTask',group=task,windows=int(ix.sum()),acceptance=float(np.mean(rates))))
+ d=json.loads((O/f'D{k}_validity.json').read_text());fit=d['fit'];inner=d['inner'];diagnostics.append(dict(D=f'D{k}',Train_CE=fit['CE'],InternalValidation_CE=inner['CE'],CE_gap=inner['CE']-fit['CE'],CE_flag_overpoint2=inner['CE']-fit['CE']>.2,CE_is_hardstop=False,Train_BA=fit['BA'],Train_AUC=fit['AUC'],InternalValidation_BA=inner['BA'],InternalValidation_AUC=inner['AUC'],Train_Real_recall=fit['Real_acceptance_macro'],Train_Sim_recall=1-fit['FR_macro'],InternalValidation_Real_recall=inner['Real_acceptance_macro'],InternalValidation_Sim_recall=1-inner['FR_macro'],fit_confusion_matrix=fit['confusion_matrix'],inner_confusion_matrix=inner['confusion_matrix'],worst_Real_group_recall=inner.get('worst_Real_group_recall'),worst_Sim_group_recall=inner.get('worst_Sim_group_recall'),group_alert=d.get('group_generalization_alert'),valid=d['valid'],scope='fit/inner are disjoint subsets of registeredTrain;notouterValidation'))
+table(O/'round_metrics.csv',rows);table(O/'group_metrics.csv',groups);table(O/'D_diagnostics.csv',diagnostics);table(O/'FR_bootstrap.csv',boots)
+# Add preexisting Original baseline from isolated stopped_audit without changing round-model qualityreference.
+for name in ['distribution_metrics.csv','structure_metrics.csv','HSIC_metrics.csv','PRDC_metrics.csv','patch_metrics.csv','taxel_metrics.csv','quality_bootstrap.csv']:
+ a=list(csv.DictReader((O/name).open()));b=[v for v in csv.DictReader((O/'stopped_audit'/name).open()) if v.get('model')=='Original'];a=[v for v in a if v.get('model')!='Original'];table(O/name,a+b)
+allboots=list(boots)
+for v in csv.DictReader((O/'quality_bootstrap.csv').open()):allboots.append(v)
+table(O/'bootstrap_results.csv',allboots)
+# Backend qualification: do not replace or smooth source outputs to make CPU replay match.
+a=np.load(O/'outputs/F3_validation.npz')['values'];b=np.load(O/'outputs/F3_registered_backend_check.npz')['values'];c=np.load(O/'outputs/F3_portable_CPU_check.npz')['values'];assert np.allclose(a,b,rtol=1e-5,atol=1e-6) and np.array_equal(a>0,b>0);save(O/'inference_backend_check.json',dict(registered='CPUfrozenEncoder+CUDAfield/Decoder,64batch',registered_replay_maxabs=float(np.max(np.abs(a-b))),registered_allclose=True,tolerance=dict(rtol=1e-5,atol=1e-6),registered_Mask_equal=True,pureCPU_maxabs=float(np.max(np.abs(a-c))),pureCPU_allclose=bool(np.allclose(a,c,rtol=1e-5,atol=1e-6)),pureCPU_Mask_diff_count=int(((a>0)!=(c>0)).sum()),Mask_entries=int(a.size),no_threshold_or_weight_change=True,interpretation='hard/autoregressive readout backend sensitivity;not crossbackend stablemodel claim'))
+print('FINAL TABLES COMPLETE',len(rows),'roundrecords',flush=True)

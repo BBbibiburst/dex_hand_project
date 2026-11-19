@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-19",
+  "scope": "frozen development audit,notnewblindacceptance",
+  "migration_training_epochs": 0,
+  "migration_optimizer_steps": 0,
+  "actual_audit_training": {
+    "migration_epochs": 0,
+    "migration_optimizer_steps": 0,
+    "planned_audit_models": 91,
+    "actual_audit_models": 43,
+    "skipped_audit_models": 48,
+    "actual_deep_epochs_total": 1680,
+    "actual_deep_optimizer_steps": 241920,
+    "actual_Logistic_LBFGS_steps": 177,
+    "skips_not_trained": true,
+    "synthetic_device_benchmark_not_researchtraining": true
+  },
+  "K": "sharedfield Euler integration on same[0,1],nottrainingepochs",
+  "all_Validation_reinference_bit_equal": true,
+  "JSD": {
+    "all_family_baselines_valid": false,
+    "robust_family90": false,
+    "reason": "predeclaredLogistic/MLP baseline failure;validGRU results retained,no estimator cherry-pick"
+  },
+  "SWD": {
+    "Original": 0.41134301198750495,
+    "best_observed": "A_K1",
+    "best_reduction": 0.4977202817338595,
+    "any_candidate90": false
+  },
+  "equivalence": {
+    "epsilon": 0.3685706084178158,
+    "any_candidate_pass": false,
+    "scope": "fixedwindow marginal sampling only;notphysicalequivalence"
+  },
+  "new090_achieved": false,
+  "C0_changed": false,
+  "P49_started": false
+}

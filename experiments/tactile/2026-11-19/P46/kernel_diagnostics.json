@@ -1,0 +1,22 @@
+{
+  "dimension": 2848,
+  "sigma": 30.251723236178087,
+  "pair_distance_mean": 28.8767931795651,
+  "pair_distance_cv": 0.31885220921152213,
+  "pair_distance_quantiles": [
+    5.109145509769301,
+    16.026878045288043,
+    30.251723236178087,
+    39.5679614342982,
+    46.82061407134916
+  ],
+  "RBF_offdiagonal_std": 0.16532377600688594,
+  "RBF_quantiles": [
+    0.3018911459289104,
+    0.6065306597126334,
+    0.9858396772066645
+  ],
+  "RealTrain_scale_floor": 0.05,
+  "coordinate_fraction_floor": 0.8662219101123596,
+  "no_Val_used_for_fitting": true
+}

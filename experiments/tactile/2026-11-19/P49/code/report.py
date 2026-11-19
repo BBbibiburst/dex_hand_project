@@ -1,0 +1,180 @@
+from audit_utils import *
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+assert (O/'complete.json').exists() and (O/'snapshot_audit_complete.json').exists()
+def read(name):return list(csv.DictReader((O/name).open()))
+def yes(v):return v is True or str(v).lower()=='true'
+rows=read('round_metrics.csv');dist=read('distribution_metrics.csv');struct=read('structure_metrics.csv');pr=read('PRDC_metrics.csv');hs=read('HSIC_metrics.csv');gates=read('quality_gates.csv');diag=read('D_diagnostics.csv');neg=read('negative_controls.csv');train=read('training_log.csv');complete=json.loads((O/'complete.json').read_text());history=[r for r in rows if int(r['round'])>0 and r['stage']=='completedfrozenD_thenG'];last=history[-1];lastgate=next(r for r in gates if r['model']==last['F_post']);final_FR_pass=float(last['FR_post'])>=.9 and float(last['Real_acceptance'])>=.9;final_A=final_FR_pass and yes(last['D_valid']) and yes(lastgate['all_quality_pass']) and yes(last['negative_controls_rejected']);final_class='A' if final_A else 'C' if (not final_FR_pass or yes(lastgate['severe_collapse']) or not yes(last['D_valid'])) else 'B';fig=O/'figures';fig.mkdir(exist_ok=True);plt.rcParams.update({'font.size':10,'figure.dpi':140});Fnames=['F0']+[r['F_post'] for r in history]
+def dget(m):return next(r for r in dist if r['model']==m)
+def sget(m):return next(r for r in struct if r['model']==m and r['group']=='ALL')
+summary=dict(date='2026-11-19',classification=final_class,FR_target_achieved=final_FR_pass,complete_A_success=final_A,initial_F0_FR_D0=float(rows[0]['FR_post']),final_F=last['F_post'],final_D=last['D'],final_macro_FR=float(last['FR_post']),final_micro_FR=float(last['FR_micro']),final_Real_acceptance=float(last['Real_acceptance']),rounds=complete['rounds_G_completed'],F_steps=complete['F_optimizer_steps'],D_steps=complete['D_optimizer_steps'],optimization_seconds=complete['cumulative_optimization_wall_seconds'],max_seconds=1800,single_seed=4901,K=1,quality_gates=lastgate,original_registration_preserved=True,CEamendment_explicit_user_authorized=True,D1_preupdate_review='D1_group_review_evidence.json',no_D1_retraining=True,no_C0=True,no_Test_Holdout=True,no_P50=True,scope='FrozenDRealacceptance achievedonregistereddevelopmentdata;NOT domaininvarianceorcompleteReal-likemigration')
+save(O/'summary.json',summary)
+# Phase ledger verifies no repeatedoptimizerepochs across recoveries.
+ledger=[]
+for phase in ['D0','D1','G1','D2','G2','D3','G3']:
+ rr=[r for r in train if r['phase']==phase];ledger.append(dict(phase=phase,epochs=len(rr),first_D_steps=rr[0]['D_optimizer_steps'] if rr else None,last_D_steps=rr[-1]['D_optimizer_steps'] if rr else None,first_G_steps=rr[0]['G_optimizer_steps'] if rr else None,last_G_steps=rr[-1]['G_optimizer_steps'] if rr else None,epochs_unique=len({r['epoch'] for r in rr})==len(rr)))
+table(O/'optimization_phase_ledger.csv',ledger)
+# Visuals distinguish D0baselinefromactual generatorupdates.
+f,axs=plt.subplots(1,2,figsize=(11,4));k=[int(r['round']) for r in history];pre=[float(r['FR_pre']) for r in history];post=[float(r['FR_post']) for r in history];real=[float(r['Real_acceptance']) for r in history]
+axs[0].plot(k,pre,'o-',label='FR pre: Dk(Fk-1)');axs[0].plot(k,post,'o-',label='FR post: Dk(Fk)');axs[0].plot(k,real,'s--',label='Real acceptance');axs[0].axhline(.9,c='red',ls=':');axs[0].set_ylim(-.03,1.05);axs[0].set_xticks(k);axs[0].set_xlabel('Outerround');axs[0].legend(fontsize=8)
+for metric in ['SWD','MMD']:axs[1].plot(range(len(Fnames)),[float(dget(n)[metric]) for n in Fnames],'o-',label=metric)
+axs[1].set_xticks(range(len(Fnames)),Fnames);axs[1].set_title('Groupweighted distances;lowerbetter');axs[1].legend();f.tight_layout();f.savefig(fig/'FR_vs_quality.png');plt.close(f)
+f,axs=plt.subplots(1,2,figsize=(11,4));dk=[r['D'] for r in diag];axs[0].plot(dk,[float(r['Train_CE']) for r in diag],'o-',label='fitTrain CE');axs[0].plot(dk,[float(r['InternalValidation_CE']) for r in diag],'o-',label='innergroup CE');axs[0].set_ylabel('CE (diagnostic only)');axs[0].legend();axs[1].plot(dk,[float(r['InternalValidation_BA']) for r in diag],'o-',label='inner BA');axs[1].plot(dk,[float(r['InternalValidation_AUC']) for r in diag],'o-',label='inner AUC');axs[1].set_ylim(.8,1.02);axs[1].legend();f.tight_layout();f.savefig(fig/'D_generalization.png');plt.close(f)
+f,axs=plt.subplots(1,2,figsize=(11,4));axs[0].bar(Fnames,[float(sget(m)['window_std']) for m in Fnames]);axs[0].set_title('Acrosswindow std (not exactunique count)');axs[1].bar(Fnames,[float(sget(m)['unique_windows']) for m in Fnames]);axs[1].set_title('Distinctnumericoutputs');f.tight_layout();f.savefig(fig/'diversity.png');plt.close(f)
+f,axs=plt.subplots(1,2,figsize=(11,4))
+for m in Fnames:
+ p=[next(r for r in pr if r['model']==m and int(r['k'])==q) for q in [3,5,10,20]];axs[0].plot([3,5,10,20],[float(r['recall']) for r in p],'o-',label=m);axs[1].plot([3,5,10,20],[float(r['coverage']) for r in p],'o-',label=m)
+axs[0].set_title('PRDC Recall');axs[1].set_title('PRDC Coverage')
+for ax in axs:ax.set_xticks([3,5,10,20]);ax.set_xlabel('k');ax.legend()
+f.tight_layout();f.savefig(fig/'PRDC.png');plt.close(f)
+f,ax=plt.subplots(figsize=(8,4));names=['F0','Constant','RealDonor',last['F_post'],last['F_post']+'_PairShuffle'];vals=[next(r for r in hs if r['model']==m and r['scope']=='RootMacro' and r['scale']=='1.0') for m in names];ax.bar(np.arange(len(names))-.15,[float(r['normalized_HSIC']) for r in vals],width=.3,label='paired');ax.bar(np.arange(len(names))+.15,[float(r['shuffle_HSIC']) for r in vals],width=.3,label='sameRootStage shuffle');ax.set_xticks(range(len(names)),names,rotation=30);ax.set_ylabel('RootMacro normalizedHSIC');ax.legend();f.tight_layout();f.savefig(fig/'input_dependence.png');plt.close(f)
+matrix=read('frozen_snapshot_matrix.csv');Ds=sorted({r['D'] for r in matrix});Fs=['Original']+Fnames+['Constant','RealDonor'];mm=np.array([[float(next(r for r in matrix if r['D']==a and r['F']==b)['FR_macro']) for b in Fs] for a in Ds]);f,ax=plt.subplots(figsize=(9,4));im=ax.imshow(mm,vmin=0,vmax=1,cmap='viridis',aspect='auto');ax.set_xticks(range(len(Fs)),Fs,rotation=35);ax.set_yticks(range(len(Ds)),Ds);ax.set_title('Frozen snapshot acceptance matrix (CPU diagnostic)');f.colorbar(im,ax=ax);f.tight_layout();f.savefig(fig/'frozen_snapshot_matrix.png');plt.close(f)
+frtable=[]
+for r in history:frtable.append(f"| {r['round']} | {float(r['FR_pre']):.4%} | {float(r['FR_post']):.2%} | {float(r['FR_gain']):.4%} | {float(r['Real_acceptance']):.4%} | {float(r['FR_micro']):.2%} | [{float(r['FR_CI_low']):.2%}, {float(r['FR_CI_high']):.2%}] |")
+dtable=[]
+for r in diag:dtable.append(f"| {r['D']} | {float(r['Train_CE']):.6f} | {float(r['InternalValidation_CE']):.6f} | {float(r['CE_gap']):.6f} | {float(r['InternalValidation_BA']):.4f} | {float(r['InternalValidation_AUC']):.4f} | {float(r['InternalValidation_Real_recall']):.4f} | {float(r['InternalValidation_Sim_recall']):.4f} |")
+qualitytable=[]
+for m in ['Original']+Fnames:
+ d=dget(m);q=sget(m) if m!='Original' else next(r for r in struct if r['model']=='Original' and r['group']=='ALL');p=next(r for r in pr if r['model']==m and r['k']=='5');h=next(r for r in hs if r['model']==m and r['scope']=='RootMacro' and r['scale']=='1.0');qualitytable.append(f"| {m} | {float(d['SWD']):.4f} | {float(d['MMD']):.4f} | {float(p['precision']):.4f} | {float(p['recall']):.4f} | {float(p['coverage']):.4f} | {float(h['normalized_HSIC']):.4f} | {float(q['window_std']):.6f} | {q['unique_windows']} |")
+negt=[]
+for r in neg:
+ if int(r['round'])==int(last['round']):negt.append(f"| {r['control']} | {float(r['FR_macro']):.2%} | {float(r['SWD']):.4f} | {float(r['MMD']):.4f} | {float(r['HSIC']):.4f} | {r['unique_windows']} | {r['all_quality_pass']} |")
+ct=complete['cumulative_optimization_wall_seconds'];
+report='''# P49：逐轮更新、逐轮冻结判别器的触觉对抗迁移
+
+日期：2026-11-19。单Seed4901、K=1、最多3轮；仅注册Train梯度，Validation为已有开发数据。
+
+## 1. 最终结论
+
+**终点分类为B：冻结判别器FR目标已达到，但完整质量验收没有通过，不是A类完整成功。**
+
+三轮都完成“上一轮输出→更新同一D→冻结D→更新同一F→同一D评价前后输出”的闭环。每轮更新后Root Macro FR及Micro FR均为100%；最终D3的Real Session Macro Acceptance为100%。这支持限定事实：**当前注册Validation与D3阈值下，F3完成了≥90%的冻结判别器Real接受率目标。**
+
+但F3的SWD约0.4113，几乎退回Original水平，明显差于初始F0的0.2066；MMD、PRDC、幅值及空间非退化检查未通过。第一轮还曾发生严重样本差异收缩，后两轮部分恢复但没有整体质量通过。不能写成完整Real-like重建、所有域差异消失或项目全局0.90验收完成。
+
+这里的FR不是旧D_old、AUC、JSD缩减率或Root通过率。没有修改旧C0或旧验收包。
+
+## 2. D0、F0与数据合同
+
+实际核验：Real Train5153窗/32Session、Validation780窗/4Session；Natural Train4049窗/50Root、Validation905窗/10Root（五任务各2Root）。数值Hash与P46注册一致。输入输出为finite、非负float32[N,4,712]，同一输入ID/Root/Stage保持。
+
+F0为P45的A_K1原权重，即P48比较的Continuous-only初始生成器。它包含原Dual-VAE及共享field；VAE全部冻结，只训练field（含原Translator基项及修正GRU），306176个参数。不是重新设计G，也没有重训VAE。
+
+**D使用任务书指定的P44全局架构**：5696维Mask+log响应→192→LayerNorm/LeakyReLU→64→1，1106625参数。F0继承Continuous-only训练结果，不表示本轮偷偷采用P45A的2848维连续D；这里明确是P44的完整D。硬Mask支路对输入不可导，连续幅值支路仍可向F传梯度，已做Smoke核验；没有临时加入STE、换D或改变Mask阈值。
+
+D0从Seed4901新初始化，并只在Original Sim/Real上训练。随后D1/D2/D3都延续同一D参数及Adam状态；F1/F2/F3延续F0及同一G Adam状态。快照是同一演化链，不是每轮重新训练独立网络。进程内参数ID稳定；发生日志恢复时以完整Checkpoint+Adam状态连续恢复，不把进程重建误称为权重重新初始化。
+
+判别器fit/inner仅使用注册Train：Real为24/8个互斥Session，Sim为40/10个互斥Root（内部验证每任务2Root）。D梯度不读inner；G可用全部Natural Train。这里的inner只验证D的分组泛化，不能声称是未被历史F0训练见过的生成器盲测。外层780/905窗Validation不参与梯度。
+
+## 3. 原始停止记录与用户授权补充
+
+原registration.json完整保留。实现起初额外把“inner CE−fit CE≤0.2”设成硬门槛，D1因此提前停在G1之前。这不是用户原任务规定的数值要求，也不足以单独判定D失效。初次停止的所有日志/CSV/完整状态保存在initial_stop_record/，没有删除或伪装成完成G1。
+
+用户于2026-11-19明确授权：取消0.2的硬停止地位，保留CE诊断；先复核分组、BA/AUC/混淆矩阵/两类Recall/概率分布，再从D1、F0及优化器继续，其他门槛、Seed、K、轮数与累计预算不变。授权及补充见protocol_amendment_2026-11-19.md/json、resume_authorized_review.json。
+
+D1重新推理复现内部BA=0.924150655、AUC=0.969299023；fit/inner无Session或Root交叉。fit混淆矩阵[[3244,5],[12,4205]]；inner为[[777,23],[248,688]]（行真值Sim/Real，列预测Sim/Real）。内部Real/Sim宏Recall分别0.870833333/0.977467977。
+
+**存在一组不能掩盖的弱项**：Real内部Session `20260814_155240_stable_3D_6512_30` Recall仅0.1333，p_real中位数约0.0228。D1整体仍具有实质判别能力，因此按用户授权进入受控G1；没有把它包装为“各组泛化均良好”。D1_review_group_metrics.csv和D1_review_probabilities.npz保留完整证据。后续D3内部最差Real组Recall已为0.99583、最差Sim组为1，初始薄弱问题并未被永久忽略。
+
+## 4. 训练顺序、损失和冻结证明
+
+D0固定20Epoch；每轮D固定10Epoch，然后冻结；每轮G固定20Epoch，最多3轮。K始终1，不搜索阈值或步数。D/G都用原Adam lr1e-4、betas(0,.99)、clip5；D保持原R1=.1、每16个D步一次。组等权加权Loss与打乱/循环的完整fit窗口访问避免长组主导。
+
+G损失仅原目标：`BCEWithLogits(D_frozen(F(S)),1)+0.5295653698327406*preserve+0.001*flow`。preserve沿用索引Patch份额平方差与相邻相对响应变化差；flow沿用原Real Train latent std（floor0.1）归一化修正场。teacher系数0，因为F0已是原退火终点，不重新启动教师。没有新增SWD/HSIC训练损失或根据Validation调权。
+
+Dk在Fk训练前保存，G阶段D全部requires_grad=False，权重Hash和Dk.pt文件Hash前后完全相同。D阶段F权重不变；每轮后原VAE逐位不变。event_order.json、frozen_D_audit.csv、checkpoint_manifest.csv及optimization_phase_ledger.csv证明顺序和状态连续性。
+
+累计D优化3300步（D0=1320，D1/2/3各660）；F优化3840步（每轮1280）。D累计50Epoch，F累计60Epoch。数据准备/冻结推理/质量统计与优化时间分开。
+
+'''+f"累计CUDA同步优化墙钟 **{ct:.3f}秒（{ct/60:.3f}分钟）**，远低于1800秒上限；这是包住优化循环的保守计时，不是纯kernel时间。预算从恢复点累计，没有重置。峰值分配显存约{complete['GPU_peak_bytes']/1024**2:.1f}MiB。\n\n"+'''
+执行中修正了训练前CuDNN训练模式Smoke错误、D0结束后的日志变量路径错误、G1结束后的NumPy布尔值JSON序列化错误。D0、D1、G1已完成阶段均从原状态恢复，没有重复优化。G1的冻结断言已在F1保存前通过；其首次冻结证明在日志恢复后从完成断言与未变D1快照重建，并明确标记，未冒充新的训练。整个过程没有额外Seed、轮次或损失搜索。
+
+## 5. FR主结果
+
+初始F0在“仅学过Original”的D0下FR=100%，但这不是本轮新收益；D1学习F0后又能把它识别出来。因此必须使用同一Dk评价Fk-1与Fk，不能跨D直接比较接受率并宣称G进步。
+
+| 外轮 | FR_pre Root Macro | FR_post Root Macro | 同一D下增益 | Real Session Macro | FR_post Micro | FR_post组95%区间 |
+|---|---:|---:|---:|---:|---:|---|
+'''+ '\n'.join(frtable)+'''
+
+真正“更新F后”首次达到90%发生在第一轮。F0/D1更新前约0.0775%，F1/D1更新后100%；D2对F1、D3对F2更新前又均为0%，更新对应G后又为100%。这验证了逐轮适应/冻结闭环可运行，但不等于残余分布差异全部消失。
+
+三轮post混淆矩阵分别[[0,905],[1,779]]、[[0,905],[0,780]]、[[0,905],[0,780]]。按本轮主FR定义，100%是真的；AUC_post约0.9911/0.9984/0.9977，仍有强排序差异。AUC只是辅助记录，**没有重新用AUC≈0.5否决FR目标**；完整成功未通过的原因是原定质量检查失败。
+
+每个Root、任务、Real Session及Macro/Micro均保存group_metrics.csv。所有10Root都100%时，经验组Bootstrap自然退化为[1,1]，不代表总体Root接受率没有不确定性；只有10个已被历史开发使用的Root。没有将窗口或1000次Bootstrap冒充独立采集单位。
+
+## 6. D是否有效：CE诊断与独立组泛化
+
+| D | Fit CE | Inner CE | CE差值 | Inner BA | Inner AUC | Inner Real Recall | Inner Sim Recall |
+|---|---:|---:|---:|---:|---:|---:|---:|
+'''+ '\n'.join(dtable)+'''
+
+CE差距依用户决定仅作诊断，D_diagnostics.csv完整记录趋势及标记。D1存在明确局部泛化弱组，不以整体高AUC隐藏；D3的fit/inner均具有很强区分能力，最终高FR不能解释成D从未学会。
+
+Dk并不是迁移后独立重训的新Probe：它先学习Fk-1，再直接参与Fk的优化并保持冻结。因此post FR是特定判别边界上的对抗成功，不能证明所有未见分类器均无法区分。frozen_snapshot_matrix.csv提供D0–D3对各快照和对照的只读交叉评价，没有训练D4，也不假设将来D4仍会接受F3。
+
+## 7. 分布、结构与输入依赖
+
+距离采用P48固定1024投影、RealTrain Scaler、组等权SWD和固定多尺度MMD；1000次真实Session/任务分层Root Bootstrap。PRDC复用P47完整2848维、k3/5/10/20、100次固定等量Root分层抽样；其采样口径单独注明，不冒充P48组权重。下表k5只用于展示，所有k完整保留。
+
+| 输出 | SWD | MMD | Precision k5 | Recall k5 | Coverage k5 | Root内HSIC | 跨窗口Std | 不同数值窗口 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+'''+ '\n'.join(qualitytable)+'''
+
+原始未迁移SWD约0.41134；初始F0约0.20661；F1/F2/F3分别0.53066/0.28644/0.41133。没有持续下降，F3几乎丢失F0已有SWD改善。F3 MMD约0.67681也明显高于F0约0.34368。
+
+F1跨窗口Std从F0的0.05478跌到0.000201，只有约0.37%，虽然仍有877个逐字节不同窗口。这是严重近模板化，不能用“不是精确常量”掩盖。F2/F3恢复到0.02311/0.03166，但分布、局部覆盖和幅值/空间质量仍未达门槛。终点F3未触发严重坍缩标记，所以按终点分B；第一轮的严重失败明确保留，不抹除。
+
+HSIC仍显示统计输入依赖，不能证明真实接触位置正确，也不能证明响应幅度差异足够；近模板化输出加微小输入变化也能有较高归一化依赖。因此HSIC不能代替多样性和幅值检查。Temporal proxy部分改善没有抵消其他失败：近模板也可获得很高lag1。时间量只是4个保留帧的统计，不是相同物理秒尺度的动力学。
+
+“空间”均指现有712通道和16Patch索引代理。Real/Sim物理Taxel映射尚未完整认证，不虚构真实坐标或接触力语义。连续接触长度限于4帧窗口，不能声称完整Episode持续时长。
+
+## 8. 负对照与质量判定
+
+所有非退化容限在首次训练前登记，并在CE补充中保持不变：SWD/MMD不超过F0的1.1倍；PRDC全部k相对F0各项绝对下降不超过0.02；依赖不低于F0的0.8倍且配对对照差异组Bootstrap下界>0；Std不低于F0的0.5倍、不同输出数不低于0.9倍；幅值、时间、空间/输入Patch和零结构偏差相对F0不超过1.1倍等。它们是本轮预先固定的开发非退化护栏，**不是P47已有的普适物理验收标准**。具体公式和数值参考见evaluate.py/registration.json。
+
+这些门槛并没有要求全部辅助量达到0.90，也没有在看到F结果后改阈值。F0能通过相对自身的护栏只是参考，不代表F0原本质量已被独立认证。
+
+最终D3下的负对照如下：
+
+| 控制 | FR Root Macro | SWD | MMD | 输入依赖HSIC | 不同输出数 | 完整质量通过 |
+|---|---:|---:|---:|---:|---:|---|
+'''+ '\n'.join(negt)+'''
+
+Constant可能有很高FR，但只有一个输出、依赖为0；Real Donor有真实边际响应但没有特定输入对应；Pair Shuffle在同Root/Stage内保留输出多重集，FR、SWD、MMD应保持不变，但HSIC依赖下降并不通过依赖护栏。每轮三种对照均由同一冻结D、同样阈值和同一质量流程评价，未选有利对照。
+
+这表明质量护栏能拒绝本轮这些已知退化，但不能证明不存在其他可同时绕过指标的错误语义。没有通过负对照就把模型宣称为全局Real-like。
+
+## 9. 推理与数值后端限制
+
+`code/infer.py`加载完整F快照，输入原始非负processed[N,4,712]，输出同shape；固定K1，不需要Real窗口、D或C0。用于当前登记数据精确路径复现时，采用CPU Encoder缓存后移到CUDA field/Decoder；权重、阈值不变。
+
+本机登记路径重放在rtol1e-5/atol1e-6下数值一致、Mask完全相同，最大差约1.62e-5；不是跨设备逐位复现保证。纯CPU重放出现31个Mask条目差异（约258万条目中），最大幅值差约3.126；与硬Mask及自回归读出对后端舍入敏感相符。未改阈值、裁剪或补值掩盖该问题，纯CPU文件作为诊断保留，不能代替登记CUDA输出计算正式结果。
+
+这说明当前模型尚不能称为跨后端稳健的部署模型。它不改变已经记录的登记后端FR结果，但进一步限制完整迁移质量与工程可移植性结论。
+
+## 10. 直接回答十二问
+
+1. **A_K1初始FR？**F0/D0为100%；D1适应F0后其pre Macro FR约0.0775%。两者不是同一判别边界。
+2. **D0有效？**是。内部独立组BA约97.83%、AUC≈1，外层Original BA约99.97%。
+3. **每轮Dk能识别上一轮？**是，外层pre BA/AUC约99.91%/0.999996、100%/1、100%/1；内部指标及薄弱组另完整披露。
+4. **G更新增益？**第1轮约+99.9225个百分点，后两轮各+100个百分点，同一轮D冻结。
+5. **首次更新后90%？**第1轮F1；不把F0/D0的初始高接受率当成本轮增益。
+6. **最终Macro/Micro FR？**两者均100%，10Root/905窗。
+7. **Real Acceptance？**最终4Session Macro为100%。
+8. **分布指标同步改善？**没有。F3 SWD几乎退回Original，且明显差于F0；MMD/PRDC也未过护栏。
+9. **HSIC证明什么？**存在统计依赖，且shuffle会削弱；不证明空间语义、充分幅值变化或物理接触正确。
+10. **对照被识别？**完整护栏拒绝Constant、donor、pairshuffle；FR本身不能独立拒绝它们。
+11. **完整结构合理？**输出finite/非负，但幅值、空间、局部覆盖仍退化，且曾近模板化；不能认证完整Real-like结构保持。
+12. **A类成功？**否。终点为B类部分成功：FR数值目标完成，完整质量失败。无旧指标替换、无新项目全局0.90声明。
+
+## 11. 产物与停止
+
+F0–F3与D0–D3完整Checkpoint含各自Adam状态，终点Validation输出、Raw GPU预测分数、Root/Session/Task FR、Bootstrap、全部质量指标、每Epoch训练日志与恢复记录完整保存。原registration、初次停止记录和用户授权补充均保留。original数据、P44–P48、C0及旧验收包Hash均保护。
+
+实际D3300/F3840优化步、Seed一个、K1、外轮3，没有追加任何轮次或分类器。恢复只延续已有状态，不重复D0、D1或G1。代码Hash和复现命令见run_commands.json；阶段账本检查每阶段Epoch不重复。
+
+**P49结束，等待人工审查；不启动P50，不commit/push。**
+'''
+(O/'REPORT.md').write_text(report);save(O/'report_complete.json',dict(classification=final_class,A_success=final_A,FR_target_achieved=final_FR_pass,figures=6));print('P49 REPORT COMPLETE',final_class,flush=True)

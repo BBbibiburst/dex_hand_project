@@ -1,0 +1,12 @@
+{
+  "decision": "NO-GO",
+  "reason": "fixed Real Session Macro JointAcceptance below0.90; auxiliaryenvelope cannot repair",
+  "Real_joint_acceptance": 0.6808333333333334,
+  "Original_joint_BA": 0.449642064396674,
+  "Original_joint_AUC": 0.5643189648109806,
+  "Original_Sim_recall": 0.21845079546001467,
+  "P52_authorized_by_condition": false,
+  "P52_started": false,
+  "P53_started": false,
+  "training_steps": 0
+}

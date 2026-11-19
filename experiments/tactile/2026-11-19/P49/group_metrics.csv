@@ -1,0 +1,399 @@
+evaluation,role,domain,group,windows,acceptance,probability_mean,device
+D2,fit,Real,20260611_151944_hardness_slip_session,10,1.0,0.999636529624856,
+D2,fit,Real,20260611_163154_hardness_slip_session,7,1.0,0.9996008292994691,
+D2,fit,Real,20260615_143952_hardness_slip_session,14,1.0,0.9995822035662911,
+D2,fit,Real,20260706_160808_bootleB30-1,210,1.0,0.9995842591483234,
+D2,fit,Real,20260706_163616_yuanzhuD7H13-20-1,140,1.0,0.9995578482663676,
+D2,fit,Real,20260813_151901_stable_shuirongC_20,240,1.0,0.9996070011425663,
+D2,fit,Real,20260813_152800_stable_shuirongC_20,240,1.0,0.9995656588436076,
+D2,fit,Real,20260813_162744_stable_3D_bottle_C_20,240,1.0,0.9995539956851597,
+D2,fit,Real,20260813_163756_stable_3D_h13r3_20,240,1.0,0.9991045582125725,
+D2,fit,Real,20260813_165122_stable_3D_h13r3_20,240,1.0,0.997791485244642,
+D2,fit,Real,20260814_144025_stable_wood_30,238,1.0,0.9995803783679024,
+D2,fit,Real,20260814_145553_stable_maidong_30,240,1.0,0.9994523409340944,
+D2,fit,Real,20260814_153130_stable_3D_xiaokaikoubeizi_30,240,1.0,0.9995192946008614,
+D2,fit,Real,20260814_154235_stable_3D_xiaokaikoubeizi_30,240,1.0,0.9995345670599023,
+D2,fit,Real,20260814_164757_stable_3D_liulengzhu_30,240,1.0,0.9994868389252419,
+D2,fit,Real,20260814_165556_stable_3D_liulengzhu_30,240,1.0,0.999614091369205,
+D2,fit,Real,20260816_165241_slip_h13r3_30,150,1.0,0.9995459207032027,
+D2,fit,Real,20260816_173936_slip_3D_bottle_A_30,150,1.0,0.9996912282157727,
+D2,fit,Real,20260817_093609_slip_3D_6512_30,149,1.0,0.999581163087163,
+D2,fit,Real,20260817_094253_slip_3D_6512_30,150,1.0,0.9996446961953851,
+D2,fit,Real,20260817_101100_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9995847239819443,
+D2,fit,Real,20260817_101910_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9995835899432038,
+D2,fit,Real,20260817_103306_slip_3D_dakaikoubeizi_30,149,1.0,0.9996092382768252,
+D2,fit,Real,20260817_104124_slip_3D_dakaikoubeizi_30,150,1.0,0.999617419727087,
+D2,fit,Sim,root_0cdc8ada9c14dbbd2a8d,89,0.0,5.368873913977126e-05,
+D2,fit,Sim,root_1793a890681bb7154c7f,116,0.0,5.460235811961516e-05,
+D2,fit,Sim,root_19966accad2776e253d6,70,0.0,5.431333549567389e-05,
+D2,fit,Sim,root_215c938aa454f5ca091b,107,0.0,5.4309459375500995e-05,
+D2,fit,Sim,root_28a4d9bcb3084ca7cee6,116,0.0,5.498577647135169e-05,
+D2,fit,Sim,root_2ac853324c277975cfb9,124,0.0,5.476076506997672e-05,
+D2,fit,Sim,root_2c2ed01b1478b0455c43,123,0.0,5.4409042751308394e-05,
+D2,fit,Sim,root_3a6cc0b5c9a6fcf925b0,104,0.0,5.4898201016975006e-05,
+D2,fit,Sim,root_3c02853a646859be1c8a,80,0.0,5.367982063175321e-05,
+D2,fit,Sim,root_40f6d4e41aa030d782ef,44,0.0,6.382252834377749e-05,
+D2,fit,Sim,root_46e28191f08086b211fc,47,0.0,5.473811565731761e-05,
+D2,fit,Sim,root_4e9f5b2551a34f5b74a4,104,0.0,5.606051117981806e-05,
+D2,fit,Sim,root_55c074628e52d016a51c,47,0.0,5.353629346605716e-05,
+D2,fit,Sim,root_59899552b8d6b4f51619,35,0.0,6.397044620749879e-05,
+D2,fit,Sim,root_71ea56df13392fbde451,51,0.0,5.377925053642893e-05,
+D2,fit,Sim,root_77db2996aa9e53583762,40,0.0,6.406291377934035e-05,
+D2,fit,Sim,root_7d49c618bff33e574119,87,0.0,6.007556469628574e-05,
+D2,fit,Sim,root_7d65fb4f91f611c89347,39,0.0,6.434179080605807e-05,
+D2,fit,Sim,root_818afff1e044710e2a7b,42,0.0,6.369986743054597e-05,
+D2,fit,Sim,root_84f5baa49e768850d163,92,0.0,5.486999224449652e-05,
+D2,fit,Sim,root_88431cefd3cd54e23628,108,0.0,5.352922368760136e-05,
+D2,fit,Sim,root_8a8162c8f0bb22215f59,52,0.0,6.302030757581309e-05,
+D2,fit,Sim,root_8b9ef2e560bf5742b6f0,78,0.0,5.403383050721463e-05,
+D2,fit,Sim,root_8e55651649ecfc3fedfb,88,0.0,5.6816394217005745e-05,
+D2,fit,Sim,root_8e9703fc727cc13d69da,61,0.0,5.3898599583818994e-05,
+D2,fit,Sim,root_96c5dec434427f7a252b,78,0.0,5.365803361141341e-05,
+D2,fit,Sim,root_9b87bd60e908f215302d,42,0.0,6.158281718790424e-05,
+D2,fit,Sim,root_aa59d9e75d30badb725f,49,0.0,5.4386396093346386e-05,
+D2,fit,Sim,root_ad9d04fdc8b38c3adabb,116,0.0,5.379652531673842e-05,
+D2,fit,Sim,root_afd580d15945a9c8c5b3,91,0.0,5.6312615906509054e-05,
+D2,fit,Sim,root_b3b7dbd1ccc46279660c,97,0.0,5.616502151098458e-05,
+D2,fit,Sim,root_b7b9cbfa86f613c46020,133,0.0,5.594436239337371e-05,
+D2,fit,Sim,root_c2f4583a750fbf1fbd49,79,0.0,5.4044619635122766e-05,
+D2,fit,Sim,root_c8ea2a58e971a844baa3,57,0.0,5.641949221178569e-05,
+D2,fit,Sim,root_d47731d1bf4917f418a6,61,0.0,5.3761328106162135e-05,
+D2,fit,Sim,root_d5f4941bfb08637ceae5,129,0.0,5.631590623865423e-05,
+D2,fit,Sim,root_dc7da4bc42db7f6bc36f,74,0.0,5.4164071898303126e-05,
+D2,fit,Sim,root_e58ab186ee6cf6e4b8b6,88,0.0,5.692516032517472e-05,
+D2,fit,Sim,root_f0981887e8c5270f5b8d,125,0.0,5.648387018397174e-05,
+D2,fit,Sim,root_f799a99574fb757393bd,86,0.0,5.357346677048951e-05,
+D2,inner,Real,20260611_145025_hardness_slip_session,10,1.0,0.999500598455298,
+D2,inner,Real,20260611_163853_hardness_slip_session,14,1.0,0.9996100309038909,
+D2,inner,Real,20260705_213030_hardness_slip_session,14,1.0,0.9996856970292267,
+D2,inner,Real,20260706_164601_bottleA-20-1,28,1.0,0.99951490384183,
+D2,inner,Real,20260813_165855_stable_3D_h13r3_20,240,0.3125,0.3377985899245162,
+D2,inner,Real,20260814_143310_stable_wood_30,240,1.0,0.9995367747793226,
+D2,inner,Real,20260814_155240_stable_3D_6512_30,240,1.0,0.9990642718791093,
+D2,inner,Real,20260817_105909_slip_3D_liulengzhui_30,150,1.0,0.9995735848677225,
+D2,inner,Sim,root_32ce89a0c4ec573b3c38,61,0.0,5.3627626484907035e-05,
+D2,inner,Sim,root_358b4775faa098154767,78,0.0,5.358162981447275e-05,
+D2,inner,Sim,root_49a636963f20db841483,124,0.0,5.6271446347698796e-05,
+D2,inner,Sim,root_636ae18147fd13ecff7f,34,0.0,6.286026635490077e-05,
+D2,inner,Sim,root_6ce29f21e9c3e3c82129,49,0.0,6.333738351876589e-05,
+D2,inner,Sim,root_9f4385c657d6597c0427,111,0.0,5.383593842431653e-05,
+D2,inner,Sim,root_a35b1d38a36b84fba394,48,0.0,5.713327812491843e-05,
+D2,inner,Sim,root_c3801bac90da9161e8be,104,0.0,5.621739236316865e-05,
+D2,inner,Sim,root_e71b2eac390250816491,77,0.0,5.3746037526127635e-05,
+D2,inner,Sim,root_eea8a3940811deb25374,114,0.0,5.3906646967717994e-05,
+D3,fit,Real,20260611_151944_hardness_slip_session,10,1.0,0.9996765350508067,
+D3,fit,Real,20260611_163154_hardness_slip_session,7,1.0,0.9996921755498672,
+D3,fit,Real,20260615_143952_hardness_slip_session,14,1.0,0.9996459803045151,
+D3,fit,Real,20260706_160808_bootleB30-1,210,1.0,0.9996722669635209,
+D3,fit,Real,20260706_163616_yuanzhuD7H13-20-1,140,1.0,0.9996424034274599,
+D3,fit,Real,20260813_151901_stable_shuirongC_20,240,1.0,0.9990116036075051,
+D3,fit,Real,20260813_152800_stable_shuirongC_20,240,1.0,0.998553139566828,
+D3,fit,Real,20260813_162744_stable_3D_bottle_C_20,240,1.0,0.9996855616420792,
+D3,fit,Real,20260813_163756_stable_3D_h13r3_20,240,1.0,0.9993076158361409,
+D3,fit,Real,20260813_165122_stable_3D_h13r3_20,240,1.0,0.9993801774262453,
+D3,fit,Real,20260814_144025_stable_wood_30,238,1.0,0.9996385801305591,
+D3,fit,Real,20260814_145553_stable_maidong_30,240,1.0,0.9990936469241632,
+D3,fit,Real,20260814_153130_stable_3D_xiaokaikoubeizi_30,240,1.0,0.9996913229039656,
+D3,fit,Real,20260814_154235_stable_3D_xiaokaikoubeizi_30,240,1.0,0.9997086596159676,
+D3,fit,Real,20260814_164757_stable_3D_liulengzhu_30,240,1.0,0.9996822192992421,
+D3,fit,Real,20260814_165556_stable_3D_liulengzhu_30,240,1.0,0.9997013654279888,
+D3,fit,Real,20260816_165241_slip_h13r3_30,150,1.0,0.9986643303879913,
+D3,fit,Real,20260816_173936_slip_3D_bottle_A_30,150,1.0,0.9995856257156364,
+D3,fit,Real,20260817_093609_slip_3D_6512_30,149,1.0,0.9995242527875648,
+D3,fit,Real,20260817_094253_slip_3D_6512_30,150,1.0,0.9996285257792737,
+D3,fit,Real,20260817_101100_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9996687303390331,
+D3,fit,Real,20260817_101910_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9997146918810965,
+D3,fit,Real,20260817_103306_slip_3D_dakaikoubeizi_30,149,1.0,0.9995834783473889,
+D3,fit,Real,20260817_104124_slip_3D_dakaikoubeizi_30,150,1.0,0.9995921218638512,
+D3,fit,Sim,root_0cdc8ada9c14dbbd2a8d,89,0.0,0.0006570632463317843,
+D3,fit,Sim,root_1793a890681bb7154c7f,116,0.0,0.0003558699186624987,
+D3,fit,Sim,root_19966accad2776e253d6,70,0.0,4.4030797634221215e-05,
+D3,fit,Sim,root_215c938aa454f5ca091b,107,0.0,6.550060965823327e-05,
+D3,fit,Sim,root_28a4d9bcb3084ca7cee6,116,0.0,0.0002015426820715359,
+D3,fit,Sim,root_2ac853324c277975cfb9,124,0.0,0.00025779452829678446,
+D3,fit,Sim,root_2c2ed01b1478b0455c43,123,0.0,7.938758282948994e-05,
+D3,fit,Sim,root_3a6cc0b5c9a6fcf925b0,104,0.0,0.00011646822881620464,
+D3,fit,Sim,root_3c02853a646859be1c8a,80,0.0,4.580436368091435e-05,
+D3,fit,Sim,root_40f6d4e41aa030d782ef,44,0.0,7.709080595581491e-05,
+D3,fit,Sim,root_46e28191f08086b211fc,47,0.0,0.00015968020740628306,
+D3,fit,Sim,root_4e9f5b2551a34f5b74a4,104,0.0,0.0012042359675837728,
+D3,fit,Sim,root_55c074628e52d016a51c,47,0.0,6.270375353285532e-05,
+D3,fit,Sim,root_59899552b8d6b4f51619,35,0.0,0.00031509354078064066,
+D3,fit,Sim,root_71ea56df13392fbde451,51,0.0,0.004155227548591769,
+D3,fit,Sim,root_77db2996aa9e53583762,40,0.0,0.00018673864315139825,
+D3,fit,Sim,root_7d49c618bff33e574119,87,0.0,0.0006907774961327144,
+D3,fit,Sim,root_7d65fb4f91f611c89347,39,0.0,5.6566857592903355e-05,
+D3,fit,Sim,root_818afff1e044710e2a7b,42,0.0,0.00012079638264653764,
+D3,fit,Sim,root_84f5baa49e768850d163,92,0.0,0.000250683509713833,
+D3,fit,Sim,root_88431cefd3cd54e23628,108,0.0,0.00017786101206208234,
+D3,fit,Sim,root_8a8162c8f0bb22215f59,52,0.0,0.0014940322407001813,
+D3,fit,Sim,root_8b9ef2e560bf5742b6f0,78,0.0,0.00010101512788034831,
+D3,fit,Sim,root_8e55651649ecfc3fedfb,88,0.0,0.0015101039503854228,
+D3,fit,Sim,root_8e9703fc727cc13d69da,61,0.0,6.916657218442901e-05,
+D3,fit,Sim,root_96c5dec434427f7a252b,78,0.0,0.0004322045979450621,
+D3,fit,Sim,root_9b87bd60e908f215302d,42,0.0,0.00011390079940625887,
+D3,fit,Sim,root_aa59d9e75d30badb725f,49,0.0,9.50937737507372e-05,
+D3,fit,Sim,root_ad9d04fdc8b38c3adabb,116,0.0,8.518190946190463e-05,
+D3,fit,Sim,root_afd580d15945a9c8c5b3,91,0.0,0.001687610641741323,
+D3,fit,Sim,root_b3b7dbd1ccc46279660c,97,0.0,0.001383217439429286,
+D3,fit,Sim,root_b7b9cbfa86f613c46020,133,0.0,0.0008566812889975338,
+D3,fit,Sim,root_c2f4583a750fbf1fbd49,79,0.0,6.544959783034913e-05,
+D3,fit,Sim,root_c8ea2a58e971a844baa3,57,0.0,5.9216722032100934e-05,
+D3,fit,Sim,root_d47731d1bf4917f418a6,61,0.0,5.995865669588095e-05,
+D3,fit,Sim,root_d5f4941bfb08637ceae5,129,0.0,0.0009561153112576139,
+D3,fit,Sim,root_dc7da4bc42db7f6bc36f,74,0.0,0.00011140288446340314,
+D3,fit,Sim,root_e58ab186ee6cf6e4b8b6,88,0.0,0.001564260872999227,
+D3,fit,Sim,root_f0981887e8c5270f5b8d,125,0.0,0.0008737691621937217,
+D3,fit,Sim,root_f799a99574fb757393bd,86,0.0,0.00032156819308873217,
+D3,inner,Real,20260611_145025_hardness_slip_session,10,1.0,0.9996324077317281,
+D3,inner,Real,20260611_163853_hardness_slip_session,14,1.0,0.9996835095930716,
+D3,inner,Real,20260705_213030_hardness_slip_session,14,1.0,0.9996373017728771,
+D3,inner,Real,20260706_164601_bottleA-20-1,28,1.0,0.9996636925271807,
+D3,inner,Real,20260813_165855_stable_3D_h13r3_20,240,0.9958333333333333,0.9756642092701882,
+D3,inner,Real,20260814_143310_stable_wood_30,240,1.0,0.9995736468559565,
+D3,inner,Real,20260814_155240_stable_3D_6512_30,240,1.0,0.9994960873024189,
+D3,inner,Real,20260817_105909_slip_3D_liulengzhui_30,150,1.0,0.9996857957517336,
+D3,inner,Sim,root_32ce89a0c4ec573b3c38,61,0.0,7.268060636230251e-05,
+D3,inner,Sim,root_358b4775faa098154767,78,0.0,0.00018636326208001965,
+D3,inner,Sim,root_49a636963f20db841483,124,0.0,0.0008504691404414483,
+D3,inner,Sim,root_636ae18147fd13ecff7f,34,0.0,0.001453688606302429,
+D3,inner,Sim,root_6ce29f21e9c3e3c82129,49,0.0,0.00035627798333317,
+D3,inner,Sim,root_9f4385c657d6597c0427,111,0.0,0.0001858768925996294,
+D3,inner,Sim,root_a35b1d38a36b84fba394,48,0.0,9.231196647432486e-05,
+D3,inner,Sim,root_c3801bac90da9161e8be,104,0.0,0.0012918950919811553,
+D3,inner,Sim,root_e71b2eac390250816491,77,0.0,0.00018038464569050019,
+D3,inner,Sim,root_eea8a3940811deb25374,114,0.0,0.0020803517602943707,
+D1/review,fit,Real,20260611_151944_hardness_slip_session,10,1.0,0.9975565147310139,CPU verifiedreplay
+D1/review,fit,Real,20260611_163154_hardness_slip_session,7,1.0,0.997012460622457,CPU verifiedreplay
+D1/review,fit,Real,20260615_143952_hardness_slip_session,14,1.0,0.9957572837072688,CPU verifiedreplay
+D1/review,fit,Real,20260706_160808_bootleB30-1,210,1.0,0.9925126595533549,CPU verifiedreplay
+D1/review,fit,Real,20260706_163616_yuanzhuD7H13-20-1,140,1.0,0.9924474605118389,CPU verifiedreplay
+D1/review,fit,Real,20260813_151901_stable_shuirongC_20,240,0.9958333333333333,0.971403046715992,CPU verifiedreplay
+D1/review,fit,Real,20260813_152800_stable_shuirongC_20,240,0.9958333333333333,0.9686001174085703,CPU verifiedreplay
+D1/review,fit,Real,20260813_162744_stable_3D_bottle_C_20,240,1.0,0.995318341508174,CPU verifiedreplay
+D1/review,fit,Real,20260813_163756_stable_3D_h13r3_20,240,1.0,0.9767696702757563,CPU verifiedreplay
+D1/review,fit,Real,20260813_165122_stable_3D_h13r3_20,240,1.0,0.9784000797089306,CPU verifiedreplay
+D1/review,fit,Real,20260814_144025_stable_wood_30,238,1.0,0.9797288018881083,CPU verifiedreplay
+D1/review,fit,Real,20260814_145553_stable_maidong_30,240,1.0,0.93656383532309,CPU verifiedreplay
+D1/review,fit,Real,20260814_153130_stable_3D_xiaokaikoubeizi_30,240,1.0,0.9728457635671445,CPU verifiedreplay
+D1/review,fit,Real,20260814_154235_stable_3D_xiaokaikoubeizi_30,240,0.9583333333333334,0.8964387621723741,CPU verifiedreplay
+D1/review,fit,Real,20260814_164757_stable_3D_liulengzhu_30,240,1.0,0.9893625104602205,CPU verifiedreplay
+D1/review,fit,Real,20260814_165556_stable_3D_liulengzhu_30,240,1.0,0.9970817567073978,CPU verifiedreplay
+D1/review,fit,Real,20260816_165241_slip_h13r3_30,150,1.0,0.978238653345386,CPU verifiedreplay
+D1/review,fit,Real,20260816_173936_slip_3D_bottle_A_30,150,1.0,0.9970756846177229,CPU verifiedreplay
+D1/review,fit,Real,20260817_093609_slip_3D_6512_30,149,1.0,0.9817862746145449,CPU verifiedreplay
+D1/review,fit,Real,20260817_094253_slip_3D_6512_30,150,1.0,0.9943304698120229,CPU verifiedreplay
+D1/review,fit,Real,20260817_101100_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9868628602024758,CPU verifiedreplay
+D1/review,fit,Real,20260817_101910_slip_3D_xiaokaikoubeizi_30,150,1.0,0.9893678876920831,CPU verifiedreplay
+D1/review,fit,Real,20260817_103306_slip_3D_dakaikoubeizi_30,149,1.0,0.9799907419689117,CPU verifiedreplay
+D1/review,fit,Real,20260817_104124_slip_3D_dakaikoubeizi_30,150,1.0,0.9901243820709639,CPU verifiedreplay
+D1/review,fit,Sim,root_0cdc8ada9c14dbbd2a8d,89,0.0,0.018298260866022424,CPU verifiedreplay
+D1/review,fit,Sim,root_1793a890681bb7154c7f,116,0.0,0.007333603381980603,CPU verifiedreplay
+D1/review,fit,Sim,root_19966accad2776e253d6,70,0.0,0.0028078179405726265,CPU verifiedreplay
+D1/review,fit,Sim,root_215c938aa454f5ca091b,107,0.009345794392523366,0.010994544713085884,CPU verifiedreplay
+D1/review,fit,Sim,root_28a4d9bcb3084ca7cee6,116,0.0,0.003951089375197028,CPU verifiedreplay
+D1/review,fit,Sim,root_2ac853324c277975cfb9,124,0.0,0.0011545111735452944,CPU verifiedreplay
+D1/review,fit,Sim,root_2c2ed01b1478b0455c43,123,0.0,0.0042465532409095945,CPU verifiedreplay
+D1/review,fit,Sim,root_3a6cc0b5c9a6fcf925b0,104,0.0,0.026076353946949796,CPU verifiedreplay
+D1/review,fit,Sim,root_3c02853a646859be1c8a,80,0.0,0.00946619047488738,CPU verifiedreplay
+D1/review,fit,Sim,root_40f6d4e41aa030d782ef,44,0.0,0.0022177101483183905,CPU verifiedreplay
+D1/review,fit,Sim,root_46e28191f08086b211fc,47,0.0,0.005026850888813227,CPU verifiedreplay
+D1/review,fit,Sim,root_4e9f5b2551a34f5b74a4,104,0.0,0.014849244856444097,CPU verifiedreplay
+D1/review,fit,Sim,root_55c074628e52d016a51c,47,0.0,0.002324125245835348,CPU verifiedreplay
+D1/review,fit,Sim,root_59899552b8d6b4f51619,35,0.0,0.004368180469253516,CPU verifiedreplay
+D1/review,fit,Sim,root_71ea56df13392fbde451,51,0.0,0.0313613247952661,CPU verifiedreplay
+D1/review,fit,Sim,root_77db2996aa9e53583762,40,0.0,0.004404409605025231,CPU verifiedreplay
+D1/review,fit,Sim,root_7d49c618bff33e574119,87,0.0,0.019418587591784203,CPU verifiedreplay
+D1/review,fit,Sim,root_7d65fb4f91f611c89347,39,0.0,0.0012178705983862143,CPU verifiedreplay
+D1/review,fit,Sim,root_818afff1e044710e2a7b,42,0.0,0.0029768576313259454,CPU verifiedreplay
+D1/review,fit,Sim,root_84f5baa49e768850d163,92,0.0,0.01152093975278552,CPU verifiedreplay
+D1/review,fit,Sim,root_88431cefd3cd54e23628,108,0.0,0.015272590519570996,CPU verifiedreplay
+D1/review,fit,Sim,root_8a8162c8f0bb22215f59,52,0.0,0.019145847842773393,CPU verifiedreplay
+D1/review,fit,Sim,root_8b9ef2e560bf5742b6f0,78,0.0,0.001408574677186129,CPU verifiedreplay
+D1/review,fit,Sim,root_8e55651649ecfc3fedfb,88,0.0,0.01354481252486821,CPU verifiedreplay
+D1/review,fit,Sim,root_8e9703fc727cc13d69da,61,0.0,0.007538796309148546,CPU verifiedreplay
+D1/review,fit,Sim,root_96c5dec434427f7a252b,78,0.0,0.005500691617419797,CPU verifiedreplay
+D1/review,fit,Sim,root_9b87bd60e908f215302d,42,0.0,0.0029097958894970417,CPU verifiedreplay
+D1/review,fit,Sim,root_aa59d9e75d30badb725f,49,0.0,0.0006118322460783631,CPU verifiedreplay
+D1/review,fit,Sim,root_ad9d04fdc8b38c3adabb,116,0.0,0.0071950371685344855,CPU verifiedreplay
+D1/review,fit,Sim,root_afd580d15945a9c8c5b3,91,0.01098901098901095,0.020916442817825925,CPU verifiedreplay
+D1/review,fit,Sim,root_b3b7dbd1ccc46279660c,97,0.010309278350515427,0.01792891838356778,CPU verifiedreplay
+D1/review,fit,Sim,root_b7b9cbfa86f613c46020,133,0.0,0.01468939704519385,CPU verifiedreplay
+D1/review,fit,Sim,root_c2f4583a750fbf1fbd49,79,0.0,0.012221133098392177,CPU verifiedreplay
+D1/review,fit,Sim,root_c8ea2a58e971a844baa3,57,0.0,0.00472393367664979,CPU verifiedreplay
+D1/review,fit,Sim,root_d47731d1bf4917f418a6,61,0.0,0.00914179795779027,CPU verifiedreplay
+D1/review,fit,Sim,root_d5f4941bfb08637ceae5,129,0.0,0.011565987544222342,CPU verifiedreplay
+D1/review,fit,Sim,root_dc7da4bc42db7f6bc36f,74,0.0,0.015224484729940074,CPU verifiedreplay
+D1/review,fit,Sim,root_e58ab186ee6cf6e4b8b6,88,0.011363636363636354,0.016607080906129796,CPU verifiedreplay
+D1/review,fit,Sim,root_f0981887e8c5270f5b8d,125,0.008000000000000007,0.01695296489070192,CPU verifiedreplay
+D1/review,fit,Sim,root_f799a99574fb757393bd,86,0.0,0.01587705526753067,CPU verifiedreplay
+D1/review,inner,Real,20260611_145025_hardness_slip_session,10,1.0,0.9913755338096948,CPU verifiedreplay
+D1/review,inner,Real,20260611_163853_hardness_slip_session,14,1.0,0.9967806951063602,CPU verifiedreplay
+D1/review,inner,Real,20260705_213030_hardness_slip_session,14,1.0,0.9982085360782403,CPU verifiedreplay
+D1/review,inner,Real,20260706_164601_bottleA-20-1,28,1.0,0.9817744992865539,CPU verifiedreplay
+D1/review,inner,Real,20260813_165855_stable_3D_h13r3_20,240,0.8333333333333334,0.7322898138028183,CPU verifiedreplay
+D1/review,inner,Real,20260814_143310_stable_wood_30,240,1.0,0.9499402270698099,CPU verifiedreplay
+D1/review,inner,Real,20260814_155240_stable_3D_6512_30,240,0.13333333333333333,0.17428407180400024,CPU verifiedreplay
+D1/review,inner,Real,20260817_105909_slip_3D_liulengzhui_30,150,1.0,0.9917683921671728,CPU verifiedreplay
+D1/review,inner,Sim,root_32ce89a0c4ec573b3c38,61,0.0,0.0019392673271617434,CPU verifiedreplay
+D1/review,inner,Sim,root_358b4775faa098154767,78,0.0641025641025641,0.0808785701902257,CPU verifiedreplay
+D1/review,inner,Sim,root_49a636963f20db841483,124,0.008064516129032251,0.014885026364146714,CPU verifiedreplay
+D1/review,inner,Sim,root_636ae18147fd13ecff7f,34,0.0,0.0159886057927581,CPU verifiedreplay
+D1/review,inner,Sim,root_6ce29f21e9c3e3c82129,49,0.0,0.028017102518151545,CPU verifiedreplay
+D1/review,inner,Sim,root_9f4385c657d6597c0427,111,0.15315315315315314,0.14601759528879912,CPU verifiedreplay
+D1/review,inner,Sim,root_a35b1d38a36b84fba394,48,0.0,0.0017730629215357053,CPU verifiedreplay
+D1/review,inner,Sim,root_c3801bac90da9161e8be,104,0.0,0.0136030364791898,CPU verifiedreplay
+D1/review,inner,Sim,root_e71b2eac390250816491,77,0.0,0.01545206425358416,CPU verifiedreplay
+D1/review,inner,Sim,root_eea8a3940811deb25374,114,0.0,0.022379852177444644,CPU verifiedreplay
+D0/pre,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.9998952536831371,registeredGPUstoredlogits
+D0/pre,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9998951547081598,registeredGPUstoredlogits
+D0/pre,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9998938932400657,registeredGPUstoredlogits
+D0/pre,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9998926859672864,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_00b146bdc97c9368a83d,36,1.0,0.9998935397489741,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_082f3961a86130a18f37,73,1.0,0.9998930890196872,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_4160fdda08aa4e598006,129,1.0,0.9998942297890904,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_56d15e4f8767e5849bb3,48,1.0,0.9998944592147311,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_699066b465aa7d5e9396,119,1.0,0.9998923913698693,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_6c99c57806b92781af6e,92,1.0,0.9998932162622239,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_75481d6cfe809ff00a31,62,1.0,0.9998918764403876,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_8a91446e2b9400d3ef2c,124,1.0,0.9998922361480787,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_952b09431bf778331a46,49,1.0,0.9998945053095782,registeredGPUstoredlogits
+D0/pre,validation,Sim,root_dc8c011f397f9a42def7,173,1.0,0.9998933496551244,registeredGPUstoredlogits
+D0/pre,validation,SimTask,lift,111,1.0,,
+D0/pre,validation,SimTask,nut_assembly,302,1.0,,
+D0/pre,validation,SimTask,pick_place,243,1.0,,
+D0/pre,validation,SimTask,push,84,1.0,,
+D0/pre,validation,SimTask,stack,165,1.0,,
+D0/post,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.9998952536831371,registeredGPUstoredlogits
+D0/post,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9998951547081598,registeredGPUstoredlogits
+D0/post,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9998938932400657,registeredGPUstoredlogits
+D0/post,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9998926859672864,registeredGPUstoredlogits
+D0/post,validation,Sim,root_00b146bdc97c9368a83d,36,1.0,0.9998935397489741,registeredGPUstoredlogits
+D0/post,validation,Sim,root_082f3961a86130a18f37,73,1.0,0.9998930890196872,registeredGPUstoredlogits
+D0/post,validation,Sim,root_4160fdda08aa4e598006,129,1.0,0.9998942297890904,registeredGPUstoredlogits
+D0/post,validation,Sim,root_56d15e4f8767e5849bb3,48,1.0,0.9998944592147311,registeredGPUstoredlogits
+D0/post,validation,Sim,root_699066b465aa7d5e9396,119,1.0,0.9998923913698693,registeredGPUstoredlogits
+D0/post,validation,Sim,root_6c99c57806b92781af6e,92,1.0,0.9998932162622239,registeredGPUstoredlogits
+D0/post,validation,Sim,root_75481d6cfe809ff00a31,62,1.0,0.9998918764403876,registeredGPUstoredlogits
+D0/post,validation,Sim,root_8a91446e2b9400d3ef2c,124,1.0,0.9998922361480787,registeredGPUstoredlogits
+D0/post,validation,Sim,root_952b09431bf778331a46,49,1.0,0.9998945053095782,registeredGPUstoredlogits
+D0/post,validation,Sim,root_dc8c011f397f9a42def7,173,1.0,0.9998933496551244,registeredGPUstoredlogits
+D0/post,validation,SimTask,lift,111,1.0,,
+D0/post,validation,SimTask,nut_assembly,302,1.0,,
+D0/post,validation,SimTask,pick_place,243,1.0,,
+D0/post,validation,SimTask,push,84,1.0,,
+D0/post,validation,SimTask,stack,165,1.0,,
+D1/pre,validation,Real,20260814_150537_stable_maidong_30,240,0.9958333333333333,0.9372423811048335,registeredGPUstoredlogits
+D1/pre,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9692952928767167,registeredGPUstoredlogits
+D1/pre,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9948350708904786,registeredGPUstoredlogits
+D1/pre,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9890959594727678,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_00b146bdc97c9368a83d,36,0.0,0.005208105065227992,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_082f3961a86130a18f37,73,0.0,0.009145835618751137,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_4160fdda08aa4e598006,129,0.007751937984496124,0.014729805558594874,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_56d15e4f8767e5849bb3,48,0.0,0.0010227865827003373,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_699066b465aa7d5e9396,119,0.0,0.0008916674770529872,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_6c99c57806b92781af6e,92,0.0,0.006962620566767425,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_75481d6cfe809ff00a31,62,0.0,0.0006683193600406124,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_8a91446e2b9400d3ef2c,124,0.0,0.02855805551003453,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_952b09431bf778331a46,49,0.0,0.02779191811655097,registeredGPUstoredlogits
+D1/pre,validation,Sim,root_dc8c011f397f9a42def7,173,0.0,0.009287586500016983,registeredGPUstoredlogits
+D1/pre,validation,SimTask,lift,111,0.0,,
+D1/pre,validation,SimTask,nut_assembly,302,0.003875968992248062,,
+D1/pre,validation,SimTask,pick_place,243,0.0,,
+D1/pre,validation,SimTask,push,84,0.0,,
+D1/pre,validation,SimTask,stack,165,0.0,,
+D1/post,validation,Real,20260814_150537_stable_maidong_30,240,0.9958333333333333,0.9372423811048335,registeredGPUstoredlogits
+D1/post,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9692952928767167,registeredGPUstoredlogits
+D1/post,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9948350708904786,registeredGPUstoredlogits
+D1/post,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9890959594727678,registeredGPUstoredlogits
+D1/post,validation,Sim,root_00b146bdc97c9368a83d,36,1.0,0.668856984662334,registeredGPUstoredlogits
+D1/post,validation,Sim,root_082f3961a86130a18f37,73,1.0,0.6590025327384447,registeredGPUstoredlogits
+D1/post,validation,Sim,root_4160fdda08aa4e598006,129,1.0,0.6603235858423663,registeredGPUstoredlogits
+D1/post,validation,Sim,root_56d15e4f8767e5849bb3,48,1.0,0.6737079314120669,registeredGPUstoredlogits
+D1/post,validation,Sim,root_699066b465aa7d5e9396,119,1.0,0.654680878715269,registeredGPUstoredlogits
+D1/post,validation,Sim,root_6c99c57806b92781af6e,92,1.0,0.6560574081968622,registeredGPUstoredlogits
+D1/post,validation,Sim,root_75481d6cfe809ff00a31,62,1.0,0.6556946104354849,registeredGPUstoredlogits
+D1/post,validation,Sim,root_8a91446e2b9400d3ef2c,124,1.0,0.6551688011870868,registeredGPUstoredlogits
+D1/post,validation,Sim,root_952b09431bf778331a46,49,1.0,0.6579416746555253,registeredGPUstoredlogits
+D1/post,validation,Sim,root_dc8c011f397f9a42def7,173,1.0,0.6565357472700017,registeredGPUstoredlogits
+D1/post,validation,SimTask,lift,111,1.0,,
+D1/post,validation,SimTask,nut_assembly,302,1.0,,
+D1/post,validation,SimTask,pick_place,243,1.0,,
+D1/post,validation,SimTask,push,84,1.0,,
+D1/post,validation,SimTask,stack,165,1.0,,
+D2/pre,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.999533463641406,registeredGPUstoredlogits
+D2/pre,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9995936259618557,registeredGPUstoredlogits
+D2/pre,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9996235806996907,registeredGPUstoredlogits
+D2/pre,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9996431513487721,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_00b146bdc97c9368a83d,36,0.0,6.090344525878467e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_082f3961a86130a18f37,73,0.0,5.558975339267637e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_4160fdda08aa4e598006,129,0.0,5.615637780187484e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_56d15e4f8767e5849bb3,48,0.0,6.378773329437389e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_699066b465aa7d5e9396,119,0.0,5.368859236343953e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_6c99c57806b92781af6e,92,0.0,5.4593839413795855e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_75481d6cfe809ff00a31,62,0.0,5.408787032142456e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_8a91446e2b9400d3ef2c,124,0.0,5.388853247315277e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_952b09431bf778331a46,49,0.0,5.5030541372061445e-05,registeredGPUstoredlogits
+D2/pre,validation,Sim,root_dc8c011f397f9a42def7,173,0.0,5.443030214677227e-05,registeredGPUstoredlogits
+D2/pre,validation,SimTask,lift,111,0.0,,
+D2/pre,validation,SimTask,nut_assembly,302,0.0,,
+D2/pre,validation,SimTask,pick_place,243,0.0,,
+D2/pre,validation,SimTask,push,84,0.0,,
+D2/pre,validation,SimTask,stack,165,0.0,,
+D2/post,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.999533463641406,registeredGPUstoredlogits
+D2/post,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9995936259618557,registeredGPUstoredlogits
+D2/post,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9996235806996907,registeredGPUstoredlogits
+D2/post,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.9996431513487721,registeredGPUstoredlogits
+D2/post,validation,Sim,root_00b146bdc97c9368a83d,36,1.0,0.9991862550728743,registeredGPUstoredlogits
+D2/post,validation,Sim,root_082f3961a86130a18f37,73,1.0,0.9990756355406234,registeredGPUstoredlogits
+D2/post,validation,Sim,root_4160fdda08aa4e598006,129,1.0,0.9968004252265779,registeredGPUstoredlogits
+D2/post,validation,Sim,root_56d15e4f8767e5849bb3,48,1.0,0.9991183805409097,registeredGPUstoredlogits
+D2/post,validation,Sim,root_699066b465aa7d5e9396,119,1.0,0.9981440692275193,registeredGPUstoredlogits
+D2/post,validation,Sim,root_6c99c57806b92781af6e,92,1.0,0.9990754565327175,registeredGPUstoredlogits
+D2/post,validation,Sim,root_75481d6cfe809ff00a31,62,1.0,0.9990074127975481,registeredGPUstoredlogits
+D2/post,validation,Sim,root_8a91446e2b9400d3ef2c,124,1.0,0.999110729456289,registeredGPUstoredlogits
+D2/post,validation,Sim,root_952b09431bf778331a46,49,1.0,0.9990500852563865,registeredGPUstoredlogits
+D2/post,validation,Sim,root_dc8c011f397f9a42def7,173,1.0,0.9969366481191498,registeredGPUstoredlogits
+D2/post,validation,SimTask,lift,111,1.0,,
+D2/post,validation,SimTask,nut_assembly,302,1.0,,
+D2/post,validation,SimTask,pick_place,243,1.0,,
+D2/post,validation,SimTask,push,84,1.0,,
+D2/post,validation,SimTask,stack,165,1.0,,
+D3/pre,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.9990677999657582,registeredGPUstoredlogits
+D3/pre,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9994059532496284,registeredGPUstoredlogits
+D3/pre,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9995721050549315,registeredGPUstoredlogits
+D3/pre,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.99959085638275,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_00b146bdc97c9368a83d,36,0.0,7.018610251247143e-05,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_082f3961a86130a18f37,73,0.0,7.057043301909249e-05,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_4160fdda08aa4e598006,129,0.0,0.0010824396043564968,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_56d15e4f8767e5849bb3,48,0.0,5.0444392872164915e-05,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_699066b465aa7d5e9396,119,0.0,0.00017383251129930914,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_6c99c57806b92781af6e,92,0.0,0.000301223492186482,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_75481d6cfe809ff00a31,62,0.0,4.667874873746962e-05,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_8a91446e2b9400d3ef2c,124,0.0,0.00017386887215859817,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_952b09431bf778331a46,49,0.0,9.362762401558046e-05,registeredGPUstoredlogits
+D3/pre,validation,Sim,root_dc8c011f397f9a42def7,173,0.0,0.00030678879359505773,registeredGPUstoredlogits
+D3/pre,validation,SimTask,lift,111,0.0,,
+D3/pre,validation,SimTask,nut_assembly,302,0.0,,
+D3/pre,validation,SimTask,pick_place,243,0.0,,
+D3/pre,validation,SimTask,push,84,0.0,,
+D3/pre,validation,SimTask,stack,165,0.0,,
+D3/post,validation,Real,20260814_150537_stable_maidong_30,240,1.0,0.9990677999657582,registeredGPUstoredlogits
+D3/post,validation,Real,20260814_151336_stable_maidong_30,240,1.0,0.9994059532496284,registeredGPUstoredlogits
+D3/post,validation,Real,20260816_172352_slip_3D_bottle_C_30,150,1.0,0.9995721050549315,registeredGPUstoredlogits
+D3/post,validation,Real,20260816_173235_slip_3D_bottle_A_30,150,1.0,0.99959085638275,registeredGPUstoredlogits
+D3/post,validation,Sim,root_00b146bdc97c9368a83d,36,1.0,0.9266035373906628,registeredGPUstoredlogits
+D3/post,validation,Sim,root_082f3961a86130a18f37,73,1.0,0.9846832437920849,registeredGPUstoredlogits
+D3/post,validation,Sim,root_4160fdda08aa4e598006,129,1.0,0.9885647357790966,registeredGPUstoredlogits
+D3/post,validation,Sim,root_56d15e4f8767e5849bb3,48,1.0,0.8994406535479289,registeredGPUstoredlogits
+D3/post,validation,Sim,root_699066b465aa7d5e9396,119,1.0,0.9923914195907857,registeredGPUstoredlogits
+D3/post,validation,Sim,root_6c99c57806b92781af6e,92,1.0,0.9869627133111826,registeredGPUstoredlogits
+D3/post,validation,Sim,root_75481d6cfe809ff00a31,62,1.0,0.9907061486435899,registeredGPUstoredlogits
+D3/post,validation,Sim,root_8a91446e2b9400d3ef2c,124,1.0,0.9911238761962741,registeredGPUstoredlogits
+D3/post,validation,Sim,root_952b09431bf778331a46,49,1.0,0.9881387879020563,registeredGPUstoredlogits
+D3/post,validation,Sim,root_dc8c011f397f9a42def7,173,1.0,0.991243381514555,registeredGPUstoredlogits
+D3/post,validation,SimTask,lift,111,1.0,,
+D3/post,validation,SimTask,nut_assembly,302,1.0,,
+D3/post,validation,SimTask,pick_place,243,1.0,,
+D3/post,validation,SimTask,push,84,1.0,,
+D3/post,validation,SimTask,stack,165,1.0,,

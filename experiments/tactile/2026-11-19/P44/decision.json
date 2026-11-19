@@ -1,0 +1,23 @@
+{
+  "status": "COMPLETED_STOPPED_NO_P45",
+  "formal_acceptance": false,
+  "joint_passes": {
+    "K1": 1,
+    "K2": 1,
+    "K4": 1,
+    "K8": 1,
+    "Natural_raw": 0,
+    "C3": 1,
+    "C27": 2
+  },
+  "all_K_D_only_11": true,
+  "iterative_extra_benefit": "not supported by joint C0 or adversarial D",
+  "failure_scope": "current configuration; does not establish shared-field architecture impossible",
+  "major_implementation_limit": "D binaryMask branch is a nondifferentiable shortcut; G adversarial gradient exists only through amplitude branch, despite decoder ST",
+  "shared_weights_and_full_output_valid": true,
+  "global_output_constant_collapse": false,
+  "source_information_preservation_fully_validated": false,
+  "existing_C27_D090_release_replaced": false,
+  "next_single_recommendation": "Only if separately approved: repair discriminator occupancy gradient path with forward-identical hard occupancy and explicit decoder Mask surrogate; keep architecture/checkpoints/protocol otherwise fixed. Do not enlarge model or training budget.",
+  "no_automatic_new_training": true
+}

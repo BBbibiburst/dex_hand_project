@@ -1,0 +1,421 @@
+model,scope,bandwidth_scale,units,HSIC,normalized_HSIC,constant_kernel,null_tail_fraction,X_sigma,Y_sigma,inference,null_mean,cyclic_tail_fraction,CI_low,CI_high
+Original,10Root means;all32withinTask swaps inclidentity,1,10,0.026892483180125014,1.0,False,0.03125,30.8441577295164,30.8441577295164,descriptive task-preserving Root null; only2Roots/task,,,,
+Original,all905window global descriptive,0.5,10,0.03009240876966281,1.0,False,,55.11892152299582,55.11892152299582,no window-iid pvalue,,,,
+Original,withinRoot equalmacro,0.5,10,,1.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5441208051622497,0.005,1.0,1.0
+Original,withinRootStage rootmacro,0.5,10,,1.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original,all905window global descriptive,1.0,10,0.006481601424101663,1.0,False,,55.11892152299582,55.11892152299582,no window-iid pvalue,,,,
+Original,withinRoot equalmacro,1.0,10,,1.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5000044979254044,0.005,1.0,1.0
+Original,withinRootStage rootmacro,1.0,10,,1.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original,all905window global descriptive,2.0,10,0.0007014242056191688,1.0,False,,55.11892152299582,55.11892152299582,no window-iid pvalue,,,,
+Original,withinRoot equalmacro,2.0,10,,1.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4585317613381546,0.005,1.0,1.0
+Original,withinRootStage rootmacro,2.0,10,,1.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1,10Root means;all32withinTask swaps inclidentity,1,10,0.03022550749063329,0.5624802168039907,False,0.34375,30.8441577295164,11.17875781985644,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K1,all905window global descriptive,0.5,10,0.01085834887590388,0.2525298701233233,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1,withinRoot equalmacro,0.5,10,,0.48359142568791214,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.37939757077207026,0.005,0.4342525257242043,0.5296276736121042
+B_K1,withinRootStage rootmacro,0.5,10,,0.6583525145268012,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1,all905window global descriptive,1.0,10,0.0042222847905315185,0.2082302227646951,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1,withinRoot equalmacro,1.0,10,,0.39257284992600944,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3256342771005079,0.01,0.35742933443051406,0.4271529579160007
+B_K1,withinRootStage rootmacro,1.0,10,,0.5905060010451547,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1,all905window global descriptive,2.0,10,0.0008049263738601349,0.15066378947768425,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1,withinRoot equalmacro,2.0,10,,0.318212855259412,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27197697190733133,0.07,0.27589883448950603,0.3602663279204022
+B_K1,withinRootStage rootmacro,2.0,10,,0.5227333787710539,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2,10Root means;all32withinTask swaps inclidentity,1,10,0.03023441230541107,0.5580986027578934,False,0.40625,30.8441577295164,10.723113560572473,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K2,all905window global descriptive,0.5,10,0.010871046410341619,0.250141876512013,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2,withinRoot equalmacro,0.5,10,,0.4955891392815266,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3897058913643623,0.005,0.4634882073089458,0.5276900712541073
+B_K2,withinRootStage rootmacro,0.5,10,,0.6646151248870168,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2,all905window global descriptive,1.0,10,0.00420167379751721,0.2074229339136061,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2,withinRoot equalmacro,1.0,10,,0.40172744112536635,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.32788821588258144,0.015,0.37549829031238857,0.4293143370320688
+B_K2,withinRootStage rootmacro,1.0,10,,0.5944090013525328,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2,all905window global descriptive,2.0,10,0.0008350861517438846,0.149251596555205,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2,withinRoot equalmacro,2.0,10,,0.32465652798521016,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2696363792052982,0.04,0.28883248129109707,0.35792976874739707
+B_K2,withinRootStage rootmacro,2.0,10,,0.5193891586720756,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4,10Root means;all32withinTask swaps inclidentity,1,10,0.030248648974512776,0.556871350556426,False,0.40625,30.8441577295164,10.528765174065295,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K4,all905window global descriptive,0.5,10,0.010947918991437221,0.25048656176495576,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4,withinRoot equalmacro,0.5,10,,0.5046736582952318,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3912450496111897,0.005,0.47909078301296193,0.5300757490176947
+B_K4,withinRootStage rootmacro,0.5,10,,0.6701052993513217,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4,all905window global descriptive,1.0,10,0.004209767129759296,0.20792880794420257,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4,withinRoot equalmacro,1.0,10,,0.41113188227942415,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.32924885791791564,0.01,0.39055822428756404,0.43327949074265504
+B_K4,withinRootStage rootmacro,1.0,10,,0.6031654172661233,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4,all905window global descriptive,2.0,10,0.0008494320229532221,0.14906390230071515,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4,withinRoot equalmacro,2.0,10,,0.3327794326576853,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27041531100552196,0.03,0.2997618461730532,0.36258747816429804
+B_K4,withinRootStage rootmacro,2.0,10,,0.5276194631670945,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8,10Root means;all32withinTask swaps inclidentity,1,10,0.030264180526603467,0.5566645368918967,False,0.40625,30.8441577295164,10.452858337328152,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K8,all905window global descriptive,0.5,10,0.010948388401932792,0.24982469168031993,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8,withinRoot equalmacro,0.5,10,,0.506774236313459,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3925217245041963,0.005,0.48202879141476046,0.5310943398128352
+B_K8,withinRootStage rootmacro,0.5,10,,0.6634981875061353,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8,all905window global descriptive,1.0,10,0.004215394034461255,0.20810478546802963,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8,withinRoot equalmacro,1.0,10,,0.4129125233410761,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.329671122705725,0.01,0.39240668713573834,0.434919846249174
+B_K8,withinRootStage rootmacro,1.0,10,,0.6022020061416467,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8,all905window global descriptive,2.0,10,0.0008554867777977109,0.14900801327533586,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8,withinRoot equalmacro,2.0,10,,0.3342571399471762,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27091401643969415,0.03,0.3037128448899514,0.3623598573615947
+B_K8,withinRootStage rootmacro,2.0,10,,0.5310283399916189,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1,10Root means;all32withinTask swaps inclidentity,1,10,0.02325132181407732,0.6367590746280399,False,0.125,30.8441577295164,12.562152657712444,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K1,all905window global descriptive,0.5,10,0.009368180716472052,0.2602953097414641,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1,withinRoot equalmacro,0.5,10,,0.5906113716264565,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4115157192144845,0.005,0.5216615086338414,0.6516824933488925
+A_K1,withinRootStage rootmacro,0.5,10,,0.7010418552260196,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1,all905window global descriptive,1.0,10,0.002502463460234126,0.2645784724795928,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1,withinRoot equalmacro,1.0,10,,0.5071467909414283,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.34641469219073423,0.005,0.43396721073527134,0.5724520695653259
+A_K1,withinRootStage rootmacro,1.0,10,,0.6126272006430411,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1,all905window global descriptive,2.0,10,0.00021934213269338666,0.20515658511235074,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1,withinRoot equalmacro,2.0,10,,0.4326658903220836,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2999185669237189,0.005,0.35031912751102423,0.5056482249560709
+A_K1,withinRootStage rootmacro,2.0,10,,0.5472464779349961,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2,10Root means;all32withinTask swaps inclidentity,1,10,0.023028023793062055,0.6359080825493622,False,0.125,30.8441577295164,12.70972196885537,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K2,all905window global descriptive,0.5,10,0.009467243396168322,0.26095893964811345,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2,withinRoot equalmacro,0.5,10,,0.583521344435493,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.40563990581913006,0.005,0.5135592073741955,0.6461543089928348
+A_K2,withinRootStage rootmacro,0.5,10,,0.6969380551928193,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2,all905window global descriptive,1.0,10,0.002470377902982637,0.2631983179152722,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2,withinRoot equalmacro,1.0,10,,0.49818734090018635,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3408118958352923,0.005,0.4204373546607349,0.5663484644970838
+A_K2,withinRootStage rootmacro,1.0,10,,0.6129583540288452,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2,all905window global descriptive,2.0,10,0.00021507409101689188,0.20350976252621195,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2,withinRoot equalmacro,2.0,10,,0.4219705449024033,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29430310234709633,0.005,0.33901021926752295,0.49655578171973314
+A_K2,withinRootStage rootmacro,2.0,10,,0.5512603030716241,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4,10Root means;all32withinTask swaps inclidentity,1,10,0.022896645570129038,0.634684453307695,False,0.125,30.8441577295164,12.773213768988436,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K4,all905window global descriptive,0.5,10,0.009511782030340848,0.26035363156739316,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4,withinRoot equalmacro,0.5,10,,0.5825849208579461,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.40380664640316,0.005,0.5117318327782723,0.6465227819522286
+A_K4,withinRootStage rootmacro,0.5,10,,0.7010092531221692,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4,all905window global descriptive,1.0,10,0.0024854806030902747,0.26181691518888556,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4,withinRoot equalmacro,1.0,10,,0.49408615621013113,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3391027773751262,0.005,0.41771852311651514,0.5620246481437395
+A_K4,withinRootStage rootmacro,1.0,10,,0.6124293273558716,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4,all905window global descriptive,2.0,10,0.0002170725896446763,0.202754341393213,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4,withinRoot equalmacro,2.0,10,,0.4182460882900152,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29270042595515594,0.005,0.3339357867012514,0.49478821104160536
+A_K4,withinRootStage rootmacro,2.0,10,,0.5481052086337455,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8,10Root means;all32withinTask swaps inclidentity,1,10,0.02278584124995551,0.634499906835581,False,0.125,30.8441577295164,12.836526361058619,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K8,all905window global descriptive,0.5,10,0.009572283680736916,0.26192317097160356,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8,withinRoot equalmacro,0.5,10,,0.5849326466895646,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.40561208445762614,0.005,0.5140666518621888,0.6483978721882824
+A_K8,withinRootStage rootmacro,0.5,10,,0.7034828966163773,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8,all905window global descriptive,1.0,10,0.0024901569915671924,0.26223509201862294,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8,withinRoot equalmacro,1.0,10,,0.4954437323905426,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3400302120727703,0.005,0.4196102748333011,0.5633956528785463
+A_K8,withinRootStage rootmacro,1.0,10,,0.6146589526282653,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8,all905window global descriptive,2.0,10,0.00021722200155296125,0.20284006827653828,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8,withinRoot equalmacro,2.0,10,,0.4178064566221201,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29290568631319175,0.005,0.3343191182204899,0.4924925238420218
+A_K8,withinRootStage rootmacro,2.0,10,,0.5506729332399822,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1,10Root means;all32withinTask swaps inclidentity,1,10,0.03121852276779833,0.6534904443863795,False,0.125,30.8441577295164,4.863517852101137,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K1,all905window global descriptive,0.5,10,0.008875600409849712,0.23160794559135126,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1,withinRoot equalmacro,0.5,10,,0.4792847089872311,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3474779625169867,0.005,0.42925076039165255,0.5266804286558324
+C_K1,withinRootStage rootmacro,0.5,10,,0.604009528883813,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1,all905window global descriptive,1.0,10,0.0043389601117283004,0.2946505194647604,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1,withinRoot equalmacro,1.0,10,,0.4291896841745203,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29917678284453214,0.005,0.3800350657675165,0.4720346160272882
+C_K1,withinRootStage rootmacro,1.0,10,,0.5408878370334768,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1,all905window global descriptive,2.0,10,0.0005605838812349823,0.24137799439635468,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1,withinRoot equalmacro,2.0,10,,0.3780329895195903,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.256275915256874,0.005,0.3347570662389176,0.41132394593832067
+C_K1,withinRootStage rootmacro,2.0,10,,0.48452834211624224,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2,10Root means;all32withinTask swaps inclidentity,1,10,0.030706522901836144,0.6551234366995254,False,0.0625,30.8441577295164,4.6249481690390875,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K2,all905window global descriptive,0.5,10,0.00920272290380981,0.23976739244597836,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2,withinRoot equalmacro,0.5,10,,0.5144217595597944,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.36605603775299356,0.005,0.43878840078958253,0.58240916517939
+C_K2,withinRootStage rootmacro,0.5,10,,0.6479287318910883,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2,all905window global descriptive,1.0,10,0.0045121678602990855,0.3041873676231475,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2,withinRoot equalmacro,1.0,10,,0.45594329971406183,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3157948333394204,0.005,0.39911838701322155,0.5054771532828044
+C_K2,withinRootStage rootmacro,1.0,10,,0.5806323929153587,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2,all905window global descriptive,2.0,10,0.000595931691827829,0.2454139034036827,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2,withinRoot equalmacro,2.0,10,,0.39590516762867733,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2671563805131884,0.005,0.35398526784676265,0.4304092415884041
+C_K2,withinRootStage rootmacro,2.0,10,,0.5165723318061926,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4,10Root means;all32withinTask swaps inclidentity,1,10,0.030336669884032903,0.654066662021649,False,0.09375,30.8441577295164,4.694183495544346,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K4,all905window global descriptive,0.5,10,0.00889682722299211,0.23165329562994968,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4,withinRoot equalmacro,0.5,10,,0.5213883133093299,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3726015910852737,0.005,0.4455010725926932,0.5882332100614152
+C_K4,withinRootStage rootmacro,0.5,10,,0.6479655885518112,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4,all905window global descriptive,1.0,10,0.004446747425456542,0.299987426115627,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4,withinRoot equalmacro,1.0,10,,0.45673887609893116,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3194045762177979,0.005,0.3993634399442688,0.5078984105728177
+C_K4,withinRootStage rootmacro,1.0,10,,0.5884685385276673,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4,all905window global descriptive,2.0,10,0.0006005706570301037,0.2453953690916331,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4,withinRoot equalmacro,2.0,10,,0.3972648499933252,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2684153638425123,0.005,0.35448015080135703,0.43150099324830177
+C_K4,withinRootStage rootmacro,2.0,10,,0.5236402803194503,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8,10Root means;all32withinTask swaps inclidentity,1,10,0.03002456149569256,0.6522027717192884,False,0.0625,30.8441577295164,4.764132701056693,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K8,all905window global descriptive,0.5,10,0.008651021156419008,0.22631588437685526,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8,withinRoot equalmacro,0.5,10,,0.5207194374465292,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.37570894838220786,0.005,0.4461506200233141,0.5863881223604606
+C_K8,withinRootStage rootmacro,0.5,10,,0.6370466860480104,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8,all905window global descriptive,1.0,10,0.004347559318592309,0.29513317088885704,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8,withinRoot equalmacro,1.0,10,,0.46150558655893936,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.323124585275518,0.005,0.40791085643275327,0.5102816808110869
+C_K8,withinRootStage rootmacro,1.0,10,,0.5835921707288511,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8,all905window global descriptive,2.0,10,0.0005911904853089905,0.24338779967073054,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8,withinRoot equalmacro,2.0,10,,0.4010042623934608,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.271290577517908,0.005,0.3614192491573687,0.4347626213715078
+C_K8,withinRootStage rootmacro,2.0,10,,0.5238973097216795,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Constant,10Root means;all32withinTask swaps inclidentity,1,10,0.0,0.0,True,1.0,30.8441577295164,,descriptive task-preserving Root null; only2Roots/task,,,,
+Constant,all905window global descriptive,0.5,10,0.0,0.0,True,,55.11892152299582,,no window-iid pvalue,,,,
+Constant,withinRoot equalmacro,0.5,10,,0.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.0,1.0,0.0,0.0
+Constant,withinRootStage rootmacro,0.5,10,,0.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Constant,all905window global descriptive,1.0,10,0.0,0.0,True,,55.11892152299582,,no window-iid pvalue,,,,
+Constant,withinRoot equalmacro,1.0,10,,0.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.0,1.0,0.0,0.0
+Constant,withinRootStage rootmacro,1.0,10,,0.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Constant,all905window global descriptive,2.0,10,0.0,0.0,True,,55.11892152299582,,no window-iid pvalue,,,,
+Constant,withinRoot equalmacro,2.0,10,,0.0,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.0,1.0,0.0,0.0
+Constant,withinRootStage rootmacro,2.0,10,,0.0,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+RealDonor,10Root means;all32withinTask swaps inclidentity,1,10,0.017941598567296907,0.6733185766606962,False,0.75,30.8441577295164,3.1153585436223272,descriptive task-preserving Root null; only2Roots/task,,,,
+RealDonor,all905window global descriptive,0.5,10,0.0005606217971628172,0.018554219209672616,False,,55.11892152299582,30.4836758038881,no window-iid pvalue,,,,
+RealDonor,withinRoot equalmacro,0.5,10,,0.1672310334547147,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.16875678946450817,0.645,0.1524389667240329,0.1817809516468799
+RealDonor,withinRootStage rootmacro,0.5,10,,0.4208035984994124,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+RealDonor,all905window global descriptive,1.0,10,0.0001432764611132129,0.017887020923412923,False,,55.11892152299582,30.4836758038881,no window-iid pvalue,,,,
+RealDonor,withinRoot equalmacro,1.0,10,,0.11622618930326387,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.11567672973787858,0.45,0.1037132693204157,0.1280843689149255
+RealDonor,withinRootStage rootmacro,1.0,10,,0.313240277327797,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+RealDonor,all905window global descriptive,2.0,10,1.456205025306814e-05,0.01651963373166666,False,,55.11892152299582,30.4836758038881,no window-iid pvalue,,,,
+RealDonor,withinRoot equalmacro,2.0,10,,0.09794315263933406,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.09679926564870449,0.395,0.08643573697574974,0.10843769847698147
+RealDonor,withinRootStage rootmacro,2.0,10,,0.27272341598888505,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.026892479890559002,0.9999999999994071,False,0.03125,30.8441577295164,30.84415131382767,descriptive task-preserving Root null; only2Roots/task,,,,
+Original_TemporalShuffle,all905window global descriptive,0.5,10,0.030092397048314935,0.9999999998304494,False,,55.11892152299582,55.11892152233877,no window-iid pvalue,,,,
+Original_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.9999999997413855,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5441206741496732,0.005,0.9999999995872502,0.9999999998845603
+Original_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.9999999989117244,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalShuffle,all905window global descriptive,1.0,10,0.006481597509312871,0.9999999998998431,False,,55.11892152299582,55.11892152233877,no window-iid pvalue,,,,
+Original_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.9999999998683113,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5000044210211267,0.005,0.999999999765649,0.999999999967119
+Original_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.9999999992547348,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalShuffle,all905window global descriptive,2.0,10,0.0007014238367930797,0.999999999933169,False,,55.11892152299582,55.11892152233877,no window-iid pvalue,,,,
+Original_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.9999999999181215,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4585316630649599,0.005,0.9999999998614573,0.99999999997221
+Original_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.9999999989154107,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030226043215664244,0.5624889811565961,False,0.34375,30.8441577295164,11.179544028676274,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K1_TemporalShuffle,all905window global descriptive,0.5,10,0.010859149388279046,0.25253980965749767,False,,55.11892152299582,10.52850290351124,no window-iid pvalue,,,,
+B_K1_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.48361835614633286,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.37938306258088084,0.005,0.4342529539678832,0.5296657396979416
+B_K1_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.658385693645885,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_TemporalShuffle,all905window global descriptive,1.0,10,0.004222346936151589,0.2082268451794827,False,,55.11892152299582,10.52850290351124,no window-iid pvalue,,,,
+B_K1_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.39264744816069724,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3256295433143425,0.01,0.35745709366837475,0.42726995218748304
+B_K1_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.5906017698756145,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_TemporalShuffle,all905window global descriptive,2.0,10,0.0008048737897907675,0.1506649413275272,False,,55.11892152299582,10.52850290351124,no window-iid pvalue,,,,
+B_K1_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.3182512462702471,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27195048343431927,0.065,0.27590722733984396,0.36031461375671237
+B_K1_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5228670319919948,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030235297624982026,0.558111886592805,False,0.40625,30.8441577295164,10.723667391043515,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K2_TemporalShuffle,all905window global descriptive,0.5,10,0.010872093167336517,0.2501575522209924,False,,55.11892152299582,9.9336044244999,no window-iid pvalue,,,,
+B_K2_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.49558545916673635,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.38969531017016135,0.005,0.46350378369748113,0.5276671346359915
+B_K2_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6646338507556436,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_TemporalShuffle,all905window global descriptive,1.0,10,0.004201819444216335,0.20742373708497344,False,,55.11892152299582,9.9336044244999,no window-iid pvalue,,,,
+B_K2_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.40175810943414214,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.32789175334385146,0.015,0.375526795899723,0.42934182456574715
+B_K2_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.5944425871050477,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_TemporalShuffle,all905window global descriptive,2.0,10,0.0008350502926957831,0.1492538148825186,False,,55.11892152299582,9.9336044244999,no window-iid pvalue,,,,
+B_K2_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.3246907528466595,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.26964058015203357,0.04,0.2888323612536131,0.3579727520249972
+B_K2_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5194574531746141,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.03024949707756326,0.5568837751900687,False,0.40625,30.8441577295164,10.529370058375823,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K4_TemporalShuffle,all905window global descriptive,0.5,10,0.010948933426963,0.2505010151668398,False,,55.11892152299582,9.680386097080605,no window-iid pvalue,,,,
+B_K4_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.504680060522292,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.39124284207879534,0.005,0.47911879977341837,0.5300636776173389
+B_K4_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6701249443722708,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_TemporalShuffle,all905window global descriptive,1.0,10,0.004209804457909223,0.20792447449399554,False,,55.11892152299582,9.680386097080605,no window-iid pvalue,,,,
+B_K4_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.411156974381284,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.32926200777893383,0.01,0.3906096074792953,0.4332761545816404
+B_K4_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6032035496637111,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_TemporalShuffle,all905window global descriptive,2.0,10,0.0008493504197041318,0.14906445440433416,False,,55.11892152299582,9.680386097080605,no window-iid pvalue,,,,
+B_K4_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.33281846285735756,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27042898047627795,0.03,0.2998026622106992,0.3626477217225065
+B_K4_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5276674878724672,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030265061329433473,0.5566773752404817,False,0.40625,30.8441577295164,10.453458473353766,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K8_TemporalShuffle,all905window global descriptive,0.5,10,0.010949634529385379,0.24984501353515473,False,,55.11892152299582,9.578925839868653,no window-iid pvalue,,,,
+B_K8_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5067900209296171,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.39252814945280007,0.005,0.4820532052763422,0.5311041317337533
+B_K8_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6635312466061689,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_TemporalShuffle,all905window global descriptive,1.0,10,0.004215572435936953,0.20810768436001142,False,,55.11892152299582,9.578925839868653,no window-iid pvalue,,,,
+B_K8_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4129370280525615,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3296909370209084,0.01,0.3924581894206872,0.4349167223459995
+B_K8_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6022388397797661,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_TemporalShuffle,all905window global descriptive,2.0,10,0.0008554581041605614,0.1490107213081267,False,,55.11892152299582,9.578925839868653,no window-iid pvalue,,,,
+B_K8_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.3342836321742289,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2709261027508529,0.03,0.3037459541900599,0.36239769398329774
+B_K8_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5310660610974726,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.023252938551825662,0.6368133346435196,False,0.125,30.8441577295164,12.562685628268804,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K1_TemporalShuffle,all905window global descriptive,0.5,10,0.00937346841241616,0.26038931482371896,False,,55.11892152299582,21.18041441136888,no window-iid pvalue,,,,
+A_K1_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5906920644564907,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.41156014457362217,0.005,0.5217658391480976,0.6517333620315684
+A_K1_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.7011686986783803,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalShuffle,all905window global descriptive,1.0,10,0.0025024959370646403,0.26455878581765946,False,,55.11892152299582,21.18041441136888,no window-iid pvalue,,,,
+A_K1_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.5071855894466764,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3464251706238383,0.005,0.4340487792592802,0.5724500524428897
+A_K1_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6127983194718802,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalShuffle,all905window global descriptive,2.0,10,0.00021931018856305727,0.20515430981317945,False,,55.11892152299582,21.18041441136888,no window-iid pvalue,,,,
+A_K1_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.4327678912131791,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29995292942021146,0.005,0.3505333267747759,0.5056920702863974
+A_K1_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5474701123448497,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.02302962888596548,0.6359397182158103,False,0.125,30.8441577295164,12.70981332298894,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K2_TemporalShuffle,all905window global descriptive,0.5,10,0.009470484096341634,0.2610067595853962,False,,55.11892152299582,21.497699653445142,no window-iid pvalue,,,,
+A_K2_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5836034433090511,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.40569398642566623,0.005,0.5137006071959299,0.6461826774797595
+A_K2_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6970648579631722,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_TemporalShuffle,all905window global descriptive,1.0,10,0.002470120680994152,0.2631810198549575,False,,55.11892152299582,21.497699653445142,no window-iid pvalue,,,,
+A_K2_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4982073368582952,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3408362155068525,0.005,0.42052219162779864,0.566305996175217
+A_K2_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6130944285113686,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_TemporalShuffle,all905window global descriptive,2.0,10,0.0002150299201585148,0.20350568585690682,False,,55.11892152299582,21.497699653445142,no window-iid pvalue,,,,
+A_K2_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.4220226037679319,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29432534293660956,0.005,0.3391140362268361,0.4966128715290871
+A_K2_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5513979510717324,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.022896771077768524,0.6346739417379136,False,0.125,30.8441577295164,12.773495816917922,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K4_TemporalShuffle,all905window global descriptive,0.5,10,0.009514587311709328,0.260391499286274,False,,55.11892152299582,21.380870610095656,no window-iid pvalue,,,,
+A_K4_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5826589246133935,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4038470178376199,0.005,0.5118580086152382,0.6465444772056468
+A_K4_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.7011105833442387,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_TemporalShuffle,all905window global descriptive,1.0,10,0.0024854954318587652,0.26179151145544577,False,,55.11892152299582,21.380870610095656,no window-iid pvalue,,,,
+A_K4_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.49413841828762656,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3391469159749184,0.005,0.4178449088328653,0.5620154551045701
+A_K4_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6125503439602629,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_TemporalShuffle,all905window global descriptive,2.0,10,0.00021707249909871763,0.20275291904064668,False,,55.11892152299582,21.380870610095656,no window-iid pvalue,,,,
+A_K4_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.4183461839936767,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29274430162156767,0.005,0.3340278952772736,0.494892170019764
+A_K4_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5482443988282065,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.022787114808847035,0.6345376430545046,False,0.125,30.8441577295164,12.836757872953067,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K8_TemporalShuffle,all905window global descriptive,0.5,10,0.009574047401064418,0.2619313867282113,False,,55.11892152299582,21.396104687570606,no window-iid pvalue,,,,
+A_K8_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.585016220894111,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4056555772769684,0.005,0.5141872996026421,0.6484481275274241
+A_K8_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.7035769919902579,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_TemporalShuffle,all905window global descriptive,1.0,10,0.0024904535997622847,0.2622094138318808,False,,55.11892152299582,21.396104687570606,no window-iid pvalue,,,,
+A_K8_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4954758313481765,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3400634407123836,0.005,0.41967869413412395,0.5633690171710428
+A_K8_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.6147481315723763,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_TemporalShuffle,all905window global descriptive,2.0,10,0.00021725697382435046,0.20283300020860254,False,,55.11892152299582,21.396104687570606,no window-iid pvalue,,,,
+A_K8_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.4178371584968075,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29290787786255035,0.005,0.33441799441227005,0.4924978280328103
+A_K8_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5507829416864928,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.031217583323381842,0.6532137969074668,False,0.125,30.8441577295164,4.865997584910057,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K1_TemporalShuffle,all905window global descriptive,0.5,10,0.008879174548324263,0.2316104271621212,False,,55.11892152299582,9.572130781877842,no window-iid pvalue,,,,
+C_K1_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.47910721359414987,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3473509929737687,0.005,0.42909699503569754,0.5265000481790981
+C_K1_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6038118628997913,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_TemporalShuffle,all905window global descriptive,1.0,10,0.004340118764209139,0.2946022760326164,False,,55.11892152299582,9.572130781877842,no window-iid pvalue,,,,
+C_K1_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.42907778886794634,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.29918842543541374,0.005,0.38000562030315155,0.4718823627486509
+C_K1_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.5406854488653117,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_TemporalShuffle,all905window global descriptive,2.0,10,0.0005607010636598379,0.2413688611354875,False,,55.11892152299582,9.572130781877842,no window-iid pvalue,,,,
+C_K1_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.3779230975710644,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2562782478884197,0.005,0.3346795151562382,0.4112038241523247
+C_K1_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.48435459667767977,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.03072575263860642,0.6550741018811423,False,0.0625,30.8441577295164,4.618413949997656,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K2_TemporalShuffle,all905window global descriptive,0.5,10,0.009204565540030966,0.23975190499899468,False,,55.11892152299582,8.735248380310264,no window-iid pvalue,,,,
+C_K2_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5141884711403759,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3658415280071616,0.005,0.43854117835552553,0.5821754192886435
+C_K2_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6476852743166697,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_TemporalShuffle,all905window global descriptive,1.0,10,0.0045134393063672885,0.3041813230984835,False,,55.11892152299582,8.735248380310264,no window-iid pvalue,,,,
+C_K2_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4558751019917368,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3157203954806383,0.005,0.3990722247609545,0.5053905433077881
+C_K2_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.580436134133069,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_TemporalShuffle,all905window global descriptive,2.0,10,0.0005960780552515689,0.245398685239472,False,,55.11892152299582,8.735248380310264,no window-iid pvalue,,,,
+C_K2_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.39586015420905574,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2671397772274008,0.005,0.3540440721088606,0.4302709473477336
+C_K2_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5164310569135256,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.03033640649832328,0.653811174579307,False,0.09375,30.8441577295164,4.694728045789424,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K4_TemporalShuffle,all905window global descriptive,0.5,10,0.008898291052032858,0.23163805018197978,False,,55.11892152299582,8.549257103748644,no window-iid pvalue,,,,
+C_K4_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5211554085529251,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3723783848524054,0.005,0.445273737032461,0.5880514321115609
+C_K4_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6477271406647629,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_TemporalShuffle,all905window global descriptive,1.0,10,0.0044476427626592655,0.29997551650845045,False,,55.11892152299582,8.549257103748644,no window-iid pvalue,,,,
+C_K4_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4566732547746599,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3192965413583031,0.005,0.3993819135411985,0.5078103973314225
+C_K4_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.5882641226438067,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_TemporalShuffle,all905window global descriptive,2.0,10,0.0006007134807902932,0.24537778819928568,False,,55.11892152299582,8.549257103748644,no window-iid pvalue,,,,
+C_K4_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.39721043335147027,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2683692262260986,0.005,0.3544542658284181,0.43142572701142
+C_K4_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5235299103782582,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_TemporalShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030033250237134025,0.6520449584763527,False,0.0625,30.8441577295164,4.761156278772725,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K8_TemporalShuffle,all905window global descriptive,0.5,10,0.00865263850251827,0.22630821714696484,False,,55.11892152299582,8.552296334542778,no window-iid pvalue,,,,
+C_K8_TemporalShuffle,withinRoot equalmacro,0.5,10,,0.5205044078531318,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3754983338248021,0.005,0.4459659160349721,0.5861945659521937
+C_K8_TemporalShuffle,withinRootStage rootmacro,0.5,10,,0.6368809035040424,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_TemporalShuffle,all905window global descriptive,1.0,10,0.004348095314592839,0.2951313570111215,False,,55.11892152299582,8.552296334542778,no window-iid pvalue,,,,
+C_K8_TemporalShuffle,withinRoot equalmacro,1.0,10,,0.4613804039059005,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.32300380224737485,0.005,0.4078413145714938,0.5101455924409215
+C_K8_TemporalShuffle,withinRootStage rootmacro,1.0,10,,0.58344873452853,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_TemporalShuffle,all905window global descriptive,2.0,10,0.000591198476994389,0.24336964302973935,False,,55.11892152299582,8.552296334542778,no window-iid pvalue,,,,
+C_K8_TemporalShuffle,withinRoot equalmacro,2.0,10,,0.40091387454770844,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2712398922011561,0.005,0.36136647254716847,0.4346516202681735
+C_K8_TemporalShuffle,withinRootStage rootmacro,2.0,10,,0.5238203904556549,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalReverse,10Root means;all32withinTask swaps inclidentity,1,10,0.02689229287908551,0.9999999996818626,False,0.03125,30.8441577295164,30.844249517561067,descriptive task-preserving Root null; only2Roots/task,,,,
+Original_TemporalReverse,all905window global descriptive,0.5,10,0.030092480184699455,0.9999999553697477,False,,55.11892152299582,55.11892152226954,no window-iid pvalue,,,,
+Original_TemporalReverse,withinRoot equalmacro,0.5,10,,0.999999919687814,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5441170331968358,0.005,0.9999998948328315,0.9999999444257611
+Original_TemporalReverse,withinRootStage rootmacro,0.5,10,,0.9999996611622557,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalReverse,all905window global descriptive,1.0,10,0.006481574906265379,0.9999999309445057,False,,55.11892152299582,55.11892152226954,no window-iid pvalue,,,,
+Original_TemporalReverse,withinRoot equalmacro,1.0,10,,0.9999999479424291,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.5000028574147822,0.005,0.999999924766944,0.9999999709719782
+Original_TemporalReverse,withinRootStage rootmacro,1.0,10,,0.9999998744869938,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+Original_TemporalReverse,all905window global descriptive,2.0,10,0.0007014207944155301,0.9999999359227898,False,,55.11892152299582,55.11892152226954,no window-iid pvalue,,,,
+Original_TemporalReverse,withinRoot equalmacro,2.0,10,,0.9999999468776515,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.4585301894376233,0.005,0.9999999211554346,0.9999999724315982
+Original_TemporalReverse,withinRootStage rootmacro,2.0,10,,0.9999998884427915,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalReverse,10Root means;all32withinTask swaps inclidentity,1,10,0.023207612955195106,0.6372831041430218,False,0.125,30.8441577295164,12.577759589689286,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K1_TemporalReverse,all905window global descriptive,0.5,10,0.00937593173938517,0.2608318888715892,False,,55.11892152299582,21.284801871765506,no window-iid pvalue,,,,
+A_K1_TemporalReverse,withinRoot equalmacro,0.5,10,,0.5909030513053447,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.41176246806056344,0.005,0.5222198599686011,0.6521169591563417
+A_K1_TemporalReverse,withinRootStage rootmacro,0.5,10,,0.7013144616074729,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalReverse,all905window global descriptive,1.0,10,0.0024862068589786685,0.2643384132510523,False,,55.11892152299582,21.284801871765506,no window-iid pvalue,,,,
+A_K1_TemporalReverse,withinRoot equalmacro,1.0,10,,0.5070266438219848,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.3464909761230636,0.005,0.43422036166597744,0.572022874012854
+A_K1_TemporalReverse,withinRootStage rootmacro,1.0,10,,0.6128926412219916,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_TemporalReverse,all905window global descriptive,2.0,10,0.00021726322061563487,0.20480169490086172,False,,55.11892152299582,21.284801871765506,no window-iid pvalue,,,,
+A_K1_TemporalReverse,withinRoot equalmacro,2.0,10,,0.4323082764241265,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2998782873303489,0.005,0.3500551479093607,0.5050949419248544
+A_K1_TemporalReverse,withinRootStage rootmacro,2.0,10,,0.5474777744664518,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.03022550749063329,0.5624802168039907,False,0.34375,30.8441577295164,11.178757819856441,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K1_PairShuffle,all905window global descriptive,0.5,10,0.010418151373143307,0.2422923082738026,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1_PairShuffle,withinRoot equalmacro,0.5,10,,0.29218645914617114,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.26387409049920973,0.035,0.2479276182635502,0.33229219359132406
+B_K1_PairShuffle,withinRootStage rootmacro,0.5,10,,0.30915731747643405,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_PairShuffle,all905window global descriptive,1.0,10,0.004017279120906695,0.1981199676843814,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1_PairShuffle,withinRoot equalmacro,1.0,10,,0.24269547244232076,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.22927040200503537,0.22,0.2187272216164886,0.2666637232681529
+B_K1_PairShuffle,withinRootStage rootmacro,1.0,10,,0.20355057626849113,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K1_PairShuffle,all905window global descriptive,2.0,10,0.0007586732268782761,0.142006259266398,False,,55.11892152299582,10.526831771137807,no window-iid pvalue,,,,
+B_K1_PairShuffle,withinRoot equalmacro,2.0,10,,0.20594444845020657,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.1990473259330479,0.37,0.1721432667584062,0.23786723569914195
+B_K1_PairShuffle,withinRootStage rootmacro,2.0,10,,0.16224496436286154,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030234412305411077,0.5580986027578935,False,0.40625,30.8441577295164,10.723113560572472,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K2_PairShuffle,all905window global descriptive,0.5,10,0.010504498094420552,0.24170763015560057,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2_PairShuffle,withinRoot equalmacro,0.5,10,,0.31047274454628687,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2826709785915914,0.035,0.27826078052937253,0.3404592160854577
+B_K2_PairShuffle,withinRootStage rootmacro,0.5,10,,0.31403375288458746,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_PairShuffle,all905window global descriptive,1.0,10,0.004003007526973258,0.19761542797864978,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2_PairShuffle,withinRoot equalmacro,1.0,10,,0.25179909738055517,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2380244393709239,0.225,0.22974675160721514,0.2743023654750497
+B_K2_PairShuffle,withinRootStage rootmacro,1.0,10,,0.20887708653131987,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K2_PairShuffle,all905window global descriptive,2.0,10,0.000787833575028781,0.14080633315172386,False,,55.11892152299582,9.932080200563314,no window-iid pvalue,,,,
+B_K2_PairShuffle,withinRoot equalmacro,2.0,10,,0.2113076776331694,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.20097776678513835,0.295,0.17781523867515453,0.24089545326020642
+B_K2_PairShuffle,withinRootStage rootmacro,2.0,10,,0.16266494999117515,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030248648974512776,0.5568713505564261,False,0.40625,30.8441577295164,10.528765174065295,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K4_PairShuffle,all905window global descriptive,0.5,10,0.010622035581445885,0.2430304036614098,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4_PairShuffle,withinRoot equalmacro,0.5,10,,0.3094159262825657,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2795359754289314,0.035,0.27644139287767316,0.34193673753067655
+B_K4_PairShuffle,withinRootStage rootmacro,0.5,10,,0.3136168152309905,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_PairShuffle,all905window global descriptive,1.0,10,0.004015482838527638,0.19833271869914434,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4_PairShuffle,withinRoot equalmacro,1.0,10,,0.25114054099358174,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23553413481536623,0.205,0.22933065014693338,0.2733524594671273
+B_K4_PairShuffle,withinRootStage rootmacro,1.0,10,,0.20723443878013068,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K4_PairShuffle,all905window global descriptive,2.0,10,0.0008016325157315948,0.14067573128529376,False,,55.11892152299582,9.678256990751475,no window-iid pvalue,,,,
+B_K4_PairShuffle,withinRoot equalmacro,2.0,10,,0.21186577738573079,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2002314720504434,0.285,0.17839020327678126,0.24134264633257058
+B_K4_PairShuffle,withinRootStage rootmacro,2.0,10,,0.16035932892783045,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030264180526603467,0.5566645368918968,False,0.40625,30.8441577295164,10.452858337328154,descriptive task-preserving Root null; only2Roots/task,,,,
+B_K8_PairShuffle,all905window global descriptive,0.5,10,0.010639559942854905,0.24277772077110182,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8_PairShuffle,withinRoot equalmacro,0.5,10,,0.30950509948749744,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.279675171147392,0.035,0.276325357866879,0.3420409695331568
+B_K8_PairShuffle,withinRootStage rootmacro,0.5,10,,0.31430317275403385,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_PairShuffle,all905window global descriptive,1.0,10,0.004020682347641526,0.19849229527554016,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8_PairShuffle,withinRoot equalmacro,1.0,10,,0.25069379454538165,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23514641994650803,0.205,0.22871621392927521,0.272989405476555
+B_K8_PairShuffle,withinRootStage rootmacro,1.0,10,,0.208386713252175,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+B_K8_PairShuffle,all905window global descriptive,2.0,10,0.0008071560783597831,0.1405898101068517,False,,55.11892152299582,9.577468897292878,no window-iid pvalue,,,,
+B_K8_PairShuffle,withinRoot equalmacro,2.0,10,,0.21210929749315097,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.20040489434095207,0.285,0.17970385920329435,0.24047641018797966
+B_K8_PairShuffle,withinRootStage rootmacro,2.0,10,,0.16335213386776912,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.023251321814077325,0.63675907462804,False,0.125,30.8441577295164,12.562152657712446,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K1_PairShuffle,all905window global descriptive,0.5,10,0.008040044780572726,0.22339299484420477,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1_PairShuffle,withinRoot equalmacro,0.5,10,,0.37280611351596693,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.28362325775946257,0.005,0.30295021485196205,0.4401974349779194
+A_K1_PairShuffle,withinRootStage rootmacro,0.5,10,,0.34240559982913876,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_PairShuffle,all905window global descriptive,1.0,10,0.0021877228439751537,0.2313018261667258,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1_PairShuffle,withinRoot equalmacro,1.0,10,,0.3321834647126102,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23810374209822044,0.005,0.26129516052764196,0.40055520291185437
+A_K1_PairShuffle,withinRootStage rootmacro,1.0,10,,0.23006762523868055,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K1_PairShuffle,all905window global descriptive,2.0,10,0.00019144710339666715,0.17906561534812493,False,,55.11892152299582,21.177942657670236,no window-iid pvalue,,,,
+A_K1_PairShuffle,withinRoot equalmacro,2.0,10,,0.2913234806025223,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.21022224616530635,0.005,0.2257669490282497,0.3500622782881344
+A_K1_PairShuffle,withinRootStage rootmacro,2.0,10,,0.1858089242150703,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.023028023793062055,0.6359080825493622,False,0.125,30.8441577295164,12.709721968855371,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K2_PairShuffle,all905window global descriptive,0.5,10,0.008111116121893702,0.2235780970191151,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2_PairShuffle,withinRoot equalmacro,0.5,10,,0.363906685200244,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.27696118405307,0.005,0.29310819428961715,0.433386618964382
+A_K2_PairShuffle,withinRootStage rootmacro,0.5,10,,0.33292850726037004,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_PairShuffle,all905window global descriptive,1.0,10,0.0021563406018588346,0.22974024280917477,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2_PairShuffle,withinRoot equalmacro,1.0,10,,0.32178056616539913,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23243629952224437,0.005,0.2448595565622385,0.392781890211444
+A_K2_PairShuffle,withinRootStage rootmacro,1.0,10,,0.22623906080191009,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K2_PairShuffle,all905window global descriptive,2.0,10,0.00018765410737598643,0.17756412522118192,False,,55.11892152299582,21.494201315874825,no window-iid pvalue,,,,
+A_K2_PairShuffle,withinRoot equalmacro,2.0,10,,0.2803967298262908,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.20487697173534736,0.005,0.21083736261906744,0.343418398983112
+A_K2_PairShuffle,withinRootStage rootmacro,2.0,10,,0.1861939525993265,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.022896645570129038,0.6346844533076951,False,0.125,30.8441577295164,12.773213768988436,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K4_PairShuffle,all905window global descriptive,0.5,10,0.00814455091524699,0.22293019347018236,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4_PairShuffle,withinRoot equalmacro,0.5,10,,0.36016033551487786,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2740985196015894,0.005,0.2882215290525893,0.42990203075809347
+A_K4_PairShuffle,withinRootStage rootmacro,0.5,10,,0.33003131351687326,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_PairShuffle,all905window global descriptive,1.0,10,0.002168656271446353,0.22844310045677388,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4_PairShuffle,withinRoot equalmacro,1.0,10,,0.31705176726641965,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.22926272962491195,0.005,0.24092997528176668,0.3872129703320096
+A_K4_PairShuffle,withinRootStage rootmacro,1.0,10,,0.22144737579070511,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K4_PairShuffle,all905window global descriptive,2.0,10,0.00018933718828222294,0.17684838502292388,False,,55.11892152299582,21.380729976520026,no window-iid pvalue,,,,
+A_K4_PairShuffle,withinRoot equalmacro,2.0,10,,0.2769081941561666,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.20224755404944128,0.005,0.20727484006325136,0.3397980066455535
+A_K4_PairShuffle,withinRootStage rootmacro,2.0,10,,0.1824972420324491,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.02278584124995551,0.634499906835581,False,0.125,30.8441577295164,12.836526361058619,descriptive task-preserving Root null; only2Roots/task,,,,
+A_K8_PairShuffle,all905window global descriptive,0.5,10,0.008193211242298862,0.22418807680571187,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8_PairShuffle,withinRoot equalmacro,0.5,10,,0.36196189733669165,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.2768490398165182,0.005,0.28976444782865046,0.43201404979097885
+A_K8_PairShuffle,withinRootStage rootmacro,0.5,10,,0.3330738772316929,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_PairShuffle,all905window global descriptive,1.0,10,0.0021735151454552147,0.22888996400729109,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8_PairShuffle,withinRoot equalmacro,1.0,10,,0.3184313083622352,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23095559781795358,0.005,0.24231361928662587,0.3889478238800904
+A_K8_PairShuffle,withinRootStage rootmacro,1.0,10,,0.2219842403245798,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+A_K8_PairShuffle,all905window global descriptive,2.0,10,0.00018958986010351436,0.17703740824135658,False,,55.11892152299582,21.39719560089629,no window-iid pvalue,,,,
+A_K8_PairShuffle,withinRoot equalmacro,2.0,10,,0.2770967387163199,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.20296126686756683,0.005,0.2073643281217415,0.340168683941826
+A_K8_PairShuffle,withinRootStage rootmacro,2.0,10,,0.18163612434801318,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.031218522767798323,0.6534904443863796,False,0.125,30.8441577295164,4.8635178521011415,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K1_PairShuffle,all905window global descriptive,0.5,10,0.007225168126395692,0.18854007267492048,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1_PairShuffle,withinRoot equalmacro,0.5,10,,0.3029191479100431,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.23995048054086954,0.005,0.2395199701010366,0.35695884652474424
+C_K1_PairShuffle,withinRootStage rootmacro,0.5,10,,0.2798256881940428,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_PairShuffle,all905window global descriptive,1.0,10,0.0036745087252349922,0.2495288909759126,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1_PairShuffle,withinRoot equalmacro,1.0,10,,0.2883438796156691,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.21120023516375303,0.005,0.23476327186081775,0.3387005669395604
+C_K1_PairShuffle,withinRootStage rootmacro,1.0,10,,0.1867542688816298,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K1_PairShuffle,all905window global descriptive,2.0,10,0.00048591052888159215,0.20922490432497215,False,,55.11892152299582,9.572491041562532,no window-iid pvalue,,,,
+C_K1_PairShuffle,withinRoot equalmacro,2.0,10,,0.26245747618253723,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.18850082444408747,0.005,0.21505487548963229,0.30744956552105457
+C_K1_PairShuffle,withinRootStage rootmacro,2.0,10,,0.14490292950159295,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030706522901836154,0.6551234366995256,False,0.0625,30.8441577295164,4.624948169039082,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K2_PairShuffle,all905window global descriptive,0.5,10,0.007705820676931755,0.20076715877203546,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2_PairShuffle,withinRoot equalmacro,0.5,10,,0.31225233587407214,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.24271741644814676,0.005,0.2463483042226498,0.37092872747074873
+C_K2_PairShuffle,withinRootStage rootmacro,0.5,10,,0.28954579619890597,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_PairShuffle,all905window global descriptive,1.0,10,0.003823890933663176,0.2577872440037993,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2_PairShuffle,withinRoot equalmacro,1.0,10,,0.29537853527922947,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.21528943770990572,0.005,0.24534663612080987,0.33751874731042136
+C_K2_PairShuffle,withinRootStage rootmacro,1.0,10,,0.19469237738957634,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K2_PairShuffle,all905window global descriptive,2.0,10,0.0005121409117983561,0.21090756202552804,False,,55.11892152299582,8.737626804395372,no window-iid pvalue,,,,
+C_K2_PairShuffle,withinRoot equalmacro,2.0,10,,0.2681042092090168,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.1912588878997566,0.01,0.22895623004256666,0.30411362724010643
+C_K2_PairShuffle,withinRootStage rootmacro,2.0,10,,0.15317023395814075,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030336669884032913,0.6540666620216491,False,0.09375,30.8441577295164,4.694183495544343,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K4_PairShuffle,all905window global descriptive,0.5,10,0.007316806323393498,0.19051311842044782,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4_PairShuffle,withinRoot equalmacro,0.5,10,,0.3115856771869071,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.24422201553011805,0.005,0.24271780972432302,0.3733339101574286
+C_K4_PairShuffle,withinRootStage rootmacro,0.5,10,,0.294385465436984,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_PairShuffle,all905window global descriptive,1.0,10,0.003760067061144553,0.2536624484758311,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4_PairShuffle,withinRoot equalmacro,1.0,10,,0.29139719609068143,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.21501202665148278,0.005,0.2383698245343237,0.33748700557053385
+C_K4_PairShuffle,withinRootStage rootmacro,1.0,10,,0.20306842119552493,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K4_PairShuffle,all905window global descriptive,2.0,10,0.0005142937302176295,0.21014230094485273,False,,55.11892152299582,8.552299228264365,no window-iid pvalue,,,,
+C_K4_PairShuffle,withinRoot equalmacro,2.0,10,,0.2640867375338124,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.1891400001694939,0.01,0.22096136355447013,0.30229263326403033
+C_K4_PairShuffle,withinRootStage rootmacro,2.0,10,,0.1602920726469778,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_PairShuffle,10Root means;all32withinTask swaps inclidentity,1,10,0.030024561495692555,0.6522027717192884,False,0.0625,30.8441577295164,4.764132701056695,descriptive task-preserving Root null; only2Roots/task,,,,
+C_K8_PairShuffle,all905window global descriptive,0.5,10,0.00709868463439653,0.1857058330915994,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8_PairShuffle,withinRoot equalmacro,0.5,10,,0.30805714953252555,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.24372875195292026,0.005,0.23767457674682635,0.3705106309275641
+C_K8_PairShuffle,withinRootStage rootmacro,0.5,10,,0.29804305094943184,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_PairShuffle,all905window global descriptive,1.0,10,0.003674110788397318,0.249416255814943,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8_PairShuffle,withinRoot equalmacro,1.0,10,,0.2919991838128339,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.21577064157100748,0.005,0.2392383338405922,0.33828168292978683
+C_K8_PairShuffle,withinRootStage rootmacro,1.0,10,,0.2065896978850677,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,
+C_K8_PairShuffle,all905window global descriptive,2.0,10,0.0005053208950549439,0.20803606254046147,False,,55.11892152299582,8.554126337114065,no window-iid pvalue,,,,
+C_K8_PairShuffle,withinRoot equalmacro,2.0,10,,0.2647930929969225,,,,,Rootcluster bootstrap; cyclicnull is exploratory,0.18949321402755953,0.005,0.22182462312182447,0.30087233169625255
+C_K8_PairShuffle,withinRootStage rootmacro,2.0,10,,0.16275448951147437,,,,,removes Root andliteralStage block offsets; no semantic correspondence claim,,,,

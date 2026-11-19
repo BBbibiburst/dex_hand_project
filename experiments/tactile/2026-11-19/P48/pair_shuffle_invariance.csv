@@ -1,0 +1,13 @@
+model,perRoot_multiset_exact,all_projection_SWD_invariance_by_identity,independent_numerical_spotchecks,max_spotcheck_error,sevenbank_MMD_pair_inverse_exact
+B_K1,True,True,4,0.0,True
+B_K2,True,True,4,0.0,True
+B_K4,True,True,4,0.0,True
+B_K8,True,True,4,0.0,True
+A_K1,True,True,4,0.0,True
+A_K2,True,True,4,0.0,True
+A_K4,True,True,4,0.0,True
+A_K8,True,True,4,0.0,True
+C_K1,True,True,4,0.0,True
+C_K2,True,True,4,0.0,True
+C_K4,True,True,4,0.0,True
+C_K8,True,True,4,0.0,True

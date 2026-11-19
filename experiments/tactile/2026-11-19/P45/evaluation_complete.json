@@ -1,0 +1,13 @@
+{
+  "groups": [
+    "A",
+    "B",
+    "C"
+  ],
+  "C0_rows": 132,
+  "B": "original P44 results reused, not retrained",
+  "all_K_same_group_weights": true,
+  "no_model_or_probe_training": true,
+  "no_Test_Holdout": true,
+  "seconds": 34.72505283355713
+}

@@ -1,0 +1,8 @@
+{
+  "python": "3.10.20",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4",
+  "device": "cuda:0",
+  "GPU": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "other_processes_not_terminated": true
+}

@@ -1,0 +1,157 @@
+P48 REGISTERED 225 protectedfiles
+
+generate.log
+FROZEN_INFERENCE A_K1 train seconds 3.7
+FROZEN_INFERENCE A_K2 train seconds 7.9
+FROZEN_INFERENCE A_K4 train seconds 14.2
+FROZEN_INFERENCE A_K8 train seconds 25.3
+FROZEN_INFERENCE A_K1 validation seconds 26.3
+FROZEN_INFERENCE A_K2 validation seconds 27.7
+FROZEN_INFERENCE A_K4 validation seconds 29.7
+FROZEN_INFERENCE A_K8 validation seconds 33.3
+FROZEN_INFERENCE B_K1 train seconds 36.7
+FROZEN_INFERENCE B_K2 train seconds 40.9
+FROZEN_INFERENCE B_K4 train seconds 47.3
+FROZEN_INFERENCE B_K8 train seconds 58.2
+FROZEN_INFERENCE B_K1 validation seconds 59.2
+FROZEN_INFERENCE B_K2 validation seconds 60.6
+FROZEN_INFERENCE B_K4 validation seconds 62.9
+FROZEN_INFERENCE B_K8 validation seconds 66.5
+FROZEN_INFERENCE C_K1 train seconds 70.3
+FROZEN_INFERENCE C_K2 train seconds 74.8
+FROZEN_INFERENCE C_K4 train seconds 81.2
+FROZEN_INFERENCE C_K8 train seconds 92.0
+FROZEN_INFERENCE C_K1 validation seconds 93.0
+FROZEN_INFERENCE C_K2 validation seconds 94.5
+FROZEN_INFERENCE C_K4 validation seconds 96.8
+FROZEN_INFERENCE C_K8 validation seconds 100.6
+P48 GENERATE COMPLETE
+
+probes.log
+PROBE_DEVICE cpu [{'device': 'cpu', 'kind': 'mlp', 'seconds': 0.11910843849182129}, {'device': 'cpu', 'kind': 'gru', 'seconds': 0.10805320739746094}, {'device': 'cuda', 'kind': 'mlp', 'seconds': 0.9794261455535889}, {'device': 'cuda', 'kind': 'gru', 'seconds': 0.14551830291748047}]
+Traceback (most recent call last):
+  File "/home/zmy/dex_hand_project/outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/probes.py", line 21, in <module>
+    assert (O/'generate_complete.json').exists();start=time.time();reg=json.loads((O/'registration.json').read_text());r=real('train');rv=real('validation');s=natural('train');sv=natural('validation');yr=np.ones(len(r['x']));ys=np.zeros(len(s['x']));y=np.r_[yr,ys];yv=np.r_[np.ones(len(rv['x'])),np.zeros(len(sv['x']))];w=np.r_[.5*weights(r['g']),.5*weights(s['g'])];wv=np.r_[.5*weights(rv['g']),.5*weights(sv['g'])];N=len(y);trainrx=feature(r['x']);valrx=feature(rv['x']);audits=[];folder=O/'probes';folder.mkdir(exist_ok=True)
+AssertionError
+PROBE_DEVICE cpu [{'device': 'cpu', 'kind': 'mlp', 'seconds': 0.07968997955322266}, {'device': 'cpu', 'kind': 'gru', 'seconds': 0.0692739486694336}, {'device': 'cuda', 'kind': 'mlp', 'seconds': 0.27539515495300293}, {'device': 'cuda', 'kind': 'gru', 'seconds': 0.06294369697570801}]
+PROBE_COMPLETE Original logistic secs 3.3 TrainCE 0.0162 ValCE 0.2987 valid False
+PROBE_COMPLETE Original mlp_11 secs 17.2 TrainCE 0.004 ValCE 1.2469 valid False
+PROBE_COMPLETE Original mlp_12 secs 17.4 TrainCE 0.0821 ValCE 1.5124 valid False
+PROBE_COMPLETE Original mlp_13 secs 28.5 TrainCE 0.0012 ValCE 1.2779 valid False
+PROBE_COMPLETE Original gru_11 secs 50.4 TrainCE 0.0 ValCE 0.1703 valid True
+PROBE_COMPLETE Original gru_12 secs 47.0 TrainCE 0.0001 ValCE 0.1966 valid True
+PROBE_COMPLETE Original gru_13 secs 28.8 TrainCE 0.0 ValCE 0.1975 valid True
+PROBE_COMPLETE A_K1 gru_11 secs 29.1 TrainCE 0.0 ValCE 0.0132 valid True
+PROBE_COMPLETE A_K1 gru_12 secs 31.3 TrainCE 0.0 ValCE 0.0116 valid True
+PROBE_COMPLETE A_K1 gru_13 secs 29.5 TrainCE 0.0 ValCE 0.0137 valid True
+PROBE_COMPLETE A_K2 gru_11 secs 30.4 TrainCE 0.0 ValCE 0.0063 valid True
+PROBE_COMPLETE A_K2 gru_12 secs 29.7 TrainCE 0.0 ValCE 0.0183 valid True
+PROBE_COMPLETE A_K2 gru_13 secs 29.4 TrainCE 0.0 ValCE 0.0136 valid True
+PROBE_COMPLETE A_K4 gru_11 secs 29.3 TrainCE 0.0 ValCE 0.0051 valid True
+PROBE_COMPLETE A_K4 gru_12 secs 29.6 TrainCE 0.0 ValCE 0.0036 valid True
+PROBE_COMPLETE A_K4 gru_13 secs 29.1 TrainCE 0.0 ValCE 0.008 valid True
+PROBE_COMPLETE A_K8 gru_11 secs 29.4 TrainCE 0.0 ValCE 0.0061 valid True
+PROBE_COMPLETE A_K8 gru_12 secs 29.0 TrainCE 0.0 ValCE 0.0042 valid True
+PROBE_COMPLETE A_K8 gru_13 secs 29.3 TrainCE 0.0 ValCE 0.0195 valid True
+PROBE_COMPLETE B_K1 gru_11 secs 33.9 TrainCE 0.0 ValCE 0.0496 valid True
+PROBE_COMPLETE B_K1 gru_12 secs 31.3 TrainCE 0.0 ValCE 0.0511 valid True
+PROBE_COMPLETE B_K1 gru_13 secs 30.1 TrainCE 0.0 ValCE 0.0492 valid True
+PROBE_COMPLETE B_K2 gru_11 secs 30.2 TrainCE 0.0 ValCE 0.0017 valid True
+PROBE_COMPLETE B_K2 gru_12 secs 30.1 TrainCE 0.0 ValCE 0.0074 valid True
+PROBE_COMPLETE B_K2 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0051 valid True
+PROBE_COMPLETE B_K4 gru_11 secs 29.8 TrainCE 0.0 ValCE 0.001 valid True
+PROBE_COMPLETE B_K4 gru_12 secs 29.9 TrainCE 0.0 ValCE 0.0254 valid True
+PROBE_COMPLETE B_K4 gru_13 secs 29.7 TrainCE 0.0 ValCE 0.0058 valid True
+PROBE_COMPLETE B_K8 gru_11 secs 30.6 TrainCE 0.0 ValCE 0.001 valid True
+PROBE_COMPLETE B_K8 gru_12 secs 29.9 TrainCE 0.0 ValCE 0.0367 valid True
+PROBE_COMPLETE B_K8 gru_13 secs 29.9 TrainCE 0.0 ValCE 0.0048 valid True
+PROBE_COMPLETE C_K1 gru_11 secs 30.1 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K1 gru_12 secs 30.0 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K1 gru_13 secs 30.1 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K2 gru_11 secs 29.7 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K2 gru_12 secs 30.2 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K2 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K4 gru_11 secs 30.0 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K4 gru_12 secs 29.7 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K4 gru_13 secs 30.7 TrainCE 0.0 ValCE 0.0005 valid True
+PROBE_COMPLETE C_K8 gru_11 secs 29.9 TrainCE 0.0 ValCE 0.0001 valid True
+PROBE_COMPLETE C_K8 gru_12 secs 30.1 TrainCE 0.0 ValCE 0.0 valid True
+PROBE_COMPLETE C_K8 gru_13 secs 30.0 TrainCE 0.0 ValCE 0.0005 valid True
+P48 PROBES COMPLETE
+
+baseline_gate.log
+BASELINE_GATE [{'instance': 'mlp_12', 'baseline_JSD': -0.8192918573759626, 'CI_low': -2.239240643281132, 'CI_high': 0.3582952088726446, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'gru_11', 'baseline_JSD': 0.522840115513403, 'CI_low': 0.4019969504048268, 'CI_high': 0.6409718599893434, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}, {'instance': 'logistic', 'baseline_JSD': 0.39448584542660897, 'CI_low': 0.1448463433885383, 'CI_high': 0.6294664007077455, 'TrainVal_mismatch': True, 'converged': True, 'baseline_valid': False}, {'instance': 'mlp_11', 'baseline_JSD': -0.5537530281144499, 'CI_low': -1.7485478875787355, 'CI_high': 0.4872242177965777, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'mlp_13', 'baseline_JSD': -0.5847468511047343, 'CI_low': -1.793854708667111, 'CI_high': 0.41898956100075296, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}]
+BASELINE_GATE [{'instance': 'mlp_12', 'baseline_JSD': -0.8192918573759626, 'CI_low': -2.239240643281132, 'CI_high': 0.3582952088726446, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'gru_11', 'baseline_JSD': 0.522840115513403, 'CI_low': 0.4019969504048268, 'CI_high': 0.6409718599893434, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}, {'instance': 'gru_12', 'baseline_JSD': 0.49652765082054956, 'CI_low': 0.371706014810434, 'CI_high': 0.6127006751738775, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}, {'instance': 'logistic', 'baseline_JSD': 0.39448584542660897, 'CI_low': 0.1448463433885383, 'CI_high': 0.6294664007077455, 'TrainVal_mismatch': True, 'converged': True, 'baseline_valid': False}, {'instance': 'mlp_11', 'baseline_JSD': -0.5537530281144499, 'CI_low': -1.7485478875787355, 'CI_high': 0.4872242177965777, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'mlp_13', 'baseline_JSD': -0.5847468511047343, 'CI_low': -1.793854708667111, 'CI_high': 0.41898956100075296, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}]
+BASELINE_GATE [{'instance': 'mlp_12', 'baseline_JSD': -0.8192918573759626, 'CI_low': -2.239240643281132, 'CI_high': 0.3582952088726446, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'gru_11', 'baseline_JSD': 0.522840115513403, 'CI_low': 0.4019969504048268, 'CI_high': 0.6409718599893434, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}, {'instance': 'gru_12', 'baseline_JSD': 0.49652765082054956, 'CI_low': 0.371706014810434, 'CI_high': 0.6127006751738775, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}, {'instance': 'logistic', 'baseline_JSD': 0.39448584542660897, 'CI_low': 0.1448463433885383, 'CI_high': 0.6294664007077455, 'TrainVal_mismatch': True, 'converged': True, 'baseline_valid': False}, {'instance': 'mlp_11', 'baseline_JSD': -0.5537530281144499, 'CI_low': -1.7485478875787355, 'CI_high': 0.4872242177965777, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'mlp_13', 'baseline_JSD': -0.5847468511047343, 'CI_low': -1.793854708667111, 'CI_high': 0.41898956100075296, 'TrainVal_mismatch': True, 'converged': False, 'baseline_valid': False}, {'instance': 'gru_13', 'baseline_JSD': 0.4956643487746622, 'CI_low': 0.3504109985812104, 'CI_high': 0.6386540750870101, 'TrainVal_mismatch': False, 'converged': True, 'baseline_valid': True}]
+
+swd.log
+SWD Original 0.41134301198750495 reduction 0.0 seconds 9.3
+SWD B_K1 0.33906333322189575 reduction 0.1757163162110671 seconds 17.1
+SWD B_K2 0.3413144949999375 reduction 0.17024360435639208 seconds 24.8
+SWD B_K4 0.3421091181196214 reduction 0.16831182699169467 seconds 31.6
+SWD B_K8 0.3425070436319978 reduction 0.16734444575321517 seconds 37.9
+SWD A_K1 0.20660925217182965 reduction 0.4977202817338595 seconds 44.5
+SWD A_K2 0.20760217768387684 reduction 0.4953064191347366 seconds 51.1
+SWD A_K4 0.20784684254367428 reduction 0.49471162390869083 seconds 58.7
+SWD A_K8 0.2079587385526703 reduction 0.49443959787266956 seconds 66.3
+SWD C_K1 0.3746443858848263 reduction 0.08921660276993704 seconds 73.3
+SWD C_K2 0.37722044296719087 reduction 0.0829540505755586 seconds 80.7
+SWD C_K4 0.37679504925202645 reduction 0.08398820869364354 seconds 86.6
+SWD C_K8 0.3765531904039021 reduction 0.0845761823338319 seconds 92.4
+SWD Constant 0.332755425833695 reduction 0.1910512245585374 seconds 98.2
+SWD RealDonor 0.22026635546536627 reduction 0.4645190290188833 seconds 104.1
+PATH A 1 seconds 104.8
+PATH A 2 seconds 105.7
+PATH A 4 seconds 107.3
+PATH A 8 seconds 110.3
+PATH B 1 seconds 110.8
+PATH B 2 seconds 111.7
+PATH B 4 seconds 113.2
+PATH B 8 seconds 116.1
+PATH C 1 seconds 116.6
+PATH C 2 seconds 117.4
+PATH C 4 seconds 118.9
+PATH C 8 seconds 121.9
+P48 SWD/PATH COMPLETE
+
+equivalence.log
+EQUIVALENCE Original 0.4113298276205452 epsilon 0.3685706084178158 CI -0.032192444467605975 0.270925313927108
+EQUIVALENCE B_K1 0.5372078442784614 epsilon 0.3685706084178158 CI 0.13051124726679467 0.3376533243978587
+EQUIVALENCE B_K2 0.5414276294420445 epsilon 0.3685706084178158 CI 0.1341848485339185 0.3434058069475312
+EQUIVALENCE B_K4 0.5423358826189117 epsilon 0.3685706084178158 CI 0.13468195081520673 0.3446863206288449
+EQUIVALENCE B_K8 0.5428114873198276 epsilon 0.3685706084178158 CI 0.13522429169058575 0.3456111621913659
+EQUIVALENCE A_K1 0.3693778962468177 epsilon 0.3685706084178158 CI -0.0817709321378642 0.24615829410901716
+EQUIVALENCE A_K2 0.3698283816390144 epsilon 0.3685706084178158 CI -0.08179256288216293 0.24612909981686693
+EQUIVALENCE A_K4 0.36968402765018654 epsilon 0.3685706084178158 CI -0.08289847576814437 0.24611857202656232
+EQUIVALENCE A_K8 0.37032835475775705 epsilon 0.3685706084178158 CI -0.08234671028428202 0.24652919720664562
+EQUIVALENCE C_K1 0.6345720309258721 epsilon 0.3685706084178158 CI 0.20303711412150705 0.4411126787805877
+EQUIVALENCE C_K2 0.6391151052674066 epsilon 0.3685706084178158 CI 0.209183964661574 0.444331444098222
+EQUIVALENCE C_K4 0.6394474452514655 epsilon 0.3685706084178158 CI 0.20853603817015587 0.4456106990284391
+EQUIVALENCE C_K8 0.63856868641581 epsilon 0.3685706084178158 CI 0.20725877574668022 0.44417599635625654
+EQUIVALENCE Constant 0.5449405821888981 epsilon 0.3685706084178158 CI 0.12295904013443384 0.3444372886975753
+EQUIVALENCE RealDonor 0.3538376980400153 epsilon 0.3685706084178158 CI -0.08729177524055175 0.22547533829829214
+P48 EQUIVALENCE COMPLETE
+
+quality.log
+P48 QUALITY COMPLETE
+
+historical_audit.log
+HISTORICAL ARTIFACTS VERIFIED 413
+
+shared_audit.log
+SHARED PARAMETER AUDIT PASS
+
+latent_path.log
+LATENT PATH AUDIT COMPLETE
+
+checks.log
+P48 STATISTICAL CHECKS PASS
+
+jsd_summary.log
+P48 JSD SUMMARY COMPLETE 43 trained 48 stopped
+
+report.log
+P48 REPORT COMPLETE
+
+FINAL_VERIFICATION {"protected_historical_files": 603, "protected_hashes_all_unchanged": true, "D090_pack_files": 71, "D090_pack_unchanged": true, "Validation_endpoints_bit_equal_all12": true, "model_count_actual": 43, "model_count_stopped": 48, "TrainVal_group_disjoint": true, "no_Test_Holdout": true, "no_C0_inference": true, "migration_training_epochs": 0, "migration_optimizer_steps": 0, "no_server_changes": true, "no_commit_push": true, "P49_started": false}
+P48 STOP; no P49.

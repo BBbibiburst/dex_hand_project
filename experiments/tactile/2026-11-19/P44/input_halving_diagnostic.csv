@@ -1,0 +1,5 @@
+K,diagnostic_only,input_halving_output_RMSE,windows,nonphysical_gain_test
+1,True,0.08060225592559535,64,True
+2,True,0.0791920892197844,64,True
+4,True,0.07898351000576673,64,True
+8,True,0.07855912653554592,64,True

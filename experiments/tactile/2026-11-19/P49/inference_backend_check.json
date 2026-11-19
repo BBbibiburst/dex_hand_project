@@ -1,0 +1,16 @@
+{
+  "registered": "CPUfrozenEncoder+CUDAfield/Decoder,64batch",
+  "registered_replay_maxabs": 1.621246337890625e-05,
+  "registered_allclose": true,
+  "tolerance": {
+    "rtol": 1e-05,
+    "atol": 1e-06
+  },
+  "registered_Mask_equal": true,
+  "pureCPU_maxabs": 3.125908851623535,
+  "pureCPU_allclose": false,
+  "pureCPU_Mask_diff_count": 31,
+  "Mask_entries": 2577440,
+  "no_threshold_or_weight_change": true,
+  "interpretation": "hard/autoregressive readout backend sensitivity;not crossbackend stablemodel claim"
+}

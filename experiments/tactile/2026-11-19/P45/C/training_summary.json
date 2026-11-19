@@ -1,0 +1,17 @@
+{
+  "epochs": 20,
+  "G_steps": 1152,
+  "D_steps": 1280,
+  "K_step_counts": {
+    "1": 320,
+    "2": 320,
+    "4": 320,
+    "8": 320
+  },
+  "train_seconds": 45.752349615097046,
+  "GPU_peak_bytes": 279517696,
+  "all_Train_windows_each_epoch": true,
+  "VAE_bit_identical": true,
+  "field_initial_hash": "88b99c2991c45478c6b1975e3edb5142b0e7438eb74ac3984a386c367feadc5d",
+  "no_checkpoint_search": true
+}
