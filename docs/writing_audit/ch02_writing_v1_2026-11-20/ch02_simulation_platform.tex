@@ -1,0 +1,398 @@
+% !TeX root = ../thesis.tex
+% TH-CH02-WRITE-V1: reviewed materials; draft, not compiled or frozen.
+\chapter{RM75B-Dex Hand多任务仿真平台与触觉感知建模}
+\label{chap:simulation_platform}
+
+\section{系统需求与总体架构}
+\label{sec:platform_architecture}
+
+多任务灵巧手操作要求机器人在同一场景中完成接近、接触、抓持和物体运动等连续过程。机械臂决定手部能够到达的位置与姿态，欠驱动灵巧手通过有限驱动通道形成接触，触觉观测则反映接触发生后的局部响应。这些环节相互影响，不能仅通过一个抓取姿态或单独的传感器模型描述。为支持后续专家示教生成与触觉数据研究，本文搭建RM75B-Dex Hand仿真平台，将机器人模型、控制接口、触觉阵列、任务逻辑和记录模块组织到统一执行流程中。平台基于MuJoCo完成多刚体动力学和接触计算\cite{todorov2012mujoco}，本章讨论仿真实现及其观测含义，不涉及实机集成认证。
+
+平台采用图\ref{fig:ch02_architecture}所示的五层结构。模型层保存机械臂、手部、底座及物体资产，负责提供关节和几何关系；控制层将动作解释为关节或末端目标；感知层在机器人表面配置触觉采样区域并组织观测；任务层设置场景、初始条件和评价逻辑；记录层保存执行过程中的状态、动作与传感器输出。各层通过明确接口组合，主要职责见表\ref{tab:ch02_modules}。这种组织方式使任务配置不必重复实现机器人模型，也使传感器后处理能够与任务成功条件分开检查。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.91\textwidth}\centering
+  任务配置与初始条件\\[4pt]
+  $\downarrow$\\[4pt]
+  模型层：机械臂、灵巧手、底座、物体\\[4pt]
+  控制层：动作解释与执行器目标 $\rightarrow$ MuJoCo接触与状态推进\\[4pt]
+  $\downarrow$\\[4pt]
+  感知层：状态与触觉观测 $\rightarrow$ 任务层：评价与终止\\[4pt]
+  $\downarrow$\\[4pt]
+  记录层：关联保存动作、观测及执行信息
+  \end{minipage}}
+  \caption{仿真平台模块及控制、观测数据流}
+  \label{fig:ch02_architecture}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{仿真平台主要模块与功能}
+  \label{tab:ch02_modules}
+  \begin{tabular}{p{0.15\textwidth}p{0.32\textwidth}p{0.39\textwidth}}
+    \hline
+    模块 & 主要组成 & 接口职责\\
+    \hline
+    模型层 & 模型描述、资产与组合构建器 & 确定关节、执行器、几何及安装关系\\
+    控制层 & 机械臂与手部位置控制器 & 将动作转换为执行器控制量\\
+    感知层 & 曲面阵列与信号处理器 & 绑定传感器地址并输出有序观测\\
+    任务层 & 场景、任务状态与评价器 & 设置任务条件并评价执行状态\\
+    记录层 & 在线记录及合同检查 & 保存关联记录并检查数组合法性\\
+    \hline
+  \end{tabular}
+\end{table}
+
+一次控制周期中，环境先将动作送入控制器，再推进若干物理子步，随后读取观测并进行任务评价。记录模块位于执行链路的接口处，不参与接触力求解。这样的顺序有助于区分控制目标、物理状态和观测结果，避免把目标动作直接当成已经完成的运动。
+
+平台设置Lift、PickPlace、Stack、Push和NutAssembly五类任务接口，分别面向抬升、搬移放置、堆叠、推动和装配过程。任务工厂负责选择任务对象，并由任务实例补充相应场景。接口注册说明软件具有对应入口，但不能代替具体条件下的执行验证。本章仅以已有代表性记录核查观测输出，抓取生成与任务性能分析在第三章展开，数据组织及质量控制在第四章讨论。
+
+\section{RM75B机械臂与Dex Hand灵巧手模型}
+\label{sec:robot_model}
+
+机器人组合模型由RM75B机械臂、Dex Hand灵巧手和安装底座构成。机械臂MJCF定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\_joint1至pos\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。
+
+机械臂各级连杆通过局部位置和四元数描述相对变换，末端定义right\_hand安装体和right\_hand\_site。安装体用于附着手部模型，末端site用于位姿读取及逆运动学计算，两者职责不同。组合构建器将手部安装到指定body，并施加机械臂描述中给定的附加旋转，其XYZ欧拉角为$(-90^\circ,-90^\circ,0^\circ)$。该旋转通过四元数参与坐标组合，必须与父body原有变换共同使用。因此，附加安装角不能直接解释为灵巧手在世界坐标系中的姿态。对于定义在几何局部坐标系中的点，其所属刚体坐标由旋转和平移共同确定；同样的变换规则也用于后续触觉采样点安装。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox[c][2.4cm][c]{0.88\textwidth}{\centering
+  组合模型图位：RM75B连杆链、right\_hand安装体与Dex Hand。\\
+  待依据本章冻结后的XML及STL制作离线几何图；\\
+  当前不以其他版本截图替代。}}
+  \caption{RM75B与Dex Hand组合模型的几何展示图位}
+  \label{fig:ch02_robot_model}
+\end{figure}
+
+当前Dex Hand模型含十二个转动关节，由六个固定腱和六个位置执行器驱动。其中四个手指分别具有两个转动关节，每指两个关节共同受一个屈曲腱驱动；拇指包含对掌关节及三个屈曲关节，对掌与屈曲分别对应一个驱动通道。手指上的三个触觉Patch不意味着三个独立关节：部分皮肤几何附着于同一指节刚体。模型需要分别记录机构自由度、执行器数量和感知区域数量，三者不存在一一对应关系。
+
+固定腱通过关节坐标的线性组合定义传动长度，其关系写为
+\begin{equation}
+  l_t=\sum_{j\in\mathcal J_t}c_{tj}q_j,
+  \label{eq:ch02_tendon}
+\end{equation}
+其中，$q_j$为第$j$个关节角，$\mathcal J_t$为第$t$个固定腱关联的关节集合，$c_{tj}$为XML中给定的传动系数。四指屈曲腱对两个关节均使用0.003的系数；拇指对掌系数为0.0085，屈曲腱的三个系数依次为0.0035、0.004和0.004。在模型长度约定下，控制目标对应腱坐标，不是各手指关节的独立角度目标。这些系数描述当前仿真传动，不作为实机推杆尺寸的测量结果。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.89\textwidth}\centering
+  机械臂：7个位置通道 $\rightarrow$ 7个转动关节\\[5pt]
+  四指：每指1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 2个转动关节\\[5pt]
+  拇指：1个对掌通道 $\rightarrow$ 1个转动关节\\[3pt]
+  \phantom{拇指：}1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 3个转动关节
+  \end{minipage}}
+  \caption{当前模型的关节与驱动关系}
+  \label{fig:ch02_drive}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{机械臂及灵巧手执行器配置}
+  \label{tab:ch02_actuators}
+  \begin{tabular}{p{0.26\textwidth}p{0.23\textwidth}p{0.24\textwidth}p{0.13\textwidth}}
+    \hline
+    执行器或通道 & 控制坐标范围 & 比例增益$k_p$ & 力或力矩限幅\\
+    \hline
+    pos\_joint1 & $[-3.1,3.1]$ rad & 5000 & $\pm60$ N$\cdot$m\\
+    pos\_joint2 & $[-2.268,2.268]$ rad & 5000 & $\pm60$ N$\cdot$m\\
+    pos\_joint3 & $[-3.1,3.1]$ rad & 3000 & $\pm30$ N$\cdot$m\\
+    pos\_joint4 & $[-2.355,2.355]$ rad & 3000 & $\pm30$ N$\cdot$m\\
+    pos\_joint5 & $[-3.1,3.1]$ rad & 2000 & $\pm10$ N$\cdot$m\\
+    pos\_joint6 & $[-2.233,2.233]$ rad & 2000 & $\pm10$ N$\cdot$m\\
+    pos\_joint7 & $[-6.28,6.28]$ rad & 1000 & $\pm10$ N$\cdot$m\\
+    四指屈曲，各1通道 & $[0,0.01]$ m & 10000 & $\pm20$ N\\
+    拇指对掌 & $[-0.0069,0.004]$ m & 4000 & $\pm20$ N\\
+    拇指屈曲 & $[0,0.01]$ m & 4000 & $\pm20$ N\\
+    \hline
+  \end{tabular}
+\end{table}
+
+手部关节还配置被动弹簧及阻尼。驱动腱提供整体屈曲作用，而不同关节在接触物体后受到不同约束，未受阻关节仍可改变姿态，由此表达模型中的欠驱动适应行为。该机制并不意味着接触后每个关节都获得唯一稳定解，其运动还受弹簧、摩擦及求解参数影响。表\ref{tab:ch02_actuators}列出的腱执行器力与机械臂关节力矩对应不同传动坐标，不能直接比较数值大小。
+
+需要说明，当前手部XML没有显式滑动推杆、闭链等式约束或可变形Flex网格。部分执行器名称保留act\_push字样，但名称不改变固定腱传动的实际定义。本文以当前XML描述机构，不将历史名称解释为已经实现的闭链结构，也不把接触柔顺参数等同于硅胶形变。模型资产能够追溯到项目内XML、URDF与STL文件，但其相对实机的几何误差和物理参数标定尚未得到认证。图\ref{fig:ch02_robot_model}因此保留为待补的准确几何图位，驱动关系则按图\ref{fig:ch02_drive}所示的实际拓扑表达。
+
+\section{灵巧手接触建模与控制方法}
+\label{sec:contact_control}
+
+平台的控制过程可分为目标解释、执行器位置伺服和物理积分三个层次。目标解释确定机器人希望到达的关节或末端状态，位置执行器据此产生驱动力，接触求解器再计算约束下的状态变化。MuJoCo提供接触与多刚体约束的统一计算框架\cite{todorov2012mujoco,mujoco2026computation}，但具体运动仍由组合模型、局部几何和参数共同决定。独立机械臂XML中的求解设置在组合构建时被覆盖：实际构建器采用Newton求解器、100次迭代上限、椭圆摩擦锥与0.001~s物理步长，不能将原机械臂文件中的PGS配置直接作为组合环境参数。
+
+手部皮肤碰撞几何采用mesh类型，当前padgeom默认接触维数为4，滑动、扭转和滚动摩擦参数依次为1.3、0.02和0.0002，接触参考参数为$(0.01,1)$。这些设置适用于对应几何类别，并非所有接触的统一取值。模型对部分手指与拇指、手掌与手指接触另设显式pair，物体和桌面也具有自身参数，最终接触行为需要结合配对规则解释。触觉布局虽然引用同一皮肤网格资产，仍不能把拟合表面直接等同于引擎内部碰撞表示。接触约束具有数值柔顺性，也不表示模型已经包含可变形触觉皮肤。
+
+机械臂position模式将七维动作解释为关节位置目标，经合法范围约束后写入执行器控制数组。IK模式则接受末端位置与四元数组成的七维目标，在临时状态上迭代求解关节配置。设机械臂关节向量为$\boldsymbol q\in\mathbb R^7$，位置误差为$\boldsymbol e_p\in\mathbb R^3$，四元数误差转换得到的旋转向量为$\boldsymbol e_r\in\mathbb R^3$。代码分别调用末端site的位置与旋转Jacobian，按权重组成$\boldsymbol J_w$及$\boldsymbol e_w$。这里的旋转误差不是欧拉角逐分量相减，位置与旋转权重则用于调整两类误差在数值求解中的相对作用。
+
+对加权Jacobian作奇异值分解后，控制器使用阻尼伪逆计算主任务修正，并在启用时叠加姿态项：
+\begin{equation}
+ \begin{aligned}
+  \boldsymbol J_w&=\boldsymbol U\boldsymbol\Sigma\boldsymbol V^{\mathsf T},\qquad
+  \boldsymbol J_{\lambda}^{+}=\boldsymbol V\,
+  \operatorname{diag}\!\left(\frac{\sigma_i}{\sigma_i^2+\lambda^2}\right)
+  \boldsymbol U^{\mathsf T},\\
+  \Delta\boldsymbol q&=\boldsymbol J_{\lambda}^{+}\boldsymbol e_w+
+  \left(\boldsymbol I-\boldsymbol J_{\lambda}^{+}\boldsymbol J_w\right)
+  k_n(\boldsymbol q_0-\boldsymbol q).
+ \end{aligned}
+ \label{eq:ch02_ik}
+\end{equation}
+其中，$\sigma_i$为奇异值，$\lambda$为阻尼系数，$k_n$为姿态调节增益，$\boldsymbol q_0$为参考姿态。阻尼能够限制小奇异值对应的更新放大，代码还依据奇异值和条件数调整阻尼。式\ref{eq:ch02_ik}中的第二项仅在零空间选项开启时使用；由于采用阻尼伪逆，其投影不应解释为对主任务完全无影响的严格正交零空间。求解后还需限制单次关节增量、关节范围及目标变化速度，防止迭代结果直接产生过大的控制跳变。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.91\textwidth}\centering
+  动作输入 $\rightarrow$ 关节目标 / 末端位姿IK\\[4pt]
+  $\downarrow$ 限幅与目标平滑\\[4pt]
+  机械臂与手部位置执行器目标\\[4pt]
+  $\downarrow$ 在控制周期内保持\\[4pt]
+  50个物理子步：动力学、碰撞及接触约束求解\\[4pt]
+  $\downarrow$\\[4pt]
+  观测读取 $\rightarrow$ 任务评价与下一周期
+  \end{minipage}}
+  \caption{指定配置下的控制层次与多速率执行流程}
+  \label{fig:ch02_control}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{主要控制与物理参数及其适用范围}
+  \label{tab:ch02_control_parameters}
+  \begin{tabular}{p{0.28\textwidth}p{0.23\textwidth}p{0.35\textwidth}}
+    \hline
+    参数 & 取值 & 配置层级\\
+    \hline
+    物理步长、求解器 & 0.001~s，Newton & 组合构建器覆盖值\\
+    求解迭代上限、摩擦锥 & 100，椭圆锥 & 组合构建器覆盖值\\
+    控制周期 & 0.05~s & 指定机器人profile\\
+    IK迭代上限、初始阻尼 & 80，$10^{-3}$ & 控制器构造默认值\\
+    位置、旋转误差权重 & 1，0.35 & 控制器构造默认值\\
+    位置、旋转误差容差 & $10^{-4}$~m，$10^{-3}$~rad & 控制器构造默认值\\
+    单次关节修正上限 & 0.15~rad & 控制器构造默认值\\
+    目标关节速度上限 & 2~rad/s & 控制器构造默认值\\
+    零空间调节增益 & 0.1 & 默认开启，可由调用方配置\\
+    \hline
+  \end{tabular}
+\end{table}
+
+手部控制器接收六个位置通道，并根据执行器的传动类型读取坐标。固定腱执行器不能按照单一关节地址解释，其当前位置应从执行器对应的传动坐标获得。底层由MJCF位置执行器及其阻尼设置完成伺服，而不是在控制代码中另设一个通用力矩PD控制器\cite{mujoco2026xml}。表\ref{tab:ch02_control_parameters}中的IK参数是构造默认值，调用方可以覆盖，不能据此认定每条历史Episode都执行了同一套逆运动学。
+
+指定profile的控制周期为0.05~s，环境按其与物理步长之比确定每周期50个子步，对应20~Hz控制和1000~Hz物理积分。图\ref{fig:ch02_control}中，动作只在控制周期开始时更新，执行器目标在子步内保持，环境完成物理推进后读取观测。物理频率决定数值推进间隔，记录频率决定保存多少时刻，两者都不等同于真实传感器带宽。接触可能在子步内出现或消失，因此20~Hz观测并不包含所有物理子步上的瞬态变化，这也是解释触觉时序时需要保留的采样边界。
+
+\section{复杂曲面触觉阵列建模}
+\label{sec:curved_tactile_array}
+
+灵巧手指节和指尖具有不同曲率，直接在固定平面上均匀放置感知区域容易造成区域偏离表面、朝向不一致或局部重复覆盖。平台采用由皮肤STL网格派生采样点的方式，将阵列布局与所属刚体的几何关系连接起来。该设计关注仿真内部采样位置与读出区域的一致性，不以输出通道数相同推断实机电极布局相同。与以图像合成为主要输出的视觉触觉模拟器\cite{wang2022tacto,si2022taxim}不同，本平台在曲面附近布置原生touch感知区域，输出有序标量阵列。
+
+每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\times8$，指尖为$7\times8$；手掌设置$7\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\ref{tab:ch02_patch_layout}。指节几何具有重复性，但采样点仍由相应STL计算，不能用一组平面坐标替换全部曲面。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.91\textwidth}\centering
+  仿真手指索引0、1、2、3、4：每指按下列顺序组织\\[5pt]
+  Patch 0：$4\times8$ $\rightarrow$ Patch 1：$4\times8$
+  $\rightarrow$ Patch 2：$7\times8$\\[5pt]
+  五指小计：$5\times(32+32+56)=600$\\[5pt]
+  手掌Patch：$7\times16=112$ $\rightarrow$ 合计712\\[5pt]
+  每个Patch内部按行主序展开；此图表示索引拓扑，不是实物电极图。
+  \end{minipage}}
+  \caption{五指与手掌触觉阵列的维度及索引组织}
+  \label{fig:ch02_patch_order}
+\end{figure}
+
+segment策略面向指节皮肤。实现先对三角网格进行加密采样，通过主成分分析建立局部轴向与截面方向，再结合三角面朝向及径向分布筛选外表面。主成分方向来自几何点云的主要变化方向，并不自动具有固定的实物解剖含义。截面拟合和有效角度范围用于构造连续外壳样本，随后将样本组织成规则参数网格。与直接按原网格顶点布点相比，该过程能够减少三角网格局部密度差异对阵列索引分布的直接影响，但不保证最终点间距处处相等。
+
+对规则外壳样本，程序拟合张量积Bezier曲面。设参数$u,v\in[0,1]$，控制点为$\boldsymbol C_{ij}\in\mathbb R^3$，曲面及其拟合关系为
+\begin{equation}
+ \begin{aligned}
+  \boldsymbol S(u,v)&=\sum_{i=0}^{d_u}\sum_{j=0}^{d_v}
+    B_i^{d_u}(u)B_j^{d_v}(v)\boldsymbol C_{ij},\\
+  (\boldsymbol A^{\mathsf T}\boldsymbol W\boldsymbol A+\rho\boldsymbol I)\boldsymbol C
+    &=\boldsymbol A^{\mathsf T}\boldsymbol W\boldsymbol P.
+ \end{aligned}
+ \label{eq:ch02_bezier}
+\end{equation}
+其中，$B_i^{d_u}$和$B_j^{d_v}$为Bernstein基函数，$\boldsymbol A$为采样参数对应的设计矩阵，$\boldsymbol P$存储三维样本，$\boldsymbol W$为样本权重。正则强度$\rho$由配置系数与加权设计矩阵的平均对角尺度共同确定，不能直接等同于配置中的无量纲系数。曲面坐标沿用网格的长度单位，参数坐标本身无量纲。最终Taxel位于参数单元中心，避免将相邻单元同时放到同一边界上。
+
+指尖策略的配置名称为fingertip-ellipsoid，但当前函数体并非在理想椭球上直接布点。它先识别指尖的swept-shell外壳，分析轴向切片及外侧包络，再对规则样本拟合Bezier曲面。指尖拟合使用更高的轴向次数及边界权重，以表达末端弯曲和封闭区域；最终轴向参数在$[0.06,1]$范围分格后取中心，而不是把最后一行放到参数极点。这样能够避免指尖极点附近多列采样重合。图\ref{fig:ch02_fingertip}由当前STL与实际采样函数离线生成，展示网格和$7\times8$采样点关系，不代表真实传感器的标定结果。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.76\textwidth]{figures/ch02/fingertip_sampling.pdf}
+  \caption{当前指尖STL及外壳拟合后的阵列采样点（网格局部坐标）}
+  \label{fig:ch02_fingertip}
+\end{figure}
+
+手掌采用mesh-uv策略。程序对网格进行PCA投影，在局部二维参数域内设置规则采样位置，再通过投影三角形的重心坐标插值恢复三维点。当多个表面投影重叠时，需要选择对应外表面；当采样位置落在投影缺口或边界之外时，使用实现中的最近三角形回退。该方法保留了采样点与网格的关系，但二维规则网格不等于曲面等面积划分，投影折叠和回退区域也可能产生不同的局部间距。表\ref{tab:ch02_layout_parameters}列出三类布局的关键差异，不能仅根据策略名称推断其几何性质。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{不同曲面布局方法的关键实现参数}
+  \label{tab:ch02_layout_parameters}
+  \begin{tabular}{p{0.18\textwidth}p{0.29\textwidth}p{0.39\textwidth}}
+    \hline
+    配置策略 & 外壳或参数域构造 & 拟合及最终采样\\
+    \hline
+    segment & PCA轴向、截面及外壳筛选 & Bezier次数$(5,7)$；正则系数$5\times10^{-5}$；参数单元中心\\
+    指尖策略 & swept-shell外包络 & Bezier次数$(6,7)$；正则系数$8\times10^{-6}$；边界权重10\\
+    mesh-uv & PCA二维投影 & 三角形重心插值；外侧选择与缺口回退\\
+    \hline
+  \end{tabular}
+\end{table}
+
+网格采样点还需安装到正确的刚体上。程序先应用skin geom的局部旋转和平移，再根据行列相邻点差分构造切线。列方向归一化为$\boldsymbol e_x$，行方向经Gram--Schmidt正交化得到$\boldsymbol e_y$，法向由两者叉乘确定，局部方向矩阵为$[\boldsymbol e_x,\boldsymbol e_y,\boldsymbol n]$。随后依据点相对body或Patch参考位置进行外向修正。该步骤是保持感知区朝向一致的几何启发式，不能称为已经认证的实物表面法线。图\ref{fig:ch02_frame}展示局部切线与叉乘法向，特意区分外向修正前的坐标构造。
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.66\textwidth]{figures/ch02/taxel_local_frame.pdf}
+  \caption{由相邻采样点构造的局部切线和法向（外向修正前）}
+  \label{fig:ch02_frame}
+\end{figure}
+
+每个采样点对应一个定向box site。其切向半宽分别依据列、行相邻距离设置：
+\begin{equation}
+ h_x=\max\!\left(h_{\min},\frac{\gamma d_c}{2}\right),\qquad
+ h_y=\max\!\left(h_{\min},\frac{\gamma d_r}{2}\right).
+ \label{eq:ch02_site_size}
+\end{equation}
+其中，$d_c,d_r$为对应方向可用相邻距离的最小值，$\gamma$为overlap系数，$h_{\min}$为最小半宽；法向半厚度$h_z$单独配置。指定profile取$\gamma=1.25$、$h_{\min}=0.0005$~m、$h_z=0.004$~m，而传感器类默认厚度和overlap分别为0.0015~m和1.0。二者必须按具体配置区分。box site是有体积的感知区域，不参与独立Taxel碰撞；区域之间允许重叠，其截面面积也不等于经过标定的真实电极面积。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{16个Patch的阵列规格与712维索引区间}
+  \label{tab:ch02_patch_layout}
+  \begin{tabular}{llll}
+    \hline
+    Patch名称 & 行$\times$列 & 零基右开区间 & 布局类别\\
+    \hline
+    skin\_0\_0\_p & $4\times8$ & $[0,32)$ & segment\\
+    skin\_0\_1\_p & $4\times8$ & $[32,64)$ & segment\\
+    skin\_0\_2\_p & $7\times8$ & $[64,120)$ & 指尖策略\\
+    skin\_1\_0\_p & $4\times8$ & $[120,152)$ & segment\\
+    skin\_1\_1\_p & $4\times8$ & $[152,184)$ & segment\\
+    skin\_1\_2\_p & $7\times8$ & $[184,240)$ & 指尖策略\\
+    skin\_2\_0\_p & $4\times8$ & $[240,272)$ & segment\\
+    skin\_2\_1\_p & $4\times8$ & $[272,304)$ & segment\\
+    skin\_2\_2\_p & $7\times8$ & $[304,360)$ & 指尖策略\\
+    skin\_3\_0\_p & $4\times8$ & $[360,392)$ & segment\\
+    skin\_3\_1\_p & $4\times8$ & $[392,424)$ & segment\\
+    skin\_3\_2\_p & $7\times8$ & $[424,480)$ & 指尖策略\\
+    skin\_4\_0\_p & $4\times8$ & $[480,512)$ & segment\\
+    skin\_4\_1\_p & $4\times8$ & $[512,544)$ & segment\\
+    skin\_4\_2\_p & $7\times8$ & $[544,600)$ & 指尖策略\\
+    skin\_palm\_p & $7\times16$ & $[600,712)$ & mesh-uv\\
+    \hline
+  \end{tabular}
+\end{table}
+
+阵列索引按手指0至4、每指Patch 0至2、最后手掌的顺序连接，各Patch内部采用行主序。索引顺序同时服务于传感器命名、观测展开与后处理还原，因而必须保持一致。该组织保证了仿真内部从曲面位置到数组通道的可追溯性，但不认证实机电气通道到同名索引的物理对应。后续展示触觉时可将区间恢复为原二维方阵，而不是把712个通道当作一条具有物理邻接关系的长序列。
+
+\section{712维触觉观测及处理流程}
+\label{sec:tactile_processing}
+
+曲面布局确定感知区域的位置，触觉读出则决定每个区域记录什么量。构建器在组合手部之前调用传感器的augment\_spec接口，为每个采样点添加box site和一个MuJoCo原生mjSENS\_TOUCH传感器。模型完成构建后，bind依据传感器名称查找编号，检查输出维数为1，并保存sensor\_adr所指示的数据地址。地址与传感器编号不是同一概念，其他类型传感器可能占据不同长度的sensordata区间。read\_raw按已绑定地址读取712个值并转换为float32副本，避免后续物理更新改变已经返回的数组。
+
+原生touch在相应body和site感知条件下累加接触法向力，输出非负标量\cite{mujoco2026xml}。在模型采用SI单位的约定下，它可解释为模拟法向力读数，但没有除以真实电极面积，也不包含完整切向力向量。一个接触可能被重叠感知区重复覆盖，因此全部Taxel读数求和不必等于机器人受到的总外力。该读出也不等同于视觉触觉图像或材料内部连续压力场\cite{si2022taxim,sferrazza2022simtoreal}。当前712维链路来自simple\_box与原生touch，不以touch\_grid插件作为直接生成来源。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.91\textwidth}\centering
+  曲面采样 $\rightarrow$ box site与原生touch $\rightarrow$ 地址绑定\\[5pt]
+  sensordata读取 $\rightarrow$ 死区与截断 $\rightarrow$ 幂响应\\[5pt]
+  $\rightarrow$ IIR滤波 $\rightarrow$ Patch内邻域串扰\\[5pt]
+  $\rightarrow$ 可选高斯滤波与噪声（指定profile关闭）\\[5pt]
+  $\rightarrow$ 归一化 $\rightarrow$ float32的712维processed观测
+  \end{minipage}}
+  \caption{原生触觉读数到processed观测的处理链}
+  \label{fig:ch02_processing}
+\end{figure}
+
+原始数组进入TactileSignalProcessor后，按图\ref{fig:ch02_processing}处理。设原始读数为$r_{t,j}$，死区为$d$，饱和尺度为$s$，幂指数为$p$，低通系数为$\alpha$，主要幅值处理写为
+\begin{equation}
+ \begin{aligned}
+ a_{t,j}&=\operatorname{clip}(r_{t,j}-d,0,s),\qquad
+ b_{t,j}=s(a_{t,j}/s)^p,\\
+ v_{t,j}&=\alpha b_{t,j}+(1-\alpha)v_{t-1,j}.
+ \end{aligned}
+ \label{eq:ch02_processing}
+\end{equation}
+其中，$t$为连续调用的观测索引。滤波初态由处理器reset路径决定，不能假定任何数据片段都以相同方式独立初始化。指定profile使用$d=0.002$、$s=1$、$p=0.7$、$\alpha=0.45$，并开启归一化。死区和饱和设置改变了弱响应及尾部范围，幂变换与时间滤波又改变幅值和相邻观测关系，因此处理后的值不再保留原始模拟力的直接单位含义。
+
+邻域串扰在每个Patch恢复的二维阵列中进行。系数$c=0.12$表示每个源单元保留$1-c$的响应，其余部分按可用的8邻域数量平均分配。边界单元的邻居少于内部单元，程序按源单元归一化，不能写成所有接收单元统一除以8。串扰只作用于同一Patch，数组中相邻但属于不同Patch的两个索引不会据此交换响应。当前profile的gaussian\_sigma和noise\_std均为0，高斯滤波与随机噪声属于可选能力，并未在该配置中启用。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{触觉观测各阶段的输出与语义}
+  \label{tab:ch02_signal_stages}
+  \begin{tabular}{p{0.20\textwidth}p{0.27\textwidth}p{0.39\textwidth}}
+    \hline
+    阶段 & 维度或数据组织 & 处理及适用解释\\
+    \hline
+    空间布局 & 16个Patch、712个site & 定义感知位置、方向和体积\\
+    原生touch & 每site一个非负标量 & 累加满足感知条件的接触法向力\\
+    原始读取 & 712维float32副本 & 按sensor\_adr读取，顺序固定\\
+    信号处理 & Patch方阵及时间状态 & 死区、截断、幂响应、IIR及串扰\\
+    processed输出 & 712维float32 & 指定profile归一化，无量纲响应\\
+    \hline
+  \end{tabular}
+\end{table}
+
+表\ref{tab:ch02_signal_stages}区分了几何采样、原生传感器值和后处理观测。最终向量保持表\ref{tab:ch02_patch_layout}的通道顺序，可还原为局部热图；热图色标只是显示方式，不改变原数组的物理语义。真实采集侧的processed还具有自身驱动和处理条件，不能仅凭同为712维就认为它与仿真观测单位相同。本文在后续跨域研究中保持这一区分，不将无量纲processed数据称为Pa或经过认证的真实压力。
+
+\section{仿真平台功能验证}
+\label{sec:platform_validation}
+
+平台功能核查需要回答两个不同层次的问题：模型和接口是否具有所描述的实现，以及已有执行记录是否包含符合定义的触觉观测。前者可以通过模型、构建器及控制代码核对，后者需要检查实际数组和关联元数据。两类证据都不能单独替代完整动态复验。本节依据现有文件开展只读核查，没有重新执行物理任务，也未新增仿真样本；历史记录中的成功状态与本轮直接检查的数组结果分别报告。
+
+模型核查确认机械臂存在七个位置执行器，当前手部存在十二个转动关节及六个腱驱动通道，组合构建器具有模型安装和传感器扩展接口。控制流程包含动作写入、物理子步推进、观测读取和任务评价，触觉读取使用名称绑定后的数据地址。这些结果支持模型配置和软件接口层面的描述，但本轮没有据此宣称所有执行器均完成运动测试，也没有检验每个碰撞条件下的稳定性。历史编译模型审计记录中存在712个原生touch传感器，可作为先前构建结果的来源证据，不能被解释为本轮重新加载当前模型得到的结果。
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\begin{minipage}{0.91\textwidth}\centering
+  实现核查：XML、构建器、控制接口、传感器地址\\[5pt]
+  $\downarrow$ 与记录检查分开报告\\[5pt]
+  历史记录：Episode数组 $+$ manifest $+$ 结果文件\\[5pt]
+  $\downarrow$\\[5pt]
+  shape与类型 $\rightarrow$ finite与非负 $\rightarrow$ 非零及时间间隔\\[5pt]
+  $\downarrow$\\[5pt]
+  有限功能证据；不替代当前模型动态重放或实机标定
+  \end{minipage}}
+  \caption{平台实现与历史观测记录的分层核查结构}
+  \label{fig:ch02_validation}
+\end{figure}
+
+历史观测检查选择五任务开发记录中的五条代表性Episode，分别对应Lift、PickPlace、Stack、Push和NutAssembly。所读取对象为各案例source\_episode目录中的NPZ文件，并结合其manifest与结果记录确认任务来源。核查以完整保存数组为对象，不从中筛选有利时刻；统计字段固定为sensor\_tactile。设单条记录含$T$帧，则触觉合同要求数组为$T\times712$，数据类型为float32，所有元素有限且非负，同时检查是否全零。非零比例在整条数组上计算，用于描述保存响应的稀疏程度，不作为任务成功率或传感器准确率。
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{五条历史开发Episode的触觉观测核查结果}
+  \label{tab:ch02_episode_validation}
+  \begin{tabular}{lrrrr}
+    \hline
+    任务 & 帧数$T$ & 通道数 & 非零比例 & 历史成功状态\\
+    \hline
+    Lift & 447 & 712 & 0.084049720 & True\\
+    PickPlace & 638 & 712 & 0.152964408 & True\\
+    Stack & 376 & 712 & 0.182632829 & True\\
+    Push & 605 & 712 & 0.004954035 & True\\
+    NutAssembly & 599 & 712 & 0.127175911 & True\\
+    \hline
+  \end{tabular}
+\end{table}
+
+检查结果如表\ref{tab:ch02_episode_validation}所示。五条sensor\_tactile均符合上述shape、类型、有限性与非负要求，且并非全零。timestamp为float64，其相邻增量在浮点误差范围内为0.05~s，与20~Hz保存节奏相符。这一结果说明所检查历史记录保留了规则时间索引下的触觉数组，但不意味着物理子步内所有接触变化均被保存，也不能由此认证视觉、动作和触觉在任意历史文件中均完全同步。
+
+不同记录的非零比例差异较大，其中Push约为0.005，Stack约为0.183。该差异说明触觉稀疏程度随记录条件变化，统一维数并未使不同任务得到相同接触分布。但仅凭这五条数据，不能将差异完全归因于任务类型：物体、轨迹、接触阶段及处理条件也可能影响激活情况。这里不对任务进行统计排名，不用单条记录估计任务总体响应，更不把非零比例较高解释为操作质量较好。低激活记录的存在也提示，后续数据审计应保留实际响应，而不是为满足非零要求补写信号。
+
+五份NPZ同时包含tactile和sensor\_tactile两个字段，二者实际数值并不完全相同。记录合同采用后者检查，因而本节非零比例不能与前者的统计直接互换。字段名称相近不构成相同采样时刻或相同处理路径的证据，若需要进一步解释两者关系，必须回到对应版本的记录调用位置。本节保留这一差异，不将某一字段未经核验地命名为原始力，也不依据数组差值推断信号处理的因果作用。
+
+历史manifest及结果文件将五条案例的成功状态登记为True，这是原有任务执行记录的声明，不是本轮重放后重新获得的成功结果。Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。
+
+更重要的是，历史记录与当前XML、曲面拟合及信号处理配置之间的完整版本一致性尚未确认，记为UNKNOWN。关节状态或控制数组维数相容，只能表明接口形式相容，不能证明物理模型、碰撞参数和全部代码相同。因此，本章将当前实现描述与历史观测检查并列，而不将它们合并为同一冻结版本的端到端动态验收。若后续需要提出这种更强结论，应补足当时模型及配置档案；本轮没有通过新增实验填补该缺口。
+
+由此可见，现有材料支持平台具有明确的模型、控制和观测组织方式，并支持五条指定历史记录中触觉数组的数值与基本采样合同。触觉非零不能证明真实力标定正确，仿真观测合法也不意味着Real与Sim物理对应已经建立。抓取候选能否转化为稳定任务轨迹，仍需第三章的可达性和任务验证；全量数据的关联、去重与质量结论，则由第四章另行审计。本节不以有限功能记录替代这些后续论证。
+
+\section{本章小结}
+\label{sec:platform_summary}
+
+本章围绕多任务灵巧手操作的执行与感知需求，介绍了RM75B-Dex Hand仿真平台的模型、控制、触觉、任务和记录接口。当前机械臂采用七个转动关节及位置执行器，手部采用十二个转动关节、六个固定腱和六个位置驱动通道。通过区分物理关节、传动坐标与控制通道，明确了欠驱动结构的实现范围，避免将历史命名中的推杆与当前机构混同。
+
+控制链路将关节目标或末端IK求解与底层位置伺服、物理积分分开，在指定配置下按20~Hz控制和1000~Hz积分执行。触觉阵列由皮肤STL派生，通过指节与指尖外壳拟合、手掌参数域投影及局部坐标构造形成16个Patch，再由712个原生touch感知区读取标量响应。死区、幂响应、时间滤波和邻域串扰进一步产生无量纲processed观测，其含义不同于经过标定的真实压力。
+
+已有五条历史任务记录提供了触觉数组有限、非负和规则时间索引的功能证据，但与当前模型的完整版本一致性、独立Root关系及实物映射仍有限制。基于这些边界，下一章讨论如何将几何抓取候选转化为满足机械臂可达性、连续运动和任务要求的专家示教。

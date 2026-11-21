@@ -1,0 +1,372 @@
+--- thesis/thesis.tex.before
++++ thesis/thesis.tex
+@@ -1,6 +1,6 @@
+ % !TeX program = xelatex
+ % !TeX encoding = UTF-8
+-% 暂定题目与章节骨架；未撰写研究正文。
++% 已接入审核中的第一至第五章初稿；未完成章节不冒充正式正文。
+ \documentclass[fontset=fandol,type=master,campus=harbin]{hithesisbook}
+ \usepackage{hithesis}
+ \graphicspath{{figures/}{figures/framework/}{figures/network/}{figures/experiments/}}
+@@ -13,14 +13,15 @@
+ \tableofcontents
+ \mainmatter
+ \include{body/ch01_introduction}
+-\include{body/ch02_data_and_problem}
+-\include{body/ch03_dual_vae}
+-\include{body/ch04_adversarial_transfer}
+-\include{body/ch05_experiments}
+-\include{body/ch06_conclusion}
++\include{body/ch02_simulation_platform}
++\include{body/ch03_grasp_demonstrations}
++\include{body/ch04_multimodal_data}
++\include{body/ch05_dual_domain_reconstruction}
++% 第六、七章待后续授权写作；旧六章骨架保留，避免把总结误编号为第六章。
++% \include{body/ch06_conclusion}
+ \backmatter
+ \bibliographystyle{hithesis}
+-% 尚未收录研究文献；确认条目并加入正文引用后启用：
++% 复用已核验参考文献库。
+ \bibliography{reference}
+ % 本科、硕士、博士后置顺序不同；当前不引入博士答辩决议/博士个人简历。
+ % 有真实内容后按学院要求启用：
+--- /dev/null
++++ thesis/body/ch05_dual_domain_reconstruction.tex
+@@ -0,0 +1,11 @@
++% !TeX root = ../thesis.tex
++% CH05-FINAL 2026-11-21. Authoritative sources mapped in integration manifest.
++\chapter{基于统计伪配对与双域表示的触觉跨域重建方法}
++\label{chap:dual_domain_reconstruction}
++
++\input{body/ch05_sections/section_5_1}
++\input{body/ch05_sections/section_5_2}
++\input{body/ch05_sections/section_5_3}
++\input{body/ch05_sections/section_5_4}
++\input{body/ch05_sections/section_5_5}
++\input{body/ch05_sections/section_5_6}
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_1.tex
+@@ -0,0 +1,30 @@
++% Standalone section draft; not included in thesis.tex.
++\section{真实与仿真触觉差异分析}
++\label{sec:ch05_real_sim_difference}
++
++真实与仿真触觉具有相同数组维度，并不意味着能够直接用于同一操作表示。本文采用的观测按16个Patch组织，共712个标量通道，仿真阵列覆盖五指及手掌。其传感器原生raw读数来自MuJoCo native touch，对感知区域内的法向接触力累加\cite{mujoco2026xml}；仿真processed观测则经过死区、限幅、非线性响应、时间滤波及邻域扩散处理。Real processed观测来自实机自身采集处理流程，因此两域processed均应视为处理后的数值响应，不能直接称为真实压力或共同力学单位。对这种观测进行迁移，需要检查保留了哪些接触信息，而不只是核对输出形状。
++
++P37旧开发数据的Real Train/Validation为5153/1408窗，Sim为1824/406窗；P43当前主线中，Real Train/Validation分别为5153/780窗，Natural Sim Train/Validation分别为4049/905窗，均采用$4\times712$窗口。P37统计不外推至P43，后者规模仅描述当前数据划分，不代表差异复现。两者不混合，窗口不作独立采集主体。
++
++令$X_{tj}$为第$t$帧第$j$通道响应，精确非零Mask定义为$M_{tj}=\mathbf1[X_{tj}>0]$。在旧训练集上，Real与未转换Sim的激活比例分别约17.60\%和13.31\%，说明数值支持范围存在差异。Mask表示保留每帧712个激活位置，可以反映Patch内部支持及区域组合，却不是物理接触真值。滤波残留等微弱正值也会计入激活；固定通道顺序更不意味着完成两域物理配准，不能将Patch索引热图解释为认证曲面坐标，或对任意同编号Taxel作物理位置叠加。
++
++幅值分析仅取$X>0$的响应。旧训练集汇总正值中位数，Real约为0.00500250，未转换Sim约为$1.03974\times10^{-5}$；P95分别约1.50101与0.459485。这些是各域全部正值池的统计，不是逐Patch分位数的平均，也不是接触力误差。幅值分解以每帧正值的P10、P25、P50、P75、P90构成有效$4\times5$表示，其余通道仅补零以复用网络接口；不输入Taxel位置、正值数量或空Patch标志。对包含至少一帧全零响应帧的窗口，按照预定规则予以排除，故该表示只刻画有响应条件下的幅值，不能覆盖完全无接触状态。
++
++表\ref{tab:ch05_domain_feature_difference}列出旧P37数据上既有转换输出经幅值校准后的表示分解诊断。Full与分位数先作log1p，各表示分别用Train拟合标准化，Probe由Logistic、kNN各1个及MLP、GRU、Transformer各Seed11、12、13组成，共11个；Full复用P38在相同输出、划分和预处理上的Probe拟合，不新增训练。此处为迁移后Probe诊断，非后文冻结C0验收。定义$D=1-2|\mathrm{BA}-0.5|$，只度量BA偏离0.5的程度；表中三个表示的最小D均低于0.90，表明至少存在Probe未满足固定阈值下的BA等价门槛；其排序判别能力仍需结合AUC判断。因此，不能仅凭这些结果认定支持或正值摘要已经实现域混淆。幅值调整保持Mask不变，不代表完整触觉已匹配。
++
++\begin{table}[htbp]
++ \centering\small
++ \caption{旧P37数据校准后触觉的表示分解诊断}
++ \label{tab:ch05_domain_feature_difference}
++ \begin{tabular}{llc}
++ \hline
++ 表示&有效内容&11个Probe实例中的最小D\\\hline
++ Mask&$4\times712$精确非零支持&0.0272\\
++ Amplitude&$4\times5$正值分位数&0.1494\\
++ Full&$4\times712$完整响应&0.0573\\\hline
++ \end{tabular}
++\end{table}
++
++三种表示的特征空间、预处理及纳入条件不同，D值不能相减计算信息贡献，也不证明支持与幅度独立。低维分位数舍弃了响应所在通道及跨Patch组合，即使边际分布相似，也可能无法维持原接触结构。差异还可能来自任务构成、采集协议与处理链，不能全部归因于传感器物理性能。
++
++四帧窗口还承载激活持续、出现、消失及幅值变化。P37验证集第1至第2帧的Mask变化比例，Real约1.7154\%，未转换Sim约0.0958\%，分母为各自窗口与通道总数，而非条件转移概率。真实帧间隔并非恒定，帧间差分不能直接解释为物理时间导数或频率差异。幅值还需检查相邻帧全通道绝对差，不能仅用Mask持续性代替响应强度变化。因此，完整重建应同时保留激活支持、正值幅度及短时序关系。下一节据此在缺少同步物理配对的条件下定义跨域重建问题。
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_2.tex
+@@ -0,0 +1,23 @@
++% Independent section fragment; not included in thesis.tex.
++\section{非配对条件下的跨域触觉重建问题定义}
++\label{sec:ch05_unpaired_problem}
++
++前节表明，真实与仿真触觉即使具有相同观测维度，其激活支持、幅值及短时序关系也不能直接互换。本文以自然任务仿真产生的processed触觉为输入，研究向Real域风格观测的转换。单个窗口包含四帧、每帧712个通道，输入与输出均保留既有通道及帧序。目标输出应为完整$4\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征，不将其直接称为真实传感器输出，也不以低维统计摘要代替完整观测。保留帧序不要求两域采样间隔相同，帧间变化也不直接表示物理时间导数。
++
++研究使用三类数据：Real提供真实域观测，用于域内表示学习，并提供统计先验及伪配对目标侧信息；Natural Sim来自自然任务仿真，与Paired Sim共同参与Sim域表示学习，也是最终转换对象；Paired Sim则由真实统计先验指导仿真物理探针生成，按登记关系与Real窗口构成统计伪配对，为潜变量映射提供有限监督。任意Real与Sim窗口并无已知共同接触状态，不能直接互作真实标签。现有1200个训练窗口与240个验证窗口也不代表1440个独立Root；登记关联不构成同步物理接触真值，来源复用与覆盖限制仍须保留。Natural参与Sim表示学习，不等于其具有对应Real目标，亦不等于直接参与原始配对映射训练。
++
++记Natural Sim窗口为$X_S$，Real域风格输出为$\widehat X_R$，待学习映射为$F_\theta$，问题定义为
++\begin{equation}
++ \widehat X_R=F_\theta(X_S),\qquad
++ F_\theta:\mathbb R_{\geq0}^{4\times712}
++ \rightarrow\mathbb R_{\geq0}^{4\times712}.
++ \label{eq:ch05_unpaired_mapping}
++\end{equation}
++目标同时包括接近Real完整观测统计，以及尽可能保留源输入的空间索引结构、激活支持、幅值和短时序变化；后者是待检验要求，不是已实现的物理语义保持。两域Taxel尚无逐一物理对应认证，也未建立共同力学单位；同维潜表示不意味着共同语义坐标。现有监督不提供Natural输入的同步Real真值，因而潜变量回归误差及真实Mask条件下的Decoder似然，均不能代替自由输出质量。上述目标不等同于模型实际优化的联合损失，真实机器人任务收益也尚未得到验证。
++
++据此采用三层分析框架：输出层检查完整$4\times712$、数值有效性、激活支持、正值幅值和短时序关系，形状正确不足以认定结构保持；这些结构维度不另设未经验证的统一通过阈值。域评价沿用原始Real Train 5153窗与Natural Sim Train 4049窗训练后冻结的11个C0实例，即Logistic、kNN各一个及MLP、GRU、Transformer各Seed11、12、13，保留模型权重、kNN参照库、原Scaler与log1p、通道及帧序、Real=1与Sim=0标签、0.5阈值和原Train/Validation/Test分组，迁移评价不重训分类器或重拟合Scaler。BA取两类召回率的均值。每个实例须同时满足BA在$[0.45,0.55]$、AUC在$[0.475,0.525]$以及
++\begin{equation}
++ D=1-2|\mathrm{BA}-0.5|\geq0.90,
++ \label{eq:ch05_domain_confusion_target}
++\end{equation}
++且11个实例全部满足才完成联合验收。BA与D门槛数学等价，不是两项独立证据，AUC另行评价分数排序；该检验只覆盖既定判别器，不能证明全部域信息消失。评价使用780个Real与905个Translated Natural Sim开发Validation窗口，不包装为独立盲测。物理与任务层仍需物理对应关系、同步接触真值或真实机器人操作等独立证据进一步验证，目前尚未获得充分认证。三层用于组织分析，并非已经全部通过；当前完整迁移目标仍未完成，后续分别展开监督构建、表示与映射，并检验其有效范围。
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_3.tex
+@@ -0,0 +1,84 @@
++% CH05-5.3 only: standalone section fragment, not included in thesis.tex.
++\section{GMM统计先验引导的仿真触觉伪配对构建}
++\label{sec:ch05_gmm_pseudopairs}
++
++真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再通过原有传感器链路获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。所得配对提供统计监督，不代表两域经历了相同的物理接触。
++
++\begin{figure}[htbp]
++ \centering
++ \fbox{\begin{minipage}{0.91\textwidth}\centering
++ Real Train $\rightarrow$ Patch索引偏移统计 $\rightarrow$ 冻结GMM\\[2pt]
++ $\downarrow$ 对指定Real目标作分量响应分解\\[2pt]
++ 字典位置检索与加载估计 $\rightarrow$ 球形探针物理执行\\[2pt]
++ $\downarrow$ 原生触觉读取与既有信号处理\\[2pt]
++ 完整$4\times712$响应 $\rightarrow$ 统计准入与伪配对登记
++ \par\vspace*{2.5mm}
++ \end{minipage}}
++ \caption{GMM统计先验引导仿真接触与伪配对构建流程}
++ \label{fig:ch05_gmm_physical_pipeline}
++\end{figure}
++
++GMM按Patch建模。各Taxel行列索引映射至$[-0.5,0.5]^2$网格，以训练集该Patch正值响应的第5百分位筛选有效响应。每个Session最多取48帧，每帧按响应权重抽取16个位置，并减去该帧响应质心；随后按Session轮转抽样，形成最多2048个二维偏移点。因此，拟合对象是响应相对质心的扩散偏移，而非原始712维数组、物理压力或后续VAE潜变量。记偏移为$\boldsymbol u$，第$p$个Patch的分布为
++\begin{equation}
++ p_p(\boldsymbol u)=\sum_{k=1}^{K_p}\pi_{pk}
++ \mathcal N(\boldsymbol u;\boldsymbol\mu_{pk},\boldsymbol\Sigma_{pk}),
++ \qquad \sum_{k=1}^{K_p}\pi_{pk}=1.
++ \label{eq:ch05_gmm_prior}
++\end{equation}
++其中，$\pi_{pk}$为混合权重，$\boldsymbol\mu_{pk}$和完整协方差$\boldsymbol\Sigma_{pk}$描述偏移中心与扩散。实现采用EM拟合，候选分量数为1、2、3，最多60次迭代，以BIC选择，并检查Session三折核稳定性。协方差初始化与更新分别加入$0.0025\boldsymbol I$和$0.0004\boldsymbol I$正则项。虽保存了分阶段模型，本节逆构造使用全阶段合并先验；参数拟合不使用Real Validation。BIC采用$-2\log L+(6K_p-1)\log n$，其中$n$为拟合偏移点数，不能作为独立采集数量。若阶段数据不足，回退同Patch合并阶段数据；三折平均核总变差超过0.25且\mbox{分量数}大于1时，回退单分量模型。对Session限制取帧并轮转抽样，可减轻长记录对拟合样本构成的支配，但不消除会话间差异。
++
++对指定Real窗口，令$w_{pj}$为Taxel四帧平均响应，$\boldsymbol q_{pj}$为固定网格坐标。当前实现直接在该网格评估冻结分量，计算责任度及分量响应量：
++\begin{equation}
++ \begin{aligned}
++ r_{pjk}&=\frac{\pi_{pk}\mathcal N(\boldsymbol q_{pj};\boldsymbol\mu_{pk},\boldsymbol\Sigma_{pk})}
++ {\sum_{\ell=1}^{K_p}\pi_{p\ell}\mathcal N(\boldsymbol q_{pj};\boldsymbol\mu_{p\ell},\boldsymbol\Sigma_{p\ell})},\\
++ m_{pk}&=\sum_j w_{pj}r_{pjk},\qquad
++ \boldsymbol c_{pk}=\frac{\sum_j w_{pj}r_{pjk}\boldsymbol q_{pj}}{m_{pk}}.
++ \end{aligned}
++ \label{eq:ch05_gmm_responsibility}
++\end{equation}
++仅处理$m_{pk}>0$的分量。软责任度分解Taxel响应，并非物理接触归属概率；$\boldsymbol c_{pk}$由原网格重加权获得，并非分量均值加回目标质心。训练坐标已中心化，逆构造却未减去目标质心，二者存在原点语义不一致。故仅能作启发式权重，不保证空间先验的平移一致性。
++
++\begin{table}[htbp]
++ \centering\small
++ \caption{球形探针响应字典的组织}
++ \label{tab:ch05_probe_dictionary}
++ \begin{tabular}{p{0.28\textwidth}p{0.59\textwidth}}
++ \hline
++ 条件或字段 & 实际设置与含义\\
++ \hline
++ 接触区域与位置 & 16个Patch，各取中心及上下左右共5个位置\\
++ 探针与加载 & 半径4~mm；基础深度0.25、0.5、1~mm\\
++ 手部初态设置 & 2种驱动指令；与位置、深度组合成480行\\
++ 记录及取窗 & 每条32帧，固定取零基索引12--15帧\\
++ 状态指纹 & 首个保存步的qpos与目标球心量化后联合散列，共160种，非独立Root认证\\
++ 响应与来源 & 原生及processed触觉、探针条件和Episode来源\\
++ \hline
++ \end{tabular}
++\end{table}
++
++字典将可执行条件与观测响应关联，见表\ref{tab:ch05_probe_dictionary}。各Patch分量按$m_{pk}$合并排序后保留最多5个。对每个保留分量，先在手部驱动指令为0、深度0.25~mm且非零响应的字典条目中，选择响应质心最接近$\boldsymbol c_{pk}$的位置；再利用同位置的响应总量与深度关系插值估计基础加载。四帧Patch总量相对其均值的变化用于设置加载因子，而不直接写入触觉数组。基础命令受既定范围约束，不能解释为真实材料压陷量。具体而言，四帧加载因子限制在$[0,2]$；反馈按目标与生成Patch总响应之比估计调整倍率，并将倍率限制在$[0.5,2]$、基础深度限制在$[0.1,1]$~mm。该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。
++
++\begin{figure}[htbp]
++ \centering
++ \fbox{\begin{minipage}{0.91\textwidth}\centering
++ 一个Real目标 $\rightarrow$ 各Patch软分量：$r_{pjk},m_{pk},\boldsymbol c_{pk}$\\[2pt]
++ $\downarrow$ 全部分量按分量响应量排序，保留至多5个\\[2pt]
++ 字典基元组合 $\rightarrow$ 至多3次物理候选与反馈\\[2pt]
++ $\downarrow$ 取已执行候选中代价最小者，再检查准入条件\\[2pt]
++ 一组Real--Sim伪配对；完整多解概率未进入后续监督
++ \par\vspace*{2.5mm}
++ \end{minipage}}
++ \caption{软分量分解、候选压缩与单一伪配对选择示意}
++ \label{fig:ch05_gmm_candidate_selection}
++\end{figure}
++
++探针由目标体约束驱动球形碰撞体，在MuJoCo中推进接触并读取原生触觉，经既有处理得到无量纲712维观测，而非真实压力场。每个目标至多执行初始检索、深度反馈、深度反馈加邻近位置修正三个候选，统计门槛通过即停止，后续候选不再执行。记实际执行集合为$\mathcal A$，选择规则为
++\begin{equation}
++ a^*=\operatorname*{arg\,min}_{a\in\mathcal A}
++ \left[1-s_a+d_a+e_a\right],
++ \label{eq:ch05_pair_selection}
++\end{equation}
++其中，$s_a$为逐帧Patch响应比例余弦相似度的四帧均值，零响应帧也计入。$d_a$在Real主响应Patch双方活跃帧上，比较Sim质心与Real质心加GMM混合均值的锚点；无双方活跃帧时，排序中该项取1且不允许登记。该锚点未改变责任度求值坐标，未消除原点不一致，仍为索引启发式参照。混合均值按冻结权重$\pi_{pk}$计算，而非按$m_{pk}$计算；混合协方差同时包含分量协方差与分量间均值差异。$e_a$是Sim协方差与该混合协方差之差的Frobenius范数的四帧均值，零Sim帧协方差按0计入，未除以目标协方差范数。响应比例及质心、协方差计算中的响应总量分母设$10^{-12}$下限，这不构成误差的相对归一化。仅当所选结果非零、$s_a\ge0.8$、$d_a\le0.2$、$e_a\le0.1$且不重复时登记。argmin包含未通过候选，故即使出现通过者，最终最小代价者仍可能不达门槛而被拒收。仅比较已执行集合，不保证全局最优。上述距离均在索引空间计算，不是物理接触误差。目标按元数据预定顺序处理，不以域分类器评分。来源、探针条件和匹配记录可追溯，并检查窗口数值重复；未通过候选的Episode与评分均保存，数值唯一不证明物理初态独立。
++
++图\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_4.tex
+@@ -0,0 +1,59 @@
++% Standalone section fragment. Not included in thesis.tex.
++\section{基于双域变分自编码器的触觉表示学习}
++\label{sec:ch05_dual_vae_representation}
++
++统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器\cite{kingma2014vae}，分别建立Real VAE与Sim VAE，如图\ref{fig:ch05_dual_vae}所示。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。
++
++\begin{figure}[htbp]
++ \centering
++ \fbox{\begin{minipage}{0.92\textwidth}\centering\small
++ Real Train $\rightarrow E_r\rightarrow (\boldsymbol\mu_r,\boldsymbol\ell_r)
++ \rightarrow Z_r\rightarrow D_r\rightarrow$ Real自重建\\[5pt]
++ Natural Sim与Paired Sim $\rightarrow E_s\rightarrow (\boldsymbol\mu_s,\boldsymbol\ell_s)
++ \rightarrow Z_s\rightarrow D_s\rightarrow$ Sim自重建\\[5pt]
++ 两路参数独立；训练潜变量由重参数化采样获得\\[3pt]
++ 各Decoder：前帧Mask与潜变量 $\rightarrow$ 时序状态 $\rightarrow$ 当帧Mask\\[3pt]
++ 训练：随机潜变量，前帧及当帧使用真实Mask\\[3pt]
++ 自由推理：后验均值，前帧及当帧使用预测Mask\\[3pt]
++ 时序状态与当帧Mask $\rightarrow$ 条件Gamma混合幅值
++ \par\vspace*{2.5mm}
++ \end{minipage}}
++ \caption{双域VAE独立表示学习与条件解码结构}
++ \label{fig:ch05_dual_vae}
++\end{figure}
++
++记输入为$X\in\mathbb R_{\ge0}^{4\times712}$，正值Mask为$M_{tj}=\mathbf1[X_{tj}>0]$。每帧拼接$M_t$与$\log(1+X_t)/s_{\rm enc}$，形成1424维输入。尺度$s_{\rm enc}$由本域训练池的对数响应总体标准差确定，下限为$10^{-3}$；仅作除法，不减均值。输入经1424至128维Linear、GELU和LayerNorm后，送入单层单向GRU，隐状态维数为128。两路线性头输出每帧64维均值$\boldsymbol\mu_t$及对数方差$\boldsymbol\ell_t$，后者限制在$[-8,4]$。训练采用重参数化：
++\begin{equation}
++ \boldsymbol z_t=\boldsymbol\mu_t+
++ \exp\!\left(\tfrac12\boldsymbol\ell_t\right)\odot\boldsymbol\epsilon_t,
++ \qquad \boldsymbol\epsilon_t\sim\mathcal N(\boldsymbol0,\boldsymbol I).
++ \label{eq:ch05_vae_reparameterization}
++\end{equation}
++窗口间不传递隐状态，四帧按保留顺序输入，不据此假定物理采样间隔相同。
++
++Decoder以零隐状态开始，首帧使用可学习的32维序列起始向量BOS；后续将前帧完整Mask嵌入32维，与64维潜变量拼接后输入128维GRUCell。Mask头给出712个logit，表达时间条件依赖；给定隐状态时，同帧似然仍按Taxel因子化。幅值头接收隐状态与当帧Mask嵌入，经160至128维及128至4272维线性层，输出各Taxel的两分量Gamma参数。混合权重$\omega_{tjk}$由softmax得到，shape $a_{tjk}$与rate $b_{tjk}$经softplus并加数值下限。每个分量的均值为shape与rate之比。下式省略时序状态和当帧Mask条件的记号，$\operatorname{Gamma}(y;a,b)=b^a y^{a-1}e^{-by}/\Gamma(a)$。对正值$x$，条件密度为
++\begin{equation}
++ f_{tj}(x)=\frac1{s_{\rm pos}}\sum_{k=1}^{2}\omega_{tjk}
++ \operatorname{Gamma}\!\left(\frac{x}{s_{\rm pos}};a_{tjk},b_{tjk}\right),
++ \qquad x>0.
++ \label{eq:ch05_vae_gamma_mixture}
++\end{equation}
++其中$s_{\rm pos}$为训练池正值中位数，下限为$10^{-7}$。时序状态使前帧接触影响后续预测，当帧完整Mask则向幅值头提供激活区域上下文。两分量用于表达正值分布的不同形状，不对应经过认证的物理接触类别。该分支区分零值事件与连续幅值，且幅值条件于Mask，并非两个无关输出；这不等于已证明显式Mask优于其他建模方式。
++
++令$N_+=\sum_{t,j}M_{tj}$，$l_{tj}$为Mask logit，$d$为潜变量维度索引。单窗训练目标为
++\begin{equation}
++ \begin{aligned}
++ L_{\rm mask}&=\frac1{4\cdot712}\sum_{t,j}
++ \operatorname{BCEWithLogits}(l_{tj},M_{tj}),\\
++ L_{\rm amp}&=-\frac{\sum_{t,j}M_{tj}\log f_{tj}(X_{tj})}{\max(N_+,1)},\\
++ L_{\rm KL}&=\frac1{2\cdot4\cdot64}\sum_{t,d}
++ \bigl(\mu_{td}^{2}+e^{\ell_{td}}-1-\ell_{td}\bigr),\\
++ L&=L_{\rm mask}+L_{\rm amp}+0.001L_{\rm KL}.
++ \end{aligned}
++ \label{eq:ch05_vae_objective}
++\end{equation}
++批次再取窗口均值。幅值项仅统计真实正值，全零窗该项为零；密度中的$1/s_{\rm pos}$对应对数似然的尺度Jacobian修正。连续密度可以大于1，因此负NLL本身不表示异常。训练采用真实前帧及当帧Mask作条件，即Teacher Forcing；自由推理则取后验均值，以预测Mask递推，并按logit非负确定激活，再乘以$s_{\rm pos}\sum_k\omega_{tjk}a_{tjk}/b_{tjk}$输出幅值。该读出不随机采样Mask或Gamma，训练条件与自由运行条件的差异仍需评价。
++
++Real训练池为5153窗，Sim训练池包含4049个Natural窗与1200个Paired窗，Sim采用分层混合批次，每步从Natural Sim和Paired Sim各取32窗，合成64窗，每轮127步。较小的Paired组重复访问，实现批次等量混合，而非按原始规模比例采样。Real每轮81步，两域总优化步数分别为3645和5715，重复访问不增加独立样本。两域分别拟合尺度，Real与Sim的输入尺度分别约为0.14118和0.04089，正值尺度分别约为0.0050025和$10^{-7}$。Sim正值尺度触及下限，其拟合按合并训练元素进行，与训练时两类窗口等量采样的权重不同，上述尺度均由传感器处理后的无量纲触觉数值计算，不对应实际压力或力学单位。采用AdamW、学习率$10^{-3}$、批量64，两域均训练45轮，仅在第30至45轮按各自验证目标选择检查点，最终均选第30轮，属于限定候选区间内的选择，而非全部轮次的无约束最优。验证损失取后验均值，但仍使用真实Mask条件，不能替代自由重建检验。Real按验证重建项与KL加权和选取权重，Sim则对Natural与Paired验证目标等权汇合；两套模型均未依据域分类器成绩选择。
++
++上述为C3基础模型。后续C13仅调整Real Decoder的当前帧Mask条件嵌入与幅值头，其余Encoder、Mask预测及循环骨干冻结；C23复用其自重建输出诊断，C24仅在相同可训练范围增加时序幅值约束，具体结果留待实验分析。各域重建目标只要求潜表示能够服务于本域读出，不约束同一维度表示相同接触特征。即使采用相同先验，也不能直接将两套坐标中的近邻解释为物理对应。独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_5.tex
+@@ -0,0 +1,47 @@
++% Standalone section draft; not included in the official thesis main file.
++\section{基于伪配对监督的跨域潜变量映射}
++\label{sec:ch05_latent_translator}
++
++双域VAE分别获得域内表示，但相同的潜变量维数并不构成语义对应。为利用统计伪配对建立联系，本文在两套VAE训练完成后固定其参数，以配对窗口的后验均值构造监督。记第$n$组Paired Sim与Real窗口为$(X_{s,n},X_{r,n})$，其均值表示分别为$Z_{s,n}=\mu_s(X_{s,n})$与$Z_{r,n}=\mu_r(X_{r,n})$，均具有$4\times64$形状。Translator学习
++\begin{equation}
++ \widehat Z_{r,n}=T_\theta(Z_{s,n}),\qquad
++ \widehat X_{r,n}=D_r(\widehat Z_{r,n}),
++ \label{eq:ch05_translator_mapping}
++\end{equation}
++其中$\theta$为映射参数，$D_r$为Real Decoder。该监督关系由伪配对确定，不是已知物理接触变换的真值。每组输入、均值目标及Real触觉沿同一配对索引取出，不在训练过程中重新寻找近邻。回归比较发生在Translator输出与Real目标坐标之间，不将未映射的两域向量直接作物理距离比较。
++
++Translator由两层单向GRU和线性投影组成。GRU每帧输入64维，隐状态为128维，输出经128至64维线性层形成预测Real潜变量，总参数量181824。四帧之间递推隐状态，每个窗口以零状态开始，不跨窗口延续；批量输入输出均为$[B,4,64]$。采用GRU旨在使映射利用当前及前序帧信息，尚无同等数据和预算的公平消融证明其优于MLP。此阶段使用固定后验均值，不重复VAE训练时的随机重参数化。
++
++为兼顾潜变量回归与目标域读出，联合目标定义为
++\begin{equation}
++ \begin{aligned}
++ L_H&=\frac1{B\cdot4\cdot64}\sum_{n,t,d}
++ \rho_1(\widehat z_{r,ntd}-z_{r,ntd}),\\
++ L_T&=L_H+\frac{0.1}{B}\sum_n
++ L_{D_r}(\widehat Z_{r,n},X_{r,n}),
++ \end{aligned}
++ \label{eq:ch05_translator_objective}
++\end{equation}
++其中$B$为批量大小，$t$与$d$分别为帧和潜变量维度索引；Huber函数在$|e|<1$时为$\rho_1(e)=e^2/2$，否则为$|e|-1/2$。$L_{D_r}$沿用上一节的Mask BCE与正值Gamma混合NLL之和，保留其归一化和尺度Jacobian，不包含KL。它约束预测潜变量在Real Decoder中的条件重建，而非直接度量跨域分布对齐。
++
++训练数据流如图\ref{fig:ch05_translator_paths}所示。两域Encoder仅提供均值缓存，Real Decoder参数也保持冻结，但计算NLL时不切断其对预测潜变量的梯度，因此损失仍可经Decoder回传至Translator，只有$\theta$参与更新。参数冻结意味着不累积其参数梯度，并不意味着该模块退出计算图；映射输出对条件似然的影响仍由固定读出函数传递。Decoder首帧用BOS，后续以真实前帧Mask递推隐状态；真实当前帧Mask作为幅值头条件，同时监督Mask头logit的BCE。两者角色不同，该Teacher Forcing似然不代表自由运行质量。
++
++\begin{figure}[htbp]
++ \centering
++ \fbox{\begin{minipage}{0.92\textwidth}\centering\small
++ 训练：Paired Sim $\rightarrow$ 冻结$E_s$均值 $\rightarrow T_\theta
++ \rightarrow$ 预测Real latent\\[3pt]
++ 配对Real $\rightarrow$ 冻结$E_r$均值 $\rightarrow$ Huber监督\\[3pt]
++ 预测Real latent与配对Real $\rightarrow$ 冻结$D_r$真实Mask条件NLL\\[3pt]
++ Huber与NLL梯度回传至$T_\theta$；仅更新Translator\\[5pt]
++ 部署：Natural Sim $\rightarrow E_s$均值 $\rightarrow T_\theta
++ \rightarrow D_r$自由解码 $\rightarrow4\times712$触觉
++ \par\vspace*{2.5mm}
++ \end{minipage}}
++ \caption{伪配对监督训练与自由推理的数据流}
++ \label{fig:ch05_translator_paths}
++\end{figure}
++
++训练和验证分别使用1200与240个配对窗口。随机种子为4303，采用AdamW，学习率$3\times10^{-4}$、权重衰减$10^{-4}$，批量64，梯度范数上限5。每轮打乱训练窗口并执行19步，45轮共855步；在第30至45轮内按验证联合目标选择权重，最终采用第30轮，对应570次参数更新。末批包含48窗，验证时按各批样本数加权汇总，与训练采用相同的Huber和NLL组合，不依据域分类器分数挑选检查点。总训练步数与所存检查点经历的更新次数应分别记录。Natural Sim不直接参与该映射的配对训练。部署时仅需Natural输入，经Sim均值编码、Translator和Real Decoder生成完整触觉；Mask由模型预测，幅值取恢复尺度后的Gamma混合均值$s_{\rm pos}\sum_k\omega_k a_k/b_k$，无需Real样本、GMM或探针。
++
++这种映射的有效范围受监督来源限制。GMM责任度不是物理接触归属概率，Top-5分量筛选与单一候选选择压缩了多解信息，Translator未接收完整分量概率或候选分布。1200与240窗也不代表1440个独立Root。Paired Validation上，Translator与配对训练Real均值模板的潜变量Huber分别为0.32591983675956726和0.4942297637462616，按全部窗口、帧及潜维平均。该模板仅沿1200个配对训练目标的窗口维取均值，保留四帧位置，并广播至待评价窗口，不使用验证目标拟合。然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验。
+--- /dev/null
++++ thesis/body/ch05_sections/section_5_6.tex
+@@ -0,0 +1,65 @@
++% Independent section draft; no official main-file integration.
++\section{跨域触觉重建实验结果与分析}
++\label{sec:ch05_reconstruction_results}
++
++为检验统计伪配对与双域表示是否支持完整触觉转换，本节采用迁移前训练并冻结的C0评价器。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。
++
++\begin{figure}[htbp]
++ \centering
++ \fbox{\begin{minipage}{0.92\textwidth}\centering\small
++ 原Real Train与Natural Sim Train $\rightarrow$ 训练11个C0后冻结\\[3pt]
++ Real Validation与Translated Natural Validation\\[3pt]
++ $\downarrow$ 原log1p、Scaler及通道顺序\\[3pt]
++ 冻结C0、阈值0.5 $\rightarrow$ 逐实例BA、AUC、D及联合判定
++ \par\vspace*{2.5mm}
++ \end{minipage}}
++ \caption{迁移前冻结C0的Validation评价协议}
++ \label{fig:ch05_c0_validation_protocol}
++\end{figure}
++
++记两类召回率为$R_r$与$R_s$，则$\mathrm{BA}=(R_r+R_s)/2$，$D=1-2|\mathrm{BA}-0.5|$。每个实例必须同时满足BA在$[0.45,0.55]$、AUC在$[0.475,0.525]$及$D\ge0.90$，且11个实例全部满足才算联合通过。BA与D门槛数学等价，不是两项独立证据；AUC检验分数排序，不能在小于0.5时反转后参加验收。点估计按窗口计算，不应误称Session或Root等权宏平均。原始未转换数据上，11个C0的Validation BA均超过0.98，表明其已能区分原始两域；但冻结后的测试只覆盖这些模型学到的判别特征，即使通过也不能替代触觉结构与输入响应保持检查。
++
++表\ref{tab:ch05_transfer_summary}汇总同角色跨域结果。C3采用原双域VAE与GRU Translator，其Validation结果取已有冻结链路复现，而非历史开发Test。虽然D全部达标，仅kNN同时满足AUC条件。表\ref{tab:ch05_validation_instances}中，C3的MLP分数仍保持正向排序差异，GRU和部分Transformer则出现反向排序；两种情况均不满足域不可辨识要求。例如MLP Seed11将905个迁移窗口全部判Real，Real中776/780判对，BA约0.497436；但AUC为0.591571。固定阈值下的高D因此可能来自类别预测偏向，不能证明分布已接近。
++
++\begin{table}[htbp]
++ \centering\small
++ \caption{同划分Natural Validation的跨域评价汇总}
++ \label{tab:ch05_transfer_summary}
++ \begin{tabular}{lccc}
++ \hline
++ 版本&目标域读出&BA/D及AUC联合&BA/D等价门槛\\\hline
++ C3&原C3&1/11&11/11\\
++ C13&幅值条件修复&1/11&11/11\\
++ C27&原C3&2/11&11/11\\\hline
++ \end{tabular}
++\end{table}
++\begin{table}[htbp]
++ \centering\footnotesize
++ \caption{C3与C27的冻结Validation逐实例结果}
++ \label{tab:ch05_validation_instances}
++ \begin{tabular}{lrrrrrr}
++ \hline
++ &\multicolumn{3}{c}{C3}&\multicolumn{3}{c}{C27}\\
++ 实例&BA&AUC&D&BA&AUC&D\\\hline
++Logistic&0.498718&0.682604&0.997436&0.501480&0.673062&0.997039\\
++kNN&0.501944&0.500536&0.996111&0.506364&0.509993&0.987272\\
++MLP 11&0.497436&0.591571&0.994872&0.498541&0.600164&0.997082\\
++MLP 12&0.498718&0.598765&0.997436&0.498718&0.630157&0.997436\\
++MLP 13&0.498077&0.610894&0.996154&0.499734&0.617238&0.999469\\
++GRU 11&0.498718&0.239559&0.997436&0.498718&0.571915&0.997436\\
++GRU 12&0.498718&0.237257&0.997436&0.511978&0.487958&0.976045\\
++GRU 13&0.498718&0.383622&0.997436&0.511425&0.548114&0.977150\\
++Transformer 11&0.497436&0.282288&0.994872&0.497988&0.357940&0.995977\\
++Transformer 12&0.496154&0.217189&0.992308&0.499469&0.307241&0.998938\\
++Transformer 13&0.498077&0.698591&0.996154&0.503602&0.643598&0.992796\\
++ \hline
++ \end{tabular}
++\end{table}
++
++针对目标域读出，C13仅更新Real Decoder当前Mask条件嵌入和幅值头，冻结Encoder、Mask及循环骨干。同一Real验证集的重建MSE由0.07786883降至0.02631960，而Natural迁移联合结果仍为1/11，仅kNN通过。其MLP与Logistic的AUC仍高于上限，GRU与部分Transformer仍低于下限，说明局部幅值修复没有消除剩余可辨识特征。该现象不证明幅值无作用，只说明这一修复范围不足以完成整体转换。
++
++C23进一步用原始Real与其C13重建输出作读出诊断，6/11满足同一数值门槛，包括Logistic、kNN、三个MLP及GRU Seed13；其余时序分类器未满足。该结果揭示目标域自重建仍存在可辨识痕迹，不是Natural迁移通过6/11。C24仅在相同幅值参数范围增加保留相邻帧的变化约束，同780个Real验证窗中，输出与Real的相邻保留帧log1p增量绝对误差由0.00281497降至0.00161364，但全窗全通道MSE升至0.02715745，汇总输出正值P99由3.54426降至3.28971，四帧总响应的跨窗标准差由67.58367降至57.52224；读出诊断仅kNN与Transformer Seed13满足，共2/11。时间统计改善与幅值尾部退化并存，不能将压低变化误差等同于更真实的触觉。Real帧间隔不均匀，该损失也不是物理时间导数。
++
++C27保留原C3双域VAE，只适配Translator，增加Natural覆盖、Real坐标中的分布矩及源Patch响应份额约束，未混入C13 Decoder。新增通过GRU Seed12，使联合数由1增至2；但MLP、Logistic、GRU Seed11/13及三个Transformer仍未满足，且各实例AUC变化并非一致向0.5靠近。这支持有限适配带来局部变化，\mbox{不能}支持整体成功或稳定优势；D的11/11也不能覆盖其余九个实例的排序差异。
++
++瓶颈证据指向监督与读出的共同限制，而非单纯未训练充分。配对状态复用、近Sim输入对应不同Real目标以及多解压缩提示监督歧义。Paired Train与Paired Validation中，19种放置后首帧指纹跨组复用，涉及后者97窗。指纹仅取九位小数精度的qpos与探针位置，不含速度等完整状态，不能等同于物理初态完全相同；但Real Session隔离也不能消除该复用风险。Natural又缺少对应Real真值，配对回归改善不能确认域外输入正确。加载与空间构型调整未解决全部配对覆盖，连续场、Taxel积分及处理诊断仅解释物理读出；这些都不是新的迁移成绩。扩散采样修复虽改善稳定性，仍未共同超过GRU的配对指标；直接OT和共享Encoder路线分别因坐标前提及结构保持停止，未执行的OT或C0不记为0/11。现有证据不能确定各因素的因果份额，也没有认证Taxel物理对应或真实任务收益。因而本章完成的是可追溯的重建与诊断链路，尚未完成完整域迁移验收。

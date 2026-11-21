@@ -1,0 +1,237 @@
+{
+  "actuators": [
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint1",
+      "joint": "joint1",
+      "kp": "5000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-3.1 3.1",
+      "forcelimited": "true",
+      "forcerange": "-60 60"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint2",
+      "joint": "joint2",
+      "kp": "5000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-2.268 2.268",
+      "forcelimited": "true",
+      "forcerange": "-60 60"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint3",
+      "joint": "joint3",
+      "kp": "3000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-3.1 3.1",
+      "forcelimited": "true",
+      "forcerange": "-30 30"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint4",
+      "joint": "joint4",
+      "kp": "3000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-2.355 2.355",
+      "forcelimited": "true",
+      "forcerange": "-30 30"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint5",
+      "joint": "joint5",
+      "kp": "2000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-3.1 3.1",
+      "forcelimited": "true",
+      "forcerange": "-10 10"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint6",
+      "joint": "joint6",
+      "kp": "2000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-2.233 2.233",
+      "forcelimited": "true",
+      "forcerange": "-10 10"
+    },
+    {
+      "source": "assets/robots/rm75b/rm75b.xml",
+      "type": "position",
+      "name": "pos_joint7",
+      "joint": "joint7",
+      "kp": "1000",
+      "dampratio": "1.0",
+      "ctrllimited": "true",
+      "ctrlrange": "-6.28 6.28",
+      "forcelimited": "true",
+      "forcerange": "-10 10"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "act_push_0_j",
+      "tendon": "finger_0_flexor",
+      "ctrlrange": "0 0.01",
+      "kp": "10000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "act_push_1_j",
+      "tendon": "finger_1_flexor",
+      "ctrlrange": "0 0.01",
+      "kp": "10000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "act_push_2_j",
+      "tendon": "finger_2_flexor",
+      "ctrlrange": "0 0.01",
+      "kp": "10000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "act_push_3_j",
+      "tendon": "finger_3_flexor",
+      "ctrlrange": "0 0.01",
+      "kp": "10000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "thumb_rotate_act_push_j",
+      "tendon": "thumb_opposition",
+      "ctrlrange": "-0.0069 0.004",
+      "kp": "4000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    },
+    {
+      "source": "assets/grippers/dex_hand/dex_hand.xml",
+      "type": "position",
+      "name": "thumb_grasp_act_push_j",
+      "tendon": "thumb_flexor",
+      "ctrlrange": "0 0.01",
+      "kp": "4000",
+      "dampratio": "1",
+      "forcelimited": "true",
+      "forcerange": "-20 20"
+    }
+  ],
+  "fixed_tendons": [
+    {
+      "name": "finger_0_flexor",
+      "terms": [
+        {
+          "joint": "finger_first_0_j",
+          "coef": "0.003"
+        },
+        {
+          "joint": "finger_second_0_j",
+          "coef": "0.003"
+        }
+      ]
+    },
+    {
+      "name": "finger_1_flexor",
+      "terms": [
+        {
+          "joint": "finger_first_1_j",
+          "coef": "0.003"
+        },
+        {
+          "joint": "finger_second_1_j",
+          "coef": "0.003"
+        }
+      ]
+    },
+    {
+      "name": "finger_2_flexor",
+      "terms": [
+        {
+          "joint": "finger_first_2_j",
+          "coef": "0.003"
+        },
+        {
+          "joint": "finger_second_2_j",
+          "coef": "0.003"
+        }
+      ]
+    },
+    {
+      "name": "finger_3_flexor",
+      "terms": [
+        {
+          "joint": "finger_first_3_j",
+          "coef": "0.003"
+        },
+        {
+          "joint": "finger_second_3_j",
+          "coef": "0.003"
+        }
+      ]
+    },
+    {
+      "name": "thumb_opposition",
+      "terms": [
+        {
+          "joint": "thumb_rotate_j",
+          "coef": "0.0085"
+        }
+      ]
+    },
+    {
+      "name": "thumb_flexor",
+      "terms": [
+        {
+          "joint": "thumb_first_j",
+          "coef": "0.0035"
+        },
+        {
+          "joint": "thumb_second_j",
+          "coef": "0.004"
+        },
+        {
+          "joint": "thumb_third_j",
+          "coef": "0.004"
+        }
+      ]
+    }
+  ],
+  "solver_override_source": "source/robots/builder.py::_configure_solver",
+  "solver_overrides_actuator_parameters": false,
+  "units": "SI model convention; not calibrated hardware values; arm kp Nm/rad; tendon kp N/m"
+}

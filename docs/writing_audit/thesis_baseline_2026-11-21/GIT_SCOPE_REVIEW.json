@@ -1,0 +1,2215 @@
+{
+  "roots": [
+    "thesis",
+    "docs/writing_audit",
+    "scripts"
+  ],
+  "selected_paths": [
+    ".gitattributes",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_FIGURE_TABLE_PLAN.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_FORMULA_PLAN.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_MATERIAL_REVIEW.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_REFERENCE_REVIEW.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/CH02_WRITING_READINESS.md",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/audit_existing_materials.py",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/integrity.json",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/model_and_episode_audit.json",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/reference_records.json",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/run_commands.json",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/source_inventory.json",
+    "docs/writing_audit/ch02_material_review_v1_2026-11-20/write_reports.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/FIGURES_AND_FORMULAS.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/README.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/RUN_COMMANDS.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/SELF_REVIEW.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/ch02_simulation_platform.tex",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/changes.diff",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/package_delivery.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/plot_geometry.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/protected_before.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/reference_before.bib",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/BUILD_ISSUES.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/README.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/RUN_COMMANDS.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/SHA256SUMS",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/WORDCOUNT_COMPARISON.md",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/actuator_xml_check.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/assembled_robot.pdf",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/build_preview.sh",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/ch02_preview.tex",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/ch02_simulation_platform.tex",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter02_preview.pdf",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter02_preview_with_references.pdf",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter_before.tex",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/finalize_revision.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/geometry_provenance.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/integrity.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/pdf_checks.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/plot_assembled_geometry.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/prepare_revision.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/protected_before.json",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/revise_text.py",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff",
+    "docs/writing_audit/ch02_writing_v1_2026-11-20/static_checks.json",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_OPEN_ISSUES.md",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/historical_results_check.json",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/integrity.json",
+    "docs/writing_audit/ch03_material_audit_v1_2026-11-20/source_index.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/README.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/RUN_COMMANDS.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/WRITING_REVIEW.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/ch03_grasp_demonstrations.tex",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/changes.diff",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/RUN_COMMANDS.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/SHA256SUMS",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/build_preview.sh",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/ch03_preview.tex",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/changes.diff",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/chapter03_body_preview.pdf",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/chapter03_preview.pdf",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/chapter_before.tex",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/citation_check.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/layout_review.md",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/package_review.py",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/protected_before.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/package_ch03.py",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/protected_before.json",
+    "docs/writing_audit/ch03_writing_v1_2026-11-20/static_checks.json",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_DATASET_INVENTORY.md",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_OPEN_ISSUES.md",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/audit_existing_data.py",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/dataset_checks.json",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/integrity.json",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/run_commands.json",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/source_index.json",
+    "docs/writing_audit/ch04_material_audit_v1_2026-11-20/write_reports.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/README.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/RUN_COMMANDS.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/WRITING_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/ch04_multimodal_data.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/changes.diff",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/figure_provenance.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/package_ch04.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/plot_sink_comparison.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/protected_before.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/RUN_COMMANDS.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/SHA256SUMS",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/build_preview.sh",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/ch04_before.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/ch04_multimodal_data.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/chapter04_preview.pdf",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/chapter04_preview.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/chapter04_preview_with_references.pdf",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/chapter04_preview_with_references.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/package_revision.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/pdf_text.txt",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/protected_before.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/static_checks.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/RUN_COMMANDS.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/SHA256SUMS",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/build_preview.sh",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/ch04_before.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/ch04_multimodal_data.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/changes.diff",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/chapter04_preview.pdf",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/chapter04_preview.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/chapter04_preview_with_references.pdf",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/chapter04_preview_with_references.tex",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/integrity.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/package_r2.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/plot_sink_compact.py",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/protected_before.json",
+    "docs/writing_audit/ch04_writing_v1_2026-11-20/static_checks.json",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_DATA_ROLE_MATRIX.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_EVALUATION_CONTRACT.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_OPEN_ISSUES.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_PROBLEM_FORMULATION.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/CH05_52_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_52_material_audit_v1_2026-11-21/source_manifest.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_LOSS_AND_TRAINING.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_MODEL_ARCHITECTURE.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_OPEN_ISSUES.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/CH05_54_VERSION_COMPARISON.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/RUN_COMMANDS.md",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/audited_inputs.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/baseline.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/checkpoint_metadata.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/code_locations.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/collect_evidence.py",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_54_material_audit_v1_2026-11-21/verified_facts.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_OPEN_ISSUES.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_PAIRING_AUDIT.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_TRAINING_AUDIT.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/CH05_55_TRANSLATOR_ARCHITECTURE.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/RUN_COMMANDS.md",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/baseline.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/checkpoint_metadata.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/code_locations.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/collect_evidence.py",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/mapping_evidence.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/pairing_recount.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/source_hashes.json",
+    "docs/writing_audit/ch05_55_material_audit_v1_2026-11-21/training_evidence.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/5_5_recompile/render_comparison.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/5_5_recompile/section_5_5_preview.tex",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_FINAL_AUDIT.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_ISSUE_LIST.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_READING_DRAFT.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/CH05_WORDCOUNT.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/COMPLETION_CHECKLIST.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/NUMERIC_CROSSCHECK.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/README.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/SOURCE_MANIFEST.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/chapter05.pdf",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/chapter05_complete.tex",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/full_thesis.pdf",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/pdf_pages.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/protected_before.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/REVISION_REVIEW.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/SECTION_5_2_READING_DRAFT.md",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/changes.diff",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/section_5_2.tex",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/thesis_before.tex",
+    "docs/writing_audit/ch05_final_integration_2026-11-21/validation_numeric_recheck.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_EVIDENCE_AUDIT.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_FULL_AUDIT.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_ISSUE_LIST.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_LOGIC_AUDIT.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_TECHNICAL_CONSISTENCY.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_WORDCOUNT.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/CH05_WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/RUN_COMMANDS.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/SOURCE_MANIFEST.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/SOURCE_MANIFEST.md",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/audit_chapter.py",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/baseline.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/issue_records.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/main_include_graph.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/source_hashes.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/source_search.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/validation_evidence_check.json",
+    "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount_results.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_C0_PROTOCOL_AND_METRIC_AUDIT.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_EVIDENCE_MATRIX.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_GMM_PSEUDOPAIR_AUDIT.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_MATERIAL_AUDIT.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_OPEN_ISSUES.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/CH05_STRUCTURE_AND_WORD_BUDGET.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/README.md",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/RUN_COMMANDS.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/baseline.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/checkpoint_metadata.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/claim_cards.csv",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/extra_checks.py",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/finalize_audit.py",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/git_status_before.txt",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/integrity.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/source_code_index.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/subgroup_review.py",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/validation_metric_recheck.csv",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/verified_observations.json",
+    "docs/writing_audit/ch05_material_audit_v1_2026-11-20/write_reports.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/SECTION_5_3_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/baseline.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/count_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/package_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/COORDINATE_AUDIT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/METRIC_DEFINITIONS.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/RUN_COMMANDS.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/SECTION_5_3_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/TECHNICAL_AUDIT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/artifact_presence.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/baseline.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/check_artifacts.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/count_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/extra_inputs.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/package_revision.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/section_5_3.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/R2_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/RUN_COMMANDS.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/SECTION_5_3_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/artifact_presence.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/baseline.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/check_artifacts.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/count_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/extra_inputs.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/package_revision.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/pdf_text.txt",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/RUN_COMMANDS.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/SECTION_5_3_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/baseline.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/count_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/freeze_section.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/SECTION_5_1_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/MATERIAL_FOR_5_4_MASK_SAMPLING.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/NUMERIC_AUDIT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/SECTION_5_1_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/check_numeric.py",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/numeric_check.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/numeric_source_hashes.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/section_5_1.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/OFFICIAL_REFERENCE_CHECK.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/R2_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/SECTION_5_1_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/pdf_text.txt",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/section_5_1.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/section_5_1_body.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/section_5_1_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/section_5_1_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/section_5_1.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/selected_statistics.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/source_hashes.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/verified_numbers.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/SECTION_5_2_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/protection_baseline.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/section_5_2.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_3.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/SECTION_5_4_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/R1_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/RUN_COMMANDS.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/SECTION_5_4_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/pdf_text.txt",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4_body.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/section_5_4.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/SECTION_5_5_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/SECTION_5_5_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/build_with_references.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/pdf_text.txt",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview_with_references.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview_with_references.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/section_5_5.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/EVIDENCE_CITATION_MAP.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/SECTION_5_6_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/WRITING_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/C13_validation_check.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/C24_existing_metrics.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/SECTION_5_6_READING_DRAFT.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/LAYOUT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/TECHNICAL_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/WORDCOUNT_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/pdf_text.txt",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/FREEZE_REVIEW.md",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/SHA256SUMS",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/build_preview.sh",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/changes.diff",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6_R1_before.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6_preview.pdf",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6_preview.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/integrity.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/placement_overlap_check.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/protected_before.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/section_5_6.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/section_5_6.tex",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/source_hashes.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/static_checks.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/validation_metrics.csv",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/validation_records.json",
+    "docs/writing_audit/ch05_writing_v1_2026-11-20/static_checks.json",
+    "docs/writing_audit/thesis_baseline_2026-11-21/BASELINE_CHECKS.json",
+    "docs/writing_audit/thesis_baseline_2026-11-21/GIT_REVIEW.md",
+    "docs/writing_audit/thesis_baseline_2026-11-21/GIT_SCOPE_REVIEW.json",
+    "docs/writing_audit/thesis_baseline_2026-11-21/INTEGRITY_REVIEW.json",
+    "docs/writing_audit/thesis_baseline_2026-11-21/THESIS_ASSET_INVENTORY.csv",
+    "docs/writing_audit/thesis_baseline_2026-11-21/WHITESPACE_REVIEW.txt",
+    "docs/writing_audit/thesis_baseline_2026-11-21/protected_before.json",
+    "docs/writing_audit/thesis_baseline_2026-11-21/stage_paths.txt",
+    "scripts/count_thesis_words.py",
+    "scripts/count_thesis_words.sh",
+    "scripts/tests/thesis_wordcount/README.md",
+    "scripts/tests/thesis_wordcount/basic.tex",
+    "scripts/tests/thesis_wordcount/child.tex",
+    "scripts/tests/thesis_wordcount/custom.tex",
+    "scripts/tests/thesis_wordcount/extended.tex",
+    "scripts/tests/thesis_wordcount/includes.tex",
+    "scripts/tests/thesis_wordcount/protected_before.json",
+    "scripts/tests/thesis_wordcount/second.tex",
+    "scripts/texcount_rules.tex",
+    "scripts/thesis_length_budget.json",
+    "thesis/.gitignore",
+    "thesis/.vscode/extensions.json",
+    "thesis/.vscode/settings.json",
+    "thesis/AGENTS.md",
+    "thesis/CHATGPT_THESIS_REVIEW_PACKET.md",
+    "thesis/EXPERIMENT_EVIDENCE.md",
+    "thesis/Makefile",
+    "thesis/README.md",
+    "thesis/REFERENCE_THESIS_ANALYSIS.md",
+    "thesis/ROBOTICS_EVIDENCE.md",
+    "thesis/SYMBOLS_AND_TERMS.md",
+    "thesis/THESIS_ISSUE_TRACKER.md",
+    "thesis/THESIS_LENGTH_BUDGET.md",
+    "thesis/THESIS_MASTER_INDEX.md",
+    "thesis/THESIS_NEXT_STEPS.md",
+    "thesis/THESIS_PLAN.md",
+    "thesis/THESIS_PLAN_V2.md",
+    "thesis/THESIS_PROGRESS_REPORT.md",
+    "thesis/THESIS_RESEARCH_SUMMARY.md",
+    "thesis/THESIS_WRITING_STANDARD.md",
+    "thesis/back/acknowledgements.tex",
+    "thesis/back/appendix.tex",
+    "thesis/back/publications.tex",
+    "thesis/body/ch01_introduction.tex",
+    "thesis/body/ch02_data_and_problem.tex",
+    "thesis/body/ch02_simulation_platform.tex",
+    "thesis/body/ch03_dual_vae.tex",
+    "thesis/body/ch03_grasp_demonstrations.tex",
+    "thesis/body/ch04_adversarial_transfer.tex",
+    "thesis/body/ch04_multimodal_data.tex",
+    "thesis/body/ch05_dual_domain_reconstruction.tex",
+    "thesis/body/ch05_experiments.tex",
+    "thesis/body/ch05_sections/section_5_1.tex",
+    "thesis/body/ch05_sections/section_5_2.tex",
+    "thesis/body/ch05_sections/section_5_3.tex",
+    "thesis/body/ch05_sections/section_5_4.tex",
+    "thesis/body/ch05_sections/section_5_5.tex",
+    "thesis/body/ch05_sections/section_5_6.tex",
+    "thesis/body/ch06_conclusion.tex",
+    "thesis/docs/history/v2_before_execution_constraints_2026-11-19/AGENTS.md",
+    "thesis/docs/history/v2_before_execution_constraints_2026-11-19/THESIS_PLAN_V2.md",
+    "thesis/docs/history/v2_before_execution_constraints_2026-11-19/THESIS_WRITING_STANDARD.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/AGENTS.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/EXPERIMENT_EVIDENCE.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/README.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/REFERENCE_THESIS_ANALYSIS.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/SYMBOLS_AND_TERMS.md",
+    "thesis/docs/history/workflow_v1_2026-11-19/THESIS_WRITING_STANDARD.md",
+    "thesis/docs/official/SHA256SUMS.json",
+    "thesis/docs/official/degree_selection_extracted.json",
+    "thesis/docs/official/download_status.json",
+    "thesis/docs/official/hithesis_latest_release.json",
+    "thesis/docs/official/tinytex_latest_release.json",
+    "thesis/docs/project_files.txt",
+    "thesis/docs/project_integrity.json",
+    "thesis/docs/school_requirements.md",
+    "thesis/docs/setup_report.md",
+    "thesis/docs/synctex_check.json",
+    "thesis/docs/template_provenance.json",
+    "thesis/docs/thesis.upstream.tex",
+    "thesis/docs/verification.json",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/before.json",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/ch01_before.tex.txt",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/citation_key_map.json",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/reference_before.bib.txt",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/static_check.json",
+    "thesis/docs/writing_audit/ch01_1_1_draft_v2/static_check.py",
+    "thesis/docs/writing_audit/ch01_1_1_material_review.md",
+    "thesis/docs/writing_audit/ch01_1_1_revision_v2_1/REPORT.md",
+    "thesis/docs/writing_audit/ch01_1_1_revision_v2_1/ch01_before.tex.txt",
+    "thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff",
+    "thesis/docs/writing_audit/ch01_1_1_revision_v2_1/verification.json",
+    "thesis/docs/writing_audit/ch01_1_1_sources/internal_evidence.json",
+    "thesis/docs/writing_audit/ch01_1_1_sources/literature_catalog.json",
+    "thesis/docs/writing_audit/ch01_1_1_writing_delivery_v2.md",
+    "thesis/docs/writing_audit/ch01_1_2_material_review.md",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/ch01_introduction.before.tex",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/revision_notes.txt",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/section_1_2_final.tex",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/section_1_2_review.txt",
+    "thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/verification.json",
+    "thesis/docs/writing_audit/ch01_1_2_sources/claim_evidence_matrix.csv",
+    "thesis/docs/writing_audit/ch01_1_2_sources/literature_catalog.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before_hashes.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/ch01_introduction.tex.diff",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/citation_mapping.csv",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/delivery_and_self_review.txt",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/delivery_files.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/historical_material_integrity.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/paragraph_evidence.csv",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/reference.bib.diff",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/references_used.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/references_used.txt",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/section_1_2_review.txt",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/verification.json",
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/verify_delivery.py",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/before_hashes.json",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/ch01_introduction.before.tex",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/changes.diff",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/delivery.txt",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/sections_1_3_1_5.tex",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/sections_1_3_1_5_review.txt",
+    "thesis/docs/writing_audit/ch01_1_3_1_5_writing_v1_2026-11-20/verification.json",
+    "thesis/docs/writing_audit/evidence_catalog.csv",
+    "thesis/docs/writing_audit/evidence_catalog.json",
+    "thesis/docs/writing_audit/reference_page_19.png",
+    "thesis/docs/writing_audit/reference_page_23.png",
+    "thesis/docs/writing_audit/reference_page_41.png",
+    "thesis/docs/writing_audit/reference_page_60.png",
+    "thesis/docs/writing_audit/reference_page_64.png",
+    "thesis/docs/writing_audit/reference_page_65.png",
+    "thesis/docs/writing_audit/reference_pdf_metadata.json",
+    "thesis/docs/writing_audit/v2/REVISION_SUMMARY.md",
+    "thesis/docs/writing_audit/v2/robotics_source_audit.json",
+    "thesis/docs/writing_audit/v2/validation.json",
+    "thesis/docs/writing_audit/verified_claims.csv",
+    "thesis/docs/writing_audit/workflow_request_2026-11-19.md",
+    "thesis/docs/writing_audit/workflow_validation.json",
+    "thesis/docs/writing_audit/writing_workflow_files.txt",
+    "thesis/figures/ch02/fingertip_sampling.pdf",
+    "thesis/figures/ch02/fingertip_sampling.png",
+    "thesis/figures/ch02/revision_v1/assembled_robot.pdf",
+    "thesis/figures/ch02/taxel_local_frame.pdf",
+    "thesis/figures/ch02/taxel_local_frame.png",
+    "thesis/figures/ch04/sink_historical_precision.pdf",
+    "thesis/figures/ch04/sink_historical_precision.png",
+    "thesis/figures/ch04/sink_historical_precision_r2.pdf",
+    "thesis/figures/ch04/sink_historical_precision_r2.png",
+    "thesis/front/abstract.tex",
+    "thesis/front/cover.tex",
+    "thesis/front/denotation.tex",
+    "thesis/gbt7714-numerical-quanjiao.bst",
+    "thesis/hithesis-bthesistitle.eps",
+    "thesis/hithesis-hrb-bachelor-bottommark.eps",
+    "thesis/hithesis-logo.eps",
+    "thesis/hithesis-shenzhenbthesistitle.eps",
+    "thesis/hithesis-zfb.eps",
+    "thesis/hithesis.bst",
+    "thesis/hithesis.ist",
+    "thesis/hithesis.sty",
+    "thesis/hithesisbook.cfg",
+    "thesis/hithesisbook.cls",
+    "thesis/hitszthesis.bst",
+    "thesis/latexmk.projectrc",
+    "thesis/latexmkrc",
+    "thesis/reference.bib",
+    "thesis/releases/ch01_2026-11-20/FREEZE_REPORT.txt",
+    "thesis/releases/ch01_2026-11-20/FREEZE_STATUS.json",
+    "thesis/releases/ch01_2026-11-20/SHA256SUMS",
+    "thesis/releases/ch01_2026-11-20/before_hashes.json",
+    "thesis/releases/ch01_2026-11-20/chapter01.pdf",
+    "thesis/releases/ch01_2026-11-20/chapter01_with_references.pdf",
+    "thesis/releases/ch01_2026-11-20/extracted_pdf_checks.json",
+    "thesis/releases/ch01_2026-11-20/main_file_change.diff",
+    "thesis/releases/ch01_2026-11-20/pdf_checks.json",
+    "thesis/releases/ch01_2026-11-20/source/body/ch01_introduction.tex",
+    "thesis/releases/ch01_2026-11-20/source/latexmk.projectrc",
+    "thesis/releases/ch01_2026-11-20/source/latexmkrc",
+    "thesis/releases/ch01_2026-11-20/source/reference.bib",
+    "thesis/releases/ch01_2026-11-20/source/scripts/build.sh",
+    "thesis/releases/ch01_2026-11-20/source/thesis.tex",
+    "thesis/releases/ch01_2026-11-20/texcount_ch01.json",
+    "thesis/releases/ch01_2026-11-20/thesis_build_snapshot.pdf",
+    "thesis/releases/ch01_2026-11-20/tool_versions.json",
+    "thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md",
+    "thesis/releases/ch02_2026-11-20/FREEZE_REPORT.md",
+    "thesis/releases/ch02_2026-11-20/FREEZE_STATUS.json",
+    "thesis/releases/ch02_2026-11-20/SHA256SUMS",
+    "thesis/releases/ch02_2026-11-20/ch02_preview.tex",
+    "thesis/releases/ch02_2026-11-20/ch02_simulation_platform.tex",
+    "thesis/releases/ch02_2026-11-20/chapter02.pdf",
+    "thesis/releases/ch02_2026-11-20/chapter02_with_references.pdf",
+    "thesis/releases/ch02_2026-11-20/final_changes.diff",
+    "thesis/releases/ch02_2026-11-20/finalize_freeze.py",
+    "thesis/releases/ch02_2026-11-20/formula_2_5_check.png",
+    "thesis/releases/ch02_2026-11-20/protected_hashes.json",
+    "thesis/releases/ch02_2026-11-20/reference.bib",
+    "thesis/releases/ch02_2026-11-20/source_before.tex",
+    "thesis/releases/ch05_5_1_2026-11-21/FREEZE_STATUS.json",
+    "thesis/releases/ch05_5_1_2026-11-21/LAYOUT_REVIEW.md",
+    "thesis/releases/ch05_5_1_2026-11-21/OFFICIAL_REFERENCE_CHECK.md",
+    "thesis/releases/ch05_5_1_2026-11-21/R2_REVIEW.md",
+    "thesis/releases/ch05_5_1_2026-11-21/README.md",
+    "thesis/releases/ch05_5_1_2026-11-21/SECTION_5_1_READING_DRAFT.md",
+    "thesis/releases/ch05_5_1_2026-11-21/SHA256SUMS",
+    "thesis/releases/ch05_5_1_2026-11-21/WORDCOUNT_REVIEW.md",
+    "thesis/releases/ch05_5_1_2026-11-21/changes.diff",
+    "thesis/releases/ch05_5_1_2026-11-21/section_5_1.tex",
+    "thesis/releases/ch05_5_1_2026-11-21/section_5_1_body.pdf",
+    "thesis/releases/ch05_5_1_2026-11-21/section_5_1_preview.pdf",
+    "thesis/releases/ch05_5_3_2026-11-21/FREEZE_STATUS.json",
+    "thesis/releases/ch05_5_3_2026-11-21/LAYOUT_REVIEW.md",
+    "thesis/releases/ch05_5_3_2026-11-21/READING_DRAFT.md",
+    "thesis/releases/ch05_5_3_2026-11-21/README.md",
+    "thesis/releases/ch05_5_3_2026-11-21/SHA256SUMS",
+    "thesis/releases/ch05_5_3_2026-11-21/WORDCOUNT_REVIEW.md",
+    "thesis/releases/ch05_5_3_2026-11-21/changes_R2_R3.diff",
+    "thesis/releases/ch05_5_3_2026-11-21/preview_entry.tex",
+    "thesis/releases/ch05_5_3_2026-11-21/section_5_3.pdf",
+    "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+    "thesis/releases/ch05_5_3_2026-11-21/wordcount.json",
+    "thesis/releases/ch05_5_4_2026-11-21/FREEZE_STATUS.json",
+    "thesis/releases/ch05_5_4_2026-11-21/LAYOUT_REVIEW.md",
+    "thesis/releases/ch05_5_4_2026-11-21/R1_REVIEW.md",
+    "thesis/releases/ch05_5_4_2026-11-21/README.md",
+    "thesis/releases/ch05_5_4_2026-11-21/SECTION_5_4_READING_DRAFT.md",
+    "thesis/releases/ch05_5_4_2026-11-21/SHA256SUMS",
+    "thesis/releases/ch05_5_4_2026-11-21/WORDCOUNT_REVIEW.md",
+    "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+    "thesis/releases/ch05_5_4_2026-11-21/section_5_4_body.pdf",
+    "thesis/releases/ch05_5_4_2026-11-21/section_5_4_preview.pdf",
+    "thesis/releases/ch05_5_5_2026-11-21/FREEZE_STATUS.json",
+    "thesis/releases/ch05_5_5_2026-11-21/README.md",
+    "thesis/releases/ch05_5_5_2026-11-21/SECTION_5_5_READING_DRAFT.md",
+    "thesis/releases/ch05_5_5_2026-11-21/SHA256SUMS",
+    "thesis/releases/ch05_5_5_2026-11-21/TECHNICAL_REVIEW.md",
+    "thesis/releases/ch05_5_5_2026-11-21/section_5_5.tex",
+    "thesis/releases/ch05_5_5_2026-11-21/section_5_5_preview.pdf",
+    "thesis/releases/ch05_5_5_2026-11-21/section_5_5_preview_with_references.pdf",
+    "thesis/releases/ch05_5_6_2026-11-21/FREEZE_REVIEW.md",
+    "thesis/releases/ch05_5_6_2026-11-21/FREEZE_STATUS.json",
+    "thesis/releases/ch05_5_6_2026-11-21/README.md",
+    "thesis/releases/ch05_5_6_2026-11-21/SECTION_5_6_READING_DRAFT.md",
+    "thesis/releases/ch05_5_6_2026-11-21/SHA256SUMS",
+    "thesis/releases/ch05_5_6_2026-11-21/changes.diff",
+    "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+    "thesis/releases/ch05_5_6_2026-11-21/section_5_6_preview.pdf",
+    "thesis/scripts/audit_robotics_writing_sources.py",
+    "thesis/scripts/build.sh",
+    "thesis/scripts/build_writing_evidence.py",
+    "thesis/scripts/check_synctex.py",
+    "thesis/scripts/check_writing_workflow.py",
+    "thesis/scripts/check_writing_workflow_v2.py",
+    "thesis/scripts/finalize_setup.py",
+    "thesis/scripts/verify_setup.py",
+    "thesis/tests/compile_smoke.tex",
+    "thesis/tests/compile_smoke_references.bib",
+    "thesis/thesis.code-workspace",
+    "thesis/thesis.tex",
+    "thesis/wiseref-LICENSE",
+    "thesis/wiseref.sty"
+  ],
+  "excluded": [
+    {
+      "path": "thesis/docs/Makefile.upstream",
+      "reason": "not_selected_file_type",
+      "bytes": 1747
+    },
+    {
+      "path": "thesis/tables/.gitkeep",
+      "reason": "not_selected_file_type",
+      "bytes": 0
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/build_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 52504
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/wordcount_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 615
+    },
+    {
+      "path": "thesis/releases/ch05_5_3_2026-11-21/xelatex.log",
+      "reason": "not_selected_file_type",
+      "bytes": 106278
+    },
+    {
+      "path": "thesis/releases/ch05_5_3_2026-11-21/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 104923
+    },
+    {
+      "path": "thesis/releases/ch05_5_5_2026-11-21/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 53541
+    },
+    {
+      "path": "thesis/releases/ch01_2026-11-20/build.console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 108395
+    },
+    {
+      "path": "thesis/releases/ch01_2026-11-20/texcount.console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 410
+    },
+    {
+      "path": "thesis/figures/network/.gitkeep",
+      "reason": "not_selected_file_type",
+      "bytes": 0
+    },
+    {
+      "path": "thesis/figures/experiments/.gitkeep",
+      "reason": "not_selected_file_type",
+      "bytes": 0
+    },
+    {
+      "path": "thesis/figures/framework/.gitkeep",
+      "reason": "not_selected_file_type",
+      "bytes": 0
+    },
+    {
+      "path": "thesis/figures/ch02/fingertip_sampling_points.npz",
+      "reason": "raw_data_model_video_or_archive",
+      "bytes": 275892
+    },
+    {
+      "path": "thesis/docs/writing_audit/reference_fulltext.txt",
+      "reason": "third_party_fulltext",
+      "bytes": 165101
+    },
+    {
+      "path": "thesis/docs/official/thesis_guide.doc",
+      "reason": "raw_data_model_video_or_archive",
+      "bytes": 7108608
+    },
+    {
+      "path": "thesis/docs/official/practice_guide.doc",
+      "reason": "raw_data_model_video_or_archive",
+      "bytes": 621568
+    },
+    {
+      "path": "thesis/docs/official/degree_selection.xlsx",
+      "reason": "not_selected_file_type",
+      "bytes": 11571
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S05_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 7521
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S06.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 447792
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/IsaacSim_documentation_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 52737
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14_formal.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4160650
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S20.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 3926758
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 9707714
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S07_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 9120
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S07_formal.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 31253746
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 9171
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S05.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4166340
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S04.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4584838
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S15.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4011306
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S10.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 6037851
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S23_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5996
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S20_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 6886
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S22.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5670840
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S25.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 7886891
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S02_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 16891
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 31253441
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S20_author_institution.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 14822
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S16_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 16124
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S18_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 9449
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S21_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 9263
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S24.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4719235
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 17043
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03_formal.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 1445422
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S23.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 479876
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S16.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 14032162
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S02.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 20341760
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S22_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 6712
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S18.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 530482
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S24_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 15034
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S21.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5365878
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S07.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 29187866
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 45381
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L02_dexterity.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 83208
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 17951
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 51508
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 11512475
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 41597
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 2737562
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 46271
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 39885
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L04_visuotactile.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 49015
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L02_dexterity.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4590851
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L01_billard.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 39362
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/verify_internal.py",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4327
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L04_visuotactile.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5331834
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 124477
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5022182
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 5061199
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 2108379
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 4066798
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L03_tactile_review.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 121959
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 50697
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L03_tactile_review.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 2429925
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 3160373
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic.pdf",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 8700215
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata_publisher.html",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 16442
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired.txt",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 41290
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/count_chapter.log",
+      "reason": "not_selected_file_type",
+      "bytes": 583
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/count_files.log",
+      "reason": "not_selected_file_type",
+      "bytes": 505
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/count_chapter.log",
+      "reason": "not_selected_file_type",
+      "bytes": 646
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/count_files.log",
+      "reason": "not_selected_file_type",
+      "bytes": 505
+    },
+    {
+      "path": "docs/writing_audit/ch04_material_audit_v1_2026-11-20/audit_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 1368
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/build_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 122301
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/chapter05.aux",
+      "reason": "not_selected_file_type",
+      "bytes": 13558
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/build_inputs.fls",
+      "reason": "not_selected_file_type",
+      "bytes": 76754
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/bibliography_build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 3356
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 122809
+    },
+    {
+      "path": "docs/writing_audit/ch05_material_audit_v1_2026-11-20/audit_sources.py",
+      "reason": "downloaded_literature_or_extracted_fulltext",
+      "bytes": 10952
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/detail_page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 225961
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/assembled_robot.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 141992
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/build_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 55071
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_15.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 34838
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 65005
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 74461
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 57051
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/count_chapter.log",
+      "reason": "not_selected_file_type",
+      "bytes": 667
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/detail_page_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 203586
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_11.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 76927
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 31766
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/build_final_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 55071
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_07.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 66005
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/contact_sheet.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 909713
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 63963
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/geometry_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 62
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_13.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 81486
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 81224
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 54123
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_12.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 64492
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/count_files.log",
+      "reason": "not_selected_file_type",
+      "bytes": 529
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_05.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 64157
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/detail_page_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 112786
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 68190
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/page_14.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 28788
+    },
+    {
+      "path": "docs/writing_audit/ch05_final_integration_2026-11-21/5_5_recompile/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 53541
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/detail_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 198157
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 62868
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 71234
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 59250
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_11.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 71165
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/wordcount_console.log",
+      "reason": "not_selected_file_type",
+      "bytes": 676
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/detail_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 214055
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 72593
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_07.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 65009
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/detail_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 201471
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/contact_sheet.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 816301
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 77829
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_13.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 33546
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 76209
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 68213
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_12.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 27500
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/detail_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 238690
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_05.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 67762
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/build_initial.log",
+      "reason": "not_selected_file_type",
+      "bytes": 87462
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 26571
+    },
+    {
+      "path": "docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 68030
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/instance_table.tmp",
+      "reason": "not_selected_file_type",
+      "bytes": 1008
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 150224
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 157946
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 140867
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/contact_sheet.jpg",
+      "reason": "not_selected_file_type",
+      "bytes": 79706
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 79305
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 172286
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 183051
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 162067
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/contact_sheet.jpg",
+      "reason": "not_selected_file_type",
+      "bytes": 88378
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 104923
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 226588
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 239099
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 108483
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 86700
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 30807
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 223270
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 243831
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 144021
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/reference_page.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 30867
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 54803
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 229702
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 245895
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 126202
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 81582
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 252531
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 187459
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 26111
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 87598
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 59130
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 57970
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 50930
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_11.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 6614
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 54233
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_07.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 48957
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/detail_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 229836
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 55147
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/last_page.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 13750
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 50417
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/detail_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 209235
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 51841
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/contact_sheet.jpg",
+      "reason": "not_selected_file_type",
+      "bytes": 311597
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_05.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 59784
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/trial_last.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 20909
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/count.log",
+      "reason": "not_selected_file_type",
+      "bytes": 607
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 452851
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 50345
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 208788
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 49753
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 63130
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 55672
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 205867
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_11.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 15221
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_06.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 243611
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 62056
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_07.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 53989
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_10.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 185569
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 59747
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 213606
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_02.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 54510
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_09.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 235404
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_03.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 56239
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_12.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 10434
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/contact_sheet.jpg",
+      "reason": "not_selected_file_type",
+      "bytes": 355585
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_08.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 227949
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_05.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 64510
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/count.log",
+      "reason": "not_selected_file_type",
+      "bytes": 607
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_07.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 199505
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/build.log",
+      "reason": "not_selected_file_type",
+      "bytes": 230149
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/page_04.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 55339
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_05.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 246065
+    },
+    {
+      "path": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/detail_01.png",
+      "reason": "temporary_page_or_contact_render",
+      "bytes": 211855
+    },
+    {
+      "path": "thesis/docs/full_file_inventory.txt",
+      "reason": "obsolete_full_installation_inventory_not_needed_for_project",
+      "bytes": 1514476
+    },
+    {
+      "path": "docs/writing_audit/ch05_material_audit_v1_2026-11-20/audited_sources.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 46065
+    },
+    {
+      "path": "thesis/docs/official/practice_guide.txt",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 87851
+    },
+    {
+      "path": "thesis/docs/official/thesis_guide.txt",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 84320
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L01_billard_alternate_access.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 506
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L02_dexterity_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 20094
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L02_dexterity_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 84911
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L03_tactile_review_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 124347
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L04_visuotactile_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 11744
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L04_visuotactile_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 50224
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 12114
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 42507
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 52461
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 51932
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 9854
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 47291
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 8940
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 40799
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 13689
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 42333
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey_access.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 284
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 21292
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 127353
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t_access.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 271
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 13631
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 48134
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/access_manifest.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 4349
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/bibliographic_checks.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 4253
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/file_manifest.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 10479
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/integrity.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 703
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/protected_before.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 1646
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_1_sources/run_commands.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 356
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S01_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 127353
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S02_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 63573
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 2533
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03_formal_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 58448
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S03_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 81633
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S04_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 15891
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S04_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 44707
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S05_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 16951
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S05_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 52036
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S06_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 4505
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S06_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 45749
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S07_formal_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 41531
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S07_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 93194
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S08_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 47291
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S09_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 40799
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S10_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 14241
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S10_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 69870
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S11_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 52461
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S12_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 51932
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S13_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 48134
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 24063
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14_formal_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 61929
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S14_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 99938
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S15_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 108981
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S15_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 66785
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S16_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 147416
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S17_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 42507
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S18_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 30287
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S19_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 42333
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S20_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 43830
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S21_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 41820
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S22_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 104164
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S23_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 138213
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S24_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 44685
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S25_crossref.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 15698
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/S25_pages.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 49575
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/access_manifest.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 10473
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/additional_access.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 1600
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/file_inventory.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 15143
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/foundational_metadata_access.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 427
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/integrity.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 414
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/internal_evidence_recheck.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 16759
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/internal_source_reading.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 1444
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/metadata_checks.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 34612
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/protected_before.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 3053
+    },
+    {
+      "path": "thesis/docs/writing_audit/ch01_1_2_sources/reading_log.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 11583
+    },
+    {
+      "path": "thesis/docs/writing_audit/verified_code_sources.json",
+      "reason": "raw_publisher_metadata_or_extracted_third_party_fulltext_not_published",
+      "bytes": 1242
+    },
+    {
+      "path": "thesis/docs/writing_audit/reference_pages.json",
+      "reason": "third_party_thesis_fulltext_extracted_JSON_local_only",
+      "bytes": 171341
+    }
+  ],
+  "candidate_bytes": 25266488,
+  "sensitive_pattern_hits": [],
+  "binary_policy": "Only project-generated figures, thesis/release/review PDFs and template EPS; no downloaded article PDFs, research signal arrays, weights, installation or videos.",
+  "other_user_work": "All apps/tests/docs/progress/references and root archives left unstaged.",
+  "upstream": "main -> origin/main",
+  "remote": "git@github.com:BBbibiburst/dex_hand_project.git",
+  "pre_fetch_divergence": [
+    0,
+    0
+  ],
+  "excluded_reason_counts": {
+    "not_selected_file_type": 51,
+    "local_tools_vendor_build_or_generated_review_artifacts": 24611,
+    "downloaded_literature_or_extracted_fulltext": 62,
+    "raw_data_model_video_or_archive": 3,
+    "third_party_fulltext": 1,
+    "temporary_page_or_contact_render": 94
+  },
+  "note": "Local tool/cache/generated exclusions are aggregated; original files retained. No installation file list needed in remote evidence.",
+  "whitespace_check": {
+    "unmodified_historical_or_template_warnings": 347,
+    "affected_files": 63,
+    "action": "Preserve historical files and frozen hashes; no bulk whitespace mutation; warnings disclosed.",
+    "initial_diagnostics": 347,
+    "final_diagnostics": 345,
+    "final_files": 61,
+    "CRLF_policy": "Preserve raw bytes; cr-at-eol recognized as EOL, no trailing-space check suppression"
+  }
+}

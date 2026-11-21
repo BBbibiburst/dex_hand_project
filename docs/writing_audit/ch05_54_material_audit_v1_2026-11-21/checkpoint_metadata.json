@@ -1,0 +1,1002 @@
+{
+  "C3_Real": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/real_vae/checkpoint.pt",
+    "sha256": "99beaf8e6402b1c34a59add2a86036f56ebc8fd1b69c472c2542198774a1e815",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "kind"
+    ],
+    "metadata": {
+      "encoder_scale": 0.14118273556232452,
+      "positive_scale": 0.005002501420676708,
+      "epoch": 30,
+      "optimizer_steps": 2430,
+      "kind": "real"
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.14118273556232452,
+    "positive_scale_buffer": 0.005002501420676708,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  },
+  "C3_Sim": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/sim_vae/checkpoint.pt",
+    "sha256": "c92af67fd97d29cc600a7a338899ad47b293b495b25896155dde2707ccc6db62",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "kind"
+    ],
+    "metadata": {
+      "encoder_scale": 0.04088745638728142,
+      "positive_scale": 1e-07,
+      "epoch": 30,
+      "optimizer_steps": 3810,
+      "kind": "sim"
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.04088745638728142,
+    "positive_scale_buffer": 1.0000000116860974e-07,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  },
+  "C3_Translator": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/translator/checkpoint.pt",
+    "sha256": "c98e1146ae2f8d17ce05ecffacbfeaf24e1cf07db4d51783c69355fcacfb7b6a",
+    "checkpoint_fields": [
+      "model",
+      "epoch",
+      "optimizer_steps"
+    ],
+    "metadata": {
+      "epoch": 30,
+      "optimizer_steps": 570
+    },
+    "state_shapes": {
+      "gru.weight_ih_l0": [
+        384,
+        64
+      ],
+      "gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "gru.bias_ih_l0": [
+        384
+      ],
+      "gru.bias_hh_l0": [
+        384
+      ],
+      "gru.weight_ih_l1": [
+        384,
+        128
+      ],
+      "gru.weight_hh_l1": [
+        384,
+        128
+      ],
+      "gru.bias_ih_l1": [
+        384
+      ],
+      "gru.bias_hh_l1": [
+        384
+      ],
+      "projection.weight": [
+        64,
+        128
+      ],
+      "projection.bias": [
+        64
+      ]
+    },
+    "state_dtypes": {
+      "gru.weight_ih_l0": "torch.float32",
+      "gru.weight_hh_l0": "torch.float32",
+      "gru.bias_ih_l0": "torch.float32",
+      "gru.bias_hh_l0": "torch.float32",
+      "gru.weight_ih_l1": "torch.float32",
+      "gru.weight_hh_l1": "torch.float32",
+      "gru.bias_ih_l1": "torch.float32",
+      "gru.bias_hh_l1": "torch.float32",
+      "projection.weight": "torch.float32",
+      "projection.bias": "torch.float32"
+    }
+  },
+  "C13_Real": {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/checkpoint.pt",
+    "sha256": "6dea2be871e03d4fedc5c9b8022b98c1d8866fed6bf4ed496a2ea6ccd1ddc2c7",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "seed",
+      "kind",
+      "validation_positive_NLL"
+    ],
+    "metadata": {
+      "encoder_scale": 0.14118273556232452,
+      "positive_scale": 0.005002501420676708,
+      "epoch": 3,
+      "optimizer_steps": 243,
+      "seed": 4313,
+      "kind": "real_vae_amplitude_context_repair",
+      "validation_positive_NLL": -2.7416080577573023
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.14118273556232452,
+    "positive_scale_buffer": 0.005002501420676708,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  },
+  "C24_initial": {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/initial_checkpoint.pt",
+    "sha256": "8e55f19c7c14440521682fbc16194cc394c5e39ab570f94d59a63898729b185e",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "seed",
+      "kind",
+      "validation_positive_NLL"
+    ],
+    "metadata": {
+      "encoder_scale": 0.14118273556232452,
+      "positive_scale": 0.005002501420676708,
+      "epoch": 3,
+      "optimizer_steps": 243,
+      "seed": 4313,
+      "kind": "real_vae_amplitude_context_repair",
+      "validation_positive_NLL": -2.7416080577573023
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.14118273556232452,
+    "positive_scale_buffer": 0.005002501420676708,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  },
+  "C24_selected": {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/checkpoint.pt",
+    "sha256": "c07a457c199df315c70dd543e3e642319c0cc9b8d47b92f32e5a8c4f299c6109",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "seed",
+      "validation_positive_NLL",
+      "kind",
+      "lambda_temporal"
+    ],
+    "metadata": {
+      "encoder_scale": 0.14118273556232452,
+      "positive_scale": 0.005002501420676708,
+      "epoch": 2,
+      "optimizer_steps": 162,
+      "seed": 4313,
+      "validation_positive_NLL": -2.7023901579181824,
+      "kind": "C24_single_temporal_amplitude_repair",
+      "lambda_temporal": 269.8845743604945
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.14118273556232452,
+    "positive_scale_buffer": 0.005002501420676708,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  },
+  "C24_endpoint": {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/endpoint_checkpoint.pt",
+    "sha256": "94f26b62eebd4a072e2c9a73c5de775602416b2f1c683e9c5cf794d1e45cfd8a",
+    "checkpoint_fields": [
+      "model",
+      "encoder_scale",
+      "positive_scale",
+      "epoch",
+      "optimizer_steps",
+      "seed",
+      "validation_positive_NLL",
+      "kind",
+      "lambda_temporal"
+    ],
+    "metadata": {
+      "encoder_scale": 0.14118273556232452,
+      "positive_scale": 0.005002501420676708,
+      "epoch": 18,
+      "optimizer_steps": 1458,
+      "seed": 4313,
+      "validation_positive_NLL": -2.352905134038289,
+      "kind": "C24_single_temporal_amplitude_repair",
+      "lambda_temporal": 269.8845743604945
+    },
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    },
+    "state_dtypes": {
+      "encoder.scale": "torch.float32",
+      "encoder.input.0.weight": "torch.float32",
+      "encoder.input.0.bias": "torch.float32",
+      "encoder.input.2.weight": "torch.float32",
+      "encoder.input.2.bias": "torch.float32",
+      "encoder.gru.weight_ih_l0": "torch.float32",
+      "encoder.gru.weight_hh_l0": "torch.float32",
+      "encoder.gru.bias_ih_l0": "torch.float32",
+      "encoder.gru.bias_hh_l0": "torch.float32",
+      "encoder.mean.weight": "torch.float32",
+      "encoder.mean.bias": "torch.float32",
+      "encoder.logvar.weight": "torch.float32",
+      "encoder.logvar.bias": "torch.float32",
+      "decoder.bos": "torch.float32",
+      "decoder.positive_scale": "torch.float32",
+      "decoder.previous.0.weight": "torch.float32",
+      "decoder.previous.0.bias": "torch.float32",
+      "decoder.cell.weight_ih": "torch.float32",
+      "decoder.cell.weight_hh": "torch.float32",
+      "decoder.cell.bias_ih": "torch.float32",
+      "decoder.cell.bias_hh": "torch.float32",
+      "decoder.mask.weight": "torch.float32",
+      "decoder.mask.bias": "torch.float32",
+      "decoder.current.0.weight": "torch.float32",
+      "decoder.current.0.bias": "torch.float32",
+      "decoder.amplitude.0.weight": "torch.float32",
+      "decoder.amplitude.0.bias": "torch.float32",
+      "decoder.amplitude.2.weight": "torch.float32",
+      "decoder.amplitude.2.bias": "torch.float32"
+    },
+    "encoder_scale_buffer": 0.14118273556232452,
+    "positive_scale_buffer": 0.005002501420676708,
+    "parameter_count": 1094232,
+    "encoder_parameters": 298240,
+    "decoder_parameters": 795992,
+    "amplitude_trainable_parameters": 594512
+  }
+}

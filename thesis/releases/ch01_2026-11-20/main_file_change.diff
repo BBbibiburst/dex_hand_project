@@ -1,0 +1,11 @@
+--- before/thesis.tex
++++ after/thesis.tex
+@@ -21,7 +21,7 @@
+ \backmatter
+ \bibliographystyle{hithesis}
+ % 尚未收录研究文献；确认条目并加入正文引用后启用：
+-% \bibliography{reference}
++\bibliography{reference}
+ % 本科、硕士、博士后置顺序不同；当前不引入博士答辩决议/博士个人简历。
+ % 有真实内容后按学院要求启用：
+ % \begin{appendix}\input{back/appendix}\end{appendix}

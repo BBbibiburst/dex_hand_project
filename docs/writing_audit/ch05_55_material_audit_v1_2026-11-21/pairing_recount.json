@@ -1,0 +1,172 @@
+{
+  "roles": {
+    "train": {
+      "shape": [
+        1200,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "real_shape": [
+        1200,
+        4,
+        712
+      ],
+      "manifest_row_hashes_match": true,
+      "unique": {
+        "real_source_window_id": 1200,
+        "real_session_id": 30,
+        "sim_root_fingerprint": 461,
+        "sim_content_sha256": 1200,
+        "real_content_sha256": 1200,
+        "target_id": 1200,
+        "actual_sensor_episode": 1200
+      },
+      "max_real_source_reuse": 1,
+      "max_placed_state_reuse": 90,
+      "stages": {
+        "CLOSE": 462,
+        "HOLD": 384,
+        "LIFT": 354
+      }
+    },
+    "validation": {
+      "shape": [
+        240,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "real_shape": [
+        240,
+        4,
+        712
+      ],
+      "manifest_row_hashes_match": true,
+      "unique": {
+        "real_source_window_id": 240,
+        "real_session_id": 4,
+        "sim_root_fingerprint": 106,
+        "sim_content_sha256": 240,
+        "real_content_sha256": 240,
+        "target_id": 240,
+        "actual_sensor_episode": 240
+      },
+      "max_real_source_reuse": 1,
+      "max_placed_state_reuse": 21,
+      "stages": {
+        "HOLD": 52,
+        "LIFT": 72,
+        "CLOSE": 116
+      }
+    }
+  },
+  "cross_manifest": {
+    "real_source_window_id": 0,
+    "real_session_id": 0,
+    "sim_root_fingerprint": 19,
+    "sim_content_sha256": 0,
+    "real_content_sha256": 0,
+    "target_id": 0,
+    "actual_sensor_episode": 0
+  },
+  "historical_independence": [
+    {
+      "role": "train",
+      "windows": 1200,
+      "unique_real_source": 1200,
+      "unique_real_trial": 566,
+      "unique_real_session": 30,
+      "unique_episode": 1200,
+      "unique_source_trajectory": 1200,
+      "unique_reported_root": 461,
+      "unique_placed_probe_first_frame_state": 461,
+      "unique_full_preplacement_reset_state": 1,
+      "unique_robot_reset_state": 1,
+      "unique_gmm_numeric_target": 1200,
+      "unique_physical_sphere_configuration": 1200,
+      "unique_physical_topology": 270,
+      "unique_sim_window_sha": 1200,
+      "unique_real_window_sha": 1200
+    },
+    {
+      "role": "validation",
+      "windows": 240,
+      "unique_real_source": 240,
+      "unique_real_trial": 106,
+      "unique_real_session": 4,
+      "unique_episode": 240,
+      "unique_source_trajectory": 240,
+      "unique_reported_root": 106,
+      "unique_placed_probe_first_frame_state": 106,
+      "unique_full_preplacement_reset_state": 1,
+      "unique_robot_reset_state": 1,
+      "unique_gmm_numeric_target": 240,
+      "unique_physical_sphere_configuration": 240,
+      "unique_physical_topology": 72,
+      "unique_sim_window_sha": 240,
+      "unique_real_window_sha": 240
+    }
+  ],
+  "historical_cross": {
+    "exact": {
+      "real_source": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "real_trial": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "real_session": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "episode": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "source_trajectory": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "reported_root": {
+        "unique_overlap": 19,
+        "validation_windows_in_shared_value": 97
+      },
+      "full_preplacement_reset_state": {
+        "unique_overlap": 1,
+        "validation_windows_in_shared_value": 240
+      },
+      "robot_reset_state": {
+        "unique_overlap": 1,
+        "validation_windows_in_shared_value": 240
+      },
+      "gmm_numeric_target": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "physical_sphere_configuration": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "physical_topology": {
+        "unique_overlap": 17,
+        "validation_windows_in_shared_value": 165
+      },
+      "sim_window_sha": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      },
+      "real_window_sha": {
+        "unique_overlap": 0,
+        "validation_windows_in_shared_value": 0
+      }
+    },
+    "near_rule": "identical patch/site/radius/tilt/posture topology; RMS effective four-frame indentation<=.05mm; diagnostic only",
+    "near_validation_count": 160,
+    "no_history_modified": true,
+    "root_definitions": "reportedRoot is qpos+probe position after first50ms, not original reset; reset and robot state separately audited"
+  },
+  "source_inventory_rows": 1440
+}

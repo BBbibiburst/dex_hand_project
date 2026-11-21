@@ -1,0 +1,38 @@
+% !TeX program = xelatex
+% 独立工程测试，不属于论文研究正文，也不表示任何实验结果。
+\documentclass[fontset=fandol,type=master,campus=harbin]{hithesisbook}
+\usepackage{hithesis}
+\begin{document}
+\frontmatter
+\tableofcontents
+\listoffigures
+\listoftables
+\mainmatter
+\chapter{工程编译测试}
+中文复制检索测试：灵巧手触觉，哈尔滨工业大学。
+本页仅用于确认模板编译、图表编号和引用链路。
+模板来源为官方仓库\cite{hithesis-template}。
+图\ref{fig:compile-test}、表\ref{tab:compile-test}及式\eqref{eq:compile-test}仅为工程占位测试。
+\begin{figure}[htbp]
+\centering
+\fbox{\rule{0pt}{15mm}\rule{45mm}{0pt}}
+\caption{编译测试占位图，不含研究结果}
+\label{fig:compile-test}
+\end{figure}
+\begin{table}[htbp]
+\centering
+\caption{编译测试占位表，不含研究结果}
+\label{tab:compile-test}
+\begin{tabular}{cc}
+\toprule
+字段 & 状态 \\
+\midrule
+工程测试 & 待核对 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{equation}\label{eq:compile-test}1+1=2\end{equation}
+\backmatter
+\bibliographystyle{hithesis}
+\bibliography{tests/compile_smoke_references}
+\end{document}

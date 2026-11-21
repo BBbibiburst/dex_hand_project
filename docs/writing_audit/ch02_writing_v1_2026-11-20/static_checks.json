@@ -1,0 +1,123 @@
+{
+  "missing_citation_keys": [],
+  "duplicate_bib_keys": [],
+  "missing_reference_labels": [],
+  "duplicate_body_labels": [],
+  "environment_errors": [],
+  "figures": [
+    {
+      "order": 1,
+      "caption": "仿真平台模块及控制、观测数据流",
+      "label": "fig:ch02_architecture",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "order": 2,
+      "caption": "RM75B与Dex Hand组合模型的几何展示图位",
+      "label": "fig:ch02_robot_model",
+      "image_files": [],
+      "placeholder": true
+    },
+    {
+      "order": 3,
+      "caption": "当前模型的关节与驱动关系",
+      "label": "fig:ch02_drive",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "order": 4,
+      "caption": "指定配置下的控制层次与多速率执行流程",
+      "label": "fig:ch02_control",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "order": 5,
+      "caption": "五指与手掌触觉阵列的维度及索引组织",
+      "label": "fig:ch02_patch_order",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "order": 6,
+      "caption": "当前指尖STL及外壳拟合后的阵列采样点（网格局部坐标）",
+      "label": "fig:ch02_fingertip",
+      "image_files": [
+        "figures/ch02/fingertip_sampling.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "order": 7,
+      "caption": "由相邻采样点构造的局部切线和法向（外向修正前）",
+      "label": "fig:ch02_frame",
+      "image_files": [
+        "figures/ch02/taxel_local_frame.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "order": 8,
+      "caption": "原生触觉读数到processed观测的处理链",
+      "label": "fig:ch02_processing",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "order": 9,
+      "caption": "平台实现与历史观测记录的分层核查结构",
+      "label": "fig:ch02_validation",
+      "image_files": [],
+      "placeholder": false
+    }
+  ],
+  "tables": [
+    {
+      "caption": "仿真平台主要模块与功能",
+      "label": "tab:ch02_modules"
+    },
+    {
+      "caption": "机械臂及灵巧手执行器配置",
+      "label": "tab:ch02_actuators"
+    },
+    {
+      "caption": "主要控制与物理参数及其适用范围",
+      "label": "tab:ch02_control_parameters"
+    },
+    {
+      "caption": "不同曲面布局方法的关键实现参数",
+      "label": "tab:ch02_layout_parameters"
+    },
+    {
+      "caption": "16个Patch的阵列规格与712维索引区间",
+      "label": "tab:ch02_patch_layout"
+    },
+    {
+      "caption": "触觉观测各阶段的输出与语义",
+      "label": "tab:ch02_signal_stages"
+    },
+    {
+      "caption": "五条历史开发Episode的触觉观测核查结果",
+      "label": "tab:ch02_episode_validation"
+    }
+  ],
+  "equation_count": 5,
+  "cited_keys": [
+    "mujoco2026computation",
+    "mujoco2026xml",
+    "sferrazza2022simtoreal",
+    "si2022taxim",
+    "todorov2012mujoco",
+    "wang2022tacto"
+  ],
+  "protected_changed": [
+    "thesis/reference.bib"
+  ],
+  "bibliography_original_prefix_preserved": true,
+  "first_chapter_unchanged": true,
+  "main_unchanged": true,
+  "compiled": false,
+  "frozen": false
+}

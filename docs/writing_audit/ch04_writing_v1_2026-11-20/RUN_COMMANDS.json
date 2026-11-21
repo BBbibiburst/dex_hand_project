@@ -1,0 +1,9 @@
+{
+  "commands": [
+    "OPENBLAS_NUM_THREADS=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch04_writing_v1_2026-11-20/plot_sink_comparison.py",
+    "./scripts/count_thesis_words.sh --chapter 4 --output-dir docs/writing_audit/ch04_writing_v1_2026-11-20/wordcount",
+    "./scripts/count_thesis_words.sh --files --output-dir docs/writing_audit/ch04_writing_v1_2026-11-20/wordcount",
+    "python3 docs/writing_audit/ch04_writing_v1_2026-11-20/package_ch04.py"
+  ],
+  "no_compilation": true
+}

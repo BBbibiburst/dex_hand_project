@@ -1,0 +1,908 @@
+[
+  {
+    "path": "outputs/dex_hand_top100_v2/summary.json",
+    "sha256": "e9a23b52f43d434d9634b25ae92ebc38fc96e2e81b84db5a130c0574bb9c77c3",
+    "kind": "historical_summary_not_independent_final_acceptance",
+    "count": 100,
+    "selected_count": null,
+    "result_rows": 100,
+    "statuses": {
+      "RL_SUCCESS": 2,
+      "LATTICE_SUCCESS": 98
+    },
+    "cached_rows": 0,
+    "variant_rows": 0,
+    "unique_object_ids": 100
+  },
+  {
+    "path": "outputs/pick_place_top100_final/summary.json",
+    "sha256": "a70295cbaee6cc3a132d08d1fabf0c1080beb5c3914b660bf72f6e19a11a64d5",
+    "kind": "historical_summary_not_independent_final_acceptance",
+    "count": 100,
+    "selected_count": null,
+    "result_rows": 100,
+    "statuses": {
+      "SUCCESS": 100
+    },
+    "cached_rows": 100,
+    "variant_rows": 0,
+    "unique_object_ids": 100
+  },
+  {
+    "path": "outputs/stack_task_valid_v24/summary.json",
+    "sha256": "18ec12b71cb095e7dc40984364060ffb5e5d290a6fa6b67bceec964727f8bc40",
+    "kind": "historical_summary_not_independent_final_acceptance",
+    "count": 48,
+    "selected_count": 48,
+    "result_rows": 48,
+    "statuses": {
+      "FAILED": 5,
+      "SUCCESS": 43
+    },
+    "cached_rows": 0,
+    "variant_rows": 0,
+    "unique_object_ids": 48
+  },
+  {
+    "path": "outputs/push_top100_final/summary.json",
+    "sha256": "8e5e829600d4c86e011ee7927990ed070072aea27da85e0095a8e5626c71b088",
+    "kind": "historical_summary_not_independent_final_acceptance",
+    "count": 100,
+    "selected_count": null,
+    "result_rows": 100,
+    "statuses": {
+      "SUCCESS": 100
+    },
+    "cached_rows": 98,
+    "variant_rows": 0,
+    "unique_object_ids": 100
+  },
+  {
+    "path": "outputs/nut_assembly_top100_final/summary.json",
+    "sha256": "42ca95049066483a19a58d77d116311478f082aa02f35c03bbdfc854ad5c4342",
+    "kind": "historical_summary_not_independent_final_acceptance",
+    "count": 100,
+    "selected_count": null,
+    "result_rows": 100,
+    "statuses": {
+      "SUCCESS": 100
+    },
+    "cached_rows": 0,
+    "variant_rows": 100,
+    "unique_object_ids": 0
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz",
+    "sha256": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "kind": "sampled_development_episode",
+    "case": "lift_sugar_rgb_00",
+    "tactile_key": "sensor_tactile",
+    "tactile_shape": [
+      447,
+      712
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.08404971972953272,
+    "timestamp_20hz": true,
+    "fields": {
+      "qpos": [
+        447,
+        26
+      ],
+      "qvel": [
+        447,
+        25
+      ],
+      "ctrl": [
+        447,
+        13
+      ],
+      "action": [
+        447,
+        13
+      ],
+      "object_position": [
+        447,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        447,
+        4
+      ],
+      "stage": [
+        447
+      ],
+      "reward": [
+        447
+      ],
+      "task_success": [
+        447
+      ],
+      "robot_object_contact_count": [
+        447
+      ],
+      "robot_object_normal_force": [
+        447
+      ],
+      "robot_object_digit_contact_count": [
+        447,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        447,
+        5
+      ],
+      "tactile": [
+        447,
+        712
+      ],
+      "palm_object_contact": [
+        447
+      ],
+      "object_support_contact": [
+        447
+      ],
+      "timestamp": [
+        447
+      ],
+      "state": [
+        447,
+        39
+      ],
+      "sensor_tactile": [
+        447,
+        712
+      ],
+      "object_state": [
+        447,
+        1,
+        7
+      ],
+      "pre_qpos": [
+        447,
+        26
+      ],
+      "pre_qvel": [
+        447,
+        25
+      ],
+      "next_timestamp": [
+        447
+      ],
+      "position_action": [
+        447,
+        13
+      ],
+      "ik_action": [
+        447,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz",
+    "sha256": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+    "kind": "sampled_development_episode",
+    "case": "pick_tomato_rgb_00",
+    "tactile_key": "sensor_tactile",
+    "tactile_shape": [
+      638,
+      712
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.15296440773484554,
+    "timestamp_20hz": true,
+    "fields": {
+      "position_action": [
+        638,
+        13
+      ],
+      "timestamp": [
+        638
+      ],
+      "object_position": [
+        638,
+        3
+      ],
+      "stage": [
+        638
+      ],
+      "pre_qpos": [
+        638,
+        26
+      ],
+      "object_quaternion_wxyz": [
+        638,
+        4
+      ],
+      "robot_object_digit_normal_force": [
+        638,
+        5
+      ],
+      "action": [
+        638,
+        13
+      ],
+      "pre_qvel": [
+        638,
+        25
+      ],
+      "robot_object_contact_count": [
+        638
+      ],
+      "reward": [
+        638
+      ],
+      "next_timestamp": [
+        638
+      ],
+      "tactile": [
+        638,
+        712
+      ],
+      "task_success": [
+        638
+      ],
+      "state": [
+        638,
+        39
+      ],
+      "robot_object_digit_contact_count": [
+        638,
+        5
+      ],
+      "sensor_tactile": [
+        638,
+        712
+      ],
+      "robot_object_normal_force": [
+        638
+      ],
+      "object_state": [
+        638,
+        2,
+        7
+      ],
+      "palm_object_contact": [
+        638
+      ],
+      "qvel": [
+        638,
+        25
+      ],
+      "object_support_contact": [
+        638
+      ],
+      "ik_action": [
+        638,
+        13
+      ],
+      "qpos": [
+        638,
+        26
+      ],
+      "ctrl": [
+        638,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz",
+    "sha256": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+    "kind": "sampled_development_episode",
+    "case": "stack_ring_rgb_01",
+    "tactile_key": "sensor_tactile",
+    "tactile_shape": [
+      376,
+      712
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.1826328293091083,
+    "timestamp_20hz": true,
+    "fields": {
+      "qpos": [
+        376,
+        33
+      ],
+      "qvel": [
+        376,
+        31
+      ],
+      "ctrl": [
+        376,
+        13
+      ],
+      "action": [
+        376,
+        13
+      ],
+      "object_position": [
+        376,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        376,
+        4
+      ],
+      "stage": [
+        376
+      ],
+      "reward": [
+        376
+      ],
+      "task_success": [
+        376
+      ],
+      "robot_object_contact_count": [
+        376
+      ],
+      "robot_object_normal_force": [
+        376
+      ],
+      "robot_object_digit_contact_count": [
+        376,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        376,
+        5
+      ],
+      "tactile": [
+        376,
+        712
+      ],
+      "palm_object_contact": [
+        376
+      ],
+      "object_support_contact": [
+        376
+      ],
+      "timestamp": [
+        376
+      ],
+      "state": [
+        376,
+        39
+      ],
+      "sensor_tactile": [
+        376,
+        712
+      ],
+      "object_state": [
+        376,
+        2,
+        7
+      ],
+      "next_timestamp": [
+        376
+      ],
+      "position_action": [
+        376,
+        13
+      ],
+      "ik_action": [
+        376,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz",
+    "sha256": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+    "kind": "sampled_development_episode",
+    "case": "push_tomato_rgb_00",
+    "tactile_key": "sensor_tactile",
+    "tactile_shape": [
+      605,
+      712
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.004954034729315628,
+    "timestamp_20hz": true,
+    "fields": {
+      "qpos": [
+        605,
+        26
+      ],
+      "qvel": [
+        605,
+        25
+      ],
+      "ctrl": [
+        605,
+        13
+      ],
+      "action": [
+        605,
+        13
+      ],
+      "object_position": [
+        605,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        605,
+        4
+      ],
+      "stage": [
+        605
+      ],
+      "reward": [
+        605
+      ],
+      "task_success": [
+        605
+      ],
+      "robot_object_contact_count": [
+        605
+      ],
+      "robot_object_normal_force": [
+        605
+      ],
+      "robot_object_digit_contact_count": [
+        605,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        605,
+        5
+      ],
+      "tactile": [
+        605,
+        712
+      ],
+      "palm_object_contact": [
+        605
+      ],
+      "object_support_contact": [
+        605
+      ],
+      "timestamp": [
+        605
+      ],
+      "state": [
+        605,
+        39
+      ],
+      "sensor_tactile": [
+        605,
+        712
+      ],
+      "object_state": [
+        605,
+        1,
+        7
+      ],
+      "pre_qpos": [
+        605,
+        26
+      ],
+      "pre_qvel": [
+        605,
+        25
+      ],
+      "next_timestamp": [
+        605
+      ],
+      "position_action": [
+        605,
+        13
+      ],
+      "ik_action": [
+        605,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz",
+    "sha256": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+    "kind": "sampled_development_episode",
+    "case": "nut_retain_lower_rgb_00",
+    "tactile_key": "sensor_tactile",
+    "tactile_shape": [
+      599,
+      712
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.12717591116279942,
+    "timestamp_20hz": true,
+    "fields": {
+      "qpos": [
+        599,
+        26
+      ],
+      "qvel": [
+        599,
+        25
+      ],
+      "ctrl": [
+        599,
+        13
+      ],
+      "action": [
+        599,
+        13
+      ],
+      "object_position": [
+        599,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        599,
+        4
+      ],
+      "stage": [
+        599
+      ],
+      "reward": [
+        599
+      ],
+      "task_success": [
+        599
+      ],
+      "robot_object_contact_count": [
+        599
+      ],
+      "robot_object_normal_force": [
+        599
+      ],
+      "robot_object_digit_contact_count": [
+        599,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        599,
+        5
+      ],
+      "tactile": [
+        599,
+        712
+      ],
+      "palm_object_contact": [
+        599
+      ],
+      "object_support_contact": [
+        599
+      ],
+      "timestamp": [
+        599
+      ],
+      "state": [
+        599,
+        39
+      ],
+      "sensor_tactile": [
+        599,
+        712
+      ],
+      "object_state": [
+        599,
+        2,
+        7
+      ],
+      "pre_qpos": [
+        599,
+        26
+      ],
+      "pre_qvel": [
+        599,
+        25
+      ],
+      "next_timestamp": [
+        599
+      ],
+      "position_action": [
+        599,
+        13
+      ],
+      "ik_action": [
+        599,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/dp_2026-10-11/lerobot_5/data/chunk-000/file-000.parquet",
+    "sha256": "ae846cf27f358897c8e57b1f3efcbcb6c4ab766866d03ceb507897549792028a",
+    "kind": "lerobot_actual_parquet",
+    "rows": 1550
+  },
+  {
+    "path": "outputs/dp_2026-10-11/lerobot_5/meta/info.json",
+    "sha256": "b2444c6b35d06aa82a505607decdaa7ae6e6294208cb05c43c0e85cb96307f4b",
+    "kind": "lerobot_metadata_and_actual_content_check",
+    "declared_episodes": 5,
+    "declared_frames": 1550,
+    "actual_parquet_rows": 1550,
+    "actual_episode_indices": 5,
+    "parquet_files": 1,
+    "tactile_shapes": [
+      [
+        712
+      ]
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.12729702790866257,
+    "features": {
+      "observation.state": {
+        "dtype": "float32",
+        "shape": [
+          39
+        ],
+        "names": null
+      },
+      "observation.images.agentview": {
+        "dtype": "video",
+        "shape": [
+          120,
+          160,
+          3
+        ],
+        "names": [
+          "height",
+          "width",
+          "channels"
+        ],
+        "info": {
+          "video.height": 120,
+          "video.width": 160,
+          "video.codec": "av1",
+          "video.pix_fmt": "yuv420p",
+          "video.is_depth_map": false,
+          "video.fps": 20,
+          "video.channels": 3,
+          "has_audio": false
+        }
+      },
+      "action": {
+        "dtype": "float32",
+        "shape": [
+          13
+        ],
+        "names": null
+      },
+      "observation.tactile": {
+        "dtype": "float32",
+        "shape": [
+          712
+        ],
+        "names": null
+      },
+      "timestamp": {
+        "dtype": "float32",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "frame_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "episode_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "task_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      }
+    },
+    "note": "No proof of episode physical independence, video PTS, causal alignment or successful task acceptance from this read"
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-000.parquet",
+    "sha256": "503eb02e6c39eb8021517584e81138900117e5b9a856afc980cd66520233810f",
+    "kind": "lerobot_actual_parquet",
+    "rows": 3339
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-001.parquet",
+    "sha256": "f0f19edb7527a4842120fdd01ad7bbea9ba67a0bc2236f02e163a5c0418647a9",
+    "kind": "lerobot_actual_parquet",
+    "rows": 3339
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-002.parquet",
+    "sha256": "35a653df1334c9333841132ea18bfd7f83439921b5499d07be4ccfb94a88f500",
+    "kind": "lerobot_actual_parquet",
+    "rows": 3339
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-003.parquet",
+    "sha256": "ff9941872c91d1e07fc6b1bd4a6dea2838668127dde0f4c31a421c630c6ff72c",
+    "kind": "lerobot_actual_parquet",
+    "rows": 3339
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-004.parquet",
+    "sha256": "478f54c88c6764a106567da5a5499e5d0578f92452cb3fd097f1cac2a564f623",
+    "kind": "lerobot_actual_parquet",
+    "rows": 954
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/meta/info.json",
+    "sha256": "90293f093be88b65a812f3cc5c0168e5a331a0fd8f4b1752644eae560b4c02d6",
+    "kind": "lerobot_metadata_and_actual_content_check",
+    "declared_episodes": 30,
+    "declared_frames": 14310,
+    "actual_parquet_rows": 14310,
+    "actual_episode_indices": 30,
+    "parquet_files": 5,
+    "tactile_shapes": [
+      [
+        712
+      ]
+    ],
+    "tactile_finite": true,
+    "tactile_nonzero_fraction": 0.09402878869966001,
+    "features": {
+      "observation.state": {
+        "dtype": "float32",
+        "shape": [
+          39
+        ],
+        "names": null
+      },
+      "observation.images.agentview": {
+        "dtype": "image",
+        "shape": [
+          120,
+          160,
+          3
+        ],
+        "names": [
+          "height",
+          "width",
+          "channels"
+        ]
+      },
+      "action": {
+        "dtype": "float32",
+        "shape": [
+          13
+        ],
+        "names": null
+      },
+      "observation.tactile": {
+        "dtype": "float32",
+        "shape": [
+          712
+        ],
+        "names": null
+      },
+      "timestamp": {
+        "dtype": "float32",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "frame_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "episode_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      },
+      "task_index": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "names": null
+      }
+    },
+    "note": "No proof of episode physical independence, video PTS, causal alignment or successful task acceptance from this read"
+  },
+  {
+    "path": "source/robots/arms/rm75b.py",
+    "sha256": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/robots/hands/dex_hand.py",
+    "sha256": "f3d8f24150ae0fb3a625a594d38bfaeddd5ff0b3977b79f3cc15971c0079927f",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/sensors/tactile/dex_hand.py",
+    "sha256": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/sensors/tactile/signal_processing.py",
+    "sha256": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/grasping/graspqp_adapter.py",
+    "sha256": "c1c8a9c57d4779cbb732f9f4ed67ae65c900e8b806397d7abeb6574a2865c1f1",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/grasping/dexevolve.py",
+    "sha256": "f75c5e27a1cede8aebe14af645ce3ceeb60c5599f0d7e7d19cad520dfd8b3af0",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "tools/grasping/batch_grasp_edit.py",
+    "sha256": "f874d1a63a93e5377b197c62e8756cfbe76a2c6ad24a7b32d65fe3cb75da3d18",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/grasping/executor.py",
+    "sha256": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/verification/strict_replay.py",
+    "sha256": "25edfdfbd2c10a5fae26b722fb06c6f105e16569deae12fe7352fa7e43fcb830",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/grasp_pipeline/replay.py",
+    "sha256": "ad79c14f924ed5196aac1e79f3329a3c9ad191c6a8328c9ab9370d31f2c716cf",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/data/production_recorder.py",
+    "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/data/production_queue.py",
+    "sha256": "3aa9b5fbc4f0631d0891d6309d0d3b3ccb2c1345d2c67d2b26abd81b30b37ebe",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  },
+  {
+    "path": "source/data/lerobot_schema.py",
+    "sha256": "82192b828542a9b4980d7efdb53e5827026af6d38d54a83a6dbcf9ef99affbb9",
+    "kind": "selected_code_source",
+    "scope": "specific functions reviewed; not entire pipeline independently verified"
+  }
+]

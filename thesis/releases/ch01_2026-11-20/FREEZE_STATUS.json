@@ -1,0 +1,43 @@
+{
+  "task": "TH-CH01-FINAL",
+  "date": "2026-11-20",
+  "status": "FROZEN_CHAPTER_1_DRAFT_WITH_NONBLOCKING_WARNINGS",
+  "scope": "Approved Chapter 1 content 1.1–1.5 and the cited bibliography at this snapshot; not whole thesis final formatting",
+  "chapter_pdf": "chapter01.pdf",
+  "chapter_printed_pages": [
+    1,
+    10
+  ],
+  "chapter_full_pdf_pages": [
+    7,
+    16
+  ],
+  "chapter_pdf_page_count": 10,
+  "with_references_pdf": "chapter01_with_references.pdf",
+  "with_references_pdf_page_count": 14,
+  "reference_printed_pages": [
+    16,
+    19
+  ],
+  "reference_full_pdf_pages": [
+    22,
+    25
+  ],
+  "full_build_pages": 25,
+  "texcount": 8493,
+  "source_changed": [
+    "thesis/thesis.tex: uncomment bibliography only"
+  ],
+  "chapter_source_unchanged": true,
+  "reference_bib_unchanged": true,
+  "other_chapters_templates_plan_unchanged": true,
+  "compile_success": true,
+  "citation_cross_reference_check": "PASS",
+  "visual_check": "PASS_FOR_DRAFT_WITH_DISCLOSED_NONBLOCKING_ISSUES",
+  "needs_new_review_if_content_changes": true,
+  "no_second_chapter_started": true,
+  "no_commit_push": true,
+  "source_sha256": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+  "main_sha256": "ad757386c9e6fb62c3d129724fa258dd832304ad43d18f90b0964eb7ffdc83f7",
+  "bib_sha256": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053"
+}

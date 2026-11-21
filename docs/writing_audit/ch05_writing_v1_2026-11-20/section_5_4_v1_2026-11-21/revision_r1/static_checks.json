@@ -1,0 +1,38 @@
+{
+  "labels": [
+    "sec:ch05_dual_vae_representation",
+    "fig:ch05_dual_vae",
+    "eq:ch05_vae_reparameterization",
+    "eq:ch05_vae_gamma_mixture",
+    "eq:ch05_vae_objective"
+  ],
+  "duplicate_labels": [],
+  "references": [
+    "fig:ch05_dual_vae"
+  ],
+  "unresolved_local_refs": [],
+  "citations": [
+    "kingma2014vae"
+  ],
+  "missing_cite_keys": [],
+  "duplicate_used_bib_keys": [],
+  "unclosed_environments": [],
+  "environment_errors": [],
+  "brace_net_balance": 0,
+  "display_equations": 3,
+  "figures": 1,
+  "compiled": true,
+  "citation_printed": "[1]",
+  "raw_bib_key_in_pdf": false,
+  "pages": 4,
+  "body_pages": [
+    1,
+    2,
+    3
+  ],
+  "reference_pages": [
+    4
+  ],
+  "overfull": false,
+  "undefined_references": false
+}

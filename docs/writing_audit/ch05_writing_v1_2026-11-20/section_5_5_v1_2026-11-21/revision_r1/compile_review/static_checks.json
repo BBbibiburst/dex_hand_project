@@ -1,0 +1,44 @@
+{
+  "body_pages": 2,
+  "with_references_pages": 3,
+  "body_text_same_in_both_PDFs": true,
+  "source_byte_identical_to_R1": true,
+  "equation_numbers": [
+    "5-7",
+    "5-8"
+  ],
+  "figure_number": "5-4",
+  "long_decimals_complete": true,
+  "missing_refs": false,
+  "overfull": false,
+  "context_reference_only": "kingma2014vae from frozen5.4 via preview-only nocite",
+  "engine_warnings": {
+    "section_5_5_preview": [
+      "LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <10.53937> not available",
+      "Package glossaries Warning: No \\printglossary or \\printglossaries found.",
+      "LaTeX Font Warning: Size substitutions with differences"
+    ],
+    "section_5_5_preview_with_references": [
+      "LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <10.53937> not available",
+      "Underfull \\hbox (badness 2005) in paragraph at lines 28--29",
+      "Package glossaries Warning: No \\printglossary or \\printglossaries found.",
+      "LaTeX Font Warning: Size substitutions with differences"
+    ]
+  },
+  "wordcount": {
+    "text": 1194,
+    "headings": 15,
+    "captions_footnotes": 16,
+    "heading_count": 1,
+    "float_count": 1,
+    "inline_math": 31,
+    "display_math": 2,
+    "total": 1225,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/wordcount/raw/section_5_5.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "state": "COMPILE_REVIEW_COMPLETE_AWAITING_USER_PDF_REVIEW"
+}

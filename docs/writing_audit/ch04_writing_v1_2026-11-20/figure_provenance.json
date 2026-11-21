@@ -1,0 +1,14 @@
+{
+  "input": "outputs/five_task_p38_exact_replay_2026-11-03/comparison.json",
+  "input_sha256": "d0e520fd82db0c9d59889c6572fbf14900e0d9a9d11308b830ea5faae775b9da",
+  "fields": [
+    "legacy_replay.max_qpos_component_error",
+    "exact_replay.max_qpos_component_error"
+  ],
+  "values": [
+    1.6288973093032837,
+    0.0
+  ],
+  "source_evidence": "L1 historical replay results; not a new experiment",
+  "no_training_or_physics": true
+}

@@ -1,0 +1,665 @@
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:13: trailing whitespace.
++任务配置与初始条件 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:14: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:15: trailing whitespace.
++  模型层：机械臂、灵巧手、底座、物体 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:16: trailing whitespace.
++  控制层：动作解释与执行器目标 $\rightarrow$ MuJoCo接触与状态推进 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:17: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:18: trailing whitespace.
++  感知层：状态与触觉观测 $\rightarrow$ 任务层：评价与终止 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:19: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:44: trailing whitespace.
++组合模型图位：RM75B连杆链、right_hand安装体与Dex Hand。 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:45: trailing whitespace.
++  待依据本章冻结后的XML及STL制作离线几何图； →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:54: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:61: trailing whitespace.
++机械臂：7个位置通道 $\rightarrow$ 7个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:62: trailing whitespace.
++  四指：每指1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 2个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:63: trailing whitespace.
++  拇指：1个对掌通道 $\rightarrow$ 1个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:105: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:112: trailing whitespace.
++动作输入 $\rightarrow$ 关节目标 / 末端位姿IK →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:113: trailing whitespace.
++  $\downarrow$ 限幅与目标平滑 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:114: trailing whitespace.
++  机械臂与手部位置执行器目标 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:115: trailing whitespace.
++  $\downarrow$ 在控制周期内保持 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:116: trailing whitespace.
++  50个物理子步：动力学、碰撞及接触约束求解 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:117: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:146: trailing whitespace.
++仿真手指索引0、1、2、3、4：每指按下列顺序组织 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:148: trailing whitespace.
++  $\rightarrow$ Patch 2：$7\times8$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:149: trailing whitespace.
++  五指小计：$5\times(32+32+56)=600$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:150: trailing whitespace.
++  手掌Patch：$7\times16=112$ $\rightarrow$ 合计712 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:164: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:192: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:228: trailing whitespace.
++曲面采样 $\rightarrow$ box site与原生touch $\rightarrow$ 地址绑定 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:229: trailing whitespace.
++  sensordata读取 $\rightarrow$ 死区与截断 $\rightarrow$ 幂响应 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:230: trailing whitespace.
++  $\rightarrow$ IIR滤波 $\rightarrow$ Patch内邻域串扰 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:231: trailing whitespace.
++  $\rightarrow$ 可选高斯滤波与噪声（指定profile关闭） →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:242: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:269: trailing whitespace.
++实现核查：XML、构建器、控制接口、传感器地址 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:270: trailing whitespace.
++  $\downarrow$ 与记录检查分开报告 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:271: trailing whitespace.
++  历史记录：Episode数组 $+$ manifest $+$ 结果文件 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:272: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:273: trailing whitespace.
++  shape与类型 $\rightarrow$ finite与非负 $\rightarrow$ 非零及时间间隔 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/CH02_READING_DRAFT.md:274: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:13: trailing whitespace.
++任务配置与初始条件 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:14: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:15: trailing whitespace.
++  模型层：机械臂、灵巧手、底座、物体 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:16: trailing whitespace.
++  控制层：动作解释与执行器目标 $\rightarrow$ MuJoCo接触与状态推进 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:17: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:18: trailing whitespace.
++  感知层：状态与触觉观测 $\rightarrow$ 任务层：评价与终止 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:19: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:50: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:57: trailing whitespace.
++机械臂：7个位置通道 $\rightarrow$ 7个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:58: trailing whitespace.
++  四指：每指1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 2个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:59: trailing whitespace.
++  拇指：1个对掌通道 $\rightarrow$ 1个转动关节 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:101: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:108: trailing whitespace.
++动作输入 $\rightarrow$ 关节目标 / 末端位姿IK →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:109: trailing whitespace.
++  $\downarrow$ 限幅与目标平滑 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:110: trailing whitespace.
++  机械臂与手部位置执行器目标 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:111: trailing whitespace.
++  $\downarrow$ 在控制周期内保持 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:112: trailing whitespace.
++  50个物理子步：动力学、碰撞及接触约束求解 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:113: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:143: trailing whitespace.
++仿真手指索引0、1、2、3、4：每指按下列顺序组织 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:145: trailing whitespace.
++  $\rightarrow$ Patch 2：$7\times8$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:146: trailing whitespace.
++  五指小计：$5\times(32+32+56)=600$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:147: trailing whitespace.
++  手掌Patch：$7\times16=112$ $\rightarrow$ 合计712 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:161: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:189: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:225: trailing whitespace.
++曲面采样 $\rightarrow$ box site与原生touch $\rightarrow$ 地址绑定 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:226: trailing whitespace.
++  sensordata读取 $\rightarrow$ 死区与截断 $\rightarrow$ 幂响应 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:227: trailing whitespace.
++  $\rightarrow$ IIR滤波 $\rightarrow$ Patch内邻域串扰 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:228: trailing whitespace.
++  $\rightarrow$ 可选高斯滤波与噪声（指定profile关闭） →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:239: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:266: trailing whitespace.
++实现核查：XML、构建器、控制接口、传感器地址 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:267: trailing whitespace.
++  $\downarrow$ 与记录检查分开报告 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:268: trailing whitespace.
++  历史记录：Episode数组 $+$ manifest $+$ 结果文件 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:269: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:270: trailing whitespace.
++  shape与类型 $\rightarrow$ finite与非负 $\rightarrow$ 非零及时间间隔 →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/CH02_READING_DRAFT.md:271: trailing whitespace.
++  $\downarrow$ →
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:4: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:16: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:29: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:36: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:45: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:62: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:64: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:86: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:88: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:91: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:93: trailing whitespace.
++
+docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/technical_changes.diff:93: new blank line at EOF.
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:14: trailing whitespace.
++
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:21: trailing whitespace.
++物体几何、初始位姿和任务条件 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:22: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:23: trailing whitespace.
++ 几何候选与物理反馈细化 $\rightarrow$ 机器人目标转换与可达筛选 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:24: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:25: trailing whitespace.
++ 局部腕姿态扩展与分段执行 $\rightarrow$ 轨迹记录 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:26: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:56: trailing whitespace.
++物体表面与六驱动手部代理 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:57: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:58: trailing whitespace.
++ GraspQP官方指标 $+$ 本地几何约束 $\rightarrow$ 初始优化候选 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:59: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:60: trailing whitespace.
++ DexEvolve-style变异、交叉、接触修正与物理反馈 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:61: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:62: trailing whitespace.
++ 候选档案 $\rightarrow$ Wrist Lattice局部扩展 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:63: trailing whitespace.
++ $\downarrow$ 未解决且满足后续条件 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:82: trailing whitespace.
++
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:93: trailing whitespace.
++
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:102: trailing whitespace.
++源候选的局部腕姿态编辑：平移、旋转及耦合格点 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:103: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:104: trailing whitespace.
++ 对象相对目标 $\rightarrow$ 世界手部目标 $\rightarrow$ 安装旋转补偿 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:105: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:106: trailing whitespace.
++ 预抓取目标IK $\rightarrow$ 抓取目标IK →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:107: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:108: trailing whitespace.
++ 残差阈值筛选 $\rightarrow$ 评分、编辑幅度与源跟踪误差排序 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:109: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:130: trailing whitespace.
++
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:139: trailing whitespace.
++当前真实状态 $\rightarrow$ 分段插值目标 $\rightarrow$ IK与位置命令 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:140: trailing whitespace.
++ $\downarrow$ 物理推进与阶段记录 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:141: trailing whitespace.
++ 完整轨迹 $\rightarrow$ 按低层ctrl独立回放 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:142: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:143: trailing whitespace.
++ 尾段抬升、速度、角速度、皮肤接触、桌面接触及穿透 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:144: trailing whitespace.
++ $\downarrow$ 联合判定 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:191: trailing whitespace.
++Lift抓持与承载记录 $\rightarrow$ PickPlace搬移释放后缀 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:192: trailing whitespace.
++  $\rightarrow$ Stack支撑与稳定放置后缀 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:193: trailing whitespace.
++ Push：几何接近 $\rightarrow$ 有效接触 $\rightarrow$ 反馈推动 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:194: trailing whitespace.
++ NutAssembly：Bolt抓持 $\rightarrow$ 姿态伺服 $\rightarrow$ 对准下降 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:254: trailing whitespace.
++真实案例图位：Lift历史Strict通过轨迹与Nut抓持保持对照。 →
+docs/writing_audit/ch03_writing_v1_2026-11-20/CH03_READING_DRAFT.md:255: trailing whitespace.
++ 待从已有视频中提取并绑定对应manifest和阶段； →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:30: trailing whitespace.
++原始执行：source NPZ $+$ Manifest →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:31: trailing whitespace.
++ $\downarrow$ 字段、时序与来源核对 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:32: trailing whitespace.
++ 规范modalities $+$ Episode元数据 $+$ 验证记录 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:33: trailing whitespace.
++ $\downarrow$ 按具体导出合同映射 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:34: trailing whitespace.
++ LeRobot数值特征、图像或视频、Episode索引 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:48: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:57: trailing whitespace.
++在线：读取$o_i^{-}$ $\rightarrow$ 施加$u_i$ $\rightarrow$ 得到$o_i^{+}$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:58: trailing whitespace.
++ 训练配对：$o_i^{-}$ $+$ $u_i$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:59: trailing whitespace.
++ 旧记录：保存$o_{i-1}^{+}$ $\rightarrow$ 当前动作$u_i$ $\rightarrow$ 保存$o_i^{+}$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:60: trailing whitespace.
++ 合法连续时可配对：$o_{i-1}^{+}$ $+$ $u_i$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:70: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:77: trailing whitespace.
++20 Hz控制行：0，1，2，3，4，5，6，7，8，$\ldots$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:78: trailing whitespace.
++ 状态与触觉：每个被接受的控制行记录 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:79: trailing whitespace.
++ 默认20 Hz RGB：0，1，2，3，4，5，6，7，8，$\ldots$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:80: trailing whitespace.
++ 5 Hz RGB示例：0，4，8，$\ldots$；保留对应控制行索引 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:108: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:140: trailing whitespace.
++执行结果与验证状态 $\rightarrow$ 结构、数值及阶段合同 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:141: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:142: trailing whitespace.
++ 时间关联与动作语义 $\rightarrow$ 来源、版本与文件Hash →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:143: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:144: trailing whitespace.
++ 内容重复与用途检查 $\rightarrow$ VALIDATING后登记 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:145: trailing whitespace.
++ $\downarrow$ →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:146: trailing whitespace.
++ EXPORTED / DUPLICATE / QUARANTINED等状态 →
+docs/writing_audit/ch04_writing_v1_2026-11-20/CH04_READING_DRAFT.md:158: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:12: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:15: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:17: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:19: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:21: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:31: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:44: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:46: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/changes.diff:49: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/changes.diff:19: trailing whitespace.
++
+docs/writing_audit/ch05_final_integration_2026-11-21/CH05_READING_DRAFT.md:297: new blank line at EOF.
+docs/writing_audit/ch05_final_integration_2026-11-21/chapter05_complete.tex:336: new blank line at EOF.
+docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/changes.diff:11: trailing whitespace.
++
+docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/changes.diff:15: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/SECTION_5_3_READING_DRAFT.md:26: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/SECTION_5_3_READING_DRAFT.md:40: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/SECTION_5_3_READING_DRAFT.md:75: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/changes.diff:114: trailing whitespace.
+++
+docs/writing_audit/ch05_writing_v1_2026-11-20/changes.diff:128: trailing whitespace.
+++
+docs/writing_audit/ch05_writing_v1_2026-11-20/changes.diff:163: trailing whitespace.
+++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/SECTION_5_3_READING_DRAFT.md:26: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/SECTION_5_3_READING_DRAFT.md:40: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/SECTION_5_3_READING_DRAFT.md:75: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff:22: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff:25: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff:31: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/changes.diff:41: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/SECTION_5_3_READING_DRAFT.md:26: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/SECTION_5_3_READING_DRAFT.md:40: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/SECTION_5_3_READING_DRAFT.md:75: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/changes.diff:18: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/SECTION_5_3_READING_DRAFT.md:26: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/SECTION_5_3_READING_DRAFT.md:40: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/SECTION_5_3_READING_DRAFT.md:75: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/changes.diff:26: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/SECTION_5_1_READING_DRAFT.md:25: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/SECTION_5_1_READING_DRAFT.md:25: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:12: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:14: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:16: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:19: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:33: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r1/changes.diff:35: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/SECTION_5_1_READING_DRAFT.md:25: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:12: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:14: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:17: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/revision_r2/changes.diff:20: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/SECTION_5_4_READING_DRAFT.md:44: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/SECTION_5_4_READING_DRAFT.md:45: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/changes.diff:15: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/changes.diff:18: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/SECTION_5_5_READING_DRAFT.md:36: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/SECTION_5_5_READING_DRAFT.md:36: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/changes.diff:15: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/changes.diff:18: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/SECTION_5_6_READING_DRAFT.md:48: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/SECTION_5_6_READING_DRAFT.md:48: new blank line at EOF.
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/changes.diff:13: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/changes.diff:15: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/changes.diff:18: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/changes.diff:20: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/changes.diff:4: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/changes.diff:9: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/changes.diff:4: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/changes.diff:6: trailing whitespace.
++
+docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/changes.diff:9: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:6: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:9: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:11: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:14: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:16: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_1_revision_v2_1/changes.diff:19: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff:4: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff:6: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff:9: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff:11: trailing whitespace.
++
+thesis/docs/writing_audit/ch01_1_2_revision_v2_1_2026-11-20/changes.diff:11: new blank line at EOF.
+thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/ch01_introduction.tex.diff:5: trailing whitespace.
++
+thesis/gbt7714-numerical-quanjiao.bst:4: trailing whitespace.
++%%
+thesis/gbt7714-numerical-quanjiao.bst:275: trailing whitespace.
++  tmp.period
+thesis/hithesis-bthesistitle.eps:336: new blank line at EOF.
+thesis/hithesis-logo.eps:383: new blank line at EOF.
+thesis/hithesis-shenzhenbthesistitle.eps:1555: new blank line at EOF.
+thesis/hithesis-zfb.eps:353: new blank line at EOF.
+thesis/hithesis.bst:8: trailing whitespace.
++%%
+thesis/hithesis.bst:10: trailing whitespace.
++%%
+thesis/hithesis.bst:12: trailing whitespace.
++%%
+thesis/hithesis.bst:17: trailing whitespace.
++%%
+thesis/hithesis.bst:19: trailing whitespace.
++%%
+thesis/hithesis.bst:22: trailing whitespace.
++%%
+thesis/hithesis.bst:25: trailing whitespace.
++%%
+thesis/hithesis.bst:1958: new blank line at EOF.
+thesis/hithesis.ist:8: trailing whitespace.
++%%
+thesis/hithesis.ist:10: trailing whitespace.
++%%
+thesis/hithesis.ist:12: trailing whitespace.
++%%
+thesis/hithesis.ist:17: trailing whitespace.
++%%
+thesis/hithesis.ist:19: trailing whitespace.
++%%
+thesis/hithesis.ist:22: trailing whitespace.
++%%
+thesis/hithesis.ist:24: trailing whitespace.
++%%
+thesis/hithesis.sty:8: trailing whitespace.
++%%
+thesis/hithesis.sty:10: trailing whitespace.
++%%
+thesis/hithesis.sty:12: trailing whitespace.
++%%
+thesis/hithesis.sty:17: trailing whitespace.
++%%
+thesis/hithesis.sty:19: trailing whitespace.
++%%
+thesis/hithesis.sty:22: trailing whitespace.
++%%
+thesis/hithesis.sty:25: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:8: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:10: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:12: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:17: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:19: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:22: trailing whitespace.
++%%
+thesis/hithesisbook.cfg:24: trailing whitespace.
++%%
+thesis/hithesisbook.cls:8: trailing whitespace.
++%%
+thesis/hithesisbook.cls:10: trailing whitespace.
++%%
+thesis/hithesisbook.cls:12: trailing whitespace.
++%%
+thesis/hithesisbook.cls:17: trailing whitespace.
++%%
+thesis/hithesisbook.cls:19: trailing whitespace.
++%%
+thesis/hithesisbook.cls:22: trailing whitespace.
++%%
+thesis/hithesisbook.cls:25: trailing whitespace.
++%%
+thesis/hitszthesis.bst:8: trailing whitespace.
++%%
+thesis/hitszthesis.bst:10: trailing whitespace.
++%%
+thesis/hitszthesis.bst:12: trailing whitespace.
++%%
+thesis/hitszthesis.bst:17: trailing whitespace.
++%%
+thesis/hitszthesis.bst:19: trailing whitespace.
++%%
+thesis/hitszthesis.bst:22: trailing whitespace.
++%%
+thesis/hitszthesis.bst:25: trailing whitespace.
++%%
+thesis/hitszthesis.bst:1995: new blank line at EOF.
+thesis/latexmkrc:39: new blank line at EOF.
+thesis/releases/ch01_2026-11-20/source/latexmkrc:39: new blank line at EOF.
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:17: trailing whitespace.
++任务配置与初始条件 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:18: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:19: trailing whitespace.
++  模型层：机械臂、灵巧手、底座、物体 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:20: trailing whitespace.
++  控制层：动作解释与执行器目标 $\rightarrow$ MuJoCo接触与状态推进 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:21: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:22: trailing whitespace.
++  感知层：状态与触觉观测 $\rightarrow$ 任务层：评价与终止 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:23: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:65: trailing whitespace.
++
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:74: trailing whitespace.
++机械臂：7个位置通道 $\rightarrow$ 7个转动关节 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:75: trailing whitespace.
++  四指：每指1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 2个转动关节 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:76: trailing whitespace.
++  拇指：1个对掌通道 $\rightarrow$ 1个转动关节 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:125: trailing whitespace.
++
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:134: trailing whitespace.
++position模式：关节位置目标；ik模式：末端位姿经IK转换 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:135: trailing whitespace.
++   $\downarrow$ 按各模式处理目标；IK路径包含限步与平滑 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:136: trailing whitespace.
++  机械臂与手部位置执行器目标 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:137: trailing whitespace.
++  $\downarrow$ 在控制周期内保持 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:138: trailing whitespace.
++  50个物理子步：动力学、碰撞及接触约束求解 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:139: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:178: trailing whitespace.
++仿真手指索引0、1、2、3、4：每指按下列顺序组织 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:180: trailing whitespace.
++  $\rightarrow$ Patch 2：$7\times8$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:181: trailing whitespace.
++  五指小计：$5\times(32+32+56)=600$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:182: trailing whitespace.
++  手掌Patch：$7\times16=112$ $\rightarrow$ 合计712 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:198: trailing whitespace.
++
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:238: trailing whitespace.
++
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:281: trailing whitespace.
++曲面采样 $\rightarrow$ box site与原生touch $\rightarrow$ 地址绑定 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:282: trailing whitespace.
++  sensordata读取 $\rightarrow$ 死区与截断 $\rightarrow$ 幂响应 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:283: trailing whitespace.
++  $\rightarrow$ IIR滤波 $\rightarrow$ Patch内邻域串扰 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:284: trailing whitespace.
++  $\rightarrow$ 可选高斯滤波与噪声（指定profile关闭） →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:299: trailing whitespace.
++
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:333: trailing whitespace.
++实现核查：XML、构建器、控制接口、传感器地址 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:334: trailing whitespace.
++  $\downarrow$ 与记录检查分开报告 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:335: trailing whitespace.
++  历史记录：Episode数组 $+$ manifest $+$ 结果文件 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:336: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:337: trailing whitespace.
++  shape与类型 $\rightarrow$ finite与非负 $\rightarrow$ 非零及时间间隔 →
+thesis/releases/ch02_2026-11-20/CH02_READING_DRAFT.md:338: trailing whitespace.
++  $\downarrow$ →
+thesis/releases/ch02_2026-11-20/final_changes.diff:11: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/SECTION_5_1_READING_DRAFT.md:25: new blank line at EOF.
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:6: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:9: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:12: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:14: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:17: trailing whitespace.
++
+thesis/releases/ch05_5_1_2026-11-21/changes.diff:20: trailing whitespace.
++
+thesis/releases/ch05_5_3_2026-11-21/READING_DRAFT.md:26: trailing whitespace.
++
+thesis/releases/ch05_5_3_2026-11-21/READING_DRAFT.md:40: trailing whitespace.
++
+thesis/releases/ch05_5_3_2026-11-21/READING_DRAFT.md:75: trailing whitespace.
++
+thesis/releases/ch05_5_3_2026-11-21/changes_R2_R3.diff:26: trailing whitespace.
++
+thesis/releases/ch05_5_4_2026-11-21/SECTION_5_4_READING_DRAFT.md:45: new blank line at EOF.
+thesis/releases/ch05_5_5_2026-11-21/SECTION_5_5_READING_DRAFT.md:36: new blank line at EOF.
+thesis/releases/ch05_5_6_2026-11-21/SECTION_5_6_READING_DRAFT.md:48: new blank line at EOF.
+thesis/releases/ch05_5_6_2026-11-21/changes.diff:4: trailing whitespace.
++
+thesis/releases/ch05_5_6_2026-11-21/changes.diff:6: trailing whitespace.
++
+thesis/releases/ch05_5_6_2026-11-21/changes.diff:9: trailing whitespace.
++
+thesis/wiseref.sty:9: trailing whitespace.
++%%
+thesis/wiseref.sty:18: trailing whitespace.
++%%

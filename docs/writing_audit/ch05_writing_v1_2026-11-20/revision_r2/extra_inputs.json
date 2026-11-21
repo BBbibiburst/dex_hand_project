@@ -1,0 +1,11 @@
+{
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/dictionary_manifest.csv": "6c5d79edceacaf21ef1aff79d89210985aa007352144b5d911616ac85698992b",
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse_attempts.csv": "d2fb01b401acf3ff8bb5b6c4267a3cfa3b9d55e2450a1e804073b7dc06ad66eb",
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/expansion_attempts.jsonl": "b0bc178e6a973db1defeae56db241fab1ab869916bce2d96cc87cad0dbbbbb47",
+  "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/episode.npz": "ca82bbde55a6af5599799d6b4cdc3427a09fb9f1cd4bc42d276dfcedd59d43a8",
+  "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/condition.json": "4f38c38ce48c59ee39f7a28d6242e78230ee075f54330fc09c9ca2f0dc98be88",
+  "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/contact_records.json": "bf5b0fec8b9e5da651332c75d6cf46e03f7a3b98e0df7d2a8f5dadd5132f60fb",
+  "outputs/tactile_gmm_dual_vae_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da",
+  "outputs/tactile_p43_latent_translator_integrated_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da",
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da"
+}

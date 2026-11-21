@@ -1,0 +1,38 @@
+{
+  "status": "R1定点复核完成，等待用户及ChatGPT审核",
+  "wordcount": {
+    "text": 1931,
+    "headings": 17,
+    "captions_footnotes": 50,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 42,
+    "display_math": 3,
+    "total": 1998,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/wordcount/raw/section_5_3.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "labels": [
+    "sec:ch05_gmm_pseudopairs",
+    "fig:ch05_gmm_physical_pipeline",
+    "eq:ch05_gmm_prior",
+    "eq:ch05_gmm_responsibility",
+    "tab:ch05_probe_dictionary",
+    "fig:ch05_gmm_candidate_selection",
+    "eq:ch05_pair_selection"
+  ],
+  "missing_refs": [],
+  "duplicate_labels": [],
+  "environments_balanced": true,
+  "braces_balanced": true,
+  "original_responsibility_formula_retained": true,
+  "relative_e_denominator_not_invented": true,
+  "figures": 2,
+  "tables": 1,
+  "equations": 3,
+  "no_compile": true,
+  "frozen": false
+}

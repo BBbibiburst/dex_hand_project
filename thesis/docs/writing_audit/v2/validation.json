@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-19",
+  "errors": [],
+  "chapter_cards": 42,
+  "V1_plan_unchanged": true,
+  "protected_latex_files": 22,
+  "robotics_artifacts_and_code_hashed": 31,
+  "P48_CSV": {
+    "path": "outputs/tactile_p48_unified_four_route_audit_2026-11-19/metrics_swd.csv",
+    "sha256": "15d5106776442af3d2907713a539a4a2a5adc6ddec4210d844fc355386e2e233",
+    "row": {
+      "model": "A_K1",
+      "SWD": "0.20660925217182965",
+      "Original_SWD": "0.41134301198750495",
+      "R_W": "0.4977202817338595",
+      "SWD_CI_low": "0.16887823142341732",
+      "SWD_CI_high": "0.31935097841009447",
+      "R_W_CI_low": "0.40851387597073363",
+      "R_W_CI_high": "0.5667432326739397",
+      "denominator_valid": "True",
+      "point90": "False",
+      "metric": "mean1024 weightedprojectedW1;notfullW1",
+      "weights": "equal4Session and10Root"
+    }
+  },
+  "status": "planning only; not chapter task brief, no official prose, no training, no LaTeX build, no git commit/push",
+  "limitations": [
+    "server current data UNKNOWN",
+    "not all robotics episodes independently accepted",
+    "seven-chapter structure awaits user/ChatGPT review"
+  ]
+}

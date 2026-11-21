@@ -1,0 +1,289 @@
+{
+  "preview_pages": 15,
+  "body_pages": 14,
+  "reference_pages": 1,
+  "chapter_number": 2,
+  "printed_body_page_range": [
+    1,
+    14
+  ],
+  "temporary_standalone_pagination": true,
+  "pages": [
+    {
+      "pdf_page": 1,
+      "text_characters": 701,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 2,
+      "text_characters": 1214,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 3,
+      "text_characters": 755,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 4,
+      "text_characters": 1251,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 5,
+      "text_characters": 934,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 6,
+      "text_characters": 1171,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 7,
+      "text_characters": 1040,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 8,
+      "text_characters": 1027,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 9,
+      "text_characters": 940,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 10,
+      "text_characters": 1063,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 11,
+      "text_characters": 1203,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 12,
+      "text_characters": 1061,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 13,
+      "text_characters": 1126,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 14,
+      "text_characters": 389,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    },
+    {
+      "pdf_page": 15,
+      "text_characters": 1254,
+      "replacement_characters": 0,
+      "blank": false,
+      "words_outside_page": [],
+      "header_present": true
+    }
+  ],
+  "fonts": [
+    {
+      "xref": 5,
+      "name": "XBSQHF+FandolSong-Regular-Identity-H",
+      "embedded_bytes": 294212,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 7,
+      "name": "TSBCRW+FandolHei-Regular-Identity-H",
+      "embedded_bytes": 33182,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 9,
+      "name": "POLDHW+TeXGyreTermesX-Regular-Identity-H",
+      "embedded_bytes": 9171,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 15,
+      "name": "NDRRMQ+txsys",
+      "embedded_bytes": 1131,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 19,
+      "name": "SBXZCB+TeXGyreTermesX-Regular",
+      "embedded_bytes": 3229,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 20,
+      "name": "CNEMQZ+NewTXMI",
+      "embedded_bytes": 3399,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 85,
+      "name": "ZUPYLD+NewTXMI7",
+      "embedded_bytes": 2331,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 86,
+      "name": "PNGPYS+txmiaX",
+      "embedded_bytes": 269,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 87,
+      "name": "ZEZPKX+txexs",
+      "embedded_bytes": 568,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 88,
+      "name": "KTGTHC+NewTXMI5",
+      "embedded_bytes": 694,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 25,
+      "name": "BMQQDV+DejaVuSans",
+      "embedded_bytes": 0,
+      "embedded": true,
+      "verification": "embedded Type3 CharProcs streams",
+      "embedded_type3_glyphs": 34
+    },
+    {
+      "xref": 100,
+      "name": "MQLHTC+NewTXBMI",
+      "embedded_bytes": 2054,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 101,
+      "name": "SUOCBH+txsym",
+      "embedded_bytes": 587,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 102,
+      "name": "GAQWDL+txbmiaX",
+      "embedded_bytes": 262,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 103,
+      "name": "GMJWZN+TeXGyreHeros-Regular",
+      "embedded_bytes": 408,
+      "embedded": true,
+      "verification": "font program extraction",
+      "embedded_type3_glyphs": 0
+    },
+    {
+      "xref": 125,
+      "name": "BMQQDV+DejaVuSans",
+      "embedded_bytes": 0,
+      "embedded": true,
+      "verification": "embedded Type3 CharProcs streams",
+      "embedded_type3_glyphs": 35
+    },
+    {
+      "xref": 176,
+      "name": "BMQQDV+DejaVuSans",
+      "embedded_bytes": 0,
+      "embedded": true,
+      "verification": "embedded Type3 CharProcs streams",
+      "embedded_type3_glyphs": 35
+    }
+  ],
+  "all_fonts_embedded": true,
+  "undefined_reference_or_citation": false,
+  "overfull_boxes": [],
+  "underfull_boxes": [
+    "Underfull \\hbox (badness 2486) in paragraph at lines 28--29",
+    "Underfull \\hbox (badness 10000) in paragraph at lines 28--29",
+    "Underfull \\hbox (badness 2941) in paragraph at lines 43--44"
+  ],
+  "bibtex_warnings": [
+    "Warning--Require address: todorov2012mujoco",
+    "Warning--Require citedate: todorov2012mujoco",
+    "Warning--Require year: mujoco2026computation",
+    "Warning--Require year: mujoco2026xml",
+    "Warning--Require citedate: wang2022tacto",
+    "Warning--Require citedate: si2022taxim",
+    "Warning--Require citedate: sferrazza2022simtoreal"
+  ],
+  "no_formal_freeze": true
+}

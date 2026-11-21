@@ -1,0 +1,49 @@
+{
+  "labels": [
+    "sec:ch05_real_sim_difference",
+    "tab:ch05_domain_feature_difference"
+  ],
+  "refs_resolved": true,
+  "labels_unique_across_5_3_to_5_6": true,
+  "no_new_citations": true,
+  "no_test_arrays": true,
+  "P39_D_values_verified": {
+    "mask_after": {
+      "D_min": 0.02718456112852663,
+      "probe": "mlp",
+      "seed": "12",
+      "count": 11,
+      "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+    },
+    "amplitude_after": {
+      "D_min": 0.14935764666368123,
+      "probe": "transformer",
+      "seed": "11",
+      "count": 11,
+      "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+    },
+    "full_after": {
+      "D_min": 0.05725551388266892,
+      "probe": "transformer",
+      "seed": "11",
+      "count": 11,
+      "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+    }
+  },
+  "wordcount": {
+    "text": 1200,
+    "headings": 11,
+    "captions_footnotes": 15,
+    "heading_count": 1,
+    "float_count": 1,
+    "inline_math": 11,
+    "display_math": 0,
+    "total": 1226,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_1_v1_2026-11-21/wordcount/raw/section_5_1.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "compiled": false
+}

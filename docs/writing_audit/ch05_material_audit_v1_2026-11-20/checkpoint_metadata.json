@@ -1,0 +1,376 @@
+{
+  "C3_Real": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/real_vae/checkpoint.pt",
+    "sha256": "99beaf8e6402b1c34a59add2a86036f56ebc8fd1b69c472c2542198774a1e815",
+    "epoch": 30,
+    "optimizer_steps_at_checkpoint": 2430,
+    "kind": "real",
+    "encoder_scale": 0.14118273556232452,
+    "positive_scale": 0.005002501420676708,
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    }
+  },
+  "C3_Sim": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/sim_vae/checkpoint.pt",
+    "sha256": "c92af67fd97d29cc600a7a338899ad47b293b495b25896155dde2707ccc6db62",
+    "epoch": 30,
+    "optimizer_steps_at_checkpoint": 3810,
+    "kind": "sim",
+    "encoder_scale": 0.04088745638728142,
+    "positive_scale": 1e-07,
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    }
+  },
+  "C3_Translator": {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/translator/checkpoint.pt",
+    "sha256": "c98e1146ae2f8d17ce05ecffacbfeaf24e1cf07db4d51783c69355fcacfb7b6a",
+    "epoch": 30,
+    "optimizer_steps_at_checkpoint": 570,
+    "kind": null,
+    "encoder_scale": null,
+    "positive_scale": null,
+    "state_shapes": {
+      "gru.weight_ih_l0": [
+        384,
+        64
+      ],
+      "gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "gru.bias_ih_l0": [
+        384
+      ],
+      "gru.bias_hh_l0": [
+        384
+      ],
+      "gru.weight_ih_l1": [
+        384,
+        128
+      ],
+      "gru.weight_hh_l1": [
+        384,
+        128
+      ],
+      "gru.bias_ih_l1": [
+        384
+      ],
+      "gru.bias_hh_l1": [
+        384
+      ],
+      "projection.weight": [
+        64,
+        128
+      ],
+      "projection.bias": [
+        64
+      ]
+    }
+  },
+  "C13_Real": {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/checkpoint.pt",
+    "sha256": "6dea2be871e03d4fedc5c9b8022b98c1d8866fed6bf4ed496a2ea6ccd1ddc2c7",
+    "epoch": 3,
+    "optimizer_steps_at_checkpoint": 243,
+    "kind": "real_vae_amplitude_context_repair",
+    "encoder_scale": 0.14118273556232452,
+    "positive_scale": 0.005002501420676708,
+    "state_shapes": {
+      "encoder.scale": [],
+      "encoder.input.0.weight": [
+        128,
+        1424
+      ],
+      "encoder.input.0.bias": [
+        128
+      ],
+      "encoder.input.2.weight": [
+        128
+      ],
+      "encoder.input.2.bias": [
+        128
+      ],
+      "encoder.gru.weight_ih_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.weight_hh_l0": [
+        384,
+        128
+      ],
+      "encoder.gru.bias_ih_l0": [
+        384
+      ],
+      "encoder.gru.bias_hh_l0": [
+        384
+      ],
+      "encoder.mean.weight": [
+        64,
+        128
+      ],
+      "encoder.mean.bias": [
+        64
+      ],
+      "encoder.logvar.weight": [
+        64,
+        128
+      ],
+      "encoder.logvar.bias": [
+        64
+      ],
+      "decoder.bos": [
+        32
+      ],
+      "decoder.positive_scale": [],
+      "decoder.previous.0.weight": [
+        32,
+        712
+      ],
+      "decoder.previous.0.bias": [
+        32
+      ],
+      "decoder.cell.weight_ih": [
+        384,
+        96
+      ],
+      "decoder.cell.weight_hh": [
+        384,
+        128
+      ],
+      "decoder.cell.bias_ih": [
+        384
+      ],
+      "decoder.cell.bias_hh": [
+        384
+      ],
+      "decoder.mask.weight": [
+        712,
+        128
+      ],
+      "decoder.mask.bias": [
+        712
+      ],
+      "decoder.current.0.weight": [
+        32,
+        712
+      ],
+      "decoder.current.0.bias": [
+        32
+      ],
+      "decoder.amplitude.0.weight": [
+        128,
+        160
+      ],
+      "decoder.amplitude.0.bias": [
+        128
+      ],
+      "decoder.amplitude.2.weight": [
+        4272,
+        128
+      ],
+      "decoder.amplitude.2.bias": [
+        4272
+      ]
+    }
+  },
+  "C13_changed_state_keys": [
+    "decoder.current.0.weight",
+    "decoder.current.0.bias",
+    "decoder.amplitude.0.weight",
+    "decoder.amplitude.0.bias",
+    "decoder.amplitude.2.weight",
+    "decoder.amplitude.2.bias"
+  ],
+  "no_model_execution": true,
+  "no_model_import": true
+}

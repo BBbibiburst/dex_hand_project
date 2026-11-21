@@ -1,0 +1,25 @@
+{
+  "labels_unique": true,
+  "refs_resolved": true,
+  "statistical_decimal_tokens_unchanged": true,
+  "C13_instances": 11,
+  "C13_joint_pass": 1,
+  "shared_fingerprints": 19,
+  "validation_hit_count": 97,
+  "wordcount": {
+    "text": 1556,
+    "headings": 13,
+    "captions_footnotes": 36,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 10,
+    "display_math": 0,
+    "total": 1605,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/wordcount/raw/section_5_6.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "compiled": false
+}

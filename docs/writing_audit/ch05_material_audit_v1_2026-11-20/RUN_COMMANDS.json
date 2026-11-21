@@ -1,0 +1,11 @@
+{
+  "taskfile": "/home/zmy/.codex/attachments/cfa665e0-7486-441e-b2ba-dd8a20a0b06d/已粘贴的文本.txt",
+  "read_only_process": "代码文本/AST；指定Train/Validation配对数组与字典；已保存CSV统计；CPU weights_only=True读取checkpoint元数据，不构造模型、不推理",
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch05_material_audit_v1_2026-11-20/audit_sources.py",
+    "PYTHONDONTWRITEBYTECODE=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch05_material_audit_v1_2026-11-20/extra_checks.py",
+    "python3 docs/writing_audit/ch05_material_audit_v1_2026-11-20/write_reports.py",
+    "python3 docs/writing_audit/ch05_material_audit_v1_2026-11-20/finalize_audit.py"
+  ],
+  "scope_note": "上列脚本不单独覆盖历史；本目录保留首次任务内复核的结果。C13原冻CSV对照及checkpoint元数据另以只读inline命令补核，结果分别写入validation_metric_recheck.csv与checkpoint_metadata.json。"
+}

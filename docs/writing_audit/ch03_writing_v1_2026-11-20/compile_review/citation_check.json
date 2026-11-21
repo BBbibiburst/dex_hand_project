@@ -1,0 +1,283 @@
+{
+  "status": "第三章V1临时编译完成，等待用户PDF审核",
+  "missing_bib_keys": [],
+  "used_bib_keys": [
+    "mandlekar2022demonstrations",
+    "mandlekar2023mimicgen",
+    "zurbrugg2025graspqp",
+    "zurbrugg2026dexevolve"
+  ],
+  "missing_reference_labels": [],
+  "compiled_labels": {
+    "chap:grasp_demonstrations": {
+      "number": "3",
+      "page": "1"
+    },
+    "sec:grasp_task_pipeline": {
+      "number": "3.1",
+      "page": "1"
+    },
+    "eq:ch03_candidate": {
+      "number": "3-1",
+      "page": "1"
+    },
+    "fig:ch03_overall_pipeline": {
+      "number": "3-1",
+      "page": "1"
+    },
+    "sec:grasp_candidate_generation": {
+      "number": "3.2",
+      "page": "2"
+    },
+    "tab:ch03_candidate_parameters": {
+      "number": "3-1",
+      "page": "2"
+    },
+    "fig:ch03_candidate_sources": {
+      "number": "3-2",
+      "page": "3"
+    },
+    "sec:grasp_reachability": {
+      "number": "3.3",
+      "page": "4"
+    },
+    "eq:ch03_target_transform": {
+      "number": "3-2",
+      "page": "4"
+    },
+    "eq:ch03_reachability_score": {
+      "number": "3-3",
+      "page": "4"
+    },
+    "fig:ch03_reachability": {
+      "number": "3-3",
+      "page": "5"
+    },
+    "sec:grasp_trajectory_verification": {
+      "number": "3.4",
+      "page": "6"
+    },
+    "eq:ch03_segment_interpolation": {
+      "number": "3-4",
+      "page": "6"
+    },
+    "fig:ch03_strict_replay": {
+      "number": "3-4",
+      "page": "7"
+    },
+    "tab:ch03_strict_thresholds": {
+      "number": "3-2",
+      "page": "7"
+    },
+    "sec:multitask_demonstration": {
+      "number": "3.5",
+      "page": "8"
+    },
+    "tab:ch03_task_stages": {
+      "number": "3-3",
+      "page": "8"
+    },
+    "fig:ch03_task_transfer": {
+      "number": "3-5",
+      "page": "9"
+    },
+    "sec:grasp_quality_experiments": {
+      "number": "3.6",
+      "page": "9"
+    },
+    "tab:ch03_historical_batches": {
+      "number": "3-4",
+      "page": "10"
+    },
+    "tab:ch03_sugar_strict": {
+      "number": "3-5",
+      "page": "10"
+    },
+    "tab:ch03_generation_failures": {
+      "number": "3-6",
+      "page": "11"
+    },
+    "fig:ch03_examples": {
+      "number": "3-6",
+      "page": "11"
+    },
+    "sec:grasp_demonstration_summary": {
+      "number": "3.7",
+      "page": "11"
+    }
+  },
+  "undefined_or_multiply_defined_warning": false,
+  "overfull_boxes": [],
+  "underfull_boxes": [
+    "Underfull \\hbox (badness 4739) in paragraph at lines 262--262"
+  ],
+  "bibtex_warnings": [
+    "Warning--Require address: zurbrugg2025graspqp",
+    "Warning--Require citedate: zurbrugg2025graspqp",
+    "Warning--Require citedate: zurbrugg2026dexevolve",
+    "Warning--Require address: mandlekar2022demonstrations",
+    "Warning--Require citedate: mandlekar2022demonstrations",
+    "Warning--Require address: mandlekar2023mimicgen",
+    "Warning--Require citedate: mandlekar2023mimicgen"
+  ],
+  "pdf_pages": 13,
+  "body_pages": 12,
+  "reference_pages": 1,
+  "fonts": [
+    {
+      "font": "EPEGVO+FandolSong-Regular-Identity-H",
+      "embedded": true
+    },
+    {
+      "font": "IMDTEC+FandolHei-Regular-Identity-H",
+      "embedded": true
+    },
+    {
+      "font": "BDPFDE+TeXGyreTermesX-Regular-Identity-H",
+      "embedded": true
+    },
+    {
+      "font": "AKFXVE+txsys",
+      "embedded": true
+    },
+    {
+      "font": "RCTUNA+txmiaX",
+      "embedded": true
+    },
+    {
+      "font": "MNABPG+NewTXBMI",
+      "embedded": true
+    },
+    {
+      "font": "HMMKVA+NewTXMI7",
+      "embedded": true
+    },
+    {
+      "font": "XFNHLS+NewTXMI",
+      "embedded": true
+    },
+    {
+      "font": "PWATLV+TeXGyreTermesX-Regular",
+      "embedded": true
+    },
+    {
+      "font": "GWLDFM+txsym",
+      "embedded": true
+    },
+    {
+      "font": "LWQCIO+TeXGyreHeros-Regular",
+      "embedded": true
+    }
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "text_characters": 744,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 2,
+      "text_characters": 1049,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 3,
+      "text_characters": 929,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 4,
+      "text_characters": 975,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 5,
+      "text_characters": 877,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 6,
+      "text_characters": 1008,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 7,
+      "text_characters": 1009,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 8,
+      "text_characters": 1191,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 9,
+      "text_characters": 1024,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 10,
+      "text_characters": 1435,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 11,
+      "text_characters": 1037,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 12,
+      "text_characters": 342,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    },
+    {
+      "page": 13,
+      "text_characters": 1222,
+      "blank": false,
+      "outside_page_words": [],
+      "replacement_characters": 0,
+      "header_present": true
+    }
+  ],
+  "changed_protected_files": [
+    "thesis/body/ch03_grasp_demonstrations.tex"
+  ],
+  "formal_main_first_two_chapters_bib_unchanged": true,
+  "frozen": false
+}

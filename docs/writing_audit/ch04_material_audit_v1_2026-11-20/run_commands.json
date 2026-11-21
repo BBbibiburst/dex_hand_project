@@ -1,0 +1,7 @@
+{
+  "commands": [
+    "PYTHONPATH=. OPENBLAS_NUM_THREADS=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch04_material_audit_v1_2026-11-20/audit_existing_data.py",
+    "python3 docs/writing_audit/ch04_material_audit_v1_2026-11-20/write_reports.py"
+  ],
+  "notes": "Only existing-array statistics. Legacy missing pre-state fields remain UNKNOWN; relative metadata paths resolved against project root."
+}

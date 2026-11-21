@@ -1,0 +1,61 @@
+{
+  "task": "TH-CH01-1.2-V2",
+  "task_date": "2026-11-19",
+  "execution_date": "2026-11-20",
+  "timezone": "Asia/Shanghai",
+  "stage": "3 completed; awaiting user review",
+  "section_1_1_byte_identical": true,
+  "old_bib_entries_byte_identical": true,
+  "changed_existing_files": [
+    "thesis/reference.bib",
+    "thesis/body/ch01_introduction.tex"
+  ],
+  "all_other_protected_files_unchanged": true,
+  "citations_in_section": 25,
+  "new_bib_entries": 18,
+  "reused_bib_entries": 7,
+  "duplicate_keys": [],
+  "missing_keys": [],
+  "narrative_han_characters": 3620,
+  "narrative_nonspace_characters": 4124,
+  "section_counts": [
+    {
+      "section": "1.2.1",
+      "heading": "灵巧手抓取生成与可执行操作",
+      "han_characters": 819,
+      "nonspace_characters": 932,
+      "paragraphs": 3
+    },
+    {
+      "section": "1.2.2",
+      "heading": "机器人仿真与触觉感知建模",
+      "han_characters": 699,
+      "nonspace_characters": 791,
+      "paragraphs": 2
+    },
+    {
+      "section": "1.2.3",
+      "heading": "专家示教与多模态操作数据",
+      "han_characters": 803,
+      "nonspace_characters": 924,
+      "paragraphs": 3
+    },
+    {
+      "section": "1.2.4",
+      "heading": "触觉Sim-to-Real与跨域重建",
+      "han_characters": 1299,
+      "nonspace_characters": 1477,
+      "paragraphs": 4
+    }
+  ],
+  "table_count": 1,
+  "brace_and_environment_static_check": "passed",
+  "compilation_performed": false,
+  "bibtex_backend_execution_performed": false,
+  "training_or_simulation_performed": false,
+  "commit_push_performed": false,
+  "output_sha256": {
+    "thesis/body/ch01_introduction.tex": "05995e9d2e03f5c51bf949b3a3d4f62587f2d52e7d8316d3a9ec279d8fbb033c",
+    "thesis/reference.bib": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053"
+  }
+}

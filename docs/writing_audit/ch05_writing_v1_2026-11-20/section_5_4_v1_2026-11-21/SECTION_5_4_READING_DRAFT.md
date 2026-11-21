@@ -1,0 +1,44 @@
+# 5.4 基于双域变分自编码器的触觉表示学习
+统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器[Kingma与Welling，2014；kingma2014vae]，分别建立Real VAE与Sim VAE，如图（双域VAE独立表示学习与条件解码结构）所示。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。
+
+
+**图：双域VAE独立表示学习与条件解码结构**
+
+- Real Train → Real Encoder → 均值/对数方差 → 重参数化潜变量 → Real Decoder → Real自重建。
+- Natural Sim与Paired Sim → Sim Encoder → 均值/对数方差 → 重参数化潜变量 → Sim Decoder → Sim自重建。
+- 两路参数独立；各Decoder用前帧Mask与潜变量递推状态，再预测当前Mask；状态与当帧Mask共同决定条件Gamma混合幅值。
+
+
+记输入为$X\in\mathbb R_{\ge0}^{4\times712}$，正值Mask为$M_{tj}=\mathbf1[X_{tj}>0]$。每帧拼接$M_t$与$\log(1+X_t)/s_{\rm enc}$，形成1424维输入。尺度$s_{\rm enc}$由本域训练池的对数响应总体标准差确定，下限为$10^{-3}$；仅作除法，不减均值。输入经1424至128维Linear、GELU和LayerNorm后，送入单层单向GRU，隐状态维数为128。两路线性头输出每帧64维均值$\boldsymbol\mu_t$及对数方差$\boldsymbol\ell_t$，后者限制在$[-8,4]$。训练采用重参数化：
+$$
+ \boldsymbol z_t=\boldsymbol\mu_t+
+ \exp\!\left(\tfrac12\boldsymbol\ell_t\right)\odot\boldsymbol\epsilon_t,
+ \qquad \boldsymbol\epsilon_t\sim\mathcal N(\boldsymbol0,\boldsymbol I).
+ $$
+窗口间不传递隐状态，四帧按保留顺序输入，不据此假定物理采样间隔相同。
+
+Decoder以零隐状态开始，首帧使用可学习的32维序列起始向量BOS；后续将前帧完整Mask嵌入32维，与64维潜变量拼接后输入128维GRUCell。Mask头给出712个logit，表达时间条件依赖；给定隐状态时，同帧似然仍按Taxel因子化。幅值头接收隐状态与当帧Mask嵌入，经160至128维及128至4272维线性层，输出各Taxel的两分量Gamma参数。混合权重$\omega_{tjk}$由softmax得到，shape $a_{tjk}$与rate $b_{tjk}$经softplus并加数值下限。每个分量的均值为shape与rate之比。下式省略时序状态和当帧Mask条件的记号，$\operatorname{Gamma}(y;a,b)=b^a y^{a-1}e^{-by}/\Gamma(a)$。对正值$x$，条件密度为
+$$
+ f_{tj}(x)=\frac1{s_{\rm pos}}\sum_{k=1}^{2}\omega_{tjk}
+ \operatorname{Gamma}\!\left(\frac{x}{s_{\rm pos}};a_{tjk},b_{tjk}\right),
+ \qquad x>0.
+ $$
+其中$s_{\rm pos}$为训练池正值中位数，下限为$10^{-7}$。时序状态使前帧接触影响后续预测，当帧完整Mask则向幅值头提供激活区域上下文。两分量用于表达正值分布的不同形状，不对应经过认证的物理接触类别。该分支区分零值事件与连续幅值，且幅值条件于Mask，并非两个无关输出；这不等于已证明显式Mask优于其他建模方式。
+
+令$N_+=\sum_{t,j}M_{tj}$，$l_{tj}$为Mask logit，$d$为潜变量维度索引。单窗训练目标为
+$$
+ \begin{aligned}
+ L_{\rm mask}&=\frac1{4\cdot712}\sum_{t,j}
+ \operatorname{BCEWithLogits}(l_{tj},M_{tj}),\\
+ L_{\rm amp}&=-\frac{\sum_{t,j}M_{tj}\log f_{tj}(X_{tj})}{\max(N_+,1)},\\
+ L_{\rm KL}&=\frac1{2\cdot4\cdot64}\sum_{t,d}
+ \bigl(\mu_{td}^{2}+e^{\ell_{td}}-1-\ell_{td}\bigr),\\
+ L&=L_{\rm mask}+L_{\rm amp}+0.001L_{\rm KL}.
+ \end{aligned}
+ $$
+批次再取窗口均值。幅值项仅统计真实正值，全零窗该项为零；密度中的$1/s_{\rm pos}$对应对数似然的尺度Jacobian修正。连续密度可以大于1，因此负NLL本身不表示异常。训练采用真实前帧及当帧Mask作条件，即Teacher Forcing；自由推理则取后验均值，以预测Mask递推，并按logit非负确定激活，再乘以$s_{\rm pos}\sum_k\omega_{tjk}a_{tjk}/b_{tjk}$输出幅值。该读出不随机采样Mask或Gamma，训练条件与自由运行条件的差异仍需评价。
+
+Real训练池为5153窗，Sim训练池包含4049个Natural窗与1200个Paired窗，批次各取32个Sim窗口混合；重复访问不增加独立样本。Real每轮81步，Sim每轮127步，两者总优化步数分别为3645和5715；窗口数量、访问次数与独立采集数量应分别理解。两域分别拟合尺度，Real与Sim的输入尺度分别约为0.14118和0.04089，正值尺度分别约为0.0050025和$10^{-7}$。Sim正值尺度触及下限，其拟合按合并训练元素进行，与训练时两类窗口等量采样的权重不同，不能将该尺度等同于两域物理单位一致。采用AdamW、学习率$10^{-3}$、批量64，两域均训练45轮；在第30轮起具备资格的权重中按验证目标选择，最终均选第30轮，不能视为全部轮次的无约束最优。验证损失取后验均值，但仍使用真实Mask条件，不能替代自由重建检验。Real按验证重建项与KL加权和选取权重，Sim则对Natural与Paired验证目标等权汇合；两套模型均未依据域分类器成绩选择。
+
+上述为C3基础模型。后续C13仅修订Real幅值条件路径，C23复用其自重建输出诊断，C24仅在相同可训练范围增加时序幅值约束，具体结果留待实验分析。各域重建目标只要求潜表示能够服务于本域读出，不约束同一维度表示相同接触特征。即使采用相同先验，也不能直接将两套坐标中的近邻解释为物理对应。独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。
+

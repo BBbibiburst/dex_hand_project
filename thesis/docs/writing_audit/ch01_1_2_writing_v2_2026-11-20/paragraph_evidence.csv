@@ -1,0 +1,17 @@
+paragraph,claim_ids,source_ids,bibtex_keys,narrative_start
+1.2.1-P1,Q01;Q02,S01;S04,bohg2014grasp;wang2023dexgraspnet,"
+抓取生成需要根据物体几何和手部结构，确定接触位置、手掌位姿及手指配置。解析方法"
+1.2.1-P2,Q02;Q03,S02;S03,zurbrugg2025graspqp;zurbrugg2026dexevolve,优化目标如何近似真实抓持，是候选生成中的关键问题。GraspQP将接触扳手的受限
+1.2.1-P3,Q04;Q05,S05,xu2023unidexgrasp,从稳定抓持进一步走向可执行操作，还需要建立目标姿态与运动过程之间的联系。UniD
+1.2.2-P1,Q06,S06;S07,todorov2012mujoco;makoviychuk2021isaacgym,"
+机器人仿真为控制和操作研究提供动力学、碰撞检测与接触计算基础。MuJoCo采用"
+1.2.2-P2,Q07;Q08;Q09,S08;S09,wang2022tacto;si2022taxim,触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，
+1.2.3-P1,Q10;Q11,S16;S11,mandlekar2023mimicgen;mandlekar2022demonstrations,"
+操作示教可以通过人工遥操作获得，也可以依托规划、控制器和已有轨迹自动生成。人工"
+1.2.3-P2,Q12;Q14,S12;S14;S13,walke2023bridgedata;khazatsky2024droid;fang2024rh20t,数据集研究从采集来源、环境覆盖和模态组成等方面扩展了操作学习的条件。Bridge
+1.2.3-P3,Q12;Q13;Q14,S15,openx2024embodiment,跨机器人利用数据还涉及动作和观测语义的适配。Open X-Embodiment通
+1.2.4-P1,Q15;Q16,S17;S10,tobin2017randomization;sferrazza2022simtoreal,"
+Sim-to-Real研究需要处理模型近似和真实采集条件引起的差异。一类方法从"
+1.2.4-P2,Q16;Q17;Q18,S25,narang2021latentprojections,与本文方法较为接近的是Narang等针对BioTac传感器开展的研究。他们建立三
+1.2.4-P3,Q18;Q19;Q20,S20;S19;S21;S22,kingma2014vae;zhu2017cyclegan;liu2017unit;ganin2016dann,缺少配对监督时，迁移方法需要借助分布目标和额外结构约束。VAE通过重建与先验正则
+1.2.4-P4,Q21;Q22;Q23,S18;S23;S24,goodfellow2014gan;gretton2012mmd;naeem2020metrics,迁移评价也必须与上述目标对应。生成对抗网络关于分布一致的理论结论依赖理想判别器和

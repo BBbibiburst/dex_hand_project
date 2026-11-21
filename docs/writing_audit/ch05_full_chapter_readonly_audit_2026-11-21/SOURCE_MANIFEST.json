@@ -1,0 +1,171 @@
+{
+  "date": "2026-11-21",
+  "sections": [
+    {
+      "section": "5.1",
+      "authority": null,
+      "sha256": null,
+      "status": "MISSING_NOT_LOCATED",
+      "formal_body_found": false,
+      "integrated_into_main": false,
+      "wordcount": null,
+      "search_evidence": "source_search.json; no standalone section or combined formal prose found"
+    },
+    {
+      "section": "5.2",
+      "authority": null,
+      "sha256": null,
+      "status": "MISSING_NOT_LOCATED",
+      "formal_body_found": false,
+      "integrated_into_main": false,
+      "wordcount": null,
+      "search_evidence": "source_search.json; no standalone section or combined formal prose found"
+    },
+    {
+      "section": "5.3",
+      "authority": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "sha256": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+      "status": "FROZEN_DRAFT",
+      "formal_body_found": true,
+      "integrated_into_main": false,
+      "title": "GMM统计先验引导的仿真触觉伪配对构建",
+      "freeze_record": "thesis/releases/ch05_5_3_2026-11-21/FREEZE_STATUS.json",
+      "freeze_record_matches_source": true,
+      "other_candidates": [
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_3.tex",
+          "sha256": "df71ed2085a3321eab5e909cd84b6944fd1ba91b7c810992a319dd8c2cf87270",
+          "same_as_authority": false
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3.tex",
+          "sha256": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+          "same_as_authority": true
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3.tex",
+          "sha256": "7342d5af72ffd2002c34c78ac0d757d3ddcbeb2bba19730b75b80e0ebec41027",
+          "same_as_authority": false
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/section_5_3.tex",
+          "sha256": "9cc12795a9a99d74fd78a47653dd6472b2933a7b37879f37ec040c34d74d2cd1",
+          "same_as_authority": false
+        }
+      ],
+      "wordcount": 1999,
+      "pdf": {
+        "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.pdf",
+        "sha256": "0841bb3a9625728c4313cdb553f42ad3ee4c5385cb28dca57f97e9629a2f7ca9",
+        "matches_freeze_record": true
+      }
+    },
+    {
+      "section": "5.4",
+      "authority": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "sha256": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+      "status": "FROZEN_DRAFT",
+      "formal_body_found": true,
+      "integrated_into_main": false,
+      "title": "基于双域变分自编码器的触觉表示学习",
+      "freeze_record": "thesis/releases/ch05_5_4_2026-11-21/FREEZE_STATUS.json",
+      "freeze_record_matches_source": true,
+      "other_candidates": [
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4.tex",
+          "sha256": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+          "same_as_authority": true
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/section_5_4.tex",
+          "sha256": "1558ba4a6c8aa31262d483be922fb7190548772807ff93b170c573fd7a9a0f70",
+          "same_as_authority": false
+        }
+      ],
+      "wordcount": 1496,
+      "pdf": {
+        "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4_preview.pdf",
+        "sha256": "eaf6d27954ccf6e813d10c4ceb81e622c953749a796925c9a7caf8eb3e5b8b0c",
+        "matches_freeze_record": true
+      }
+    },
+    {
+      "section": "5.5",
+      "authority": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "sha256": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+      "status": "REVIEWED_R1_NOT_FROZEN",
+      "formal_body_found": true,
+      "integrated_into_main": false,
+      "title": "基于伪配对监督的跨域潜变量映射",
+      "freeze_record": null,
+      "release_directory_exists": false,
+      "compile_copy_matches_R1": true,
+      "temporary_compile_not_freeze": true,
+      "other_candidates": [
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/section_5_5.tex",
+          "sha256": "53bb48de86415694c56b1eeb66f1b9d194cadc41109d4ecc2f83008009c3ae09",
+          "same_as_authority": false
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5.tex",
+          "sha256": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+          "same_as_authority": true
+        }
+      ],
+      "wordcount": 1225,
+      "pdf": {
+        "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview.pdf",
+        "sha256": "39d7c7edde4465e9eb6b16d040ca4f8df206d1e59ff5867c4ace4f4875d2c906",
+        "status": "temporary_preview_not_frozen"
+      }
+    },
+    {
+      "section": "5.6",
+      "authority": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+      "status": "FROZEN_DRAFT",
+      "formal_body_found": true,
+      "integrated_into_main": false,
+      "title": "跨域触觉重建实验结果与分析",
+      "freeze_record": "thesis/releases/ch05_5_6_2026-11-21/FREEZE_STATUS.json",
+      "freeze_record_matches_source": true,
+      "other_candidates": [
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/section_5_6.tex",
+          "sha256": "cfb2d0184623a3d622b3db311955c8acfd677d9204c5358ffe6b4c6c937492b9",
+          "same_as_authority": false
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6.tex",
+          "sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+          "same_as_authority": true
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/section_5_6.tex",
+          "sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+          "same_as_authority": true
+        },
+        {
+          "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6.tex",
+          "sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+          "same_as_authority": true
+        }
+      ],
+      "wordcount": 1605,
+      "pdf": {
+        "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6_preview.pdf",
+        "sha256": "151ab5240127b5bc11db018a58188e74a40c16614a0a3116b3228c6f03e795af",
+        "matches_freeze_record": true
+      }
+    }
+  ],
+  "chapter5_7_context": "MISSING_NOT_LOCATED; outside requested5.1–5.6 but V2 complete chapter also needs summary",
+  "current_main_chapter5": {
+    "path": "thesis/body/ch05_experiments.tex",
+    "sha256": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+    "status": "OLD_SIX_CHAPTER_PLACEHOLDER"
+  },
+  "main_path": "thesis/thesis.tex",
+  "main_sha256": "ad757386c9e6fb62c3d129724fa258dd832304ad43d18f90b0964eb7ffdc83f7"
+}

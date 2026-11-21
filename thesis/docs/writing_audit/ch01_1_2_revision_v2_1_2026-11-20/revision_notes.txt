@@ -1,0 +1,14 @@
+TH-CH01-1.2-V2.1 最小修订
+
+仅修改1.2.4第二段。
+1. 明确GMM与Patch响应统计来自Real Train，固定索引坐标为统计代理。
+2. 补明16 Patch响应字典→球形探针位置/加载条件→MuJoCo物理接触→统计伪配对，不写成直接生成Gaussian触觉数组。
+3. 明确Real VAE、Natural Sim和Paired Sim共同参与的Sim VAE、冻结两VAE后的GRU Translator监督关系。
+4. 明确Natural Sim→Sim Encoder→GRU Translator→Real Decoder的推理链；GMM/探针仅用于训练监督构造。
+5. 保留S25既有双域表示先例，区别监督来源和读出条件，不宣称组合首创。
+
+未修改其余正文、表格和参考文献。静态检查通过：四个小节、25个引用键、5列表格8个数据行，引用和标签完整。未编译，排版效果尚未检查。
+原始备份：ch01_introduction.before.tex
+逐行差异：changes.diff
+最终完整正文：section_1_2_final.tex及section_1_2_review.txt
+完成后停止，等待用户确认。

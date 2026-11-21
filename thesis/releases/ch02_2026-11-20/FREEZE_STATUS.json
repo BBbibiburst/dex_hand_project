@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-20",
+  "status": "FROZEN_CHAPTER_2_DRAFT_WITH_NONBLOCKING_WARNINGS",
+  "scope": "Chapter 2 standalone draft; main thesis includes unchanged",
+  "texcount": 8947,
+  "body_pages": 14,
+  "preview_pages_with_references": 15,
+  "formula_2_5_visual_check": "PASS: all three lines including normalized float32 output visible on preview page 11",
+  "compile_success": true,
+  "references_resolved": true,
+  "no_overfull": true,
+  "formal_main_unchanged": true,
+  "chapter1_unchanged": true,
+  "not_whole_thesis_final_freeze": true
+}

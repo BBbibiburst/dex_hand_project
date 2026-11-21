@@ -1,0 +1,1562 @@
+{
+  "git_head_read_only": "ff7b1a17e3122d7456dfa3f48c1bb7a0c2c7f421",
+  "current_source_files": {
+    "source/grasping/contracts.py": {
+      "sha256": "4b3397dfa21eebfd9a8d0ceb5bfbd21b9261452f1b33a51b96fc8bbd909b6d3c",
+      "definitions": [
+        {
+          "name": "_array",
+          "line": 18,
+          "end": 22
+        },
+        {
+          "name": "GraspCandidate",
+          "line": 26,
+          "end": 106
+        },
+        {
+          "name": "DemonstrationEpisode",
+          "line": 110,
+          "end": 190
+        },
+        {
+          "name": "__post_init__",
+          "line": 40,
+          "end": 73
+        },
+        {
+          "name": "to_dict",
+          "line": 75,
+          "end": 89
+        },
+        {
+          "name": "from_dict",
+          "line": 92,
+          "end": 106
+        },
+        {
+          "name": "validate",
+          "line": 134,
+          "end": 142
+        },
+        {
+          "name": "save",
+          "line": 144,
+          "end": 167
+        },
+        {
+          "name": "load",
+          "line": 170,
+          "end": 190
+        }
+      ]
+    },
+    "source/grasping/catalog.py": {
+      "sha256": "1f8aca83620988d6e9eba94b8120581d75ef418b1079e56bb19dd649b88cb23d",
+      "definitions": [
+        {
+          "name": "ObjectGeometry",
+          "line": 21,
+          "end": 37
+        },
+        {
+          "name": "resolve_object_mesh",
+          "line": 40,
+          "end": 56
+        },
+        {
+          "name": "resolve_object_collision_mesh",
+          "line": 59,
+          "end": 76
+        },
+        {
+          "name": "load_object_geometry",
+          "line": 79,
+          "end": 176
+        },
+        {
+          "name": "table_z",
+          "line": 36,
+          "end": 37
+        }
+      ]
+    },
+    "source/grasping/hand_surrogate.py": {
+      "sha256": "b207c53b595338f62403192f6a6e1b1a174f280521c3ff09d1d68bc6615e1bed",
+      "definitions": [
+        {
+          "name": "_farthest_indices",
+          "line": 36,
+          "end": 45
+        },
+        {
+          "name": "_mesh_points",
+          "line": 48,
+          "end": 55
+        },
+        {
+          "name": "_transform_geom_points",
+          "line": 58,
+          "end": 64
+        },
+        {
+          "name": "_thumb_powers",
+          "line": 67,
+          "end": 80
+        },
+        {
+          "name": "DexHandSurrogate",
+          "line": 84,
+          "end": 214
+        },
+        {
+          "name": "calibrate_dex_hand_surrogate",
+          "line": 217,
+          "end": 348
+        },
+        {
+          "name": "load_or_calibrate_surrogate",
+          "line": 351,
+          "end": 374
+        },
+        {
+          "name": "points_per_digit",
+          "line": 96,
+          "end": 97
+        },
+        {
+          "name": "surface_point_count",
+          "line": 100,
+          "end": 101
+        },
+        {
+          "name": "contact_indices",
+          "line": 104,
+          "end": 111
+        },
+        {
+          "name": "evaluate_numpy",
+          "line": 113,
+          "end": 134
+        },
+        {
+          "name": "evaluate_torch",
+          "line": 136,
+          "end": 169
+        },
+        {
+          "name": "save",
+          "line": 171,
+          "end": 192
+        },
+        {
+          "name": "load",
+          "line": 195,
+          "end": 214
+        },
+        {
+          "name": "sample",
+          "line": 258,
+          "end": 276
+        }
+      ]
+    },
+    "source/grasping/graspqp_adapter.py": {
+      "sha256": "c1c8a9c57d4779cbb732f9f4ed67ae65c900e8b806397d7abeb6574a2865c1f1",
+      "definitions": [
+        {
+          "name": "GraspQPConfig",
+          "line": 21,
+          "end": 53
+        },
+        {
+          "name": "graspqp_available",
+          "line": 56,
+          "end": 61
+        },
+        {
+          "name": "refine_candidates_with_graspqp",
+          "line": 64,
+          "end": 217
+        },
+        {
+          "name": "validate",
+          "line": 35,
+          "end": 53
+        }
+      ]
+    },
+    "source/grasping/dexevolve.py": {
+      "sha256": "f75c5e27a1cede8aebe14af645ce3ceeb60c5599f0d7e7d19cad520dfd8b3af0",
+      "definitions": [
+        {
+          "name": "DexEvolveConfig",
+          "line": 25,
+          "end": 73
+        },
+        {
+          "name": "EvolvedIndividual",
+          "line": 77,
+          "end": 85
+        },
+        {
+          "name": "candidate_embedding",
+          "line": 88,
+          "end": 95
+        },
+        {
+          "name": "candidate_distance",
+          "line": 98,
+          "end": 100
+        },
+        {
+          "name": "mutate_candidate",
+          "line": 103,
+          "end": 122
+        },
+        {
+          "name": "crossover_candidates",
+          "line": 125,
+          "end": 135
+        },
+        {
+          "name": "_materialize",
+          "line": 138,
+          "end": 177
+        },
+        {
+          "name": "episode_fitness",
+          "line": 180,
+          "end": 204
+        },
+        {
+          "name": "disturbance_lifetime",
+          "line": 207,
+          "end": 248
+        },
+        {
+          "name": "_evaluate",
+          "line": 251,
+          "end": 276
+        },
+        {
+          "name": "_evaluate_batch",
+          "line": 279,
+          "end": 354
+        },
+        {
+          "name": "_density",
+          "line": 357,
+          "end": 364
+        },
+        {
+          "name": "_insert",
+          "line": 367,
+          "end": 378
+        },
+        {
+          "name": "evolve_candidates",
+          "line": 381,
+          "end": 459
+        },
+        {
+          "name": "evolve_candidate",
+          "line": 462,
+          "end": 463
+        },
+        {
+          "name": "validate",
+          "line": 59,
+          "end": 73
+        },
+        {
+          "name": "success",
+          "line": 84,
+          "end": 85
+        }
+      ]
+    },
+    "source/grasping/dexevolve_mjwarp.py": {
+      "sha256": "0912f7dde1f75cda8bb176bd7537f8fcf71ce6d6f3532b3bb5d4b19d967646fe",
+      "definitions": [
+        {
+          "name": "MjWarpLifetimeConfig",
+          "line": 19,
+          "end": 27
+        },
+        {
+          "name": "MjWarpLifetimeEvaluator",
+          "line": 30,
+          "end": 189
+        },
+        {
+          "name": "__init__",
+          "line": 33,
+          "end": 86
+        },
+        {
+          "name": "_opposed_contact",
+          "line": 88,
+          "end": 110
+        },
+        {
+          "name": "_sync_to_warp",
+          "line": 112,
+          "end": 114
+        },
+        {
+          "name": "_sync_to_torch",
+          "line": 116,
+          "end": 117
+        },
+        {
+          "name": "_closed_frame",
+          "line": 120,
+          "end": 125
+        },
+        {
+          "name": "evaluate",
+          "line": 127,
+          "end": 176
+        },
+        {
+          "name": "metrics",
+          "line": 178,
+          "end": 186
+        },
+        {
+          "name": "close",
+          "line": 188,
+          "end": 189
+        }
+      ]
+    },
+    "source/grasping/budget.py": {
+      "sha256": "b1fee79bac43d7ea20814b578ac0629258e6fe09588bc4c46316c6989ecc20b5",
+      "definitions": [
+        {
+          "name": "GenerationBudget",
+          "line": 9,
+          "end": 20
+        },
+        {
+          "name": "dexevolve_evaluations",
+          "line": 19,
+          "end": 20
+        }
+      ]
+    },
+    "source/grasping/executor.py": {
+      "sha256": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+      "definitions": [
+        {
+          "name": "ExecutionConfig",
+          "line": 36,
+          "end": 88
+        },
+        {
+          "name": "ReachabilityResult",
+          "line": 92,
+          "end": 96
+        },
+        {
+          "name": "grasp_hand_targets",
+          "line": 99,
+          "end": 128
+        },
+        {
+          "name": "quaternion_wxyz_to_matrix",
+          "line": 131,
+          "end": 133
+        },
+        {
+          "name": "hand_attach_rotation",
+          "line": 136,
+          "end": 142
+        },
+        {
+          "name": "candidate_world_pose",
+          "line": 145,
+          "end": 158
+        },
+        {
+          "name": "rank_candidates_for_scene",
+          "line": 161,
+          "end": 244
+        },
+        {
+          "name": "actuator_targets_from_fractions",
+          "line": 247,
+          "end": 254
+        },
+        {
+          "name": "_slerp_wxyz",
+          "line": 257,
+          "end": 270
+        },
+        {
+          "name": "_orientation_error",
+          "line": 273,
+          "end": 275
+        },
+        {
+          "name": "_Recorder",
+          "line": 278,
+          "end": 355
+        },
+        {
+          "name": "_palm_object_contact",
+          "line": 358,
+          "end": 372
+        },
+        {
+          "name": "_contact_digit",
+          "line": 375,
+          "end": 399
+        },
+        {
+          "name": "_robot_object_contact_summary",
+          "line": 402,
+          "end": 430
+        },
+        {
+          "name": "_step",
+          "line": 433,
+          "end": 437
+        },
+        {
+          "name": "_run_pose_segment",
+          "line": 440,
+          "end": 473
+        },
+        {
+          "name": "_target_error",
+          "line": 476,
+          "end": 484
+        },
+        {
+          "name": "execute_grasp",
+          "line": 487,
+          "end": 741
+        },
+        {
+          "name": "maximum_steps",
+          "line": 58,
+          "end": 68
+        },
+        {
+          "name": "validate",
+          "line": 70,
+          "end": 88
+        },
+        {
+          "name": "__init__",
+          "line": 279,
+          "end": 298
+        },
+        {
+          "name": "append",
+          "line": 300,
+          "end": 337
+        },
+        {
+          "name": "arrays",
+          "line": 339,
+          "end": 355
+        }
+      ]
+    },
+    "source/rl/grasp_edit/templates.py": {
+      "sha256": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309",
+      "definitions": [
+        {
+          "name": "GraspEditTemplate",
+          "line": 37,
+          "end": 52
+        },
+        {
+          "name": "_slug",
+          "line": 55,
+          "end": 56
+        },
+        {
+          "name": "_full_episode",
+          "line": 59,
+          "end": 69
+        },
+        {
+          "name": "discover_grasp_attempts",
+          "line": 72,
+          "end": 121
+        },
+        {
+          "name": "_axis_rotation",
+          "line": 124,
+          "end": 133
+        },
+        {
+          "name": "_rotation_delta",
+          "line": 136,
+          "end": 143
+        },
+        {
+          "name": "edit_candidate_pose",
+          "line": 146,
+          "end": 180
+        },
+        {
+          "name": "local_wrist_lattice",
+          "line": 183,
+          "end": 238
+        },
+        {
+          "name": "_code",
+          "line": 241,
+          "end": 244
+        },
+        {
+          "name": "_label",
+          "line": 247,
+          "end": 266
+        },
+        {
+          "name": "_write_index",
+          "line": 269,
+          "end": 294
+        },
+        {
+          "name": "build_grasp_edit_templates",
+          "line": 297,
+          "end": 583
+        },
+        {
+          "name": "wrist_edit",
+          "line": 51,
+          "end": 52
+        },
+        {
+          "name": "key",
+          "line": 100,
+          "end": 118
+        },
+        {
+          "name": "compile_key",
+          "line": 395,
+          "end": 427
+        }
+      ]
+    },
+    "source/control/arm.py": {
+      "sha256": "f511f6f3ed5ec4bed81e791c3dbf1bd7059256a8a12fff127cc5187cc00793b3",
+      "definitions": [
+        {
+          "name": "ArmPositionIkController",
+          "line": 23,
+          "end": 546
+        },
+        {
+          "name": "__init__",
+          "line": 26,
+          "end": 97
+        },
+        {
+          "name": "action_size",
+          "line": 100,
+          "end": 101
+        },
+        {
+          "name": "position_action_size",
+          "line": 104,
+          "end": 105
+        },
+        {
+          "name": "action_space",
+          "line": 108,
+          "end": 109
+        },
+        {
+          "name": "actuator_ids",
+          "line": 112,
+          "end": 115
+        },
+        {
+          "name": "qpos_addrs",
+          "line": 118,
+          "end": 121
+        },
+        {
+          "name": "ctrl_low",
+          "line": 124,
+          "end": 127
+        },
+        {
+          "name": "ctrl_high",
+          "line": 130,
+          "end": 133
+        },
+        {
+          "name": "site_id",
+          "line": 136,
+          "end": 139
+        },
+        {
+          "name": "arm_dof_addrs",
+          "line": 142,
+          "end": 145
+        },
+        {
+          "name": "ik_data",
+          "line": 148,
+          "end": 151
+        },
+        {
+          "name": "set_timestep",
+          "line": 153,
+          "end": 156
+        },
+        {
+          "name": "set_control_mode",
+          "line": 158,
+          "end": 164
+        },
+        {
+          "name": "bind",
+          "line": 166,
+          "end": 214
+        },
+        {
+          "name": "reset",
+          "line": 216,
+          "end": 252
+        },
+        {
+          "name": "apply_action",
+          "line": 254,
+          "end": 262
+        },
+        {
+          "name": "apply_position_action",
+          "line": 264,
+          "end": 277
+        },
+        {
+          "name": "apply_ik_action",
+          "line": 279,
+          "end": 309
+        },
+        {
+          "name": "current_action",
+          "line": 311,
+          "end": 315
+        },
+        {
+          "name": "current_ik_action",
+          "line": 317,
+          "end": 321
+        },
+        {
+          "name": "ik_action_layout",
+          "line": 323,
+          "end": 324
+        },
+        {
+          "name": "_solve_ik",
+          "line": 326,
+          "end": 422
+        },
+        {
+          "name": "_adaptive_damping",
+          "line": 424,
+          "end": 430
+        },
+        {
+          "name": "_smooth_joint_target",
+          "line": 432,
+          "end": 454
+        },
+        {
+          "name": "_slerp",
+          "line": 457,
+          "end": 471
+        },
+        {
+          "name": "_coerce_position_action",
+          "line": 473,
+          "end": 486
+        },
+        {
+          "name": "_bound_action_space",
+          "line": 488,
+          "end": 515
+        },
+        {
+          "name": "_unbound_action_space",
+          "line": 517,
+          "end": 546
+        }
+      ]
+    },
+    "source/verification/strict_replay.py": {
+      "sha256": "25edfdfbd2c10a5fae26b722fb06c6f105e16569deae12fe7352fa7e43fcb830",
+      "definitions": [
+        {
+          "name": "StrictReplayResult",
+          "line": 49,
+          "end": 70
+        },
+        {
+          "name": "_manifest_path",
+          "line": 73,
+          "end": 77
+        },
+        {
+          "name": "_payload",
+          "line": 80,
+          "end": 81
+        },
+        {
+          "name": "_signature",
+          "line": 84,
+          "end": 93
+        },
+        {
+          "name": "_contact_sets",
+          "line": 96,
+          "end": 128
+        },
+        {
+          "name": "_contact_snapshot",
+          "line": 131,
+          "end": 206
+        },
+        {
+          "name": "load_replay_controls",
+          "line": 209,
+          "end": 229
+        },
+        {
+          "name": "_resolved_settings",
+          "line": 232,
+          "end": 283
+        },
+        {
+          "name": "strict_replay_manifest",
+          "line": 286,
+          "end": 545
+        }
+      ]
+    },
+    "source/verification/profiles.py": {
+      "sha256": "e50fe451e25a4bb84bfc6acb2d9f93de694282776cfeae644fe1ed7f9bcfb4ab",
+      "definitions": [
+        {
+          "name": "verification_status",
+          "line": 11,
+          "end": 16
+        }
+      ]
+    },
+    "source/grasp_pipeline/replay.py": {
+      "sha256": "ad79c14f924ed5196aac1e79f3329a3c9ad191c6a8328c9ab9370d31f2c716cf",
+      "definitions": [
+        {
+          "name": "ReplayResult",
+          "line": 16,
+          "end": 20
+        },
+        {
+          "name": "replay_grasp_trajectory",
+          "line": 23,
+          "end": 72
+        }
+      ]
+    },
+    "source/grasp_pipeline/reference.py": {
+      "sha256": "52ffb63b7eab0d37e72faba43e41a2238b8e7e7b8cc5f4944600d79c60e41a86",
+      "definitions": [
+        {
+          "name": "EpisodeRecord",
+          "line": 16,
+          "end": 52
+        },
+        {
+          "name": "ReferenceTrajectory",
+          "line": 56,
+          "end": 196
+        },
+        {
+          "name": "resolve_reference_manifest",
+          "line": 199,
+          "end": 222
+        },
+        {
+          "name": "load_reference",
+          "line": 225,
+          "end": 238
+        },
+        {
+          "name": "load",
+          "line": 26,
+          "end": 52
+        },
+        {
+          "name": "__post_init__",
+          "line": 76,
+          "end": 106
+        },
+        {
+          "name": "horizon",
+          "line": 109,
+          "end": 110
+        },
+        {
+          "name": "action_dim",
+          "line": 113,
+          "end": 114
+        },
+        {
+          "name": "hand_action_size",
+          "line": 117,
+          "end": 118
+        },
+        {
+          "name": "hand_slice",
+          "line": 121,
+          "end": 122
+        },
+        {
+          "name": "from_episode",
+          "line": 125,
+          "end": 196
+        }
+      ]
+    },
+    "source/grasp_pipeline/trajectory.py": {
+      "sha256": "c82d554d55405b9e8a8cb3acaae34aa39656ba4a130963abc466de90ffb4b7b0",
+      "definitions": [
+        {
+          "name": "GraspTrajectory",
+          "line": 16,
+          "end": 97
+        },
+        {
+          "name": "validate",
+          "line": 29,
+          "end": 43
+        },
+        {
+          "name": "save",
+          "line": 45,
+          "end": 73
+        },
+        {
+          "name": "load",
+          "line": 76,
+          "end": 97
+        }
+      ]
+    },
+    "tools/grasping/batch_grasp_edit.py": {
+      "sha256": "f874d1a63a93e5377b197c62e8756cfbe76a2c6ad24a7b32d65fe3cb75da3d18",
+      "definitions": [
+        {
+          "name": "_is_noncacheable_interruption",
+          "line": 59,
+          "end": 74
+        },
+        {
+          "name": "ChildResult",
+          "line": 128,
+          "end": 131
+        },
+        {
+          "name": "LatticePreflight",
+          "line": 135,
+          "end": 144
+        },
+        {
+          "name": "ObjectWorkItem",
+          "line": 148,
+          "end": 156
+        },
+        {
+          "name": "_utc_now",
+          "line": 164,
+          "end": 165
+        },
+        {
+          "name": "_slug",
+          "line": 168,
+          "end": 169
+        },
+        {
+          "name": "_format_duration",
+          "line": 172,
+          "end": 180
+        },
+        {
+          "name": "_gpu_ids",
+          "line": 183,
+          "end": 206
+        },
+        {
+          "name": "_gpu_resource_rows",
+          "line": 209,
+          "end": 239
+        },
+        {
+          "name": "_estimated_worker_memory_mb",
+          "line": 242,
+          "end": 245
+        },
+        {
+          "name": "_resource_plan",
+          "line": 248,
+          "end": 350
+        },
+        {
+          "name": "_runtime_estimate",
+          "line": 353,
+          "end": 368
+        },
+        {
+          "name": "_wall_clock_estimate",
+          "line": 371,
+          "end": 383
+        },
+        {
+          "name": "_init_object_worker",
+          "line": 386,
+          "end": 399
+        },
+        {
+          "name": "_worker_gpu_identity",
+          "line": 402,
+          "end": 405
+        },
+        {
+          "name": "_gpu_phase",
+          "line": 409,
+          "end": 423
+        },
+        {
+          "name": "_atomic_json",
+          "line": 426,
+          "end": 430
+        },
+        {
+          "name": "_atomic_csv",
+          "line": 433,
+          "end": 441
+        },
+        {
+          "name": "_repo_root",
+          "line": 444,
+          "end": 453
+        },
+        {
+          "name": "_prepare_shared_surrogate",
+          "line": 456,
+          "end": 466
+        },
+        {
+          "name": "_validate_runtime_dependencies",
+          "line": 469,
+          "end": 482
+        },
+        {
+          "name": "_sha256",
+          "line": 485,
+          "end": 486
+        },
+        {
+          "name": "_source_hashes",
+          "line": 489,
+          "end": 510
+        },
+        {
+          "name": "_dataset_ids",
+          "line": 513,
+          "end": 522
+        },
+        {
+          "name": "_selection_ids",
+          "line": 525,
+          "end": 537
+        },
+        {
+          "name": "_episode_lifts",
+          "line": 540,
+          "end": 551
+        },
+        {
+          "name": "_discover_grasp",
+          "line": 554,
+          "end": 557
+        },
+        {
+          "name": "_grasp_summary",
+          "line": 560,
+          "end": 585
+        },
+        {
+          "name": "_run_child",
+          "line": 588,
+          "end": 620
+        },
+        {
+          "name": "_ensure_grasp",
+          "line": 623,
+          "end": 676
+        },
+        {
+          "name": "_parse_lattice",
+          "line": 679,
+          "end": 684
+        },
+        {
+          "name": "_parse_lattice_precheck",
+          "line": 687,
+          "end": 699
+        },
+        {
+          "name": "_preflight_lattice",
+          "line": 702,
+          "end": 768
+        },
+        {
+          "name": "_recovery_args",
+          "line": 771,
+          "end": 778
+        },
+        {
+          "name": "_apply_preflight",
+          "line": 781,
+          "end": 791
+        },
+        {
+          "name": "_parse_update_history",
+          "line": 794,
+          "end": 828
+        },
+        {
+          "name": "_adaptive_decision",
+          "line": 831,
+          "end": 875
+        },
+        {
+          "name": "_adaptive_train",
+          "line": 878,
+          "end": 1002
+        },
+        {
+          "name": "_read_json",
+          "line": 1005,
+          "end": 1011
+        },
+        {
+          "name": "_checkpoint_update",
+          "line": 1014,
+          "end": 1024
+        },
+        {
+          "name": "_classify_training",
+          "line": 1027,
+          "end": 1128
+        },
+        {
+          "name": "_empty_row",
+          "line": 1131,
+          "end": 1163
+        },
+        {
+          "name": "_save_object_result",
+          "line": 1166,
+          "end": 1172
+        },
+        {
+          "name": "_load_object_result",
+          "line": 1175,
+          "end": 1180
+        },
+        {
+          "name": "_write_summary",
+          "line": 1183,
+          "end": 1265
+        },
+        {
+          "name": "_format_progress",
+          "line": 1268,
+          "end": 1300
+        },
+        {
+          "name": "_run_object_item",
+          "line": 1303,
+          "end": 1427
+        },
+        {
+          "name": "build_parser",
+          "line": 1430,
+          "end": 1576
+        },
+        {
+          "name": "main",
+          "line": 1579,
+          "end": 1909
+        },
+        {
+          "name": "positive_or_auto",
+          "line": 259,
+          "end": 269
+        }
+      ]
+    },
+    "tools/grasp_generation/graspqp_evolve.py": {
+      "sha256": "70b9332a729d72ad2527e1b8b8fa4a6e496d14abc65ae923a679be7ca1085042",
+      "definitions": [
+        {
+          "name": "build_parser",
+          "line": 35,
+          "end": 55
+        },
+        {
+          "name": "_write",
+          "line": 58,
+          "end": 62
+        },
+        {
+          "name": "evolution_execution_config",
+          "line": 65,
+          "end": 67
+        },
+        {
+          "name": "main",
+          "line": 70,
+          "end": 351
+        },
+        {
+          "name": "finish_phase",
+          "line": 75,
+          "end": 80
+        }
+      ]
+    },
+    "source/grasping/task_transfer.py": {
+      "sha256": "ae176b54fac085c5fcab8a9614527141fe3b8da9f4a27363349b5f671b9c95af",
+      "definitions": [
+        {
+          "name": "PickPlaceTransferConfig",
+          "line": 32,
+          "end": 99
+        },
+        {
+          "name": "_select_transport_hand",
+          "line": 102,
+          "end": 189
+        },
+        {
+          "name": "_combine_arrays",
+          "line": 192,
+          "end": 210
+        },
+        {
+          "name": "_hand_collision_min_z",
+          "line": 213,
+          "end": 231
+        },
+        {
+          "name": "_safe_descent_distance",
+          "line": 234,
+          "end": 251
+        },
+        {
+          "name": "_object_touches_table",
+          "line": 254,
+          "end": 266
+        },
+        {
+          "name": "_run_adaptive_release",
+          "line": 269,
+          "end": 298
+        },
+        {
+          "name": "execute_pick_place_transfer",
+          "line": 301,
+          "end": 801
+        },
+        {
+          "name": "validate",
+          "line": 59,
+          "end": 86
+        },
+        {
+          "name": "appended_steps",
+          "line": 89,
+          "end": 99
+        }
+      ]
+    },
+    "source/grasping/stack_transfer.py": {
+      "sha256": "ea508777ae8936b4f0fcd65c3ae91cfb2bdf2b9ec5d57a6432c980776cf08e75",
+      "definitions": [
+        {
+          "name": "_StackTransferPlacement",
+          "line": 28,
+          "end": 47
+        },
+        {
+          "name": "StackTransferConfig",
+          "line": 51,
+          "end": 137
+        },
+        {
+          "name": "_servo_grasped_object",
+          "line": 140,
+          "end": 199
+        },
+        {
+          "name": "_best_lift_transfer_frame",
+          "line": 202,
+          "end": 229
+        },
+        {
+          "name": "_object_downward_extent",
+          "line": 232,
+          "end": 270
+        },
+        {
+          "name": "_restore_lift_terminal_into_stack",
+          "line": 273,
+          "end": 296
+        },
+        {
+          "name": "execute_stack_transfer",
+          "line": 299,
+          "end": 604
+        },
+        {
+          "name": "sample",
+          "line": 31,
+          "end": 47
+        },
+        {
+          "name": "validate",
+          "line": 81,
+          "end": 123
+        },
+        {
+          "name": "maximum_steps",
+          "line": 126,
+          "end": 137
+        }
+      ]
+    },
+    "source/grasping/push_transfer.py": {
+      "sha256": "16707ff4d2e688b6e46dd109547cf8ba830b67548e2962e49675fd3791139f22",
+      "definitions": [
+        {
+          "name": "PushTransferConfig",
+          "line": 24,
+          "end": 99
+        },
+        {
+          "name": "_palm_geometry_in_ee_frame",
+          "line": 102,
+          "end": 134
+        },
+        {
+          "name": "_palm_facing_rotation",
+          "line": 137,
+          "end": 159
+        },
+        {
+          "name": "_four_finger_geometry_in_ee_frame",
+          "line": 162,
+          "end": 212
+        },
+        {
+          "name": "_four_finger_tactile_indices",
+          "line": 215,
+          "end": 226
+        },
+        {
+          "name": "_four_finger_object_contact",
+          "line": 229,
+          "end": 241
+        },
+        {
+          "name": "_push_advance",
+          "line": 244,
+          "end": 251
+        },
+        {
+          "name": "_hand_table_contact_frames",
+          "line": 254,
+          "end": 278
+        },
+        {
+          "name": "execute_push_transfer",
+          "line": 281,
+          "end": 615
+        },
+        {
+          "name": "validate",
+          "line": 54,
+          "end": 99
+        }
+      ]
+    },
+    "source/grasping/nut_transfer.py": {
+      "sha256": "dad11466d10fd8e49a6c91dc6655748a2211d76eff6349735344866626aaa95f",
+      "definitions": [
+        {
+          "name": "NutTransferConfig",
+          "line": 36,
+          "end": 93
+        },
+        {
+          "name": "_servo_bolt_orientation",
+          "line": 96,
+          "end": 148
+        },
+        {
+          "name": "_servo_bolt_yaw",
+          "line": 151,
+          "end": 195
+        },
+        {
+          "name": "execute_nut_transfer",
+          "line": 198,
+          "end": 500
+        },
+        {
+          "name": "validate",
+          "line": 60,
+          "end": 93
+        }
+      ]
+    },
+    "apps/collect_generated_lerobot.py": {
+      "sha256": "4cc5607d4e40b1c3a921ddf7765e2ce7bcc48cd840b720f5e356c77cbf75339e",
+      "definitions": [
+        {
+          "name": "build_parser",
+          "line": 19,
+          "end": 53
+        },
+        {
+          "name": "_manifest",
+          "line": 56,
+          "end": 60
+        },
+        {
+          "name": "discover_trajectory_manifests",
+          "line": 63,
+          "end": 73
+        },
+        {
+          "name": "recorded_pre_action_indices",
+          "line": 76,
+          "end": 103
+        },
+        {
+          "name": "_export_one",
+          "line": 106,
+          "end": 237
+        },
+        {
+          "name": "run",
+          "line": 240,
+          "end": 255
+        },
+        {
+          "name": "main",
+          "line": 258,
+          "end": 259
+        }
+      ]
+    },
+    "apps/run_p32_online_contract.py": {
+      "sha256": "c8765d1a937a4c094c2f0b7adcc9962efde469e27e52064efe400f946811aaec",
+      "definitions": [
+        {
+          "name": "run",
+          "line": 42,
+          "end": 237
+        },
+        {
+          "name": "main",
+          "line": 240,
+          "end": 256
+        },
+        {
+          "name": "factory",
+          "line": 57,
+          "end": 81
+        },
+        {
+          "name": "create",
+          "line": 58,
+          "end": 80
+        },
+        {
+          "name": "config",
+          "line": 114,
+          "end": 120
+        },
+        {
+          "name": "planned_pick",
+          "line": 126,
+          "end": 139
+        },
+        {
+          "name": "suppress_probe",
+          "line": 92,
+          "end": 98
+        }
+      ]
+    },
+    "source/data/production_recorder.py": {
+      "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+      "definitions": [
+        {
+          "name": "validate_stage_encoding",
+          "line": 21,
+          "end": 43
+        },
+        {
+          "name": "attach_stage_encoding",
+          "line": 46,
+          "end": 53
+        },
+        {
+          "name": "validate_online_arrays",
+          "line": 56,
+          "end": 96
+        },
+        {
+          "name": "OnlineEnvironment",
+          "line": 99,
+          "end": 223
+        },
+        {
+          "name": "recorder_type",
+          "line": 226,
+          "end": 250
+        },
+        {
+          "name": "__init__",
+          "line": 102,
+          "end": 133
+        },
+        {
+          "name": "__getattr__",
+          "line": 135,
+          "end": 136
+        },
+        {
+          "name": "elapsed_steps",
+          "line": 139,
+          "end": 140
+        },
+        {
+          "name": "elapsed_steps",
+          "line": 143,
+          "end": 144
+        },
+        {
+          "name": "_before",
+          "line": 146,
+          "end": 184
+        },
+        {
+          "name": "close",
+          "line": 186,
+          "end": 190
+        },
+        {
+          "name": "_after",
+          "line": 192,
+          "end": 199
+        },
+        {
+          "name": "step",
+          "line": 201,
+          "end": 206
+        },
+        {
+          "name": "step_physics",
+          "line": 208,
+          "end": 214
+        },
+        {
+          "name": "reset",
+          "line": 216,
+          "end": 217
+        },
+        {
+          "name": "prepare_recorded_control",
+          "line": 219,
+          "end": 223
+        },
+        {
+          "name": "OnlineRecorder",
+          "line": 227,
+          "end": 248
+        },
+        {
+          "name": "read_once",
+          "line": 127,
+          "end": 131
+        },
+        {
+          "name": "__init__",
+          "line": 228,
+          "end": 230
+        },
+        {
+          "name": "append",
+          "line": 232,
+          "end": 243
+        },
+        {
+          "name": "arrays",
+          "line": 245,
+          "end": 248
+        }
+      ]
+    }
+  },
+  "historical_json_hashes": {
+    "outputs/dex_hand_top100_v2/summary.json": "e9a23b52f43d434d9634b25ae92ebc38fc96e2e81b84db5a130c0574bb9c77c3",
+    "outputs/pick_place_top100_final/summary.json": "a70295cbaee6cc3a132d08d1fabf0c1080beb5c3914b660bf72f6e19a11a64d5",
+    "outputs/stack_task_valid_v24/summary.json": "18ec12b71cb095e7dc40984364060ffb5e5d290a6fa6b67bceec964727f8bc40",
+    "outputs/push_top100_final/summary.json": "8e5e829600d4c86e011ee7927990ed070072aea27da85e0095a8e5626c71b088",
+    "outputs/nut_assembly_top100_final/summary.json": "42ca95049066483a19a58d77d116311478f082aa02f35c03bbdfc854ad5c4342",
+    "outputs/dp_p8_2026-10-14/dataset_audit/source_a.json": "fba08216504499600b697507536b039332c0f9bc9eea2c1c92ecd1c2ed3a1c63",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/manifest.json": "cd4e9ae42eac4c2fb0e1f279a096ce1d88c68aed027630198bf923944a2f1b85",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/strict_replay_final.json": "65ab7496265b0c8871d4774072f80c0ad0f38e16a40bfab59ed7f3ad6302e8aa",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p01/candidate_00/manifest.json": "5250edcc2fb07432906a1141647baf05a70acca926896e075776f93aeded63b8",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p01/candidate_00/strict_replay_final.json": "1eecc6da894db80f9e1037e15b2b224ba07914f47687faab5f2415e2077e236e",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p02/candidate_00/manifest.json": "0f7176d7762c9509ccd5e0d6a95a84b7296d6d35e2483d925894328877a8c200",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p02/candidate_00/strict_replay_final.json": "228bba9ed99a8c5c003f183311fe6a6cecba149d18bb1a9ca07bcd5b535f60a8",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p03/candidate_00/manifest.json": "87464967f2870acfcae48e0463ae9c8251002b74c71231b8adec844239d65c5d",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p03/candidate_00/strict_replay_final.json": "375ec4f58aeffd2338f8417eb19fe5f8bec16a100fb9a844c9e1384160a6e354",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p04/candidate_00/manifest.json": "757187045e18b02499bf3ae002895d69104e2eab80c0ccb05a703cb9e5d6a6cf",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p04/candidate_00/strict_replay_final.json": "408eabb23aa03b50b875754dcb50d3d1b34d5660c71e930c3e92c518169a1893",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p05/candidate_00/manifest.json": "97671f761063d1f6e9f6c721dcbc7b5f6a8aace67387455fa5702fffb8949f8f",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p05/candidate_00/strict_replay_final.json": "68178c57f99c9409a1077b9fae8dea0d305c178a25b4bac5977fc14d59520761",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p06/candidate_00/manifest.json": "5b368f421ac21ebd85bbdc9de6f060fc6ec5792dc073fb5247343ace94475a76",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p06/candidate_00/strict_replay_final.json": "aac87c2c85674eb7dc0e230d2057b2d665ea48645b6d936ea966692de65f1d5f",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p07/candidate_00/manifest.json": "48fff00742ed32cef0c0c5a363ab73e04072743cd3b72fd1114cd9ffaccc3fbd",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p07/candidate_00/strict_replay_final.json": "a41abdcb5826169f6e7782a328b3a9748d224b418d61307e07b1245fa0b2b8de",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p08/candidate_00/manifest.json": "03c03df3e8eb3fc608822327aa1a94d0d134c41b68bb9017dffce309f5b9d662",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p08/candidate_00/strict_replay_final.json": "8e36c519912b4826d6c5679d300a361b894cb9415f0b5ebd6aff7f1b4cf4f8f6",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p09/candidate_00/manifest.json": "55cc94a05691be53a2394a1883f2b78aeafc3c610133fd8bd00623c568cda404",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p09/candidate_00/strict_replay_final.json": "fb8fd3c9e1d11ab9401d4d2e108e643a9591eec67a82f614a9933bda97fe9ecf",
+    "outputs/dp_p1_2026-10-11/generation_formal_summary.json": "6ba85fb341b30cfc690a616c24189b878f0e6a3e50ca51772d61b089e7364540",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_strict.json": "00aaa91645953ed2c861bf8aa4afdc91089dfaa095fa085e3892f9b50aa08c8e",
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/result.json": "06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657"
+  }
+}

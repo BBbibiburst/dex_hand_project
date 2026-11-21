@@ -1,0 +1,32 @@
+[
+  {
+    "file": "thesis_guide.doc",
+    "url": "https://hitgs.hit.edu.cn/_upload/article/files/9d/52/c937ab6d47bd85bb5cdb44910f27/20f9358a-d860-4e1d-a059-d73a22d3c7e9.doc",
+    "bytes": 7108608,
+    "status": "downloaded"
+  },
+  {
+    "file": "practice_guide.doc",
+    "url": "https://hitgs.hit.edu.cn/_upload/article/files/9d/52/c937ab6d47bd85bb5cdb44910f27/bf2e45b5-d29d-4a8d-a959-a512b7276eb4.doc",
+    "bytes": 621568,
+    "status": "downloaded"
+  },
+  {
+    "file": "degree_selection.xlsx",
+    "url": "https://hitgs.hit.edu.cn/_upload/article/files/9d/52/c937ab6d47bd85bb5cdb44910f27/7f432b5f-470f-4deb-8344-6caf80124d61.xlsx",
+    "bytes": 11571,
+    "status": "downloaded"
+  },
+  {
+    "file": "hithesis_latest_release.json",
+    "url": "https://api.github.com/repos/hithesis/hithesis/releases/latest",
+    "bytes": 81809,
+    "status": "downloaded"
+  },
+  {
+    "file": "tinytex_latest_release.json",
+    "url": "https://api.github.com/repos/rstudio/tinytex-releases/releases/latest",
+    "bytes": 37695,
+    "status": "downloaded"
+  }
+]

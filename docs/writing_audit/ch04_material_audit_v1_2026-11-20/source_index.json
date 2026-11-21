@@ -1,0 +1,781 @@
+{
+  "source/imitation/observation.py": {
+    "sha256": "997c93adaee402faf71c8a64a07cc64ab9989c8cf1b50d6cba4f036c74268194",
+    "definitions": [
+      {
+        "name": "actuator_ids",
+        "line": 20,
+        "end": 28
+      },
+      {
+        "name": "real_observable_state",
+        "line": 31,
+        "end": 41
+      },
+      {
+        "name": "state_layout",
+        "line": 44,
+        "end": 50
+      },
+      {
+        "name": "action_layout",
+        "line": 53,
+        "end": 58
+      },
+      {
+        "name": "validate_position_action_contract",
+        "line": 61,
+        "end": 70
+      }
+    ]
+  },
+  "source/data/lerobot_schema.py": {
+    "sha256": "82192b828542a9b4980d7efdb53e5827026af6d38d54a83a6dbcf9ef99affbb9",
+    "definitions": []
+  },
+  "source/data/lerobot_recorder.py": {
+    "sha256": "cf3d184d7d57f202ed962399e16e6913a9c65002e287b82d853b0b558ed8ac0c",
+    "definitions": [
+      {
+        "name": "LeRobotEpisodeRecorder",
+        "line": 22,
+        "end": 194
+      },
+      {
+        "name": "_create_dataset",
+        "line": 197,
+        "end": 199
+      },
+      {
+        "name": "_archive_incomplete_dataset",
+        "line": 202,
+        "end": 211
+      },
+      {
+        "name": "_validate_dataset_compatibility",
+        "line": 214,
+        "end": 232
+      },
+      {
+        "name": "__init__",
+        "line": 23,
+        "end": 140
+      },
+      {
+        "name": "add_frame",
+        "line": 142,
+        "end": 177
+      },
+      {
+        "name": "save_episode",
+        "line": 179,
+        "end": 182
+      },
+      {
+        "name": "clear_episode",
+        "line": 184,
+        "end": 187
+      },
+      {
+        "name": "finalize",
+        "line": 189,
+        "end": 194
+      }
+    ]
+  },
+  "apps/collect_generated_lerobot.py": {
+    "sha256": "4cc5607d4e40b1c3a921ddf7765e2ce7bcc48cd840b720f5e356c77cbf75339e",
+    "definitions": [
+      {
+        "name": "build_parser",
+        "line": 19,
+        "end": 53
+      },
+      {
+        "name": "_manifest",
+        "line": 56,
+        "end": 60
+      },
+      {
+        "name": "discover_trajectory_manifests",
+        "line": 63,
+        "end": 73
+      },
+      {
+        "name": "recorded_pre_action_indices",
+        "line": 76,
+        "end": 103
+      },
+      {
+        "name": "_export_one",
+        "line": 106,
+        "end": 237
+      },
+      {
+        "name": "run",
+        "line": 240,
+        "end": 255
+      },
+      {
+        "name": "main",
+        "line": 258,
+        "end": 259
+      }
+    ]
+  },
+  "source/data/production_recorder.py": {
+    "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "definitions": [
+      {
+        "name": "validate_stage_encoding",
+        "line": 21,
+        "end": 43
+      },
+      {
+        "name": "attach_stage_encoding",
+        "line": 46,
+        "end": 53
+      },
+      {
+        "name": "validate_online_arrays",
+        "line": 56,
+        "end": 96
+      },
+      {
+        "name": "OnlineEnvironment",
+        "line": 99,
+        "end": 223
+      },
+      {
+        "name": "recorder_type",
+        "line": 226,
+        "end": 250
+      },
+      {
+        "name": "__init__",
+        "line": 102,
+        "end": 133
+      },
+      {
+        "name": "__getattr__",
+        "line": 135,
+        "end": 136
+      },
+      {
+        "name": "elapsed_steps",
+        "line": 139,
+        "end": 140
+      },
+      {
+        "name": "elapsed_steps",
+        "line": 143,
+        "end": 144
+      },
+      {
+        "name": "_before",
+        "line": 146,
+        "end": 184
+      },
+      {
+        "name": "close",
+        "line": 186,
+        "end": 190
+      },
+      {
+        "name": "_after",
+        "line": 192,
+        "end": 199
+      },
+      {
+        "name": "step",
+        "line": 201,
+        "end": 206
+      },
+      {
+        "name": "step_physics",
+        "line": 208,
+        "end": 214
+      },
+      {
+        "name": "reset",
+        "line": 216,
+        "end": 217
+      },
+      {
+        "name": "prepare_recorded_control",
+        "line": 219,
+        "end": 223
+      },
+      {
+        "name": "OnlineRecorder",
+        "line": 227,
+        "end": 248
+      },
+      {
+        "name": "read_once",
+        "line": 127,
+        "end": 131
+      },
+      {
+        "name": "__init__",
+        "line": 228,
+        "end": 230
+      },
+      {
+        "name": "append",
+        "line": 232,
+        "end": 243
+      },
+      {
+        "name": "arrays",
+        "line": 245,
+        "end": 248
+      }
+    ]
+  },
+  "source/data/production_queue.py": {
+    "sha256": "3aa9b5fbc4f0631d0891d6309d0d3b3ccb2c1345d2c67d2b26abd81b30b37ebe",
+    "definitions": [
+      {
+        "name": "process_identity",
+        "line": 17,
+        "end": 26
+      },
+      {
+        "name": "ProductionQueue",
+        "line": 29,
+        "end": 474
+      },
+      {
+        "name": "__init__",
+        "line": 30,
+        "end": 122
+      },
+      {
+        "name": "_efficiency",
+        "line": 125,
+        "end": 130
+      },
+      {
+        "name": "_scheduled",
+        "line": 133,
+        "end": 140
+      },
+      {
+        "name": "_terminal",
+        "line": 143,
+        "end": 153
+      },
+      {
+        "name": "connect",
+        "line": 156,
+        "end": 164
+      },
+      {
+        "name": "transaction",
+        "line": 167,
+        "end": 175
+      },
+      {
+        "name": "event",
+        "line": 178,
+        "end": 180
+      },
+      {
+        "name": "enqueue",
+        "line": 182,
+        "end": 198
+      },
+      {
+        "name": "recover",
+        "line": 200,
+        "end": 227
+      },
+      {
+        "name": "claim",
+        "line": 229,
+        "end": 247
+      },
+      {
+        "name": "attach_worker",
+        "line": 249,
+        "end": 254
+      },
+      {
+        "name": "owned",
+        "line": 257,
+        "end": 263
+      },
+      {
+        "name": "heartbeat",
+        "line": 265,
+        "end": 291
+      },
+      {
+        "name": "validating",
+        "line": 293,
+        "end": 297
+      },
+      {
+        "name": "fail",
+        "line": 299,
+        "end": 313
+      },
+      {
+        "name": "register",
+        "line": 315,
+        "end": 347
+      },
+      {
+        "name": "record_attempt_metrics",
+        "line": 349,
+        "end": 375
+      },
+      {
+        "name": "scheduling_efficiency",
+        "line": 377,
+        "end": 381
+      },
+      {
+        "name": "scheduling_stats",
+        "line": 383,
+        "end": 388
+      },
+      {
+        "name": "observe_progress",
+        "line": 390,
+        "end": 407
+      },
+      {
+        "name": "status",
+        "line": 409,
+        "end": 430
+      },
+      {
+        "name": "quota_status",
+        "line": 432,
+        "end": 474
+      }
+    ]
+  },
+  "source/data/production_video.py": {
+    "sha256": "981b6239620531db6db5bbc58fec28616a5ea1ae5c5a6eedd3e93f1504db371f",
+    "definitions": [
+      {
+        "name": "verify_video",
+        "line": 19,
+        "end": 41
+      },
+      {
+        "name": "OnlineVideo",
+        "line": 44,
+        "end": 154
+      },
+      {
+        "name": "__init__",
+        "line": 45,
+        "end": 67
+      },
+      {
+        "name": "_consume",
+        "line": 69,
+        "end": 78
+      },
+      {
+        "name": "_check",
+        "line": 80,
+        "end": 89
+      },
+      {
+        "name": "_put",
+        "line": 91,
+        "end": 99
+      },
+      {
+        "name": "submit",
+        "line": 101,
+        "end": 107
+      },
+      {
+        "name": "should_capture",
+        "line": 110,
+        "end": 111
+      },
+      {
+        "name": "record_control",
+        "line": 113,
+        "end": 121
+      },
+      {
+        "name": "abort",
+        "line": 123,
+        "end": 129
+      },
+      {
+        "name": "finish",
+        "line": 131,
+        "end": 154
+      }
+    ]
+  },
+  "source/data/production_capture.py": {
+    "sha256": "a4e2eccec7c0e6657e629255d221912833d19ab3bbd1e81b9a292d5fbebced80",
+    "definitions": [
+      {
+        "name": "capture_contract",
+        "line": 8,
+        "end": 22
+      },
+      {
+        "name": "capture_from_config",
+        "line": 25,
+        "end": 33
+      },
+      {
+        "name": "recorded_rgb_contract",
+        "line": 36,
+        "end": 47
+      }
+    ]
+  },
+  "source/data/production_artifacts.py": {
+    "sha256": "a41c464af480a52ad0f5fffb96c3572807f230a20f59d31e9a1f2c4d1daa2fda",
+    "definitions": [
+      {
+        "name": "model_object_identities",
+        "line": 28,
+        "end": 38
+      },
+      {
+        "name": "copy_source_contents",
+        "line": 41,
+        "end": 59
+      },
+      {
+        "name": "sync_directory",
+        "line": 62,
+        "end": 67
+      },
+      {
+        "name": "write_json",
+        "line": 70,
+        "end": 74
+      },
+      {
+        "name": "canonical_arrays",
+        "line": 77,
+        "end": 82
+      },
+      {
+        "name": "content_hash",
+        "line": 85,
+        "end": 99
+      },
+      {
+        "name": "_DecodedVideoProof",
+        "line": 102,
+        "end": 119
+      },
+      {
+        "name": "verify_episode",
+        "line": 122,
+        "end": 238
+      },
+      {
+        "name": "package_episode",
+        "line": 241,
+        "end": 321
+      },
+      {
+        "name": "reconcile_episode",
+        "line": 324,
+        "end": 340
+      },
+      {
+        "name": "register_artifact",
+        "line": 343,
+        "end": 374
+      },
+      {
+        "name": "isolate_duplicate",
+        "line": 377,
+        "end": 386
+      },
+      {
+        "name": "__init__",
+        "line": 105,
+        "end": 112
+      },
+      {
+        "name": "checked_result",
+        "line": 114,
+        "end": 119
+      }
+    ]
+  },
+  "source/data/production_inventory.py": {
+    "sha256": "69be00386375f2bfb6df13be7a84a260f69e0e04d960648a012c704dd8dcc8c9",
+    "definitions": [
+      {
+        "name": "verify_inventory_row",
+        "line": 11,
+        "end": 27
+      },
+      {
+        "name": "audit_inventory",
+        "line": 30,
+        "end": 58
+      }
+    ]
+  },
+  "source/data/production_duration.py": {
+    "sha256": "b23af322eb0dab70380ee39775d747eb731baa33e57ca5ed45cb73d86d7ced5d",
+    "definitions": [
+      {
+        "name": "candidate_duration",
+        "line": 10,
+        "end": 34
+      }
+    ]
+  },
+  "source/data/five_task_dataset.py": {
+    "sha256": "30ba6c1b1acf7cf1dcf7b0da1bd00773c6fa6e2b0001110f8e07325507b9e6e8",
+    "definitions": [
+      {
+        "name": "classify_failure",
+        "line": 25,
+        "end": 34
+      },
+      {
+        "name": "sha256_file",
+        "line": 37,
+        "end": 42
+      },
+      {
+        "name": "canonical_hash",
+        "line": 45,
+        "end": 47
+      },
+      {
+        "name": "tactile_status",
+        "line": 50,
+        "end": 59
+      },
+      {
+        "name": "validate_source_episode",
+        "line": 62,
+        "end": 96
+      },
+      {
+        "name": "write_causal_source",
+        "line": 99,
+        "end": 136
+      },
+      {
+        "name": "validate_exported_arrays",
+        "line": 139,
+        "end": 158
+      },
+      {
+        "name": "EpisodeIndex",
+        "line": 161,
+        "end": 287
+      },
+      {
+        "name": "__init__",
+        "line": 162,
+        "end": 184
+      },
+      {
+        "name": "close",
+        "line": 186,
+        "end": 187
+      },
+      {
+        "name": "find_lineage",
+        "line": 189,
+        "end": 194
+      },
+      {
+        "name": "find_content",
+        "line": 196,
+        "end": 201
+      },
+      {
+        "name": "insert",
+        "line": 203,
+        "end": 222
+      },
+      {
+        "name": "inventory",
+        "line": 224,
+        "end": 273
+      },
+      {
+        "name": "write_inventory",
+        "line": 275,
+        "end": 287
+      }
+    ]
+  },
+  "source/grasping/executor.py": {
+    "sha256": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "definitions": [
+      {
+        "name": "ExecutionConfig",
+        "line": 36,
+        "end": 88
+      },
+      {
+        "name": "ReachabilityResult",
+        "line": 92,
+        "end": 96
+      },
+      {
+        "name": "grasp_hand_targets",
+        "line": 99,
+        "end": 128
+      },
+      {
+        "name": "quaternion_wxyz_to_matrix",
+        "line": 131,
+        "end": 133
+      },
+      {
+        "name": "hand_attach_rotation",
+        "line": 136,
+        "end": 142
+      },
+      {
+        "name": "candidate_world_pose",
+        "line": 145,
+        "end": 158
+      },
+      {
+        "name": "rank_candidates_for_scene",
+        "line": 161,
+        "end": 244
+      },
+      {
+        "name": "actuator_targets_from_fractions",
+        "line": 247,
+        "end": 254
+      },
+      {
+        "name": "_slerp_wxyz",
+        "line": 257,
+        "end": 270
+      },
+      {
+        "name": "_orientation_error",
+        "line": 273,
+        "end": 275
+      },
+      {
+        "name": "_Recorder",
+        "line": 278,
+        "end": 355
+      },
+      {
+        "name": "_palm_object_contact",
+        "line": 358,
+        "end": 372
+      },
+      {
+        "name": "_contact_digit",
+        "line": 375,
+        "end": 399
+      },
+      {
+        "name": "_robot_object_contact_summary",
+        "line": 402,
+        "end": 430
+      },
+      {
+        "name": "_step",
+        "line": 433,
+        "end": 437
+      },
+      {
+        "name": "_run_pose_segment",
+        "line": 440,
+        "end": 473
+      },
+      {
+        "name": "_target_error",
+        "line": 476,
+        "end": 484
+      },
+      {
+        "name": "execute_grasp",
+        "line": 487,
+        "end": 741
+      },
+      {
+        "name": "maximum_steps",
+        "line": 58,
+        "end": 68
+      },
+      {
+        "name": "validate",
+        "line": 70,
+        "end": 88
+      },
+      {
+        "name": "__init__",
+        "line": 279,
+        "end": 298
+      },
+      {
+        "name": "append",
+        "line": 300,
+        "end": 337
+      },
+      {
+        "name": "arrays",
+        "line": 339,
+        "end": 355
+      }
+    ]
+  },
+  "apps/export_five_task_dataset.py": {
+    "sha256": "e62e37fe20446b1aea8e97395e917381c6c85f549946f444c3b3de0268abfa3f",
+    "definitions": [
+      {
+        "name": "_git_head",
+        "line": 30,
+        "end": 31
+      },
+      {
+        "name": "_directory_bytes",
+        "line": 34,
+        "end": 35
+      },
+      {
+        "name": "_fsync_tree",
+        "line": 38,
+        "end": 47
+      },
+      {
+        "name": "_asset_record",
+        "line": 50,
+        "end": 62
+      },
+      {
+        "name": "build_parser",
+        "line": 65,
+        "end": 75
+      },
+      {
+        "name": "export",
+        "line": 78,
+        "end": 273
+      },
+      {
+        "name": "main",
+        "line": 276,
+        "end": 278
+      }
+    ]
+  }
+}

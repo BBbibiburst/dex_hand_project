@@ -1,0 +1,160 @@
+{
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/models.py": [
+    {
+      "name": "Encoder",
+      "line": 7,
+      "end": 12
+    },
+    {
+      "name": "Decoder",
+      "line": 13,
+      "end": 28
+    },
+    {
+      "name": "DomainVAE",
+      "line": 29,
+      "end": 33
+    },
+    {
+      "name": "Translator",
+      "line": 34,
+      "end": 36
+    },
+    {
+      "name": "__init__",
+      "line": 8,
+      "end": 9
+    },
+    {
+      "name": "forward",
+      "line": 10,
+      "end": 12
+    },
+    {
+      "name": "__init__",
+      "line": 14,
+      "end": 15
+    },
+    {
+      "name": "parameters_for",
+      "line": 16,
+      "end": 17
+    },
+    {
+      "name": "run",
+      "line": 18,
+      "end": 25
+    },
+    {
+      "name": "deterministic_decode",
+      "line": 26,
+      "end": 26
+    },
+    {
+      "name": "nll",
+      "line": 27,
+      "end": 28
+    },
+    {
+      "name": "__init__",
+      "line": 30,
+      "end": 30
+    },
+    {
+      "name": "posterior_mean",
+      "line": 31,
+      "end": 31
+    },
+    {
+      "name": "forward",
+      "line": 32,
+      "end": 33
+    },
+    {
+      "name": "__init__",
+      "line": 35,
+      "end": 35
+    },
+    {
+      "name": "forward",
+      "line": 36,
+      "end": 36
+    }
+  ],
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/pipeline_cpu.py": [
+    {
+      "name": "scale_fit",
+      "line": 19,
+      "end": 20
+    },
+    {
+      "name": "model_eval",
+      "line": 21,
+      "end": 26
+    },
+    {
+      "name": "train_vae",
+      "line": 27,
+      "end": 52
+    },
+    {
+      "name": "means",
+      "line": 57,
+      "end": 58
+    },
+    {
+      "name": "evaluate",
+      "line": 65,
+      "end": 70
+    }
+  ],
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/inference.py": [
+    {
+      "name": "Converter",
+      "line": 7,
+      "end": 19
+    },
+    {
+      "name": "__init__",
+      "line": 8,
+      "end": 13
+    },
+    {
+      "name": "transform",
+      "line": 15,
+      "end": 19
+    }
+  ],
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/expand.py": [
+    {
+      "name": "moments",
+      "line": 10,
+      "end": 13
+    },
+    {
+      "name": "objective",
+      "line": 15,
+      "end": 16
+    },
+    {
+      "name": "transitions",
+      "line": 17,
+      "end": 18
+    }
+  ],
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/verify_pairs.py": [],
+  "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/models_audit.py": [
+    {
+      "name": "mse",
+      "line": 16,
+      "end": 16
+    },
+    {
+      "name": "describe",
+      "line": 17,
+      "end": 19
+    }
+  ],
+  "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/pairs.py": [],
+  "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/input_ambiguity.py": []
+}

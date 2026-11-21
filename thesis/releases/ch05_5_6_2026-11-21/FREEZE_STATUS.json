@@ -1,0 +1,19 @@
+{
+  "section": "5.6 跨域触觉重建实验结果与分析",
+  "date": "2026-11-21",
+  "state": "FROZEN_DRAFT",
+  "authorization": "用户明确要求将纯排版修复同步正式R1、复编核验并将同版TeX/PDF冻结",
+  "review_boundary": "R1内容审核通过；最终PDF由执行者复编并与前版逐像素核对，未声称用户已亲自逐页审核",
+  "pages": 3,
+  "TeXcount": 1605,
+  "section_sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+  "pdf_sha256": "151ab5240127b5bc11db018a58188e74a40c16614a0a3116b3228c6f03e795af",
+  "R1_matches_release": true,
+  "render_identical_previous_review": true,
+  "joint_result_C27": "2/11",
+  "D_equivalent_gate_C27": "11/11",
+  "chapter5_complete": false,
+  "whole_chapter_review_started": false,
+  "main_unchanged": true,
+  "commit_push": false
+}

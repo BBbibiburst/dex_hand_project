@@ -1,0 +1,58 @@
+[
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before/body/ch01_introduction.tex",
+    "sha256": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before/reference.bib",
+    "sha256": "7ceb75b0fa4b64f70ef0b9318d88d9ebf99a4338b2feb965d30b037c44f2d0dc"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before_hashes.json",
+    "sha256": "fb7869abfcb135be009056587fdb8fa51068db58473caf2b32a1bf770ee8f2c1"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/ch01_introduction.tex.diff",
+    "sha256": "747dccd094de81fe0e8f768c2e25875a5a05091f52fef8d05404a751cfd7bbf7"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/citation_mapping.csv",
+    "sha256": "05bd49596b07637fcb77050f09e645209df104da2cac7ac86102eaf2bf21d7d0"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/delivery_and_self_review.txt",
+    "sha256": "7a7104b9d5b0fae9f78d4306fd4a106ef8aca07b3e1d839ce21522f8d5cadf21"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/historical_material_integrity.json",
+    "sha256": "868885b00856b11deb5dd58041c1f0d3ab84bb24a29ad18e9edb8e03258bcdad"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/paragraph_evidence.csv",
+    "sha256": "105a76383da1a93f08bd33c71f55f05960eed9c3faf96687cebf773fb41baa3c"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/reference.bib.diff",
+    "sha256": "a01544ec554c395a6c948e13ce9dce28a8a1151ba0c26008a52ec4fe04402cfb"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/references_used.json",
+    "sha256": "47d436cf7f72f2c67cf14b5fb5cbed59ed3bb1c26fcddd9fe13ba67fb631e5c3"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/references_used.txt",
+    "sha256": "915504f6d84443fa13c8aefc3aa65f8d88b63a0137bcfb52eec5480e2a5ef1e4"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/section_1_2_review.txt",
+    "sha256": "17ce586aea870921295b4a507ecbdf165579e79d0f0fa5ceceba8513f9f4cc46"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/verification.json",
+    "sha256": "ca15090f172c551b2e3dfd17ef7913dbad8063d6d07b66cdf06025bd9e7d4821"
+  },
+  {
+    "path": "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/verify_delivery.py",
+    "sha256": "f6146a1c18ff52027eae9471f692446760f46925f86c6c0c35c0707da3299b8e"
+  }
+]

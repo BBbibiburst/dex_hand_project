@@ -1,0 +1,10 @@
+{
+  "commands": [
+    "python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/check_artifacts.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/count_section.py",
+    "bash docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/build_preview.sh > docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/build.log 2>&1",
+    "PYTHONPATH=thesis/.tools/python python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/package_revision.py"
+  ],
+  "build_log": "保留本轮初次及最终成功构建日志；最终引擎日志在build/",
+  "PDF_review": "全页缩略图+第2/3页放大查看"
+}

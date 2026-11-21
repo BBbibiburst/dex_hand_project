@@ -1,0 +1,21 @@
+Copyright (C) 2026 Junhao Wu
+
+This work may be distributed and/or modified under the conditions of the
+LaTeX Project Public License, either version 1.3c of this license or (at your
+option) any later version. The latest version of this license is at
+https://www.latex-project.org/lppl/ and version 1.3c or later is part of all
+distributions of LaTeX version 2008 or later.
+
+This work has the LPPL maintenance status "maintained".
+The Current Maintainer of this work is Junhao Wu.
+Contact: andrew.junhao.wu@gmail.com
+Source repository: https://github.com/hithesis/wiseref
+
+This work consists of wiseref.dtx, wiseref.ins, wiseref-en.tex,
+wiseref-zh.tex, wiseref-example-en.tex, wiseref-example-zh.tex, build.lua,
+Makefile, README.md, LICENSE, and the test scripts, fixtures,
+and documentation under test/. The derived files are wiseref.sty,
+wiseref-en.pdf, and wiseref-zh.pdf.
+
+Local caches, build intermediates, and generated test results are not part
+of the distributed work. See test/CTAN-RELEASE.md for the archive layout.

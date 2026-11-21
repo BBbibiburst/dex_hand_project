@@ -1,0 +1,370 @@
+[
+  {
+    "path": "source/robots/arms/rm75b.py",
+    "sha256": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+    "level": "L2",
+    "scope": "RM75B seven actuator registration",
+    "result": null
+  },
+  {
+    "path": "source/robots/hands/dex_hand.py",
+    "sha256": "f3d8f24150ae0fb3a625a594d38bfaeddd5ff0b3977b79f3cc15971c0079927f",
+    "level": "L2",
+    "scope": "six-drive hand and tactile sensor factory",
+    "result": null
+  },
+  {
+    "path": "source/envs/rl_env.py",
+    "sha256": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+    "level": "L2",
+    "scope": "default arm/hand names",
+    "result": null
+  },
+  {
+    "path": "source/sensors/tactile/dex_hand.py",
+    "sha256": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+    "level": "L2",
+    "scope": "_add_touch_sensor,bind,read_raw,read",
+    "result": null
+  },
+  {
+    "path": "source/sensors/tactile/signal_processing.py",
+    "sha256": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+    "level": "L2",
+    "scope": "config and process ordering",
+    "result": null
+  },
+  {
+    "path": "source/grasping/graspqp_adapter.py",
+    "sha256": "c1c8a9c57d4779cbb732f9f4ed67ae65c900e8b806397d7abeb6574a2865c1f1",
+    "level": "L2",
+    "scope": "refine_candidates_with_graspqp actual optimized variables",
+    "result": null
+  },
+  {
+    "path": "source/grasping/dexevolve.py",
+    "sha256": "f75c5e27a1cede8aebe14af645ce3ceeb60c5599f0d7e7d19cad520dfd8b3af0",
+    "level": "L2",
+    "scope": "DexEvolve-style config and executor dependency",
+    "result": null
+  },
+  {
+    "path": "source/grasping/executor.py",
+    "sha256": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "level": "L2",
+    "scope": "rank_candidates_for_scene IK and legacy Recorder",
+    "result": null
+  },
+  {
+    "path": "source/rl/grasp_edit/templates.py",
+    "sha256": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309",
+    "level": "L2",
+    "scope": "build_grasp_edit_templates error filtering",
+    "result": null
+  },
+  {
+    "path": "tools/grasping/batch_grasp_edit.py",
+    "sha256": "f874d1a63a93e5377b197c62e8756cfbe76a2c6ad24a7b32d65fe3cb75da3d18",
+    "level": "L2",
+    "scope": "_preflight_lattice workflow",
+    "result": null
+  },
+  {
+    "path": "source/verification/strict_replay.py",
+    "sha256": "25edfdfbd2c10a5fae26b722fb06c6f105e16569deae12fe7352fa7e43fcb830",
+    "level": "L2",
+    "scope": "FINAL profile criteria",
+    "result": null
+  },
+  {
+    "path": "source/grasp_pipeline/replay.py",
+    "sha256": "ad79c14f924ed5196aac1e79f3329a3c9ad191c6a8328c9ab9370d31f2c716cf",
+    "level": "L2",
+    "scope": "tail task success fraction",
+    "result": null
+  },
+  {
+    "path": "source/data/production_recorder.py",
+    "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "level": "L2",
+    "scope": "pre-action capture,actual controls,validation and optional checks",
+    "result": null
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/matching.py",
+    "sha256": "a23870860ade9568ce887d5d259a07771da70ea1f1f8b4b3b070905388d5c096",
+    "level": "L2",
+    "scope": "fixed-index GMM statistical matching; not physical correspondence",
+    "result": null
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz",
+    "sha256": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "level": "L2",
+    "scope": "selected development episode only; not root independence/task success/video acceptance",
+    "result": {
+      "tactile_shape": [
+        447,
+        712
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "nonzero_fraction": 0.08404971972953272,
+      "timestamp_20hz": true,
+      "state_shape": [
+        447,
+        39
+      ],
+      "position_action_shape": [
+        447,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz",
+    "sha256": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+    "level": "L2",
+    "scope": "selected development episode only; not root independence/task success/video acceptance",
+    "result": {
+      "tactile_shape": [
+        638,
+        712
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "nonzero_fraction": 0.15296440773484554,
+      "timestamp_20hz": true,
+      "state_shape": [
+        638,
+        39
+      ],
+      "position_action_shape": [
+        638,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz",
+    "sha256": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+    "level": "L2",
+    "scope": "selected development episode only; not root independence/task success/video acceptance",
+    "result": {
+      "tactile_shape": [
+        376,
+        712
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "nonzero_fraction": 0.1826328293091083,
+      "timestamp_20hz": true,
+      "state_shape": [
+        376,
+        39
+      ],
+      "position_action_shape": [
+        376,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz",
+    "sha256": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+    "level": "L2",
+    "scope": "selected development episode only; not root independence/task success/video acceptance",
+    "result": {
+      "tactile_shape": [
+        605,
+        712
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "nonzero_fraction": 0.004954034729315628,
+      "timestamp_20hz": true,
+      "state_shape": [
+        605,
+        39
+      ],
+      "position_action_shape": [
+        605,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz",
+    "sha256": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+    "level": "L2",
+    "scope": "selected development episode only; not root independence/task success/video acceptance",
+    "result": {
+      "tactile_shape": [
+        599,
+        712
+      ],
+      "dtype": "float32",
+      "finite": true,
+      "nonzero_fraction": 0.12717591116279942,
+      "timestamp_20hz": true,
+      "state_shape": [
+        599,
+        39
+      ],
+      "position_action_shape": [
+        599,
+        13
+      ]
+    }
+  },
+  {
+    "path": "outputs/dp_2026-10-11/lerobot_5/data/chunk-000/file-000.parquet",
+    "sha256": "ae846cf27f358897c8e57b1f3efcbcb6c4ab766866d03ceb507897549792028a",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 1550
+    }
+  },
+  {
+    "path": "outputs/dp_2026-10-11/lerobot_5/meta/info.json",
+    "sha256": "b2444c6b35d06aa82a505607decdaa7ae6e6294208cb05c43c0e85cb96307f4b",
+    "level": "L2",
+    "scope": "metadata checked against actual numeric records",
+    "result": {
+      "declared_episodes": 5,
+      "declared_frames": 1550,
+      "actual_episode_indices": 5,
+      "actual_rows": 1550,
+      "numeric_shapes": [
+        [
+          39,
+          13,
+          712
+        ]
+      ],
+      "finite": true,
+      "within_episode_timestamp_monotonic": true,
+      "not_checked": [
+        "source physical independence",
+        "image/video timestamps",
+        "pre/post action causality",
+        "all source manifests"
+      ]
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-000.parquet",
+    "sha256": "503eb02e6c39eb8021517584e81138900117e5b9a856afc980cd66520233810f",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 3339
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-001.parquet",
+    "sha256": "f0f19edb7527a4842120fdd01ad7bbea9ba67a0bc2236f02e163a5c0418647a9",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 3339
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-002.parquet",
+    "sha256": "35a653df1334c9333841132ea18bfd7f83439921b5499d07be4ccfb94a88f500",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 3339
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-003.parquet",
+    "sha256": "ff9941872c91d1e07fc6b1bd4a6dea2838668127dde0f4c31a421c630c6ff72c",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 3339
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/data/chunk-000/file-004.parquet",
+    "sha256": "478f54c88c6764a106567da5a5499e5d0578f92452cb3fd097f1cac2a564f623",
+    "level": "L2",
+    "scope": "actual rows and selected numeric fields",
+    "result": {
+      "rows": 954
+    }
+  },
+  {
+    "path": "outputs/dp_p1_2026-10-11/lerobot_formal30/meta/info.json",
+    "sha256": "90293f093be88b65a812f3cc5c0168e5a331a0fd8f4b1752644eae560b4c02d6",
+    "level": "L2",
+    "scope": "metadata checked against actual numeric records",
+    "result": {
+      "declared_episodes": 30,
+      "declared_frames": 14310,
+      "actual_episode_indices": 30,
+      "actual_rows": 14310,
+      "numeric_shapes": [
+        [
+          39,
+          13,
+          712
+        ]
+      ],
+      "finite": true,
+      "within_episode_timestamp_monotonic": true,
+      "not_checked": [
+        "source physical independence",
+        "image/video timestamps",
+        "pre/post action causality",
+        "all source manifests"
+      ]
+    }
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/summary.json",
+    "sha256": "16d623ba68cd3ffb51196aa4b68cb37b46d53b34f873cc5c7a44b01d1a89c89d",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  },
+  {
+    "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_strict.json",
+    "sha256": "00aaa91645953ed2c861bf8aa4afdc91089dfaa095fa085e3892f9b50aa08c8e",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  },
+  {
+    "path": "outputs/tactile_p34_feasibility_audit/common_support_matrix.csv",
+    "sha256": "e9080155a833f8bb86b5b4b1c9c730f45415343f9f656853ca3fd332075fb47c",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  },
+  {
+    "path": "outputs/tactile_p41_real_informed_gmm_forward_2026-11-15/source_audit.md",
+    "sha256": "2588cdd38f74c2509797a8cdbf7ac22ad2ca8fbd0f59b57db1fb3947c2d96460",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  },
+  {
+    "path": "outputs/tactile_p41_real_informed_gmm_forward_2026-11-15/real_sim_taxel_mapping.csv",
+    "sha256": "af509cbf86e3b430eaff8f112a1d3fd6bae7ee8b976d843256c33240c120294e",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/paired_manifest.csv",
+    "sha256": "1c305bca621a241a6fbe1a18318223f1a778928e244ac14aea30939a0f17adb3",
+    "level": "L1",
+    "scope": "historical recorded findings/metadata; not all underlying episodes independently re-evaluated",
+    "result": null
+  }
+]

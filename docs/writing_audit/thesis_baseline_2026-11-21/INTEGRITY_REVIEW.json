@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-21",
+  "formal_source_and_bib_unchanged": true,
+  "protected": {
+    "thesis/thesis.tex": "cad54fa118917d620d1475a51eb4708caf211dac67a5199303259d03a9c13b98",
+    "thesis/reference.bib": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+    "thesis/body/ch05_dual_domain_reconstruction.tex": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+    "thesis/body/ch01_introduction.tex": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+    "thesis/body/ch03_grasp_demonstrations.tex": "876fd4df1b847e4f88749d3de0fdb718bef0d9d78dddce83ec8a765955728b4a",
+    "thesis/body/ch04_multimodal_data.tex": "427b28fffb584208ae8476c0c6bb7e2231e0685e44866210eced82cdb9e4a3bc",
+    "thesis/body/ch05_experiments.tex": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+    "thesis/body/ch03_dual_vae.tex": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+    "thesis/body/ch04_adversarial_transfer.tex": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+    "thesis/body/ch06_conclusion.tex": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+    "thesis/body/ch02_data_and_problem.tex": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+    "thesis/body/ch02_simulation_platform.tex": "3d181034773d44878aa27fb6a76917890e661f5c3ae8d20200b6263408098f38",
+    "thesis/body/ch05_sections/section_5_5.tex": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+    "thesis/body/ch05_sections/section_5_4.tex": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+    "thesis/body/ch05_sections/section_5_6.tex": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+    "thesis/body/ch05_sections/section_5_3.tex": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+    "thesis/body/ch05_sections/section_5_1.tex": "f93ad4b25bfa2e65e6068606dd48927012e2588e5ca24d1cad0078495f5d3281",
+    "thesis/body/ch05_sections/section_5_2.tex": "0468d48a23847c327e6084aef46b993d43614ad46f1e321753ac00d70015eeb5",
+    "thesis/front/denotation.tex": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+    "thesis/front/cover.tex": "ea2b5824504009f6447b3c5530c85222c492ba1291c20c1a80917d154b2c1b35",
+    "thesis/front/abstract.tex": "82882b03988099a02d80676bdfbcbf5862b4985ce3a8a8731ecb4214fc1ab763"
+  },
+  "new_management_documents": [
+    "thesis/THESIS_MASTER_INDEX.md",
+    "thesis/THESIS_PROGRESS_REPORT.md",
+    "thesis/THESIS_RESEARCH_SUMMARY.md",
+    "thesis/THESIS_ISSUE_TRACKER.md",
+    "thesis/THESIS_NEXT_STEPS.md",
+    "thesis/CHATGPT_THESIS_REVIEW_PACKET.md"
+  ],
+  "README_changed": "Only obsolete skeleton status replaced with current progress and index links",
+  "experiment_operations": [],
+  "excluded_third_party_texts_models_and_local_tools": true
+}

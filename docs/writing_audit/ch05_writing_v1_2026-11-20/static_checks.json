@@ -1,0 +1,37 @@
+{
+  "status": "5.3 stage3 draft ready, waiting review",
+  "count": {
+    "text": 1763,
+    "headings": 17,
+    "captions_footnotes": 50,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 38,
+    "display_math": 3,
+    "total": 1830,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/wordcount/raw/section_5_3.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "figures": 2,
+  "tables": 1,
+  "equations": 3,
+  "labels": [
+    "sec:ch05_gmm_pseudopairs",
+    "fig:ch05_gmm_physical_pipeline",
+    "eq:ch05_gmm_prior",
+    "eq:ch05_gmm_responsibility",
+    "tab:ch05_probe_dictionary",
+    "fig:ch05_gmm_candidate_selection",
+    "eq:ch05_pair_selection"
+  ],
+  "missing_reference_targets": [],
+  "duplicate_labels": [],
+  "environment_errors": [],
+  "braces_balanced": true,
+  "new_citations": [],
+  "compiled": false,
+  "frozen": false
+}

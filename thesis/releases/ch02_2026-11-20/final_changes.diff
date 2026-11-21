@@ -1,0 +1,33 @@
+--- revision_v1
++++ chapter02_frozen_draft
+@@ -57,7 +57,7 @@
+ \begin{figure}[htbp]
+   \centering
+   \includegraphics[width=0.96\textwidth]{figures/ch02/revision_v1/assembled_robot.pdf}
+-  \caption{由当前XML与STL离线组合的机械臂和手部模型（关节零位，右侧为同一姿态的手部放大图）}
++  \caption{由当前XML与STL离线组合的机械臂和手部模型（静态关节零位，右侧为手部放大图；未显示底座，非任务执行截图）}
+   \label{fig:ch02_robot_model}
+ \end{figure}
+ 
+@@ -135,8 +135,8 @@
+ \begin{figure}[htbp]
+   \centering
+   \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  动作输入 $\rightarrow$ 关节目标 / 末端位姿IK\\[4pt]
+-  $\downarrow$ 限幅与目标平滑\\[4pt]
++  position模式：关节位置目标；ik模式：末端位姿经IK转换\\[4pt]
++   $\downarrow$ 按各模式处理目标；IK路径包含限步与平滑\\[4pt]
+   机械臂与手部位置执行器目标\\[4pt]
+   $\downarrow$ 在控制周期内保持\\[4pt]
+   50个物理子步：动力学、碰撞及接触约束求解\\[4pt]
+@@ -306,7 +306,9 @@
+  \begin{aligned}
+  a_{t,j}&=\operatorname{clip}(r_{t,j}-d,0,s),\qquad
+  b_{t,j}=s(a_{t,j}/s)^p,\\
+- v_{t,j}&=\alpha b_{t,j}+(1-\alpha)v_{t-1,j}.
++ v_{t,j}&=\alpha b_{t,j}+(1-\alpha)v_{t-1,j},\\
++ \boldsymbol y_t&=\operatorname{float32}\!\left(
++ \frac{\operatorname{clip}(\mathcal C_c(\boldsymbol v_t),0,s)}{s}\right).
+  \end{aligned}
+  \label{eq:ch02_processing}
+ \end{equation}

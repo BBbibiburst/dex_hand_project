@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/count_section.py",
+    "bash docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/build_preview.sh",
+    "PYTHONPATH=thesis/.tools/python python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/freeze_section.py"
+  ],
+  "logs": "build.log保留首次纯加底部留白和最终局部调整构建；最终引擎日志在build/"
+}

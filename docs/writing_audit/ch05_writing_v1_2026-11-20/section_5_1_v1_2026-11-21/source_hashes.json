@@ -1,0 +1,16 @@
+{
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/code/run.py": "f869bf2a3089bd6577e8de032bab3e31a2b2670f55cc64e29576965bd73aaeec",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/code/describe.py": "41c48a1a87d7a5df1a580c68c770194f5173644d673c264c52086db5d8151c45",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/p39_report.md": "636291fab856f39f43636f22da4767779bd062ef24742da3af6e1dfe06188874",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/registration.json": "e51ab2f154b8ce642a3b7c6ba955baad8800e1782b2fabbade87d648aee659c6",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/data_counts.csv": "1b8767cb8c88a74b91803353b25ba8f566148167d31645407eca310f0b04e30e",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/mask_statistics.csv": "6e6a805a9384180825229e2e1bb20b75d1339e1ee33a428451391abf5a9bb19f",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/amplitude_statistics.csv": "99503ef55d102650529fe653248fc2748fe3b595a286b4690908758593bd0939",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/temporal_statistics.csv": "3b4f29ca9430bf4d1284b4c1e1b53a99adffa7c684c1cd796869953939f2a8e2",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/probe_metrics.csv": "77995b755e8ae6d47c6cbb3ce6dc31c74f10d17b0db4441cb421c096d12343e0",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/representation_counts.csv": "7414837cef37c1e52aad26b77e295809edd173fe1190c28ab7648adc40ed1a68",
+  "outputs/tactile_p40_sensor_semantics_2026-11-15/sensor_semantics_report.md": "3cd9066f1c52c8d4c350b9b016ce7860814a850f77138a45d441db90b63777b3",
+  "outputs/tactile_p42_dual_vae_diagnostics_2026-11-16/p42_report.md": "db766a6b8b227798a93ef3b4a7ee53e46166f0ab28fe091e2d4e5207b1293d99",
+  "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/model_training_registration.json": "8f015d541a6f1f87b57eba3277120cbb331388c9852b6ba3e374b2006a4d9e71",
+  "outputs/tactile_p39_domain_decomposition_2026-11-15/code/common.py": "63bccf51a67f33faff86394fe26209912cabf00ad46a05bba5f3550c3aedac42"
+}

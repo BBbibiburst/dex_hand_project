@@ -1,0 +1,16 @@
+{
+  "section": "5.5 基于伪配对监督的跨域潜变量映射",
+  "date": "2026-11-21",
+  "state": "FROZEN_DRAFT",
+  "authorization": "CH05-FINAL明确授权核验R1源/PDF、复编通过后正式归档冻结",
+  "source": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+  "section_sha256": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+  "pdf_sha256": "dba6266f8b91554d7ff161290096af45dd2c8aa6f2b036f6b51cd28ede7e3e68",
+  "TeXcount": 1225,
+  "body_pages": 2,
+  "R1_source_unchanged": true,
+  "recompiled_pdf_pixel_identical_prior_review": true,
+  "with_references_pdf": "历史已审核附参考文献预览保留，非新增5.5引文",
+  "review_boundary": "本轮执行者核对复编及整章PDF，未声称用户再次逐页审核",
+  "commit_push": false
+}

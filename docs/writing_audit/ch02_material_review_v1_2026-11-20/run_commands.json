@@ -1,0 +1,7 @@
+{
+  "commands": [
+    "/home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch02_material_review_v1_2026-11-20/audit_existing_materials.py",
+    "python3 docs/writing_audit/ch02_material_review_v1_2026-11-20/write_reports.py"
+  ],
+  "scope": "offline existing-file audit; no MuJoCo compilation/step or model training"
+}

@@ -1,0 +1,41 @@
+{
+  "labels": [
+    "sec:ch05_reconstruction_results",
+    "fig:ch05_c0_validation_protocol",
+    "tab:ch05_transfer_summary",
+    "tab:ch05_validation_instances"
+  ],
+  "references": [
+    "tab:ch05_transfer_summary",
+    "tab:ch05_validation_instances"
+  ],
+  "local_refs_resolved": true,
+  "labels_unique": true,
+  "environments_balanced": true,
+  "all_11_instances_C3_and_C27": true,
+  "tables_match_6decimal_CSV": true,
+  "precision_based_pass_counts": {
+    "C3": 1,
+    "C13": 1,
+    "C27": 2,
+    "C23": 6,
+    "C24": 2
+  },
+  "frozen_C0_rerun": false,
+  "wordcount": {
+    "text": 1486,
+    "headings": 13,
+    "captions_footnotes": 36,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 10,
+    "display_math": 0,
+    "total": 1535,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/wordcount/raw/section_5_6.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "compiled": false
+}

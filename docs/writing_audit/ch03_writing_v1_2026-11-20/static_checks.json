@@ -1,0 +1,86 @@
+{
+  "status": "第三章V1正文完成，等待用户审核",
+  "source": "thesis/body/ch03_grasp_demonstrations.tex",
+  "texcount": 8587,
+  "figures": [
+    {
+      "index": 1,
+      "label": "fig:ch03_overall_pipeline",
+      "caption": "抓取候选到专家示教的分级构建流程",
+      "placeholder": false
+    },
+    {
+      "index": 2,
+      "label": "fig:ch03_candidate_sources",
+      "caption": "已有候选模块在分级生成流程中的职责",
+      "placeholder": false
+    },
+    {
+      "index": 3,
+      "label": "fig:ch03_reachability",
+      "caption": "局部腕姿态扩展与两个目标的可达性筛选",
+      "placeholder": false
+    },
+    {
+      "index": 4,
+      "label": "fig:ch03_strict_replay",
+      "caption": "分段轨迹执行与Strict Replay质量验收",
+      "placeholder": false
+    },
+    {
+      "index": 5,
+      "label": "fig:ch03_task_transfer",
+      "caption": "多任务示教的共用来源与任务专属控制关系",
+      "placeholder": false
+    },
+    {
+      "index": 6,
+      "label": "fig:ch03_examples",
+      "caption": "典型成功与失败案例的待补原始画面",
+      "placeholder": true
+    }
+  ],
+  "tables": [
+    {
+      "label": "tab:ch03_candidate_parameters",
+      "caption": "候选优化参数及约束的实际作用"
+    },
+    {
+      "label": "tab:ch03_strict_thresholds",
+      "caption": "当前final配置的Strict Replay验收条件"
+    },
+    {
+      "label": "tab:ch03_task_stages",
+      "caption": "五类任务的示教阶段与主要执行约束"
+    },
+    {
+      "label": "tab:ch03_historical_batches",
+      "caption": "历史批量路由与任务记录及其统计限制"
+    },
+    {
+      "label": "tab:ch03_sugar_strict",
+      "caption": "Sugar Box局部扰动示教的历史Strict结果"
+    },
+    {
+      "label": "tab:ch03_generation_failures",
+      "caption": "历史90次扰动尝试的汇总分类"
+    }
+  ],
+  "equations": 4,
+  "citation_keys": [
+    "mandlekar2022demonstrations",
+    "mandlekar2023mimicgen",
+    "zurbrugg2025graspqp",
+    "zurbrugg2026dexevolve"
+  ],
+  "missing_citations": [],
+  "duplicate_bib_keys": [],
+  "missing_reference_targets": [],
+  "duplicate_labels": [],
+  "environment_errors": [],
+  "changed_protected_files": [],
+  "first_two_chapters_and_frozen_pdfs_unchanged": true,
+  "reference_bib_unchanged": true,
+  "no_compilation": true,
+  "no_training_or_simulation": true
+}

@@ -1,0 +1,94 @@
+{
+  "labels": {
+    "sec:ch05_gmm_pseudopairs": {
+      "number": "5.3",
+      "page": "1"
+    },
+    "fig:ch05_gmm_physical_pipeline": {
+      "number": "5-1",
+      "page": "1"
+    },
+    "eq:ch05_gmm_prior": {
+      "number": "5-1",
+      "page": "1"
+    },
+    "eq:ch05_gmm_responsibility": {
+      "number": "5-2",
+      "page": "2"
+    },
+    "tab:ch05_probe_dictionary": {
+      "number": "5-1",
+      "page": "2"
+    },
+    "eq:ch05_pair_selection": {
+      "number": "5-3",
+      "page": "2"
+    },
+    "fig:ch05_gmm_candidate_selection": {
+      "number": "5-2",
+      "page": "3"
+    }
+  },
+  "fonts": {
+    "5": {
+      "name": "MDVYUU+FandolSong-Regular-Identity-H",
+      "embedded": true
+    },
+    "7": {
+      "name": "WMFRYC+FandolHei-Regular-Identity-H",
+      "embedded": true
+    },
+    "9": {
+      "name": "VPGRLB+TeXGyreTermesX-Regular-Identity-H",
+      "embedded": true
+    },
+    "13": {
+      "name": "DQXXBM+txsys",
+      "embedded": true
+    },
+    "14": {
+      "name": "QAXGIZ+TeXGyreTermesX-Regular",
+      "embedded": true
+    },
+    "15": {
+      "name": "JFCGHP+NewTXMI",
+      "embedded": true
+    },
+    "16": {
+      "name": "SNLMRQ+NewTXBMI",
+      "embedded": true
+    },
+    "17": {
+      "name": "DERFZD+NewTXMI7",
+      "embedded": true
+    },
+    "18": {
+      "name": "OMHTCK+txmiaX",
+      "embedded": true
+    },
+    "19": {
+      "name": "OLHUNX+NewTXMI5",
+      "embedded": true
+    },
+    "20": {
+      "name": "BFZKTB+txexs",
+      "embedded": true
+    },
+    "21": {
+      "name": "XABLBX+txbmiaX",
+      "embedded": true
+    }
+  },
+  "no_overfull": true,
+  "no_undefined_refs": true,
+  "semantic_normalization_matches_R2": true,
+  "first_page_last_line": "量。若阶段数据不足，回退同Patch 合并阶段数据；三折平均核总变差超过0.25 且",
+  "second_page_first_line": "分量数大于1 时，回退单分量模型。对Session 限制取帧并轮转抽样，可减轻长记",
+  "pages": 3,
+  "TeXcount": 1999,
+  "reviewed_images": [
+    "page_01.png",
+    "page_02.png",
+    "page_03.png"
+  ]
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "id": "CH05-01",
+    "priority": "P1",
+    "file": "thesis/body/ch05_experiments.tex",
+    "lines": "2–4；THESIS_PLAN_V2.md:295–313",
+    "current": "旧第五章只有章标题与“正文待写”；5.1、5.2正式源未定位",
+    "kind": "正文缺失/就绪性",
+    "effect": "无法审计问题提出、差异动机、三类数据定义及5.1→5.3回应链，不能称整章完成",
+    "recommend": "后续由用户确认任务书补齐5.1/5.2；若有其他位置的正式稿先提供权威路径；不可用规划冒充",
+    "blocking": "是，阻塞完整整章和论文整合；不阻塞现有四节的限定审核"
+  },
+  {
+    "id": "CH05-02",
+    "priority": "P1",
+    "file": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+    "lines": "1–3；compile_review/integrity.json:2–3",
+    "current": "R1独立片段，编译状态等待用户PDF审核；无正式冻结记录",
+    "kind": "版本/审核状态",
+    "effect": "不能将5.5临时PDF或本轮审计提升为已冻结版",
+    "recommend": "按既定工作流取得用户PDF审核/冻结授权后单独处理；源与临时副本已一致，无需推定新技术修改",
+    "blocking": "阻塞将5.5标为正式冻结；不阻塞初稿讨论"
+  },
+  {
+    "id": "CH05-03",
+    "priority": "P1",
+    "file": "thesis/thesis.tex",
+    "lines": "15–20；thesis/body/ch05_experiments.tex:2–4",
+    "current": "六章旧include，未包含5.3–5.6权威片段",
+    "kind": "整合结构缺口",
+    "effect": "实际主文件无法生成本次审计的V2第五章，旧第5章仅7个标题统计量",
+    "recommend": "整章内容确认后由用户独立授权修改主文件/七章骨架，不在审计中自动迁移",
+    "blocking": "是，阻塞整篇论文实际构建；非技术实验错误"
+  },
+  {
+    "id": "CH05-04",
+    "priority": "P1",
+    "file": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+    "lines": "21–23、59–65；对照thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex:82–84及docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex:47",
+    "current": "5.6详列C0与目标侧重建，但未成组呈现GMM准入、Sim域内重建、Paired映射的最小定量链",
+    "kind": "方法—验证对应不足",
+    "effect": "无法仅由当前实验节逐一验证双域表示/统计配对贡献，不能把C0结果当所有模块验证",
+    "recommend": "用已有历史Train/Validation记录补一张简明分环节证据表或精确交叉引用；承认不能因果分离模块贡献，不新增实验",
+    "blocking": "不阻塞诚实初稿；建议在整章统一修改中修复"
+  },
+  {
+    "id": "CH05-05",
+    "priority": "P2",
+    "file": "thesis/THESIS_PLAN_V2.md",
+    "lines": "295–313；本轮任务书第三阶段章节定位",
+    "current": "既有规划5.1为差异分析、5.2为非配对问题定义；本轮逻辑提示把背景放5.1、差异/数据并入5.2",
+    "kind": "结构职责待确认",
+    "effect": "正文尚缺时不能静默按另一方案写作，否则重复或目标漂移",
+    "recommend": "下一写作任务书明确两节职责；可保留原标题并在5.1起段交代问题背景，不自行改规划",
+    "blocking": "不阻塞现有片段；正式补写前需确认"
+  },
+  {
+    "id": "CH05-06",
+    "priority": "P2",
+    "file": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+    "lines": "5、25、34；docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex:13",
+    "current": "VAE中文名和GRU/GELU/LayerNorm/BOS缩写出现，现有四节未完整展开所有首次术语",
+    "kind": "术语首次定义",
+    "effect": "尚无5.1/5.2不能确认整章首次定义是否已满足；不属于算法事实错误",
+    "recommend": "整章补齐时在首次位置集中定义核心缩写与Real/Natural/Paired角色，不在每节重复铺陈",
+    "blocking": "否"
+  },
+  {
+    "id": "CH05-07",
+    "priority": "P2",
+    "file": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+    "lines": "10–17、25–31；docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex:5–11",
+    "current": "5.4图Z_r表示训练采样latent，5.5局部Z_r定义为posterior mean；两处均有解释",
+    "kind": "局部符号角色变化",
+    "effect": "不是公式矛盾，但快速阅读可能将随机变量与均值混同",
+    "recommend": "统一修改时用显式mu或均值上横线标识映射阶段；若保留局部定义可加一句阶段约定，不改实际目标",
+    "blocking": "否"
+  },
+  {
+    "id": "CH05-08",
+    "priority": "P2",
+    "file": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+    "lines": "84；thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex:5、59；docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex:5、47；thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex:65",
+    "current": "非同步配对、同维不天然对齐、有限监督局限多次出现",
+    "kind": "必要边界与重复",
+    "effect": "核心限制应保留，但多次全句复述可能挤压结果解释",
+    "recommend": "各节保留其特有因果角色：5.3信息压缩，5.4域内表示，5.5监督范围，5.6实证回应；次要重复改交叉引用",
+    "blocking": "否"
+  },
+  {
+    "id": "CH05-09",
+    "priority": "P3",
+    "file": "thesis/thesis.tex",
+    "lines": "3、23–24",
+    "current": "仍有“未撰写正文”“尚未收录研究文献”旧注释，但bibliography已启用且有文献",
+    "kind": "过时管理注释",
+    "effect": "不影响LaTeX输出，可能误导后续协作",
+    "recommend": "未来获整合授权时更新注释；本轮不改主文件",
+    "blocking": "否"
+  }
+]

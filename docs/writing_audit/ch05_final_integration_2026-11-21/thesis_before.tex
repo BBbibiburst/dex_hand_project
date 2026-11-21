@@ -1,0 +1,31 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+% 暂定题目与章节骨架；未撰写研究正文。
+\documentclass[fontset=fandol,type=master,campus=harbin]{hithesisbook}
+\usepackage{hithesis}
+\graphicspath{{figures/}{figures/framework/}{figures/network/}{figures/experiments/}}
+\begin{document}
+\frontmatter
+\input{front/cover}
+\input{front/abstract}
+\makecover
+% 有经核实的符号表时启用：\input{front/denotation}
+\tableofcontents
+\mainmatter
+\include{body/ch01_introduction}
+\include{body/ch02_data_and_problem}
+\include{body/ch03_dual_vae}
+\include{body/ch04_adversarial_transfer}
+\include{body/ch05_experiments}
+\include{body/ch06_conclusion}
+\backmatter
+\bibliographystyle{hithesis}
+% 尚未收录研究文献；确认条目并加入正文引用后启用：
+\bibliography{reference}
+% 本科、硕士、博士后置顺序不同；当前不引入博士答辩决议/博士个人简历。
+% 有真实内容后按学院要求启用：
+% \begin{appendix}\input{back/appendix}\end{appendix}
+% \include{back/publications}
+% \authorization
+% \include{back/acknowledgements}
+\end{document}

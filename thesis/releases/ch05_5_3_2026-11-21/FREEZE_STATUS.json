@@ -1,0 +1,18 @@
+{
+  "section": "5.3 GMM统计先验引导的仿真触觉伪配对构建",
+  "date": "2026-11-21",
+  "state": "FROZEN_DRAFT",
+  "authorization": "用户本轮确认R2内容审核通过，要求仅做两项R3排版调整、编译核查并在保留历史版本后冻结",
+  "R3_review": "agent layout verification after user-approved R2 content, not a separate claimed user R3 PDF approval",
+  "pages": 3,
+  "TeXcount": 1999,
+  "section_sha256": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+  "pdf_sha256": "0841bb3a9625728c4313cdb553f42ad3ee4c5385cb28dca57f97e9629a2f7ca9",
+  "source_technical_content_identical_to_R2": true,
+  "original_R1_R2_retained": true,
+  "HEAD": "ff7b1a17e3122d7456dfa3f48c1bb7a0c2c7f421",
+  "global_main_unchanged": true,
+  "chapter5_complete": false,
+  "next_section_started": false,
+  "commit_push": false
+}

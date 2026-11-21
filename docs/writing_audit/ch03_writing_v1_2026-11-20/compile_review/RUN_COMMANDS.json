@@ -1,0 +1,9 @@
+{
+  "commands": [
+    "bash docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/build_preview.sh",
+    "./scripts/count_thesis_words.sh --chapter 3 --output-dir docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/wordcount",
+    "PYTHONPATH=thesis/.tools/python python3 docs/writing_audit/ch03_writing_v1_2026-11-20/compile_review/package_review.py"
+  ],
+  "original_main_modified": false,
+  "no_freeze": true
+}

@@ -1,0 +1,11 @@
+--- chapter_v1_before.tex
++++ thesis/body/ch03_grasp_demonstrations.tex
+@@ -259,7 +259,7 @@
+  \hline
+  任务或阶段 & 记录数 & 历史状态 & 解释限制\\
+  \hline
+- Lift候选路由 & 100 & 98 LATTICE\_SUCCESS，2 RL\_SUCCESS & 不是100条FINAL\_VERIFIED\\
++ Lift候选路由 & 100 & 98 LATTICE\_SUCCESS，2 RL\_SUCCESS & 不是100条\newline\mbox{FINAL\_VERIFIED}\\
+  PickPlace & 100 & 100 SUCCESS & 全部cached\\
+  Stack & 48 & 43 SUCCESS，5 FAILED & 仅task-valid对象域\\
+  Push & 100 & 100 SUCCESS & 98条cached\\

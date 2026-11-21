@@ -1,0 +1,113 @@
+S01 / bohg2014grasp / reused_unchanged
+Jeannette Bohg; Antonio Morales; Tamim Asfour; Danica Kragic. Data-Driven Grasp Synthesis—A Survey. IEEE Transactions on Robotics, 30(2): 289–309, 2014.
+DOI: 10.1109/TRO.2013.2289018
+https://arxiv.org/abs/1309.2660
+
+S02 / zurbrugg2025graspqp / added
+René Zurbrügg; Andrei Cramariuc; Marco Hutter. GraspQP: Differentiable Optimization of Force Closure for Diverse and Robust Dexterous Grasping. Conference on Robot Learning, PMLR 305:2583–2602, 2025.
+https://proceedings.mlr.press/v305/zurbrugg25a.html
+
+S03 / zurbrugg2026dexevolve / added
+René Zurbrügg; Andrei Cramariuc; Marco Hutter. DexEvolve: Evolutionary Optimization for Robust and Diverse Dexterous Grasp Synthesis. Robotics: Science and Systems XXII, paper 059, 2026.
+DOI: 10.15607/rss.2026.xxii.059
+https://roboticsproceedings.org/rss22/p059.html
+
+S04 / wang2023dexgraspnet / added
+Ruicheng Wang; Jialiang Zhang; Jiayi Chen; Yinzhen Xu; Puhao Li; Tengyu Liu; He Wang. DexGraspNet: A Large-Scale Robotic Dexterous Grasp Dataset for General Objects Based on Simulation. IEEE International Conference on Robotics and Automation (ICRA):11359–11366, 2023.
+DOI: 10.1109/icra48891.2023.10160982
+https://doi.org/10.1109/icra48891.2023.10160982
+
+S05 / xu2023unidexgrasp / added
+Yinzhen Xu; Weikang Wan; Jialiang Zhang; Haoran Liu; Zikang Shan; Hao Shen; Ruicheng Wang; Haoran Geng; Yijia Weng; Jiayi Chen; Tengyu Liu; Li Yi; He Wang. UniDexGrasp: Universal Robotic Dexterous Grasping via Learning Diverse Proposal Generation and Goal-Conditioned Policy. IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR):4737–4746, 2023.
+DOI: 10.1109/cvpr52729.2023.00459
+https://openaccess.thecvf.com/content/CVPR2023/html/Xu_UniDexGrasp_Universal_Robotic_Dexterous_Grasping_via_Learning_Diverse_Proposal_Generation_CVPR_2023_paper.html
+
+S06 / todorov2012mujoco / added
+Emanuel Todorov; Tom Erez; Yuval Tassa. MuJoCo: A physics engine for model-based control. IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS):5026–5033, 2012.
+DOI: 10.1109/iros.2012.6386109
+https://roboti.us/lab/papers/TodorovIROS12.pdf
+
+S07 / makoviychuk2021isaacgym / added
+Makoviychuk, Viktor; Wawrzyniak, Lukasz; Guo, Yunrong; Lu, Michelle; Storey, Kier; Macklin, Miles; Hoeller, David; Rudin, Nikita; Allshire, Arthur; Handa, Ankur; State, Gavriel. Isaac Gym: High Performance GPU Based Physics Simulation For Robot Learning. NeurIPS Datasets and Benchmarks, volume 1, Round 2, 2021.
+https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/28dd2c7955ce926456240b2ff0100bde-Abstract-round2.html
+
+S08 / wang2022tacto / reused_unchanged
+Shaoxiong Wang; Mike Lambeta; Po-Wei Chou; Roberto Calandra. TACTO: A Fast, Flexible, and Open-Source Simulator for High-Resolution Vision-Based Tactile Sensors. IEEE Robotics and Automation Letters, 7(2): 3930–3937, 2022.
+DOI: 10.1109/LRA.2022.3146945
+https://arxiv.org/abs/2012.08456
+
+S09 / si2022taxim / reused_unchanged
+Zilin Si; Wenzhen Yuan. Taxim: An Example-Based Simulation Model for GelSight Tactile Sensors. IEEE Robotics and Automation Letters, 7(2): 2361–2368, 2022.
+DOI: 10.1109/LRA.2022.3142412
+https://arxiv.org/abs/2109.04027
+
+S10 / sferrazza2022simtoreal / added
+Carmelo Sferrazza; Raffaello D'Andrea. Sim-to-Real for High-Resolution Optical Tactile Sensing: From Images to Three-Dimensional Contact Force Distributions. Soft Robotics 9(5):926–937, 2022.
+DOI: 10.1089/soro.2020.0213
+https://journals.sagepub.com/doi/10.1089/soro.2020.0213
+
+S11 / mandlekar2022demonstrations / reused_unchanged
+Ajay Mandlekar; Danfei Xu; Josiah Wong; Soroush Nasiriany; Chen Wang; Rohun Kulkarni; Li Fei-Fei; Silvio Savarese; Yuke Zhu; Roberto Martín-Martín. What Matters in Learning from Offline Human Demonstrations for Robot Manipulation. Proceedings of the 5th Conference on Robot Learning, PMLR 164: 1678–1690, 2022.
+https://proceedings.mlr.press/v164/mandlekar22a.html
+
+S12 / walke2023bridgedata / reused_unchanged
+Homer Rich Walke; Kevin Black; Tony Z. Zhao; Quan Vuong; Chongyi Zheng; Philippe Hansen-Estruch; Andre Wang He; Vivek Myers; Moo Jin Kim; Max Du; Abraham Lee; Kuan Fang; Chelsea Finn; Sergey Levine. BridgeData V2: A Dataset for Robot Learning at Scale. Proceedings of the 7th Conference on Robot Learning, PMLR 229: 1723–1736, 2023.
+https://proceedings.mlr.press/v229/walke23a.html
+
+S13 / fang2024rh20t / reused_unchanged
+Hao-Shu Fang; Hongjie Fang; Zhenyu Tang; Jirong Liu; Chenxi Wang; Junbo Wang; Haoyi Zhu; Cewu Lu. RH20T: A Comprehensive Robotic Dataset for Learning Diverse Skills in One-Shot. 2024 IEEE International Conference on Robotics and Automation (ICRA): 653–660, 2024.
+DOI: 10.1109/ICRA57147.2024.10611615
+https://rh20t.github.io/
+
+S14 / khazatsky2024droid / added
+Alexander Khazatsky; Karl Pertsch; Suraj Nair; et al.（完整作者保留在reference.bib和references_used.json）. DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset. Robotics: Science and Systems XX, paper 120, 2024.
+DOI: 10.15607/rss.2024.xx.120
+https://roboticsproceedings.org/rss20/p120.html
+
+S15 / openx2024embodiment / added
+Open X-Embodiment Collaboration. Open X-Embodiment: Robotic Learning Datasets and RT-X Models. IEEE International Conference on Robotics and Automation (ICRA):6892–6903, 2024.
+DOI: 10.1109/icra57147.2024.10611477
+https://doi.org/10.1109/icra57147.2024.10611477
+
+S16 / mandlekar2023mimicgen / added
+Ajay Mandlekar; Soroush Nasiriany; Bowen Wen; Iretiayo Akinola; Yashraj Narang; Linxi Fan; Yuke Zhu; Dieter Fox. MimicGen: A Data Generation System for Scalable Robot Learning using Human Demonstrations. Conference on Robot Learning, PMLR 229:1820–1864, 2023.
+https://proceedings.mlr.press/v229/mandlekar23a.html
+
+S17 / tobin2017randomization / reused_unchanged
+Josh Tobin; Rachel Fong; Alex Ray; Jonas Schneider; Wojciech Zaremba; Pieter Abbeel. Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World. 2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS): 23–30, 2017.
+DOI: 10.1109/IROS.2017.8202133
+https://arxiv.org/abs/1703.06907
+
+S18 / goodfellow2014gan / added
+Goodfellow, Ian J.; Pouget-Abadie, Jean; Mirza, Mehdi; Xu, Bing; Warde-Farley, David; Ozair, Sherjil; Courville, Aaron; Bengio, Yoshua. Generative Adversarial Nets. Advances in Neural Information Processing Systems 27, 2014.
+https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html
+
+S19 / zhu2017cyclegan / added
+Jun-Yan Zhu; Taesung Park; Phillip Isola; Alexei A. Efros. Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks. 2017 IEEE International Conference on Computer Vision (ICCV): 2242–2251, 2017.
+DOI: 10.1109/ICCV.2017.244
+https://openaccess.thecvf.com/content_ICCV_2017/html/Zhu_Unpaired_Image-To-Image_Translation_ICCV_2017_paper.html
+
+S20 / kingma2014vae / added
+Kingma, Diederik P.; Welling, Max. Auto-Encoding Variational Bayes. International Conference on Learning Representations (ICLR), 2014.
+https://dare.uva.nl/id/cf65ba0f-d88f-4a49-8ebd-3a7fce86edd7
+
+S21 / liu2017unit / added
+Liu, Ming-Yu; Breuel, Thomas; Kautz, Jan. Unsupervised Image-to-Image Translation Networks. Advances in Neural Information Processing Systems 30, 2017.
+https://papers.nips.cc/paper_files/paper/2017/hash/dc6a6489640ca02b0d42dabeb8e46bb7-Abstract.html
+
+S22 / ganin2016dann / added
+Yaroslav Ganin; Evgeniya Ustinova; Hana Ajakan; Pascal Germain; Hugo Larochelle; François Laviolette; Mario Marchand; Victor Lempitsky. Domain-Adversarial Training of Neural Networks. Journal of Machine Learning Research 17(59):1–35, 2016.
+https://www.jmlr.org/papers/v17/15-239.html
+
+S23 / gretton2012mmd / added
+Arthur Gretton; Karsten M. Borgwardt; Malte J. Rasch; Bernhard Schölkopf; Alexander Smola. A Kernel Two-Sample Test. Journal of Machine Learning Research 13(25):723–773, 2012.
+https://www.jmlr.org/papers/v13/gretton12a.html
+
+S24 / naeem2020metrics / added
+Muhammad Ferjad Naeem; Seong Joon Oh; Youngjung Uh; Yunjey Choi; Jaejun Yoo. Reliable Fidelity and Diversity Metrics for Generative Models. International Conference on Machine Learning, PMLR 119:7176–7185, 2020.
+https://proceedings.mlr.press/v119/naeem20a.html
+
+S25 / narang2021latentprojections / added
+Yashraj Narang; Balakumar Sundaralingam; Miles Macklin; Arsalan Mousavian; Dieter Fox. Sim-to-Real for Robotic Tactile Sensing via Physics-Based Simulation and Learned Latent Projections. IEEE International Conference on Robotics and Automation (ICRA):6444–6451, 2021.
+DOI: 10.1109/icra48506.2021.9561969
+https://research.nvidia.com/publication/2021-06_sim-real-robotic-tactile-sensing-physics-based-simulation-and-learned-latent

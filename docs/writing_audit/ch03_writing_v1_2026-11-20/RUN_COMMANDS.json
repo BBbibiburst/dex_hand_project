@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "./scripts/count_thesis_words.sh --chapter 3 --output-dir docs/writing_audit/ch03_writing_v1_2026-11-20/wordcount",
+    "./scripts/count_thesis_words.sh --files --output-dir docs/writing_audit/ch03_writing_v1_2026-11-20/wordcount",
+    "python3 docs/writing_audit/ch03_writing_v1_2026-11-20/package_ch03.py"
+  ],
+  "latex_compiled": false
+}

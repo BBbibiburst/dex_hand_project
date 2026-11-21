@@ -1,0 +1,14 @@
+{
+  "chapter01.pdf": {
+    "pages": 10,
+    "internal_links": 1,
+    "bookmarks": 10,
+    "text_replacement_characters": 0
+  },
+  "chapter01_with_references.pdf": {
+    "pages": 14,
+    "internal_links": 39,
+    "bookmarks": 11,
+    "text_replacement_characters": 0
+  }
+}

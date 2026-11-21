@@ -1,0 +1,427 @@
+{
+  "C3": {
+    "source": "outputs/tactile_p43_c11_latent_support_audit_2026-11-17/probe_metrics.csv",
+    "instances": [
+      {
+        "instance": "mlp_11",
+        "BA": 0.49743589743589745,
+        "AUC": 0.5915710440572319,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "mlp_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.5987654058648534,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "mlp_13",
+        "BA": 0.4980769230769231,
+        "AUC": 0.6108938943193087,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "gru_11",
+        "BA": 0.4987179487179487,
+        "AUC": 0.23955942768097463,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.23725740189828587,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_13",
+        "BA": 0.4987179487179487,
+        "AUC": 0.3836216177928885,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "transformer_11",
+        "BA": 0.49743589743589745,
+        "AUC": 0.2822878594701799,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "transformer_12",
+        "BA": 0.49615384615384617,
+        "AUC": 0.21718869528261794,
+        "D": 0.9923076923076923,
+        "passed": false
+      },
+      {
+        "instance": "transformer_13",
+        "BA": 0.4980769230769231,
+        "AUC": 0.6985911602209944,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "logistic",
+        "BA": 0.4987179487179487,
+        "AUC": 0.6826044765547528,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "knn",
+        "BA": 0.5019443263918402,
+        "AUC": 0.5005361949284601,
+        "D": 0.9961113472163197,
+        "passed": true
+      }
+    ],
+    "passed": 1,
+    "BA_D_passed": 11,
+    "role": "Natural Validation transfer"
+  },
+  "C13": {
+    "source": "outputs/tactile_c13_frozen_c0_validation_2026-11-18/metrics.csv",
+    "instances": [
+      {
+        "instance": "mlp_11",
+        "BA": 0.49743589743589745,
+        "AUC": 0.5715356282759597,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "mlp_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.5895969684091231,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "mlp_13",
+        "BA": 0.4980769230769231,
+        "AUC": 0.6010971809038107,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "gru_11",
+        "BA": 0.4987179487179487,
+        "AUC": 0.18720781980450488,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.19158308542286442,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_13",
+        "BA": 0.4987179487179487,
+        "AUC": 0.30862020116163763,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "transformer_11",
+        "BA": 0.49743589743589745,
+        "AUC": 0.26644071398215047,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "transformer_12",
+        "BA": 0.49615384615384617,
+        "AUC": 0.23696345091372717,
+        "D": 0.9923076923076923,
+        "passed": false
+      },
+      {
+        "instance": "transformer_13",
+        "BA": 0.4980769230769231,
+        "AUC": 0.6754618217877887,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "logistic",
+        "BA": 0.4987179487179487,
+        "AUC": 0.658305709023941,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "knn",
+        "BA": 0.4986294092647684,
+        "AUC": 0.4977518062048449,
+        "D": 0.9972588185295368,
+        "passed": true
+      }
+    ],
+    "passed": 1,
+    "BA_D_passed": 11,
+    "role": "Natural Validation transfer"
+  },
+  "C27": {
+    "source": "outputs/tactile_c27_c3_route_improvement_2026-11-18/metrics.csv",
+    "instances": [
+      {
+        "instance": "mlp_11",
+        "BA": 0.498540869811588,
+        "AUC": 0.6001636209094773,
+        "D": 0.997081739623176,
+        "passed": false
+      },
+      {
+        "instance": "mlp_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.6301572460688483,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "mlp_13",
+        "BA": 0.4997343816404589,
+        "AUC": 0.6172382773763989,
+        "D": 0.999468763280918,
+        "passed": false
+      },
+      {
+        "instance": "gru_11",
+        "BA": 0.4987179487179487,
+        "AUC": 0.5719152854511971,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_12",
+        "BA": 0.511977617226236,
+        "AUC": 0.4879579260518487,
+        "D": 0.976044765547528,
+        "passed": true
+      },
+      {
+        "instance": "gru_13",
+        "BA": 0.5114251310383907,
+        "AUC": 0.5481144638050716,
+        "D": 0.9771497379232186,
+        "passed": false
+      },
+      {
+        "instance": "transformer_11",
+        "BA": 0.4979883836237427,
+        "AUC": 0.3579395098455872,
+        "D": 0.9959767672474856,
+        "passed": false
+      },
+      {
+        "instance": "transformer_12",
+        "BA": 0.499468763280918,
+        "AUC": 0.3072411106389007,
+        "D": 0.998937526561836,
+        "passed": false
+      },
+      {
+        "instance": "transformer_13",
+        "BA": 0.5036017849553761,
+        "AUC": 0.6435982433772489,
+        "D": 0.9927964300892478,
+        "passed": false
+      },
+      {
+        "instance": "logistic",
+        "BA": 0.5014803796571753,
+        "AUC": 0.6730620484487888,
+        "D": 0.9970392406856494,
+        "passed": false
+      },
+      {
+        "instance": "knn",
+        "BA": 0.5063642158946027,
+        "AUC": 0.5099929168437456,
+        "D": 0.9872715682107946,
+        "passed": true
+      }
+    ],
+    "passed": 2,
+    "BA_D_passed": 11,
+    "role": "Natural Validation transfer"
+  },
+  "C23": {
+    "source": "outputs/tactile_c23_real_reconstruction_c0_2026-11-18/metrics.csv",
+    "instances": [
+      {
+        "instance": "mlp_11",
+        "BA": 0.4980769230769231,
+        "AUC": 0.5088042406311637,
+        "D": 0.9961538461538462,
+        "passed": true
+      },
+      {
+        "instance": "mlp_12",
+        "BA": 0.4987179487179487,
+        "AUC": 0.49326265614727155,
+        "D": 0.9974358974358974,
+        "passed": true
+      },
+      {
+        "instance": "mlp_13",
+        "BA": 0.4987179487179487,
+        "AUC": 0.49597468770545694,
+        "D": 0.9974358974358974,
+        "passed": true
+      },
+      {
+        "instance": "gru_11",
+        "BA": 0.4987179487179487,
+        "AUC": 0.4672945430637738,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "gru_12",
+        "BA": 0.5006410256410256,
+        "AUC": 0.4466880341880342,
+        "D": 0.9987179487179487,
+        "passed": false
+      },
+      {
+        "instance": "gru_13",
+        "BA": 0.5,
+        "AUC": 0.48273586456278766,
+        "D": 1.0,
+        "passed": true
+      },
+      {
+        "instance": "transformer_11",
+        "BA": 0.49743589743589745,
+        "AUC": 0.46618918474687704,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "transformer_12",
+        "BA": 0.49743589743589745,
+        "AUC": 0.43346071663379354,
+        "D": 0.9948717948717949,
+        "passed": false
+      },
+      {
+        "instance": "transformer_13",
+        "BA": 0.5012820512820513,
+        "AUC": 0.34483070348454964,
+        "D": 0.9974358974358974,
+        "passed": false
+      },
+      {
+        "instance": "logistic",
+        "BA": 0.49935897435897436,
+        "AUC": 0.49156147271531886,
+        "D": 0.9987179487179487,
+        "passed": true
+      },
+      {
+        "instance": "knn",
+        "BA": 0.49935897435897436,
+        "AUC": 0.4948759040105194,
+        "D": 0.9987179487179487,
+        "passed": true
+      }
+    ],
+    "passed": 6,
+    "BA_D_passed": 11,
+    "role": "Real reconstruction diagnostic"
+  },
+  "C24": {
+    "source": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/metrics.csv",
+    "instances": [
+      {
+        "instance": "mlp_11",
+        "BA": 0.5006410256410256,
+        "AUC": 0.5411686390532544,
+        "D": 0.9987179487179487,
+        "passed": false
+      },
+      {
+        "instance": "mlp_12",
+        "BA": 0.5,
+        "AUC": 0.5363256081525313,
+        "D": 1.0,
+        "passed": false
+      },
+      {
+        "instance": "mlp_13",
+        "BA": 0.5006410256410256,
+        "AUC": 0.5358563445101907,
+        "D": 0.9987179487179487,
+        "passed": false
+      },
+      {
+        "instance": "gru_11",
+        "BA": 0.5,
+        "AUC": 0.3222863247863248,
+        "D": 1.0,
+        "passed": false
+      },
+      {
+        "instance": "gru_12",
+        "BA": 0.507051282051282,
+        "AUC": 0.3347131821170283,
+        "D": 0.985897435897436,
+        "passed": false
+      },
+      {
+        "instance": "gru_13",
+        "BA": 0.5064102564102564,
+        "AUC": 0.3399046679815911,
+        "D": 0.9871794871794872,
+        "passed": false
+      },
+      {
+        "instance": "transformer_11",
+        "BA": 0.4980769230769231,
+        "AUC": 0.3707018408941486,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "transformer_12",
+        "BA": 0.5006410256410256,
+        "AUC": 0.3306114398422091,
+        "D": 0.9987179487179487,
+        "passed": false
+      },
+      {
+        "instance": "transformer_13",
+        "BA": 0.5032051282051282,
+        "AUC": 0.5090302432610125,
+        "D": 0.9935897435897436,
+        "passed": true
+      },
+      {
+        "instance": "logistic",
+        "BA": 0.5019230769230769,
+        "AUC": 0.5580407626561473,
+        "D": 0.9961538461538462,
+        "passed": false
+      },
+      {
+        "instance": "knn",
+        "BA": 0.5032051282051282,
+        "AUC": 0.5013379355687048,
+        "D": 0.9935897435897436,
+        "passed": true
+      }
+    ],
+    "passed": 2,
+    "BA_D_passed": 11,
+    "role": "Real reconstruction diagnostic"
+  }
+}

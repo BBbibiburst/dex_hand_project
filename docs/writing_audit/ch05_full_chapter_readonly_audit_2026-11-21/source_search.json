@@ -1,0 +1,306 @@
+{
+  "command": [
+    "rg",
+    "--files",
+    "thesis",
+    "docs/writing_audit",
+    "-g",
+    "*.tex",
+    "-g",
+    "!**/wordcount/**",
+    "-g",
+    "!**/build/**",
+    "-g",
+    "!thesis/.tools/**",
+    "-g",
+    "!thesis/third_party/**",
+    "-g",
+    "!thesis/vendor/**"
+  ],
+  "tex_files_searched": 71,
+  "matching_headings": [
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/ch02_simulation_platform.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/ch02_simulation_platform.tex",
+      "line": 178,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/ch02_simulation_platform.tex",
+      "line": 286,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/ch02_simulation_platform.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/ch02_simulation_platform.tex",
+      "line": 176,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/ch02_simulation_platform.tex",
+      "line": 284,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter_before.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter_before.tex",
+      "line": 178,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/chapter_before.tex",
+      "line": 286,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    },
+    {
+      "path": "thesis/body/ch02_simulation_platform.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "thesis/body/ch02_simulation_platform.tex",
+      "line": 176,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "thesis/body/ch02_simulation_platform.tex",
+      "line": 284,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    },
+    {
+      "path": "thesis/body/ch02_data_and_problem.tex",
+      "line": 2,
+      "command": "chapter",
+      "title": "灵巧手触觉数据与跨域迁移问题定义"
+    },
+    {
+      "path": "thesis/body/ch04_adversarial_transfer.tex",
+      "line": 2,
+      "command": "chapter",
+      "title": "基于迭代对抗学习的触觉迁移方法"
+    },
+    {
+      "path": "thesis/body/ch03_dual_vae.tex",
+      "line": 2,
+      "command": "chapter",
+      "title": "基于双变分自编码器的触觉跨域表示与初始迁移"
+    },
+    {
+      "path": "thesis/body/ch05_experiments.tex",
+      "line": 2,
+      "command": "chapter",
+      "title": "实验结果与分析"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_3.tex",
+      "line": 2,
+      "command": "section",
+      "title": "GMM统计先验引导的仿真触觉伪配对构建"
+    },
+    {
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 2,
+      "command": "section",
+      "title": "GMM统计先验引导的仿真触觉伪配对构建"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于伪配对监督的跨域潜变量映射"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/section_5_4.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于双域变分自编码器的触觉表示学习"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/section_5_6.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/section_5_4.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于双域变分自编码器的触觉表示学习"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r3/section_5_3.tex",
+      "line": 2,
+      "command": "section",
+      "title": "GMM统计先验引导的仿真触觉伪配对构建"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/section_5_5.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于伪配对监督的跨域潜变量映射"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5_preview_with_references.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/compile_review/section_5_5.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于伪配对监督的跨域潜变量映射"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/section_5_3.tex",
+      "line": 2,
+      "command": "section",
+      "title": "GMM统计先验引导的仿真触觉伪配对构建"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/section_5_3.tex",
+      "line": 2,
+      "command": "section",
+      "title": "GMM统计先验引导的仿真触觉伪配对构建"
+    },
+    {
+      "path": "thesis/releases/ch05_5_3_2026-11-21/preview_entry.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 2,
+      "command": "section",
+      "title": "基于双域变分自编码器的触觉表示学习"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6_R1_before.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/ch02_simulation_platform.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/ch02_simulation_platform.tex",
+      "line": 176,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/ch02_simulation_platform.tex",
+      "line": 284,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/section_5_6.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/freeze_final/section_5_6_preview.tex",
+      "line": 7,
+      "command": "chapter",
+      "title": "基于统计伪配对与双域表示的触觉跨域重建方法"
+    },
+    {
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_6_v1_2026-11-21/revision_r1/compile_review/section_5_6.tex",
+      "line": 2,
+      "command": "section",
+      "title": "跨域触觉重建实验结果与分析"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/source_before.tex",
+      "line": 3,
+      "command": "chapter",
+      "title": "RM75B-Dex Hand多任务仿真平台与触觉感知建模"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/source_before.tex",
+      "line": 176,
+      "command": "section",
+      "title": "复杂曲面触觉阵列建模"
+    },
+    {
+      "path": "thesis/releases/ch02_2026-11-20/source_before.tex",
+      "line": 284,
+      "command": "section",
+      "title": "712维触觉观测及处理流程"
+    }
+  ],
+  "scope": "current repository thesis and writing audit only; excludes generated/build/wordcount/third-party"
+}

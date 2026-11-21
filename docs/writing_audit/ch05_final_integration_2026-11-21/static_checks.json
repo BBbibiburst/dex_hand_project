@@ -1,0 +1,135 @@
+{
+  "labels": 26,
+  "unresolved_refs": [],
+  "citations": [
+    "mujoco2026xml",
+    "kingma2014vae"
+  ],
+  "chapter_unused_bib_keys": [
+    "bohg2014grasp",
+    "calandra2018feeling",
+    "fang2024rh20t",
+    "ganin2016dann",
+    "goodfellow2014gan",
+    "gretton2012mmd",
+    "khazatsky2024droid",
+    "liu2017unit",
+    "luo2017tactile",
+    "makoviychuk2021isaacgym",
+    "mandlekar2022demonstrations",
+    "mandlekar2023mimicgen",
+    "mujoco2026computation",
+    "naeem2020metrics",
+    "narang2021latentprojections",
+    "openai2020dexterous",
+    "openx2024embodiment",
+    "sferrazza2022simtoreal",
+    "si2022taxim",
+    "tobin2017randomization",
+    "todorov2012mujoco",
+    "walke2023bridgedata",
+    "wang2022tacto",
+    "wang2023dexgraspnet",
+    "xu2023unidexgrasp",
+    "zhu2017cyclegan",
+    "zurbrugg2025graspqp",
+    "zurbrugg2026dexevolve"
+  ],
+  "whole_bib_duplicate_keys": [],
+  "numbering": {
+    "equations": [
+      [
+        "5-1",
+        "50"
+      ],
+      [
+        "5-2",
+        "50"
+      ],
+      [
+        "5-3",
+        "51"
+      ],
+      [
+        "5-4",
+        "52"
+      ],
+      [
+        "5-5",
+        "53"
+      ],
+      [
+        "5-6",
+        "54"
+      ],
+      [
+        "5-7",
+        "54"
+      ],
+      [
+        "5-8",
+        "55"
+      ],
+      [
+        "5-9",
+        "56"
+      ],
+      [
+        "5-10",
+        "56"
+      ]
+    ],
+    "figures": [
+      [
+        "5-1",
+        "51"
+      ],
+      [
+        "5-2",
+        "53"
+      ],
+      [
+        "5-3",
+        "54"
+      ],
+      [
+        "5-4",
+        "57"
+      ],
+      [
+        "5-5",
+        "58"
+      ]
+    ],
+    "tables": [
+      [
+        "5-1",
+        "49"
+      ],
+      [
+        "5-2",
+        "52"
+      ],
+      [
+        "5-3",
+        "58"
+      ],
+      [
+        "5-4",
+        "59"
+      ]
+    ]
+  },
+  "counts": {
+    "1": 1239,
+    "2": 1073,
+    "3": 1999,
+    "4": 1496,
+    "5": 1225,
+    "6": 1605,
+    "chapter": 8658
+  },
+  "chapter_formula_count": 10,
+  "chapter_figure_count": 5,
+  "chapter_table_count": 4
+}

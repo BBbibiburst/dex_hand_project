@@ -1,0 +1,5577 @@
+[
+  {
+    "id": "S01",
+    "title": "Data-Driven Grasp Synthesis—A Survey",
+    "authors": [
+      "Jeannette Bohg",
+      "Antonio Morales",
+      "Tamim Asfour",
+      "Danica Kragic"
+    ],
+    "year": 2014,
+    "venue": "IEEE Transactions on Robotics, 30(2): 289–309",
+    "doi": "10.1109/TRO.2013.2289018",
+    "primary_url": "https://arxiv.org/abs/1309.2660",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W02",
+    "research_direction": "抓取",
+    "technical_route": "解析规划与数据驱动抓取综述",
+    "contribution": "从对象表示、先验和数据来源梳理抓取；讨论候选可达性筛选。",
+    "limitations": "2014综述不代表截至2026的全部进展；不提供本项目六驱动适配结论。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        4
+      ],
+      "detail": "分类框架及已知物体可达性段落；综述没有单独新实验",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "候选生成、稳定性与执行约束需要区分",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "d35e98291e3101239235a3fd6529f57967adf6feb79780a66e47227cb920c759",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S02",
+    "title": "GraspQP: Differentiable Optimization of Force Closure for Diverse and Robust Dexterous Grasping",
+    "authors": [
+      "René Zurbrügg",
+      "Andrei Cramariuc",
+      "Marco Hutter"
+    ],
+    "year": 2025,
+    "venue": "Conference on Robot Learning, PMLR 305:2583–2602",
+    "doi": null,
+    "primary_url": "https://proceedings.mlr.press/v305/zurbrugg25a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S02.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S02_publisher.html",
+    "research_direction": "抓取",
+    "technical_route": "隐式QP力闭合能量与MALA*优化",
+    "contribution": "将受限接触扳手组合写为可微QP，以改进解析抓取候选质量和多样性。",
+    "limitations": "解析接触及扰动测试有特定假设；不证明RM75B完整轨迹可达。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        4,
+        5,
+        7
+      ],
+      "detail": "定义、QP方法、跨手型实验表及评价设置的选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "优化路线和本项目GraspQP指标适配的来源",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "c15085c6e68c55d6f8ed2dcca2852ae41e4d92fab2d8de1a378eea644617e757",
+    "version_notes": "",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S03",
+    "title": "DexEvolve: Evolutionary Optimization for Robust and Diverse Dexterous Grasp Synthesis",
+    "authors": [
+      "René Zurbrügg",
+      "Andrei Cramariuc",
+      "Marco Hutter"
+    ],
+    "year": 2026,
+    "venue": "Robotics: Science and Systems XXII, paper 059",
+    "doi": "10.15607/rss.2026.xxii.059",
+    "primary_url": "https://roboticsproceedings.org/rss22/p059.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S03_formal.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S03_crossref.json",
+    "research_direction": "抓取",
+    "technical_route": "仿真闭环进化优化与扩散蒸馏",
+    "contribution": "利用Isaac Sim物理反馈选择、变异和交叉，改进解析种子抓取。",
+    "limitations": "原论文包含异步搜索和蒸馏；本项目DexEvolve-style不自动等于完整复现。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        7
+      ],
+      "detail": "正式RSS版方法概述、表示及跨手型/收敛结果选段；另读预印本3、6、8页选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "解析候选→物理优化→执行的不同层次",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "e7205a96e6edd4b1b331da0b56f3ffeca32047b988acfff37d3124e0a63c8a4d",
+    "version_notes": "RSS正式版11页与预印本17页不同，页号已分别标注。RSS网页编码异常以Crossref和PDF中的René Zurbrügg为准。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S04",
+    "title": "DexGraspNet: A Large-Scale Robotic Dexterous Grasp Dataset for General Objects Based on Simulation",
+    "authors": [
+      "Ruicheng Wang",
+      "Jialiang Zhang",
+      "Jiayi Chen",
+      "Yinzhen Xu",
+      "Puhao Li",
+      "Tengyu Liu",
+      "He Wang"
+    ],
+    "year": 2023,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):11359–11366",
+    "doi": "10.1109/icra48891.2023.10160982",
+    "primary_url": "https://doi.org/10.1109/icra48891.2023.10160982",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S04.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S04_crossref.json",
+    "research_direction": "抓取",
+    "technical_route": "可微力闭合优化与仿真验证的数据集",
+    "contribution": "将抓取姿态、手关节和接触点纳入优化，生成并验证ShadowHand抓取。",
+    "limitations": "数据生成验证与学习基线采用不同成功判定；不能直接搬为具体机械臂成功率。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "detail": "摘要、候选/能量定义、学习基线及放宽验证条件",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "数据生成优化与仿真质量评价",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "c1b5fe6258e25369626a6ac1df06218394bbb3fb3aa4bb41980dca074e6c04b8",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S05",
+    "title": "UniDexGrasp: Universal Robotic Dexterous Grasping via Learning Diverse Proposal Generation and Goal-Conditioned Policy",
+    "authors": [
+      "Yinzhen Xu",
+      "Weikang Wan",
+      "Jialiang Zhang",
+      "Haoran Liu",
+      "Zikang Shan",
+      "Hao Shen",
+      "Ruicheng Wang",
+      "Haoran Geng",
+      "Yijia Weng",
+      "Jiayi Chen",
+      "Tengyu Liu",
+      "Li Yi",
+      "He Wang"
+    ],
+    "year": 2023,
+    "venue": "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR):4737–4746",
+    "doi": "10.1109/cvpr52729.2023.00459",
+    "primary_url": "https://openaccess.thecvf.com/content/CVPR2023/html/Xu_UniDexGrasp_Universal_Robotic_Dexterous_Grasping_via_Learning_Diverse_Proposal_Generation_CVPR_2023_paper.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S05.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S05_crossref.json",
+    "research_direction": "抓取",
+    "technical_route": "多样候选生成与目标条件执行策略",
+    "contribution": "分离候选姿态生成和目标条件策略，结合课程学习及教师学生蒸馏。",
+    "limitations": "抓取策略的机器人、动作和任务假设明确；不直接覆盖RM75B欠驱动链。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        6,
+        7
+      ],
+      "detail": "摘要、分布参数化动机、策略课程及生成/执行实验选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "从几何抓取目标到可执行策略",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "daf839ee27ae3ffb852a7543868bd35508407e943d5e2c61a932a8f93991eecf",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S06",
+    "title": "MuJoCo: A physics engine for model-based control",
+    "authors": [
+      "Emanuel Todorov",
+      "Tom Erez",
+      "Yuval Tassa"
+    ],
+    "year": 2012,
+    "venue": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS):5026–5033",
+    "doi": "10.1109/iros.2012.6386109",
+    "primary_url": "https://roboti.us/lab/papers/TodorovIROS12.pdf",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S06.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S06_crossref.json",
+    "research_direction": "仿真触觉",
+    "technical_route": "广义坐标动力学与接触求解",
+    "contribution": "讨论多关节、接触、等式约束和执行器建模，并进行计时测试。",
+    "limitations": "2012版本论文不能证明当前引擎全部功能；接触求解不是压阻读出模型。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        7
+      ],
+      "detail": "引擎摘要、求解流程、模型元素和计时实验开头",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "机器人仿真提供动力学基础但不自动提供特定触觉读出",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "31bab10428d0714ad2baeb905eaa9eb6010c27aff1173681ca91b7ebb2e82372",
+    "version_notes": "本轮找回作者托管PDF；旧链接曾重定向，未回改1.1历史档案。2012论文不用于描述当前全部版本功能。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S07",
+    "title": "Isaac Gym: High Performance GPU Based Physics Simulation For Robot Learning",
+    "authors": [
+      "Makoviychuk, Viktor",
+      "Wawrzyniak, Lukasz",
+      "Guo, Yunrong",
+      "Lu, Michelle",
+      "Storey, Kier",
+      "Macklin, Miles",
+      "Hoeller, David",
+      "Rudin, Nikita",
+      "Allshire, Arthur",
+      "Handa, Ankur",
+      "State, Gavriel"
+    ],
+    "year": 2021,
+    "venue": "NeurIPS Datasets and Benchmarks, volume 1, Round 2",
+    "doi": null,
+    "primary_url": "https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/28dd2c7955ce926456240b2ff0100bde-Abstract-round2.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S07_formal.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S07_publisher.html",
+    "research_direction": "仿真触觉",
+    "technical_route": "GPU物理仿真与张量训练管线",
+    "contribution": "直接连接物理缓冲区与GPU策略学习，以并行环境验证多类机器人任务。",
+    "limitations": "硬件、任务和训练管线限定加速结论；Isaac Gym不等于Isaac Sim。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        7
+      ],
+      "detail": "正式版摘要、GPU管线、任务与手部/堆叠实验",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "仿真平台的规模化与物理读出分层",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "a46e390574ba3c14d8c513c90e57ed8b1b21552105ff51b5d10a9cf62db667df",
+    "version_notes": "正式NeurIPS Datasets and Benchmarks论文，不再标为仅arXiv；不将Gym测速套给Isaac Sim。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S08",
+    "title": "TACTO: A Fast, Flexible, and Open-Source Simulator for High-Resolution Vision-Based Tactile Sensors",
+    "authors": [
+      "Shaoxiong Wang",
+      "Mike Lambeta",
+      "Po-Wei Chou",
+      "Roberto Calandra"
+    ],
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 3930–3937",
+    "doi": "10.1109/LRA.2022.3146945",
+    "primary_url": "https://arxiv.org/abs/2012.08456",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W09",
+    "research_direction": "仿真触觉",
+    "technical_route": "几何接触驱动的视觉触觉渲染",
+    "contribution": "分离物理场景同步与光学渲染，支持相机、光照及传感器配置。",
+    "limitations": "针对视觉触觉；背景图校正不是任意传感器物理标定。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        4,
+        7
+      ],
+      "detail": "复用1.1方法与位姿估计实验阅读，本轮复查流程/计时/背景校正",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "触觉模拟的传感器特定假设",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "3d656371a5d15141d5e352680c2c95cdddbbf9e5ce89fc96278e0c6e7b544838",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S09",
+    "title": "Taxim: An Example-Based Simulation Model for GelSight Tactile Sensors",
+    "authors": [
+      "Zilin Si",
+      "Wenzhen Yuan"
+    ],
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 2361–2368",
+    "doi": "10.1109/LRA.2022.3142412",
+    "primary_url": "https://arxiv.org/abs/2109.04027",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W10",
+    "research_direction": "仿真触觉",
+    "technical_route": "实例光学校准与弹性标记位移近似",
+    "contribution": "结合经验光学映射和FEM标定的形变传播，模拟GelSight图像与标记位移。",
+    "limitations": "文中速度比较限定CPU；成像和材料近似不能直接移植到712维标量阵列。",
+    "reading_scope": {
+      "pdf_pages": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "detail": "复用方法阅读；本轮核对形变标定、受控压入、图像实验及CPU限制",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "几何、材料和读出模型共同决定触觉观测",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "24feb04024fe5b03fd7c43c5cd6a6e5d9101f60188ae8418270a63d2c394d8ca",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S10",
+    "title": "Sim-to-Real for High-Resolution Optical Tactile Sensing: From Images to Three-Dimensional Contact Force Distributions",
+    "authors": [
+      "Carmelo Sferrazza",
+      "Raffaello D'Andrea"
+    ],
+    "year": 2022,
+    "venue": "Soft Robotics 9(5):926–937",
+    "doi": "10.1089/soro.2020.0213",
+    "primary_url": "https://journals.sagepub.com/doi/10.1089/soro.2020.0213",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S10.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S10_crossref.json",
+    "research_direction": "迁移",
+    "technical_route": "FEM合成视觉触觉与力分布回归",
+    "contribution": "在FEM中生成图像特征和力场监督，经相机校准后迁移到真实传感器。",
+    "limitations": "真实分布力真值部分借助仿真赋值，需区别独立力计验证；不是任意无配对触觉转换。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        4,
+        7,
+        9,
+        11
+      ],
+      "detail": "预印本v3摘要、FEM方法、相机映射、测试指标与可视化选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "模型校准与物理监督假设",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "6882606ffa819f87c691848af9c86d15e3f66f0a8ad40ff61e44c96aa9fc76e8",
+    "version_notes": "正式卷期2022，在线发表2021；Crossref默认published是在线日期。卷期由出版社和PubMed交叉核对。全文读取arXiv v3，不称已读出版社排版全文。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S11",
+    "title": "What Matters in Learning from Offline Human Demonstrations for Robot Manipulation",
+    "authors": [
+      "Ajay Mandlekar",
+      "Danfei Xu",
+      "Josiah Wong",
+      "Soroush Nasiriany",
+      "Chen Wang",
+      "Rohun Kulkarni",
+      "Li Fei-Fei",
+      "Silvio Savarese",
+      "Yuke Zhu",
+      "Roberto Martín-Martín"
+    ],
+    "year": 2022,
+    "venue": "Proceedings of the 5th Conference on Robot Learning, PMLR 164: 1678–1690",
+    "doi": null,
+    "primary_url": "https://proceedings.mlr.press/v164/mandlekar22a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W06",
+    "research_direction": "示教数据",
+    "technical_route": "离线示教系统性学习与消融",
+    "contribution": "研究示教质量、算法、观测和历史信息对模仿学习的影响。",
+    "limitations": "实验任务和演示分布限定结论；不说明更多模态必然更好。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        5,
+        7
+      ],
+      "detail": "复用1.1研究设置、方法和消融；本轮复读观测/相机消融",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "数据质量与观测设计影响学习",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "963aaa01b922f07c6d67848c06d1d5bd80664dd96e5e4a209b76d2e281318c66",
+    "version_notes": "",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S12",
+    "title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+    "authors": [
+      "Homer Rich Walke",
+      "Kevin Black",
+      "Tony Z. Zhao",
+      "Quan Vuong",
+      "Chongyi Zheng",
+      "Philippe Hansen-Estruch",
+      "Andre Wang He",
+      "Vivek Myers",
+      "Moo Jin Kim",
+      "Max Du",
+      "Abraham Lee",
+      "Kuan Fang",
+      "Chelsea Finn",
+      "Sergey Levine"
+    ],
+    "year": 2023,
+    "venue": "Proceedings of the 7th Conference on Robot Learning, PMLR 229: 1723–1736",
+    "doi": null,
+    "primary_url": "https://proceedings.mlr.press/v229/walke23a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W07",
+    "research_direction": "示教数据",
+    "technical_route": "跨环境遥操作/脚本数据与多任务学习",
+    "contribution": "提供多环境、多物体操作数据，并验证目标/语言条件及跨环境利用。",
+    "limitations": "不同版本规模不一致；不应据本节构造触觉同步或物理配对结论。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        4,
+        6
+      ],
+      "detail": "复用数据采集协议；本轮读模型及实验问题/设置选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "数据多样性与迁移利用，不做跨论文数字排名",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "52dc04866e173336d090f0b42b373d4b495a4a35cedc4f756b4d064936383825",
+    "version_notes": "PMLR正式作者元数据顺序与所读PDF有差异，按已核验PMLR记录列作者；网页与PDF的轨迹数不同，本节不引用规模作排名。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S13",
+    "title": "RH20T: A Comprehensive Robotic Dataset for Learning Diverse Skills in One-Shot",
+    "authors": [
+      "Hao-Shu Fang",
+      "Hongjie Fang",
+      "Zhenyu Tang",
+      "Jirong Liu",
+      "Chenxi Wang",
+      "Junbo Wang",
+      "Haoyi Zhu",
+      "Cewu Lu"
+    ],
+    "year": 2024,
+    "venue": "2024 IEEE International Conference on Robotics and Automation (ICRA): 653–660",
+    "doi": "10.1109/ICRA57147.2024.10611615",
+    "primary_url": "https://rh20t.github.io/",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W08",
+    "research_direction": "示教数据",
+    "technical_route": "多模态实机采集与技能预训练",
+    "contribution": "组织视觉、力/触觉、音频和机器人状态并验证预训练迁移。",
+    "limitations": "部分实验使用所选子集；其模态关联不能替本项目证明跨设备同步。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "detail": "复用采集/对齐/设置；本轮核对ACT实验结果与组别",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "国内多模态数据采集和标定代表",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "6156500a1340a2e976681f0f8deea8ce493fb4af227d8a5b2696cb3c384bb755",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S14",
+    "title": "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset",
+    "authors": [
+      "Alexander Khazatsky",
+      "Karl Pertsch",
+      "Suraj Nair",
+      "Ashwin Balakrishna",
+      "Sudeep Dasari",
+      "Siddharth Karamcheti",
+      "Soroush Nasiriany",
+      "Mohan Kumar Srirama",
+      "Lawrence Yunliang Chen",
+      "Kirsty Ellis",
+      "Peter David Fagan",
+      "Joey Hejna",
+      "Masha Itkina",
+      "Marion Lepert",
+      "Yecheng Jason Ma",
+      "Patrick Tree Miller",
+      "Jimmy Wu",
+      "Suneel Belkhale",
+      "Shivin Dass",
+      "Huy Ha",
+      "Arhan Jain",
+      "Abraham Lee",
+      "Youngwoon Lee",
+      "Marius Memmel",
+      "Sungjae Park",
+      "Ilija Radosavovic",
+      "Kaiyuan Wang",
+      "Albert Zhan",
+      "Kevin Black",
+      "Cheng Chi",
+      "Kyle Beltran Hatch",
+      "Shan Lin",
+      "Jingpei Lu",
+      "Jean Mercat",
+      "Abdul Rehman",
+      "Pannag R Sanketi",
+      "Archit Sharma",
+      "Cody Simpson",
+      "Quan Vuong",
+      "Homer Rich Walke",
+      "Blake Wulfe",
+      "Ted Xiao",
+      "Jonathan Heewon Yang",
+      "Arefeh Yavary",
+      "Tony Z. Zhao",
+      "Christopher Agia",
+      "Rohan Baijal",
+      "Mateo Guaman Castro",
+      "Daphne Chen",
+      "Qiuyu Chen",
+      "Trinity Chung",
+      "Jaimyn Drake",
+      "Ethan Paul Foster",
+      "Jensen Gao",
+      "David Antonio Herrera",
+      "Minho Heo",
+      "Kyle Hsu",
+      "Jiaheng Hu",
+      "Donovon Jackson",
+      "Charlotte Le",
+      "Yunshuang Li",
+      "Roy Lin",
+      "Zehan Ma",
+      "Abhiram Maddukuri",
+      "Suvir Mirchandani",
+      "Daniel Morton",
+      "Tony Nguyen",
+      "Abigail O'Neill",
+      "Rosario Scalise",
+      "Derick Seale",
+      "Victor Son",
+      "Stephen Tian",
+      "Emi Tran",
+      "Andrew E. Wang",
+      "Yilin Wu",
+      "Annie Xie",
+      "Jingyun Yang",
+      "Patrick Yin",
+      "Yunchu Zhang",
+      "Osbert Bastani",
+      "Glen Berseth",
+      "Jeannette Bohg",
+      "Ken Goldberg",
+      "Abhinav Gupta",
+      "Abhishek Gupta",
+      "Dinesh Jayaraman",
+      "Joseph J Lim",
+      "Jitendra Malik",
+      "Roberto Martín-Martín",
+      "Subramanian Ramamoorthy",
+      "Dorsa Sadigh",
+      "Shuran Song",
+      "Jiajun Wu",
+      "Michael C. Yip",
+      "Yuke Zhu",
+      "Thomas Kollar",
+      "Sergey Levine",
+      "Chelsea Finn"
+    ],
+    "year": 2024,
+    "venue": "Robotics: Science and Systems XX, paper 120",
+    "doi": "10.15607/rss.2024.xx.120",
+    "primary_url": "https://roboticsproceedings.org/rss20/p120.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S14_formal.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S14_crossref.json",
+    "research_direction": "示教数据",
+    "technical_route": "分布式真实场景遥操作采集",
+    "contribution": "用统一机器人采集装置及标定扩大场景覆盖，并检验联合训练效用。",
+    "limitations": "网页与PDF规模口径不同；无712D触觉同合同保证。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        6,
+        8
+      ],
+      "detail": "正式RSS版摘要、数据定义、场景多样性和策略评估选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "场景多样性、采集协议与下游验证",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "f37321af021aba1d19351a166241db48230b82e85c3fccf2054261fd46ca339a",
+    "version_notes": "以RSS正式元数据列全作者；Crossref部分姓名缩写不同。RSS摘要65k与正式PDF表76k存在版本差异，不混写。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S15",
+    "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+    "authors": [
+      "Open X-Embodiment Collaboration"
+    ],
+    "year": 2024,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):6892–6903",
+    "doi": "10.1109/icra57147.2024.10611477",
+    "primary_url": "https://doi.org/10.1109/icra57147.2024.10611477",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S15.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S15_crossref.json",
+    "individual_author_metadata": [
+      {
+        "given": "Abby",
+        "family": "O’Neill",
+        "sequence": "first",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Abdul",
+        "family": "Rehman",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Edinburgh"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Abhiram",
+        "family": "Maddukuri",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Abhishek",
+        "family": "Gupta",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Abhishek",
+        "family": "Padalkar",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "German Aerospace Center"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Abraham",
+        "family": "Lee",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Acorn",
+        "family": "Pooley",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Agrim",
+        "family": "Gupta",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ajay",
+        "family": "Mandlekar",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "NVIDIA"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ajinkya",
+        "family": "Jain",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Intrinsic LLC"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Albert",
+        "family": "Tung",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Alex",
+        "family": "Bewley",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Alex",
+        "family": "Herzog",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Alex",
+        "family": "Irpan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Alexander",
+        "family": "Khazatsky",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Anant",
+        "family": "Rai",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Anchit",
+        "family": "Gupta",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Meta AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Andrew",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Anikait",
+        "family": "Singh",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Animesh",
+        "family": "Garg",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Georgia Institute of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Aniruddha",
+        "family": "Kembhavi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Annie",
+        "family": "Xie",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Anthony",
+        "family": "Brohan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Antonin",
+        "family": "Raffin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "German Aerospace Center"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Archit",
+        "family": "Sharma",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Arefeh",
+        "family": "Yavary",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Davis"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Arhan",
+        "family": "Jain",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ashwin",
+        "family": "Balakrishna",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ayzaan",
+        "family": "Wahid",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ben",
+        "family": "Burgess-Limerick",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Queensland University of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Beomjoon",
+        "family": "Kim",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Bernhard",
+        "family": "Schölkopf",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Max Planck Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Blake",
+        "family": "Wulfe",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Brian",
+        "family": "Ichter",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Cewu",
+        "family": "Lu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Shanghai Jiao Tong University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Charles",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Charlotte",
+        "family": "Le",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chelsea",
+        "family": "Finn",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chen",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chenfeng",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Cheng",
+        "family": "Chi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Columbia University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chenguang",
+        "family": "Huang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Freiburg"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Christine",
+        "family": "Chan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Christopher",
+        "family": "Agia",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chuer",
+        "family": "Pan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Chuyuan",
+        "family": "Fu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Coline",
+        "family": "Devin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Danfei",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Georgia Institute of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Daniel",
+        "family": "Morton",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Danny",
+        "family": "Driess",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Daphne",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Deepak",
+        "family": "Pathak",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Dhruv",
+        "family": "Shah",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Dieter",
+        "family": "Büchler",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Max Planck Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Dinesh",
+        "family": "Jayaraman",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Pennsylvania"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Dmitry",
+        "family": "Kalashnikov",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Dorsa",
+        "family": "Sadigh",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Edward",
+        "family": "Johns",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Imperial College London"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ethan",
+        "family": "Foster",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Fangchen",
+        "family": "Liu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Federico",
+        "family": "Ceola",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Istituto Italiano di Tecnologia"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Fei",
+        "family": "Xia",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Feiyu",
+        "family": "Zhao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Freek",
+        "family": "Stulp",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "German Aerospace Center"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gaoyue",
+        "family": "Zhou",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gaurav S.",
+        "family": "Sukhatme",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gautam",
+        "family": "Salhotra",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ge",
+        "family": "Yan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gilbert",
+        "family": "Feng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Giulio",
+        "family": "Schiavi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "ETH Z&#x00FC;rich"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Glen",
+        "family": "Berseth",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Montreal"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Gregory",
+        "family": "Kahn",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Guanzhi",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "California Institute of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hao",
+        "family": "Su",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hao-Shu",
+        "family": "Fang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Shanghai Jiao Tong University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Haochen",
+        "family": "Shi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Henghui",
+        "family": "Bao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Heni",
+        "family": "Ben Amor",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Arizona State University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Henrik I",
+        "family": "Christensen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hiroki",
+        "family": "Furuta",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Homer",
+        "family": "Walke",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Hongjie",
+        "family": "Fang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Shanghai Jiao Tong University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Huy",
+        "family": "Ha",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Columbia University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Igor",
+        "family": "Mordatch",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ilija",
+        "family": "Radosavovic",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Isabel",
+        "family": "Leal",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jacky",
+        "family": "Liang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jad",
+        "family": "Abou-Chakra",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Queensland University of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jaehyung",
+        "family": "Kim",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jaimyn",
+        "family": "Drake",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jan",
+        "family": "Peters",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Technische Universit&#x00E4;t Darmstadt"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jan",
+        "family": "Schneider",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Max Planck Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jasmine",
+        "family": "Hsu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jeannette",
+        "family": "Bohg",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jeffrey",
+        "family": "Bingham",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jeffrey",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jensen",
+        "family": "Gao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiaheng",
+        "family": "Hu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiajun",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jialin",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google Research"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiankai",
+        "family": "Sun",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jianlan",
+        "family": "Luo",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jiayuan",
+        "family": "Gu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jie",
+        "family": "Tan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jihoon",
+        "family": "Oh",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jimmy",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Princeton University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jingpei",
+        "family": "Lu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jingyun",
+        "family": "Yang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jitendra",
+        "family": "Malik",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "João",
+        "family": "Silvério",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "German Aerospace Center"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Joey",
+        "family": "Hejna",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jonathan",
+        "family": "Booher",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jonathan",
+        "family": "Tompson",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jonathan",
+        "family": "Yang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Jordi",
+        "family": "Salvador",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Joseph J.",
+        "family": "Lim",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Junhyek",
+        "family": "Han",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kaiyuan",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kanishka",
+        "family": "Rao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Karl",
+        "family": "Pertsch",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Karol",
+        "family": "Hausman",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Keegan",
+        "family": "Go",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Intrinsic LLC"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Keerthana",
+        "family": "Gopalakrishnan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ken",
+        "family": "Goldberg",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kendra",
+        "family": "Byrne",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kenneth",
+        "family": "Oslund",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kento",
+        "family": "Kawaharazuka",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kevin",
+        "family": "Black",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kevin",
+        "family": "Lin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kevin",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kiana",
+        "family": "Ehsani",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kiran",
+        "family": "Lekkala",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kirsty",
+        "family": "Ellis",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Montreal"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Krishan",
+        "family": "Rana",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Queensland University of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Krishnan",
+        "family": "Srinivasan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kuan",
+        "family": "Fang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kunal Pratap",
+        "family": "Singh",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "EPFL"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kuo-Hao",
+        "family": "Zeng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kyle",
+        "family": "Hatch",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Kyle",
+        "family": "Hsu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Laurent",
+        "family": "Itti",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Lawrence Yunliang",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Lerrel",
+        "family": "Pinto",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Li",
+        "family": "Fei-Fei",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Liam",
+        "family": "Tan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Linxi Jim",
+        "family": "Fan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "NVIDIA"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Lionel",
+        "family": "Ott",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "ETH Z&#x00FC;rich"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Lisa",
+        "family": "Lee",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Luca",
+        "family": "Weihs",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Magnum",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Marion",
+        "family": "Lepert",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Marius",
+        "family": "Memmel",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Masayoshi",
+        "family": "Tomizuka",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Masha",
+        "family": "Itkina",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mateo Guaman",
+        "family": "Castro",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Max",
+        "family": "Spero",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Maximilian",
+        "family": "Du",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Michael",
+        "family": "Ahn",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Michael C.",
+        "family": "Yip",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mingtong",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Illinois Urbana-Champaign"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mingyu",
+        "family": "Ding",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Minho",
+        "family": "Heo",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mohan Kumar",
+        "family": "Srirama",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Mohit",
+        "family": "Sharma",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Moo Jin",
+        "family": "Kim",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Naoaki",
+        "family": "Kanazawa",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Nicklas",
+        "family": "Hansen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Nicolas",
+        "family": "Heess",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Nikhil J",
+        "family": "Joshi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Niko",
+        "family": "Suenderhauf",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Queensland University of Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ning",
+        "family": "Liu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Norman",
+        "family": "Di Palo",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Imperial College London"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Nur Muhammad Mahi",
+        "family": "Shafiullah",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Oier",
+        "family": "Mees",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Freiburg"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Oliver",
+        "family": "Kroemer",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Osbert",
+        "family": "Bastani",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Pennsylvania"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Pannag R",
+        "family": "Sanketi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Patrick Tree",
+        "family": "Miller",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Patrick",
+        "family": "Yin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Paul",
+        "family": "Wohlhart",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Peng",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Peter David",
+        "family": "Fagan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Edinburgh"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Peter",
+        "family": "Mitrano",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Michigan"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Pierre",
+        "family": "Sermanet",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Pieter",
+        "family": "Abbeel",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Priya",
+        "family": "Sundaresan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Qiuyu",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Quan",
+        "family": "Vuong",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rafael",
+        "family": "Rafailov",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ran",
+        "family": "Tian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ria",
+        "family": "Doshi",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Roberto",
+        "family": "Martín-Martín",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rohan",
+        "family": "Baijal",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rosario",
+        "family": "Scalise",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rose",
+        "family": "Hendrix",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Roy",
+        "family": "Lin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Runjia",
+        "family": "Qian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ruohan",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Russell",
+        "family": "Mendonca",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Rutav",
+        "family": "Shah",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ryan",
+        "family": "Hoque",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ryan",
+        "family": "Julian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Samuel",
+        "family": "Bustamante",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "German Aerospace Center"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sean",
+        "family": "Kirmani",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sergey",
+        "family": "Levine",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shan",
+        "family": "Lin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sherry",
+        "family": "Moore",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shikhar",
+        "family": "Bahl",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shivin",
+        "family": "Dass",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Southern California"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shubham",
+        "family": "Sonawani",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Arizona State University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Shuran",
+        "family": "Song",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Columbia University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sichun",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Siddhant",
+        "family": "Haldar",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Siddharth",
+        "family": "Karamcheti",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Simeon",
+        "family": "Adebola",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Simon",
+        "family": "Guist",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Max Planck Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Soroush",
+        "family": "Nasiriany",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Stefan",
+        "family": "Schaal",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Intrinsic LLC"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Stefan",
+        "family": "Welker",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Stephen",
+        "family": "Tian",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Subramanian",
+        "family": "Ramamoorthy",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Edinburgh"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sudeep",
+        "family": "Dasari",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Suneel",
+        "family": "Belkhale",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Sungjae",
+        "family": "Park",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Suraj",
+        "family": "Nair",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Suvir",
+        "family": "Mirchandani",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Takayuki",
+        "family": "Osa",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tanmay",
+        "family": "Gupta",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tatsuya",
+        "family": "Harada",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tatsuya",
+        "family": "Matsushima",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ted",
+        "family": "Xiao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Thomas",
+        "family": "Kollar",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Toyota Research Institute"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tianhe",
+        "family": "Yu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tianli",
+        "family": "Ding",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Todor",
+        "family": "Davchev",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Tony Z.",
+        "family": "Zhao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Travis",
+        "family": "Armstrong",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Trevor",
+        "family": "Darrell",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Trinity",
+        "family": "Chung",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Vidhi",
+        "family": "Jain",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Vincent",
+        "family": "Vanhoucke",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Wei",
+        "family": "Zhan",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Wenxuan",
+        "family": "Zhou",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Wolfram",
+        "family": "Burgard",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Technology,Nuremberg"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xi",
+        "family": "Chen",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xiaolong",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xinghao",
+        "family": "Zhu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xinyang",
+        "family": "Geng",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xiyuan",
+        "family": "Liu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xu",
+        "family": "Liangwei",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Xuanlin",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yao",
+        "family": "Lu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yecheng Jason",
+        "family": "Ma",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Pennsylvania"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yejin",
+        "family": "Kim",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yevgen",
+        "family": "Chebotar",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yifan",
+        "family": "Zhou",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Arizona State University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yifeng",
+        "family": "Zhu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yilin",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Ying",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yixuan",
+        "family": "Wang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Illinois Urbana-Champaign"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yonatan",
+        "family": "Bisk",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Carnegie Mellon University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yoonyoung",
+        "family": "Cho",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Korea Advanced Institute of Science &amp; Technology"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Youngwoon",
+        "family": "Lee",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yuchen",
+        "family": "Cui",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yue",
+        "family": "Cao",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "IO-AI TECH"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yueh-Hua",
+        "family": "Wu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,San Diego"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yujin",
+        "family": "Tang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yuke",
+        "family": "Zhu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Texas at Austin"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yunchu",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Washington"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yunfan",
+        "family": "Jiang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Stanford University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yunshuang",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Pennsylvania"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yunzhu",
+        "family": "Li",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of Illinois Urbana-Champaign"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yusuke",
+        "family": "Iwasawa",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Yutaka",
+        "family": "Matsuo",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "The University of Tokyo"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zehan",
+        "family": "Ma",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zhuo",
+        "family": "Xu",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Google DeepMind"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zichen Jeff",
+        "family": "Cui",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "New York University"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zichen",
+        "family": "Zhang",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "Allen Institute for AI"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      },
+      {
+        "given": "Zipeng",
+        "family": "Lin",
+        "sequence": "additional",
+        "affiliation": [
+          {
+            "name": "University of California,Berkeley"
+          }
+        ],
+        "role": [
+          {
+            "vocabulary": "crossref",
+            "role": "author"
+          }
+        ]
+      }
+    ],
+    "research_direction": "示教数据",
+    "technical_route": "跨机器人数据整合与RT-X",
+    "contribution": "以粗粒度观测动作统一支持跨机器人训练，包含迁移及消融。",
+    "limitations": "统一格式不等于动力学相同或模态全部齐全；当前阅读全文片段来自2025预印本v9。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "detail": "预印本v9摘要、数据整合和跨机器人/消融实验选段；正式ICRA元数据单列",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "格式标准化与语义/控制合同需分开",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "13f16aff5afdee583dc25b3c570e9bb0cf6baefb59b539928d919588cd8d9246",
+    "version_notes": "正式出版2024；本地arXiv v9更新于2025。团队作者与完整个人作者元数据分别保存，不把<sup>0</sup>排版残片放进题名；不将v9新增结果冒充已核正式版结果。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S16",
+    "title": "MimicGen: A Data Generation System for Scalable Robot Learning using Human Demonstrations",
+    "authors": [
+      "Ajay Mandlekar",
+      "Soroush Nasiriany",
+      "Bowen Wen",
+      "Iretiayo Akinola",
+      "Yashraj Narang",
+      "Linxi Fan",
+      "Yuke Zhu",
+      "Dieter Fox"
+    ],
+    "year": 2023,
+    "venue": "Conference on Robot Learning, PMLR 229:1820–1864",
+    "doi": null,
+    "primary_url": "https://proceedings.mlr.press/v229/mandlekar23a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S16.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S16_publisher.html",
+    "research_direction": "示教数据",
+    "technical_route": "物体中心分段轨迹变换与实际执行",
+    "contribution": "通过分段、坐标变换及插值重用少量示教，在执行成功后形成新示教。",
+    "limitations": "依赖已知物体中心子任务序列、位姿及末端动作接口；不是任意灵巧操作通用生成。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        7
+      ],
+      "detail": "摘要、三项任务/动作假设、生成管线和数据/性能实验",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "自动示教必须适配控制和任务验证",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "5f65080fac4df7f9500ccd126dbca6071ca4289c566eb03704dad8b65426c509",
+    "version_notes": "",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S17",
+    "title": "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World",
+    "authors": [
+      "Josh Tobin",
+      "Rachel Fong",
+      "Alex Ray",
+      "Jonas Schneider",
+      "Wojciech Zaremba",
+      "Pieter Abbeel"
+    ],
+    "year": 2017,
+    "venue": "2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS): 23–30",
+    "doi": "10.1109/IROS.2017.8202133",
+    "primary_url": "https://arxiv.org/abs/1703.06907",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W05",
+    "research_direction": "迁移",
+    "technical_route": "视觉域随机化",
+    "contribution": "随机纹理、光照、相机和干扰物训练视觉定位并做真实评估与消融。",
+    "limitations": "原实验主要是视觉随机化；不能直接支持压阻材料随机化已经有效。",
+    "reading_scope": {
+      "pdf_pages": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "detail": "复用方法阅读；本轮读随机化范围、真实定位和消融",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "以覆盖变化降低仿真依赖，限定到原验证模态",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "3fc98c5f4cea050686d45858e647e1b704492121fdae80f8fcd5d560c107f11f",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S18",
+    "title": "Generative Adversarial Nets",
+    "authors": [
+      "Goodfellow, Ian J.",
+      "Pouget-Abadie, Jean",
+      "Mirza, Mehdi",
+      "Xu, Bing",
+      "Warde-Farley, David",
+      "Ozair, Sherjil",
+      "Courville, Aaron",
+      "Bengio, Yoshua"
+    ],
+    "year": 2014,
+    "venue": "Advances in Neural Information Processing Systems 27",
+    "doi": null,
+    "primary_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S18.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S18_publisher.html",
+    "research_direction": "迁移",
+    "technical_route": "生成器与判别器极小极大优化",
+    "contribution": "给出对抗生成目标及理想最优判别器条件下的分布结论。",
+    "limitations": "有限/冻结判别器被接受不等价理论最优分布相等；原实验为图像生成。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "detail": "摘要、优化目标/交替过程、理论前提及实验设置选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "对抗优化依据及判别分数的解释边界",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "ff5819e3a7b713c3bd3107b7de3d51fe0a347aa5d8444f0efdcf2345ef0a8b63",
+    "version_notes": "出版页未列DOI/连续页码，留空而非猜测；正文读取作者预印本。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S19",
+    "title": "Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks",
+    "authors": [
+      "Jun-Yan Zhu",
+      "Taesung Park",
+      "Phillip Isola",
+      "Alexei A. Efros"
+    ],
+    "year": 2017,
+    "venue": "2017 IEEE International Conference on Computer Vision (ICCV): 2242–2251",
+    "doi": "10.1109/ICCV.2017.244",
+    "primary_url": "https://openaccess.thecvf.com/content_ICCV_2017/html/Zhu_Unpaired_Image-To-Image_Translation_ICCV_2017_paper.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W11",
+    "research_direction": "迁移",
+    "technical_route": "非配对对抗转换与循环一致性",
+    "contribution": "用双向映射和循环损失约束无配对图像转换，并做消融。",
+    "limitations": "不认证触觉物理语义及唯一对应；图像可视质量不能替代触觉结构指标。",
+    "reading_scope": {
+      "pdf_pages": [
+        2,
+        3,
+        5
+      ],
+      "detail": "复用方法阅读；本轮读有真值评价与无配对训练区分、实验/消融",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "非配对学习需要额外结构约束",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "0c2330be7183072954db6835452a9f56f7b4f778069cb9f4d7a87ef4b4bdfa88",
+    "version_notes": "IEEE题录2242–2251；CVF版打印页2223–2232不同，保留差异，阅读范围均指PDF序号。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S20",
+    "title": "Auto-Encoding Variational Bayes",
+    "authors": [
+      "Kingma, Diederik P.",
+      "Welling, Max"
+    ],
+    "year": 2014,
+    "venue": "International Conference on Learning Representations (ICLR)",
+    "doi": null,
+    "primary_url": "https://dare.uva.nl/id/cf65ba0f-d88f-4a49-8ebd-3a7fce86edd7",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S20.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S20_author_institution.html",
+    "research_direction": "迁移",
+    "technical_route": "变分下界与重参数化",
+    "contribution": "通过概率Encoder/Decoder与KL正则学习潜变量生成模型。",
+    "limitations": "两个独立VAE的坐标和潜语义不由同维度或高斯先验保证。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        6,
+        7
+      ],
+      "detail": "摘要、ELBO、训练设置及MNIST/Frey比较选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "双域表示的基础与不能自动对齐的边界",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "bdcb63b79ed88f64f8ee2d43a721930d01dde5441a4dba20ecaa2342b34e017c",
+    "version_notes": "作者所属阿姆斯特丹大学机构库核实为ICLR2014录用稿；2013为预印本首发年。没有核实会议DOI。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者录用稿/arXiv，机构库注明accepted paper，不冒称另有出版社排版版",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S21",
+    "title": "Unsupervised Image-to-Image Translation Networks",
+    "authors": [
+      "Liu, Ming-Yu",
+      "Breuel, Thomas",
+      "Kautz, Jan"
+    ],
+    "year": 2017,
+    "venue": "Advances in Neural Information Processing Systems 30",
+    "doi": null,
+    "primary_url": "https://papers.nips.cc/paper_files/paper/2017/hash/dc6a6489640ca02b0d42dabeb8e46bb7-Abstract.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S21.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S21_publisher.html",
+    "research_direction": "迁移",
+    "technical_route": "共享潜空间假设下的非配对图像翻译",
+    "contribution": "通过显式权重共享、VAE/GAN及循环约束实现双域转换。",
+    "limitations": "共享潜空间是建模假设及网络约束，不是独立VAE天然性质；实验为图像。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        5
+      ],
+      "detail": "摘要、共享高层函数、VAE建模、消融和实验设置",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "非配对对应关系的可识别性依赖约束",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "48de51d0f94d8a1c480d6eaa8fb4bff6cb21c53a2bd33bc63bfad002844c5ca7",
+    "version_notes": "正式NeurIPS2017元数据；全文读取作者预印本。出版页未列DOI/页码，不猜测。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S22",
+    "title": "Domain-Adversarial Training of Neural Networks",
+    "authors": [
+      "Yaroslav Ganin",
+      "Evgeniya Ustinova",
+      "Hana Ajakan",
+      "Pascal Germain",
+      "Hugo Larochelle",
+      "François Laviolette",
+      "Mario Marchand",
+      "Victor Lempitsky"
+    ],
+    "year": 2016,
+    "venue": "Journal of Machine Learning Research 17(59):1–35",
+    "doi": null,
+    "primary_url": "https://www.jmlr.org/papers/v17/15-239.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S22.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S22_publisher.html",
+    "research_direction": "迁移",
+    "technical_route": "任务分类与GRL域对抗表示",
+    "contribution": "联合源域任务监督和域判别学习域不变表示，并评估分类/检索。",
+    "limitations": "主要输出是任务表示；不能把潜空间域混淆直接视作完整触觉重建。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        10,
+        24
+      ],
+      "detail": "摘要、浅层更新算法及图像域适应实验表",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "域适应与触觉输出重建的区别",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "801be7cae7acf3ec0df604d40e6129cb9f594e09e6891370b3f7bd2ebef40403",
+    "version_notes": "JMLR HTML citation_author误列Mario March，PDF署名为Mario Marchand，采用PDF署名；重音字符已核对。",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S23",
+    "title": "A Kernel Two-Sample Test",
+    "authors": [
+      "Arthur Gretton",
+      "Karsten M. Borgwardt",
+      "Malte J. Rasch",
+      "Bernhard Schölkopf",
+      "Alexander Smola"
+    ],
+    "year": 2012,
+    "venue": "Journal of Machine Learning Research 13(25):723–773",
+    "doi": null,
+    "primary_url": "https://www.jmlr.org/papers/v13/gretton12a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S23.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S23_publisher.html",
+    "research_direction": "迁移评价",
+    "technical_route": "RKHS最大均值差异与两样本检验",
+    "contribution": "将分布比较写为核均值嵌入差异，研究检验与核选择。",
+    "limitations": "有限样本、核/表示和独立性影响估计；不检查输入与输出接触语义。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        5,
+        25
+      ],
+      "detail": "摘要、均值嵌入/定理条件及数据库/生物/神经实验设计开头",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "分布指标须写清实现和统计条件",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "236e1e59ca080d36c59958777c523afdeb8b496871ed50bd21665312c8013f28",
+    "version_notes": "",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S24",
+    "title": "Reliable Fidelity and Diversity Metrics for Generative Models",
+    "authors": [
+      "Muhammad Ferjad Naeem",
+      "Seong Joon Oh",
+      "Youngjung Uh",
+      "Yunjey Choi",
+      "Jaejun Yoo"
+    ],
+    "year": 2020,
+    "venue": "International Conference on Machine Learning, PMLR 119:7176–7185",
+    "doi": null,
+    "primary_url": "https://proceedings.mlr.press/v119/naeem20a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S24.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S24_publisher.html",
+    "research_direction": "迁移评价",
+    "technical_route": "生成保真度、多样性及密度覆盖",
+    "contribution": "用density/coverage补充precision/recall，并检验离群点和模式丢失。",
+    "limitations": "依赖特征及邻域；原图像特征不能无验证充当触觉物理距离。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        4,
+        7
+      ],
+      "detail": "摘要、指标定义、Gaussian和图像实验选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "不能仅用单一分数概括生成质量",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "09933ed7868c7828d7e27b8f43906cf31796c0dfc096d4726b439aa44b045fd1",
+    "version_notes": "",
+    "doi_status": "出版记录未列/未核实，不推测不存在",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S25",
+    "title": "Sim-to-Real for Robotic Tactile Sensing via Physics-Based Simulation and Learned Latent Projections",
+    "authors": [
+      "Yashraj Narang",
+      "Balakumar Sundaralingam",
+      "Miles Macklin",
+      "Arsalan Mousavian",
+      "Dieter Fox"
+    ],
+    "year": 2021,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):6444–6451",
+    "doi": "10.1109/icra48506.2021.9561969",
+    "primary_url": "https://research.nvidia.com/publication/2021-06_sim-real-robotic-tactile-sensing-physics-based-simulation-and-learned-latent",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S25.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S25_crossref.json",
+    "research_direction": "迁移",
+    "technical_route": "FEM触觉模型与独立VAE监督潜投影",
+    "contribution": "分别学习BioTac形变与电信号表示，冻结后用有限配对数据训练潜空间投影。",
+    "limitations": "依赖监督对应和特定传感器；未见接触模式也可能重建失败，不是纯无配对成功。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "detail": "摘要、两VAE结构、监督投影、FEM及信号/接触重建实验",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "与本课题最近的方法先例，必须正面比较",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "abf4d976f28e1a7db9a12a395a505887c302bec1a8d06acaec798f67ba1870a5",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  }
+]

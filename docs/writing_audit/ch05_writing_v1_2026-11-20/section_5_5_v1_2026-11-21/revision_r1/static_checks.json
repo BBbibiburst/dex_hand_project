@@ -1,0 +1,17 @@
+{
+  "labels_unique": true,
+  "local_refs_resolve": true,
+  "environments_balanced": true,
+  "display_equations_bit_identical": true,
+  "figure_bit_identical": true,
+  "CSV_values_exactly_copied": true,
+  "no_new_citations": true,
+  "no_control_characters": true,
+  "compiled": false,
+  "labels": [
+    "sec:ch05_latent_translator",
+    "eq:ch05_translator_mapping",
+    "eq:ch05_translator_objective",
+    "fig:ch05_translator_paths"
+  ]
+}

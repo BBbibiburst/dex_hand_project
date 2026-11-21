@@ -1,0 +1,703 @@
+[
+  {
+    "source_id": "S01",
+    "bibtex_key": "bohg2014grasp",
+    "status": "reused_unchanged",
+    "title": "Data-Driven Grasp Synthesis—A Survey",
+    "year": 2014,
+    "venue": "IEEE Transactions on Robotics, 30(2): 289–309",
+    "doi": "10.1109/TRO.2013.2289018",
+    "url": "https://arxiv.org/abs/1309.2660",
+    "read_pdf_pages": [
+      3,
+      4
+    ],
+    "version_notes": "",
+    "authors": [
+      "Jeannette Bohg",
+      "Antonio Morales",
+      "Tamim Asfour",
+      "Danica Kragic"
+    ]
+  },
+  {
+    "source_id": "S02",
+    "bibtex_key": "zurbrugg2025graspqp",
+    "status": "added",
+    "title": "GraspQP: Differentiable Optimization of Force Closure for Diverse and Robust Dexterous Grasping",
+    "year": 2025,
+    "venue": "Conference on Robot Learning, PMLR 305:2583–2602",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v305/zurbrugg25a.html",
+    "read_pdf_pages": [
+      3,
+      4,
+      5,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "René Zurbrügg",
+      "Andrei Cramariuc",
+      "Marco Hutter"
+    ]
+  },
+  {
+    "source_id": "S03",
+    "bibtex_key": "zurbrugg2026dexevolve",
+    "status": "added",
+    "title": "DexEvolve: Evolutionary Optimization for Robust and Diverse Dexterous Grasp Synthesis",
+    "year": 2026,
+    "venue": "Robotics: Science and Systems XXII, paper 059",
+    "doi": "10.15607/rss.2026.xxii.059",
+    "url": "https://roboticsproceedings.org/rss22/p059.html",
+    "read_pdf_pages": [
+      3,
+      7
+    ],
+    "version_notes": "RSS正式版11页与预印本17页不同，页号已分别标注。RSS网页编码异常以Crossref和PDF中的René Zurbrügg为准。",
+    "authors": [
+      "René Zurbrügg",
+      "Andrei Cramariuc",
+      "Marco Hutter"
+    ]
+  },
+  {
+    "source_id": "S04",
+    "bibtex_key": "wang2023dexgraspnet",
+    "status": "added",
+    "title": "DexGraspNet: A Large-Scale Robotic Dexterous Grasp Dataset for General Objects Based on Simulation",
+    "year": 2023,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):11359–11366",
+    "doi": "10.1109/icra48891.2023.10160982",
+    "url": "https://doi.org/10.1109/icra48891.2023.10160982",
+    "read_pdf_pages": [
+      1,
+      2,
+      3,
+      6
+    ],
+    "version_notes": "",
+    "authors": [
+      "Ruicheng Wang",
+      "Jialiang Zhang",
+      "Jiayi Chen",
+      "Yinzhen Xu",
+      "Puhao Li",
+      "Tengyu Liu",
+      "He Wang"
+    ]
+  },
+  {
+    "source_id": "S05",
+    "bibtex_key": "xu2023unidexgrasp",
+    "status": "added",
+    "title": "UniDexGrasp: Universal Robotic Dexterous Grasping via Learning Diverse Proposal Generation and Goal-Conditioned Policy",
+    "year": 2023,
+    "venue": "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR):4737–4746",
+    "doi": "10.1109/cvpr52729.2023.00459",
+    "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Xu_UniDexGrasp_Universal_Robotic_Dexterous_Grasping_via_Learning_Diverse_Proposal_Generation_CVPR_2023_paper.html",
+    "read_pdf_pages": [
+      1,
+      3,
+      6,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "Yinzhen Xu",
+      "Weikang Wan",
+      "Jialiang Zhang",
+      "Haoran Liu",
+      "Zikang Shan",
+      "Hao Shen",
+      "Ruicheng Wang",
+      "Haoran Geng",
+      "Yijia Weng",
+      "Jiayi Chen",
+      "Tengyu Liu",
+      "Li Yi",
+      "He Wang"
+    ]
+  },
+  {
+    "source_id": "S06",
+    "bibtex_key": "todorov2012mujoco",
+    "status": "added",
+    "title": "MuJoCo: A physics engine for model-based control",
+    "year": 2012,
+    "venue": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS):5026–5033",
+    "doi": "10.1109/iros.2012.6386109",
+    "url": "https://roboti.us/lab/papers/TodorovIROS12.pdf",
+    "read_pdf_pages": [
+      1,
+      3,
+      7
+    ],
+    "version_notes": "本轮找回作者托管PDF；旧链接曾重定向，未回改1.1历史档案。2012论文不用于描述当前全部版本功能。",
+    "authors": [
+      "Emanuel Todorov",
+      "Tom Erez",
+      "Yuval Tassa"
+    ]
+  },
+  {
+    "source_id": "S07",
+    "bibtex_key": "makoviychuk2021isaacgym",
+    "status": "added",
+    "title": "Isaac Gym: High Performance GPU Based Physics Simulation For Robot Learning",
+    "year": 2021,
+    "venue": "NeurIPS Datasets and Benchmarks, volume 1, Round 2",
+    "doi": null,
+    "url": "https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/28dd2c7955ce926456240b2ff0100bde-Abstract-round2.html",
+    "read_pdf_pages": [
+      1,
+      3,
+      7
+    ],
+    "version_notes": "正式NeurIPS Datasets and Benchmarks论文，不再标为仅arXiv；不将Gym测速套给Isaac Sim。",
+    "authors": [
+      "Makoviychuk, Viktor",
+      "Wawrzyniak, Lukasz",
+      "Guo, Yunrong",
+      "Lu, Michelle",
+      "Storey, Kier",
+      "Macklin, Miles",
+      "Hoeller, David",
+      "Rudin, Nikita",
+      "Allshire, Arthur",
+      "Handa, Ankur",
+      "State, Gavriel"
+    ]
+  },
+  {
+    "source_id": "S08",
+    "bibtex_key": "wang2022tacto",
+    "status": "reused_unchanged",
+    "title": "TACTO: A Fast, Flexible, and Open-Source Simulator for High-Resolution Vision-Based Tactile Sensors",
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 3930–3937",
+    "doi": "10.1109/LRA.2022.3146945",
+    "url": "https://arxiv.org/abs/2012.08456",
+    "read_pdf_pages": [
+      3,
+      4,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "Shaoxiong Wang",
+      "Mike Lambeta",
+      "Po-Wei Chou",
+      "Roberto Calandra"
+    ]
+  },
+  {
+    "source_id": "S09",
+    "bibtex_key": "si2022taxim",
+    "status": "reused_unchanged",
+    "title": "Taxim: An Example-Based Simulation Model for GelSight Tactile Sensors",
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 2361–2368",
+    "doi": "10.1109/LRA.2022.3142412",
+    "url": "https://arxiv.org/abs/2109.04027",
+    "read_pdf_pages": [
+      2,
+      3,
+      5,
+      6
+    ],
+    "version_notes": "",
+    "authors": [
+      "Zilin Si",
+      "Wenzhen Yuan"
+    ]
+  },
+  {
+    "source_id": "S10",
+    "bibtex_key": "sferrazza2022simtoreal",
+    "status": "added",
+    "title": "Sim-to-Real for High-Resolution Optical Tactile Sensing: From Images to Three-Dimensional Contact Force Distributions",
+    "year": 2022,
+    "venue": "Soft Robotics 9(5):926–937",
+    "doi": "10.1089/soro.2020.0213",
+    "url": "https://journals.sagepub.com/doi/10.1089/soro.2020.0213",
+    "read_pdf_pages": [
+      1,
+      3,
+      4,
+      7,
+      9,
+      11
+    ],
+    "version_notes": "正式卷期2022，在线发表2021；Crossref默认published是在线日期。卷期由出版社和PubMed交叉核对。全文读取arXiv v3，不称已读出版社排版全文。",
+    "authors": [
+      "Carmelo Sferrazza",
+      "Raffaello D'Andrea"
+    ]
+  },
+  {
+    "source_id": "S11",
+    "bibtex_key": "mandlekar2022demonstrations",
+    "status": "reused_unchanged",
+    "title": "What Matters in Learning from Offline Human Demonstrations for Robot Manipulation",
+    "year": 2022,
+    "venue": "Proceedings of the 5th Conference on Robot Learning, PMLR 164: 1678–1690",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v164/mandlekar22a.html",
+    "read_pdf_pages": [
+      3,
+      5,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "Ajay Mandlekar",
+      "Danfei Xu",
+      "Josiah Wong",
+      "Soroush Nasiriany",
+      "Chen Wang",
+      "Rohun Kulkarni",
+      "Li Fei-Fei",
+      "Silvio Savarese",
+      "Yuke Zhu",
+      "Roberto Martín-Martín"
+    ]
+  },
+  {
+    "source_id": "S12",
+    "bibtex_key": "walke2023bridgedata",
+    "status": "reused_unchanged",
+    "title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+    "year": 2023,
+    "venue": "Proceedings of the 7th Conference on Robot Learning, PMLR 229: 1723–1736",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v229/walke23a.html",
+    "read_pdf_pages": [
+      3,
+      4,
+      6
+    ],
+    "version_notes": "PMLR正式作者元数据顺序与所读PDF有差异，按已核验PMLR记录列作者；网页与PDF的轨迹数不同，本节不引用规模作排名。",
+    "authors": [
+      "Homer Rich Walke",
+      "Kevin Black",
+      "Tony Z. Zhao",
+      "Quan Vuong",
+      "Chongyi Zheng",
+      "Philippe Hansen-Estruch",
+      "Andre Wang He",
+      "Vivek Myers",
+      "Moo Jin Kim",
+      "Max Du",
+      "Abraham Lee",
+      "Kuan Fang",
+      "Chelsea Finn",
+      "Sergey Levine"
+    ]
+  },
+  {
+    "source_id": "S13",
+    "bibtex_key": "fang2024rh20t",
+    "status": "reused_unchanged",
+    "title": "RH20T: A Comprehensive Robotic Dataset for Learning Diverse Skills in One-Shot",
+    "year": 2024,
+    "venue": "2024 IEEE International Conference on Robotics and Automation (ICRA): 653–660",
+    "doi": "10.1109/ICRA57147.2024.10611615",
+    "url": "https://rh20t.github.io/",
+    "read_pdf_pages": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ],
+    "version_notes": "",
+    "authors": [
+      "Hao-Shu Fang",
+      "Hongjie Fang",
+      "Zhenyu Tang",
+      "Jirong Liu",
+      "Chenxi Wang",
+      "Junbo Wang",
+      "Haoyi Zhu",
+      "Cewu Lu"
+    ]
+  },
+  {
+    "source_id": "S14",
+    "bibtex_key": "khazatsky2024droid",
+    "status": "added",
+    "title": "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset",
+    "year": 2024,
+    "venue": "Robotics: Science and Systems XX, paper 120",
+    "doi": "10.15607/rss.2024.xx.120",
+    "url": "https://roboticsproceedings.org/rss20/p120.html",
+    "read_pdf_pages": [
+      1,
+      3,
+      6,
+      8
+    ],
+    "version_notes": "以RSS正式元数据列全作者；Crossref部分姓名缩写不同。RSS摘要65k与正式PDF表76k存在版本差异，不混写。",
+    "authors": [
+      "Alexander Khazatsky",
+      "Karl Pertsch",
+      "Suraj Nair",
+      "Ashwin Balakrishna",
+      "Sudeep Dasari",
+      "Siddharth Karamcheti",
+      "Soroush Nasiriany",
+      "Mohan Kumar Srirama",
+      "Lawrence Yunliang Chen",
+      "Kirsty Ellis",
+      "Peter David Fagan",
+      "Joey Hejna",
+      "Masha Itkina",
+      "Marion Lepert",
+      "Yecheng Jason Ma",
+      "Patrick Tree Miller",
+      "Jimmy Wu",
+      "Suneel Belkhale",
+      "Shivin Dass",
+      "Huy Ha",
+      "Arhan Jain",
+      "Abraham Lee",
+      "Youngwoon Lee",
+      "Marius Memmel",
+      "Sungjae Park",
+      "Ilija Radosavovic",
+      "Kaiyuan Wang",
+      "Albert Zhan",
+      "Kevin Black",
+      "Cheng Chi",
+      "Kyle Beltran Hatch",
+      "Shan Lin",
+      "Jingpei Lu",
+      "Jean Mercat",
+      "Abdul Rehman",
+      "Pannag R Sanketi",
+      "Archit Sharma",
+      "Cody Simpson",
+      "Quan Vuong",
+      "Homer Rich Walke",
+      "Blake Wulfe",
+      "Ted Xiao",
+      "Jonathan Heewon Yang",
+      "Arefeh Yavary",
+      "Tony Z. Zhao",
+      "Christopher Agia",
+      "Rohan Baijal",
+      "Mateo Guaman Castro",
+      "Daphne Chen",
+      "Qiuyu Chen",
+      "Trinity Chung",
+      "Jaimyn Drake",
+      "Ethan Paul Foster",
+      "Jensen Gao",
+      "David Antonio Herrera",
+      "Minho Heo",
+      "Kyle Hsu",
+      "Jiaheng Hu",
+      "Donovon Jackson",
+      "Charlotte Le",
+      "Yunshuang Li",
+      "Roy Lin",
+      "Zehan Ma",
+      "Abhiram Maddukuri",
+      "Suvir Mirchandani",
+      "Daniel Morton",
+      "Tony Nguyen",
+      "Abigail O'Neill",
+      "Rosario Scalise",
+      "Derick Seale",
+      "Victor Son",
+      "Stephen Tian",
+      "Emi Tran",
+      "Andrew E. Wang",
+      "Yilin Wu",
+      "Annie Xie",
+      "Jingyun Yang",
+      "Patrick Yin",
+      "Yunchu Zhang",
+      "Osbert Bastani",
+      "Glen Berseth",
+      "Jeannette Bohg",
+      "Ken Goldberg",
+      "Abhinav Gupta",
+      "Abhishek Gupta",
+      "Dinesh Jayaraman",
+      "Joseph J Lim",
+      "Jitendra Malik",
+      "Roberto Martín-Martín",
+      "Subramanian Ramamoorthy",
+      "Dorsa Sadigh",
+      "Shuran Song",
+      "Jiajun Wu",
+      "Michael C. Yip",
+      "Yuke Zhu",
+      "Thomas Kollar",
+      "Sergey Levine",
+      "Chelsea Finn"
+    ]
+  },
+  {
+    "source_id": "S15",
+    "bibtex_key": "openx2024embodiment",
+    "status": "added",
+    "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+    "year": 2024,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):6892–6903",
+    "doi": "10.1109/icra57147.2024.10611477",
+    "url": "https://doi.org/10.1109/icra57147.2024.10611477",
+    "read_pdf_pages": [
+      1,
+      2,
+      4,
+      6
+    ],
+    "version_notes": "正式出版2024；本地arXiv v9更新于2025。团队作者与完整个人作者元数据分别保存，不把<sup>0</sup>排版残片放进题名；不将v9新增结果冒充已核正式版结果。",
+    "authors": [
+      "Open X-Embodiment Collaboration"
+    ]
+  },
+  {
+    "source_id": "S16",
+    "bibtex_key": "mandlekar2023mimicgen",
+    "status": "added",
+    "title": "MimicGen: A Data Generation System for Scalable Robot Learning using Human Demonstrations",
+    "year": 2023,
+    "venue": "Conference on Robot Learning, PMLR 229:1820–1864",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v229/mandlekar23a.html",
+    "read_pdf_pages": [
+      1,
+      3,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "Ajay Mandlekar",
+      "Soroush Nasiriany",
+      "Bowen Wen",
+      "Iretiayo Akinola",
+      "Yashraj Narang",
+      "Linxi Fan",
+      "Yuke Zhu",
+      "Dieter Fox"
+    ]
+  },
+  {
+    "source_id": "S17",
+    "bibtex_key": "tobin2017randomization",
+    "status": "reused_unchanged",
+    "title": "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World",
+    "year": 2017,
+    "venue": "2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS): 23–30",
+    "doi": "10.1109/IROS.2017.8202133",
+    "url": "https://arxiv.org/abs/1703.06907",
+    "read_pdf_pages": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "version_notes": "",
+    "authors": [
+      "Josh Tobin",
+      "Rachel Fong",
+      "Alex Ray",
+      "Jonas Schneider",
+      "Wojciech Zaremba",
+      "Pieter Abbeel"
+    ]
+  },
+  {
+    "source_id": "S18",
+    "bibtex_key": "goodfellow2014gan",
+    "status": "added",
+    "title": "Generative Adversarial Nets",
+    "year": 2014,
+    "venue": "Advances in Neural Information Processing Systems 27",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "read_pdf_pages": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "version_notes": "出版页未列DOI/连续页码，留空而非猜测；正文读取作者预印本。",
+    "authors": [
+      "Goodfellow, Ian J.",
+      "Pouget-Abadie, Jean",
+      "Mirza, Mehdi",
+      "Xu, Bing",
+      "Warde-Farley, David",
+      "Ozair, Sherjil",
+      "Courville, Aaron",
+      "Bengio, Yoshua"
+    ]
+  },
+  {
+    "source_id": "S19",
+    "bibtex_key": "zhu2017cyclegan",
+    "status": "added",
+    "title": "Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks",
+    "year": 2017,
+    "venue": "2017 IEEE International Conference on Computer Vision (ICCV): 2242–2251",
+    "doi": "10.1109/ICCV.2017.244",
+    "url": "https://openaccess.thecvf.com/content_ICCV_2017/html/Zhu_Unpaired_Image-To-Image_Translation_ICCV_2017_paper.html",
+    "read_pdf_pages": [
+      2,
+      3,
+      5
+    ],
+    "version_notes": "IEEE题录2242–2251；CVF版打印页2223–2232不同，保留差异，阅读范围均指PDF序号。",
+    "authors": [
+      "Jun-Yan Zhu",
+      "Taesung Park",
+      "Phillip Isola",
+      "Alexei A. Efros"
+    ]
+  },
+  {
+    "source_id": "S20",
+    "bibtex_key": "kingma2014vae",
+    "status": "added",
+    "title": "Auto-Encoding Variational Bayes",
+    "year": 2014,
+    "venue": "International Conference on Learning Representations (ICLR)",
+    "doi": null,
+    "url": "https://dare.uva.nl/id/cf65ba0f-d88f-4a49-8ebd-3a7fce86edd7",
+    "read_pdf_pages": [
+      1,
+      3,
+      6,
+      7
+    ],
+    "version_notes": "作者所属阿姆斯特丹大学机构库核实为ICLR2014录用稿；2013为预印本首发年。没有核实会议DOI。",
+    "authors": [
+      "Kingma, Diederik P.",
+      "Welling, Max"
+    ]
+  },
+  {
+    "source_id": "S21",
+    "bibtex_key": "liu2017unit",
+    "status": "added",
+    "title": "Unsupervised Image-to-Image Translation Networks",
+    "year": 2017,
+    "venue": "Advances in Neural Information Processing Systems 30",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper_files/paper/2017/hash/dc6a6489640ca02b0d42dabeb8e46bb7-Abstract.html",
+    "read_pdf_pages": [
+      1,
+      3,
+      5
+    ],
+    "version_notes": "正式NeurIPS2017元数据；全文读取作者预印本。出版页未列DOI/页码，不猜测。",
+    "authors": [
+      "Liu, Ming-Yu",
+      "Breuel, Thomas",
+      "Kautz, Jan"
+    ]
+  },
+  {
+    "source_id": "S22",
+    "bibtex_key": "ganin2016dann",
+    "status": "added",
+    "title": "Domain-Adversarial Training of Neural Networks",
+    "year": 2016,
+    "venue": "Journal of Machine Learning Research 17(59):1–35",
+    "doi": null,
+    "url": "https://www.jmlr.org/papers/v17/15-239.html",
+    "read_pdf_pages": [
+      1,
+      10,
+      24
+    ],
+    "version_notes": "JMLR HTML citation_author误列Mario March，PDF署名为Mario Marchand，采用PDF署名；重音字符已核对。",
+    "authors": [
+      "Yaroslav Ganin",
+      "Evgeniya Ustinova",
+      "Hana Ajakan",
+      "Pascal Germain",
+      "Hugo Larochelle",
+      "François Laviolette",
+      "Mario Marchand",
+      "Victor Lempitsky"
+    ]
+  },
+  {
+    "source_id": "S23",
+    "bibtex_key": "gretton2012mmd",
+    "status": "added",
+    "title": "A Kernel Two-Sample Test",
+    "year": 2012,
+    "venue": "Journal of Machine Learning Research 13(25):723–773",
+    "doi": null,
+    "url": "https://www.jmlr.org/papers/v13/gretton12a.html",
+    "read_pdf_pages": [
+      1,
+      5,
+      25
+    ],
+    "version_notes": "",
+    "authors": [
+      "Arthur Gretton",
+      "Karsten M. Borgwardt",
+      "Malte J. Rasch",
+      "Bernhard Schölkopf",
+      "Alexander Smola"
+    ]
+  },
+  {
+    "source_id": "S24",
+    "bibtex_key": "naeem2020metrics",
+    "status": "added",
+    "title": "Reliable Fidelity and Diversity Metrics for Generative Models",
+    "year": 2020,
+    "venue": "International Conference on Machine Learning, PMLR 119:7176–7185",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v119/naeem20a.html",
+    "read_pdf_pages": [
+      1,
+      4,
+      7
+    ],
+    "version_notes": "",
+    "authors": [
+      "Muhammad Ferjad Naeem",
+      "Seong Joon Oh",
+      "Youngjung Uh",
+      "Yunjey Choi",
+      "Jaejun Yoo"
+    ]
+  },
+  {
+    "source_id": "S25",
+    "bibtex_key": "narang2021latentprojections",
+    "status": "added",
+    "title": "Sim-to-Real for Robotic Tactile Sensing via Physics-Based Simulation and Learned Latent Projections",
+    "year": 2021,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):6444–6451",
+    "doi": "10.1109/icra48506.2021.9561969",
+    "url": "https://research.nvidia.com/publication/2021-06_sim-real-robotic-tactile-sensing-physics-based-simulation-and-learned-latent",
+    "read_pdf_pages": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ],
+    "version_notes": "",
+    "authors": [
+      "Yashraj Narang",
+      "Balakumar Sundaralingam",
+      "Miles Macklin",
+      "Arsalan Mousavian",
+      "Dieter Fox"
+    ]
+  }
+]

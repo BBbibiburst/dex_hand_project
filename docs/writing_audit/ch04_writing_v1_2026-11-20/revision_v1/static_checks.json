@@ -1,0 +1,505 @@
+{
+  "status": "第四章R1临时编译完成，等待用户与ChatGPT PDF审核；未冻结",
+  "body_pages": 11,
+  "with_references_pages": 12,
+  "texcount": {
+    "number": 4,
+    "title": "多源示教数据构建与质量控制",
+    "source_file": "body/ch04_multimodal_data.tex",
+    "mapping_note": "拟议统计映射；文件未创建，不修改主文件；旧六章文件见实际统计",
+    "minimum": 7000,
+    "maximum": 8000,
+    "center": 7500.0,
+    "conditional": true,
+    "source_path": "thesis/body/ch04_multimodal_data.tex",
+    "status": "PRESENT",
+    "source_in_actual_graph": false,
+    "metrics": {
+      "text": 7394,
+      "headings": 72,
+      "captions_footnotes": 166,
+      "heading_count": 7,
+      "float_count": 11,
+      "inline_math": 58,
+      "display_math": 4,
+      "total": 7632,
+      "raw_output": "docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v1/wordcount/raw/planned_4.txt",
+      "subcounts": [
+        {
+          "text": 0,
+          "headings": 13,
+          "captions_footnotes": 0,
+          "heading_count": 1,
+          "float_count": 0,
+          "inline_math": 0,
+          "display_math": 0,
+          "title": "Chapter: 多源示教数据构建与质量控制",
+          "total": 13
+        },
+        {
+          "text": 1049,
+          "headings": 12,
+          "captions_footnotes": 26,
+          "heading_count": 1,
+          "float_count": 2,
+          "inline_math": 12,
+          "display_math": 0,
+          "title": "Section: 多模态数据表示与组织方式",
+          "total": 1087
+        },
+        {
+          "text": 1468,
+          "headings": 11,
+          "captions_footnotes": 49,
+          "heading_count": 1,
+          "float_count": 3,
+          "inline_math": 33,
+          "display_math": 2,
+          "title": "Section: 示教数据采集与关联机制",
+          "total": 1528
+        },
+        {
+          "text": 870,
+          "headings": 11,
+          "captions_footnotes": 0,
+          "heading_count": 1,
+          "float_count": 0,
+          "inline_math": 2,
+          "display_math": 1,
+          "title": "Section: 数据格式转换与统一存储",
+          "total": 881
+        },
+        {
+          "text": 1751,
+          "headings": 11,
+          "captions_footnotes": 27,
+          "heading_count": 1,
+          "float_count": 2,
+          "inline_math": 11,
+          "display_math": 1,
+          "title": "Section: 轨迹质量审计与数据清洗",
+          "total": 1789
+        },
+        {
+          "text": 1885,
+          "headings": 10,
+          "captions_footnotes": 64,
+          "heading_count": 1,
+          "float_count": 4,
+          "inline_math": 0,
+          "display_math": 0,
+          "title": "Section: 数据集统计与质量验证",
+          "total": 1959
+        },
+        {
+          "text": 371,
+          "headings": 4,
+          "captions_footnotes": 0,
+          "heading_count": 1,
+          "float_count": 0,
+          "inline_math": 0,
+          "display_math": 0,
+          "title": "Section: 本章小结",
+          "total": 375
+        }
+      ],
+      "warnings": [],
+      "code_blocks": 0,
+      "code_physical_lines": 0
+    },
+    "actual_count": 7632,
+    "completion_percent": 101.76,
+    "gap_to_minimum": 0,
+    "sections": [
+      {
+        "id": "4.1",
+        "title": "多模态数据表示与组织方式",
+        "minimum": 1000,
+        "maximum": 1100,
+        "center": 1050.0,
+        "rationale": "模态、字段、版本及来源图",
+        "research_question": "数据来源及单位如何区分。",
+        "evidence": "R-06、R-07、E-DATA。",
+        "formula_need": "Episode、Root、Trial、窗口记号。",
+        "figure_table_need": "来源及版本关系图。",
+        "evidence_gap": "真实跨设备同步证据。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 1087,
+        "completion_percent": 103.52380952380952,
+        "gap_to_minimum": 0,
+        "metrics": {
+          "text": 1049,
+          "headings": 12,
+          "captions_footnotes": 26,
+          "heading_count": 1,
+          "float_count": 2,
+          "inline_math": 12,
+          "display_math": 0
+        }
+      },
+      {
+        "id": "4.2",
+        "title": "示教数据采集与关联机制",
+        "minimum": 1300,
+        "maximum": 1500,
+        "center": 1400.0,
+        "rationale": "采样时序和动作关联，必须有证据",
+        "research_question": "何种关联有实际证据。",
+        "evidence": "R-06、R-07。",
+        "formula_need": "timestamp及action因果对齐。",
+        "figure_table_need": "逐步时序图。",
+        "evidence_gap": "全量视频PTS与模态一致性。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 1528,
+        "completion_percent": 109.14285714285714,
+        "gap_to_minimum": 0,
+        "metrics": {
+          "text": 1468,
+          "headings": 11,
+          "captions_footnotes": 49,
+          "heading_count": 1,
+          "float_count": 3,
+          "inline_math": 33,
+          "display_math": 2
+        }
+      },
+      {
+        "id": "4.3",
+        "title": "数据格式转换与统一存储",
+        "minimum": 900,
+        "maximum": 1000,
+        "center": 950.0,
+        "rationale": "存储格式与转换映射，以表格压缩",
+        "research_question": "如何存储并保留来源。",
+        "evidence": "R-06、R-07。",
+        "formula_need": "字段维度及转换索引。",
+        "figure_table_need": "schema对照表。",
+        "evidence_gap": "各导出版本转换脚本和完整lineage。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 881,
+        "completion_percent": 92.73684210526316,
+        "gap_to_minimum": 19,
+        "metrics": {
+          "text": 870,
+          "headings": 11,
+          "captions_footnotes": 0,
+          "heading_count": 1,
+          "float_count": 0,
+          "inline_math": 2,
+          "display_math": 1
+        }
+      },
+      {
+        "id": "4.4",
+        "title": "轨迹质量审计与数据清洗",
+        "minimum": 1500,
+        "maximum": 1700,
+        "center": 1600.0,
+        "rationale": "去重、清洗及质量审计方法",
+        "research_question": "如何避免重复和中断计账。",
+        "evidence": "R-04、R-08。",
+        "formula_need": "唯一时长与成功失败分账。",
+        "figure_table_need": "队列状态图、质量规则表。",
+        "evidence_gap": "数据库与全量磁盘产物核对。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 1789,
+        "completion_percent": 111.8125,
+        "gap_to_minimum": 0,
+        "metrics": {
+          "text": 1751,
+          "headings": 11,
+          "captions_footnotes": 27,
+          "heading_count": 1,
+          "float_count": 2,
+          "inline_math": 11,
+          "display_math": 1
+        }
+      },
+      {
+        "id": "4.5",
+        "title": "数据集统计与质量验证",
+        "minimum": 1900,
+        "maximum": 2250,
+        "center": 2075.0,
+        "rationale": "有效量、独立性、缺失及质量验证",
+        "research_question": "现存数据有多大且证明什么。",
+        "evidence": "R-06、R-08。",
+        "formula_need": "小时数、独立资产及统计分母。",
+        "figure_table_need": "任务/物体/时长/异常表。",
+        "evidence_gap": "服务器当前数据库及最终验收UNKNOWN。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 1959,
+        "completion_percent": 94.40963855421687,
+        "gap_to_minimum": 0,
+        "metrics": {
+          "text": 1885,
+          "headings": 10,
+          "captions_footnotes": 64,
+          "heading_count": 1,
+          "float_count": 4,
+          "inline_math": 0,
+          "display_math": 0
+        }
+      },
+      {
+        "id": "4.6",
+        "title": "本章小结",
+        "minimum": 400,
+        "maximum": 450,
+        "center": 425.0,
+        "rationale": "总结数据可用范围",
+        "research_question": "哪些数据可用于后续研究。",
+        "evidence": "R-06、E-DATA。",
+        "formula_need": "无。",
+        "figure_table_need": "子集使用关系图。",
+        "evidence_gap": "不将重复索引时长计入新增物理小时。",
+        "chapter": 4,
+        "source_path": "thesis/body/ch04_multimodal_data.tex",
+        "status": "PRESENT",
+        "actual_count": 375,
+        "completion_percent": 88.23529411764706,
+        "gap_to_minimum": 25,
+        "metrics": {
+          "text": 371,
+          "headings": 4,
+          "captions_footnotes": 0,
+          "heading_count": 1,
+          "float_count": 0,
+          "inline_math": 0,
+          "display_math": 0
+        }
+      }
+    ]
+  },
+  "citation_keys": [
+    "mandlekar2022demonstrations"
+  ],
+  "missing_bib_keys": [],
+  "missing_refs": [],
+  "compiled_labels": {
+    "chap:multimodal_data": {
+      "number": "4",
+      "page": "1"
+    },
+    "sec:data_representation": {
+      "number": "4.1",
+      "page": "1"
+    },
+    "tab:ch04_fields": {
+      "number": "4-1",
+      "page": "1"
+    },
+    "fig:ch04_carriers": {
+      "number": "4-1",
+      "page": "2"
+    },
+    "sec:data_recording_alignment": {
+      "number": "4.2",
+      "page": "2"
+    },
+    "eq:ch04_causal_pairing": {
+      "number": "4-1",
+      "page": "2"
+    },
+    "fig:ch04_timing": {
+      "number": "4-2",
+      "page": "3"
+    },
+    "eq:ch04_time_interval": {
+      "number": "4-2",
+      "page": "3"
+    },
+    "fig:ch04_multirate": {
+      "number": "4-3",
+      "page": "4"
+    },
+    "tab:ch04_recording_versions": {
+      "number": "4-2",
+      "page": "4"
+    },
+    "sec:data_conversion": {
+      "number": "4.3",
+      "page": "4"
+    },
+    "eq:ch04_mapping_error": {
+      "number": "4-3",
+      "page": "5"
+    },
+    "sec:data_quality_control": {
+      "number": "4.4",
+      "page": "5"
+    },
+    "tab:ch04_quality_gates": {
+      "number": "4-3",
+      "page": "6"
+    },
+    "fig:ch04_admission": {
+      "number": "4-4",
+      "page": "7"
+    },
+    "eq:ch04_duplicate": {
+      "number": "4-4",
+      "page": "7"
+    },
+    "sec:dataset_quality_validation": {
+      "number": "4.5",
+      "page": "8"
+    },
+    "tab:ch04_lerobot_inventory": {
+      "number": "4-4",
+      "page": "8"
+    },
+    "tab:ch04_version_quality": {
+      "number": "4-5",
+      "page": "9"
+    },
+    "tab:ch04_sink_precision": {
+      "number": "4-6",
+      "page": "9"
+    },
+    "fig:ch04_sink_precision": {
+      "number": "4-5",
+      "page": "10"
+    },
+    "sec:data_quality_summary": {
+      "number": "4.6",
+      "page": "10"
+    }
+  },
+  "overfull": [],
+  "underfull": [
+    "Underfull \\hbox (badness 1082) in paragraph at lines 162--163",
+    "Underfull \\hbox (badness 1831) in paragraph at lines 220--221"
+  ],
+  "undefined": [],
+  "bibtex_warnings": [
+    "Warning--Require address: mandlekar2022demonstrations",
+    "Warning--Require citedate: mandlekar2022demonstrations"
+  ],
+  "fonts": {
+    "5": {
+      "name": "WMBBIT+FandolSong-Regular-Identity-H",
+      "embedded": true
+    },
+    "7": {
+      "name": "LNKHKO+FandolHei-Regular-Identity-H",
+      "embedded": true
+    },
+    "9": {
+      "name": "FBLNPI+TeXGyreTermesX-Regular-Identity-H",
+      "embedded": true
+    },
+    "13": {
+      "name": "BTPJUZ+txsys",
+      "embedded": true
+    },
+    "14": {
+      "name": "OVCTOM+NewTXMI",
+      "embedded": true
+    },
+    "15": {
+      "name": "FGJLSS+TeXGyreTermesX-Regular",
+      "embedded": true
+    },
+    "16": {
+      "name": "BXEQOU+NewTXMI7",
+      "embedded": true
+    },
+    "22": {
+      "name": "KSNRUJ+txmiaX",
+      "embedded": true
+    },
+    "35": {
+      "name": "ZPMWOY+NewTXBMI",
+      "embedded": true
+    },
+    "36": {
+      "name": "GOXPDB+txexs",
+      "embedded": true
+    },
+    "44": {
+      "name": "NYZCQQ+TeXGyreTermesX-Bold",
+      "embedded": true
+    },
+    "60": {
+      "name": "BMQQDV+DejaVuSans",
+      "embedded": true
+    }
+  },
+  "pages": [
+    {
+      "page": 1,
+      "characters": 1084,
+      "replacement_character": false
+    },
+    {
+      "page": 2,
+      "characters": 1013,
+      "replacement_character": false
+    },
+    {
+      "page": 3,
+      "characters": 998,
+      "replacement_character": false
+    },
+    {
+      "page": 4,
+      "characters": 1022,
+      "replacement_character": false
+    },
+    {
+      "page": 5,
+      "characters": 1146,
+      "replacement_character": false
+    },
+    {
+      "page": 6,
+      "characters": 1207,
+      "replacement_character": false
+    },
+    {
+      "page": 7,
+      "characters": 935,
+      "replacement_character": false
+    },
+    {
+      "page": 8,
+      "characters": 1135,
+      "replacement_character": false
+    },
+    {
+      "page": 9,
+      "characters": 1291,
+      "replacement_character": false
+    },
+    {
+      "page": 10,
+      "characters": 957,
+      "replacement_character": false
+    },
+    {
+      "page": 11,
+      "characters": 210,
+      "replacement_character": false
+    },
+    {
+      "page": 12,
+      "characters": 343,
+      "replacement_character": false
+    }
+  ],
+  "changed_protected": [],
+  "changed_audited_inputs": [],
+  "body_export": "BibTeX解析后从含文献预览提取相同正文页，保留引用编号",
+  "frozen": false
+}

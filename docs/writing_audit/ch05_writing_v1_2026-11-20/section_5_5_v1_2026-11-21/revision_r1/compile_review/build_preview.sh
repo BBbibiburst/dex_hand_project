@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REVIEW_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(git -C "$REVIEW_ROOT" rev-parse --show-toplevel)"
+THESIS_ROOT="$PROJECT_ROOT/thesis"
+export PATH="$THESIS_ROOT/.tools/.TinyTeX/bin/x86_64-linux:$PATH"
+export TEXMFVAR="$THESIS_ROOT/.tools/texmf-var"
+export TEXMFCONFIG="$THESIS_ROOT/.tools/texmf-config"
+export TEXMFHOME="$THESIS_ROOT/.tools/texmf-home"
+export BIBINPUTS="$THESIS_ROOT:"
+export BSTINPUTS="$THESIS_ROOT:"
+cd "$THESIS_ROOT"
+mkdir -p "$REVIEW_ROOT/build"
+latexmk -norc -r "$THESIS_ROOT/latexmkrc" -r "$THESIS_ROOT/latexmk.projectrc" -pdf -halt-on-error -outdir="$REVIEW_ROOT/build" "$REVIEW_ROOT/section_5_5_preview.tex"
+cp "$REVIEW_ROOT/build/section_5_5_preview.pdf" "$REVIEW_ROOT/section_5_5_preview.pdf"

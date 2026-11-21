@@ -1,0 +1,2815 @@
+[
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/inverse.py",
+    "definitions": [
+      {
+        "name": "moments",
+        "line": 10,
+        "end": 13
+      },
+      {
+        "name": "objective",
+        "line": 15,
+        "end": 16
+      },
+      {
+        "name": "transitions",
+        "line": 17,
+        "end": 18
+      }
+    ],
+    "lines": 91
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/models.py",
+    "definitions": [
+      {
+        "name": "Encoder",
+        "line": 7,
+        "end": 12
+      },
+      {
+        "name": "Decoder",
+        "line": 13,
+        "end": 28
+      },
+      {
+        "name": "DomainVAE",
+        "line": 29,
+        "end": 33
+      },
+      {
+        "name": "Translator",
+        "line": 34,
+        "end": 36
+      },
+      {
+        "name": "__init__",
+        "line": 8,
+        "end": 9
+      },
+      {
+        "name": "forward",
+        "line": 10,
+        "end": 12
+      },
+      {
+        "name": "__init__",
+        "line": 14,
+        "end": 15
+      },
+      {
+        "name": "parameters_for",
+        "line": 16,
+        "end": 17
+      },
+      {
+        "name": "run",
+        "line": 18,
+        "end": 25
+      },
+      {
+        "name": "deterministic_decode",
+        "line": 26,
+        "end": 26
+      },
+      {
+        "name": "nll",
+        "line": 27,
+        "end": 28
+      },
+      {
+        "name": "__init__",
+        "line": 30,
+        "end": 30
+      },
+      {
+        "name": "posterior_mean",
+        "line": 31,
+        "end": 31
+      },
+      {
+        "name": "forward",
+        "line": 32,
+        "end": 33
+      },
+      {
+        "name": "__init__",
+        "line": 35,
+        "end": 35
+      },
+      {
+        "name": "forward",
+        "line": 36,
+        "end": 36
+      }
+    ],
+    "lines": 36
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/example_plot.py",
+    "definitions": [],
+    "lines": 11
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/post_training_checks.py",
+    "definitions": [
+      {
+        "name": "describe",
+        "line": 6,
+        "end": 7
+      },
+      {
+        "name": "latent_mu",
+        "line": 42,
+        "end": 43
+      }
+    ],
+    "lines": 60
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/register.py",
+    "definitions": [],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/c0_cpu_resume.py",
+    "definitions": [
+      {
+        "name": "predict",
+        "line": 24,
+        "end": 28
+      },
+      {
+        "name": "bce",
+        "line": 29,
+        "end": 29
+      },
+      {
+        "name": "knearest",
+        "line": 30,
+        "end": 37
+      },
+      {
+        "name": "record",
+        "line": 38,
+        "end": 44
+      },
+      {
+        "name": "closure",
+        "line": 67,
+        "end": 68
+      }
+    ],
+    "lines": 98
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/verify_metrics.py",
+    "definitions": [],
+    "lines": 7
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/physics.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 22
+      },
+      {
+        "name": "reset",
+        "line": 23,
+        "end": 28
+      },
+      {
+        "name": "mapping",
+        "line": 29,
+        "end": 37
+      },
+      {
+        "name": "run",
+        "line": 40,
+        "end": 81
+      }
+    ],
+    "lines": 82
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/pipeline_cpu.py",
+    "definitions": [
+      {
+        "name": "scale_fit",
+        "line": 19,
+        "end": 20
+      },
+      {
+        "name": "model_eval",
+        "line": 21,
+        "end": 26
+      },
+      {
+        "name": "train_vae",
+        "line": 27,
+        "end": 52
+      },
+      {
+        "name": "means",
+        "line": 57,
+        "end": 58
+      },
+      {
+        "name": "evaluate",
+        "line": 65,
+        "end": 70
+      }
+    ],
+    "lines": 107
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/diagnostics.py",
+    "definitions": [],
+    "lines": 31
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/paired_statistics.py",
+    "definitions": [
+      {
+        "name": "describe",
+        "line": 4,
+        "end": 6
+      }
+    ],
+    "lines": 13
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/inference.py",
+    "definitions": [
+      {
+        "name": "Converter",
+        "line": 7,
+        "end": 19
+      },
+      {
+        "name": "__init__",
+        "line": 8,
+        "end": 13
+      },
+      {
+        "name": "transform",
+        "line": 15,
+        "end": 19
+      }
+    ],
+    "lines": 19
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "budget",
+        "line": 20,
+        "end": 23
+      },
+      {
+        "name": "real",
+        "line": 24,
+        "end": 25
+      },
+      {
+        "name": "natural",
+        "line": 26,
+        "end": 27
+      }
+    ],
+    "lines": 27
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/finalize.py",
+    "definitions": [],
+    "lines": 32
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/verify_dictionary.py",
+    "definitions": [],
+    "lines": 8
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/dictionary.py",
+    "definitions": [],
+    "lines": 30
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/inverse_physics.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 22
+      },
+      {
+        "name": "reset",
+        "line": 23,
+        "end": 28
+      },
+      {
+        "name": "mapping",
+        "line": 29,
+        "end": 37
+      },
+      {
+        "name": "run",
+        "line": 40,
+        "end": 82
+      }
+    ],
+    "lines": 83
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/expand.py",
+    "definitions": [
+      {
+        "name": "moments",
+        "line": 10,
+        "end": 13
+      },
+      {
+        "name": "objective",
+        "line": 15,
+        "end": 16
+      },
+      {
+        "name": "transitions",
+        "line": 17,
+        "end": 18
+      }
+    ],
+    "lines": 93
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/multi.py",
+    "definitions": [
+      {
+        "name": "primitive",
+        "line": 7,
+        "end": 7
+      }
+    ],
+    "lines": 17
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/verify_pairs.py",
+    "definitions": [],
+    "lines": 16
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/c0.py",
+    "definitions": [
+      {
+        "name": "predict",
+        "line": 24,
+        "end": 28
+      },
+      {
+        "name": "bce",
+        "line": 29,
+        "end": 29
+      },
+      {
+        "name": "knearest",
+        "line": 30,
+        "end": 37
+      },
+      {
+        "name": "record",
+        "line": 38,
+        "end": 44
+      },
+      {
+        "name": "closure",
+        "line": 64,
+        "end": 65
+      }
+    ],
+    "lines": 95
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/final_temporal_checks.py",
+    "definitions": [],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/report.py",
+    "definitions": [
+      {
+        "name": "readcsv",
+        "line": 6,
+        "end": 6
+      },
+      {
+        "name": "status",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "metric_table",
+        "line": 35,
+        "end": 39
+      }
+    ],
+    "lines": 113
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/matching.py",
+    "definitions": [
+      {
+        "name": "inherited_metrics",
+        "line": 3,
+        "end": 9
+      }
+    ],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/verify_multi.py",
+    "definitions": [],
+    "lines": 7
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/pipeline.py",
+    "definitions": [
+      {
+        "name": "scale_fit",
+        "line": 19,
+        "end": 20
+      },
+      {
+        "name": "model_eval",
+        "line": 21,
+        "end": 26
+      },
+      {
+        "name": "train_vae",
+        "line": 27,
+        "end": 52
+      },
+      {
+        "name": "means",
+        "line": 57,
+        "end": 58
+      },
+      {
+        "name": "evaluate",
+        "line": 65,
+        "end": 70
+      }
+    ],
+    "lines": 107
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/convert.py",
+    "definitions": [],
+    "lines": 12
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/pairs.py",
+    "definitions": [],
+    "lines": 40
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/paired_oracle.py",
+    "definitions": [],
+    "lines": 12
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/register.py",
+    "definitions": [],
+    "lines": 11
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/input_ambiguity.py",
+    "definitions": [],
+    "lines": 10
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/additional.py",
+    "definitions": [],
+    "lines": 33
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/ambiguity.py",
+    "definitions": [],
+    "lines": 21
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/scores.py",
+    "definitions": [],
+    "lines": 26
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/plots.py",
+    "definitions": [],
+    "lines": 17
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/models_audit.py",
+    "definitions": [
+      {
+        "name": "mse",
+        "line": 16,
+        "end": 16
+      },
+      {
+        "name": "describe",
+        "line": 17,
+        "end": 19
+      }
+    ],
+    "lines": 78
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/mask_feedback.py",
+    "definitions": [],
+    "lines": 14
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      }
+    ],
+    "lines": 21
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/finalize.py",
+    "definitions": [
+      {
+        "name": "sha",
+        "line": 5,
+        "end": 9
+      }
+    ],
+    "lines": 31
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/decoder_readout.py",
+    "definitions": [],
+    "lines": 23
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/report.py",
+    "definitions": [
+      {
+        "name": "csvrows",
+        "line": 41,
+        "end": 41
+      },
+      {
+        "name": "metric_table",
+        "line": 42,
+        "end": 45
+      }
+    ],
+    "lines": 173
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/generation_counts.py",
+    "definitions": [],
+    "lines": 15
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/structure.py",
+    "definitions": [],
+    "lines": 35
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/latent.py",
+    "definitions": [
+      {
+        "name": "spectral",
+        "line": 7,
+        "end": 8
+      }
+    ],
+    "lines": 87
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/extract.py",
+    "definitions": [],
+    "lines": 34
+  },
+  {
+    "path": "outputs/tactile_p43_c4_root_cause_audit_2026-11-16/code/candidate_duplicates.py",
+    "definitions": [],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/probes.py",
+    "definitions": [
+      {
+        "name": "Runner",
+        "line": 9,
+        "end": 48
+      },
+      {
+        "name": "heldout",
+        "line": 10,
+        "end": 10
+      },
+      {
+        "name": "run",
+        "line": 11,
+        "end": 48
+      },
+      {
+        "name": "closure",
+        "line": 39,
+        "end": 40
+      }
+    ],
+    "lines": 54
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/register_repair.py",
+    "definitions": [],
+    "lines": 7
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/next_stage_statistics.py",
+    "definitions": [
+      {
+        "name": "load",
+        "line": 17,
+        "end": 22
+      },
+      {
+        "name": "group_statistics",
+        "line": 24,
+        "end": 28
+      }
+    ],
+    "lines": 79
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/verify_next_stage.py",
+    "definitions": [],
+    "lines": 37
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/generate_repair.py",
+    "definitions": [
+      {
+        "name": "RepairedConverter",
+        "line": 9,
+        "end": 11
+      },
+      {
+        "name": "__init__",
+        "line": 10,
+        "end": 11
+      }
+    ],
+    "lines": 23
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/test_contracts.py",
+    "definitions": [
+      {
+        "name": "Contracts",
+        "line": 10,
+        "end": 47
+      },
+      {
+        "name": "setUpClass",
+        "line": 12,
+        "end": 13
+      },
+      {
+        "name": "test_group_isolation",
+        "line": 14,
+        "end": 17
+      },
+      {
+        "name": "test_gmm_response_mass_and_zero_patch",
+        "line": 18,
+        "end": 21
+      },
+      {
+        "name": "test_inference_partition_rng_and_sample_order",
+        "line": 22,
+        "end": 25
+      },
+      {
+        "name": "test_episode_timestamp_alignment_and_tail",
+        "line": 26,
+        "end": 28
+      },
+      {
+        "name": "test_invalid_input_rejected",
+        "line": 29,
+        "end": 31
+      },
+      {
+        "name": "test_joint_gradient_paths",
+        "line": 32,
+        "end": 37
+      },
+      {
+        "name": "test_all_probes_and_bootstrap_present",
+        "line": 38,
+        "end": 43
+      },
+      {
+        "name": "test_source_and_checkpoint_hashes_unchanged",
+        "line": 44,
+        "end": 47
+      }
+    ],
+    "lines": 48
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/train_amplitude_repair.py",
+    "definitions": [
+      {
+        "name": "quantiles",
+        "line": 10,
+        "end": 15
+      },
+      {
+        "name": "val_loss",
+        "line": 17,
+        "end": 24
+      }
+    ],
+    "lines": 46
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/replay_next_stage.py",
+    "definitions": [],
+    "lines": 42
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/reconstruction_checks.py",
+    "definitions": [],
+    "lines": 22
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/render_stage_free.py",
+    "definitions": [],
+    "lines": 14
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/train_vae.py",
+    "definitions": [
+      {
+        "name": "data",
+        "line": 11,
+        "end": 15
+      },
+      {
+        "name": "fit_statistics",
+        "line": 16,
+        "end": 23
+      },
+      {
+        "name": "losses",
+        "line": 25,
+        "end": 31
+      },
+      {
+        "name": "evaluate",
+        "line": 33,
+        "end": 46
+      }
+    ],
+    "lines": 64
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/replay_baseline.py",
+    "definitions": [],
+    "lines": 25
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/finalize_next_stage.py",
+    "definitions": [],
+    "lines": 16
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/diagnostics.py",
+    "definitions": [],
+    "lines": 52
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/inference.py",
+    "definitions": [
+      {
+        "name": "TactileConverter",
+        "line": 9,
+        "end": 39
+      },
+      {
+        "name": "__init__",
+        "line": 10,
+        "end": 12
+      },
+      {
+        "name": "transform",
+        "line": 14,
+        "end": 33
+      },
+      {
+        "name": "transform_episode",
+        "line": 34,
+        "end": 39
+      }
+    ],
+    "lines": 47
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/evaluate_repair.py",
+    "definitions": [],
+    "lines": 19
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/pipeline_after_train.py",
+    "definitions": [],
+    "lines": 13
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/next_stage_probes.py",
+    "definitions": [
+      {
+        "name": "values",
+        "line": 13,
+        "end": 18
+      },
+      {
+        "name": "representation",
+        "line": 20,
+        "end": 33
+      },
+      {
+        "name": "pool",
+        "line": 35,
+        "end": 39
+      },
+      {
+        "name": "Runner",
+        "line": 40,
+        "end": 83
+      },
+      {
+        "name": "heldout",
+        "line": 41,
+        "end": 41
+      },
+      {
+        "name": "run",
+        "line": 42,
+        "end": 83
+      },
+      {
+        "name": "closure",
+        "line": 64,
+        "end": 65
+      }
+    ],
+    "lines": 96
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/next_stage_report.py",
+    "definitions": [
+      {
+        "name": "read",
+        "line": 13,
+        "end": 13
+      },
+      {
+        "name": "number",
+        "line": 14,
+        "end": 14
+      },
+      {
+        "name": "passed",
+        "line": 15,
+        "end": 15
+      },
+      {
+        "name": "bounds",
+        "line": 16,
+        "end": 16
+      },
+      {
+        "name": "fmt",
+        "line": 17,
+        "end": 17
+      },
+      {
+        "name": "table",
+        "line": 18,
+        "end": 18
+      }
+    ],
+    "lines": 200
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "sha",
+        "line": 10,
+        "end": 14
+      },
+      {
+        "name": "csvwrite",
+        "line": 15,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "deadline",
+        "line": 20,
+        "end": 22
+      }
+    ],
+    "lines": 28
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/generate.py",
+    "definitions": [],
+    "lines": 15
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/convert_frozen_tactile.py",
+    "definitions": [],
+    "lines": 26
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/pipeline_repair.py",
+    "definitions": [],
+    "lines": 14
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/test_next_stage.py",
+    "definitions": [
+      {
+        "name": "NextStage",
+        "line": 9,
+        "end": 31
+      },
+      {
+        "name": "setUpClass",
+        "line": 11,
+        "end": 12
+      },
+      {
+        "name": "test_masks_exact_all_rows",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "test_positive_feature_has_no_location_feature",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "test_positive_feature_has_no_count_feature",
+        "line": 20,
+        "end": 21
+      },
+      {
+        "name": "test_empty_frame_is_not_sample_exclusion",
+        "line": 22,
+        "end": 24
+      },
+      {
+        "name": "test_repair_inference_stream_and_timestamps",
+        "line": 25,
+        "end": 26
+      },
+      {
+        "name": "test_frozen_weights_and_train_sources",
+        "line": 27,
+        "end": 31
+      }
+    ],
+    "lines": 32
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/dual_vae.py",
+    "definitions": [
+      {
+        "name": "proxy",
+        "line": 8,
+        "end": 12
+      },
+      {
+        "name": "rates",
+        "line": 13,
+        "end": 13
+      },
+      {
+        "name": "probability_rates",
+        "line": 14,
+        "end": 14
+      },
+      {
+        "name": "proportions",
+        "line": 15,
+        "end": 15
+      },
+      {
+        "name": "cross_retention",
+        "line": 16,
+        "end": 17
+      },
+      {
+        "name": "Encoder",
+        "line": 18,
+        "end": 22
+      },
+      {
+        "name": "Decoder",
+        "line": 23,
+        "end": 31
+      },
+      {
+        "name": "DualVAE",
+        "line": 32,
+        "end": 40
+      },
+      {
+        "name": "weighted",
+        "line": 42,
+        "end": 42
+      },
+      {
+        "name": "latent_alignment",
+        "line": 43,
+        "end": 52
+      },
+      {
+        "name": "__init__",
+        "line": 19,
+        "end": 20
+      },
+      {
+        "name": "forward",
+        "line": 21,
+        "end": 22
+      },
+      {
+        "name": "__init__",
+        "line": 24,
+        "end": 25
+      },
+      {
+        "name": "forward",
+        "line": 26,
+        "end": 27
+      },
+      {
+        "name": "amplitude",
+        "line": 28,
+        "end": 29
+      },
+      {
+        "name": "nll",
+        "line": 30,
+        "end": 31
+      },
+      {
+        "name": "__init__",
+        "line": 33,
+        "end": 34
+      },
+      {
+        "name": "encode",
+        "line": 35,
+        "end": 35
+      },
+      {
+        "name": "decode",
+        "line": 36,
+        "end": 36
+      },
+      {
+        "name": "own",
+        "line": 37,
+        "end": 38
+      },
+      {
+        "name": "sample_sim_to_real",
+        "line": 39,
+        "end": 40
+      }
+    ],
+    "lines": 52
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/gmm.py",
+    "definitions": [
+      {
+        "name": "grid",
+        "line": 5,
+        "end": 6
+      },
+      {
+        "name": "logdensity",
+        "line": 7,
+        "end": 8
+      },
+      {
+        "name": "fit_em",
+        "line": 9,
+        "end": 15
+      },
+      {
+        "name": "kernel",
+        "line": 16,
+        "end": 17
+      },
+      {
+        "name": "GMMRenderer",
+        "line": 18,
+        "end": 30
+      },
+      {
+        "name": "__init__",
+        "line": 19,
+        "end": 19
+      },
+      {
+        "name": "transform",
+        "line": 20,
+        "end": 30
+      }
+    ],
+    "lines": 30
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/fit_gmm.py",
+    "definitions": [
+      {
+        "name": "patch_frames",
+        "line": 6,
+        "end": 7
+      },
+      {
+        "name": "samples",
+        "line": 8,
+        "end": 21
+      }
+    ],
+    "lines": 45
+  },
+  {
+    "path": "outputs/tactile_gmm_dual_vae_2026-11-16/code/amplitude_model.py",
+    "definitions": [
+      {
+        "name": "QuantileDecoder",
+        "line": 7,
+        "end": 27
+      },
+      {
+        "name": "AmplitudeRepair",
+        "line": 28,
+        "end": 31
+      },
+      {
+        "name": "build_from_original",
+        "line": 32,
+        "end": 41
+      },
+      {
+        "name": "__init__",
+        "line": 8,
+        "end": 11
+      },
+      {
+        "name": "coordinate",
+        "line": 12,
+        "end": 16
+      },
+      {
+        "name": "amplitude",
+        "line": 17,
+        "end": 24
+      },
+      {
+        "name": "nll",
+        "line": 25,
+        "end": 27
+      },
+      {
+        "name": "__init__",
+        "line": 29,
+        "end": 31
+      }
+    ],
+    "lines": 41
+  },
+  {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/code/finish.py",
+    "definitions": [
+      {
+        "name": "laws",
+        "line": 16,
+        "end": 17
+      }
+    ],
+    "lines": 18
+  },
+  {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/code/run.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 14,
+        "end": 14
+      },
+      {
+        "name": "table",
+        "line": 15,
+        "end": 17
+      },
+      {
+        "name": "main",
+        "line": 18,
+        "end": 94
+      },
+      {
+        "name": "laws",
+        "line": 36,
+        "end": 37
+      },
+      {
+        "name": "loss_vector",
+        "line": 38,
+        "end": 39
+      },
+      {
+        "name": "ev",
+        "line": 40,
+        "end": 44
+      },
+      {
+        "name": "summarize",
+        "line": 59,
+        "end": 60
+      }
+    ],
+    "lines": 95
+  },
+  {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/code/run_before_numerical_tolerance_fix.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 14,
+        "end": 14
+      },
+      {
+        "name": "table",
+        "line": 15,
+        "end": 17
+      },
+      {
+        "name": "main",
+        "line": 18,
+        "end": 94
+      },
+      {
+        "name": "laws",
+        "line": 36,
+        "end": 37
+      },
+      {
+        "name": "loss_vector",
+        "line": 38,
+        "end": 39
+      },
+      {
+        "name": "ev",
+        "line": 40,
+        "end": 44
+      },
+      {
+        "name": "summarize",
+        "line": 59,
+        "end": 60
+      }
+    ],
+    "lines": 95
+  },
+  {
+    "path": "outputs/tactile_c23_real_reconstruction_c0_2026-11-18/code/evaluate.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 11
+      },
+      {
+        "name": "sha",
+        "line": 12,
+        "end": 12
+      },
+      {
+        "name": "extract",
+        "line": 13,
+        "end": 14
+      },
+      {
+        "name": "main",
+        "line": 15,
+        "end": 86
+      },
+      {
+        "name": "budget",
+        "line": 18,
+        "end": 20
+      },
+      {
+        "name": "summary",
+        "line": 61,
+        "end": 63
+      }
+    ],
+    "lines": 87
+  },
+  {
+    "path": "outputs/tactile_c23_real_reconstruction_c0_2026-11-18/code/report.py",
+    "definitions": [
+      {
+        "name": "read",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "table",
+        "line": 10,
+        "end": 11
+      }
+    ],
+    "lines": 145
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/numerical_check.py",
+    "definitions": [],
+    "lines": 10
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/prepare_evaluation.py",
+    "definitions": [],
+    "lines": 27
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/audit.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 5,
+        "end": 5
+      },
+      {
+        "name": "table",
+        "line": 6,
+        "end": 8
+      }
+    ],
+    "lines": 56
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/evaluate.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 11
+      },
+      {
+        "name": "sha",
+        "line": 12,
+        "end": 12
+      },
+      {
+        "name": "extract",
+        "line": 13,
+        "end": 14
+      },
+      {
+        "name": "main",
+        "line": 15,
+        "end": 85
+      },
+      {
+        "name": "budget",
+        "line": 18,
+        "end": 20
+      },
+      {
+        "name": "summary",
+        "line": 61,
+        "end": 63
+      }
+    ],
+    "lines": 86
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/report.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "table",
+        "line": 10,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 13
+      },
+      {
+        "name": "summary",
+        "line": 15,
+        "end": 17
+      }
+    ],
+    "lines": 42
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/code/train.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 10
+      },
+      {
+        "name": "sha",
+        "line": 11,
+        "end": 11
+      },
+      {
+        "name": "main",
+        "line": 12,
+        "end": 63
+      },
+      {
+        "name": "forward",
+        "line": 32,
+        "end": 35
+      },
+      {
+        "name": "ev",
+        "line": 36,
+        "end": 41
+      }
+    ],
+    "lines": 64
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/infer.py",
+    "definitions": [],
+    "lines": 7
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/sensitivity.py",
+    "definitions": [],
+    "lines": 23
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 7,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 13
+      },
+      {
+        "name": "module",
+        "line": 14,
+        "end": 15
+      },
+      {
+        "name": "extract",
+        "line": 17,
+        "end": 18
+      },
+      {
+        "name": "real",
+        "line": 20,
+        "end": 21
+      },
+      {
+        "name": "natural",
+        "line": 22,
+        "end": 23
+      },
+      {
+        "name": "load",
+        "line": 24,
+        "end": 28
+      },
+      {
+        "name": "convert",
+        "line": 30,
+        "end": 31
+      },
+      {
+        "name": "evaluate",
+        "line": 32,
+        "end": 55
+      }
+    ],
+    "lines": 55
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/resolve_baseline.py",
+    "definitions": [],
+    "lines": 10
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/report.py",
+    "definitions": [
+      {
+        "name": "describe",
+        "line": 19,
+        "end": 20
+      }
+    ],
+    "lines": 42
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/evaluate_candidate.py",
+    "definitions": [],
+    "lines": 2
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/baseline.py",
+    "definitions": [],
+    "lines": 11
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/code/train.py",
+    "definitions": [
+      {
+        "name": "means",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "standardized",
+        "line": 11,
+        "end": 11
+      },
+      {
+        "name": "moment_target",
+        "line": 13,
+        "end": 14
+      },
+      {
+        "name": "moments",
+        "line": 16,
+        "end": 17
+      },
+      {
+        "name": "shares",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "structure",
+        "line": 20,
+        "end": 23
+      },
+      {
+        "name": "soft_output",
+        "line": 24,
+        "end": 25
+      },
+      {
+        "name": "training_eval",
+        "line": 27,
+        "end": 33
+      }
+    ],
+    "lines": 50
+  },
+  {
+    "path": "outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/finish.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "sha",
+        "line": 10,
+        "end": 10
+      },
+      {
+        "name": "table",
+        "line": 11,
+        "end": 11
+      },
+      {
+        "name": "concentration",
+        "line": 28,
+        "end": 28
+      },
+      {
+        "name": "delta",
+        "line": 29,
+        "end": 30
+      },
+      {
+        "name": "eta",
+        "line": 16,
+        "end": 17
+      }
+    ],
+    "lines": 73
+  },
+  {
+    "path": "outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/code/audit.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "statehash",
+        "line": 18,
+        "end": 22
+      },
+      {
+        "name": "getmodule",
+        "line": 23,
+        "end": 24
+      },
+      {
+        "name": "main",
+        "line": 26,
+        "end": 103
+      },
+      {
+        "name": "spectrum",
+        "line": 58,
+        "end": 59
+      },
+      {
+        "name": "desc",
+        "line": 60,
+        "end": 61
+      },
+      {
+        "name": "feats",
+        "line": 80,
+        "end": 82
+      }
+    ],
+    "lines": 104
+  },
+  {
+    "path": "outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/finish.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 10,
+        "end": 10
+      },
+      {
+        "name": "sha",
+        "line": 11,
+        "end": 11
+      },
+      {
+        "name": "table",
+        "line": 12,
+        "end": 12
+      }
+    ],
+    "lines": 50
+  },
+  {
+    "path": "outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/run.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "table",
+        "line": 10,
+        "end": 13
+      },
+      {
+        "name": "sha",
+        "line": 14,
+        "end": 18
+      },
+      {
+        "name": "module",
+        "line": 19,
+        "end": 20
+      },
+      {
+        "name": "main",
+        "line": 22,
+        "end": 105
+      },
+      {
+        "name": "stats",
+        "line": 40,
+        "end": 41
+      },
+      {
+        "name": "outputstats",
+        "line": 85,
+        "end": 86
+      },
+      {
+        "name": "numeric_features",
+        "line": 94,
+        "end": 95
+      }
+    ],
+    "lines": 106
+  },
+  {
+    "path": "outputs/tactile_c26_shared_frozen_encoder_2026-11-18/code/evaluate.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "sha",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "table",
+        "line": 10,
+        "end": 12
+      },
+      {
+        "name": "extract",
+        "line": 13,
+        "end": 14
+      },
+      {
+        "name": "main",
+        "line": 15,
+        "end": 45
+      }
+    ],
+    "lines": 46
+  },
+  {
+    "path": "outputs/tactile_p37_full_data_revalidation_2026-11-15/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 9,
+        "end": 9
+      },
+      {
+        "name": "csvwrite",
+        "line": 10,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "deadline",
+        "line": 20,
+        "end": 22
+      },
+      {
+        "name": "metrics",
+        "line": 23,
+        "end": 27
+      },
+      {
+        "name": "ci",
+        "line": 28,
+        "end": 33
+      },
+      {
+        "name": "weights",
+        "line": 34,
+        "end": 40
+      }
+    ],
+    "lines": 40
+  },
+  {
+    "path": "source/sensors/tactile/dex_hand.py",
+    "definitions": [
+      {
+        "name": "site_name",
+        "line": 39,
+        "end": 40
+      },
+      {
+        "name": "sensor_name",
+        "line": 43,
+        "end": 44
+      },
+      {
+        "name": "_items",
+        "line": 47,
+        "end": 48
+      },
+      {
+        "name": "_body_by_geom_name",
+        "line": 51,
+        "end": 63
+      },
+      {
+        "name": "_mesh_file_map",
+        "line": 66,
+        "end": 67
+      },
+      {
+        "name": "_resolve_mesh_path",
+        "line": 70,
+        "end": 72
+      },
+      {
+        "name": "_normalize",
+        "line": 75,
+        "end": 80
+      },
+      {
+        "name": "_grid_difference",
+        "line": 83,
+        "end": 101
+      },
+      {
+        "name": "_neighbor_spacing",
+        "line": 104,
+        "end": 125
+      },
+      {
+        "name": "_taxel_frame",
+        "line": 128,
+        "end": 135
+      },
+      {
+        "name": "_orient_frame_outward",
+        "line": 138,
+        "end": 155
+      },
+      {
+        "name": "_rotation_matrix_to_quat",
+        "line": 158,
+        "end": 164
+      },
+      {
+        "name": "_quat_to_mat",
+        "line": 167,
+        "end": 176
+      },
+      {
+        "name": "_transform_points",
+        "line": 179,
+        "end": 180
+      },
+      {
+        "name": "DexHandTactileSensorBase",
+        "line": 183,
+        "end": 468
+      },
+      {
+        "name": "SimpleBoxTactileSensor",
+        "line": 471,
+        "end": 541
+      },
+      {
+        "name": "create_dex_hand_tactile_sensor",
+        "line": 544,
+        "end": 560
+      },
+      {
+        "name": "visit",
+        "line": 54,
+        "end": 59
+      },
+      {
+        "name": "__init__",
+        "line": 188,
+        "end": 216
+      },
+      {
+        "name": "patch_shapes",
+        "line": 219,
+        "end": 220
+      },
+      {
+        "name": "total_taxels",
+        "line": 223,
+        "end": 224
+      },
+      {
+        "name": "observation_space",
+        "line": 227,
+        "end": 229
+      },
+      {
+        "name": "set_name_prefix",
+        "line": 231,
+        "end": 232
+      },
+      {
+        "name": "visualization_sites",
+        "line": 234,
+        "end": 244
+      },
+      {
+        "name": "surface_patch_names",
+        "line": 246,
+        "end": 247
+      },
+      {
+        "name": "default_surface_patch_names",
+        "line": 249,
+        "end": 250
+      },
+      {
+        "name": "surface_plot_data",
+        "line": 252,
+        "end": 292
+      },
+      {
+        "name": "augment_spec",
+        "line": 294,
+        "end": 342
+      },
+      {
+        "name": "_add_taxel",
+        "line": 345,
+        "end": 358
+      },
+      {
+        "name": "_add_touch_sensor",
+        "line": 360,
+        "end": 377
+      },
+      {
+        "name": "bind",
+        "line": 379,
+        "end": 400
+      },
+      {
+        "name": "reset",
+        "line": 402,
+        "end": 418
+      },
+      {
+        "name": "read_raw",
+        "line": 420,
+        "end": 424
+      },
+      {
+        "name": "read",
+        "line": 426,
+        "end": 427
+      },
+      {
+        "name": "read_patches",
+        "line": 429,
+        "end": 430
+      },
+      {
+        "name": "patches_from_values",
+        "line": 432,
+        "end": 437
+      },
+      {
+        "name": "read_images",
+        "line": 439,
+        "end": 452
+      },
+      {
+        "name": "metadata",
+        "line": 454,
+        "end": 468
+      },
+      {
+        "name": "__init__",
+        "line": 476,
+        "end": 509
+      },
+      {
+        "name": "_add_taxel",
+        "line": 511,
+        "end": 533
+      },
+      {
+        "name": "metadata",
+        "line": 535,
+        "end": 541
+      }
+    ],
+    "lines": 575
+  },
+  {
+    "path": "source/sensors/tactile/signal_processing.py",
+    "definitions": [
+      {
+        "name": "_validate_nonnegative",
+        "line": 12,
+        "end": 16
+      },
+      {
+        "name": "_gaussian_kernel1d",
+        "line": 19,
+        "end": 25
+      },
+      {
+        "name": "_convolve_axis_reflect",
+        "line": 28,
+        "end": 42
+      },
+      {
+        "name": "_gaussian_blur",
+        "line": 45,
+        "end": 48
+      },
+      {
+        "name": "_neighbor_crosstalk",
+        "line": 51,
+        "end": 91
+      },
+      {
+        "name": "TaxelPatch",
+        "line": 95,
+        "end": 105
+      },
+      {
+        "name": "TactileSignalProcessorConfig",
+        "line": 109,
+        "end": 144
+      },
+      {
+        "name": "TactileSignalProcessor",
+        "line": 147,
+        "end": 218
+      },
+      {
+        "name": "shape",
+        "line": 104,
+        "end": 105
+      },
+      {
+        "name": "from_mapping",
+        "line": 121,
+        "end": 131
+      },
+      {
+        "name": "__post_init__",
+        "line": 133,
+        "end": 144
+      },
+      {
+        "name": "__init__",
+        "line": 150,
+        "end": 153
+      },
+      {
+        "name": "normalized",
+        "line": 156,
+        "end": 157
+      },
+      {
+        "name": "reset",
+        "line": 159,
+        "end": 160
+      },
+      {
+        "name": "process",
+        "line": 162,
+        "end": 187
+      },
+      {
+        "name": "_process_patch_images",
+        "line": 189,
+        "end": 203
+      },
+      {
+        "name": "metadata",
+        "line": 205,
+        "end": 218
+      }
+    ],
+    "lines": 218
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/finish.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 10
+      },
+      {
+        "name": "rows",
+        "line": 11,
+        "end": 11
+      },
+      {
+        "name": "sha",
+        "line": 59,
+        "end": 63
+      }
+    ],
+    "lines": 143
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/analyze.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 13,
+        "end": 13
+      },
+      {
+        "name": "table",
+        "line": 14,
+        "end": 17
+      },
+      {
+        "name": "loadrows",
+        "line": 18,
+        "end": 18
+      },
+      {
+        "name": "spatial",
+        "line": 35,
+        "end": 38
+      },
+      {
+        "name": "transitions",
+        "line": 39,
+        "end": 41
+      }
+    ],
+    "lines": 122
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/compiled_radius_check.py",
+    "definitions": [],
+    "lines": 26
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/supplement.py",
+    "definitions": [],
+    "lines": 27
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/free_probe.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 22
+      },
+      {
+        "name": "reset",
+        "line": 23,
+        "end": 27
+      },
+      {
+        "name": "mapping",
+        "line": 28,
+        "end": 36
+      },
+      {
+        "name": "run",
+        "line": 57,
+        "end": 98
+      }
+    ],
+    "lines": 106
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/multi.py",
+    "definitions": [],
+    "lines": 23
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/primary.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 20
+      },
+      {
+        "name": "reset",
+        "line": 21,
+        "end": 25
+      },
+      {
+        "name": "mapping",
+        "line": 26,
+        "end": 34
+      },
+      {
+        "name": "run",
+        "line": 55,
+        "end": 91
+      }
+    ],
+    "lines": 99
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/experiment.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 20
+      },
+      {
+        "name": "reset",
+        "line": 21,
+        "end": 25
+      },
+      {
+        "name": "mapping",
+        "line": 26,
+        "end": 34
+      },
+      {
+        "name": "run",
+        "line": 55,
+        "end": 91
+      }
+    ],
+    "lines": 99
+  },
+  {
+    "path": "outputs/tactile_p43_c2_spherical_indenter_2026-11-16/code/probe_library.py",
+    "definitions": [
+      {
+        "name": "dump",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "table",
+        "line": 9,
+        "end": 12
+      },
+      {
+        "name": "make",
+        "line": 13,
+        "end": 22
+      },
+      {
+        "name": "reset",
+        "line": 23,
+        "end": 27
+      },
+      {
+        "name": "mapping",
+        "line": 28,
+        "end": 36
+      },
+      {
+        "name": "run",
+        "line": 39,
+        "end": 80
+      }
+    ],
+    "lines": 81
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/analyze.py",
+    "definitions": [
+      {
+        "name": "encode",
+        "line": 15,
+        "end": 16
+      },
+      {
+        "name": "ci",
+        "line": 68,
+        "end": 72
+      },
+      {
+        "name": "distance",
+        "line": 73,
+        "end": 77
+      }
+    ],
+    "lines": 148
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 6,
+        "end": 6
+      },
+      {
+        "name": "rows",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "pava",
+        "line": 22,
+        "end": 28
+      }
+    ],
+    "lines": 28
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/finalize.py",
+    "definitions": [],
+    "lines": 68
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/report.py",
+    "definitions": [
+      {
+        "name": "getd",
+        "line": 8,
+        "end": 8
+      },
+      {
+        "name": "getc",
+        "line": 9,
+        "end": 9
+      }
+    ],
+    "lines": 131
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/run_physics.py",
+    "definitions": [
+      {
+        "name": "budget",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "wanted",
+        "line": 18,
+        "end": 21
+      }
+    ],
+    "lines": 62
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/prepare.py",
+    "definitions": [],
+    "lines": 57
+  },
+  {
+    "path": "outputs/tactile_p43_c5_loading_calibration_2026-11-17/code/seal_manifest.py",
+    "definitions": [],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/evaluate_v0.py",
+    "definitions": [
+      {
+        "name": "encode",
+        "line": 40,
+        "end": 41
+      },
+      {
+        "name": "transform",
+        "line": 81,
+        "end": 84
+      }
+    ],
+    "lines": 131
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/register_audit.py",
+    "definitions": [],
+    "lines": 35
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/register_audit_v0.py",
+    "definitions": [],
+    "lines": 35
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/common.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 6,
+        "end": 6
+      },
+      {
+        "name": "rows",
+        "line": 7,
+        "end": 7
+      },
+      {
+        "name": "table",
+        "line": 8,
+        "end": 12
+      },
+      {
+        "name": "sha",
+        "line": 13,
+        "end": 17
+      },
+      {
+        "name": "module",
+        "line": 18,
+        "end": 19
+      },
+      {
+        "name": "pava",
+        "line": 22,
+        "end": 28
+      }
+    ],
+    "lines": 28
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/run_spatial.py",
+    "definitions": [
+      {
+        "name": "budget",
+        "line": 16,
+        "end": 19
+      },
+      {
+        "name": "score",
+        "line": 20,
+        "end": 21
+      },
+      {
+        "name": "depth_map",
+        "line": 23,
+        "end": 35
+      },
+      {
+        "name": "propose",
+        "line": 37,
+        "end": 62
+      },
+      {
+        "name": "execute",
+        "line": 64,
+        "end": 70
+      },
+      {
+        "name": "result",
+        "line": 72,
+        "end": 73
+      },
+      {
+        "name": "runstage",
+        "line": 74,
+        "end": 79
+      },
+      {
+        "name": "quality",
+        "line": 80,
+        "end": 81
+      }
+    ],
+    "lines": 103
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/evaluate.py",
+    "definitions": [
+      {
+        "name": "encode",
+        "line": 40,
+        "end": 41
+      },
+      {
+        "name": "transform",
+        "line": 81,
+        "end": 84
+      }
+    ],
+    "lines": 131
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/seal.py",
+    "definitions": [],
+    "lines": 9
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/report_finalize.py",
+    "definitions": [],
+    "lines": 165
+  },
+  {
+    "path": "outputs/tactile_p43_c6_spatial_configuration_2026-11-17/code/linearity_diagnostic.py",
+    "definitions": [],
+    "lines": 21
+  },
+  {
+    "path": "outputs/tactile_p43_c10_r1_v_prediction_2026-11-17/code/run.py",
+    "definitions": [
+      {
+        "name": "save",
+        "line": 13,
+        "end": 14
+      },
+      {
+        "name": "table",
+        "line": 15,
+        "end": 17
+      },
+      {
+        "name": "budget",
+        "line": 18,
+        "end": 20
+      },
+      {
+        "name": "recover",
+        "line": 22,
+        "end": 23
+      },
+      {
+        "name": "sample",
+        "line": 26,
+        "end": 32
+      },
+      {
+        "name": "oracle_tests",
+        "line": 34,
+        "end": 47
+      },
+      {
+        "name": "evaluate",
+        "line": 49,
+        "end": 69
+      },
+      {
+        "name": "main",
+        "line": 71,
+        "end": 105
+      },
+      {
+        "name": "metrics",
+        "line": 51,
+        "end": 53
+      },
+      {
+        "name": "loss_eval",
+        "line": 84,
+        "end": 89
+      },
+      {
+        "name": "Oracle",
+        "line": 40,
+        "end": 42
+      },
+      {
+        "name": "__call__",
+        "line": 41,
+        "end": 42
+      }
+    ],
+    "lines": 107
+  },
+  {
+    "path": "outputs/tactile_p43_c10_r1_v_prediction_2026-11-17/code/report.py",
+    "definitions": [
+      {
+        "name": "main",
+        "line": 10,
+        "end": 97
+      },
+      {
+        "name": "sha",
+        "line": 92,
+        "end": 96
+      }
+    ],
+    "lines": 99
+  },
+  {
+    "path": "outputs/tactile_p39_domain_decomposition_2026-11-15/code/run.py",
+    "definitions": [
+      {
+        "name": "inputs",
+        "line": 9,
+        "end": 14
+      },
+      {
+        "name": "features",
+        "line": 15,
+        "end": 25
+      },
+      {
+        "name": "pool",
+        "line": 27,
+        "end": 33
+      },
+      {
+        "name": "Runner",
+        "line": 34,
+        "end": 81
+      },
+      {
+        "name": "heldout",
+        "line": 35,
+        "end": 35
+      },
+      {
+        "name": "run",
+        "line": 36,
+        "end": 81
+      },
+      {
+        "name": "closure",
+        "line": 62,
+        "end": 63
+      }
+    ],
+    "lines": 93
+  }
+]

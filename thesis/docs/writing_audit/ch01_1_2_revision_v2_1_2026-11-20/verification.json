@@ -1,0 +1,29 @@
+{
+  "task": "TH-CH01-1.2-V2.1",
+  "date": "2026-11-20",
+  "changed_paragraph": "1.2.4 paragraph 2 (S25 comparison)",
+  "other_text_unchanged": true,
+  "section_1_1_unchanged": true,
+  "table_unchanged": true,
+  "chapter_hierarchy": "section 1.2 + four subsections",
+  "citation_keys": 25,
+  "citations_unchanged": true,
+  "missing_keys": [],
+  "duplicate_keys": [],
+  "reference_bib_unchanged": true,
+  "table_columns": 5,
+  "table_body_rows": 8,
+  "static_environment_and_label_checks": "passed",
+  "compiled": false,
+  "experiments_run": false,
+  "commit_push": false,
+  "before_sha256": "05995e9d2e03f5c51bf949b3a3d4f62587f2d52e7d8316d3a9ec279d8fbb033c",
+  "after_sha256": "10d2bff283767e59da5e7191025d311f14ca4b9e088b783c3dd08d2a66f13415",
+  "bib_sha256": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053",
+  "code_evidence": [
+    "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/matching.py",
+    "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/pipeline.py:27-63",
+    "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/models.py:34-35",
+    "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/inference.py:19"
+  ]
+}

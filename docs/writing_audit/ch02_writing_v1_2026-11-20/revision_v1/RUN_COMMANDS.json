@@ -1,0 +1,12 @@
+{
+  "commands": [
+    "python3 docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/prepare_revision.py",
+    "PYTHONPATH=. OPENBLAS_NUM_THREADS=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/plot_assembled_geometry.py",
+    "python3 docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/revise_text.py",
+    "bash docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/build_preview.sh",
+    "./scripts/count_thesis_words.sh --chapter 2 --output-dir docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/wordcount",
+    "./scripts/count_thesis_words.sh --files --output-dir docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/wordcount",
+    "PYTHONPATH=thesis/.tools/python python3 docs/writing_audit/ch02_writing_v1_2026-11-20/revision_v1/finalize_revision.py"
+  ],
+  "note": "prepare_revision.py captures before state and must not be rerun over this archived revision; revise_text.py is a one-time patch, not an idempotent transformation"
+}

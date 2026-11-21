@@ -1,0 +1,18 @@
+{
+  "section": "5.1 真实与仿真触觉差异分析",
+  "date": "2026-11-21",
+  "state": "FROZEN_DRAFT",
+  "authorization": "用户确认只做R2三处修订并核实官方引用，随后直接PDF检查和冻结，不再反复技术审计",
+  "review_boundary": "R2按明确审核意见定点修订；执行者已查看PDF，未声称用户亲自逐页审核R2 PDF",
+  "TeXcount": 1239,
+  "body_pages": 2,
+  "preview_with_references_pages": 3,
+  "section_sha256": "f93ad4b25bfa2e65e6068606dd48927012e2588e5ca24d1cad0078495f5d3281",
+  "pdf_sha256": "ed9462455a328b41ff4d3925648b9834a14e17558572119ec3855e099e8c8689",
+  "V1_R1_retained": true,
+  "main_bib_unchanged": true,
+  "statistical_values_unchanged": true,
+  "final_chapter_conclusion_unchanged": "C27 Validation joint2/11",
+  "section5_2_started": false,
+  "commit_push": false
+}

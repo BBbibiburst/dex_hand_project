@@ -1,0 +1,196 @@
+[
+  {
+    "id": "S06",
+    "title": "MuJoCo: A physics engine for model-based control",
+    "authors": [
+      "Emanuel Todorov",
+      "Tom Erez",
+      "Yuval Tassa"
+    ],
+    "year": 2012,
+    "venue": "IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS):5026–5033",
+    "doi": "10.1109/iros.2012.6386109",
+    "primary_url": "https://roboti.us/lab/papers/TodorovIROS12.pdf",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S06.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S06_crossref.json",
+    "research_direction": "仿真触觉",
+    "technical_route": "广义坐标动力学与接触求解",
+    "contribution": "讨论多关节、接触、等式约束和执行器建模，并进行计时测试。",
+    "limitations": "2012版本论文不能证明当前引擎全部功能；接触求解不是压阻读出模型。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        7
+      ],
+      "detail": "引擎摘要、求解流程、模型元素和计时实验开头",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "机器人仿真提供动力学基础但不自动提供特定触觉读出",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "31bab10428d0714ad2baeb905eaa9eb6010c27aff1173681ca91b7ebb2e82372",
+    "version_notes": "本轮找回作者托管PDF；旧链接曾重定向，未回改1.1历史档案。2012论文不用于描述当前全部版本功能。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S08",
+    "title": "TACTO: A Fast, Flexible, and Open-Source Simulator for High-Resolution Vision-Based Tactile Sensors",
+    "authors": [
+      "Shaoxiong Wang",
+      "Mike Lambeta",
+      "Po-Wei Chou",
+      "Roberto Calandra"
+    ],
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 3930–3937",
+    "doi": "10.1109/LRA.2022.3146945",
+    "primary_url": "https://arxiv.org/abs/2012.08456",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W09",
+    "research_direction": "仿真触觉",
+    "technical_route": "几何接触驱动的视觉触觉渲染",
+    "contribution": "分离物理场景同步与光学渲染，支持相机、光照及传感器配置。",
+    "limitations": "针对视觉触觉；背景图校正不是任意传感器物理标定。",
+    "reading_scope": {
+      "pdf_pages": [
+        3,
+        4,
+        7
+      ],
+      "detail": "复用1.1方法与位姿估计实验阅读，本轮复查流程/计时/背景校正",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "触觉模拟的传感器特定假设",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "3d656371a5d15141d5e352680c2c95cdddbbf9e5ce89fc96278e0c6e7b544838",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S09",
+    "title": "Taxim: An Example-Based Simulation Model for GelSight Tactile Sensors",
+    "authors": [
+      "Zilin Si",
+      "Wenzhen Yuan"
+    ],
+    "year": 2022,
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 2361–2368",
+    "doi": "10.1109/LRA.2022.3142412",
+    "primary_url": "https://arxiv.org/abs/2109.04027",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim.pdf",
+    "metadata_source": "已审核1.1目录及其出版社/Crossref存档",
+    "reused_from": "W10",
+    "research_direction": "仿真触觉",
+    "technical_route": "实例光学校准与弹性标记位移近似",
+    "contribution": "结合经验光学映射和FEM标定的形变传播，模拟GelSight图像与标记位移。",
+    "limitations": "文中速度比较限定CPU；成像和材料近似不能直接移植到712维标量阵列。",
+    "reading_scope": {
+      "pdf_pages": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "detail": "复用方法阅读；本轮核对形变标定、受控压入、图像实验及CPU限制",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "几何、材料和读出模型共同决定触觉观测",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "24feb04024fe5b03fd7c43c5cd6a6e5d9101f60188ae8418270a63d2c394d8ca",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "正式开放版本或已审核1.1存档；以local_pdf首页与来源记录为准",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S10",
+    "title": "Sim-to-Real for High-Resolution Optical Tactile Sensing: From Images to Three-Dimensional Contact Force Distributions",
+    "authors": [
+      "Carmelo Sferrazza",
+      "Raffaello D'Andrea"
+    ],
+    "year": 2022,
+    "venue": "Soft Robotics 9(5):926–937",
+    "doi": "10.1089/soro.2020.0213",
+    "primary_url": "https://journals.sagepub.com/doi/10.1089/soro.2020.0213",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S10.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S10_crossref.json",
+    "research_direction": "迁移",
+    "technical_route": "FEM合成视觉触觉与力分布回归",
+    "contribution": "在FEM中生成图像特征和力场监督，经相机校准后迁移到真实传感器。",
+    "limitations": "真实分布力真值部分借助仿真赋值，需区别独立力计验证；不是任意无配对触觉转换。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        4,
+        7,
+        9,
+        11
+      ],
+      "detail": "预印本v3摘要、FEM方法、相机映射、测试指标与可视化选段",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "模型校准与物理监督假设",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "6882606ffa819f87c691848af9c86d15e3f66f0a8ad40ff61e44c96aa9fc76e8",
+    "version_notes": "正式卷期2022，在线发表2021；Crossref默认published是在线日期。卷期由出版社和PubMed交叉核对。全文读取arXiv v3，不称已读出版社排版全文。",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  },
+  {
+    "id": "S25",
+    "title": "Sim-to-Real for Robotic Tactile Sensing via Physics-Based Simulation and Learned Latent Projections",
+    "authors": [
+      "Yashraj Narang",
+      "Balakumar Sundaralingam",
+      "Miles Macklin",
+      "Arsalan Mousavian",
+      "Dieter Fox"
+    ],
+    "year": 2021,
+    "venue": "IEEE International Conference on Robotics and Automation (ICRA):6444–6451",
+    "doi": "10.1109/icra48506.2021.9561969",
+    "primary_url": "https://research.nvidia.com/publication/2021-06_sim-real-robotic-tactile-sensing-physics-based-simulation-and-learned-latent",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_2_sources/S25.pdf",
+    "metadata_source": "thesis/docs/writing_audit/ch01_1_2_sources/S25_crossref.json",
+    "research_direction": "迁移",
+    "technical_route": "FEM触觉模型与独立VAE监督潜投影",
+    "contribution": "分别学习BioTac形变与电信号表示，冻结后用有限配对数据训练潜空间投影。",
+    "limitations": "依赖监督对应和特定传感器；未见接触模式也可能重建失败，不是纯无配对成功。",
+    "reading_scope": {
+      "pdf_pages": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "detail": "摘要、两VAE结构、监督投影、FEM及信号/接触重建实验",
+      "complete_paper_read": false,
+      "abstract": "read relevant abstract; reused W records retain prior reading provenance"
+    },
+    "suggested_claim": "与本课题最近的方法先例，必须正面比较",
+    "fulltext_access": "全文PDF已取得；仅声明上述选段已读",
+    "pdf_sha256": "abf4d976f28e1a7db9a12a395a505887c302bec1a8d06acaec798f67ba1870a5",
+    "version_notes": "",
+    "doi_status": "已核实且匹配题名",
+    "verification_status": "可用于所列论点；版本与边界见备注",
+    "read_edition": "作者预印本；正式题录另核，不宣称逐行核对正式全文",
+    "limitations_basis": "原文模型/实验设置与本项目证据的受限比较；除明确注明外，不冒称作者已证明该局限。"
+  }
+]

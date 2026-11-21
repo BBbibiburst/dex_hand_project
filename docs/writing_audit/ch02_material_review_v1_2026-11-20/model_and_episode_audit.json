@@ -1,0 +1,1939 @@
+{
+  "mode": "offline XML parsing and existing NPZ statistics; no simulation",
+  "models": {
+    "arm": {
+      "path": "assets/robots/rm75b/rm75b.xml",
+      "sha256": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+      "option": {
+        "iterations": "50",
+        "timestep": "0.001",
+        "solver": "PGS",
+        "gravity": "0 0 -9.81"
+      },
+      "mesh_assets": [
+        {
+          "name": "base_link",
+          "content_type": "model/stl",
+          "file": "base_link.STL"
+        },
+        {
+          "name": "link1",
+          "content_type": "model/stl",
+          "file": "link1.STL"
+        },
+        {
+          "name": "link2",
+          "content_type": "model/stl",
+          "file": "link2.STL"
+        },
+        {
+          "name": "link3",
+          "content_type": "model/stl",
+          "file": "link3.STL"
+        },
+        {
+          "name": "link4",
+          "content_type": "model/stl",
+          "file": "link4.STL"
+        },
+        {
+          "name": "link5",
+          "content_type": "model/stl",
+          "file": "link5.STL"
+        },
+        {
+          "name": "link6",
+          "content_type": "model/stl",
+          "file": "link6.STL"
+        },
+        {
+          "name": "link7",
+          "content_type": "model/stl",
+          "file": "link7.STL"
+        }
+      ],
+      "body_transforms": [
+        {
+          "name": "root",
+          "pos": "0 0 0.02016246710532496",
+          "quat": "1 0 0 0"
+        },
+        {
+          "name": "Link1",
+          "pos": "0 0 0.2405",
+          "quat": "0.707105 -0.707108 0 0"
+        },
+        {
+          "name": "Link2",
+          "quat": "0.707105 0.707108 0 0"
+        },
+        {
+          "name": "Link3",
+          "pos": "0 0 0.256",
+          "quat": "0.707105 -0.707108 0 0"
+        },
+        {
+          "name": "Link4",
+          "quat": "0.707105 0.707108 0 0"
+        },
+        {
+          "name": "Link5",
+          "pos": "0 0 0.21",
+          "quat": "0.707105 -0.707108 0 0"
+        },
+        {
+          "name": "Link6",
+          "quat": "0.707105 0.707108 0 0"
+        },
+        {
+          "name": "Link7",
+          "pos": "0 0 0.144"
+        },
+        {
+          "name": "right_hand",
+          "pos": "0 0 0",
+          "quat": "0.707 0 -0.707 0"
+        }
+      ],
+      "joints": [
+        {
+          "name": "joint1",
+          "pos": "0 0 0",
+          "axis": "0 -1 0",
+          "range": "-3.1 3.1",
+          "actuatorfrcrange": "-60 60",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint2",
+          "pos": "0 0 0",
+          "axis": "0 1 0",
+          "range": "-2.268 2.268",
+          "actuatorfrcrange": "-60 60",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint3",
+          "pos": "0 0 0",
+          "axis": "0 -1 0",
+          "range": "-3.1 3.1",
+          "actuatorfrcrange": "-30 30",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint4",
+          "pos": "0 0 0",
+          "axis": "0 1 0",
+          "range": "-2.355 2.355",
+          "actuatorfrcrange": "-30 30",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint5",
+          "pos": "0 0 0",
+          "axis": "0 -1 0",
+          "range": "-3.1 3.1",
+          "actuatorfrcrange": "-10 10",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint6",
+          "pos": "0 0 0",
+          "axis": "0 1 0",
+          "range": "-2.233 2.233",
+          "actuatorfrcrange": "-10 10",
+          "frictionloss": "1",
+          "damping": "10.0"
+        },
+        {
+          "name": "joint7",
+          "pos": "0 0 0",
+          "axis": "0 0 1",
+          "range": "-6.28 6.28",
+          "actuatorfrcrange": "-10 10",
+          "frictionloss": "1",
+          "damping": "10.0"
+        }
+      ],
+      "actuators": [
+        {
+          "type": "position",
+          "name": "pos_joint1",
+          "joint": "joint1",
+          "kp": "5000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-3.1 3.1",
+          "forcelimited": "true",
+          "forcerange": "-60 60"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint2",
+          "joint": "joint2",
+          "kp": "5000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-2.268 2.268",
+          "forcelimited": "true",
+          "forcerange": "-60 60"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint3",
+          "joint": "joint3",
+          "kp": "3000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-3.1 3.1",
+          "forcelimited": "true",
+          "forcerange": "-30 30"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint4",
+          "joint": "joint4",
+          "kp": "3000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-2.355 2.355",
+          "forcelimited": "true",
+          "forcerange": "-30 30"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint5",
+          "joint": "joint5",
+          "kp": "2000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-3.1 3.1",
+          "forcelimited": "true",
+          "forcerange": "-10 10"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint6",
+          "joint": "joint6",
+          "kp": "2000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-2.233 2.233",
+          "forcelimited": "true",
+          "forcerange": "-10 10"
+        },
+        {
+          "type": "position",
+          "name": "pos_joint7",
+          "joint": "joint7",
+          "kp": "1000",
+          "dampratio": "1.0",
+          "ctrllimited": "true",
+          "ctrlrange": "-6.28 6.28",
+          "forcelimited": "true",
+          "forcerange": "-10 10"
+        }
+      ],
+      "tendons": [],
+      "equality_count": 0,
+      "flex_count": 0,
+      "skin_geoms": [],
+      "explicit_contact_pairs": 0
+    },
+    "hand": {
+      "path": "assets/grippers/dex_hand/dex_hand.xml",
+      "sha256": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+      "option": {
+        "timestep": "0.001",
+        "iterations": "100",
+        "solver": "Newton",
+        "cone": "elliptic",
+        "gravity": "0 0 -9.81"
+      },
+      "mesh_assets": [
+        {
+          "name": "v3_base_link",
+          "content_type": "model/stl",
+          "file": "meshes/v3_base_link.STL"
+        },
+        {
+          "name": "finger_first_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_first_0_p.STL"
+        },
+        {
+          "name": "finger_second_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_second_0_p.STL"
+        },
+        {
+          "name": "skin_0_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_0_0_p.STL"
+        },
+        {
+          "name": "skin_0_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_0_1_p.STL"
+        },
+        {
+          "name": "skin_0_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_0_2_p.STL"
+        },
+        {
+          "name": "finger_first_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_first_1_p.STL"
+        },
+        {
+          "name": "finger_second_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_second_1_p.STL"
+        },
+        {
+          "name": "skin_1_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_1_0_p.STL"
+        },
+        {
+          "name": "skin_1_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_1_1_p.STL"
+        },
+        {
+          "name": "skin_1_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_1_2_p.STL"
+        },
+        {
+          "name": "finger_first_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_first_2_p.STL"
+        },
+        {
+          "name": "finger_second_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_second_2_p.STL"
+        },
+        {
+          "name": "skin_2_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_2_0_p.STL"
+        },
+        {
+          "name": "skin_2_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_2_1_p.STL"
+        },
+        {
+          "name": "skin_2_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_2_2_p.STL"
+        },
+        {
+          "name": "finger_first_3_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_first_3_p.STL"
+        },
+        {
+          "name": "finger_second_3_p",
+          "content_type": "model/stl",
+          "file": "meshes/finger_second_3_p.STL"
+        },
+        {
+          "name": "skin_3_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_3_0_p.STL"
+        },
+        {
+          "name": "skin_3_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_3_1_p.STL"
+        },
+        {
+          "name": "skin_3_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_3_2_p.STL"
+        },
+        {
+          "name": "thumb_rotate_p",
+          "content_type": "model/stl",
+          "file": "meshes/thumb_rotate_p.STL"
+        },
+        {
+          "name": "thumb_first_p",
+          "content_type": "model/stl",
+          "file": "meshes/thumb_first_p.STL"
+        },
+        {
+          "name": "thumb_second_p",
+          "content_type": "model/stl",
+          "file": "meshes/thumb_second_p.STL"
+        },
+        {
+          "name": "thumb_third_p",
+          "content_type": "model/stl",
+          "file": "meshes/thumb_third_p.STL"
+        },
+        {
+          "name": "skin_4_0_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_4_0_p.STL"
+        },
+        {
+          "name": "skin_4_1_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_4_1_p.STL"
+        },
+        {
+          "name": "skin_4_2_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_4_2_p.STL"
+        },
+        {
+          "name": "skin_palm_p",
+          "content_type": "model/stl",
+          "file": "meshes/skin_palm_p.STL"
+        }
+      ],
+      "body_transforms": [
+        {
+          "name": "hand_root",
+          "pos": "0 0 0",
+          "quat": "1 0 0 0"
+        },
+        {
+          "name": "finger_first_0_p",
+          "pos": "0.002 0.13804 -0.0350749",
+          "gravcomp": "1",
+          "quat": "0.0214958 0.713766 -0.699737 0.0210733"
+        },
+        {
+          "name": "finger_second_0_p",
+          "pos": "-0.0318983 0.00389251 0",
+          "gravcomp": "1"
+        },
+        {
+          "name": "finger_first_1_p",
+          "pos": "0.002 0.13913 -0.0133252",
+          "gravcomp": "1",
+          "quat": "0.0143317 0.713946 -0.699913 0.01405"
+        },
+        {
+          "name": "finger_second_1_p",
+          "pos": "-0.0318983 0.00389251 0",
+          "gravcomp": "1"
+        },
+        {
+          "name": "finger_first_2_p",
+          "pos": "0.002 0.13978 0.008442",
+          "gravcomp": "1",
+          "quat": "0.0071639 0.714069 -0.700004 0.00702743"
+        },
+        {
+          "name": "finger_second_2_p",
+          "pos": "-0.0318983 0.00389251 0",
+          "gravcomp": "1"
+        },
+        {
+          "name": "finger_first_3_p",
+          "pos": "0.002 0.14 0.030218",
+          "gravcomp": "1",
+          "quat": "-2.62306e-06 0.714106 -0.700037 2.57138e-06"
+        },
+        {
+          "name": "finger_second_3_p",
+          "pos": "-0.031898 0.0038925 0",
+          "gravcomp": "1"
+        },
+        {
+          "name": "thumb_rotate_p",
+          "pos": "-0.015 0.0636 0.018118",
+          "gravcomp": "1",
+          "quat": "0.707105 0.707108 0 0"
+        },
+        {
+          "name": "thumb_first_p",
+          "pos": "-0.0248548 0.00577022 0.00127",
+          "gravcomp": "1",
+          "quat": "0.638758 0.689899 0.155045 -0.303295"
+        },
+        {
+          "name": "thumb_second_p",
+          "pos": "0.00538619 -0.0565 0",
+          "gravcomp": "1"
+        },
+        {
+          "name": "thumb_third_p",
+          "pos": "0.00212065 -0.0233881 0",
+          "gravcomp": "1"
+        }
+      ],
+      "joints": [
+        {
+          "name": "finger_first_0_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.60",
+          "stiffness": "0.030"
+        },
+        {
+          "name": "finger_second_0_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.75",
+          "stiffness": "0.028"
+        },
+        {
+          "name": "finger_first_1_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.60",
+          "stiffness": "0.030"
+        },
+        {
+          "name": "finger_second_1_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.75",
+          "stiffness": "0.028"
+        },
+        {
+          "name": "finger_first_2_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.60",
+          "stiffness": "0.030"
+        },
+        {
+          "name": "finger_second_2_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.75",
+          "stiffness": "0.028"
+        },
+        {
+          "name": "finger_first_3_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.60",
+          "stiffness": "0.030"
+        },
+        {
+          "name": "finger_second_3_j",
+          "axis": "0 0 -1",
+          "range": "-0.08 1.75",
+          "stiffness": "0.028"
+        },
+        {
+          "name": "thumb_rotate_j",
+          "axis": "0 0 1",
+          "range": "-0.90 0.55",
+          "stiffness": "0.025",
+          "damping": "0.001"
+        },
+        {
+          "name": "thumb_first_j",
+          "axis": "0 0 1",
+          "range": "-0.08 1.00",
+          "stiffness": "0.050"
+        },
+        {
+          "name": "thumb_second_j",
+          "axis": "0 0 1",
+          "range": "-0.08 1.05",
+          "stiffness": "0.040"
+        },
+        {
+          "name": "thumb_third_j",
+          "axis": "0 0 1",
+          "range": "-0.08 1.10",
+          "stiffness": "0.035"
+        }
+      ],
+      "actuators": [
+        {
+          "type": "position",
+          "name": "act_push_0_j",
+          "tendon": "finger_0_flexor",
+          "ctrlrange": "0 0.01",
+          "kp": "10000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        },
+        {
+          "type": "position",
+          "name": "act_push_1_j",
+          "tendon": "finger_1_flexor",
+          "ctrlrange": "0 0.01",
+          "kp": "10000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        },
+        {
+          "type": "position",
+          "name": "act_push_2_j",
+          "tendon": "finger_2_flexor",
+          "ctrlrange": "0 0.01",
+          "kp": "10000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        },
+        {
+          "type": "position",
+          "name": "act_push_3_j",
+          "tendon": "finger_3_flexor",
+          "ctrlrange": "0 0.01",
+          "kp": "10000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        },
+        {
+          "type": "position",
+          "name": "thumb_rotate_act_push_j",
+          "tendon": "thumb_opposition",
+          "ctrlrange": "-0.0069 0.004",
+          "kp": "4000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        },
+        {
+          "type": "position",
+          "name": "thumb_grasp_act_push_j",
+          "tendon": "thumb_flexor",
+          "ctrlrange": "0 0.01",
+          "kp": "4000",
+          "dampratio": "1",
+          "forcelimited": "true",
+          "forcerange": "-20 20"
+        }
+      ],
+      "tendons": [
+        {
+          "name": "finger_0_flexor",
+          "terms": [
+            {
+              "joint": "finger_first_0_j",
+              "coef": "0.003"
+            },
+            {
+              "joint": "finger_second_0_j",
+              "coef": "0.003"
+            }
+          ]
+        },
+        {
+          "name": "finger_1_flexor",
+          "terms": [
+            {
+              "joint": "finger_first_1_j",
+              "coef": "0.003"
+            },
+            {
+              "joint": "finger_second_1_j",
+              "coef": "0.003"
+            }
+          ]
+        },
+        {
+          "name": "finger_2_flexor",
+          "terms": [
+            {
+              "joint": "finger_first_2_j",
+              "coef": "0.003"
+            },
+            {
+              "joint": "finger_second_2_j",
+              "coef": "0.003"
+            }
+          ]
+        },
+        {
+          "name": "finger_3_flexor",
+          "terms": [
+            {
+              "joint": "finger_first_3_j",
+              "coef": "0.003"
+            },
+            {
+              "joint": "finger_second_3_j",
+              "coef": "0.003"
+            }
+          ]
+        },
+        {
+          "name": "thumb_opposition",
+          "terms": [
+            {
+              "joint": "thumb_rotate_j",
+              "coef": "0.0085"
+            }
+          ]
+        },
+        {
+          "name": "thumb_flexor",
+          "terms": [
+            {
+              "joint": "thumb_first_j",
+              "coef": "0.0035"
+            },
+            {
+              "joint": "thumb_second_j",
+              "coef": "0.004"
+            },
+            {
+              "joint": "thumb_third_j",
+              "coef": "0.004"
+            }
+          ]
+        }
+      ],
+      "equality_count": 0,
+      "flex_count": 0,
+      "skin_geoms": [
+        {
+          "name": "skin_palm_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.01544 0.11121 -0.003",
+          "quat": "0.000796327 1 0 0",
+          "mesh": "skin_palm_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_0_0_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0157378 0.0119851 0.0001",
+          "quat": "-0.467921 -0.506491 0.493424 -0.530141",
+          "mesh": "skin_0_0_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_0_1_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0140028 0.00423085 0.0001",
+          "quat": "-0.476897 -0.494017 0.505912 -0.522082",
+          "mesh": "skin_0_1_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_0_2_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0351717 0.00347781 0.0001",
+          "quat": "-0.462885 -0.51276 0.486905 -0.534545",
+          "mesh": "skin_0_2_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_1_0_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0157378 0.0119851 0.0001",
+          "quat": "-0.472252 -0.510519 0.489255 -0.526287",
+          "mesh": "skin_1_0_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_1_1_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.015911 0.0047591 0.0001",
+          "quat": "-0.486323 -0.492747 0.50715 -0.513313",
+          "mesh": "skin_1_1_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_1_2_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0429721 0.00510208 0.0001",
+          "quat": "-0.471191 -0.511737 0.487981 -0.527237",
+          "mesh": "skin_1_2_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_2_0_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0157378 0.0119851 0.0001",
+          "quat": "-0.476551 -0.514513 0.485053 -0.522397",
+          "mesh": "skin_2_0_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_2_1_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0179082 0.00481423 0.0001",
+          "quat": "-0.492634 -0.496765 0.503214 -0.507259",
+          "mesh": "skin_2_1_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_2_2_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0489203 0.00557317 0.0001",
+          "quat": "-0.475726 -0.515364 0.484148 -0.523149",
+          "mesh": "skin_2_2_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_3_0_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0157378 0.0119851 0.0001",
+          "quat": "-0.480818 -0.518473 0.480818 -0.518473",
+          "mesh": "skin_3_0_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_3_1_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0159111 0.00475913 0.0001",
+          "quat": "-0.496831 -0.503149 0.496831 -0.503149",
+          "mesh": "skin_3_1_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_3_2_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "-0.0429721 0.00510208 0.0001",
+          "quat": "-0.479649 -0.519555 0.479649 -0.519555",
+          "mesh": "skin_3_2_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_4_0_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "0.0200317 -0.0367688 -0.0001",
+          "quat": "0.5 0.5 -0.5 -0.5",
+          "mesh": "skin_4_0_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_4_1_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "0.0120659 -0.0106684 -0.0001",
+          "quat": "0.516981 0.516981 -0.482422 -0.482422",
+          "mesh": "skin_4_1_p",
+          "rgba": "0.04 0.04 0.04 1"
+        },
+        {
+          "name": "skin_4_2_p",
+          "class": "padgeom",
+          "type": "mesh",
+          "pos": "0.0109191 -0.0187755 -0.0001",
+          "quat": "0.48883 0.48883 -0.510926 -0.510926",
+          "mesh": "skin_4_2_p",
+          "rgba": "0.04 0.04 0.04 1"
+        }
+      ],
+      "explicit_contact_pairs": 22
+    }
+  },
+  "patches": [
+    {
+      "name": "skin_0_0_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 0,
+      "stop": 32
+    },
+    {
+      "name": "skin_0_1_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 32,
+      "stop": 64
+    },
+    {
+      "name": "skin_0_2_p",
+      "rows": 7,
+      "cols": 8,
+      "kind": "fingertip-ellipsoid",
+      "start": 64,
+      "stop": 120
+    },
+    {
+      "name": "skin_1_0_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 120,
+      "stop": 152
+    },
+    {
+      "name": "skin_1_1_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 152,
+      "stop": 184
+    },
+    {
+      "name": "skin_1_2_p",
+      "rows": 7,
+      "cols": 8,
+      "kind": "fingertip-ellipsoid",
+      "start": 184,
+      "stop": 240
+    },
+    {
+      "name": "skin_2_0_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 240,
+      "stop": 272
+    },
+    {
+      "name": "skin_2_1_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 272,
+      "stop": 304
+    },
+    {
+      "name": "skin_2_2_p",
+      "rows": 7,
+      "cols": 8,
+      "kind": "fingertip-ellipsoid",
+      "start": 304,
+      "stop": 360
+    },
+    {
+      "name": "skin_3_0_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 360,
+      "stop": 392
+    },
+    {
+      "name": "skin_3_1_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 392,
+      "stop": 424
+    },
+    {
+      "name": "skin_3_2_p",
+      "rows": 7,
+      "cols": 8,
+      "kind": "fingertip-ellipsoid",
+      "start": 424,
+      "stop": 480
+    },
+    {
+      "name": "skin_4_0_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 480,
+      "stop": 512
+    },
+    {
+      "name": "skin_4_1_p",
+      "rows": 4,
+      "cols": 8,
+      "kind": "segment",
+      "start": 512,
+      "stop": 544
+    },
+    {
+      "name": "skin_4_2_p",
+      "rows": 7,
+      "cols": 8,
+      "kind": "fingertip-ellipsoid",
+      "start": 544,
+      "stop": 600
+    },
+    {
+      "name": "skin_palm_p",
+      "rows": 7,
+      "cols": 16,
+      "kind": "mesh-uv",
+      "start": 600,
+      "stop": 712
+    }
+  ],
+  "episodes": [
+    {
+      "case": "lift_sugar_rgb_00",
+      "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz",
+      "sha256": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+      "fields": {
+        "qpos": {
+          "shape": [
+            447,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "qvel": {
+          "shape": [
+            447,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "ctrl": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "object_position": {
+          "shape": [
+            447,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "object_quaternion_wxyz": {
+          "shape": [
+            447,
+            4
+          ],
+          "dtype": "float32"
+        },
+        "stage": {
+          "shape": [
+            447
+          ],
+          "dtype": "int16"
+        },
+        "reward": {
+          "shape": [
+            447
+          ],
+          "dtype": "float32"
+        },
+        "task_success": {
+          "shape": [
+            447
+          ],
+          "dtype": "bool"
+        },
+        "robot_object_contact_count": {
+          "shape": [
+            447
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_normal_force": {
+          "shape": [
+            447
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_contact_count": {
+          "shape": [
+            447,
+            5
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_digit_normal_force": {
+          "shape": [
+            447,
+            5
+          ],
+          "dtype": "float32"
+        },
+        "tactile": {
+          "shape": [
+            447,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "palm_object_contact": {
+          "shape": [
+            447
+          ],
+          "dtype": "bool"
+        },
+        "object_support_contact": {
+          "shape": [
+            447
+          ],
+          "dtype": "bool"
+        },
+        "timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        },
+        "state": {
+          "shape": [
+            447,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            447,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            447,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "pre_qpos": {
+          "shape": [
+            447,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "pre_qvel": {
+          "shape": [
+            447,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "next_timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        },
+        "position_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        }
+      },
+      "tactile_key": "sensor_tactile",
+      "finite": true,
+      "nonnegative": true,
+      "nonzero_fraction": 0.08404971972953272,
+      "minimum": 0.0,
+      "maximum": 0.9017789363861084,
+      "timestamp_deltas": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "historical_success": true,
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 447,
+        "duration_seconds": 22.350000000004332,
+        "tactile_nonzero_fraction": 0.08404971972953272
+      },
+      "schema": 1,
+      "independent_root": "UNKNOWN",
+      "current_model_compatibility": "UNKNOWN",
+      "tactile_vs_sensor_tactile_equal": false
+    },
+    {
+      "case": "pick_tomato_rgb_00",
+      "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz",
+      "sha256": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+      "fields": {
+        "position_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        },
+        "object_position": {
+          "shape": [
+            638,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "stage": {
+          "shape": [
+            638
+          ],
+          "dtype": "int16"
+        },
+        "pre_qpos": {
+          "shape": [
+            638,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "object_quaternion_wxyz": {
+          "shape": [
+            638,
+            4
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_normal_force": {
+          "shape": [
+            638,
+            5
+          ],
+          "dtype": "float32"
+        },
+        "action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "pre_qvel": {
+          "shape": [
+            638,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_contact_count": {
+          "shape": [
+            638
+          ],
+          "dtype": "int16"
+        },
+        "reward": {
+          "shape": [
+            638
+          ],
+          "dtype": "float32"
+        },
+        "next_timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        },
+        "tactile": {
+          "shape": [
+            638,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "task_success": {
+          "shape": [
+            638
+          ],
+          "dtype": "bool"
+        },
+        "state": {
+          "shape": [
+            638,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_contact_count": {
+          "shape": [
+            638,
+            5
+          ],
+          "dtype": "int16"
+        },
+        "sensor_tactile": {
+          "shape": [
+            638,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_normal_force": {
+          "shape": [
+            638
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            638,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "palm_object_contact": {
+          "shape": [
+            638
+          ],
+          "dtype": "bool"
+        },
+        "qvel": {
+          "shape": [
+            638,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "object_support_contact": {
+          "shape": [
+            638
+          ],
+          "dtype": "bool"
+        },
+        "ik_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "qpos": {
+          "shape": [
+            638,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "ctrl": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        }
+      },
+      "tactile_key": "sensor_tactile",
+      "finite": true,
+      "nonnegative": true,
+      "nonzero_fraction": 0.15296440773484554,
+      "minimum": 0.0,
+      "maximum": 0.9430000185966492,
+      "timestamp_deltas": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "historical_success": true,
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 638,
+        "duration_seconds": 31.900000000016004,
+        "tactile_nonzero_fraction": 0.15296440773484554
+      },
+      "schema": 1,
+      "independent_root": "UNKNOWN",
+      "current_model_compatibility": "UNKNOWN",
+      "tactile_vs_sensor_tactile_equal": false
+    },
+    {
+      "case": "stack_ring_rgb_01",
+      "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz",
+      "sha256": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+      "fields": {
+        "qpos": {
+          "shape": [
+            376,
+            33
+          ],
+          "dtype": "float32"
+        },
+        "qvel": {
+          "shape": [
+            376,
+            31
+          ],
+          "dtype": "float32"
+        },
+        "ctrl": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "action": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "object_position": {
+          "shape": [
+            376,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "object_quaternion_wxyz": {
+          "shape": [
+            376,
+            4
+          ],
+          "dtype": "float32"
+        },
+        "stage": {
+          "shape": [
+            376
+          ],
+          "dtype": "int16"
+        },
+        "reward": {
+          "shape": [
+            376
+          ],
+          "dtype": "float32"
+        },
+        "task_success": {
+          "shape": [
+            376
+          ],
+          "dtype": "bool"
+        },
+        "robot_object_contact_count": {
+          "shape": [
+            376
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_normal_force": {
+          "shape": [
+            376
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_contact_count": {
+          "shape": [
+            376,
+            5
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_digit_normal_force": {
+          "shape": [
+            376,
+            5
+          ],
+          "dtype": "float32"
+        },
+        "tactile": {
+          "shape": [
+            376,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "palm_object_contact": {
+          "shape": [
+            376
+          ],
+          "dtype": "bool"
+        },
+        "object_support_contact": {
+          "shape": [
+            376
+          ],
+          "dtype": "bool"
+        },
+        "timestamp": {
+          "shape": [
+            376
+          ],
+          "dtype": "float64"
+        },
+        "state": {
+          "shape": [
+            376,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            376,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            376,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "next_timestamp": {
+          "shape": [
+            376
+          ],
+          "dtype": "float64"
+        },
+        "position_action": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        }
+      },
+      "tactile_key": "sensor_tactile",
+      "finite": true,
+      "nonnegative": true,
+      "nonzero_fraction": 0.1826328293091083,
+      "minimum": 0.0,
+      "maximum": 0.9394312500953674,
+      "timestamp_deltas": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "historical_success": true,
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 376,
+        "duration_seconds": 18.799999999999994,
+        "tactile_nonzero_fraction": 0.1826328293091083
+      },
+      "schema": 1,
+      "independent_root": "UNKNOWN",
+      "current_model_compatibility": "UNKNOWN",
+      "tactile_vs_sensor_tactile_equal": false
+    },
+    {
+      "case": "push_tomato_rgb_00",
+      "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz",
+      "sha256": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+      "fields": {
+        "qpos": {
+          "shape": [
+            605,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "qvel": {
+          "shape": [
+            605,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "ctrl": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "action": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "object_position": {
+          "shape": [
+            605,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "object_quaternion_wxyz": {
+          "shape": [
+            605,
+            4
+          ],
+          "dtype": "float32"
+        },
+        "stage": {
+          "shape": [
+            605
+          ],
+          "dtype": "int16"
+        },
+        "reward": {
+          "shape": [
+            605
+          ],
+          "dtype": "float32"
+        },
+        "task_success": {
+          "shape": [
+            605
+          ],
+          "dtype": "bool"
+        },
+        "robot_object_contact_count": {
+          "shape": [
+            605
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_normal_force": {
+          "shape": [
+            605
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_contact_count": {
+          "shape": [
+            605,
+            5
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_digit_normal_force": {
+          "shape": [
+            605,
+            5
+          ],
+          "dtype": "float32"
+        },
+        "tactile": {
+          "shape": [
+            605,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "palm_object_contact": {
+          "shape": [
+            605
+          ],
+          "dtype": "bool"
+        },
+        "object_support_contact": {
+          "shape": [
+            605
+          ],
+          "dtype": "bool"
+        },
+        "timestamp": {
+          "shape": [
+            605
+          ],
+          "dtype": "float64"
+        },
+        "state": {
+          "shape": [
+            605,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            605,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            605,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "pre_qpos": {
+          "shape": [
+            605,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "pre_qvel": {
+          "shape": [
+            605,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "next_timestamp": {
+          "shape": [
+            605
+          ],
+          "dtype": "float64"
+        },
+        "position_action": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        }
+      },
+      "tactile_key": "sensor_tactile",
+      "finite": true,
+      "nonnegative": true,
+      "nonzero_fraction": 0.004954034729315628,
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "timestamp_deltas": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "historical_success": true,
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 605,
+        "duration_seconds": 30.250000000013987,
+        "tactile_nonzero_fraction": 0.004954034729315628
+      },
+      "schema": 1,
+      "independent_root": "UNKNOWN",
+      "current_model_compatibility": "UNKNOWN",
+      "tactile_vs_sensor_tactile_equal": false
+    },
+    {
+      "case": "nut_retain_lower_rgb_00",
+      "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz",
+      "sha256": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+      "fields": {
+        "qpos": {
+          "shape": [
+            599,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "qvel": {
+          "shape": [
+            599,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "ctrl": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "action": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "object_position": {
+          "shape": [
+            599,
+            3
+          ],
+          "dtype": "float32"
+        },
+        "object_quaternion_wxyz": {
+          "shape": [
+            599,
+            4
+          ],
+          "dtype": "float32"
+        },
+        "stage": {
+          "shape": [
+            599
+          ],
+          "dtype": "int16"
+        },
+        "reward": {
+          "shape": [
+            599
+          ],
+          "dtype": "float32"
+        },
+        "task_success": {
+          "shape": [
+            599
+          ],
+          "dtype": "bool"
+        },
+        "robot_object_contact_count": {
+          "shape": [
+            599
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_normal_force": {
+          "shape": [
+            599
+          ],
+          "dtype": "float32"
+        },
+        "robot_object_digit_contact_count": {
+          "shape": [
+            599,
+            5
+          ],
+          "dtype": "int16"
+        },
+        "robot_object_digit_normal_force": {
+          "shape": [
+            599,
+            5
+          ],
+          "dtype": "float32"
+        },
+        "tactile": {
+          "shape": [
+            599,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "palm_object_contact": {
+          "shape": [
+            599
+          ],
+          "dtype": "bool"
+        },
+        "object_support_contact": {
+          "shape": [
+            599
+          ],
+          "dtype": "bool"
+        },
+        "timestamp": {
+          "shape": [
+            599
+          ],
+          "dtype": "float64"
+        },
+        "state": {
+          "shape": [
+            599,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            599,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            599,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "pre_qpos": {
+          "shape": [
+            599,
+            26
+          ],
+          "dtype": "float32"
+        },
+        "pre_qvel": {
+          "shape": [
+            599,
+            25
+          ],
+          "dtype": "float32"
+        },
+        "next_timestamp": {
+          "shape": [
+            599
+          ],
+          "dtype": "float64"
+        },
+        "position_action": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        }
+      },
+      "tactile_key": "sensor_tactile",
+      "finite": true,
+      "nonnegative": true,
+      "nonzero_fraction": 0.12717591116279942,
+      "minimum": 0.0,
+      "maximum": 0.9077436327934265,
+      "timestamp_deltas": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "historical_success": true,
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 599,
+        "duration_seconds": 29.95000000001362,
+        "tactile_nonzero_fraction": 0.12717591116279942
+      },
+      "schema": 1,
+      "independent_root": "UNKNOWN",
+      "current_model_compatibility": "UNKNOWN",
+      "tactile_vs_sensor_tactile_equal": false
+    }
+  ]
+}

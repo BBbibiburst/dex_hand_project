@@ -1,0 +1,117 @@
+{
+  "status": "第四章V1正文完成，等待用户与ChatGPT审核",
+  "source_path": "thesis/body/ch04_multimodal_data.tex",
+  "texcount": 7442,
+  "sections": [
+    {
+      "id": "4.1",
+      "title": "多模态数据表示与组织方式",
+      "actual_count": 1087
+    },
+    {
+      "id": "4.2",
+      "title": "示教数据采集与关联机制",
+      "actual_count": 1395
+    },
+    {
+      "id": "4.3",
+      "title": "数据格式转换与统一存储",
+      "actual_count": 881
+    },
+    {
+      "id": "4.4",
+      "title": "轨迹质量审计与数据清洗",
+      "actual_count": 1732
+    },
+    {
+      "id": "4.5",
+      "title": "数据集统计与质量验证",
+      "actual_count": 1959
+    },
+    {
+      "id": "4.6",
+      "title": "本章小结",
+      "actual_count": 375
+    }
+  ],
+  "figures": [
+    {
+      "caption": "数据载体及其转换关系示意",
+      "label": "fig:ch04_carriers",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "caption": "执行前采集与历史执行后记录的索引关系",
+      "label": "fig:ch04_timing",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "caption": "控制记录与RGB采样频率分离的合同示意",
+      "label": "fig:ch04_multirate",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "caption": "分层质量审查与数据准入关系",
+      "label": "fig:ch04_admission",
+      "image_files": [],
+      "placeholder": false
+    },
+    {
+      "caption": "由已有报告绘制的Sink回放偏差对照（历史记录，非本轮新实验）",
+      "label": "fig:ch04_sink_precision",
+      "image_files": [
+        "figures/ch04/sink_historical_precision.pdf"
+      ],
+      "placeholder": false
+    }
+  ],
+  "tables": [
+    {
+      "caption": "主要数据字段的维度与实际语义",
+      "label": "tab:ch04_fields"
+    },
+    {
+      "caption": "不同记录路径的时序与版本边界",
+      "label": "tab:ch04_recording_versions"
+    },
+    {
+      "caption": "分层数据质量检查及其判定范围",
+      "label": "tab:ch04_quality_gates"
+    },
+    {
+      "caption": "三组LeRobot数据的实际数值库存",
+      "label": "tab:ch04_lerobot_inventory"
+    },
+    {
+      "caption": "旧在线记录与v4开发包的质量对照",
+      "label": "tab:ch04_version_quality"
+    },
+    {
+      "caption": "Sink历史回放状态与精度对照",
+      "label": "tab:ch04_sink_precision"
+    }
+  ],
+  "equation_labels": [
+    "eq:ch04_causal_pairing",
+    "eq:ch04_time_interval",
+    "eq:ch04_mapping_error",
+    "eq:ch04_duplicate"
+  ],
+  "citation_keys": [],
+  "missing_citation_keys": [],
+  "missing_reference_targets": [],
+  "duplicate_labels": [],
+  "environment_errors": [],
+  "braces_balanced": true,
+  "data_numeric_anchors_match_audit": true,
+  "changed_existing_protected_files": [],
+  "source_data_code_hashes_match_material_audit": true,
+  "formal_main_unchanged": true,
+  "reference_bib_unchanged": true,
+  "chapters_1_2_3_unchanged": true,
+  "compiled": false,
+  "frozen": false
+}

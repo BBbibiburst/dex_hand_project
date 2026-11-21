@@ -1,0 +1,3221 @@
+{
+  "assets/grippers/dex_hand/dex_hand.xml": {
+    "sha256": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+    "lines": 393,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_end_0_p.STL": {
+    "sha256": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_end_1_p.STL": {
+    "sha256": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_end_2_p.STL": {
+    "sha256": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_end_3_p.STL": {
+    "sha256": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_push_0_p.STL": {
+    "sha256": "fba9986e5b144891347a95f61f9671885bd68f5d3e735552041c35d87b84b780",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_push_1_p.STL": {
+    "sha256": "cec2b2c9531eb98e3eb3d0ce18f47cb2daf448752380f1e9fdfae875bff589f7",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_push_2_p.STL": {
+    "sha256": "91c28a25364c0762469d5ddc906d41160e26c28b9e173d9ed33633e066f92042",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_push_3_p.STL": {
+    "sha256": "02ea3b6b60dea9efd4239ccb2b413682c8faf9119fc8e34b8c195ef933deb9e6",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_root_0_p.STL": {
+    "sha256": "0eef028c75243f7bd01993c1ef43033eaaf76b6a0f7da262d16d32c5330a3293",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_root_1_p.STL": {
+    "sha256": "89f3b43c9c0c275ffbaa271b6ad51265da2b07d21f474d503cd096527ec3a447",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_root_2_p.STL": {
+    "sha256": "4517aafa3d127874b235c0e8429db680e5c79dfb1f43963f17c6981551b04a8b",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/act_root_3_p.STL": {
+    "sha256": "901974293563a69e5edd72c050b69a3d9b16978d4c0f9fb992ab8b7fba512fd2",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_0_p.STL": {
+    "sha256": "c7aff1536958f780b403cb83cad984cce4ea642617f74c3d830f2f294f0d887e",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_1_p.STL": {
+    "sha256": "4a79ab6eeaded78a590ede6beb730993d0f091ca911b66b8506b9e01a22da698",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_2_p.STL": {
+    "sha256": "649a6b9b1654172d4c1fd731458d069f365a6b5a822b8f11ab0e6ed431d7011b",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_3_p.STL": {
+    "sha256": "ac72158989db407f7c3b42ce4ee1c0b78cbca054bec2fbcca60d7ce95cad5a66",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_close_0_p.STL": {
+    "sha256": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_close_1_p.STL": {
+    "sha256": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_close_2_p.STL": {
+    "sha256": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_close_3_p.STL": {
+    "sha256": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_connect_0_p.STL": {
+    "sha256": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_connect_1_p.STL": {
+    "sha256": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_connect_2_p.STL": {
+    "sha256": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/bar_connect_3_p.STL": {
+    "sha256": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/crank_close_0_p.STL": {
+    "sha256": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/crank_close_1_p.STL": {
+    "sha256": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/crank_close_2_p.STL": {
+    "sha256": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/crank_close_3_p.STL": {
+    "sha256": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_first_0_p.STL": {
+    "sha256": "faf4f69682a695a2ba922e9a6819c8610657d851d0a17f093d8ee7f34e789803",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_first_1_p.STL": {
+    "sha256": "6900c9c369a9e7b95bf277be42b5ab6e762bdc660856515b74cfb93482ff1a97",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_first_2_p.STL": {
+    "sha256": "6502a1642adf8211f741b03d9b6fe452123d976cd3f757a8d5d88174652d6c17",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_first_3_p.STL": {
+    "sha256": "f0421d54d5894b08eaae429f49a0f7e37433a8bc041c4ca76cc5239a58b384e6",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_second_0_p.STL": {
+    "sha256": "9ca250a717d4db68d03b5acfc4f8fffd4d6d26f19b056ff9d1d2c014465c9c4f",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_second_1_p.STL": {
+    "sha256": "80c2b13844cde3045cbfe4e1440f8e355c39e4940f21c51d596d971d6d7f1115",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_second_2_p.STL": {
+    "sha256": "d6f3a64fdebe437bda096c3f65d198590b1077e6f9f01fb82a0fe8cf07b7fae3",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/finger_second_3_p.STL": {
+    "sha256": "194685d81f45641d109783d9bcd788e90b93e549ba8f7f3dadb9c8e090144333",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_0_0_p.STL": {
+    "sha256": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_0_1_p.STL": {
+    "sha256": "26e59eee9d295df58bf585740edf9529972d3800da4ec954c3d02aac724a82b5",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_0_2_p.STL": {
+    "sha256": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_1_0_p.STL": {
+    "sha256": "e260f5365f908a92b6af7a699daf94bcfff4a3a074fb49766a84df1d09bb4946",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_1_1_p.STL": {
+    "sha256": "b7acb77e3bd07084765de97be4a1055bfb3114813f21a2a1114719a83e0917eb",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_1_2_p.STL": {
+    "sha256": "18de17d01792211244fa0e2950e99cedc818a6def3a1eb870c65d37b722035a7",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_2_0_p.STL": {
+    "sha256": "14a42888b1e795372c92837b66bbc08bab3fd3d9a967497a4484a25991d88a69",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_2_1_p.STL": {
+    "sha256": "a2f47f951a5778734c8e7d9724ba912eb6cab1854797282eb7e136048d545b60",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_2_2_p.STL": {
+    "sha256": "fb6e7e0bbb93895d407938ee5ff55057abe4ccc7c7fa1e8e9de9f90e3888e62b",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_3_0_p.STL": {
+    "sha256": "43b343edb283c647281aabcb5fd7ec41c96ba20a97b40ebdc2caf6fb67c53886",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_3_1_p.STL": {
+    "sha256": "dbac8e74a2089a409e844d079380e0330d5f4e75147a44b9490ed23fa4e08551",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_3_2_p.STL": {
+    "sha256": "7e72f721774b2e21fa4667be18d1bb46de199198aae3e5e6867f9d159608f41f",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_4_0_p.STL": {
+    "sha256": "2011461c167ea5f8044e379091e760f0110691a06b15202c6be52c6c3bf8425b",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_4_1_p.STL": {
+    "sha256": "4dd4406fafb1a17354247c5859adade90b6dbab148277aa607ffc50e260fb7d2",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_4_2_p.STL": {
+    "sha256": "a1620c78130f0f0d2a438998b4b3787526860c5b73843126cf66dfe9d0617a21",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/skin_palm_p.STL": {
+    "sha256": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_first_close_p.STL": {
+    "sha256": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_first_connect_p.STL": {
+    "sha256": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_first_p.STL": {
+    "sha256": "2a39d73a8da4120c458a4756d2f5807a193bf82ee7efcab173cbe500d8464be9",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_second_close_p.STL": {
+    "sha256": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_second_connect_p.STL": {
+    "sha256": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_bar_second_p.STL": {
+    "sha256": "7c2dce4347f1205d2cf0f2800d4b0c32ada63da23f813307e0d8e4fb5bf35ac8",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_first_p.STL": {
+    "sha256": "fd1fa6a7848f079c5fbf85d6d746d8f91027ad47a219e0dd4ec8015bcd3c4221",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_grasp_act_end_p.STL": {
+    "sha256": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_grasp_act_push_p.STL": {
+    "sha256": "4b4a270320f139c646db82acce4b8de7cf7ee91e8be02781162380b320f062ed",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_grasp_act_root_p.STL": {
+    "sha256": "0f83841983724f3becb906b8ba6a319e5ee263cc565000f557563f1b61056cc8",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_grasp_crank_close_p.STL": {
+    "sha256": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_rotate_act_end_p.STL": {
+    "sha256": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_rotate_act_push_p.STL": {
+    "sha256": "a470132573c141fa4a4668d685bcf485373082e52b062e4ddf9d0d90cd85be5c",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_rotate_act_root_p.STL": {
+    "sha256": "b0e20b74b742aeed2ee3cf9a395c8fd2f31b5cc79f3eed5e11b7626fe777b0b2",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_rotate_close_p.STL": {
+    "sha256": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_rotate_p.STL": {
+    "sha256": "1bfa458485ce792a27b8a6679cd43eb142880e8ea14590d92afdf6266dd45fa6",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_second_p.STL": {
+    "sha256": "34b91b52ec9b71197fae3186c8e6981127e2a7c316dbe6ba7a5158c9ee25b31a",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/thumb_third_p.STL": {
+    "sha256": "f5f4dd25758ba8971e4a123132bf6d9437cdaacd58c379f4e72cd023e10b7eef",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/grippers/dex_hand/meshes/v3_base_link.STL": {
+    "sha256": "cb9d3203c96bdec4abce820b92e1c2c7e1e613c9d2876a748862d301e61ce42c",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/base_link.STL": {
+    "sha256": "9ef1c6cad6ca4d6484ff9ed9a7d7715b036e2e6100e2bcb8ecd18e2fbc4d04e9",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link1.STL": {
+    "sha256": "bbf0716a4a8516a36d198e1fba1696df2b2b354a22bbb8cb7e284ec8f1dca239",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link2.STL": {
+    "sha256": "796420ea8922133e8d0bf2a6534f01f4d5bec25729ca7d63b8af3191c67a532f",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link3.STL": {
+    "sha256": "a1c7ae0934ea8ae0594a6deb830fc2f9c5dbf0c68444dff55d2f2c3aa5e73092",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link4.STL": {
+    "sha256": "9103bd209e04e729b2ef0bd57a93b27310ccc8fdfc9a6d9aeb1ce89866a7994c",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link5.STL": {
+    "sha256": "d4ea481e893d4558a1aca714df189f9938ab6b34ec79978fc2520b2dd54bdff9",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link6.STL": {
+    "sha256": "6ddd71e96a1ea5c7b2349d2c4bb09de616b27f5a4fa9079c97e86819da551b6e",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/meshes/link7.STL": {
+    "sha256": "86623ca52e72628f2ff1cbbf81473c11a0ba791b7ae571164ca6a29157f30d04",
+    "lines": 0,
+    "functions": []
+  },
+  "assets/robots/rm75b/rm75b.urdf": {
+    "sha256": "b4eafc8b87e540fc89bb87e476f062e6e7c28dca960282566f131874eec428ee",
+    "lines": 453,
+    "functions": []
+  },
+  "assets/robots/rm75b/rm75b.xml": {
+    "sha256": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+    "lines": 148,
+    "functions": []
+  },
+  "configs/robot_profiles/rm75b_dex_hand.json": {
+    "sha256": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399",
+    "lines": 36,
+    "functions": []
+  },
+  "source/control/__init__.py": {
+    "sha256": "4a721cee04c7baf8b82746e45e07feedfd040fdc3160f75b7fda47e2966356f9",
+    "lines": 17,
+    "functions": []
+  },
+  "source/control/arm.py": {
+    "sha256": "f511f6f3ed5ec4bed81e791c3dbf1bd7059256a8a12fff127cc5187cc00793b3",
+    "lines": 546,
+    "functions": [
+      {
+        "name": "ArmPositionIkController",
+        "line": 23,
+        "end": 546
+      },
+      {
+        "name": "__init__",
+        "line": 26,
+        "end": 97
+      },
+      {
+        "name": "action_size",
+        "line": 100,
+        "end": 101
+      },
+      {
+        "name": "position_action_size",
+        "line": 104,
+        "end": 105
+      },
+      {
+        "name": "action_space",
+        "line": 108,
+        "end": 109
+      },
+      {
+        "name": "actuator_ids",
+        "line": 112,
+        "end": 115
+      },
+      {
+        "name": "qpos_addrs",
+        "line": 118,
+        "end": 121
+      },
+      {
+        "name": "ctrl_low",
+        "line": 124,
+        "end": 127
+      },
+      {
+        "name": "ctrl_high",
+        "line": 130,
+        "end": 133
+      },
+      {
+        "name": "site_id",
+        "line": 136,
+        "end": 139
+      },
+      {
+        "name": "arm_dof_addrs",
+        "line": 142,
+        "end": 145
+      },
+      {
+        "name": "ik_data",
+        "line": 148,
+        "end": 151
+      },
+      {
+        "name": "set_timestep",
+        "line": 153,
+        "end": 156
+      },
+      {
+        "name": "set_control_mode",
+        "line": 158,
+        "end": 164
+      },
+      {
+        "name": "bind",
+        "line": 166,
+        "end": 214
+      },
+      {
+        "name": "reset",
+        "line": 216,
+        "end": 252
+      },
+      {
+        "name": "apply_action",
+        "line": 254,
+        "end": 262
+      },
+      {
+        "name": "apply_position_action",
+        "line": 264,
+        "end": 277
+      },
+      {
+        "name": "apply_ik_action",
+        "line": 279,
+        "end": 309
+      },
+      {
+        "name": "current_action",
+        "line": 311,
+        "end": 315
+      },
+      {
+        "name": "current_ik_action",
+        "line": 317,
+        "end": 321
+      },
+      {
+        "name": "ik_action_layout",
+        "line": 323,
+        "end": 324
+      },
+      {
+        "name": "_solve_ik",
+        "line": 326,
+        "end": 422
+      },
+      {
+        "name": "_adaptive_damping",
+        "line": 424,
+        "end": 430
+      },
+      {
+        "name": "_smooth_joint_target",
+        "line": 432,
+        "end": 454
+      },
+      {
+        "name": "_slerp",
+        "line": 457,
+        "end": 471
+      },
+      {
+        "name": "_coerce_position_action",
+        "line": 473,
+        "end": 486
+      },
+      {
+        "name": "_bound_action_space",
+        "line": 488,
+        "end": 515
+      },
+      {
+        "name": "_unbound_action_space",
+        "line": 517,
+        "end": 546
+      }
+    ]
+  },
+  "source/control/common.py": {
+    "sha256": "ed25900f62c8aa88f4454a7088e295ea12ab9cd3a58843e59d6628868a23ce10",
+    "lines": 57,
+    "functions": [
+      {
+        "name": "prefixed_names",
+        "line": 16,
+        "end": 17
+      },
+      {
+        "name": "_validate_mode",
+        "line": 20,
+        "end": 23
+      },
+      {
+        "name": "_actuator_ids_or_raise",
+        "line": 26,
+        "end": 49
+      },
+      {
+        "name": "_empty_box",
+        "line": 52,
+        "end": 57
+      }
+    ]
+  },
+  "source/control/composite.py": {
+    "sha256": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+    "lines": 236,
+    "functions": [
+      {
+        "name": "CompositeRobotController",
+        "line": 16,
+        "end": 178
+      },
+      {
+        "name": "build_robot_controller",
+        "line": 181,
+        "end": 236
+      },
+      {
+        "name": "__init__",
+        "line": 19,
+        "end": 27
+      },
+      {
+        "name": "control_mode",
+        "line": 30,
+        "end": 31
+      },
+      {
+        "name": "action_space",
+        "line": 34,
+        "end": 35
+      },
+      {
+        "name": "actuator_names",
+        "line": 38,
+        "end": 39
+      },
+      {
+        "name": "include_hand_action",
+        "line": 42,
+        "end": 44
+      },
+      {
+        "name": "ctrl_low",
+        "line": 47,
+        "end": 51
+      },
+      {
+        "name": "ctrl_high",
+        "line": 54,
+        "end": 58
+      },
+      {
+        "name": "set_timestep",
+        "line": 60,
+        "end": 61
+      },
+      {
+        "name": "set_control_mode",
+        "line": 63,
+        "end": 65
+      },
+      {
+        "name": "bind",
+        "line": 67,
+        "end": 70
+      },
+      {
+        "name": "reset",
+        "line": 72,
+        "end": 100
+      },
+      {
+        "name": "apply_action",
+        "line": 102,
+        "end": 125
+      },
+      {
+        "name": "current_action",
+        "line": 127,
+        "end": 135
+      },
+      {
+        "name": "current_ik_action",
+        "line": 137,
+        "end": 143
+      },
+      {
+        "name": "ik_action_layout",
+        "line": 145,
+        "end": 146
+      },
+      {
+        "name": "_combine_action_spaces",
+        "line": 148,
+        "end": 172
+      },
+      {
+        "name": "_current_position_target",
+        "line": 174,
+        "end": 178
+      }
+    ]
+  },
+  "source/control/end_effectors.py": {
+    "sha256": "5f0e68dff7663dcb1a1b6cc7b834fc546d18ee222c61cd2e7687cb130339193a",
+    "lines": 339,
+    "functions": [
+      {
+        "name": "EndEffectorPositionController",
+        "line": 16,
+        "end": 236
+      },
+      {
+        "name": "PikaGripperController",
+        "line": 239,
+        "end": 339
+      },
+      {
+        "name": "__init__",
+        "line": 19,
+        "end": 42
+      },
+      {
+        "name": "action_size",
+        "line": 45,
+        "end": 46
+      },
+      {
+        "name": "action_space",
+        "line": 49,
+        "end": 50
+      },
+      {
+        "name": "actuator_ids",
+        "line": 53,
+        "end": 56
+      },
+      {
+        "name": "qpos_addrs",
+        "line": 59,
+        "end": 67
+      },
+      {
+        "name": "ctrl_low",
+        "line": 70,
+        "end": 73
+      },
+      {
+        "name": "ctrl_high",
+        "line": 76,
+        "end": 79
+      },
+      {
+        "name": "bind",
+        "line": 81,
+        "end": 114
+      },
+      {
+        "name": "reset",
+        "line": 116,
+        "end": 151
+      },
+      {
+        "name": "apply_action",
+        "line": 153,
+        "end": 166
+      },
+      {
+        "name": "current_action",
+        "line": 168,
+        "end": 172
+      },
+      {
+        "name": "current_position",
+        "line": 174,
+        "end": 184
+      },
+      {
+        "name": "action_layout",
+        "line": 186,
+        "end": 187
+      },
+      {
+        "name": "_coerce_action",
+        "line": 189,
+        "end": 204
+      },
+      {
+        "name": "_bound_action_space",
+        "line": 206,
+        "end": 219
+      },
+      {
+        "name": "_unbound_action_space",
+        "line": 221,
+        "end": 236
+      },
+      {
+        "name": "bind",
+        "line": 248,
+        "end": 256
+      },
+      {
+        "name": "max_opening",
+        "line": 259,
+        "end": 262
+      },
+      {
+        "name": "reset",
+        "line": 264,
+        "end": 275
+      },
+      {
+        "name": "apply_action",
+        "line": 277,
+        "end": 293
+      },
+      {
+        "name": "current_action",
+        "line": 295,
+        "end": 300
+      },
+      {
+        "name": "action_layout",
+        "line": 302,
+        "end": 303
+      },
+      {
+        "name": "_coerce_action",
+        "line": 305,
+        "end": 318
+      },
+      {
+        "name": "_bound_action_space",
+        "line": 320,
+        "end": 333
+      },
+      {
+        "name": "_opening_to_joint_target",
+        "line": 335,
+        "end": 336
+      },
+      {
+        "name": "_joint_target_to_opening",
+        "line": 338,
+        "end": 339
+      }
+    ]
+  },
+  "source/data/production_recorder.py": {
+    "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "lines": 250,
+    "functions": [
+      {
+        "name": "validate_stage_encoding",
+        "line": 21,
+        "end": 43
+      },
+      {
+        "name": "attach_stage_encoding",
+        "line": 46,
+        "end": 53
+      },
+      {
+        "name": "validate_online_arrays",
+        "line": 56,
+        "end": 96
+      },
+      {
+        "name": "OnlineEnvironment",
+        "line": 99,
+        "end": 223
+      },
+      {
+        "name": "recorder_type",
+        "line": 226,
+        "end": 250
+      },
+      {
+        "name": "__init__",
+        "line": 102,
+        "end": 133
+      },
+      {
+        "name": "__getattr__",
+        "line": 135,
+        "end": 136
+      },
+      {
+        "name": "elapsed_steps",
+        "line": 139,
+        "end": 140
+      },
+      {
+        "name": "elapsed_steps",
+        "line": 143,
+        "end": 144
+      },
+      {
+        "name": "_before",
+        "line": 146,
+        "end": 184
+      },
+      {
+        "name": "close",
+        "line": 186,
+        "end": 190
+      },
+      {
+        "name": "_after",
+        "line": 192,
+        "end": 199
+      },
+      {
+        "name": "step",
+        "line": 201,
+        "end": 206
+      },
+      {
+        "name": "step_physics",
+        "line": 208,
+        "end": 214
+      },
+      {
+        "name": "reset",
+        "line": 216,
+        "end": 217
+      },
+      {
+        "name": "prepare_recorded_control",
+        "line": 219,
+        "end": 223
+      },
+      {
+        "name": "OnlineRecorder",
+        "line": 227,
+        "end": 248
+      },
+      {
+        "name": "read_once",
+        "line": 127,
+        "end": 131
+      },
+      {
+        "name": "__init__",
+        "line": 228,
+        "end": 230
+      },
+      {
+        "name": "append",
+        "line": 232,
+        "end": 243
+      },
+      {
+        "name": "arrays",
+        "line": 245,
+        "end": 248
+      }
+    ]
+  },
+  "source/envs/manipulation/__init__.py": {
+    "sha256": "60947d585dfce3618d1b3d736a58af5d737466c0cbf5c346b414898df68ca596",
+    "lines": 63,
+    "functions": []
+  },
+  "source/envs/manipulation/arenas.py": {
+    "sha256": "a33716cc4c7a8a3839b6a1b718f2b7e248084dc5c5d6af48bf563e0deaad5511",
+    "lines": 528,
+    "functions": [
+      {
+        "name": "TableArena",
+        "line": 17,
+        "end": 231
+      },
+      {
+        "name": "BinsArena",
+        "line": 235,
+        "end": 257
+      },
+      {
+        "name": "PushArena",
+        "line": 261,
+        "end": 280
+      },
+      {
+        "name": "PegsArena",
+        "line": 284,
+        "end": 351
+      },
+      {
+        "name": "ProceduralPegArena",
+        "line": 355,
+        "end": 421
+      },
+      {
+        "name": "FixedNutArena",
+        "line": 425,
+        "end": 528
+      },
+      {
+        "name": "table_half_size",
+        "line": 39,
+        "end": 40
+      },
+      {
+        "name": "table_top_pos",
+        "line": 43,
+        "end": 44
+      },
+      {
+        "name": "table_top_z",
+        "line": 47,
+        "end": 48
+      },
+      {
+        "name": "augment_spec",
+        "line": 50,
+        "end": 56
+      },
+      {
+        "name": "_configure_agentview_camera",
+        "line": 58,
+        "end": 86
+      },
+      {
+        "name": "_merge_arena_spec",
+        "line": 88,
+        "end": 121
+      },
+      {
+        "name": "_clone_body",
+        "line": 123,
+        "end": 136
+      },
+      {
+        "name": "_clone_geom",
+        "line": 138,
+        "end": 140
+      },
+      {
+        "name": "_clone_site",
+        "line": 142,
+        "end": 144
+      },
+      {
+        "name": "_clone_light",
+        "line": 146,
+        "end": 148
+      },
+      {
+        "name": "_clone_camera",
+        "line": 150,
+        "end": 152
+      },
+      {
+        "name": "_copy_mjs_attributes",
+        "line": 154,
+        "end": 179
+      },
+      {
+        "name": "_configure_table_from_robosuite_template",
+        "line": 181,
+        "end": 204
+      },
+      {
+        "name": "_configure_table_legs",
+        "line": 206,
+        "end": 231
+      },
+      {
+        "name": "augment_spec",
+        "line": 242,
+        "end": 257
+      },
+      {
+        "name": "augment_spec",
+        "line": 268,
+        "end": 280
+      },
+      {
+        "name": "augment_spec",
+        "line": 292,
+        "end": 351
+      },
+      {
+        "name": "augment_spec",
+        "line": 363,
+        "end": 395
+      },
+      {
+        "name": "_add_prism_mesh",
+        "line": 397,
+        "end": 421
+      },
+      {
+        "name": "environment_geom_names",
+        "line": 437,
+        "end": 446
+      },
+      {
+        "name": "augment_spec",
+        "line": 448,
+        "end": 528
+      }
+    ]
+  },
+  "source/envs/manipulation/base.py": {
+    "sha256": "4ee14403780d1487dd3477c37769e2370311c06936bc5a8c8ef88a7e164cc263",
+    "lines": 253,
+    "functions": [
+      {
+        "name": "SingleArmManipulationTask",
+        "line": 22,
+        "end": 253
+      },
+      {
+        "name": "__init__",
+        "line": 27,
+        "end": 58
+      },
+      {
+        "name": "create_objects",
+        "line": 61,
+        "end": 62
+      },
+      {
+        "name": "objects",
+        "line": 65,
+        "end": 66
+      },
+      {
+        "name": "table_top_z",
+        "line": 69,
+        "end": 70
+      },
+      {
+        "name": "table_offset",
+        "line": 73,
+        "end": 74
+      },
+      {
+        "name": "observation_space",
+        "line": 77,
+        "end": 89
+      },
+      {
+        "name": "extra_observation_space",
+        "line": 91,
+        "end": 92
+      },
+      {
+        "name": "get_extra_observation",
+        "line": 94,
+        "end": 95
+      },
+      {
+        "name": "augment_spec",
+        "line": 97,
+        "end": 108
+      },
+      {
+        "name": "bind",
+        "line": 110,
+        "end": 149
+      },
+      {
+        "name": "_require_bindings",
+        "line": 151,
+        "end": 154
+      },
+      {
+        "name": "reset",
+        "line": 156,
+        "end": 177
+      },
+      {
+        "name": "get_observation",
+        "line": 179,
+        "end": 199
+      },
+      {
+        "name": "evaluate",
+        "line": 201,
+        "end": 209
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 212,
+        "end": 213
+      },
+      {
+        "name": "check_success",
+        "line": 216,
+        "end": 217
+      },
+      {
+        "name": "scale_reward",
+        "line": 219,
+        "end": 222
+      },
+      {
+        "name": "_body_pos",
+        "line": 224,
+        "end": 227
+      },
+      {
+        "name": "_is_robot_touching_object",
+        "line": 229,
+        "end": 240
+      },
+      {
+        "name": "_objects_touching",
+        "line": 242,
+        "end": 253
+      }
+    ]
+  },
+  "source/envs/manipulation/bindings.py": {
+    "sha256": "c71032709a18a13702d4e0bb0c6c8e51dd503b5c7ff6f966bf9ae2c88a6da9ca",
+    "lines": 23,
+    "functions": [
+      {
+        "name": "ObjectBinding",
+        "line": 10,
+        "end": 15
+      },
+      {
+        "name": "TaskBindings",
+        "line": 19,
+        "end": 23
+      }
+    ]
+  },
+  "source/envs/manipulation/builtins.py": {
+    "sha256": "f27274b60d514f390283601082d3f0b8f1feb95a471fc311a337696ce5d127c0",
+    "lines": 15,
+    "functions": []
+  },
+  "source/envs/manipulation/factory.py": {
+    "sha256": "39472444756c64c6298b215b3066695d2c4b5846a78279808dd91981a88e2148",
+    "lines": 51,
+    "functions": [
+      {
+        "name": "make_manipulation_env",
+        "line": 12,
+        "end": 21
+      },
+      {
+        "name": "make_lift_env",
+        "line": 24,
+        "end": 30
+      },
+      {
+        "name": "make_stack_env",
+        "line": 33,
+        "end": 39
+      },
+      {
+        "name": "make_pick_place_env",
+        "line": 42,
+        "end": 43
+      },
+      {
+        "name": "make_nut_assembly_env",
+        "line": 46,
+        "end": 47
+      },
+      {
+        "name": "make_push_env",
+        "line": 50,
+        "end": 51
+      }
+    ]
+  },
+  "source/envs/manipulation/lift.py": {
+    "sha256": "d98467faa5f7c8b48a9f2fcd851f7509b33e65233dcf6db1e2bde99ad2835eb6",
+    "lines": 53,
+    "functions": [
+      {
+        "name": "LiftTask",
+        "line": 16,
+        "end": 53
+      },
+      {
+        "name": "__init__",
+        "line": 21,
+        "end": 25
+      },
+      {
+        "name": "name",
+        "line": 28,
+        "end": 29
+      },
+      {
+        "name": "create_objects",
+        "line": 31,
+        "end": 32
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 34,
+        "end": 49
+      },
+      {
+        "name": "check_success",
+        "line": 51,
+        "end": 53
+      }
+    ]
+  },
+  "source/envs/manipulation/nut_assembly.py": {
+    "sha256": "28609dba0450fffaf6aec233b83d629de9736366b83e16240235ac475ac3c2b9",
+    "lines": 231,
+    "functions": [
+      {
+        "name": "NutAssemblyTask",
+        "line": 25,
+        "end": 188
+      },
+      {
+        "name": "ProceduralNutVariant",
+        "line": 192,
+        "end": 199
+      },
+      {
+        "name": "procedural_nut_variant",
+        "line": 202,
+        "end": 231
+      },
+      {
+        "name": "__init__",
+        "line": 29,
+        "end": 72
+      },
+      {
+        "name": "name",
+        "line": 75,
+        "end": 76
+      },
+      {
+        "name": "create_objects",
+        "line": 78,
+        "end": 92
+      },
+      {
+        "name": "reset",
+        "line": 94,
+        "end": 107
+      },
+      {
+        "name": "_peg_center",
+        "line": 109,
+        "end": 115
+      },
+      {
+        "name": "check_success",
+        "line": 117,
+        "end": 171
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 173,
+        "end": 188
+      }
+    ]
+  },
+  "source/envs/manipulation/object_catalog.py": {
+    "sha256": "f6d684f8f01f4ce02780ef52ec961c4977e884e71ab516842e4d352611e5e44a",
+    "lines": 195,
+    "functions": [
+      {
+        "name": "object_records",
+        "line": 68,
+        "end": 81
+      },
+      {
+        "name": "object_ids",
+        "line": 84,
+        "end": 86
+      },
+      {
+        "name": "lift_object_ids",
+        "line": 89,
+        "end": 90
+      },
+      {
+        "name": "pick_place_object_ids",
+        "line": 93,
+        "end": 94
+      },
+      {
+        "name": "push_object_ids",
+        "line": 97,
+        "end": 99
+      },
+      {
+        "name": "stack_object_ids",
+        "line": 102,
+        "end": 104
+      },
+      {
+        "name": "task_object_eligibility",
+        "line": 107,
+        "end": 124
+      },
+      {
+        "name": "partition_task_objects",
+        "line": 127,
+        "end": 139
+      },
+      {
+        "name": "resolve_record",
+        "line": 142,
+        "end": 147
+      },
+      {
+        "name": "resolve_record_path",
+        "line": 150,
+        "end": 152
+      },
+      {
+        "name": "record_scale_to_meters",
+        "line": 155,
+        "end": 168
+      },
+      {
+        "name": "limited_mesh_scale",
+        "line": 171,
+        "end": 195
+      }
+    ]
+  },
+  "source/envs/manipulation/objects.py": {
+    "sha256": "1b7217ef44369e878b1a604670e782bbccf08e6bee16e831393ee9dd088448f3",
+    "lines": 815,
+    "functions": [
+      {
+        "name": "_configure_free_joint",
+        "line": 25,
+        "end": 35
+      },
+      {
+        "name": "_configure_object_collision",
+        "line": 38,
+        "end": 59
+      },
+      {
+        "name": "ManipulationObjectSpec",
+        "line": 62,
+        "end": 86
+      },
+      {
+        "name": "_read_obj_bounds",
+        "line": 89,
+        "end": 99
+      },
+      {
+        "name": "MeshObjectSpec",
+        "line": 103,
+        "end": 224
+      },
+      {
+        "name": "FreeBoxSpec",
+        "line": 228,
+        "end": 294
+      },
+      {
+        "name": "FreeCylinderSpec",
+        "line": 298,
+        "end": 343
+      },
+      {
+        "name": "FreeBoltSpec",
+        "line": 347,
+        "end": 496
+      },
+      {
+        "name": "FreeNutSpec",
+        "line": 500,
+        "end": 557
+      },
+      {
+        "name": "XmlNutSpec",
+        "line": 561,
+        "end": 815
+      },
+      {
+        "name": "body_name",
+        "line": 67,
+        "end": 67
+      },
+      {
+        "name": "joint_name",
+        "line": 71,
+        "end": 71
+      },
+      {
+        "name": "geom_names",
+        "line": 75,
+        "end": 75
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 79,
+        "end": 79
+      },
+      {
+        "name": "bottom_offset",
+        "line": 83,
+        "end": 83
+      },
+      {
+        "name": "add_to_spec",
+        "line": 86,
+        "end": 86
+      },
+      {
+        "name": "__post_init__",
+        "line": 115,
+        "end": 148
+      },
+      {
+        "name": "body_name",
+        "line": 151,
+        "end": 152
+      },
+      {
+        "name": "joint_name",
+        "line": 155,
+        "end": 156
+      },
+      {
+        "name": "geom_names",
+        "line": 159,
+        "end": 162
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 165,
+        "end": 166
+      },
+      {
+        "name": "bottom_offset",
+        "line": 169,
+        "end": 170
+      },
+      {
+        "name": "add_to_spec",
+        "line": 172,
+        "end": 224
+      },
+      {
+        "name": "body_name",
+        "line": 240,
+        "end": 241
+      },
+      {
+        "name": "joint_name",
+        "line": 244,
+        "end": 245
+      },
+      {
+        "name": "geom_name",
+        "line": 248,
+        "end": 249
+      },
+      {
+        "name": "geom_names",
+        "line": 252,
+        "end": 253
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 256,
+        "end": 257
+      },
+      {
+        "name": "bottom_offset",
+        "line": 260,
+        "end": 261
+      },
+      {
+        "name": "add_to_spec",
+        "line": 263,
+        "end": 294
+      },
+      {
+        "name": "body_name",
+        "line": 308,
+        "end": 309
+      },
+      {
+        "name": "joint_name",
+        "line": 312,
+        "end": 313
+      },
+      {
+        "name": "geom_names",
+        "line": 316,
+        "end": 317
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 320,
+        "end": 321
+      },
+      {
+        "name": "bottom_offset",
+        "line": 324,
+        "end": 325
+      },
+      {
+        "name": "add_to_spec",
+        "line": 327,
+        "end": 343
+      },
+      {
+        "name": "__post_init__",
+        "line": 365,
+        "end": 377
+      },
+      {
+        "name": "body_name",
+        "line": 380,
+        "end": 381
+      },
+      {
+        "name": "joint_name",
+        "line": 384,
+        "end": 385
+      },
+      {
+        "name": "geom_names",
+        "line": 388,
+        "end": 393
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 396,
+        "end": 397
+      },
+      {
+        "name": "shoulder_radius",
+        "line": 400,
+        "end": 401
+      },
+      {
+        "name": "bottom_offset",
+        "line": 404,
+        "end": 405
+      },
+      {
+        "name": "add_to_spec",
+        "line": 407,
+        "end": 448
+      },
+      {
+        "name": "_add_shaft_mesh",
+        "line": 450,
+        "end": 496
+      },
+      {
+        "name": "body_name",
+        "line": 510,
+        "end": 511
+      },
+      {
+        "name": "joint_name",
+        "line": 514,
+        "end": 515
+      },
+      {
+        "name": "geom_names",
+        "line": 518,
+        "end": 519
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 522,
+        "end": 523
+      },
+      {
+        "name": "bottom_offset",
+        "line": 526,
+        "end": 527
+      },
+      {
+        "name": "add_to_spec",
+        "line": 529,
+        "end": 557
+      },
+      {
+        "name": "ring_segments",
+        "line": 573,
+        "end": 576
+      },
+      {
+        "name": "body_name",
+        "line": 579,
+        "end": 580
+      },
+      {
+        "name": "joint_name",
+        "line": 583,
+        "end": 584
+      },
+      {
+        "name": "geom_names",
+        "line": 587,
+        "end": 593
+      },
+      {
+        "name": "horizontal_radius",
+        "line": 596,
+        "end": 597
+      },
+      {
+        "name": "bottom_offset",
+        "line": 600,
+        "end": 601
+      },
+      {
+        "name": "handle_site_name",
+        "line": 604,
+        "end": 605
+      },
+      {
+        "name": "add_to_spec",
+        "line": 607,
+        "end": 630
+      },
+      {
+        "name": "_add_material",
+        "line": 632,
+        "end": 651
+      },
+      {
+        "name": "_add_refined_collisions",
+        "line": 653,
+        "end": 695
+      },
+      {
+        "name": "_add_refined_visuals",
+        "line": 697,
+        "end": 719
+      },
+      {
+        "name": "_add_round_ring_visual",
+        "line": 721,
+        "end": 734
+      },
+      {
+        "name": "_add_square_ring_visual",
+        "line": 736,
+        "end": 752
+      },
+      {
+        "name": "_add_polygon_ring_visual",
+        "line": 754,
+        "end": 773
+      },
+      {
+        "name": "_add_capsule_collision",
+        "line": 776,
+        "end": 795
+      },
+      {
+        "name": "_add_capsule_visual",
+        "line": 798,
+        "end": 815
+      }
+    ]
+  },
+  "source/envs/manipulation/pick_place.py": {
+    "sha256": "42b299d90a6bb2158929e0d7d734d0ce728315a2f72d73597b8db8ee637a49aa",
+    "lines": 99,
+    "functions": [
+      {
+        "name": "PickPlaceTask",
+        "line": 25,
+        "end": 99
+      },
+      {
+        "name": "__init__",
+        "line": 28,
+        "end": 41
+      },
+      {
+        "name": "name",
+        "line": 44,
+        "end": 45
+      },
+      {
+        "name": "create_objects",
+        "line": 47,
+        "end": 48
+      },
+      {
+        "name": "reset",
+        "line": 50,
+        "end": 54
+      },
+      {
+        "name": "table_offset",
+        "line": 57,
+        "end": 61
+      },
+      {
+        "name": "_target_center",
+        "line": 63,
+        "end": 65
+      },
+      {
+        "name": "_in_target",
+        "line": 67,
+        "end": 74
+      },
+      {
+        "name": "check_success",
+        "line": 76,
+        "end": 82
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 84,
+        "end": 99
+      }
+    ]
+  },
+  "source/envs/manipulation/placement.py": {
+    "sha256": "3eb20fb78bdfdba6582c45a4ee273b2db227851513833508b409ee060aec80ee",
+    "lines": 321,
+    "functions": [
+      {
+        "name": "PlacementRegion",
+        "line": 17,
+        "end": 46
+      },
+      {
+        "name": "FixedTablePlacementSampler",
+        "line": 79,
+        "end": 147
+      },
+      {
+        "name": "UniformTablePlacementSampler",
+        "line": 150,
+        "end": 321
+      },
+      {
+        "name": "__post_init__",
+        "line": 23,
+        "end": 29
+      },
+      {
+        "name": "sample_xy",
+        "line": 31,
+        "end": 46
+      },
+      {
+        "name": "__init__",
+        "line": 82,
+        "end": 108
+      },
+      {
+        "name": "sample",
+        "line": 110,
+        "end": 147
+      },
+      {
+        "name": "__init__",
+        "line": 159,
+        "end": 189
+      },
+      {
+        "name": "for_object_centers",
+        "line": 192,
+        "end": 209
+      },
+      {
+        "name": "sample",
+        "line": 211,
+        "end": 277
+      },
+      {
+        "name": "_sample_valid_xy",
+        "line": 279,
+        "end": 296
+      },
+      {
+        "name": "_sample_yaw_quaternion",
+        "line": 298,
+        "end": 305
+      },
+      {
+        "name": "_effective_range",
+        "line": 307,
+        "end": 321
+      }
+    ]
+  },
+  "source/envs/manipulation/push.py": {
+    "sha256": "c1f95c1a58dea344b0efe8d278eee9520905b4dc57e6b07d32ff466df4ae8e99",
+    "lines": 192,
+    "functions": [
+      {
+        "name": "PushTask",
+        "line": 26,
+        "end": 192
+      },
+      {
+        "name": "__init__",
+        "line": 31,
+        "end": 68
+      },
+      {
+        "name": "name",
+        "line": 71,
+        "end": 72
+      },
+      {
+        "name": "create_objects",
+        "line": 74,
+        "end": 75
+      },
+      {
+        "name": "extra_observation_space",
+        "line": 77,
+        "end": 81
+      },
+      {
+        "name": "bind",
+        "line": 83,
+        "end": 89
+      },
+      {
+        "name": "reset",
+        "line": 91,
+        "end": 134
+      },
+      {
+        "name": "get_extra_observation",
+        "line": 136,
+        "end": 142
+      },
+      {
+        "name": "check_success",
+        "line": 144,
+        "end": 154
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 156,
+        "end": 192
+      }
+    ]
+  },
+  "source/envs/manipulation/rewards.py": {
+    "sha256": "08340d53c6611ba291b5e41659aa67067e489e00adf6ec9fe284dec2febb11c1",
+    "lines": 51,
+    "functions": [
+      {
+        "name": "staged_multi_object_reward",
+        "line": 11,
+        "end": 51
+      }
+    ]
+  },
+  "source/envs/manipulation/stack.py": {
+    "sha256": "29ef099150be4f11d6f807d5e3ad74061e298936705428267930b45ff3e5964a",
+    "lines": 252,
+    "functions": [
+      {
+        "name": "StackTask",
+        "line": 27,
+        "end": 252
+      },
+      {
+        "name": "__init__",
+        "line": 32,
+        "end": 69
+      },
+      {
+        "name": "name",
+        "line": 72,
+        "end": 73
+      },
+      {
+        "name": "create_objects",
+        "line": 75,
+        "end": 101
+      },
+      {
+        "name": "augment_spec",
+        "line": 103,
+        "end": 132
+      },
+      {
+        "name": "extra_observation_space",
+        "line": 134,
+        "end": 142
+      },
+      {
+        "name": "get_extra_observation",
+        "line": 144,
+        "end": 147
+      },
+      {
+        "name": "compute_task_reward",
+        "line": 149,
+        "end": 164
+      },
+      {
+        "name": "staged_rewards",
+        "line": 166,
+        "end": 194
+      },
+      {
+        "name": "check_success",
+        "line": 196,
+        "end": 201
+      },
+      {
+        "name": "_stable_platform_contact",
+        "line": 203,
+        "end": 237
+      },
+      {
+        "name": "reset",
+        "line": 239,
+        "end": 252
+      }
+    ]
+  },
+  "source/envs/rl_env.py": {
+    "sha256": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+    "lines": 360,
+    "functions": [
+      {
+        "name": "RLEnvConfig",
+        "line": 40,
+        "end": 58
+      },
+      {
+        "name": "load_env_config",
+        "line": 61,
+        "end": 67
+      },
+      {
+        "name": "RobotGymEnv",
+        "line": 70,
+        "end": 345
+      },
+      {
+        "name": "make_env",
+        "line": 348,
+        "end": 360
+      },
+      {
+        "name": "__init__",
+        "line": 85,
+        "end": 168
+      },
+      {
+        "name": "is_rendering",
+        "line": 171,
+        "end": 173
+      },
+      {
+        "name": "set_control_mode",
+        "line": 175,
+        "end": 178
+      },
+      {
+        "name": "reset",
+        "line": 180,
+        "end": 205
+      },
+      {
+        "name": "step",
+        "line": 207,
+        "end": 224
+      },
+      {
+        "name": "step_physics",
+        "line": 226,
+        "end": 229
+      },
+      {
+        "name": "render",
+        "line": 231,
+        "end": 242
+      },
+      {
+        "name": "close",
+        "line": 244,
+        "end": 250
+      },
+      {
+        "name": "_render_human",
+        "line": 252,
+        "end": 261
+      },
+      {
+        "name": "_reset_simulation_stats",
+        "line": 267,
+        "end": 283
+      },
+      {
+        "name": "record_simulation_steps",
+        "line": 285,
+        "end": 310
+      },
+      {
+        "name": "simulation_stats",
+        "line": 313,
+        "end": 314
+      },
+      {
+        "name": "_augment_spec",
+        "line": 320,
+        "end": 323
+      },
+      {
+        "name": "_get_observation",
+        "line": 329,
+        "end": 337
+      },
+      {
+        "name": "_get_info",
+        "line": 339,
+        "end": 345
+      }
+    ]
+  },
+  "source/robots/__init__.py": {
+    "sha256": "5a5f51f42b8afe334a827eb8bb89fd18457b301491095a42fe156a6e1d23a688",
+    "lines": 2,
+    "functions": []
+  },
+  "source/robots/arms/__init__.py": {
+    "sha256": "2c699b07bebe590444fe4f96fbe785826597fb59167d033fca99f396be73ac71",
+    "lines": 7,
+    "functions": []
+  },
+  "source/robots/arms/rm75b.py": {
+    "sha256": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+    "lines": 28,
+    "functions": []
+  },
+  "source/robots/bases/__init__.py": {
+    "sha256": "6067b976a5579544dc1546a758a06b98ded03bd23cc73d0f6cb066fa37a883a3",
+    "lines": 7,
+    "functions": []
+  },
+  "source/robots/bases/rethink_minimal_mount.py": {
+    "sha256": "34553e392a159094af415e116c2413c8ab59fccb4f84c5021109398204791145",
+    "lines": 16,
+    "functions": []
+  },
+  "source/robots/builder.py": {
+    "sha256": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356",
+    "lines": 282,
+    "functions": [
+      {
+        "name": "_items",
+        "line": 37,
+        "end": 39
+      },
+      {
+        "name": "_load_spec_or_raise",
+        "line": 42,
+        "end": 46
+      },
+      {
+        "name": "_first_body_or_raise",
+        "line": 49,
+        "end": 54
+      },
+      {
+        "name": "_site_or_raise",
+        "line": 57,
+        "end": 65
+      },
+      {
+        "name": "_euler_deg_to_wxyz",
+        "line": 68,
+        "end": 71
+      },
+      {
+        "name": "_reset_body_pos",
+        "line": 74,
+        "end": 77
+      },
+      {
+        "name": "_mount_arm_on_base",
+        "line": 80,
+        "end": 99
+      },
+      {
+        "name": "_attach_hand_to_arm",
+        "line": 102,
+        "end": 121
+      },
+      {
+        "name": "_configure_solver",
+        "line": 124,
+        "end": 129
+      },
+      {
+        "name": "build_robot_spec",
+        "line": 132,
+        "end": 212
+      },
+      {
+        "name": "build_robot_model",
+        "line": 215,
+        "end": 252
+      },
+      {
+        "name": "build_robot_model_from_config",
+        "line": 255,
+        "end": 282
+      }
+    ]
+  },
+  "source/robots/config.py": {
+    "sha256": "443eaf186fdb45f82e12ea604c03782ee484aaa48af38941bb7a3e5fadc49bcd",
+    "lines": 128,
+    "functions": [
+      {
+        "name": "robot_config_path",
+        "line": 34,
+        "end": 39
+      },
+      {
+        "name": "_resolve_profile_path",
+        "line": 42,
+        "end": 49
+      },
+      {
+        "name": "_load_robot_config_file",
+        "line": 52,
+        "end": 81
+      },
+      {
+        "name": "load_robot_config",
+        "line": 84,
+        "end": 87
+      },
+      {
+        "name": "apply_config_overrides",
+        "line": 90,
+        "end": 99
+      },
+      {
+        "name": "dataclass_from_robot_config",
+        "line": 102,
+        "end": 109
+      },
+      {
+        "name": "descriptors_from_robot_config",
+        "line": 112,
+        "end": 118
+      },
+      {
+        "name": "optional_tuple",
+        "line": 121,
+        "end": 128
+      }
+    ]
+  },
+  "source/robots/defaults.py": {
+    "sha256": "32d8329a84d5f3e55a40e1775ce3714a5e966d584b791f684fe62d87b42c341f",
+    "lines": 14,
+    "functions": []
+  },
+  "source/robots/descriptors.py": {
+    "sha256": "09fa0cdc9c95714eec11aafc29ab1ed821f056be0e3fb205deb7f62748284cc9",
+    "lines": 73,
+    "functions": [
+      {
+        "name": "ArmDescriptor",
+        "line": 35,
+        "end": 45
+      },
+      {
+        "name": "EndEffectorDescriptor",
+        "line": 49,
+        "end": 63
+      },
+      {
+        "name": "BaseDescriptor",
+        "line": 67,
+        "end": 73
+      }
+    ]
+  },
+  "source/robots/hands/__init__.py": {
+    "sha256": "dd2a07f9d73cb8d5270eae3a249a7672fedeaffcea48117478642df9cac23188",
+    "lines": 11,
+    "functions": []
+  },
+  "source/robots/hands/dex_hand.py": {
+    "sha256": "f3d8f24150ae0fb3a625a594d38bfaeddd5ff0b3977b79f3cc15971c0079927f",
+    "lines": 35,
+    "functions": []
+  },
+  "source/robots/hands/pika_gripper.py": {
+    "sha256": "3be5fb9a86f6626d2e7cc16f3f836546028c5369c1433563589ef0a5216d093e",
+    "lines": 23,
+    "functions": []
+  },
+  "source/robots/registry.py": {
+    "sha256": "bed965ca0d9e904a82c6f13f043e63259a897d55a2933003802702d390570c45",
+    "lines": 73,
+    "functions": [
+      {
+        "name": "load_builtin_descriptors",
+        "line": 23,
+        "end": 31
+      },
+      {
+        "name": "register_arm",
+        "line": 34,
+        "end": 35
+      },
+      {
+        "name": "register_hand",
+        "line": 38,
+        "end": 39
+      },
+      {
+        "name": "register_base",
+        "line": 42,
+        "end": 43
+      },
+      {
+        "name": "get_arm",
+        "line": 46,
+        "end": 48
+      },
+      {
+        "name": "get_hand",
+        "line": 51,
+        "end": 53
+      },
+      {
+        "name": "get_base",
+        "line": 56,
+        "end": 58
+      },
+      {
+        "name": "registered_arms",
+        "line": 61,
+        "end": 63
+      },
+      {
+        "name": "registered_hands",
+        "line": 66,
+        "end": 68
+      },
+      {
+        "name": "registered_bases",
+        "line": 71,
+        "end": 73
+      }
+    ]
+  },
+  "source/robots/scene.py": {
+    "sha256": "26e9f0995198c8e5733e662509f49436b9cc4ecd98d253f08557d35487e271d9",
+    "lines": 94,
+    "functions": [
+      {
+        "name": "_add_skybox",
+        "line": 11,
+        "end": 19
+      },
+      {
+        "name": "add_preview_scene",
+        "line": 22,
+        "end": 56
+      },
+      {
+        "name": "add_basic_scene",
+        "line": 59,
+        "end": 94
+      }
+    ]
+  },
+  "source/sensors/tactile/__init__.py": {
+    "sha256": "10ff15378d4f5e25ce99d365457cf78f98ebb321a3312df32b154a78fdb831c6",
+    "lines": 40,
+    "functions": [
+      {
+        "name": "__getattr__",
+        "line": 35,
+        "end": 40
+      }
+    ]
+  },
+  "source/sensors/tactile/dex_hand.py": {
+    "sha256": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+    "lines": 575,
+    "functions": [
+      {
+        "name": "site_name",
+        "line": 39,
+        "end": 40
+      },
+      {
+        "name": "sensor_name",
+        "line": 43,
+        "end": 44
+      },
+      {
+        "name": "_items",
+        "line": 47,
+        "end": 48
+      },
+      {
+        "name": "_body_by_geom_name",
+        "line": 51,
+        "end": 63
+      },
+      {
+        "name": "_mesh_file_map",
+        "line": 66,
+        "end": 67
+      },
+      {
+        "name": "_resolve_mesh_path",
+        "line": 70,
+        "end": 72
+      },
+      {
+        "name": "_normalize",
+        "line": 75,
+        "end": 80
+      },
+      {
+        "name": "_grid_difference",
+        "line": 83,
+        "end": 101
+      },
+      {
+        "name": "_neighbor_spacing",
+        "line": 104,
+        "end": 125
+      },
+      {
+        "name": "_taxel_frame",
+        "line": 128,
+        "end": 135
+      },
+      {
+        "name": "_orient_frame_outward",
+        "line": 138,
+        "end": 155
+      },
+      {
+        "name": "_rotation_matrix_to_quat",
+        "line": 158,
+        "end": 164
+      },
+      {
+        "name": "_quat_to_mat",
+        "line": 167,
+        "end": 176
+      },
+      {
+        "name": "_transform_points",
+        "line": 179,
+        "end": 180
+      },
+      {
+        "name": "DexHandTactileSensorBase",
+        "line": 183,
+        "end": 468
+      },
+      {
+        "name": "SimpleBoxTactileSensor",
+        "line": 471,
+        "end": 541
+      },
+      {
+        "name": "create_dex_hand_tactile_sensor",
+        "line": 544,
+        "end": 560
+      },
+      {
+        "name": "visit",
+        "line": 54,
+        "end": 59
+      },
+      {
+        "name": "__init__",
+        "line": 188,
+        "end": 216
+      },
+      {
+        "name": "patch_shapes",
+        "line": 219,
+        "end": 220
+      },
+      {
+        "name": "total_taxels",
+        "line": 223,
+        "end": 224
+      },
+      {
+        "name": "observation_space",
+        "line": 227,
+        "end": 229
+      },
+      {
+        "name": "set_name_prefix",
+        "line": 231,
+        "end": 232
+      },
+      {
+        "name": "visualization_sites",
+        "line": 234,
+        "end": 244
+      },
+      {
+        "name": "surface_patch_names",
+        "line": 246,
+        "end": 247
+      },
+      {
+        "name": "default_surface_patch_names",
+        "line": 249,
+        "end": 250
+      },
+      {
+        "name": "surface_plot_data",
+        "line": 252,
+        "end": 292
+      },
+      {
+        "name": "augment_spec",
+        "line": 294,
+        "end": 342
+      },
+      {
+        "name": "_add_taxel",
+        "line": 345,
+        "end": 358
+      },
+      {
+        "name": "_add_touch_sensor",
+        "line": 360,
+        "end": 377
+      },
+      {
+        "name": "bind",
+        "line": 379,
+        "end": 400
+      },
+      {
+        "name": "reset",
+        "line": 402,
+        "end": 418
+      },
+      {
+        "name": "read_raw",
+        "line": 420,
+        "end": 424
+      },
+      {
+        "name": "read",
+        "line": 426,
+        "end": 427
+      },
+      {
+        "name": "read_patches",
+        "line": 429,
+        "end": 430
+      },
+      {
+        "name": "patches_from_values",
+        "line": 432,
+        "end": 437
+      },
+      {
+        "name": "read_images",
+        "line": 439,
+        "end": 452
+      },
+      {
+        "name": "metadata",
+        "line": 454,
+        "end": 468
+      },
+      {
+        "name": "__init__",
+        "line": 476,
+        "end": 509
+      },
+      {
+        "name": "_add_taxel",
+        "line": 511,
+        "end": 533
+      },
+      {
+        "name": "metadata",
+        "line": 535,
+        "end": 541
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/__init__.py": {
+    "sha256": "d1a76daa71537aa092295dcbceab48203ce282f686c277bbad539b214090ad6e",
+    "lines": 1,
+    "functions": []
+  },
+  "source/sensors/tactile/fitting/bezier.py": {
+    "sha256": "1f34cfee10743e9c207b3a0ccd7720cb4f422ca2c5c7e73f64f9b4ea86ef2377",
+    "lines": 71,
+    "functions": [
+      {
+        "name": "bernstein_basis",
+        "line": 10,
+        "end": 17
+      },
+      {
+        "name": "fit_bezier_surface",
+        "line": 20,
+        "end": 58
+      },
+      {
+        "name": "evaluate_bezier_surface",
+        "line": 61,
+        "end": 71
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/ellipse.py": {
+    "sha256": "46833cba5dbedca6642f0a7a89dbf39c3e689f226dc68785c92cec0e5e18596f",
+    "lines": 192,
+    "functions": [
+      {
+        "name": "_rotated_ellipse_point",
+        "line": 12,
+        "end": 25
+      },
+      {
+        "name": "_ellipse_sampson_objective",
+        "line": 28,
+        "end": 43
+      },
+      {
+        "name": "_initial_ellipse_params",
+        "line": 46,
+        "end": 62
+      },
+      {
+        "name": "_fit_ellipse_geometric",
+        "line": 65,
+        "end": 99
+      },
+      {
+        "name": "_ellipse_point_distances",
+        "line": 102,
+        "end": 116
+      },
+      {
+        "name": "_fit_ellipse_ransac",
+        "line": 119,
+        "end": 167
+      },
+      {
+        "name": "_fit_rotated_section_ellipse",
+        "line": 170,
+        "end": 192
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/fingertip.py": {
+    "sha256": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b",
+    "lines": 378,
+    "functions": [
+      {
+        "name": "fingertip_ellipsoid_grid_points",
+        "line": 16,
+        "end": 33
+      },
+      {
+        "name": "_fingertip_swept_shell_grid_points_from_triangles",
+        "line": 36,
+        "end": 42
+      },
+      {
+        "name": "_fingertip_swept_shell_raw_grid_points",
+        "line": 45,
+        "end": 308
+      },
+      {
+        "name": "_fingertip_regular_surface_grid_points",
+        "line": 311,
+        "end": 352
+      },
+      {
+        "name": "_fingertip_swept_shell_surface_from_triangles",
+        "line": 355,
+        "end": 378
+      },
+      {
+        "name": "section_spread",
+        "line": 64,
+        "end": 67
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/layout.py": {
+    "sha256": "314935d11cbd45a62b2280b24f42708e3adfa4c3ff6f32213b52785886798a4d",
+    "lines": 33,
+    "functions": [
+      {
+        "name": "dex_hand_patch_layout",
+        "line": 14,
+        "end": 22
+      },
+      {
+        "name": "dex_hand_patch_info",
+        "line": 31,
+        "end": 33
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/plot_data.py": {
+    "sha256": "8220ba7818432a51f01ce476992905b3dbbf521529b29f1d5fd1aef746850c8d",
+    "lines": 90,
+    "functions": [
+      {
+        "name": "PatchPlotData",
+        "line": 18,
+        "end": 24
+      },
+      {
+        "name": "patch_plot_data",
+        "line": 27,
+        "end": 48
+      },
+      {
+        "name": "patch_mesh_uv_plot_data",
+        "line": 51,
+        "end": 62
+      },
+      {
+        "name": "patch_fingertip_ellipsoid_plot_data",
+        "line": 65,
+        "end": 90
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/primitives.py": {
+    "sha256": "44de49bdcf10bb206bb9f3d3264739b401002073b04d88766e956262d1e3bca3",
+    "lines": 149,
+    "functions": [
+      {
+        "name": "_vertices_as_triangles",
+        "line": 7,
+        "end": 11
+      },
+      {
+        "name": "_supersample_triangles",
+        "line": 14,
+        "end": 28
+      },
+      {
+        "name": "_triangle_normals",
+        "line": 31,
+        "end": 37
+      },
+      {
+        "name": "_barycentric_coordinates_2d",
+        "line": 40,
+        "end": 75
+      },
+      {
+        "name": "_barycentric_2d",
+        "line": 78,
+        "end": 93
+      },
+      {
+        "name": "_barycentric_interpolate",
+        "line": 96,
+        "end": 97
+      },
+      {
+        "name": "_occupied_angle_arc",
+        "line": 100,
+        "end": 127
+      },
+      {
+        "name": "_ellipse_arc_mid_angles",
+        "line": 130,
+        "end": 141
+      },
+      {
+        "name": "_linspace_midpoints",
+        "line": 144,
+        "end": 149
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/projection.py": {
+    "sha256": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f",
+    "lines": 206,
+    "functions": [
+      {
+        "name": "mesh_uv_grid_points",
+        "line": 15,
+        "end": 32
+      },
+      {
+        "name": "_projected_surface_candidates",
+        "line": 35,
+        "end": 67
+      },
+      {
+        "name": "_mesh_uv_grid_points_from_triangles",
+        "line": 70,
+        "end": 170
+      },
+      {
+        "name": "_locate_projected_triangle",
+        "line": 173,
+        "end": 206
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/segment.py": {
+    "sha256": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd",
+    "lines": 245,
+    "functions": [
+      {
+        "name": "FingerSegmentSurfaceFit",
+        "line": 24,
+        "end": 36
+      },
+      {
+        "name": "finger_segment_grid_points",
+        "line": 39,
+        "end": 42
+      },
+      {
+        "name": "finger_segment_fit_surface",
+        "line": 45,
+        "end": 47
+      },
+      {
+        "name": "_fit_finger_segment_surfaces",
+        "line": 50,
+        "end": 134
+      },
+      {
+        "name": "_finger_segment_raw_shell_grid_points",
+        "line": 137,
+        "end": 223
+      },
+      {
+        "name": "_finger_segment_regular_surface_grid_points",
+        "line": 226,
+        "end": 245
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/stl.py": {
+    "sha256": "ca4b5fa56fef08eaacce219534a8c658fbd289b50c35972a1508bf243686f81b",
+    "lines": 44,
+    "functions": [
+      {
+        "name": "read_stl_triangles",
+        "line": 11,
+        "end": 24
+      },
+      {
+        "name": "_looks_like_binary_stl",
+        "line": 27,
+        "end": 31
+      },
+      {
+        "name": "_read_ascii_stl_triangles",
+        "line": 34,
+        "end": 44
+      }
+    ]
+  },
+  "source/sensors/tactile/fitting/surfaces.py": {
+    "sha256": "40836ed416f76377de1d44cfa8bcd735f207742727536e84010b32b5de6c05b3",
+    "lines": 45,
+    "functions": [
+      {
+        "name": "grid_points_for_kind",
+        "line": 27,
+        "end": 36
+      }
+    ]
+  },
+  "source/sensors/tactile/pika_gripper.py": {
+    "sha256": "28d940a0c5cf9b6cbfde2ade8f1d0420d4682a9eb3bf10ad18c49752f0a0eade",
+    "lines": 285,
+    "functions": [
+      {
+        "name": "site_name",
+        "line": 43,
+        "end": 44
+      },
+      {
+        "name": "sensor_name",
+        "line": 47,
+        "end": 48
+      },
+      {
+        "name": "_inward_y_magnitude",
+        "line": 51,
+        "end": 53
+      },
+      {
+        "name": "_inward_y_slope",
+        "line": 56,
+        "end": 58
+      },
+      {
+        "name": "_frame",
+        "line": 61,
+        "end": 69
+      },
+      {
+        "name": "_quat",
+        "line": 72,
+        "end": 75
+      },
+      {
+        "name": "PikaGripperTactileSensor",
+        "line": 78,
+        "end": 267
+      },
+      {
+        "name": "create_pika_gripper_tactile_sensor",
+        "line": 270,
+        "end": 275
+      },
+      {
+        "name": "__init__",
+        "line": 83,
+        "end": 127
+      },
+      {
+        "name": "total_taxels",
+        "line": 130,
+        "end": 131
+      },
+      {
+        "name": "observation_space",
+        "line": 134,
+        "end": 136
+      },
+      {
+        "name": "set_name_prefix",
+        "line": 138,
+        "end": 139
+      },
+      {
+        "name": "visualization_sites",
+        "line": 141,
+        "end": 151
+      },
+      {
+        "name": "surface_patch_names",
+        "line": 153,
+        "end": 154
+      },
+      {
+        "name": "surface_plot_data",
+        "line": 156,
+        "end": 184
+      },
+      {
+        "name": "augment_spec",
+        "line": 186,
+        "end": 225
+      },
+      {
+        "name": "bind",
+        "line": 227,
+        "end": 239
+      },
+      {
+        "name": "reset",
+        "line": 241,
+        "end": 250
+      },
+      {
+        "name": "read_raw",
+        "line": 252,
+        "end": 256
+      },
+      {
+        "name": "read",
+        "line": 258,
+        "end": 260
+      },
+      {
+        "name": "read_patches",
+        "line": 262,
+        "end": 263
+      },
+      {
+        "name": "patches_from_values",
+        "line": 265,
+        "end": 267
+      }
+    ]
+  },
+  "source/sensors/tactile/probe.py": {
+    "sha256": "0434660b307f1d26136f5dbf7f5e23feba02968094faaa52f28b0b1cf982bdec",
+    "lines": 71,
+    "functions": [
+      {
+        "name": "add_probe_to_spec",
+        "line": 13,
+        "end": 43
+      },
+      {
+        "name": "probe_joint_addresses",
+        "line": 46,
+        "end": 51
+      },
+      {
+        "name": "set_probe_pose",
+        "line": 54,
+        "end": 71
+      }
+    ]
+  },
+  "source/sensors/tactile/signal_processing.py": {
+    "sha256": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+    "lines": 218,
+    "functions": [
+      {
+        "name": "_validate_nonnegative",
+        "line": 12,
+        "end": 16
+      },
+      {
+        "name": "_gaussian_kernel1d",
+        "line": 19,
+        "end": 25
+      },
+      {
+        "name": "_convolve_axis_reflect",
+        "line": 28,
+        "end": 42
+      },
+      {
+        "name": "_gaussian_blur",
+        "line": 45,
+        "end": 48
+      },
+      {
+        "name": "_neighbor_crosstalk",
+        "line": 51,
+        "end": 91
+      },
+      {
+        "name": "TaxelPatch",
+        "line": 95,
+        "end": 105
+      },
+      {
+        "name": "TactileSignalProcessorConfig",
+        "line": 109,
+        "end": 144
+      },
+      {
+        "name": "TactileSignalProcessor",
+        "line": 147,
+        "end": 218
+      },
+      {
+        "name": "shape",
+        "line": 104,
+        "end": 105
+      },
+      {
+        "name": "from_mapping",
+        "line": 121,
+        "end": 131
+      },
+      {
+        "name": "__post_init__",
+        "line": 133,
+        "end": 144
+      },
+      {
+        "name": "__init__",
+        "line": 150,
+        "end": 153
+      },
+      {
+        "name": "normalized",
+        "line": 156,
+        "end": 157
+      },
+      {
+        "name": "reset",
+        "line": 159,
+        "end": 160
+      },
+      {
+        "name": "process",
+        "line": 162,
+        "end": 187
+      },
+      {
+        "name": "_process_patch_images",
+        "line": 189,
+        "end": 203
+      },
+      {
+        "name": "metadata",
+        "line": 205,
+        "end": 218
+      }
+    ]
+  },
+  "thesis/AGENTS.md": {
+    "sha256": "5d06110f1919f8b617155f1b1b8565a491483dbf370fec1b65d8d36e90c6e6b8",
+    "lines": 51,
+    "functions": []
+  },
+  "thesis/EXPERIMENT_EVIDENCE.md": {
+    "sha256": "b95b1eaf428f6a35ff0bdb2f9c18e054e5bd8935a91f6829f14df421d79cd961",
+    "lines": 194,
+    "functions": []
+  },
+  "thesis/REFERENCE_THESIS_ANALYSIS.md": {
+    "sha256": "63a0a867af7a7e3c5faa9534ca76c9af6ed56a3b612a5607b02f9b7bdbb2eb3f",
+    "lines": 134,
+    "functions": []
+  },
+  "thesis/ROBOTICS_EVIDENCE.md": {
+    "sha256": "a6c0c1b97f8eb9212d8539fbffc4285ec78f58e62d2eca8e3775d61684377786",
+    "lines": 130,
+    "functions": []
+  },
+  "thesis/SYMBOLS_AND_TERMS.md": {
+    "sha256": "33f99217c647a7ae10599cd5d49234e9c910db4f5c50286049a5e3309b115c83",
+    "lines": 123,
+    "functions": []
+  },
+  "thesis/THESIS_LENGTH_BUDGET.md": {
+    "sha256": "fc75568738382eeb23d1ca7de9cde10c7e40403cc8380ab2387274009d846301",
+    "lines": 100,
+    "functions": []
+  },
+  "thesis/THESIS_PLAN_V2.md": {
+    "sha256": "b3a4d425fe6fd8c2811affaae0911ed7d11453e1f576f660315a84a0a3bca056",
+    "lines": 511,
+    "functions": []
+  },
+  "thesis/THESIS_WRITING_STANDARD.md": {
+    "sha256": "2b93cf36928440665bf5a6e49e3fb8934e1ddb5740b1885dcbedf4d299e56daf",
+    "lines": 132,
+    "functions": []
+  },
+  "thesis/body/ch01_introduction.tex": {
+    "sha256": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+    "lines": 111,
+    "functions": []
+  },
+  "thesis/reference.bib": {
+    "sha256": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053",
+    "lines": 340,
+    "functions": []
+  },
+  "thesis/thesis.tex": {
+    "sha256": "ad757386c9e6fb62c3d129724fa258dd832304ad43d18f90b0964eb7ffdc83f7",
+    "lines": 31,
+    "functions": []
+  },
+  "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/result.json": {
+    "sha256": "49046158b111c3c45c4d76892864c1b8d22c4573a1b074340bc778bb2bc4c202",
+    "lines": 35
+  },
+  "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": {
+    "sha256": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+    "lines": 521
+  },
+  "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/result.json": {
+    "sha256": "3d83e3970496531094d62f83e1a5520d8e812a9845adabfe6b5e36a74a1d42f4",
+    "lines": 34
+  },
+  "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/manifest.json": {
+    "sha256": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8",
+    "lines": 603
+  },
+  "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/result.json": {
+    "sha256": "fb2a7e8e5e75c89a04b27489cfa6330d6072608e11716f7addbfa1a1342a95b7",
+    "lines": 32
+  },
+  "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/manifest.json": {
+    "sha256": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139",
+    "lines": 311
+  },
+  "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/result.json": {
+    "sha256": "0039ca5665b5d6dc2e43fdd6656e3b87a9654ac4222f8990a58b1ba4f51da673",
+    "lines": 35
+  },
+  "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/manifest.json": {
+    "sha256": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65",
+    "lines": 652
+  },
+  "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json": {
+    "sha256": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657",
+    "lines": 40
+  },
+  "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json": {
+    "sha256": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+    "lines": 629
+  }
+}

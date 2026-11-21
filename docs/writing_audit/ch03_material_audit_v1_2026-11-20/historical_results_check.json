@@ -1,0 +1,400 @@
+{
+  "batch_summaries": [
+    {
+      "path": "outputs/dex_hand_top100_v2/summary.json",
+      "sha256": "e9a23b52f43d434d9634b25ae92ebc38fc96e2e81b84db5a130c0574bb9c77c3",
+      "rows": 100,
+      "unique_object_ids": 100,
+      "status_recount": {
+        "LATTICE_SUCCESS": 98,
+        "RL_SUCCESS": 2
+      },
+      "cached_rows": 0,
+      "runtime_sec_sum": 479.8649999999999,
+      "independent_root_count": "UNKNOWN",
+      "historical_code_version": "UNKNOWN unless stored source hashes exist",
+      "evidence": "L2 JSON entry recount; not physics revalidation",
+      "stored_code_hash_comparison": {
+        "matching": [
+          "apps/train_grasp_edit_rl.py",
+          "assets/grippers/dex_hand/dex_hand.xml",
+          "configs/grasping/default.json",
+          "source/grasping/dexevolve.py",
+          "source/grasping/dexevolve_contacts.py",
+          "source/grasping/graspqp_adapter.py",
+          "source/grasping/hand_surrogate.py",
+          "source/grasping/seeds.py",
+          "source/rl/common/ppo.py",
+          "source/rl/grasp_edit/ppo.py",
+          "source/rl/grasp_edit/templates.py",
+          "tools/grasp_generation/graspqp_evolve.py"
+        ],
+        "different_or_nonstring": [
+          "source/envs/manipulation/objects.py",
+          "source/grasping/catalog.py",
+          "source/grasping/executor.py",
+          "source/rl/grasp_edit/env.py",
+          "tools/grasping/batch_grasp_edit.py"
+        ],
+        "missing": [
+          "source/grasping/collision_decomposition.py"
+        ]
+      }
+    },
+    {
+      "path": "outputs/pick_place_top100_final/summary.json",
+      "sha256": "a70295cbaee6cc3a132d08d1fabf0c1080beb5c3914b660bf72f6e19a11a64d5",
+      "rows": 100,
+      "unique_object_ids": 100,
+      "status_recount": {
+        "SUCCESS": 100
+      },
+      "cached_rows": 100,
+      "runtime_sec_sum": 0.0,
+      "independent_root_count": "UNKNOWN",
+      "historical_code_version": "UNKNOWN unless stored source hashes exist",
+      "evidence": "L2 JSON entry recount; not physics revalidation"
+    },
+    {
+      "path": "outputs/stack_task_valid_v24/summary.json",
+      "sha256": "18ec12b71cb095e7dc40984364060ffb5e5d290a6fa6b67bceec964727f8bc40",
+      "rows": 48,
+      "unique_object_ids": 48,
+      "status_recount": {
+        "SUCCESS": 43,
+        "FAILED": 5
+      },
+      "cached_rows": 0,
+      "runtime_sec_sum": 14347.194000000003,
+      "independent_root_count": "UNKNOWN",
+      "historical_code_version": "UNKNOWN unless stored source hashes exist",
+      "evidence": "L2 JSON entry recount; not physics revalidation"
+    },
+    {
+      "path": "outputs/push_top100_final/summary.json",
+      "sha256": "8e5e829600d4c86e011ee7927990ed070072aea27da85e0095a8e5626c71b088",
+      "rows": 100,
+      "unique_object_ids": 100,
+      "status_recount": {
+        "SUCCESS": 100
+      },
+      "cached_rows": 98,
+      "runtime_sec_sum": 105.133,
+      "independent_root_count": "UNKNOWN",
+      "historical_code_version": "UNKNOWN unless stored source hashes exist",
+      "evidence": "L2 JSON entry recount; not physics revalidation"
+    },
+    {
+      "path": "outputs/nut_assembly_top100_final/summary.json",
+      "sha256": "42ca95049066483a19a58d77d116311478f082aa02f35c03bbdfc854ad5c4342",
+      "rows": 100,
+      "unique_object_ids": 0,
+      "status_recount": {
+        "SUCCESS": 100
+      },
+      "cached_rows": 0,
+      "runtime_sec_sum": 42.171,
+      "independent_root_count": "UNKNOWN",
+      "historical_code_version": "UNKNOWN unless stored source hashes exist",
+      "evidence": "L2 JSON entry recount; not physics revalidation"
+    }
+  ],
+  "source_a_ten_rows": [
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/manifest.json",
+      "seed": 18011,
+      "declared_perturbation": {
+        "x_m": -0.001,
+        "y_m": 0.0,
+        "yaw_degrees": -0.0
+      },
+      "npz_sha256": "7a83aada2f92fe6bed45813968c57499fd73357c7842414eedb349a72d70336a",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06430831368470591,
+      "tail_max_angular_speed": 0.04049003932254797,
+      "initial_position_registered": [
+        0.5419011116027832,
+        -0.023278871551156044,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p01/candidate_00/manifest.json",
+      "seed": 18012,
+      "declared_perturbation": {
+        "x_m": 0.001,
+        "y_m": 0.0,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "8afda10ad0e172a470da739117c545cd532d2a7f3335c50bba113a26092751b1",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p01/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06304237779931132,
+      "tail_max_angular_speed": 0.003239248845084091,
+      "initial_position_registered": [
+        0.5439010858535767,
+        -0.023278871551156044,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p02/candidate_00/manifest.json",
+      "seed": 18013,
+      "declared_perturbation": {
+        "x_m": 0.0,
+        "y_m": -0.001,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "ec198d0dbb55e63eeffb5b11343f789e646c63eed36198e646ba105a2f0db622",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p02/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06303982962243315,
+      "tail_max_angular_speed": 0.0030326884522322377,
+      "initial_position_registered": [
+        0.5429010987281799,
+        -0.024278871715068817,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p03/candidate_00/manifest.json",
+      "seed": 18014,
+      "declared_perturbation": {
+        "x_m": 0.0,
+        "y_m": 0.001,
+        "yaw_degrees": -0.0
+      },
+      "npz_sha256": "9eea59208c9eab7306a6c3ba2a343132cf3ac73a13045c3c60051a981ca72d76",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p03/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.0629899342444532,
+      "tail_max_angular_speed": 0.0031061313411394204,
+      "initial_position_registered": [
+        0.5429010987281799,
+        -0.02227887138724327,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p04/candidate_00/manifest.json",
+      "seed": 18015,
+      "declared_perturbation": {
+        "x_m": -0.001,
+        "y_m": 0.001,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "2daf91d74fdf83abcf4e9aa67c1d655dd89055cef475de5be8e3726c1b600c05",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p04/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.061148171386645966,
+      "tail_max_angular_speed": 0.052339103593428915,
+      "initial_position_registered": [
+        0.5419011116027832,
+        -0.02227887138724327,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p05/candidate_00/manifest.json",
+      "seed": 18016,
+      "declared_perturbation": {
+        "x_m": 0.001,
+        "y_m": -0.001,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "2be6d8a7b4242d997f844294772e2c6ba92af1af502696a6e872710e5527d5e2",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p05/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06387307523623698,
+      "tail_max_angular_speed": 0.047476461291045984,
+      "initial_position_registered": [
+        0.5439010858535767,
+        -0.024278871715068817,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p06/candidate_00/manifest.json",
+      "seed": 18017,
+      "declared_perturbation": {
+        "x_m": -0.001,
+        "y_m": -0.001,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "eb03ac555440660060cfb741818e17274ff559a4db21993e895066bddd26db30",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p06/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06265107367350709,
+      "tail_max_angular_speed": 0.0060180112705661105,
+      "initial_position_registered": [
+        0.5419011116027832,
+        -0.024278871715068817,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p07/candidate_00/manifest.json",
+      "seed": 18018,
+      "declared_perturbation": {
+        "x_m": 0.001,
+        "y_m": 0.001,
+        "yaw_degrees": -0.0
+      },
+      "npz_sha256": "f055533608f2c4a3e34af39a9320cfa344e0cb550bdb3ebd60f1cb96b106b427",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p07/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.0642025042094847,
+      "tail_max_angular_speed": 0.0042760239292207155,
+      "initial_position_registered": [
+        0.5439010858535767,
+        -0.02227887138724327,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p08/candidate_00/manifest.json",
+      "seed": 18019,
+      "declared_perturbation": {
+        "x_m": -0.0005,
+        "y_m": 0.0005,
+        "yaw_degrees": 0.0
+      },
+      "npz_sha256": "393b12b5f95e0046b4633620da32dbee05269f6ff2bef63dc9d7b0780fa71f5b",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p08/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06400275931557275,
+      "tail_max_angular_speed": 0.04943055344163997,
+      "initial_position_registered": [
+        0.5424010753631592,
+        -0.022778872400522232,
+        0.5715025067329407
+      ]
+    },
+    {
+      "manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p09/candidate_00/manifest.json",
+      "seed": 18020,
+      "declared_perturbation": {
+        "x_m": 0.0005,
+        "y_m": -0.0005,
+        "yaw_degrees": -0.0
+      },
+      "npz_sha256": "76f0a7c3c33cb24efcf5f77fa731a7598f92debc31e13df6a9737ad89ef24860",
+      "hash_matches_registered": true,
+      "shape_qpos": [
+        477,
+        26
+      ],
+      "shape_ctrl": [
+        477,
+        13
+      ],
+      "strict_path": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p09/candidate_00/strict_replay_final.json",
+      "strict_success": true,
+      "verification_status": "FINAL_VERIFIED",
+      "final_lift": 0.06304177497764729,
+      "tail_max_angular_speed": 0.003458155432399352,
+      "initial_position_registered": [
+        0.5434011220932007,
+        -0.023778872564435005,
+        0.5715025067329407
+      ]
+    }
+  ],
+  "source_a_all_hashes_match": true,
+  "source_a_unique_seeds": 10,
+  "source_a_unique_npz": 10,
+  "source_a_strict_passes": 10,
+  "source_a_note": "distinct near-neighbor initial conditions from one object/template; not broad unseen-object testing",
+  "no_L3": true
+}

@@ -25,3 +25,7 @@
 *.jpg binary
 *.jpeg binary
 *.mp4 binary
+
+# Preserve thesis evidence bytes (including CRLF) so archived SHA256 remains valid.
+thesis/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/writing_audit/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

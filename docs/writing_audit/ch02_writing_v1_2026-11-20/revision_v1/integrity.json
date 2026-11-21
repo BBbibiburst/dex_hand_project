@@ -1,0 +1,11 @@
+{
+  "protected_existing_file_count": 158,
+  "changed_existing_files": [
+    "thesis/body/ch02_simulation_platform.tex"
+  ],
+  "only_authorized_chapter_modified": true,
+  "first_chapter_frozen_pdf_unchanged": true,
+  "main_include_unchanged": true,
+  "reference_bib_unchanged": true,
+  "no_training_no_physics_no_server_no_git": true
+}

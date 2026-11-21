@@ -1,0 +1,33 @@
+TH-CH01-1.3~1.5-V1 正文交付
+日期：2026-11-20。阶段3完成，等待用户审核，未冻结。
+
+1. 正文与差异
+正式源文件：thesis/body/ch01_introduction.tex，仅追加1.3、1.4、1.5。
+完整追加LaTeX：sections_1_3_1_5.tex；阅读稿：sections_1_3_1_5_review.txt。
+修改前备份：ch01_introduction.before.tex；差异：changes.diff。
+1.1、1.2、原有引用逐字保持不变，未修改参考文献、主文件、其他章节、规划或模板。
+
+2. 实际TeXcount
+1.3：1032（预算1000–1100）；1.4：806（800–950）；1.5：416（400–450）。
+三节合计2254；第一章总量8493（含章标题），在7500–8500规划范围内。
+口径为现有TeXcount中文模式，含标题及有意义英文词，不是简单汉字正则计数。
+已执行：./scripts/count_thesis_words.sh --sections
+已执行：./scripts/count_thesis_words.sh --chapter 1
+最终自动报告：outputs/thesis_wordcount/THESIS_WORD_COUNT.md / .csv / .json。
+
+3. 论点—内部证据
+1.3第1段/1.4平台段：R-01、R-02、R-05；source/robots/arms/rm75b.py、source/robots/hands/dex_hand.py、source/sensors/tactile/dex_hand.py及signal_processing.py。限定仿真集成与观测来源，不推真实标定。
+1.3第2段/1.4示教段：R-03至R-05；source/grasping/graspqp_adapter.py、dexevolve.py、executor.py，source/verification/strict_replay.py和source/grasp_pipeline/replay.py。区分第三方算法适配、IK筛选、连续执行及Strict，未宣称全部候选统一通过。
+1.3第3段/1.4数据工作：R-06至R-08；source/data/production_recorder.py、production_queue.py和已核验LeRobot导出。未写全量同步或生产小时数。
+1.3第4段/1.4迁移段：E-C3/E-C4；outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/中的p43_c3_report.md、code/matching.py、models.py、pipeline.py、inference.py。GMM指导物理接触；Real/Sim VAE独立，GRU是潜变量Translator，不是机器人控制策略。
+1.3第5段/1.4迁移结果：E-P44至E-P51；P49原REPORT.md支持接受率改善与质量未过；P50原REPORT.md支持多视角残差配置退化；P51的decision.json支持只针对D50的NO-GO。三者在正文中分别说明，没有将NO-GO外推P49，没有宣称全局0.90成功。
+1.5：THESIS_PLAN_V2.md中第三至第七章论证卡及已审核七章结构；按平台—执行—数据—初始重建—对抗评价递进，未将规划迁移到当前六章include。
+证据等级沿用既有档案，仅在已核定范围使用，本轮无历史复算。
+
+4. 必要自审与待人工确认
+三节分别为5、4、2个自然段，依任务组织；新label无重复，括号静态检查通过。没有新增公式、图表、引用或未经核实的实验数值。
+1.4以平台实现、开源适配和方法探索区分贡献；未将独立双VAE/Translator的组合称为首创。
+1.5保留第四章在七章规划中的位置；该章完整lineage、时间对齐和最终统计等证据仍有缺口，后续写作前需按原工作流处理。
+研究特色/创新点称谓仍需用户与导师审核；真实Taxel映射、全量生产验收和独立跨域泛化等缺口没有通过文字消除。
+当前已有1.2仍是用户待确认版本，本次未擅自冻结。第一章文字已齐备不代表章节已完成审核或PDF验收。
+未编译PDF，未训练/仿真，未commit/push，不开始第二章。

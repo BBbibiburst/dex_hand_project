@@ -1,0 +1,58 @@
+{
+  "files": [
+    "thesis/thesis.tex",
+    "thesis/front/cover.tex",
+    "thesis/front/abstract.tex",
+    "thesis/body/ch01_introduction.tex",
+    "thesis/body/ch02_data_and_problem.tex",
+    "thesis/body/ch03_dual_vae.tex",
+    "thesis/body/ch04_adversarial_transfer.tex",
+    "thesis/body/ch05_experiments.tex",
+    "thesis/body/ch06_conclusion.tex"
+  ],
+  "edges": [
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/front/cover.tex",
+      "command": "input"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/front/abstract.tex",
+      "command": "input"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch01_introduction.tex",
+      "command": "include"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch02_data_and_problem.tex",
+      "command": "include"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch03_dual_vae.tex",
+      "command": "include"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch04_adversarial_transfer.tex",
+      "command": "include"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch05_experiments.tex",
+      "command": "include"
+    },
+    {
+      "parent": "thesis/thesis.tex",
+      "child": "thesis/body/ch06_conclusion.tex",
+      "command": "include"
+    }
+  ],
+  "missing": [],
+  "duplicate_occurrences": [],
+  "warnings": []
+}

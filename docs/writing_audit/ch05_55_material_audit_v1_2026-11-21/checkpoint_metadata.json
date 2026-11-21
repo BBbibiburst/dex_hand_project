@@ -1,0 +1,89 @@
+{
+  "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/translator/checkpoint.pt",
+  "sha256": "c98e1146ae2f8d17ce05ecffacbfeaf24e1cf07db4d51783c69355fcacfb7b6a",
+  "checkpoint_keys": [
+    "model",
+    "epoch",
+    "optimizer_steps"
+  ],
+  "epoch": 30,
+  "optimizer_steps": 570,
+  "parameter_count": 181824,
+  "state_dict": {
+    "gru.weight_ih_l0": {
+      "shape": [
+        384,
+        64
+      ],
+      "dtype": "torch.float32",
+      "numel": 24576
+    },
+    "gru.weight_hh_l0": {
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "torch.float32",
+      "numel": 49152
+    },
+    "gru.bias_ih_l0": {
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "numel": 384
+    },
+    "gru.bias_hh_l0": {
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "numel": 384
+    },
+    "gru.weight_ih_l1": {
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "torch.float32",
+      "numel": 49152
+    },
+    "gru.weight_hh_l1": {
+      "shape": [
+        384,
+        128
+      ],
+      "dtype": "torch.float32",
+      "numel": 49152
+    },
+    "gru.bias_ih_l1": {
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "numel": 384
+    },
+    "gru.bias_hh_l1": {
+      "shape": [
+        384
+      ],
+      "dtype": "torch.float32",
+      "numel": 384
+    },
+    "projection.weight": {
+      "shape": [
+        64,
+        128
+      ],
+      "dtype": "torch.float32",
+      "numel": 8192
+    },
+    "projection.bias": {
+      "shape": [
+        64
+      ],
+      "dtype": "torch.float32",
+      "numel": 64
+    }
+  }
+}

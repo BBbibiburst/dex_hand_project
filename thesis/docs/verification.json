@@ -1,0 +1,121 @@
+{
+  "template_runtime_unchanged": true,
+  "upstream_worktree_unchanged": true,
+  "documents": {
+    "thesis": {
+      "pages": 12,
+      "Chinese_text_extractable": true,
+      "Fandol_embedded": true,
+      "SyncTeX_present": true,
+      "outline": [
+        [
+          1,
+          "面向灵巧手触觉信号的仿真到现实迁移方法研究",
+          1
+        ],
+        [
+          1,
+          "Title to be confirmed",
+          3
+        ],
+        [
+          1,
+          "摘 要",
+          4
+        ],
+        [
+          1,
+          "Abstract",
+          5
+        ],
+        [
+          1,
+          "目 录",
+          6
+        ],
+        [
+          1,
+          "第1章 绪论",
+          7
+        ],
+        [
+          1,
+          "第2章 灵巧手触觉数据与跨域迁移问题定义",
+          8
+        ],
+        [
+          1,
+          "第3章 基于双变分自编码器的触觉跨域表示与初始迁移",
+          9
+        ],
+        [
+          1,
+          "第4章 基于迭代对抗学习的触觉迁移方法",
+          10
+        ],
+        [
+          1,
+          "第5章 实验结果与分析",
+          11
+        ],
+        [
+          1,
+          "第6章 总结与展望",
+          12
+        ]
+      ],
+      "fonts": [
+        "FQAKOK+FandolKai-Regular-Identity-H",
+        "JUWCCN+FandolHei-Regular-Identity-H",
+        "KNSXTL+TeXGyreTermesX-Regular-Identity-H",
+        "PQPNOK+FandolSong-Bold-Identity-H",
+        "PSUTRT+TeXGyreTermesX-Bold-Identity-H",
+        "XKTRGJ+FandolSong-Regular-Identity-H"
+      ]
+    },
+    "compile_smoke": {
+      "pages": 5,
+      "Chinese_text_extractable": true,
+      "Fandol_embedded": true,
+      "SyncTeX_present": true,
+      "outline": [
+        [
+          1,
+          "目 录",
+          1
+        ],
+        [
+          1,
+          "插图索引",
+          2
+        ],
+        [
+          1,
+          "表格索引",
+          3
+        ],
+        [
+          1,
+          "第1章 工程编译测试",
+          4
+        ],
+        [
+          1,
+          "参考文献",
+          5
+        ]
+      ],
+      "fonts": [
+        "CNETHE+txmiaX",
+        "GGDEJM+txsys",
+        "IPPUBR+FandolHei-Regular-Identity-H",
+        "JSYAZB+FandolSong-Regular-Identity-H",
+        "UICXOK+TeXGyreTermesX-Regular",
+        "YJYWNB+TeXGyreTermesX-Regular-Identity-H"
+      ]
+    }
+  },
+  "bibliography_test": true,
+  "figure_table_equation_labels": true,
+  "GUI_hotkeys": "configured; not interacted with VSCode GUI"
+}

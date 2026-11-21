@@ -1,0 +1,26 @@
+# Project-only compatibility for latexmk 4.88 + -outdir.
+# Load AFTER the byte-identical upstream latexmkrc.
+# The upstream $$Psource retains "build/..." after latexmk chdir to build/;
+# arguments passed to the internal command already contain correct local paths.
+$makeindex = 'internal thesis_splitindex';
+@cus_dep_list = grep { $_ ne 'idx ind 0 makenomenclature' } @cus_dep_list;
+sub thesis_splitindex {
+    my @args = @_;
+    my $source = $args[-1];
+    my $destination;
+    for (my $i = 0; $i < @args - 1; $i++) {
+        if ($args[$i] eq '-o') { $destination = $args[$i + 1]; }
+    }
+    if (!defined $destination) {
+        ($destination = $source) =~ s/\.idx$/.ind/;
+    }
+    # A skeleton has no index entries: an empty output is the correct result.
+    if (-f $source && !-s $source) {
+        open(my $fh, '>', $destination) or die "Cannot write $destination: $!";
+        close($fh);
+        return 0;
+    }
+    my $ret = system('makeindex', @args);
+    return $ret if $ret;
+    return system('splitindex', $source);
+}

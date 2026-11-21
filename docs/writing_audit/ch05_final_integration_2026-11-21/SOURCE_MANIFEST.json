@@ -1,0 +1,52 @@
+{
+  "5_1": {
+    "source": "thesis/releases/ch05_5_1_2026-11-21/section_5_1.tex",
+    "sha256": "f93ad4b25bfa2e65e6068606dd48927012e2588e5ca24d1cad0078495f5d3281",
+    "state": "FROZEN_DRAFT",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_1.tex",
+    "copy_sha256": "f93ad4b25bfa2e65e6068606dd48927012e2588e5ca24d1cad0078495f5d3281",
+    "copy_identical_final": true
+  },
+  "5_3": {
+    "source": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+    "sha256": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+    "state": "FROZEN_DRAFT",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_3.tex",
+    "copy_sha256": "d95b38fdf9821ad10cb9969475fcfdc7d44392a27d4424745bacc55ab99df77b",
+    "copy_identical_final": true
+  },
+  "5_4": {
+    "source": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+    "sha256": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+    "state": "FROZEN_DRAFT",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_4.tex",
+    "copy_sha256": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+    "copy_identical_final": true
+  },
+  "5_6": {
+    "source": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+    "sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+    "state": "FROZEN_DRAFT",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_6.tex",
+    "copy_sha256": "e6340ccebf835104f257dca05df1e398545230c59661291176fa862eb5586091",
+    "copy_identical_final": true
+  },
+  "5_2": {
+    "source": "docs/writing_audit/ch05_final_integration_2026-11-21/section_5_2_v1_1/section_5_2.tex",
+    "sha256": "0468d48a23847c327e6084aef46b993d43614ad46f1e321753ac00d70015eeb5",
+    "state": "V1.1_INTEGRATED_DRAFT",
+    "parent": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_2_v1_2026-11-21/section_5_2.tex",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_2.tex",
+    "copy_sha256": "0468d48a23847c327e6084aef46b993d43614ad46f1e321753ac00d70015eeb5",
+    "copy_identical_final": true
+  },
+  "5_5": {
+    "source": "thesis/releases/ch05_5_5_2026-11-21/section_5_5.tex",
+    "sha256": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+    "state": "FROZEN_DRAFT",
+    "integrated_copy": "thesis/body/ch05_sections/section_5_5.tex",
+    "copy_sha256": "4dd9349979abcae4f2c88b2ecb11dc0dfc76b28c455c5e8fec14310a53b96bea",
+    "release_pdf_sha256": "dba6266f8b91554d7ff161290096af45dd2c8aa6f2b036f6b51cd28ede7e3e68",
+    "copy_identical_final": true
+  }
+}

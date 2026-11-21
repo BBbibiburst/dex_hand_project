@@ -1,0 +1,37 @@
+{
+  "dictionary_rows": 480,
+  "unique_first_saved_state_fingerprints": 160,
+  "rows_per_fingerprint_distribution": {
+    "3": 160
+  },
+  "logged_candidate_attempts": 3593,
+  "failed_statistics_gate_attempts": 2153,
+  "failed_artifact_presence": {
+    "episode.npz": 2153,
+    "condition.json": 2153,
+    "contact_records.json": 2153
+  },
+  "first_failed_record": {
+    "role": "train",
+    "target_id": "train_000",
+    "candidate_index": "0",
+    "path": "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0",
+    "passed": "False"
+  },
+  "sample_file_hashes": {
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/episode.npz": "ca82bbde55a6af5599799d6b4cdc3427a09fb9f1cd4bc42d276dfcedd59d43a8",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/condition.json": "4f38c38ce48c59ee39f7a28d6242e78230ee075f54330fc09c9ca2f0dc98be88",
+    "/home/zmy/dex_hand_project/outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/inverse/inverse_train_000_try0/repeat_0/contact_records.json": "bf5b0fec8b9e5da651332c75d6cf46e03f7a3b98e0df7d2a8f5dadd5132f60fb"
+  },
+  "all_candidate_metadata_roles": [
+    "train",
+    "validation"
+  ],
+  "GMM_copy_hashes": {
+    "outputs/tactile_gmm_dual_vae_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da",
+    "outputs/tactile_p43_latent_translator_integrated_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da",
+    "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/gmm_parameters.npz": "155ab1d480dbbaff6a7a5d25e5064071de8b0bf0dac6c51990eae594f50ce3da"
+  },
+  "no_payload_decoding": true,
+  "no_training_or_model_execution": true
+}

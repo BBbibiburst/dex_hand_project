@@ -1,0 +1,944 @@
+{
+  "checked_sources": [
+    {
+      "path": "assets/grippers/dex_hand/dex_hand.xml",
+      "sha256_before": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+      "sha256_after": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_end_0_p.STL",
+      "sha256_before": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+      "sha256_after": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_end_1_p.STL",
+      "sha256_before": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+      "sha256_after": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_end_2_p.STL",
+      "sha256_before": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+      "sha256_after": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_end_3_p.STL",
+      "sha256_before": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+      "sha256_after": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_push_0_p.STL",
+      "sha256_before": "fba9986e5b144891347a95f61f9671885bd68f5d3e735552041c35d87b84b780",
+      "sha256_after": "fba9986e5b144891347a95f61f9671885bd68f5d3e735552041c35d87b84b780",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_push_1_p.STL",
+      "sha256_before": "cec2b2c9531eb98e3eb3d0ce18f47cb2daf448752380f1e9fdfae875bff589f7",
+      "sha256_after": "cec2b2c9531eb98e3eb3d0ce18f47cb2daf448752380f1e9fdfae875bff589f7",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_push_2_p.STL",
+      "sha256_before": "91c28a25364c0762469d5ddc906d41160e26c28b9e173d9ed33633e066f92042",
+      "sha256_after": "91c28a25364c0762469d5ddc906d41160e26c28b9e173d9ed33633e066f92042",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_push_3_p.STL",
+      "sha256_before": "02ea3b6b60dea9efd4239ccb2b413682c8faf9119fc8e34b8c195ef933deb9e6",
+      "sha256_after": "02ea3b6b60dea9efd4239ccb2b413682c8faf9119fc8e34b8c195ef933deb9e6",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_root_0_p.STL",
+      "sha256_before": "0eef028c75243f7bd01993c1ef43033eaaf76b6a0f7da262d16d32c5330a3293",
+      "sha256_after": "0eef028c75243f7bd01993c1ef43033eaaf76b6a0f7da262d16d32c5330a3293",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_root_1_p.STL",
+      "sha256_before": "89f3b43c9c0c275ffbaa271b6ad51265da2b07d21f474d503cd096527ec3a447",
+      "sha256_after": "89f3b43c9c0c275ffbaa271b6ad51265da2b07d21f474d503cd096527ec3a447",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_root_2_p.STL",
+      "sha256_before": "4517aafa3d127874b235c0e8429db680e5c79dfb1f43963f17c6981551b04a8b",
+      "sha256_after": "4517aafa3d127874b235c0e8429db680e5c79dfb1f43963f17c6981551b04a8b",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/act_root_3_p.STL",
+      "sha256_before": "901974293563a69e5edd72c050b69a3d9b16978d4c0f9fb992ab8b7fba512fd2",
+      "sha256_after": "901974293563a69e5edd72c050b69a3d9b16978d4c0f9fb992ab8b7fba512fd2",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_0_p.STL",
+      "sha256_before": "c7aff1536958f780b403cb83cad984cce4ea642617f74c3d830f2f294f0d887e",
+      "sha256_after": "c7aff1536958f780b403cb83cad984cce4ea642617f74c3d830f2f294f0d887e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_1_p.STL",
+      "sha256_before": "4a79ab6eeaded78a590ede6beb730993d0f091ca911b66b8506b9e01a22da698",
+      "sha256_after": "4a79ab6eeaded78a590ede6beb730993d0f091ca911b66b8506b9e01a22da698",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_2_p.STL",
+      "sha256_before": "649a6b9b1654172d4c1fd731458d069f365a6b5a822b8f11ab0e6ed431d7011b",
+      "sha256_after": "649a6b9b1654172d4c1fd731458d069f365a6b5a822b8f11ab0e6ed431d7011b",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_3_p.STL",
+      "sha256_before": "ac72158989db407f7c3b42ce4ee1c0b78cbca054bec2fbcca60d7ce95cad5a66",
+      "sha256_after": "ac72158989db407f7c3b42ce4ee1c0b78cbca054bec2fbcca60d7ce95cad5a66",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_close_0_p.STL",
+      "sha256_before": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+      "sha256_after": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_close_1_p.STL",
+      "sha256_before": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+      "sha256_after": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_close_2_p.STL",
+      "sha256_before": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+      "sha256_after": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_close_3_p.STL",
+      "sha256_before": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+      "sha256_after": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_connect_0_p.STL",
+      "sha256_before": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+      "sha256_after": "5a6d01eb95171dddda4dca0128b9c68d1892ceac5d3de5b5fc1b412aee68031f",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_connect_1_p.STL",
+      "sha256_before": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+      "sha256_after": "b108dac5330e817322e519bdb4fb4fc0b338dec3cba4f8b563a2f545f04da217",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_connect_2_p.STL",
+      "sha256_before": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+      "sha256_after": "663b28a2ef71c007cb88e48d0cc37cee4a9a5c8ff0d8765890dd1926f408e34e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/bar_connect_3_p.STL",
+      "sha256_before": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+      "sha256_after": "275676934605fd741a59f5aa54d5842085ed2440c53543feb74cfe734a6cc226",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/crank_close_0_p.STL",
+      "sha256_before": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+      "sha256_after": "befe62a7b391939315800afa00492586082a277cf1762a14d7c06e80102747a4",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/crank_close_1_p.STL",
+      "sha256_before": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+      "sha256_after": "75c604823d187a013a27dca904d292286bc4bdae2ff95c22b95369659d9ebdd6",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/crank_close_2_p.STL",
+      "sha256_before": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+      "sha256_after": "af1e421be23343bf852cea347bfbd89adf5c4fa5a11025db8fe368bf6e482684",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/crank_close_3_p.STL",
+      "sha256_before": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+      "sha256_after": "5f846a0bcacf600901abf29fa4e46aaea3a75da780fe4fbe672d807df3f94285",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_first_0_p.STL",
+      "sha256_before": "faf4f69682a695a2ba922e9a6819c8610657d851d0a17f093d8ee7f34e789803",
+      "sha256_after": "faf4f69682a695a2ba922e9a6819c8610657d851d0a17f093d8ee7f34e789803",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_first_1_p.STL",
+      "sha256_before": "6900c9c369a9e7b95bf277be42b5ab6e762bdc660856515b74cfb93482ff1a97",
+      "sha256_after": "6900c9c369a9e7b95bf277be42b5ab6e762bdc660856515b74cfb93482ff1a97",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_first_2_p.STL",
+      "sha256_before": "6502a1642adf8211f741b03d9b6fe452123d976cd3f757a8d5d88174652d6c17",
+      "sha256_after": "6502a1642adf8211f741b03d9b6fe452123d976cd3f757a8d5d88174652d6c17",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_first_3_p.STL",
+      "sha256_before": "f0421d54d5894b08eaae429f49a0f7e37433a8bc041c4ca76cc5239a58b384e6",
+      "sha256_after": "f0421d54d5894b08eaae429f49a0f7e37433a8bc041c4ca76cc5239a58b384e6",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_second_0_p.STL",
+      "sha256_before": "9ca250a717d4db68d03b5acfc4f8fffd4d6d26f19b056ff9d1d2c014465c9c4f",
+      "sha256_after": "9ca250a717d4db68d03b5acfc4f8fffd4d6d26f19b056ff9d1d2c014465c9c4f",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_second_1_p.STL",
+      "sha256_before": "80c2b13844cde3045cbfe4e1440f8e355c39e4940f21c51d596d971d6d7f1115",
+      "sha256_after": "80c2b13844cde3045cbfe4e1440f8e355c39e4940f21c51d596d971d6d7f1115",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_second_2_p.STL",
+      "sha256_before": "d6f3a64fdebe437bda096c3f65d198590b1077e6f9f01fb82a0fe8cf07b7fae3",
+      "sha256_after": "d6f3a64fdebe437bda096c3f65d198590b1077e6f9f01fb82a0fe8cf07b7fae3",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/finger_second_3_p.STL",
+      "sha256_before": "194685d81f45641d109783d9bcd788e90b93e549ba8f7f3dadb9c8e090144333",
+      "sha256_after": "194685d81f45641d109783d9bcd788e90b93e549ba8f7f3dadb9c8e090144333",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_0_0_p.STL",
+      "sha256_before": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+      "sha256_after": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_0_1_p.STL",
+      "sha256_before": "26e59eee9d295df58bf585740edf9529972d3800da4ec954c3d02aac724a82b5",
+      "sha256_after": "26e59eee9d295df58bf585740edf9529972d3800da4ec954c3d02aac724a82b5",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_0_2_p.STL",
+      "sha256_before": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+      "sha256_after": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_1_0_p.STL",
+      "sha256_before": "e260f5365f908a92b6af7a699daf94bcfff4a3a074fb49766a84df1d09bb4946",
+      "sha256_after": "e260f5365f908a92b6af7a699daf94bcfff4a3a074fb49766a84df1d09bb4946",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_1_1_p.STL",
+      "sha256_before": "b7acb77e3bd07084765de97be4a1055bfb3114813f21a2a1114719a83e0917eb",
+      "sha256_after": "b7acb77e3bd07084765de97be4a1055bfb3114813f21a2a1114719a83e0917eb",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_1_2_p.STL",
+      "sha256_before": "18de17d01792211244fa0e2950e99cedc818a6def3a1eb870c65d37b722035a7",
+      "sha256_after": "18de17d01792211244fa0e2950e99cedc818a6def3a1eb870c65d37b722035a7",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_2_0_p.STL",
+      "sha256_before": "14a42888b1e795372c92837b66bbc08bab3fd3d9a967497a4484a25991d88a69",
+      "sha256_after": "14a42888b1e795372c92837b66bbc08bab3fd3d9a967497a4484a25991d88a69",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_2_1_p.STL",
+      "sha256_before": "a2f47f951a5778734c8e7d9724ba912eb6cab1854797282eb7e136048d545b60",
+      "sha256_after": "a2f47f951a5778734c8e7d9724ba912eb6cab1854797282eb7e136048d545b60",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_2_2_p.STL",
+      "sha256_before": "fb6e7e0bbb93895d407938ee5ff55057abe4ccc7c7fa1e8e9de9f90e3888e62b",
+      "sha256_after": "fb6e7e0bbb93895d407938ee5ff55057abe4ccc7c7fa1e8e9de9f90e3888e62b",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_3_0_p.STL",
+      "sha256_before": "43b343edb283c647281aabcb5fd7ec41c96ba20a97b40ebdc2caf6fb67c53886",
+      "sha256_after": "43b343edb283c647281aabcb5fd7ec41c96ba20a97b40ebdc2caf6fb67c53886",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_3_1_p.STL",
+      "sha256_before": "dbac8e74a2089a409e844d079380e0330d5f4e75147a44b9490ed23fa4e08551",
+      "sha256_after": "dbac8e74a2089a409e844d079380e0330d5f4e75147a44b9490ed23fa4e08551",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_3_2_p.STL",
+      "sha256_before": "7e72f721774b2e21fa4667be18d1bb46de199198aae3e5e6867f9d159608f41f",
+      "sha256_after": "7e72f721774b2e21fa4667be18d1bb46de199198aae3e5e6867f9d159608f41f",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_4_0_p.STL",
+      "sha256_before": "2011461c167ea5f8044e379091e760f0110691a06b15202c6be52c6c3bf8425b",
+      "sha256_after": "2011461c167ea5f8044e379091e760f0110691a06b15202c6be52c6c3bf8425b",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_4_1_p.STL",
+      "sha256_before": "4dd4406fafb1a17354247c5859adade90b6dbab148277aa607ffc50e260fb7d2",
+      "sha256_after": "4dd4406fafb1a17354247c5859adade90b6dbab148277aa607ffc50e260fb7d2",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_4_2_p.STL",
+      "sha256_before": "a1620c78130f0f0d2a438998b4b3787526860c5b73843126cf66dfe9d0617a21",
+      "sha256_after": "a1620c78130f0f0d2a438998b4b3787526860c5b73843126cf66dfe9d0617a21",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/skin_palm_p.STL",
+      "sha256_before": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+      "sha256_after": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_first_close_p.STL",
+      "sha256_before": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+      "sha256_after": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_first_connect_p.STL",
+      "sha256_before": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+      "sha256_after": "cc9831a350907383d053235ecc758b1582d83a24e65bf14c850466293ba560e0",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_first_p.STL",
+      "sha256_before": "2a39d73a8da4120c458a4756d2f5807a193bf82ee7efcab173cbe500d8464be9",
+      "sha256_after": "2a39d73a8da4120c458a4756d2f5807a193bf82ee7efcab173cbe500d8464be9",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_second_close_p.STL",
+      "sha256_before": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+      "sha256_after": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_second_connect_p.STL",
+      "sha256_before": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+      "sha256_after": "4743f10361693d33ed59874d44506e1a8c53f644fb427d679db1ec0094fa9408",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_bar_second_p.STL",
+      "sha256_before": "7c2dce4347f1205d2cf0f2800d4b0c32ada63da23f813307e0d8e4fb5bf35ac8",
+      "sha256_after": "7c2dce4347f1205d2cf0f2800d4b0c32ada63da23f813307e0d8e4fb5bf35ac8",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_first_p.STL",
+      "sha256_before": "fd1fa6a7848f079c5fbf85d6d746d8f91027ad47a219e0dd4ec8015bcd3c4221",
+      "sha256_after": "fd1fa6a7848f079c5fbf85d6d746d8f91027ad47a219e0dd4ec8015bcd3c4221",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_grasp_act_end_p.STL",
+      "sha256_before": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+      "sha256_after": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_grasp_act_push_p.STL",
+      "sha256_before": "4b4a270320f139c646db82acce4b8de7cf7ee91e8be02781162380b320f062ed",
+      "sha256_after": "4b4a270320f139c646db82acce4b8de7cf7ee91e8be02781162380b320f062ed",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_grasp_act_root_p.STL",
+      "sha256_before": "0f83841983724f3becb906b8ba6a319e5ee263cc565000f557563f1b61056cc8",
+      "sha256_after": "0f83841983724f3becb906b8ba6a319e5ee263cc565000f557563f1b61056cc8",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_grasp_crank_close_p.STL",
+      "sha256_before": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+      "sha256_after": "65f187bfae9ed6b8b2079165a9e3ee13ba067d196dac3652611afc6e00a2bf68",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_rotate_act_end_p.STL",
+      "sha256_before": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+      "sha256_after": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_rotate_act_push_p.STL",
+      "sha256_before": "a470132573c141fa4a4668d685bcf485373082e52b062e4ddf9d0d90cd85be5c",
+      "sha256_after": "a470132573c141fa4a4668d685bcf485373082e52b062e4ddf9d0d90cd85be5c",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_rotate_act_root_p.STL",
+      "sha256_before": "b0e20b74b742aeed2ee3cf9a395c8fd2f31b5cc79f3eed5e11b7626fe777b0b2",
+      "sha256_after": "b0e20b74b742aeed2ee3cf9a395c8fd2f31b5cc79f3eed5e11b7626fe777b0b2",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_rotate_close_p.STL",
+      "sha256_before": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+      "sha256_after": "83342b75beeb5cd47b3d23661a6266c0267dc71481b3194e7e90f1fbe4d8656d",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_rotate_p.STL",
+      "sha256_before": "1bfa458485ce792a27b8a6679cd43eb142880e8ea14590d92afdf6266dd45fa6",
+      "sha256_after": "1bfa458485ce792a27b8a6679cd43eb142880e8ea14590d92afdf6266dd45fa6",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_second_p.STL",
+      "sha256_before": "34b91b52ec9b71197fae3186c8e6981127e2a7c316dbe6ba7a5158c9ee25b31a",
+      "sha256_after": "34b91b52ec9b71197fae3186c8e6981127e2a7c316dbe6ba7a5158c9ee25b31a",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/thumb_third_p.STL",
+      "sha256_before": "f5f4dd25758ba8971e4a123132bf6d9437cdaacd58c379f4e72cd023e10b7eef",
+      "sha256_after": "f5f4dd25758ba8971e4a123132bf6d9437cdaacd58c379f4e72cd023e10b7eef",
+      "unchanged": true
+    },
+    {
+      "path": "assets/grippers/dex_hand/meshes/v3_base_link.STL",
+      "sha256_before": "cb9d3203c96bdec4abce820b92e1c2c7e1e613c9d2876a748862d301e61ce42c",
+      "sha256_after": "cb9d3203c96bdec4abce820b92e1c2c7e1e613c9d2876a748862d301e61ce42c",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/base_link.STL",
+      "sha256_before": "9ef1c6cad6ca4d6484ff9ed9a7d7715b036e2e6100e2bcb8ecd18e2fbc4d04e9",
+      "sha256_after": "9ef1c6cad6ca4d6484ff9ed9a7d7715b036e2e6100e2bcb8ecd18e2fbc4d04e9",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link1.STL",
+      "sha256_before": "bbf0716a4a8516a36d198e1fba1696df2b2b354a22bbb8cb7e284ec8f1dca239",
+      "sha256_after": "bbf0716a4a8516a36d198e1fba1696df2b2b354a22bbb8cb7e284ec8f1dca239",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link2.STL",
+      "sha256_before": "796420ea8922133e8d0bf2a6534f01f4d5bec25729ca7d63b8af3191c67a532f",
+      "sha256_after": "796420ea8922133e8d0bf2a6534f01f4d5bec25729ca7d63b8af3191c67a532f",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link3.STL",
+      "sha256_before": "a1c7ae0934ea8ae0594a6deb830fc2f9c5dbf0c68444dff55d2f2c3aa5e73092",
+      "sha256_after": "a1c7ae0934ea8ae0594a6deb830fc2f9c5dbf0c68444dff55d2f2c3aa5e73092",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link4.STL",
+      "sha256_before": "9103bd209e04e729b2ef0bd57a93b27310ccc8fdfc9a6d9aeb1ce89866a7994c",
+      "sha256_after": "9103bd209e04e729b2ef0bd57a93b27310ccc8fdfc9a6d9aeb1ce89866a7994c",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link5.STL",
+      "sha256_before": "d4ea481e893d4558a1aca714df189f9938ab6b34ec79978fc2520b2dd54bdff9",
+      "sha256_after": "d4ea481e893d4558a1aca714df189f9938ab6b34ec79978fc2520b2dd54bdff9",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link6.STL",
+      "sha256_before": "6ddd71e96a1ea5c7b2349d2c4bb09de616b27f5a4fa9079c97e86819da551b6e",
+      "sha256_after": "6ddd71e96a1ea5c7b2349d2c4bb09de616b27f5a4fa9079c97e86819da551b6e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/meshes/link7.STL",
+      "sha256_before": "86623ca52e72628f2ff1cbbf81473c11a0ba791b7ae571164ca6a29157f30d04",
+      "sha256_after": "86623ca52e72628f2ff1cbbf81473c11a0ba791b7ae571164ca6a29157f30d04",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/rm75b.urdf",
+      "sha256_before": "b4eafc8b87e540fc89bb87e476f062e6e7c28dca960282566f131874eec428ee",
+      "sha256_after": "b4eafc8b87e540fc89bb87e476f062e6e7c28dca960282566f131874eec428ee",
+      "unchanged": true
+    },
+    {
+      "path": "assets/robots/rm75b/rm75b.xml",
+      "sha256_before": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+      "sha256_after": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+      "unchanged": true
+    },
+    {
+      "path": "configs/robot_profiles/rm75b_dex_hand.json",
+      "sha256_before": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399",
+      "sha256_after": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399",
+      "unchanged": true
+    },
+    {
+      "path": "source/control/__init__.py",
+      "sha256_before": "4a721cee04c7baf8b82746e45e07feedfd040fdc3160f75b7fda47e2966356f9",
+      "sha256_after": "4a721cee04c7baf8b82746e45e07feedfd040fdc3160f75b7fda47e2966356f9",
+      "unchanged": true
+    },
+    {
+      "path": "source/control/arm.py",
+      "sha256_before": "f511f6f3ed5ec4bed81e791c3dbf1bd7059256a8a12fff127cc5187cc00793b3",
+      "sha256_after": "f511f6f3ed5ec4bed81e791c3dbf1bd7059256a8a12fff127cc5187cc00793b3",
+      "unchanged": true
+    },
+    {
+      "path": "source/control/common.py",
+      "sha256_before": "ed25900f62c8aa88f4454a7088e295ea12ab9cd3a58843e59d6628868a23ce10",
+      "sha256_after": "ed25900f62c8aa88f4454a7088e295ea12ab9cd3a58843e59d6628868a23ce10",
+      "unchanged": true
+    },
+    {
+      "path": "source/control/composite.py",
+      "sha256_before": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+      "sha256_after": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+      "unchanged": true
+    },
+    {
+      "path": "source/control/end_effectors.py",
+      "sha256_before": "5f0e68dff7663dcb1a1b6cc7b834fc546d18ee222c61cd2e7687cb130339193a",
+      "sha256_after": "5f0e68dff7663dcb1a1b6cc7b834fc546d18ee222c61cd2e7687cb130339193a",
+      "unchanged": true
+    },
+    {
+      "path": "source/data/production_recorder.py",
+      "sha256_before": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+      "sha256_after": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/__init__.py",
+      "sha256_before": "60947d585dfce3618d1b3d736a58af5d737466c0cbf5c346b414898df68ca596",
+      "sha256_after": "60947d585dfce3618d1b3d736a58af5d737466c0cbf5c346b414898df68ca596",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/arenas.py",
+      "sha256_before": "a33716cc4c7a8a3839b6a1b718f2b7e248084dc5c5d6af48bf563e0deaad5511",
+      "sha256_after": "a33716cc4c7a8a3839b6a1b718f2b7e248084dc5c5d6af48bf563e0deaad5511",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/base.py",
+      "sha256_before": "4ee14403780d1487dd3477c37769e2370311c06936bc5a8c8ef88a7e164cc263",
+      "sha256_after": "4ee14403780d1487dd3477c37769e2370311c06936bc5a8c8ef88a7e164cc263",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/bindings.py",
+      "sha256_before": "c71032709a18a13702d4e0bb0c6c8e51dd503b5c7ff6f966bf9ae2c88a6da9ca",
+      "sha256_after": "c71032709a18a13702d4e0bb0c6c8e51dd503b5c7ff6f966bf9ae2c88a6da9ca",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/builtins.py",
+      "sha256_before": "f27274b60d514f390283601082d3f0b8f1feb95a471fc311a337696ce5d127c0",
+      "sha256_after": "f27274b60d514f390283601082d3f0b8f1feb95a471fc311a337696ce5d127c0",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/factory.py",
+      "sha256_before": "39472444756c64c6298b215b3066695d2c4b5846a78279808dd91981a88e2148",
+      "sha256_after": "39472444756c64c6298b215b3066695d2c4b5846a78279808dd91981a88e2148",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/lift.py",
+      "sha256_before": "d98467faa5f7c8b48a9f2fcd851f7509b33e65233dcf6db1e2bde99ad2835eb6",
+      "sha256_after": "d98467faa5f7c8b48a9f2fcd851f7509b33e65233dcf6db1e2bde99ad2835eb6",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/nut_assembly.py",
+      "sha256_before": "28609dba0450fffaf6aec233b83d629de9736366b83e16240235ac475ac3c2b9",
+      "sha256_after": "28609dba0450fffaf6aec233b83d629de9736366b83e16240235ac475ac3c2b9",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/object_catalog.py",
+      "sha256_before": "f6d684f8f01f4ce02780ef52ec961c4977e884e71ab516842e4d352611e5e44a",
+      "sha256_after": "f6d684f8f01f4ce02780ef52ec961c4977e884e71ab516842e4d352611e5e44a",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/objects.py",
+      "sha256_before": "1b7217ef44369e878b1a604670e782bbccf08e6bee16e831393ee9dd088448f3",
+      "sha256_after": "1b7217ef44369e878b1a604670e782bbccf08e6bee16e831393ee9dd088448f3",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/pick_place.py",
+      "sha256_before": "42b299d90a6bb2158929e0d7d734d0ce728315a2f72d73597b8db8ee637a49aa",
+      "sha256_after": "42b299d90a6bb2158929e0d7d734d0ce728315a2f72d73597b8db8ee637a49aa",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/placement.py",
+      "sha256_before": "3eb20fb78bdfdba6582c45a4ee273b2db227851513833508b409ee060aec80ee",
+      "sha256_after": "3eb20fb78bdfdba6582c45a4ee273b2db227851513833508b409ee060aec80ee",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/push.py",
+      "sha256_before": "c1f95c1a58dea344b0efe8d278eee9520905b4dc57e6b07d32ff466df4ae8e99",
+      "sha256_after": "c1f95c1a58dea344b0efe8d278eee9520905b4dc57e6b07d32ff466df4ae8e99",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/rewards.py",
+      "sha256_before": "08340d53c6611ba291b5e41659aa67067e489e00adf6ec9fe284dec2febb11c1",
+      "sha256_after": "08340d53c6611ba291b5e41659aa67067e489e00adf6ec9fe284dec2febb11c1",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/manipulation/stack.py",
+      "sha256_before": "29ef099150be4f11d6f807d5e3ad74061e298936705428267930b45ff3e5964a",
+      "sha256_after": "29ef099150be4f11d6f807d5e3ad74061e298936705428267930b45ff3e5964a",
+      "unchanged": true
+    },
+    {
+      "path": "source/envs/rl_env.py",
+      "sha256_before": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+      "sha256_after": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/__init__.py",
+      "sha256_before": "5a5f51f42b8afe334a827eb8bb89fd18457b301491095a42fe156a6e1d23a688",
+      "sha256_after": "5a5f51f42b8afe334a827eb8bb89fd18457b301491095a42fe156a6e1d23a688",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/arms/__init__.py",
+      "sha256_before": "2c699b07bebe590444fe4f96fbe785826597fb59167d033fca99f396be73ac71",
+      "sha256_after": "2c699b07bebe590444fe4f96fbe785826597fb59167d033fca99f396be73ac71",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/arms/rm75b.py",
+      "sha256_before": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+      "sha256_after": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/bases/__init__.py",
+      "sha256_before": "6067b976a5579544dc1546a758a06b98ded03bd23cc73d0f6cb066fa37a883a3",
+      "sha256_after": "6067b976a5579544dc1546a758a06b98ded03bd23cc73d0f6cb066fa37a883a3",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/bases/rethink_minimal_mount.py",
+      "sha256_before": "34553e392a159094af415e116c2413c8ab59fccb4f84c5021109398204791145",
+      "sha256_after": "34553e392a159094af415e116c2413c8ab59fccb4f84c5021109398204791145",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/builder.py",
+      "sha256_before": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356",
+      "sha256_after": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/config.py",
+      "sha256_before": "443eaf186fdb45f82e12ea604c03782ee484aaa48af38941bb7a3e5fadc49bcd",
+      "sha256_after": "443eaf186fdb45f82e12ea604c03782ee484aaa48af38941bb7a3e5fadc49bcd",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/defaults.py",
+      "sha256_before": "32d8329a84d5f3e55a40e1775ce3714a5e966d584b791f684fe62d87b42c341f",
+      "sha256_after": "32d8329a84d5f3e55a40e1775ce3714a5e966d584b791f684fe62d87b42c341f",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/descriptors.py",
+      "sha256_before": "09fa0cdc9c95714eec11aafc29ab1ed821f056be0e3fb205deb7f62748284cc9",
+      "sha256_after": "09fa0cdc9c95714eec11aafc29ab1ed821f056be0e3fb205deb7f62748284cc9",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/hands/__init__.py",
+      "sha256_before": "dd2a07f9d73cb8d5270eae3a249a7672fedeaffcea48117478642df9cac23188",
+      "sha256_after": "dd2a07f9d73cb8d5270eae3a249a7672fedeaffcea48117478642df9cac23188",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/hands/dex_hand.py",
+      "sha256_before": "f3d8f24150ae0fb3a625a594d38bfaeddd5ff0b3977b79f3cc15971c0079927f",
+      "sha256_after": "f3d8f24150ae0fb3a625a594d38bfaeddd5ff0b3977b79f3cc15971c0079927f",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/hands/pika_gripper.py",
+      "sha256_before": "3be5fb9a86f6626d2e7cc16f3f836546028c5369c1433563589ef0a5216d093e",
+      "sha256_after": "3be5fb9a86f6626d2e7cc16f3f836546028c5369c1433563589ef0a5216d093e",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/registry.py",
+      "sha256_before": "bed965ca0d9e904a82c6f13f043e63259a897d55a2933003802702d390570c45",
+      "sha256_after": "bed965ca0d9e904a82c6f13f043e63259a897d55a2933003802702d390570c45",
+      "unchanged": true
+    },
+    {
+      "path": "source/robots/scene.py",
+      "sha256_before": "26e9f0995198c8e5733e662509f49436b9cc4ecd98d253f08557d35487e271d9",
+      "sha256_after": "26e9f0995198c8e5733e662509f49436b9cc4ecd98d253f08557d35487e271d9",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/__init__.py",
+      "sha256_before": "10ff15378d4f5e25ce99d365457cf78f98ebb321a3312df32b154a78fdb831c6",
+      "sha256_after": "10ff15378d4f5e25ce99d365457cf78f98ebb321a3312df32b154a78fdb831c6",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/dex_hand.py",
+      "sha256_before": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+      "sha256_after": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/__init__.py",
+      "sha256_before": "d1a76daa71537aa092295dcbceab48203ce282f686c277bbad539b214090ad6e",
+      "sha256_after": "d1a76daa71537aa092295dcbceab48203ce282f686c277bbad539b214090ad6e",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/bezier.py",
+      "sha256_before": "1f34cfee10743e9c207b3a0ccd7720cb4f422ca2c5c7e73f64f9b4ea86ef2377",
+      "sha256_after": "1f34cfee10743e9c207b3a0ccd7720cb4f422ca2c5c7e73f64f9b4ea86ef2377",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/ellipse.py",
+      "sha256_before": "46833cba5dbedca6642f0a7a89dbf39c3e689f226dc68785c92cec0e5e18596f",
+      "sha256_after": "46833cba5dbedca6642f0a7a89dbf39c3e689f226dc68785c92cec0e5e18596f",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/fingertip.py",
+      "sha256_before": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b",
+      "sha256_after": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/layout.py",
+      "sha256_before": "314935d11cbd45a62b2280b24f42708e3adfa4c3ff6f32213b52785886798a4d",
+      "sha256_after": "314935d11cbd45a62b2280b24f42708e3adfa4c3ff6f32213b52785886798a4d",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/plot_data.py",
+      "sha256_before": "8220ba7818432a51f01ce476992905b3dbbf521529b29f1d5fd1aef746850c8d",
+      "sha256_after": "8220ba7818432a51f01ce476992905b3dbbf521529b29f1d5fd1aef746850c8d",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/primitives.py",
+      "sha256_before": "44de49bdcf10bb206bb9f3d3264739b401002073b04d88766e956262d1e3bca3",
+      "sha256_after": "44de49bdcf10bb206bb9f3d3264739b401002073b04d88766e956262d1e3bca3",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/projection.py",
+      "sha256_before": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f",
+      "sha256_after": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/segment.py",
+      "sha256_before": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd",
+      "sha256_after": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/stl.py",
+      "sha256_before": "ca4b5fa56fef08eaacce219534a8c658fbd289b50c35972a1508bf243686f81b",
+      "sha256_after": "ca4b5fa56fef08eaacce219534a8c658fbd289b50c35972a1508bf243686f81b",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/fitting/surfaces.py",
+      "sha256_before": "40836ed416f76377de1d44cfa8bcd735f207742727536e84010b32b5de6c05b3",
+      "sha256_after": "40836ed416f76377de1d44cfa8bcd735f207742727536e84010b32b5de6c05b3",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/pika_gripper.py",
+      "sha256_before": "28d940a0c5cf9b6cbfde2ade8f1d0420d4682a9eb3bf10ad18c49752f0a0eade",
+      "sha256_after": "28d940a0c5cf9b6cbfde2ade8f1d0420d4682a9eb3bf10ad18c49752f0a0eade",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/probe.py",
+      "sha256_before": "0434660b307f1d26136f5dbf7f5e23feba02968094faaa52f28b0b1cf982bdec",
+      "sha256_after": "0434660b307f1d26136f5dbf7f5e23feba02968094faaa52f28b0b1cf982bdec",
+      "unchanged": true
+    },
+    {
+      "path": "source/sensors/tactile/signal_processing.py",
+      "sha256_before": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+      "sha256_after": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/AGENTS.md",
+      "sha256_before": "5d06110f1919f8b617155f1b1b8565a491483dbf370fec1b65d8d36e90c6e6b8",
+      "sha256_after": "5d06110f1919f8b617155f1b1b8565a491483dbf370fec1b65d8d36e90c6e6b8",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/EXPERIMENT_EVIDENCE.md",
+      "sha256_before": "b95b1eaf428f6a35ff0bdb2f9c18e054e5bd8935a91f6829f14df421d79cd961",
+      "sha256_after": "b95b1eaf428f6a35ff0bdb2f9c18e054e5bd8935a91f6829f14df421d79cd961",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/REFERENCE_THESIS_ANALYSIS.md",
+      "sha256_before": "63a0a867af7a7e3c5faa9534ca76c9af6ed56a3b612a5607b02f9b7bdbb2eb3f",
+      "sha256_after": "63a0a867af7a7e3c5faa9534ca76c9af6ed56a3b612a5607b02f9b7bdbb2eb3f",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/ROBOTICS_EVIDENCE.md",
+      "sha256_before": "a6c0c1b97f8eb9212d8539fbffc4285ec78f58e62d2eca8e3775d61684377786",
+      "sha256_after": "a6c0c1b97f8eb9212d8539fbffc4285ec78f58e62d2eca8e3775d61684377786",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/SYMBOLS_AND_TERMS.md",
+      "sha256_before": "33f99217c647a7ae10599cd5d49234e9c910db4f5c50286049a5e3309b115c83",
+      "sha256_after": "33f99217c647a7ae10599cd5d49234e9c910db4f5c50286049a5e3309b115c83",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/THESIS_LENGTH_BUDGET.md",
+      "sha256_before": "fc75568738382eeb23d1ca7de9cde10c7e40403cc8380ab2387274009d846301",
+      "sha256_after": "fc75568738382eeb23d1ca7de9cde10c7e40403cc8380ab2387274009d846301",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/THESIS_PLAN_V2.md",
+      "sha256_before": "b3a4d425fe6fd8c2811affaae0911ed7d11453e1f576f660315a84a0a3bca056",
+      "sha256_after": "b3a4d425fe6fd8c2811affaae0911ed7d11453e1f576f660315a84a0a3bca056",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/THESIS_WRITING_STANDARD.md",
+      "sha256_before": "2b93cf36928440665bf5a6e49e3fb8934e1ddb5740b1885dcbedf4d299e56daf",
+      "sha256_after": "2b93cf36928440665bf5a6e49e3fb8934e1ddb5740b1885dcbedf4d299e56daf",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/body/ch01_introduction.tex",
+      "sha256_before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "sha256_after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/reference.bib",
+      "sha256_before": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053",
+      "sha256_after": "300a2d3845312d10b0be1fe180f9d41ffad379c6976478a72fd9ffe85b618053",
+      "unchanged": true
+    },
+    {
+      "path": "thesis/thesis.tex",
+      "sha256_before": "ad757386c9e6fb62c3d129724fa258dd832304ad43d18f90b0964eb7ffdc83f7",
+      "sha256_after": "ad757386c9e6fb62c3d129724fa258dd832304ad43d18f90b0964eb7ffdc83f7",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/result.json",
+      "sha256_before": "49046158b111c3c45c4d76892864c1b8d22c4573a1b074340bc778bb2bc4c202",
+      "sha256_after": "49046158b111c3c45c4d76892864c1b8d22c4573a1b074340bc778bb2bc4c202",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json",
+      "sha256_before": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+      "sha256_after": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/result.json",
+      "sha256_before": "3d83e3970496531094d62f83e1a5520d8e812a9845adabfe6b5e36a74a1d42f4",
+      "sha256_after": "3d83e3970496531094d62f83e1a5520d8e812a9845adabfe6b5e36a74a1d42f4",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/manifest.json",
+      "sha256_before": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8",
+      "sha256_after": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/result.json",
+      "sha256_before": "fb2a7e8e5e75c89a04b27489cfa6330d6072608e11716f7addbfa1a1342a95b7",
+      "sha256_after": "fb2a7e8e5e75c89a04b27489cfa6330d6072608e11716f7addbfa1a1342a95b7",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/manifest.json",
+      "sha256_before": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139",
+      "sha256_after": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/result.json",
+      "sha256_before": "0039ca5665b5d6dc2e43fdd6656e3b87a9654ac4222f8990a58b1ba4f51da673",
+      "sha256_after": "0039ca5665b5d6dc2e43fdd6656e3b87a9654ac4222f8990a58b1ba4f51da673",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/manifest.json",
+      "sha256_before": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65",
+      "sha256_after": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json",
+      "sha256_before": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657",
+      "sha256_after": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657",
+      "unchanged": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json",
+      "sha256_before": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+      "sha256_after": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+      "unchanged": true
+    }
+  ],
+  "all_unchanged": true,
+  "no_simulation_or_training": true,
+  "official_thesis_sources_modified": false,
+  "note": "read-only snapshots cover listed source/config and historical metadata; NPZ SHA in model_and_episode_audit.json"
+}

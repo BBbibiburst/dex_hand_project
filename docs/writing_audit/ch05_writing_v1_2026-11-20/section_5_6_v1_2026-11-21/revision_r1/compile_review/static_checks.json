@@ -1,0 +1,18 @@
+{
+  "pages": 3,
+  "TeXcount": 1605,
+  "no_visible_text_change": true,
+  "R1_source_untouched": true,
+  "table_refs_resolved": true,
+  "overfull": false,
+  "underfull": false,
+  "new_external_citations": 0,
+  "figure_number": "5-5",
+  "table_numbers": [
+    "5-2",
+    "5-3"
+  ],
+  "small_layout_fix": "one \\mbox{不能} in temporary copy",
+  "compiled": true,
+  "frozen": false
+}

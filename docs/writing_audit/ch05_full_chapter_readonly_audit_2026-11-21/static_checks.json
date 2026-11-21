@@ -1,0 +1,289 @@
+{
+  "labels": [
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 3,
+      "value": "sec:ch05_gmm_pseudopairs"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 18,
+      "value": "fig:ch05_gmm_physical_pipeline"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 26,
+      "value": "eq:ch05_gmm_prior"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 38,
+      "value": "eq:ch05_gmm_responsibility"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 45,
+      "value": "tab:ch05_probe_dictionary"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 73,
+      "value": "fig:ch05_gmm_candidate_selection"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 80,
+      "value": "eq:ch05_pair_selection"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 3,
+      "value": "sec:ch05_dual_vae_representation"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 22,
+      "value": "fig:ch05_dual_vae"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 30,
+      "value": "eq:ch05_vae_reparameterization"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 39,
+      "value": "eq:ch05_vae_gamma_mixture"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 53,
+      "value": "eq:ch05_vae_objective"
+    },
+    {
+      "section": "5.5",
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 3,
+      "value": "sec:ch05_latent_translator"
+    },
+    {
+      "section": "5.5",
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 9,
+      "value": "eq:ch05_translator_mapping"
+    },
+    {
+      "section": "5.5",
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 23,
+      "value": "eq:ch05_translator_objective"
+    },
+    {
+      "section": "5.5",
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 42,
+      "value": "fig:ch05_translator_paths"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 3,
+      "value": "sec:ch05_reconstruction_results"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 17,
+      "value": "fig:ch05_c0_validation_protocol"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 27,
+      "value": "tab:ch05_transfer_summary"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 39,
+      "value": "tab:ch05_validation_instances"
+    }
+  ],
+  "duplicate_labels": {},
+  "references": [
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 5,
+      "value": "fig:ch05_gmm_physical_pipeline"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 60,
+      "value": "tab:ch05_probe_dictionary"
+    },
+    {
+      "section": "5.3",
+      "path": "thesis/releases/ch05_5_3_2026-11-21/section_5_3.tex",
+      "line": 84,
+      "value": "fig:ch05_gmm_candidate_selection"
+    },
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 5,
+      "value": "fig:ch05_dual_vae"
+    },
+    {
+      "section": "5.5",
+      "path": "docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_5_v1_2026-11-21/revision_r1/section_5_5.tex",
+      "line": 27,
+      "value": "fig:ch05_translator_paths"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 22,
+      "value": "tab:ch05_transfer_summary"
+    },
+    {
+      "section": "5.6",
+      "path": "thesis/releases/ch05_5_6_2026-11-21/section_5_6.tex",
+      "line": 22,
+      "value": "tab:ch05_validation_instances"
+    }
+  ],
+  "unresolved_refs": [],
+  "citations": [
+    {
+      "section": "5.4",
+      "path": "thesis/releases/ch05_5_4_2026-11-21/section_5_4.tex",
+      "line": 5,
+      "value": "kingma2014vae"
+    }
+  ],
+  "missing_citations": [],
+  "duplicate_used_bibkeys": [],
+  "structures": {
+    "5.3": {
+      "sections": 1,
+      "figures": 2,
+      "tables": 1,
+      "equations": 3,
+      "cite_occurrences": 0
+    },
+    "5.4": {
+      "sections": 1,
+      "figures": 1,
+      "tables": 0,
+      "equations": 3,
+      "cite_occurrences": 1
+    },
+    "5.5": {
+      "sections": 1,
+      "figures": 1,
+      "tables": 0,
+      "equations": 2,
+      "cite_occurrences": 0
+    },
+    "5.6": {
+      "sections": 1,
+      "figures": 1,
+      "tables": 2,
+      "equations": 0,
+      "cite_occurrences": 0
+    }
+  },
+  "combined": {
+    "text": 6145,
+    "headings": 62,
+    "captions_footnotes": 118,
+    "heading_count": 4,
+    "float_count": 8,
+    "inline_math": 112,
+    "display_math": 8,
+    "total": 6325,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/available_sections_combined.txt",
+    "subcounts": [
+      {
+        "text": 1932,
+        "headings": 17,
+        "captions_footnotes": 50,
+        "heading_count": 1,
+        "float_count": 3,
+        "inline_math": 42,
+        "display_math": 3,
+        "title": "Section: GMM统计先验引导的仿真触觉伪配对构建",
+        "total": 1999
+      },
+      {
+        "text": 1463,
+        "headings": 17,
+        "captions_footnotes": 16,
+        "heading_count": 1,
+        "float_count": 1,
+        "inline_math": 29,
+        "display_math": 3,
+        "title": "Section: 基于双域变分自编码器的触觉表示学习",
+        "total": 1496
+      },
+      {
+        "text": 1194,
+        "headings": 15,
+        "captions_footnotes": 16,
+        "heading_count": 1,
+        "float_count": 1,
+        "inline_math": 31,
+        "display_math": 2,
+        "title": "Section: 基于伪配对监督的跨域潜变量映射",
+        "total": 1225
+      },
+      {
+        "text": 1556,
+        "headings": 13,
+        "captions_footnotes": 36,
+        "heading_count": 1,
+        "float_count": 3,
+        "inline_math": 10,
+        "display_math": 0,
+        "title": "Section: 跨域触觉重建实验结果与分析",
+        "total": 1605
+      }
+    ],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "sum_available_counts": 6325,
+  "main_placeholder_count": {
+    "text": 0,
+    "headings": 7,
+    "captions_footnotes": 0,
+    "heading_count": 1,
+    "float_count": 0,
+    "inline_math": 0,
+    "display_math": 0,
+    "total": 7,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/main_placeholder_chapter5.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "complete_chapter_count": null,
+  "5_1_5_2_actual_counts": null,
+  "no_compilation": true
+}

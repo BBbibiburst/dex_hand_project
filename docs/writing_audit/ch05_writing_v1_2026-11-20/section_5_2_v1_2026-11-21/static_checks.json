@@ -1,0 +1,17 @@
+{
+  "paragraphs": 4,
+  "labels": [
+    "sec:ch05_unpaired_problem",
+    "eq:ch05_unpaired_mapping",
+    "eq:ch05_domain_confusion_target"
+  ],
+  "duplicate_labels": false,
+  "authority_label_collision": false,
+  "references": [],
+  "citation_keys": [],
+  "display_equations": 2,
+  "equation_environments_balanced": true,
+  "texcount_total": 981,
+  "reading_draft_generated_from_tex": true,
+  "protection_unchanged": true
+}

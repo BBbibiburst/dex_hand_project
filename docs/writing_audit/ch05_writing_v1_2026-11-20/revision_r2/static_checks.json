@@ -1,0 +1,118 @@
+{
+  "wordcount": {
+    "text": 1932,
+    "headings": 17,
+    "captions_footnotes": 50,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 42,
+    "display_math": 3,
+    "total": 1999,
+    "raw_output": "docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r2/wordcount/raw/section_5_3.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "compiled_pages": 3,
+  "labels": {
+    "sec:ch05_gmm_pseudopairs": {
+      "number": "5.3",
+      "page": "1"
+    },
+    "fig:ch05_gmm_physical_pipeline": {
+      "number": "5-1",
+      "page": "1"
+    },
+    "eq:ch05_gmm_prior": {
+      "number": "5-1",
+      "page": "1"
+    },
+    "eq:ch05_gmm_responsibility": {
+      "number": "5-2",
+      "page": "2"
+    },
+    "tab:ch05_probe_dictionary": {
+      "number": "5-1",
+      "page": "2"
+    },
+    "eq:ch05_pair_selection": {
+      "number": "5-3",
+      "page": "2"
+    },
+    "fig:ch05_gmm_candidate_selection": {
+      "number": "5-2",
+      "page": "3"
+    }
+  },
+  "missing_refs": [],
+  "overfull": [],
+  "undefined": [],
+  "underfull": [],
+  "fonts": {
+    "5": {
+      "name": "QDOMLF+FandolSong-Regular-Identity-H",
+      "embedded": true
+    },
+    "7": {
+      "name": "PKZBOA+FandolHei-Regular-Identity-H",
+      "embedded": true
+    },
+    "9": {
+      "name": "QXXLFB+TeXGyreTermesX-Regular-Identity-H",
+      "embedded": true
+    },
+    "13": {
+      "name": "UIVMED+txsys",
+      "embedded": true
+    },
+    "14": {
+      "name": "LHVPOF+TeXGyreTermesX-Regular",
+      "embedded": true
+    },
+    "15": {
+      "name": "ZPIGCQ+NewTXMI",
+      "embedded": true
+    },
+    "16": {
+      "name": "AVKKMJ+NewTXBMI",
+      "embedded": true
+    },
+    "17": {
+      "name": "UOBRQQ+NewTXMI7",
+      "embedded": true
+    },
+    "18": {
+      "name": "DQQDIE+txmiaX",
+      "embedded": true
+    },
+    "19": {
+      "name": "NILSWE+NewTXMI5",
+      "embedded": true
+    },
+    "20": {
+      "name": "FFTOWQ+txexs",
+      "embedded": true
+    },
+    "21": {
+      "name": "MGIRIH+txbmiaX",
+      "embedded": true
+    }
+  },
+  "pages": [
+    {
+      "page": 1,
+      "chars": 975
+    },
+    {
+      "page": 2,
+      "chars": 1147
+    },
+    {
+      "page": 3,
+      "chars": 943
+    }
+  ],
+  "equations_figures_table_unchanged": true,
+  "frozen": false
+}

@@ -1,0 +1,62 @@
+{
+  "5.3": {
+    "text": 1932,
+    "headings": 17,
+    "captions_footnotes": 50,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 42,
+    "display_math": 3,
+    "total": 1999,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/section_5_3.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "5.4": {
+    "text": 1463,
+    "headings": 17,
+    "captions_footnotes": 16,
+    "heading_count": 1,
+    "float_count": 1,
+    "inline_math": 29,
+    "display_math": 3,
+    "total": 1496,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/section_5_4.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "5.5": {
+    "text": 1194,
+    "headings": 15,
+    "captions_footnotes": 16,
+    "heading_count": 1,
+    "float_count": 1,
+    "inline_math": 31,
+    "display_math": 2,
+    "total": 1225,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/section_5_5.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  },
+  "5.6": {
+    "text": 1556,
+    "headings": 13,
+    "captions_footnotes": 36,
+    "heading_count": 1,
+    "float_count": 3,
+    "inline_math": 10,
+    "display_math": 0,
+    "total": 1605,
+    "raw_output": "docs/writing_audit/ch05_full_chapter_readonly_audit_2026-11-21/wordcount/raw/section_5_6.txt",
+    "subcounts": [],
+    "warnings": [],
+    "code_blocks": 0,
+    "code_physical_lines": 0
+  }
+}

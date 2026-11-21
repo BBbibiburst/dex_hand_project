@@ -1,0 +1,329 @@
+[
+  {
+    "key": "W01",
+    "local_id": "L02_dexterity",
+    "title": "Learning dexterous in-hand manipulation",
+    "authors": [
+      "OpenAI: Marcin Andrychowicz",
+      "Bowen Baker",
+      "Maciek Chociej",
+      "Rafal Józefowicz",
+      "Bob McGrew",
+      "Jakub Pachocki",
+      "Arthur Petron",
+      "Matthias Plappert",
+      "Glenn Powell",
+      "Alex Ray",
+      "Jonas Schneider",
+      "Szymon Sidor",
+      "Josh Tobin",
+      "Peter Welinder",
+      "Lilian Weng",
+      "Wojciech Zaremba"
+    ],
+    "year": "2020",
+    "venue": "The International Journal of Robotics Research, 39(1): 3–20",
+    "doi": "10.1177/0278364919887447",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/1808.00177",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L02_dexterity.pdf",
+    "pdf_sha256": "da6ec44dd0941d674ec58334ff630f83d7bd19e6062ab2837ccfa0b3b94f6f73",
+    "read_pdf_pages": [
+      2,
+      3
+    ],
+    "reading_scope": "任务与系统概述、硬件和仿真迁移条件。正文展示多指协调与动态接触，并说明真实试验慢且昂贵。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持复杂灵巧操作涉及感知—控制闭环，以及仿真用于训练与受控试验的动机。该实验明确未使用手上触觉传感器，不能用它证明触觉必不可少；不是本项目实机验证。",
+    "suggested_citation_position": "第1段操作背景、第3段仿真动机；不引用其成功率或计算规模。"
+  },
+  {
+    "key": "W02",
+    "local_id": "L12_grasp_survey",
+    "title": "Data-Driven Grasp Synthesis—A Survey",
+    "authors": [
+      "Jeannette Bohg",
+      "Antonio Morales",
+      "Tamim Asfour",
+      "Danica Kragic"
+    ],
+    "year": "2014",
+    "venue": "IEEE Transactions on Robotics, 30(2): 289–309",
+    "doi": "10.1109/TRO.2013.2289018",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/1309.2660",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L12_grasp_survey.pdf",
+    "pdf_sha256": "d35e98291e3101239235a3fd6529f57967adf6feb79780a66e47227cb920c759",
+    "read_pdf_pages": [
+      3,
+      4
+    ],
+    "reading_scope": "I-C至I-E及II开头：候选生成、数据来源、任务/手模型因素及可达性过滤。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持候选抓取质量与可执行抓取的区别；正文对已知物体明确讨论位姿估计后的可达性筛选。不能把旧综述对当时研究的观察写成2026年全领域现状。",
+    "suggested_citation_position": "第3段，支撑候选生成与机器人约束需要连接；不展开综述分类。"
+  },
+  {
+    "key": "W03",
+    "local_id": "L03_tactile_review",
+    "title": "Robotic tactile perception of object properties: A review",
+    "authors": [
+      "Shan Luo",
+      "Joao Bimbo",
+      "Ravinder Dahiya",
+      "Hongbin Liu"
+    ],
+    "year": "2017",
+    "venue": "Mechatronics, 48: 54–67",
+    "doi": "10.1016/j.mechatronics.2017.11.002",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://kclpure.kcl.ac.uk/portal/en/publications/robotic-tactile-perception-of-object-properties-a-review/",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L03_tactile_review.pdf",
+    "pdf_sha256": "3d7fc8bed7052e9db733992a55a6cbb24d35d2c2c4258b97226e395a79ed376e",
+    "read_pdf_pages": [
+      2,
+      3,
+      9
+    ],
+    "reading_scope": "I引言、II感知模态与解释层次、V接触位姿估计。PDF含机构封面，PDF第2页才是手稿第1页。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持触觉可提供接触、滑移及物体属性线索；V节讨论机械臂接近物体时的视觉遮挡。不同触觉硬件与任务影响解释方式；不将综述对所有传感器能力的汇总套在项目712D上。",
+    "suggested_citation_position": "第2段触觉价值；第5段传感与处理差异的背景。"
+  },
+  {
+    "key": "W04",
+    "local_id": "L04_visuotactile",
+    "title": "More Than a Feeling: Learning to Grasp and Regrasp Using Vision and Touch",
+    "authors": [
+      "Roberto Calandra",
+      "Andrew Owens",
+      "Dinesh Jayaraman",
+      "Justin Lin",
+      "Wenzhen Yuan",
+      "Jitendra Malik",
+      "Edward H. Adelson",
+      "Sergey Levine"
+    ],
+    "year": "2018",
+    "venue": "IEEE Robotics and Automation Letters, 3(4): 3300–3307",
+    "doi": "10.1109/LRA.2018.2852779",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/1805.11085",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L04_visuotactile.pdf",
+    "pdf_sha256": "d32d6ce83e6932a65b38301edb5f11913316ee7d0d917e9a3a37968d572596de",
+    "read_pdf_pages": [
+      3,
+      4,
+      5
+    ],
+    "reading_scope": "III硬件、IV动作条件视触觉预测、V数据收集、VI-A观测消融。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持视觉、触觉和动作共同用于接触后重抓取；同文消融只证明其任务条件下的互补价值。还观察到GelSight胶体更换带来的输入变化，不能借此诊断本项目Session漂移的确切原因。",
+    "suggested_citation_position": "第2段，作为具体视触觉闭环实例；不详细介绍网络或搬运外部性能数字。"
+  },
+  {
+    "key": "W05",
+    "local_id": "L06_randomization",
+    "title": "Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World",
+    "authors": [
+      "Josh Tobin",
+      "Rachel Fong",
+      "Alex Ray",
+      "Jonas Schneider",
+      "Wojciech Zaremba",
+      "Pieter Abbeel"
+    ],
+    "year": "2017",
+    "venue": "2017 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS): 23–30",
+    "doi": "10.1109/IROS.2017.8202133",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/1703.06907",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L06_randomization.pdf",
+    "pdf_sha256": "3fc98c5f4cea050686d45858e647e1b704492121fdae80f8fcd5d560c107f11f",
+    "read_pdf_pages": [
+      2,
+      3
+    ],
+    "reading_scope": "II-B/C域适应与现实差距、III-A随机化设计。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持模拟与实测观测有现实差距，以及仿真数据利用依赖训练/实际条件差异的处理。主要实验是视觉定位，不是触觉；不据其背景段转引其他未读论文，也不称本项目采用了其随机化方法。",
+    "suggested_citation_position": "第3段仿真动机和第5段Sim-to-Real问题。"
+  },
+  {
+    "key": "W06",
+    "local_id": "L07_robomimic",
+    "title": "What Matters in Learning from Offline Human Demonstrations for Robot Manipulation",
+    "authors": [
+      "Ajay Mandlekar",
+      "Danfei Xu",
+      "Josiah Wong",
+      "Soroush Nasiriany",
+      "Chen Wang",
+      "Rohun Kulkarni",
+      "Li Fei-Fei",
+      "Silvio Savarese",
+      "Yuke Zhu",
+      "Roberto Martín-Martín"
+    ],
+    "year": "2022",
+    "venue": "Proceedings of the 5th Conference on Robot Learning, PMLR 164: 1678–1690",
+    "doi": null,
+    "doi_status": "No DOI listed by checked PMLR record; not asserted to have none",
+    "landing_url": "https://proceedings.mlr.press/v164/mandlekar22a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L07_robomimic.pdf",
+    "pdf_sha256": "963aaa01b922f07c6d67848c06d1d5bd80664dd96e5e4a209b76d2e281318c66",
+    "read_pdf_pages": [
+      3,
+      5,
+      7
+    ],
+    "reading_scope": "挑战C2/C3/C4，4.1观测历史和示教质量、4.3观测、4.5选择、4.6规模。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持示教质量、观测历史和观测选择影响学习，训练损失并非任务成功率的替代。不是触觉同步误差的受控实验，不能用其结果给本项目时间对齐收益定量背书。",
+    "suggested_citation_position": "第4段数据质量，必要时第3段示教动机。"
+  },
+  {
+    "key": "W07",
+    "local_id": "L08_bridgedata",
+    "title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+    "authors": [
+      "Homer Rich Walke",
+      "Kevin Black",
+      "Tony Z. Zhao",
+      "Quan Vuong",
+      "Chongyi Zheng",
+      "Philippe Hansen-Estruch",
+      "Andre Wang He",
+      "Vivek Myers",
+      "Moo Jin Kim",
+      "Max Du",
+      "Abraham Lee",
+      "Kuan Fang",
+      "Chelsea Finn",
+      "Sergey Levine"
+    ],
+    "year": "2023",
+    "venue": "Proceedings of the 7th Conference on Robot Learning, PMLR 229: 1723–1736",
+    "doi": null,
+    "doi_status": "No DOI listed by checked PMLR record; not asserted to have none",
+    "landing_url": "https://proceedings.mlr.press/v229/walke23a.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L08_bridgedata.pdf",
+    "pdf_sha256": "52dc04866e173336d090f0b42b373d4b495a4a35cedc4f756b4d064936383825",
+    "read_pdf_pages": [
+      3,
+      4
+    ],
+    "reading_scope": "3.1系统、3.2采集、3.3技能/任务和数据组成。题录作者按PMLR正式元数据保留。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持多任务、多环境与示教/自动采集来源的组织需求。该工作不提供本项目的712D触觉，不能证明所有机器人数据集均有触觉或所有失败数据都适合任意算法。",
+    "suggested_citation_position": "第4段，作为多源与覆盖设计的实例，不作本项目规模对标。"
+  },
+  {
+    "key": "W08",
+    "local_id": "L13_rh20t",
+    "title": "RH20T: A Comprehensive Robotic Dataset for Learning Diverse Skills in One-Shot",
+    "authors": [
+      "Hao-Shu Fang",
+      "Hongjie Fang",
+      "Zhenyu Tang",
+      "Jirong Liu",
+      "Chenxi Wang",
+      "Junbo Wang",
+      "Haoyi Zhu",
+      "Cewu Lu"
+    ],
+    "year": "2024",
+    "venue": "2024 IEEE International Conference on Robotics and Automation (ICRA): 653–660",
+    "doi": "10.1109/ICRA57147.2024.10611615",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://rh20t.github.io/",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L13_rh20t.pdf",
+    "pdf_sha256": "6156500a1340a2e976681f0f8deea8ce493fb4af227d8a5b2696cb3c384bb755",
+    "read_pdf_pages": [
+      3,
+      4,
+      5
+    ],
+    "reading_scope": "III-A多模态/层级、III-B采集处理及图6同步说明；所读全文为arXiv:2307.00595v2（2023），正式题录为ICRA2024。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持多传感器数据需要时间戳、坐标标定与处理；指尖触觉仅在部分配置提供。不能把腕部六维力矩等同于全量指尖阵列，也不把作者同步声明当成本项目同步证据。",
+    "suggested_citation_position": "第4段数据关联与时间对齐；不承诺本项目达到其采集条件。"
+  },
+  {
+    "key": "W09",
+    "local_id": "L09_tacto",
+    "title": "TACTO: A Fast, Flexible, and Open-Source Simulator for High-Resolution Vision-Based Tactile Sensors",
+    "authors": [
+      "Shaoxiong Wang",
+      "Mike Lambeta",
+      "Po-Wei Chou",
+      "Roberto Calandra"
+    ],
+    "year": "2022",
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 3930–3937",
+    "doi": "10.1109/LRA.2022.3146945",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/2012.08456",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L09_tacto.pdf",
+    "pdf_sha256": "3d656371a5d15141d5e352680c2c95cdddbbf9e5ce89fc96278e0c6e7b544838",
+    "read_pdf_pages": [
+      3,
+      4,
+      7
+    ],
+    "reading_scope": "III-B架构权衡、III-D配置及力—形变近似、V Sim2Real位姿估计。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持触觉仿真除接触求解外还涉及传感器读出与配置近似；文中Sim2Real实验存在差距。对象是视觉触觉，不能证明本项目原生touch等价于真实阵列，亦不能推广为普适准确形变模型。",
+    "suggested_citation_position": "第5段，以传感器专属模型说明跨域差异，细节留给1.2及第二章。"
+  },
+  {
+    "key": "W10",
+    "local_id": "L10_taxim",
+    "title": "Taxim: An Example-Based Simulation Model for GelSight Tactile Sensors",
+    "authors": [
+      "Zilin Si",
+      "Wenzhen Yuan"
+    ],
+    "year": "2022",
+    "venue": "IEEE Robotics and Automation Letters, 7(2): 2361–2368",
+    "doi": "10.1109/LRA.2022.3142412",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://arxiv.org/abs/2109.04027",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L10_taxim.pdf",
+    "pdf_sha256": "24feb04024fe5b03fd7c43c5cd6a6e5d9101f60188ae8418270a63d2c394d8ca",
+    "read_pdf_pages": [
+      2,
+      3
+    ],
+    "reading_scope": "III-A/B模型与逐传感器校准，III-B球形压头及形状—光响应关系。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持传感器结构、读出机制和校准影响仿真响应。模型为GelSight光学响应与标记位移，不是本项目压阻/标量数组模型；球形压头相似不代表本项目实现了Taxim或完成了实机标定。",
+    "suggested_citation_position": "第5段，与TACTO择一或并列引用，避免重复堆文献。"
+  },
+  {
+    "key": "W11",
+    "local_id": "L11_unpaired",
+    "title": "Unpaired Image-to-Image Translation Using Cycle-Consistent Adversarial Networks",
+    "authors": [
+      "Jun-Yan Zhu",
+      "Taesung Park",
+      "Phillip Isola",
+      "Alexei A. Efros"
+    ],
+    "year": "2017",
+    "venue": "2017 IEEE International Conference on Computer Vision (ICCV): 2242–2251",
+    "doi": "10.1109/ICCV.2017.244",
+    "doi_status": "verified matching paper/registry or original manuscript",
+    "landing_url": "https://openaccess.thecvf.com/content_ICCV_2017/html/Zhu_Unpaired_Image-To-Image_Translation_ICCV_2017_paper.html",
+    "local_pdf": "thesis/docs/writing_audit/ch01_1_1_sources/L11_unpaired.pdf",
+    "pdf_sha256": "0c2330be7183072954db6835452a9f56f7b4f778069cb9f4d7a87ef4b4bdfa88",
+    "read_pdf_pages": [
+      2,
+      3
+    ],
+    "reading_scope": "引言图2之后的非配对映射歧义与第3节定义。所读为CVF正式会议PDF。",
+    "fulltext_access": "PDF downloaded and text extracted; relevant body sections read; NOT claiming entire paper was read",
+    "support_and_limits": "支持缺少逐样本对应时，单纯分布匹配不足以确定有意义映射的概念背景。这是图像领域的论证，不是触觉实验证明，不说明本文使用CycleGAN或已解决重建。",
+    "suggested_citation_position": "第5段末可选引用一处，只有在明确跨领域概念边界时使用。"
+  }
+]

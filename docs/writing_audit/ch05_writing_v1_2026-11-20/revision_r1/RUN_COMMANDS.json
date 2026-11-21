@@ -1,0 +1,8 @@
+{
+  "commands": [
+    "python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/check_artifacts.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/count_section.py",
+    "PYTHONDONTWRITEBYTECODE=1 python3 docs/writing_audit/ch05_writing_v1_2026-11-20/revision_r1/package_revision.py"
+  ],
+  "read_only": "source text, metadata, path existence, Hash; no historic script executed"
+}

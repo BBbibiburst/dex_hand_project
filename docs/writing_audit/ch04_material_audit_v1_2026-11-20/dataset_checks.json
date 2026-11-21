@@ -1,0 +1,2024 @@
+{
+  "scope": "three complete selected LeRobot numeric datasets; 11 named NPZ source cases; no global production inventory",
+  "lerobot": [
+    {
+      "path": "outputs/dp_2026-10-11/lerobot_5",
+      "format": "LeRobot",
+      "declared_episodes": 5,
+      "declared_frames": 1550,
+      "actual_episode_indices": 5,
+      "actual_frames": 1550,
+      "state_shape": [
+        1550,
+        39
+      ],
+      "action_shape": [
+        1550,
+        13
+      ],
+      "tactile_shape": [
+        1550,
+        712
+      ],
+      "state_finite": true,
+      "action_finite": true,
+      "tactile_finite": true,
+      "tactile_nonnegative": true,
+      "tactile_nonzero_fraction": 0.12729702790866257,
+      "actual_task_indices": [
+        0,
+        1
+      ],
+      "declared_splits": {
+        "train": "0:5"
+      },
+      "task_labels": [
+        {
+          "task_index": 0,
+          "__index_level_0__": "lift:ycb:004_sugar_box"
+        },
+        {
+          "task_index": 1,
+          "__index_level_0__": "lift:ycb:007_tuna_fish_can"
+        }
+      ],
+      "image_feature": {
+        "dtype": "video",
+        "shape": [
+          120,
+          160,
+          3
+        ],
+        "names": [
+          "height",
+          "width",
+          "channels"
+        ],
+        "info": {
+          "video.height": 120,
+          "video.width": 160,
+          "video.codec": "av1",
+          "video.pix_fmt": "yuv420p",
+          "video.is_depth_map": false,
+          "video.fps": 20,
+          "video.channels": 3,
+          "has_audio": false
+        }
+      },
+      "parquet_columns": [
+        "action",
+        "episode_index",
+        "frame_index",
+        "index",
+        "observation.state",
+        "observation.tactile",
+        "task_index",
+        "timestamp"
+      ],
+      "episodes": [
+        {
+          "episode_index": 0,
+          "frames": 310,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000019073486328,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "6977406c029275afef5286fc683a6184bec234f06a33fa64af0e691de009671c"
+        },
+        {
+          "episode_index": 1,
+          "frames": 310,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000019073486328,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "92c0e9ccb5427c8dc946bd536538115e0b857a84eb1afd909655b9c6fdea545a"
+        },
+        {
+          "episode_index": 2,
+          "frames": 310,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000019073486328,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "da332e45483e333a477b12fbfc42ea69f4274d47122e7a9970e4e2fc9e5f1def"
+        },
+        {
+          "episode_index": 3,
+          "frames": 310,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000019073486328,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "512e59fd47457bfe5a6fda2a7a013bcf3bea0f6ba26e17164ace14effe540ce1"
+        },
+        {
+          "episode_index": 4,
+          "frames": 310,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000019073486328,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "7b858574f39a7295dbbab13b8fa3ce346c0aaeb4006c495a5e05920b5958eff5"
+        }
+      ],
+      "independent_roots": "UNKNOWN",
+      "RGB_pixels_or_video_decoded": false
+    },
+    {
+      "path": "outputs/dp_p1_2026-10-11/lerobot_formal30",
+      "format": "LeRobot",
+      "declared_episodes": 30,
+      "declared_frames": 14310,
+      "actual_episode_indices": 30,
+      "actual_frames": 14310,
+      "state_shape": [
+        14310,
+        39
+      ],
+      "action_shape": [
+        14310,
+        13
+      ],
+      "tactile_shape": [
+        14310,
+        712
+      ],
+      "state_finite": true,
+      "action_finite": true,
+      "tactile_finite": true,
+      "tactile_nonnegative": true,
+      "tactile_nonzero_fraction": 0.09402878869966001,
+      "actual_task_indices": [
+        0,
+        1,
+        2
+      ],
+      "declared_splits": {
+        "train": "0:30"
+      },
+      "task_labels": [
+        {
+          "task_index": 0,
+          "__index_level_0__": "lift:ycb:010_potted_meat_can"
+        },
+        {
+          "task_index": 1,
+          "__index_level_0__": "lift:ycb:004_sugar_box"
+        },
+        {
+          "task_index": 2,
+          "__index_level_0__": "lift:gso:Playmates_nickelodeon_teenage_mutant_ninja_turtles_shredder"
+        }
+      ],
+      "image_feature": {
+        "dtype": "image",
+        "shape": [
+          120,
+          160,
+          3
+        ],
+        "names": [
+          "height",
+          "width",
+          "channels"
+        ]
+      },
+      "parquet_columns": [
+        "action",
+        "episode_index",
+        "frame_index",
+        "index",
+        "observation.images.agentview",
+        "observation.state",
+        "observation.tactile",
+        "task_index",
+        "timestamp"
+      ],
+      "episodes": [
+        {
+          "episode_index": 0,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "e168fc79cff2e40359cae20bb0c4ddfde7dfe3ff3f9d56da049b3fb1d6dc52ab"
+        },
+        {
+          "episode_index": 1,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "7a34ec2758d533ab0b15ae1286f46b7b30fcd0d2fb85f29d7c48ca0aed5c77fc"
+        },
+        {
+          "episode_index": 2,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "3834d34f199641e6dbd17d8c3baf8e9c217885c1ba98fc3311007a2be293f78d"
+        },
+        {
+          "episode_index": 3,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "4c0c99aaa591b782a1473fc7752e024bb0675723ae96fad2827b7b13984c724c"
+        },
+        {
+          "episode_index": 4,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "a120084376593759fcd69bce7391d5780da30e7a0abed5933aadedf40f4f85fa"
+        },
+        {
+          "episode_index": 5,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "56565a627d70ebca381640f397129f61b46bd80713555117e2d4fd3c1759316b"
+        },
+        {
+          "episode_index": 6,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "e4760d55bb28e1841c2642c937c16964d5e60a4e3e6d81e57ddebbdcc3cded2e"
+        },
+        {
+          "episode_index": 7,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "f92f61ff59b378c39336238a2019261f3e5a7fa1ad939c43b1ddc602a5195372"
+        },
+        {
+          "episode_index": 8,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "b1e98d5d51c4698df4f1812ace6cde949c0b6f8b3075e5df0ba05a04da9be1ea"
+        },
+        {
+          "episode_index": 9,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "5b7140306a06d78987f5c9a939158deed809a7c3bb156bbe48595f341bd1672f"
+        },
+        {
+          "episode_index": 10,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "b1e1b380448f7f01a945355665e4824cb1747eba275d0b32a184cb49fac9fda2"
+        },
+        {
+          "episode_index": 11,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "f7fcf5fe28b8961c35ebe674c47d4ce0cd4410cd5a380855442c649fefe68182"
+        },
+        {
+          "episode_index": 12,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "c2b3bccda4b65eb1ae26355318ead789712bd26f226e65fee94abf7b03f7213d"
+        },
+        {
+          "episode_index": 13,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "7959a1aff7aa1b1a910b6200ea92944ea282b3f795d2c98293a7768219419838"
+        },
+        {
+          "episode_index": 14,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "c269d64675c45c5a4f42450ccb93025f5aa6117576b9e7b150211caa30f85fe0"
+        },
+        {
+          "episode_index": 15,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "3bb5c93d1d3618b5bbcffbdae0ff4e01f5ea066a490e567a3490c7475b6df05f"
+        },
+        {
+          "episode_index": 16,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "8b3f31553e1b803122dfda25c09f3586e54a10f5d2d2790023b4ff1d8f561a2d"
+        },
+        {
+          "episode_index": 17,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "549c649f3513f856c6b74726ea59d83593a53ae40c9e9bb9dc3e9f39f94f6346"
+        },
+        {
+          "episode_index": 18,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "2a089eac9c5b13f3132808a64a16c434874d308933392d739c6e74413baa30f0"
+        },
+        {
+          "episode_index": 19,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "0736ea1dbba3843c4ad805e0acf8610926655f80016440cb67bdcc30fff431e5"
+        },
+        {
+          "episode_index": 20,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "78cf29822d8c64c846bc14fadd77bef06a5ece3c81b4bccd1ca56b91fdef05ed"
+        },
+        {
+          "episode_index": 21,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "e3c291c667d63d9763473cc2616e0151ba872368a618261bd10c1d6d2875733d"
+        },
+        {
+          "episode_index": 22,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "3a5b3a27070e449f31e358e75a926173d5058331303cdf53946dd703b4a7dc4c"
+        },
+        {
+          "episode_index": 23,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "2a0cfe033c9d10965f1170aeaf7c98af58302177b869bb76d960ad436ee31a39"
+        },
+        {
+          "episode_index": 24,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "0ee215e539a3083664bfc36c9aec2199f836b1861a58a03c20b95d5fdcbb25d6"
+        },
+        {
+          "episode_index": 25,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "0881d62d456fb3fb4a17a21eed8be3cb6b5a69e2c97fc57df28fbf4d0f2b02e8"
+        },
+        {
+          "episode_index": 26,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "cc9e136ed1b313d89524061f94bf24fac3d32320d596ade8c35b7b5dbf449ae4"
+        },
+        {
+          "episode_index": 27,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "4c4c3ef4b337b65b39b47cf6989777f1936a294d4a653ad1700ef95066b61f74"
+        },
+        {
+          "episode_index": 28,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "01085c44e5fef17a9daa3b2d3e3bb55357cda64223969db09820b2449d7e2361"
+        },
+        {
+          "episode_index": 29,
+          "frames": 477,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "adcbba04a3d090aa71430b66783acaa1c6274db3273d2812303bf29cefbe552a"
+        }
+      ],
+      "independent_roots": "UNKNOWN",
+      "RGB_pixels_or_video_decoded": false
+    },
+    {
+      "path": "outputs/dp_p2_2026-10-11/lerobot_single_sugar_fixed",
+      "format": "LeRobot",
+      "declared_episodes": 1,
+      "declared_frames": 340,
+      "actual_episode_indices": 1,
+      "actual_frames": 340,
+      "state_shape": [
+        340,
+        39
+      ],
+      "action_shape": [
+        340,
+        13
+      ],
+      "tactile_shape": [
+        340,
+        712
+      ],
+      "state_finite": true,
+      "action_finite": true,
+      "tactile_finite": true,
+      "tactile_nonnegative": true,
+      "tactile_nonzero_fraction": 0.11097157964309319,
+      "actual_task_indices": [
+        0
+      ],
+      "declared_splits": {
+        "train": "0:1"
+      },
+      "task_labels": [
+        {
+          "task_index": 0,
+          "__index_level_0__": "lift:ycb:004_sugar_box"
+        }
+      ],
+      "image_feature": {
+        "dtype": "image",
+        "shape": [
+          120,
+          160,
+          3
+        ],
+        "names": [
+          "height",
+          "width",
+          "channels"
+        ]
+      },
+      "parquet_columns": [
+        "action",
+        "episode_index",
+        "frame_index",
+        "index",
+        "observation.images.agentview",
+        "observation.state",
+        "observation.tactile",
+        "task_index",
+        "timestamp"
+      ],
+      "episodes": [
+        {
+          "episode_index": 0,
+          "frames": 340,
+          "timestamp_dt_min": 0.049999237060546875,
+          "timestamp_dt_max": 0.05000114440917969,
+          "nonincreasing_timestamps": 0,
+          "frame_index_contiguous": true,
+          "numeric_episode_digest": "7a36a27970b77a9b65cc779a23cc6d7141b533e1b29fe77787a8a5bf447f3a56"
+        }
+      ],
+      "independent_roots": "UNKNOWN",
+      "RGB_pixels_or_video_decoded": false
+    }
+  ],
+  "fixed_export_numeric_check": {
+    "source_manifest": "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/manifest.json",
+    "frames": 340,
+    "source_total_frames": 477,
+    "inferred_tail_start": 137,
+    "action_vs_source_ctrl_max_abs": 0.0,
+    "state_command_vs_previous_ctrl_max_abs": 0.0,
+    "tactile_vs_previous_source_row_max_abs": 0.0,
+    "scope": "numeric tail mapping only; does not verify RGB pixels, all state coordinates or physical replay"
+  },
+  "npz_cases": [
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00",
+      "kind": "online_v2_development",
+      "source_schema": "five-task-online-v2",
+      "frames": 447,
+      "tactile_shape": [
+        447,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.08404971972953272,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            447,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            447,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            447,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          447,
+          39
+        ],
+        "action": [
+          447,
+          13
+        ],
+        "tactile": [
+          447,
+          712
+        ],
+        "object_state": [
+          447,
+          1,
+          7
+        ],
+        "timestamp": [
+          447
+        ],
+        "next_timestamp": [
+          447
+        ],
+        "stage": [
+          447
+        ],
+        "success": [
+          447
+        ],
+        "frame_index": [
+          447
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00",
+      "kind": "online_v2_development",
+      "source_schema": "five-task-online-v2",
+      "frames": 638,
+      "tactile_shape": [
+        638,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.15296440773484554,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.10000002384185791,
+      "pre_action_command_mismatch_row_count": 373,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            638,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            638,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            638,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_missing": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01",
+      "kind": "online_v2_development",
+      "source_schema": "five-task-online-v2",
+      "frames": 376,
+      "tactile_shape": [
+        376,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.1826328293091083,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": null,
+      "physical_qvel_continuity": null,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            376,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            376,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            376,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            376,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            376
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            376
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_missing": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00",
+      "kind": "online_v2_development",
+      "source_schema": "five-task-online-v2",
+      "frames": 605,
+      "tactile_shape": [
+        605,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.004954034729315628,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            605,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            605,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            605,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            605,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            605
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            605
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          605,
+          39
+        ],
+        "action": [
+          605,
+          13
+        ],
+        "tactile": [
+          605,
+          712
+        ],
+        "object_state": [
+          605,
+          1,
+          7
+        ],
+        "timestamp": [
+          605
+        ],
+        "next_timestamp": [
+          605
+        ],
+        "stage": [
+          605
+        ],
+        "success": [
+          605
+        ],
+        "frame_index": [
+          605
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true
+    },
+    {
+      "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00",
+      "kind": "online_v2_development",
+      "source_schema": "five-task-online-v2",
+      "frames": 599,
+      "tactile_shape": [
+        599,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.12717591116279942,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            599,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            599,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            599,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            599,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            599
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            599
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          599,
+          39
+        ],
+        "action": [
+          599,
+          13
+        ],
+        "tactile": [
+          599,
+          712
+        ],
+        "object_state": [
+          599,
+          2,
+          7
+        ],
+        "timestamp": [
+          599
+        ],
+        "next_timestamp": [
+          599
+        ],
+        "stage": [
+          599
+        ],
+        "success": [
+          599
+        ],
+        "frame_index": [
+          599
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true
+    },
+    {
+      "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50",
+      "kind": "packaged_v4_development",
+      "source_schema": "five-task-online-v4",
+      "frames": 447,
+      "tactile_shape": [
+        447,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.08111190709599578,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            447,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            447,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            447,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            447
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            447,
+            277
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            447,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          447,
+          39
+        ],
+        "action": [
+          447,
+          13
+        ],
+        "tactile": [
+          447,
+          712
+        ],
+        "object_state": [
+          447,
+          1,
+          7
+        ],
+        "timestamp": [
+          447
+        ],
+        "next_timestamp": [
+          447
+        ],
+        "stage": [
+          447
+        ],
+        "success": [
+          447
+        ],
+        "integration_state": [
+          447,
+          277
+        ],
+        "control_exact": [
+          447,
+          13
+        ],
+        "frame_index": [
+          447
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true,
+      "task": "lift",
+      "asset_hash": "8d0e8f968f7cfbfb6b012e6973a1411a62cca8ac608a3d7704f0aff88f5868d9",
+      "lineage_hash": "061129ddb78a96cc87e96dc24be96a3921bec753564f11b47a418cd3582e6d2a",
+      "content_hash": "0eb0e1de73014f1682a41c843c5360eba71fff2dca264b14fee9cdaf6f0912a5",
+      "admission": "development_verified_not_formal_production",
+      "canonical_action": "arm7_hand6_position_command_v1",
+      "registered_file_hashes_match": {
+        "independent_replay.json": true,
+        "modalities.npz": true,
+        "worker_result.json": true,
+        "strict_final.json": true,
+        "agentview.mp4": true,
+        "source_episode/manifest.json": true,
+        "source_episode/episode.npz": true,
+        "source_episode/model.mjb.gz": true
+      },
+      "missing_registered_files": []
+    },
+    {
+      "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/nut_000_3106428ada24fdc54dce",
+      "kind": "packaged_v4_development",
+      "source_schema": "five-task-online-v4",
+      "frames": 648,
+      "tactile_shape": [
+        648,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.1222798758496324,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999988347,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 1.16531784222218e-13,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            648,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            648,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            648,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            648,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            648,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            648
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            648
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            648,
+            283
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            648,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          648,
+          39
+        ],
+        "action": [
+          648,
+          13
+        ],
+        "tactile": [
+          648,
+          712
+        ],
+        "object_state": [
+          648,
+          2,
+          7
+        ],
+        "timestamp": [
+          648
+        ],
+        "next_timestamp": [
+          648
+        ],
+        "stage": [
+          648
+        ],
+        "success": [
+          648
+        ],
+        "integration_state": [
+          648,
+          283
+        ],
+        "control_exact": [
+          648,
+          13
+        ],
+        "frame_index": [
+          648
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true,
+      "task": "nut_assembly",
+      "asset_hash": "59bb0573b8d4f98faf79fda26ddf508c64bd571f467e9493001b58f08572119c",
+      "lineage_hash": "ed488f2044b4fde299a57dc6a9a2a809a018b9bf3ecf6558a19d05e3f7af9f6f",
+      "content_hash": "4478ebc56219bd2c2bcd4e557d6c6482984090744a9f5b291b5b976cb27565aa",
+      "admission": "development_verified_not_formal_production",
+      "canonical_action": "arm7_hand6_position_command_v1",
+      "registered_file_hashes_match": {
+        "independent_replay.json": true,
+        "modalities.npz": true,
+        "worker_result.json": true,
+        "agentview.mp4": true,
+        "source_episode/manifest.json": true,
+        "source_episode/episode.npz": true,
+        "source_episode/model.mjb.gz": true
+      },
+      "missing_registered_files": []
+    },
+    {
+      "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e",
+      "kind": "packaged_v4_development",
+      "source_schema": "five-task-online-v4",
+      "frames": 638,
+      "tactile_shape": [
+        638,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.1533452502553626,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            638,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            638,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            638,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            638
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            638,
+            277
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            638,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          638,
+          39
+        ],
+        "action": [
+          638,
+          13
+        ],
+        "tactile": [
+          638,
+          712
+        ],
+        "object_state": [
+          638,
+          2,
+          7
+        ],
+        "timestamp": [
+          638
+        ],
+        "next_timestamp": [
+          638
+        ],
+        "stage": [
+          638
+        ],
+        "success": [
+          638
+        ],
+        "integration_state": [
+          638,
+          277
+        ],
+        "control_exact": [
+          638,
+          13
+        ],
+        "frame_index": [
+          638
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true,
+      "task": "pick_place",
+      "asset_hash": "2cc947b7c040ff3e1f6b4cc1d305c930df9dd7f946e18f1256278471fbd0dfc9",
+      "lineage_hash": "b6695189cb423667172d8e2f9886261c1ffe9ffa6dd9025298b03eaed22c0396",
+      "content_hash": "c6a4726f96f05e10acd13956ec56af569ab979a194e3c0481328c50c9cb99c82",
+      "admission": "development_verified_not_formal_production",
+      "canonical_action": "arm7_hand6_position_command_v1",
+      "registered_file_hashes_match": {
+        "independent_replay.json": true,
+        "modalities.npz": true,
+        "worker_result.json": true,
+        "agentview.mp4": true,
+        "source_episode/manifest.json": true,
+        "source_episode/episode.npz": true,
+        "source_episode/model.mjb.gz": true
+      },
+      "missing_registered_files": []
+    },
+    {
+      "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/push_tomato_84651ac09b7a0bc393d3",
+      "kind": "packaged_v4_development",
+      "source_schema": "five-task-online-v4",
+      "frames": 613,
+      "tactile_shape": [
+        613,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.005026852649522517,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            613,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            613,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            613,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            613,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            613,
+            1,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            613
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            613
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            613,
+            277
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            613,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          613,
+          39
+        ],
+        "action": [
+          613,
+          13
+        ],
+        "tactile": [
+          613,
+          712
+        ],
+        "object_state": [
+          613,
+          1,
+          7
+        ],
+        "timestamp": [
+          613
+        ],
+        "next_timestamp": [
+          613
+        ],
+        "stage": [
+          613
+        ],
+        "success": [
+          613
+        ],
+        "integration_state": [
+          613,
+          277
+        ],
+        "control_exact": [
+          613,
+          13
+        ],
+        "frame_index": [
+          613
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true,
+      "task": "push",
+      "asset_hash": "2cc947b7c040ff3e1f6b4cc1d305c930df9dd7f946e18f1256278471fbd0dfc9",
+      "lineage_hash": "64b212f038cb6560664e00f2892687d24d19434b2ffd84cf8012e5083763539b",
+      "content_hash": "6750476e286d0d7f31f7608cd1a0b6b41afe2e12df1d87fc9efb90a35eb361b4",
+      "admission": "development_verified_not_formal_production",
+      "canonical_action": "arm7_hand6_position_command_v1",
+      "registered_file_hashes_match": {
+        "independent_replay.json": true,
+        "modalities.npz": true,
+        "worker_result.json": true,
+        "agentview.mp4": true,
+        "source_episode/manifest.json": true,
+        "source_episode/episode.npz": true,
+        "source_episode/model.mjb.gz": true
+      },
+      "missing_registered_files": []
+    },
+    {
+      "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/stack_ring_e0f34add79e08848e5b1",
+      "kind": "packaged_v4_development",
+      "source_schema": "five-task-online-v4",
+      "frames": 381,
+      "tactile_shape": [
+        381,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.20642749712465716,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            381,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            381,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            381,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            381,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            381,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            381
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            381
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            381,
+            309
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            381,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          381,
+          39
+        ],
+        "action": [
+          381,
+          13
+        ],
+        "tactile": [
+          381,
+          712
+        ],
+        "object_state": [
+          381,
+          2,
+          7
+        ],
+        "timestamp": [
+          381
+        ],
+        "next_timestamp": [
+          381
+        ],
+        "stage": [
+          381
+        ],
+        "success": [
+          381
+        ],
+        "integration_state": [
+          381,
+          309
+        ],
+        "control_exact": [
+          381,
+          13
+        ],
+        "frame_index": [
+          381
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true,
+      "task": "stack",
+      "asset_hash": "1d985b8e7128a6f9529333a56885dc53dfab22b3986d0fb3f457544f401854a8",
+      "lineage_hash": "7915bb6f91746d36333a2a25a67aee638252539b6d3c561542b5ece855164eb7",
+      "content_hash": "3e6c9cce905907dbfee260486250f39b76e9e1b3fb955960ea7381a83b5d9ad0",
+      "admission": "development_verified_not_formal_production",
+      "canonical_action": "arm7_hand6_position_command_v1",
+      "registered_file_hashes_match": {
+        "independent_replay.json": true,
+        "modalities.npz": true,
+        "worker_result.json": true,
+        "agentview.mp4": true,
+        "source_episode/manifest.json": true,
+        "source_episode/episode.npz": true,
+        "source_episode/model.mjb.gz": true
+      },
+      "missing_registered_files": []
+    },
+    {
+      "path": "outputs/five_task_p38_exact_replay_2026-11-03/dataset/work/stack_be9a3be3c204e4a44f60_ccb121ed582e33fee485/attempt_001",
+      "kind": "v4_sink_precision_case",
+      "source_schema": "five-task-online-v4",
+      "frames": 380,
+      "tactile_shape": [
+        380,
+        712
+      ],
+      "tactile_dtype": "float32",
+      "tactile_nonzero_fraction": 0.14785999408633946,
+      "tactile_nonnegative": true,
+      "all_numeric_finite": true,
+      "timestamp_dt_range": [
+        0.04999999999997229,
+        0.05000000000006111
+      ],
+      "next_timestamp_dt_max_error": 6.110389971780705e-14,
+      "pre_action_command_max_error": 0.0,
+      "pre_action_command_mismatch_row_count": 0,
+      "physical_qpos_continuity": true,
+      "physical_qvel_continuity": true,
+      "tactile_fields_identical": false,
+      "numeric_shapes": {
+        "state": {
+          "shape": [
+            380,
+            39
+          ],
+          "dtype": "float32"
+        },
+        "position_action": {
+          "shape": [
+            380,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "ik_action": {
+          "shape": [
+            380,
+            13
+          ],
+          "dtype": "float32"
+        },
+        "sensor_tactile": {
+          "shape": [
+            380,
+            712
+          ],
+          "dtype": "float32"
+        },
+        "object_state": {
+          "shape": [
+            380,
+            2,
+            7
+          ],
+          "dtype": "float32"
+        },
+        "timestamp": {
+          "shape": [
+            380
+          ],
+          "dtype": "float64"
+        },
+        "next_timestamp": {
+          "shape": [
+            380
+          ],
+          "dtype": "float64"
+        },
+        "pre_integration_state": {
+          "shape": [
+            380,
+            309
+          ],
+          "dtype": "float64"
+        },
+        "applied_ctrl64": {
+          "shape": [
+            380,
+            13
+          ],
+          "dtype": "float64"
+        }
+      },
+      "independent_root": "UNKNOWN",
+      "RGB_file_exists": true,
+      "modalities_fields": {
+        "state": [
+          380,
+          39
+        ],
+        "action": [
+          380,
+          13
+        ],
+        "tactile": [
+          380,
+          712
+        ],
+        "object_state": [
+          380,
+          2,
+          7
+        ],
+        "timestamp": [
+          380
+        ],
+        "next_timestamp": [
+          380
+        ],
+        "stage": [
+          380
+        ],
+        "success": [
+          380
+        ],
+        "frame_index": [
+          380
+        ]
+      },
+      "export_action_matches_position_action": true,
+      "export_tactile_matches_sensor_tactile": true,
+      "export_state_matches_pre_state": true
+    }
+  ],
+  "exact_numeric_episode_duplicates_across_selected_lerobot": [],
+  "no_duplicate_is_not_no_overlap_or_no_leakage": true,
+  "historical_v4_comparison": {
+    "schema": "five-task-online-v4",
+    "file_audit_passed": true,
+    "source_observed_arrays_unchanged": {
+      "qpos": true,
+      "qvel": true,
+      "ctrl": true,
+      "object_state": true,
+      "sensor_tactile": true,
+      "position_action": true
+    },
+    "decoded_rgb_unchanged": true,
+    "semantic_content_hash_unchanged": true,
+    "uncompressed_replay_auxiliary_bytes": 978880,
+    "legacy_replay": {
+      "manifest": "outputs/five_task_p38_exact_replay_2026-11-03/dataset/work/stack_be9a3be3c204e4a44f60_ccb121ed582e33fee485/attempt_001/source_episode/manifest.json",
+      "manifest_sha256": "ab29012f3881f74790988dab127ee89fbdaf56d314dd1fe07375bfb9a0f33bee",
+      "task": "stack",
+      "frames": 380,
+      "initial_state": "pre_action",
+      "skipped_initial_actions": 0,
+      "source_success": true,
+      "exact_integration_state": false,
+      "exact_recorded_ctrl": false,
+      "replay_final_success": false,
+      "success_frames": 0,
+      "max_qpos_component_error": 1.6288973093032837,
+      "tactile_max": 0.9430000185966492,
+      "unchanged_task_criterion": true,
+      "passed": false,
+      "note": "Task-specific independent replay; not the Lift FINAL Strict profile.",
+      "wall_seconds": 11.887710122999124
+    },
+    "exact_replay": {
+      "manifest": "outputs/five_task_p38_exact_replay_2026-11-03/dataset/work/stack_be9a3be3c204e4a44f60_ccb121ed582e33fee485/attempt_001/source_episode/manifest.json",
+      "manifest_sha256": "ab29012f3881f74790988dab127ee89fbdaf56d314dd1fe07375bfb9a0f33bee",
+      "task": "stack",
+      "frames": 380,
+      "initial_state": "pre_action",
+      "skipped_initial_actions": 0,
+      "source_success": true,
+      "exact_integration_state": true,
+      "exact_recorded_ctrl": true,
+      "replay_final_success": true,
+      "success_frames": 157,
+      "max_qpos_component_error": 0.0,
+      "tactile_max": 0.9430000185966492,
+      "unchanged_task_criterion": true,
+      "passed": true,
+      "note": "Task-specific independent replay; not the Lift FINAL Strict profile."
+    },
+    "old_quarantine_preserved": true,
+    "new_formal_production_seconds": 0,
+    "scope": "Same physical condition; gaining valid replay evidence is not additional trajectory diversity"
+  },
+  "frozen_tactile_contract_metadata": {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/data_contract.csv",
+    "rows": [
+      {
+        "role": "train",
+        "Real_windows": "5153",
+        "Real_Sessions": "32",
+        "Natural_windows": "4049",
+        "Natural_Roots": "50",
+        "latent_shape": "[4049, 4, 64]",
+        "processed_dtype": "float32",
+        "Real_time": "historical irregular retained frames",
+        "Natural_time": "source continuous20Hz",
+        "physical_mapping": "UNKNOWN; index-space only"
+      },
+      {
+        "role": "validation",
+        "Real_windows": "780",
+        "Real_Sessions": "4",
+        "Natural_windows": "905",
+        "Natural_Roots": "10",
+        "latent_shape": "[905, 4, 64]",
+        "processed_dtype": "float32",
+        "Real_time": "historical irregular retained frames",
+        "Natural_time": "source continuous20Hz",
+        "physical_mapping": "UNKNOWN; index-space only"
+      }
+    ],
+    "evidence": "L1 stored contract, not recomputed Real/raw arrays",
+    "Real_raw_arrays_opened": false
+  }
+}

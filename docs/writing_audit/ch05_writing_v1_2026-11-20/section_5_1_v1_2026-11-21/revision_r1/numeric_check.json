@@ -1,0 +1,121 @@
+{
+  "records": [
+    {
+      "role": "train",
+      "source": "outputs/tactile_p37_full_data_revalidation_2026-11-15/train.npz",
+      "key": "real",
+      "shape": [
+        5153,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "source_version": "P37 old development dataset",
+      "activation_numerator": 2582877,
+      "activation_denominator": 14675744,
+      "activation_fraction": 0.17599632427493966,
+      "positive_pool_count": 2582877,
+      "positive_P50": 0.005002501420676708,
+      "positive_P95": 1.5010055303573537,
+      "quantile_input": "a[a>0] pooled over N,4,712; no per-patch average",
+      "existing_csv_agrees": true
+    },
+    {
+      "role": "train",
+      "source": "outputs/tactile_p37_full_data_revalidation_2026-11-15/train.npz",
+      "key": "sim",
+      "shape": [
+        1824,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "source_version": "P37 old development dataset",
+      "activation_numerator": 691261,
+      "activation_denominator": 5194752,
+      "activation_fraction": 0.1330691051276365,
+      "positive_pool_count": 691261,
+      "positive_P50": 1.039736616803566e-05,
+      "positive_P95": 0.45948466658592224,
+      "quantile_input": "a[a>0] pooled over N,4,712; no per-patch average",
+      "existing_csv_agrees": true
+    },
+    {
+      "role": "validation",
+      "source": "outputs/tactile_p37_full_data_revalidation_2026-11-15/validation.npz",
+      "key": "real",
+      "shape": [
+        1408,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "source_version": "P37 old development dataset",
+      "mask_change_numerator": 17197,
+      "mask_change_denominator": 1002496,
+      "mask_change_fraction": 0.017154183158835545,
+      "frame_pair": "zero-based0->1; first->second retained frame only",
+      "amplitude_abs_change_mean_recorded": "0.0005749664269387722",
+      "existing_csv_agrees": true
+    },
+    {
+      "role": "validation",
+      "source": "outputs/tactile_p37_full_data_revalidation_2026-11-15/validation.npz",
+      "key": "sim",
+      "shape": [
+        406,
+        4,
+        712
+      ],
+      "dtype": "float32",
+      "source_version": "P37 old development dataset",
+      "mask_change_numerator": 277,
+      "mask_change_denominator": 289072,
+      "mask_change_fraction": 0.000958238777882327,
+      "frame_pair": "zero-based0->1; first->second retained frame only",
+      "amplitude_abs_change_mean_recorded": "0.0004527934070210904",
+      "existing_csv_agrees": true
+    }
+  ],
+  "time_evidence": {
+    "train": {
+      "windows": 5153,
+      "nonuniform_dt_windows": 5153,
+      "example": {
+        "role": "train",
+        "domain": "real",
+        "unit": "20260611_145025_hardness_slip_session/trial_0001/CLOSE/0",
+        "group": "20260611_145025_hardness_slip_session",
+        "stage": "CLOSE",
+        "span_seconds": "0.2058417797088623",
+        "dt_min": "0.06001615524291992",
+        "dt_max": "0.07886576652526855",
+        "dt_mean": "0.06861392656962077",
+        "strictly_monotonic": "True",
+        "time_contract": "recorded tactile_ts, historical greedy20Hz (not guaranteed uniform)"
+      },
+      "evidence": "existing timestamp-derived window_time_contract.csv; extraction code mask_diagnostics.py:48–53 reads recorded timestamps; no resampling or signal inference"
+    },
+    "validation": {
+      "windows": 1408,
+      "nonuniform_dt_windows": 1408,
+      "example": {
+        "role": "validation",
+        "domain": "real",
+        "unit": "20260814_150537_stable_maidong_30/trial_0001/CLOSE/0",
+        "group": "20260814_150537_stable_maidong_30",
+        "stage": "CLOSE",
+        "span_seconds": "0.20623159408569336",
+        "dt_min": "0.0652170181274414",
+        "dt_max": "0.07530784606933594",
+        "dt_mean": "0.06874386469523112",
+        "strictly_monotonic": "True",
+        "time_contract": "recorded tactile_ts, historical greedy20Hz (not guaranteed uniform)"
+      },
+      "evidence": "existing timestamp-derived window_time_contract.csv; extraction code mask_diagnostics.py:48–53 reads recorded timestamps; no resampling or signal inference"
+    }
+  },
+  "no_Test_Holdout_read": true,
+  "no_model_execution": true,
+  "scope": "lightweight static re-count on existing Train/Validation arrays only, not new experiment"
+}

@@ -1,0 +1,206 @@
+{
+  "all": [
+    {
+      "role": "train",
+      "group_type": "ALL",
+      "group": "ALL",
+      "windows": "1200",
+      "latent_RMSE": "0.7677740454673767",
+      "Huber": "0.25565120577812195",
+      "Train_mean_reference_Huber": "0.6218109726905823",
+      "Huber_improvement_fraction": "0.5888602435588837",
+      "RealDecoder_NLL": "-4.245328903198242",
+      "oracle_Real_latent_decoder_NLL": "-4.675130367279053",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    },
+    {
+      "role": "validation",
+      "group_type": "ALL",
+      "group": "ALL",
+      "windows": "240",
+      "latent_RMSE": "0.8675159215927124",
+      "Huber": "0.32591983675956726",
+      "Train_mean_reference_Huber": "0.4942297637462616",
+      "Huber_improvement_fraction": "0.34054994583129883",
+      "RealDecoder_NLL": "-1.746824860572815",
+      "oracle_Real_latent_decoder_NLL": "-2.109210729598999",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    }
+  ],
+  "session_worse_than_mean_reference": [
+    {
+      "role": "train",
+      "group_type": "real_groups",
+      "group": "20260611_151944_hardness_slip_session",
+      "windows": "2",
+      "latent_RMSE": "0.9869130849838257",
+      "Huber": "0.41052234172821045",
+      "Train_mean_reference_Huber": "0.39379599690437317",
+      "Huber_improvement_fraction": "-0.04247462749481201",
+      "RealDecoder_NLL": "-5.091765403747559",
+      "oracle_Real_latent_decoder_NLL": "-5.430368423461914",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    },
+    {
+      "role": "train",
+      "group_type": "real_groups",
+      "group": "20260615_143952_hardness_slip_session",
+      "windows": "4",
+      "latent_RMSE": "1.3189812898635864",
+      "Huber": "0.6977943181991577",
+      "Train_mean_reference_Huber": "0.523591160774231",
+      "Huber_improvement_fraction": "-0.33270835876464844",
+      "RealDecoder_NLL": "-4.854968547821045",
+      "oracle_Real_latent_decoder_NLL": "-5.498318195343018",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    },
+    {
+      "role": "train",
+      "group_type": "real_groups",
+      "group": "20260705_213030_hardness_slip_session",
+      "windows": "6",
+      "latent_RMSE": "0.9861764311790466",
+      "Huber": "0.3831292688846588",
+      "Train_mean_reference_Huber": "0.3736487627029419",
+      "Huber_improvement_fraction": "-0.025372743606567383",
+      "RealDecoder_NLL": "-5.280415058135986",
+      "oracle_Real_latent_decoder_NLL": "-5.649149417877197",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    },
+    {
+      "role": "validation",
+      "group_type": "real_groups",
+      "group": "20260816_172352_slip_3D_bottle_C_30",
+      "windows": "34",
+      "latent_RMSE": "0.9047294855117798",
+      "Huber": "0.3374179005622864",
+      "Train_mean_reference_Huber": "0.3256314694881439",
+      "Huber_improvement_fraction": "-0.03619563579559326",
+      "RealDecoder_NLL": "-1.1921758651733398",
+      "oracle_Real_latent_decoder_NLL": "-2.3054018020629883",
+      "scope": "paired only; no valid targetReal latent forNatural"
+    }
+  ],
+  "historical_ambiguity": [
+    {
+      "role": "train",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "",
+      "windows": "1200",
+      "median_sim_distance": "0.009292144139971408",
+      "median_real_target_distance": "6.902215957641602",
+      "median_translator_prediction_distance": "0.0065735685639083385",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "train",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "0.05",
+      "windows": "861",
+      "median_sim_distance": "0.004522027317417016",
+      "median_real_target_distance": "6.750513553619385",
+      "median_translator_prediction_distance": "0.002973503665998578",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "train",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "0.1",
+      "windows": "925",
+      "median_sim_distance": "0.005178523553076837",
+      "median_real_target_distance": "6.558931350708008",
+      "median_translator_prediction_distance": "0.003547320608049631",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "train",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "",
+      "windows": "1200",
+      "median_sim_distance": "0.24955611979363662",
+      "median_real_target_distance": "16.603656768798828",
+      "median_translator_prediction_distance": "0.2656993865966797",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "train",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "0.05",
+      "windows": "571",
+      "median_sim_distance": "0.003355451525620818",
+      "median_real_target_distance": "14.654515266418457",
+      "median_translator_prediction_distance": "0.001861151191405952",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "train",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "0.1",
+      "windows": "586",
+      "median_sim_distance": "0.003557281883019191",
+      "median_real_target_distance": "14.55432415008545",
+      "median_translator_prediction_distance": "0.0019965684041380882",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "",
+      "windows": "240",
+      "median_sim_distance": "0.007825927549522818",
+      "median_real_target_distance": "14.579841613769531",
+      "median_translator_prediction_distance": "0.011603429913520813",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "0.05",
+      "windows": "156",
+      "median_sim_distance": "0.004370808124815971",
+      "median_real_target_distance": "13.879068374633789",
+      "median_translator_prediction_distance": "0.005884512327611446",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "any_other_window",
+      "sim_distance_upper_bound": "0.1",
+      "windows": "161",
+      "median_sim_distance": "0.004664191105954679",
+      "median_real_target_distance": "13.914566040039062",
+      "median_translator_prediction_distance": "0.006116639357060194",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "",
+      "windows": "240",
+      "median_sim_distance": "0.007825927549522818",
+      "median_real_target_distance": "14.579841613769531",
+      "median_translator_prediction_distance": "0.011603429913520813",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "0.05",
+      "windows": "156",
+      "median_sim_distance": "0.004370808124815971",
+      "median_real_target_distance": "13.879068374633789",
+      "median_translator_prediction_distance": "0.005884512327611446",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    },
+    {
+      "role": "validation",
+      "mode": "different_Real_session",
+      "sim_distance_upper_bound": "0.1",
+      "windows": "161",
+      "median_sim_distance": "0.004664191105954679",
+      "median_real_target_distance": "13.914566040039062",
+      "median_translator_prediction_distance": "0.006116639357060194",
+      "scope": "near inputs with differing targets indicate ambiguity; not a proof of irreducible error"
+    }
+  ]
+}

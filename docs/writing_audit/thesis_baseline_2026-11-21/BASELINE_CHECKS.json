@@ -1,0 +1,26 @@
+{
+  "current_body_counts": {
+    "1": 8493,
+    "2": 8947,
+    "3": 8587,
+    "4": 7633,
+    "5": 8658,
+    "body": 42318
+  },
+  "chapter_freeze_identity": {
+    "1": {
+      "matches_freeze": true
+    },
+    "2": {
+      "source_snapshots": [
+        "thesis/releases/ch02_2026-11-20/ch02_simulation_platform.tex"
+      ],
+      "matches_snapshot": true
+    }
+  },
+  "current_pdf_matches_formal_build_inputs": true,
+  "full_pages": 71,
+  "chapter5_pages": 13,
+  "build_input_count": 23,
+  "asset_count": 2219
+}

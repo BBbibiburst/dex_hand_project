@@ -1,0 +1,7 @@
+{
+  "build": "bash docs/writing_audit/ch05_writing_v1_2026-11-20/section_5_4_v1_2026-11-21/revision_r1/build_preview.sh",
+  "count_engine": "scripts/count_thesis_words.py Counter with absolute output path",
+  "render": "PYTHONPATH=thesis/.tools/python python3 (PyMuPDF page rendering/text extraction)",
+  "fallbacks": "System pdfinfo/pdftotext unavailable and mujoco env lacks fitz; used existing thesis/.tools/python pymupdf, installed nothing",
+  "no_training_inference_simulation": true
+}

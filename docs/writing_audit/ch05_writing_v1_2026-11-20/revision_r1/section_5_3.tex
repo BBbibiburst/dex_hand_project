@@ -1,0 +1,82 @@
+% CH05-5.3 only: standalone section fragment, not included in thesis.tex.
+\section{GMM统计先验引导的仿真触觉伪配对构建}
+\label{sec:ch05_gmm_pseudopairs}
+
+真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再通过原有传感器链路获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。所得配对提供统计监督，不代表两域经历了相同的物理接触。
+
+\begin{figure}[htbp]
+ \centering
+ \fbox{\begin{minipage}{0.91\textwidth}\centering
+ Real Train $\rightarrow$ Patch索引偏移统计 $\rightarrow$ 冻结GMM\\[4pt]
+ $\downarrow$ 对指定Real目标作分量响应分解\\[4pt]
+ 字典位置检索与加载估计 $\rightarrow$ 球形探针物理执行\\[4pt]
+ $\downarrow$ 原生触觉读取与既有信号处理\\[4pt]
+ 完整$4\times712$响应 $\rightarrow$ 统计准入与伪配对登记
+ \end{minipage}}
+ \caption{GMM统计先验引导仿真接触与伪配对构建流程}
+ \label{fig:ch05_gmm_physical_pipeline}
+\end{figure}
+
+GMM按Patch建模。各Taxel行列索引映射至$[-0.5,0.5]^2$网格，以训练集该Patch正值响应的第5百分位筛选有效响应。每个Session最多取48帧，每帧按响应权重抽取16个位置，并减去该帧响应质心；随后按Session轮转抽样，形成最多2048个二维偏移点。因此，拟合对象是响应相对质心的扩散偏移，而非原始712维数组、物理压力或后续VAE潜变量。记偏移为$\boldsymbol u$，第$p$个Patch的分布为
+\begin{equation}
+ p_p(\boldsymbol u)=\sum_{k=1}^{K_p}\pi_{pk}
+ \mathcal N(\boldsymbol u;\boldsymbol\mu_{pk},\boldsymbol\Sigma_{pk}),
+ \qquad \sum_{k=1}^{K_p}\pi_{pk}=1.
+ \label{eq:ch05_gmm_prior}
+\end{equation}
+其中，$\pi_{pk}$为混合权重，$\boldsymbol\mu_{pk}$和完整协方差$\boldsymbol\Sigma_{pk}$描述偏移中心与扩散。实现采用EM拟合，候选分量数为1、2、3，最多60次迭代，以BIC选择，并检查Session三折核稳定性。协方差初始化与更新分别加入$0.0025\boldsymbol I$和$0.0004\boldsymbol I$正则项。虽保存了分阶段模型，本节逆构造使用全阶段合并先验；参数拟合不使用Real Validation。BIC采用$-2\log L+(6K_p-1)\log n$，其中$n$为拟合偏移点数，不能作为独立采集数量。若阶段数据不足，回退同Patch合并阶段数据；三折平均核总变差超过0.25且分量数大于1时，回退单分量模型。对Session限制取帧并轮转抽样，可减轻长记录对拟合样本构成的支配，但不消除会话间差异。
+
+对指定Real窗口，令$w_{pj}$为Taxel四帧平均响应，$\boldsymbol q_{pj}$为固定网格坐标。当前实现直接在该网格评估冻结分量，计算责任度及分量响应量：
+\begin{equation}
+ \begin{aligned}
+ r_{pjk}&=\frac{\pi_{pk}\mathcal N(\boldsymbol q_{pj};\boldsymbol\mu_{pk},\boldsymbol\Sigma_{pk})}
+ {\sum_{\ell=1}^{K_p}\pi_{p\ell}\mathcal N(\boldsymbol q_{pj};\boldsymbol\mu_{p\ell},\boldsymbol\Sigma_{p\ell})},\\
+ m_{pk}&=\sum_j w_{pj}r_{pjk},\qquad
+ \boldsymbol c_{pk}=\frac{\sum_j w_{pj}r_{pjk}\boldsymbol q_{pj}}{m_{pk}}.
+ \end{aligned}
+ \label{eq:ch05_gmm_responsibility}
+\end{equation}
+仅处理$m_{pk}>0$的分量。软责任度允许一个Taxel对多个分量贡献响应，$\boldsymbol c_{pk}$是原网格上重新加权的中心，并非将分量均值加回目标质心。训练坐标已中心化，逆构造却未减去目标质心，二者存在原点语义不一致。故仅能作启发式权重，不保证空间先验的平移一致性。
+
+\begin{table}[htbp]
+ \centering\small
+ \caption{球形探针响应字典的组织}
+ \label{tab:ch05_probe_dictionary}
+ \begin{tabular}{p{0.28\textwidth}p{0.59\textwidth}}
+ \hline
+ 条件或字段 & 实际设置与含义\\
+ \hline
+ 接触区域与位置 & 16个Patch，各取中心及上下左右共5个位置\\
+ 探针与加载 & 半径4~mm；基础深度0.25、0.5、1~mm\\
+ 手部初态设置 & 2种驱动指令；与位置、深度组合成480行\\
+ 记录及取窗 & 每条32帧，固定取零基索引12--15帧\\
+ 状态指纹 & 首个保存步的qpos与目标球心量化后联合散列，共160种，非独立Root认证\\
+ 响应与来源 & 原生及processed触觉、探针条件和Episode来源\\
+ \hline
+ \end{tabular}
+\end{table}
+
+字典将可执行条件与观测响应关联，见表\ref{tab:ch05_probe_dictionary}。各Patch分量按$m_{pk}$合并排序后保留最多5个。对每个保留分量，先在手部驱动指令为0、深度0.25~mm且非零响应的字典条目中，选择响应质心最接近$\boldsymbol c_{pk}$的位置；再利用同位置的响应总量与深度关系插值估计基础加载。四帧Patch总量相对其均值的变化用于设置加载因子，而不直接写入触觉数组。基础命令受既定范围约束，不能解释为真实材料压陷量。具体而言，四帧加载因子限制在$[0,2]$；反馈按目标与生成Patch总响应之比估计调整倍率，并将倍率限制在$[0.5,2]$、基础深度限制在$[0.1,1]$~mm。该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。
+
+\begin{figure}[htbp]
+ \centering
+ \fbox{\begin{minipage}{0.91\textwidth}\centering
+ 一个Real目标 $\rightarrow$ 各Patch软分量：$r_{pjk},m_{pk},\boldsymbol c_{pk}$\\[4pt]
+ $\downarrow$ 全部分量按分量响应量排序，保留至多5个\\[4pt]
+ 字典基元组合 $\rightarrow$ 至多3次物理候选与反馈\\[4pt]
+ $\downarrow$ 取已执行候选中代价最小者，再检查准入条件\\[4pt]
+ 一组Real--Sim伪配对；完整多解概率未进入后续监督
+ \end{minipage}}
+ \caption{软分量分解、候选压缩与单一伪配对选择示意}
+ \label{fig:ch05_gmm_candidate_selection}
+\end{figure}
+
+探针由目标体约束驱动球形碰撞体，在MuJoCo中推进接触并读取原生触觉，经既有处理得到无量纲712维观测，而非真实压力场。每个目标至多执行初始检索、深度反馈、深度反馈加邻近位置修正三个候选，统计门槛通过即停止，后续候选不再执行。记实际执行集合为$\mathcal A$，选择规则为
+\begin{equation}
+ a^*=\operatorname*{arg\,min}_{a\in\mathcal A}
+ \left[1-s_a+d_a+e_a\right],
+ \label{eq:ch05_pair_selection}
+\end{equation}
+其中，$s_a$为逐帧Patch响应比例余弦相似度的四帧均值，零响应帧也计入。$d_a$在Real主响应Patch双方活跃帧上，比较Sim质心与Real质心加GMM混合均值的锚点；无双方活跃帧时，排序中该项取1且不允许登记。混合均值按冻结权重$\pi_{pk}$计算，而非按$m_{pk}$计算；混合协方差同时包含分量协方差与分量间均值差异。$e_a$是Sim协方差与该混合协方差之差的Frobenius范数的四帧均值，零Sim帧协方差按0计入，未除以目标协方差范数。响应比例及质心、协方差计算中的响应总量分母设$10^{-12}$下限，这不构成误差的相对归一化。仅当所选结果非零、$s_a\ge0.8$、$d_a\le0.2$、$e_a\le0.1$且不重复时登记。仅比较已执行集合，不保证全局最优。上述距离均在索引空间计算，不是物理接触误差。目标按预先确定的来源元数据顺序处理，生成过程不调用域分类器评分。登记时保留Real来源、实际探针条件、所选Episode和匹配统计，并检查Real与Sim窗口的数值重复。这样可以追踪监督样本如何产生，却不能仅凭文件唯一性认定物理初态独立；未通过的候选也应保留，以区分缺少字典支持与已执行但统计不匹配的情况。
+
+图\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。

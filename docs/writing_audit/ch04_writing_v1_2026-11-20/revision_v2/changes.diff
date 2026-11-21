@@ -1,0 +1,20 @@
+--- chapter04_R1.tex
++++ thesis/body/ch04_multimodal_data.tex
+@@ -264,11 +264,14 @@
+  \end{tabular}
+ \end{table}
+ 
+-\begin{figure}[htbp]
+- \centering
+- \includegraphics[width=0.78\textwidth]{figures/ch04/sink_historical_precision.pdf}
++\begin{figure}[!htbp]
++ \centering
++ \setlength{\abovecaptionskip}{0pt}
++ \vspace{-10pt}
++ \includegraphics[width=0.78\textwidth]{figures/ch04/sink_historical_precision_r2.pdf}
+  \caption{由已有报告绘制的Sink回放偏差对照（历史记录，非本轮新实验）}
+  \label{fig:ch04_sink_precision}
++ \vspace{-14pt}
+ \end{figure}
+ 
+ 两种设置同时改变完整状态保存与控制精度，因此该对照支持原状态/精度合同不足的解释，但没有分离两个因素的独立贡献。偏差0也只指报告中对应保存状态的比较方式，不能推广为任意任务、模型版本和浮点后端均逐位复现。保存额外状态能够增加回放证据，却不产生新的物理多样性；同一条件的旧隔离副本和新通过副本不能重复累计为新增时长。

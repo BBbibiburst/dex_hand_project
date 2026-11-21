@@ -1,0 +1,42 @@
+{
+  "labels": [
+    "sec:ch05_latent_translator",
+    "eq:ch05_translator_mapping",
+    "eq:ch05_translator_objective",
+    "fig:ch05_translator_paths"
+  ],
+  "duplicate_local_labels": [],
+  "duplicate_with_frozen53_54": [],
+  "refs": [
+    "fig:ch05_translator_paths"
+  ],
+  "unresolved_refs": [],
+  "citations": [],
+  "missing_citations": [],
+  "environment_errors": [],
+  "unclosed_environments": [],
+  "brace_balance": 0,
+  "negative_brace_balance": false,
+  "display_equations": 2,
+  "figures": 1,
+  "wordcount_in_budget": true,
+  "step_arithmetic": {
+    "total": 855,
+    "selected": 570
+  },
+  "static_only_not_compiled": true,
+  "numeric_source_verification": {
+    "seed": 4303,
+    "pairs_train": 1200,
+    "pairs_validation": 240,
+    "parameter_count": 181824,
+    "epochs": 45,
+    "steps_per_epoch": 19,
+    "total_steps": 855,
+    "selected_epoch": 30,
+    "selected_steps": 570,
+    "NLL_weight": 0.1,
+    "Huber_delta": 1,
+    "sources": "CH05_55_TRAINING_AUDIT.md, checkpoint_metadata.json, training_evidence.json"
+  }
+}

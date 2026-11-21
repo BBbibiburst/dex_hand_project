@@ -1,0 +1,23 @@
+{
+  "mask_after": {
+    "D_min": 0.02718456112852663,
+    "probe": "mlp",
+    "seed": "12",
+    "count": 11,
+    "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+  },
+  "amplitude_after": {
+    "D_min": 0.14935764666368123,
+    "probe": "transformer",
+    "seed": "11",
+    "count": 11,
+    "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+  },
+  "full_after": {
+    "D_min": 0.05725551388266892,
+    "probe": "transformer",
+    "seed": "11",
+    "count": 11,
+    "scope": "P39 existing exposed validation; independent post-conversion probes, NOT frozen C0"
+  }
+}

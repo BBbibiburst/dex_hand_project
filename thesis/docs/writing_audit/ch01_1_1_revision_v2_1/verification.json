@@ -1,0 +1,144 @@
+{
+  "task": "TH-CH01-1.1-V2.1",
+  "stage": "4; targeted edits only, awaiting final user review",
+  "exact_replacements": 4,
+  "paragraphs": 6,
+  "chapter_before_sha256": "efe537cb056a49c21f74252513eb9d99e65738977c3b8cb99d167ebaf1916d31",
+  "chapter_after_sha256": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2",
+  "bib_before_sha256": "7ceb75b0fa4b64f70ef0b9318d88d9ebf99a4338b2feb965d30b037c44f2d0dc",
+  "bib_after_sha256": "7ceb75b0fa4b64f70ef0b9318d88d9ebf99a4338b2feb965d30b037c44f2d0dc",
+  "changed_protected_files": [
+    "thesis/body/ch01_introduction.tex"
+  ],
+  "unchanged_protected_count": 25,
+  "urls": [
+    {
+      "line": 15,
+      "value": "https://doi.org/10.1177/0278364919887447",
+      "pure_url": true
+    },
+    {
+      "line": 28,
+      "value": "https://doi.org/10.1109/TRO.2013.2289018",
+      "pure_url": true
+    },
+    {
+      "line": 40,
+      "value": "https://doi.org/10.1016/j.mechatronics.2017.11.002",
+      "pure_url": true
+    },
+    {
+      "line": 53,
+      "value": "https://doi.org/10.1109/LRA.2018.2852779",
+      "pure_url": true
+    },
+    {
+      "line": 65,
+      "value": "https://doi.org/10.1109/IROS.2017.8202133",
+      "pure_url": true
+    },
+    {
+      "line": 78,
+      "value": "https://proceedings.mlr.press/v164/mandlekar22a.html",
+      "pure_url": true
+    },
+    {
+      "line": 91,
+      "value": "https://proceedings.mlr.press/v229/walke23a.html",
+      "pure_url": true
+    },
+    {
+      "line": 103,
+      "value": "https://doi.org/10.1109/ICRA57147.2024.10611615",
+      "pure_url": true
+    },
+    {
+      "line": 116,
+      "value": "https://doi.org/10.1109/LRA.2022.3146945",
+      "pure_url": true
+    },
+    {
+      "line": 129,
+      "value": "https://doi.org/10.1109/LRA.2022.3142412",
+      "pure_url": true
+    }
+  ],
+  "author_encoding": [
+    {
+      "line": 8,
+      "non_ascii": [
+        {
+          "character": "ó",
+          "codepoint": "0xf3"
+        }
+      ],
+      "tex_accent": false
+    },
+    {
+      "line": 21,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 34,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 46,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 59,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 71,
+      "non_ascii": [],
+      "tex_accent": true
+    },
+    {
+      "line": 84,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 97,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 109,
+      "non_ascii": [],
+      "tex_accent": false
+    },
+    {
+      "line": 122,
+      "non_ascii": [],
+      "tex_accent": false
+    }
+  ],
+  "bibliography_entries": 10,
+  "unique_cited_keys": 10,
+  "issues": {
+    "duplicate_keys": [],
+    "markdown_in_keys": [],
+    "missing_citation_keys": [],
+    "duplicate_normalized_titles": [],
+    "duplicate_dois": [],
+    "static_entry_errors": []
+  },
+  "backend": "latexmk XeLaTeX plus BibTeX/hithesis.bst; no Biber configured",
+  "compile_or_backend_invoked": false,
+  "special_character_status": "UTF-8 ó on line8 needs actual backend/display verification; TeX accent on line71 is standard syntax; neither is proven a syntax failure",
+  "required_docs": {
+    "THESIS_PLAN_V2.md": "b3a4d425fe6fd8c2811affaae0911ed7d11453e1f576f660315a84a0a3bca056",
+    "ROBOTICS_EVIDENCE.md": "a6c0c1b97f8eb9212d8539fbffc4285ec78f58e62d2eca8e3775d61684377786",
+    "EXPERIMENT_EVIDENCE.md": "b95b1eaf428f6a35ff0bdb2f9c18e054e5bd8935a91f6829f14df421d79cd961",
+    "THESIS_WRITING_STANDARD.md": "2b93cf36928440665bf5a6e49e3fb8934e1ddb5740b1885dcbedf4d299e56daf",
+    "REFERENCE_THESIS_ANALYSIS.md": "63a0a867af7a7e3c5faa9534ca76c9af6ed56a3b612a5607b02f9b7bdbb2eb3f",
+    "SYMBOLS_AND_TERMS.md": "33f99217c647a7ae10599cd5d49234e9c910db4f5c50286049a5e3309b115c83"
+  }
+}

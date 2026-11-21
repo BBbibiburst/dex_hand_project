@@ -1,0 +1,174 @@
+{
+  "mask_statistics.csv": [
+    {
+      "role": "train",
+      "candidate": "Real",
+      "stage": "ALL",
+      "patch": "ALL",
+      "windows": "5153",
+      "groups": "32",
+      "activation_fraction": "0.17599632427493966",
+      "all_zero_window_fraction": "0.0",
+      "all_zero_frame_fraction": "0.0006792159906850379",
+      "activation_count_mean": "125.30938288375704"
+    },
+    {
+      "role": "train",
+      "candidate": "raw",
+      "stage": "ALL",
+      "patch": "ALL",
+      "windows": "1824",
+      "groups": "36",
+      "activation_fraction": "0.1330691051276365",
+      "all_zero_window_fraction": "0.020285087719298246",
+      "all_zero_frame_fraction": "0.02042214912280702",
+      "activation_count_mean": "94.74520285087719"
+    }
+  ],
+  "amplitude_statistics.csv": [
+    {
+      "role": "train",
+      "candidate": "Real",
+      "stage": "ALL",
+      "patch": "ALL",
+      "windows": "5153",
+      "independent_groups": "32",
+      "positive_values": "2582877",
+      "minimum": "2.0378938558739235e-20",
+      "maximum": "12.269109725952148",
+      "positive_P10": "0.0003001500735990703",
+      "positive_P25": "0.0010505252284929156",
+      "positive_P50": "0.005002501420676708",
+      "positive_P75": "0.025862932205200195",
+      "positive_P90": "0.3003101527690864",
+      "positive_P95": "1.5010055303573537",
+      "positive_P99": "4.108879566192627"
+    },
+    {
+      "role": "train",
+      "candidate": "raw",
+      "stage": "ALL",
+      "patch": "ALL",
+      "windows": "1824",
+      "independent_groups": "36",
+      "positive_values": "691261",
+      "minimum": "1.401298464324817e-45",
+      "maximum": "0.9283626675605774",
+      "positive_P10": "3.401529704714115e-27",
+      "positive_P25": "1.3629926115113147e-16",
+      "positive_P50": "1.039736616803566e-05",
+      "positive_P75": "0.014434266835451126",
+      "positive_P90": "0.02898675575852394",
+      "positive_P95": "0.45948466658592224",
+      "positive_P99": "0.8799999952316284"
+    }
+  ],
+  "temporal_statistics.csv": [
+    {
+      "role": "validation",
+      "candidate": "Real",
+      "stage": "ALL",
+      "transition": "0",
+      "00": "0.8200820751404494",
+      "01": "0.008540682456588355",
+      "10": "0.00861350070224719",
+      "11": "0.162763741700715",
+      "change_fraction": "0.017154183158835545",
+      "amplitude_abs_change_mean": "0.0005749664269387722"
+    },
+    {
+      "role": "validation",
+      "candidate": "raw",
+      "stage": "ALL",
+      "transition": "0",
+      "00": "0.8742216472020812",
+      "01": "0.0008613770963635357",
+      "10": "9.686168151879117e-05",
+      "11": "0.12482011402003652",
+      "change_fraction": "0.000958238777882327",
+      "amplitude_abs_change_mean": "0.0004527934070210904"
+    }
+  ],
+  "representation_counts.csv": [
+    {
+      "job": "mask_before",
+      "role": "train",
+      "domain": "sim",
+      "input_windows": "1824",
+      "included_windows": "1824",
+      "excluded_no_positive_frame": "0",
+      "groups": "36",
+      "window_IDs": "1824"
+    },
+    {
+      "job": "mask_before",
+      "role": "train",
+      "domain": "real",
+      "input_windows": "5153",
+      "included_windows": "5153",
+      "excluded_no_positive_frame": "0",
+      "groups": "32",
+      "window_IDs": "5153"
+    },
+    {
+      "job": "mask_before",
+      "role": "validation",
+      "domain": "sim",
+      "input_windows": "406",
+      "included_windows": "406",
+      "excluded_no_positive_frame": "0",
+      "groups": "8",
+      "window_IDs": "406"
+    },
+    {
+      "job": "mask_before",
+      "role": "validation",
+      "domain": "real",
+      "input_windows": "1408",
+      "included_windows": "1408",
+      "excluded_no_positive_frame": "0",
+      "groups": "7",
+      "window_IDs": "1408"
+    },
+    {
+      "job": "amplitude_after",
+      "role": "train",
+      "domain": "sim",
+      "input_windows": "1824",
+      "included_windows": "1824",
+      "excluded_no_positive_frame": "0",
+      "groups": "36",
+      "window_IDs": "1824"
+    },
+    {
+      "job": "amplitude_after",
+      "role": "train",
+      "domain": "real",
+      "input_windows": "5153",
+      "included_windows": "5139",
+      "excluded_no_positive_frame": "14",
+      "groups": "32",
+      "window_IDs": "5139"
+    },
+    {
+      "job": "amplitude_after",
+      "role": "validation",
+      "domain": "sim",
+      "input_windows": "406",
+      "included_windows": "406",
+      "excluded_no_positive_frame": "0",
+      "groups": "8",
+      "window_IDs": "406"
+    },
+    {
+      "job": "amplitude_after",
+      "role": "validation",
+      "domain": "real",
+      "input_windows": "1408",
+      "included_windows": "1408",
+      "excluded_no_positive_frame": "0",
+      "groups": "7",
+      "window_IDs": "1408"
+    }
+  ]
+}

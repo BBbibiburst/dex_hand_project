@@ -1,0 +1,9 @@
+{
+  "commands": [
+    "/home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/plot_sink_compact.py",
+    "bash docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/build_preview.sh",
+    "./scripts/count_thesis_words.sh --chapter 4 --output-dir docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/wordcount",
+    "PYTHONPATH=thesis/.tools/python python3 docs/writing_audit/ch04_writing_v1_2026-11-20/revision_v2/package_r2.py"
+  ],
+  "no_experiments": true
+}

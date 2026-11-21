@@ -1,0 +1,16 @@
+{
+  "section": "5.4 基于双域变分自编码器的触觉表示学习",
+  "date": "2026-11-21",
+  "state": "FROZEN_DRAFT",
+  "authorization": "本轮用户建议完成五项R1定点修订、临时编译检查后冻结5.4初稿；本次按此范围执行",
+  "review_boundary": "V1用户内容审核通过；R1为定点修订及执行者PDF检查，未声称用户另行审核R1 PDF",
+  "TeXcount": 1496,
+  "body_pages": 3,
+  "preview_with_references_pages": 4,
+  "section_sha256": "4f083c1142be4c26f318f2808fd234db340cc4d8278a3391da1c9fb6ea2b6c7b",
+  "pdf_sha256": "eaf6d27954ccf6e813d10c4ceb81e622c953749a796925c9a7caf8eb3e5b8b0c",
+  "V1_retained": true,
+  "global_main_unchanged": true,
+  "section5_5_started": false,
+  "commit_push": false
+}

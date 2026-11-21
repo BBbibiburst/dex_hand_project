@@ -1,0 +1,10 @@
+{
+  "commands": [
+    "PYTHONPATH=. OPENBLAS_NUM_THREADS=1 /home/zmy/miniconda3/envs/mujoco/bin/python docs/writing_audit/ch02_writing_v1_2026-11-20/plot_geometry.py",
+    "./scripts/count_thesis_words.sh --chapter 2 --output-dir docs/writing_audit/ch02_writing_v1_2026-11-20/wordcount",
+    "./scripts/count_thesis_words.sh --files --output-dir docs/writing_audit/ch02_writing_v1_2026-11-20/wordcount",
+    "python3 docs/writing_audit/ch02_writing_v1_2026-11-20/package_delivery.py"
+  ],
+  "no_latex_compilation": true,
+  "no_physics_simulation": true
+}

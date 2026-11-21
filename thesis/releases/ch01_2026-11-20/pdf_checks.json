@@ -1,0 +1,175 @@
+{
+  "citations_used": 28,
+  "bbl_entries": 28,
+  "missing_keys": [],
+  "duplicate_bib_keys": false,
+  "source_labels_resolved": 11,
+  "table_reference": "1-1 on printed page 8",
+  "undefined_citations_or_references": false,
+  "chinese_text_search": [
+    "研究背景与意义",
+    "国内外研究现状",
+    "研究问题与技术难点",
+    "主要研究内容与创新点",
+    "论文组织结构",
+    "表1-1",
+    "GMM",
+    "GRUTranslator"
+  ],
+  "chinese_text_copy_extract": "passed",
+  "fonts": [
+    {
+      "name": "XKTRGJ+FandolSong-Regular-Identity-H",
+      "embedded_bytes": 299987
+    },
+    {
+      "name": "JUWCCN+FandolHei-Regular-Identity-H",
+      "embedded_bytes": 66855
+    },
+    {
+      "name": "KNSXTL+TeXGyreTermesX-Regular-Identity-H",
+      "embedded_bytes": 9543
+    }
+  ],
+  "page_checks": [
+    {
+      "full_pdf_page": 7,
+      "printed_page": 1,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 8,
+      "printed_page": 2,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 9,
+      "printed_page": 3,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 10,
+      "printed_page": 4,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 11,
+      "printed_page": 5,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 12,
+      "printed_page": 6,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 13,
+      "printed_page": 7,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 14,
+      "printed_page": 8,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 15,
+      "printed_page": 9,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    },
+    {
+      "full_pdf_page": 16,
+      "printed_page": 10,
+      "header": true,
+      "footer_checked": true,
+      "visual_review": "reviewed at rendered overview; table also reviewed full-page",
+      "missing_replacement_character": false
+    }
+  ],
+  "links_in_combined_extract": 39,
+  "texcount": 8493,
+  "warnings": {
+    "bibtex": [
+      "Require citedate: openai2020dexterous",
+      "Require citedate: luo2017tactile",
+      "Require citedate: calandra2018feeling",
+      "Require address: fang2024rh20t",
+      "Require citedate: fang2024rh20t",
+      "Require address: tobin2017randomization",
+      "Require citedate: tobin2017randomization",
+      "Require citedate: bohg2014grasp",
+      "Require address: mandlekar2022demonstrations",
+      "Require citedate: mandlekar2022demonstrations",
+      "Require address: walke2023bridgedata",
+      "Require citedate: walke2023bridgedata",
+      "Require citedate: wang2022tacto",
+      "Require citedate: si2022taxim",
+      "Require address: wang2023dexgraspnet",
+      "Require citedate: wang2023dexgraspnet",
+      "Require address: zurbrugg2025graspqp",
+      "Require citedate: zurbrugg2025graspqp",
+      "Require citedate: zurbrugg2026dexevolve",
+      "Require citedate: xu2023unidexgrasp",
+      "Require address: todorov2012mujoco",
+      "Require citedate: todorov2012mujoco",
+      "Require citedate: makoviychuk2021isaacgym",
+      "Require address: mandlekar2023mimicgen",
+      "Require citedate: mandlekar2023mimicgen",
+      "Require citedate: khazatsky2024droid",
+      "Require address: openx2024embodiment",
+      "Require citedate: openx2024embodiment",
+      "Require citedate: sferrazza2022simtoreal",
+      "Require address: narang2021latentprojections",
+      "Require citedate: narang2021latentprojections",
+      "Require citedate: kingma2014vae",
+      "Require address: zhu2017cyclegan",
+      "Require citedate: zhu2017cyclegan",
+      "Require citedate: liu2017unit",
+      "Require citedate: ganin2016dann",
+      "Require citedate: goodfellow2014gan",
+      "Require citedate: gretton2012mmd",
+      "Require address: naeem2020metrics",
+      "Require citedate: naeem2020metrics"
+    ],
+    "overfull_hbox": [
+      "5.79674pt too wide",
+      "2.0989pt too wide"
+    ],
+    "font_size_substitution": "U/rsfs nominal math sizes; maximum 0.47188pt; chapter has no math formulae",
+    "glossaries": "no printglossary; not used in this chapter"
+  },
+  "visual_result": "PASS_FOR_CHAPTER_DRAFT_WITH_NONBLOCKING_WARNINGS",
+  "visual_issues": [
+    "Table 1-1 has narrow, justified cells and tight English inter-column spacing; 5.79674pt/2.0989pt column-box excess. Text remains legible; no page clipping observed.",
+    "Table floats on printed page 8, between parts of section 1.3; retained per approved source.",
+    "Bibliography emits 28 missing citedate and 12 missing address warnings. Entries render and all citations resolve; no unverified metadata filled."
+  ],
+  "full_thesis_scope": "25-page build includes cover placeholders and old six-chapter stubs; only Chapter 1 is frozen."
+}

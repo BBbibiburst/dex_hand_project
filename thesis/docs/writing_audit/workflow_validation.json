@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-19",
+  "errors": [],
+  "section_cards": 31,
+  "indexed_reports": 170,
+  "verified_csv_claims": 20,
+  "unchanged_tex_and_template_files": 22,
+  "reference_pages": 79,
+  "git_head": "ff7b1a17e3122d7456dfa3f48c1bb7a0c2c7f421",
+  "scope": "writing workflow only; no training, no official prose, no commit/push",
+  "limitations": [
+    "indexed reports are not all independently re-evaluated",
+    "auxiliary theses unavailable/unread as recorded",
+    "literature and school administrative fields still require verification"
+  ],
+  "files": {
+    "REFERENCE_THESIS_ANALYSIS.md": "5d8089bc9c103ae2d2968957cdea5b3b7d648bff8c1ff3372a3cfbf575c6701d",
+    "THESIS_WRITING_STANDARD.md": "acb725dd48fb8ab57540d0b004697cfd13c108eccb679619b2ae3f745a1d2cad",
+    "THESIS_PLAN.md": "dcd915dad827c3a8d4876c58c296a0e8b90ccbc46fd0eed790279726562932b6",
+    "EXPERIMENT_EVIDENCE.md": "97ab9cb8e3c24b7996542a7285f179f896ab44b138374a8f463037891ecbeec2",
+    "SYMBOLS_AND_TERMS.md": "31e57aae204a485071b722ac5a0687774ae304604cfec994f36cf33aa4496c1c",
+    "AGENTS.md": "5ce35bc92544ef897fd90a94e05dd98203834d4f8d9d9d0d5fd5f1e1154e22c6",
+    "README.md": "724156f8cdc6d5dfd9250c9fa262ccafde7aea26cebf75c72fcd8bdb6fe83960",
+    "docs/school_requirements.md": "e77a260bb1417b2fb3fe534ee1183a6d1c03b53ebeb95c32da4900bafcec4110",
+    "scripts/build_writing_evidence.py": "db488f996a5c22b416ae4eaeb7ab0109af3d78968bac133a3030aa889b28aa56",
+    "scripts/check_writing_workflow.py": "95d033a34f4be92553ee4dab32b2656ab4bf8be84a38dc17970cc14e0f4c9a0c",
+    "docs/writing_audit/evidence_catalog.csv": "cc2b521e9f48532af306ed2a6e5d77ab9118b74df7e74a3c5e6bc9143a7f0479",
+    "docs/writing_audit/evidence_catalog.json": "b26cddf3fa5b8fa1efcdd75b755ffb6cae3d834e93bdf87d8e99c830f1387c6a",
+    "docs/writing_audit/reference_fulltext.txt": "d20ad649c1c94eb3c34b6e2091a8479287226ce8675be9d41179d9d30c1ee0fc",
+    "docs/writing_audit/reference_page_19.png": "2265e13a7159d50199472246045a46d77cac26785d42f1ecb4550ae20370326c",
+    "docs/writing_audit/reference_page_23.png": "71ff2f6791aa4a546972f13632be9e9c2b01eb3cc4c508c5c4382a80cca37af7",
+    "docs/writing_audit/reference_page_41.png": "461becd30466ec8e97d6375a23f81663e7fb5de2880e9c4b49446acedd5105df",
+    "docs/writing_audit/reference_page_60.png": "75c8153077674e4a3bafea4ba4f1c44f319fa4f75bd434f4f1f49b36b290c806",
+    "docs/writing_audit/reference_page_64.png": "e0f78913eff7b8574abdf136534505aa081ed2bfe521ccaaa457cfafa80083ae",
+    "docs/writing_audit/reference_page_65.png": "ffd75aed41ca64874e7186cddbef70e2b3a97f2c51158d9986c43aa72538b413",
+    "docs/writing_audit/reference_pages.json": "6b351b638d46f42f42891c0f440d39c9d23218a274d7ed9974aab1495ac44a0b",
+    "docs/writing_audit/reference_pdf_metadata.json": "5c9f4d6a2e93804ef660aecbd43525df24c84ad6f2df1a4ff73cd1fbaf8ac201",
+    "docs/writing_audit/verified_claims.csv": "da95f452bfa7f44379597a14a48b30c1820aeda42d00970a22655cc604ed3c97",
+    "docs/writing_audit/verified_code_sources.json": "4dfa0c32d5953d65c7952a25c36328e5f2b370e414137961551dee4574a3c88b",
+    "docs/writing_audit/workflow_request_2026-11-19.md": "efec6122d13916d3a9df231467f6728c5808277da735a405032ec5d03fce4733"
+  }
+}
