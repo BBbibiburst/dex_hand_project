@@ -59,7 +59,7 @@ def execute(payload, output, budget):
         phase = 'REPLAY'
         manifest = output / "source_episode/manifest.json"
         verification = {"manifest": str(manifest), "manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
-                        **profile.call('independent_replay', replay, manifest)}
+                        **profile.call('independent_replay', replay, manifest, require_trajectory=True)}
         with (output / "independent_replay.json").open("x") as stream:
             json.dump(verification, stream, indent=2)
         if not verification["passed"]:

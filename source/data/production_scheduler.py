@@ -13,6 +13,7 @@ def enqueue_next(queue, templates, config, sampling_seed):
     stats, covered = queue.scheduling_stats(count_failures=config['count_failed_episodes']
                                            and not config.get('coverage_requires_success', True))
     efficiency = queue.scheduling_efficiency()
+    asset_counts=queue.asset_episode_counts() if hasattr(queue,"asset_episode_counts") else {}
     failure_limit = config.get('template_failure_limit', 3)
     duplicate_limit = config.get('template_duplicate_limit', 3)
     blocked = []
@@ -58,11 +59,12 @@ def enqueue_next(queue, templates, config, sampling_seed):
         rate = productive / measured['worker_seconds'] if complete else None
         exploration = task_scheduled[task] % config.get('efficiency_exploration_interval', 10) == 0
         efficiency_rank = -rate if rate is not None and template['asset_hash'] in covered and not exploration else 0.
-        rank = (-fraction, task_active.get(task, 0), task_scheduled.get(task, 0),
+        rank = (task_active.get(task, 0), -fraction, task_scheduled.get(task, 0),
                 template['asset_hash'] in covered, asset_active.get(template['asset_hash'], 0),
-                efficiency_rank, asset_scheduled.get(template['asset_hash'], 0), row.get('scheduled', 0), penalty,
+                asset_counts.get((task,template['asset_hash']),0), efficiency_rank, asset_scheduled.get(template['asset_hash'], 0), row.get('scheduled', 0), penalty,
                 template.get('validation_status') != 'CURRENT_SINGLE_CONDITION_SUCCESS', template['template_id'])
-        choices.append((rank, template, row, {'schema': 'coverage-efficiency-selection-v1',
+        choices.append((rank, template, row, {'schema': 'asset-balanced-selection-v2',
+                        'registered_asset_episodes':asset_counts.get((task,template['asset_hash']),0),
                         'measured_physical_per_worker_second': rate, 'timing_complete': complete,
                         'exploration_slot': exploration, 'timed_attempts': measured.get('timed', 0)}))
     if not choices:

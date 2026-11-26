@@ -172,6 +172,19 @@ def verify_episode(directory, *, _video_proof=None):
                 or not replay_evidence.get("unchanged_task_criterion")):
             raise ValueError("Independent replay evidence differs from packaged source")
         replay_evidence = {"present": True, **replay_evidence}
+    contract=source_meta['metadata']['online_contract']
+    quality=meta.get('quality_contract')
+    if quality is not None:
+        if (quality.get('schema')!='collection-quality-v2'
+                or quality.get('tactile_profile_id')!=canonical_hash(contract.get('sensor',{}))
+                or quality.get('tactile_profile_id')!=canonical_hash(meta.get('sensor_provenance',{}))
+                or replay_evidence.get('trajectory_reproduced') is not True
+                or not np.isfinite(replay_evidence.get('max_qpos_component_error',float('inf')))
+                or replay_evidence.get('max_qpos_component_error',float('inf'))>1e-6
+                or replay_evidence.get('trajectory_tolerance',float('inf'))>1e-6
+                or replay_evidence.get('acceptance_scope')!='outcome_and_open_loop_trajectory'
+                or replay_evidence.get('recorded_model_used') is not True):
+            raise ValueError('New collection quality contract lacks exact replay or tactile profile identity')
     expected_lineage = canonical_hash({"task": meta["task"], "asset_hash": meta["asset_hash"],
                                       "source_episode_sha256": meta["files"]["source_episode/episode.npz"]})
     if meta["lineage_hash"] != expected_lineage:
@@ -231,6 +244,8 @@ def verify_episode(directory, *, _video_proof=None):
                     or strict['result'].get('verification_status') != 'FINAL_VERIFIED'):
                 raise ValueError("Formal Lift FINAL Strict evidence differs")
     return {"passed": True, **check,
+            "quality_scope": 'trajectory_verified' if quality else 'legacy_outcome_only',
+            "tactile_profile_id": canonical_hash(meta.get('sensor_provenance',{})),
             "task_outcome": reported_task_outcome(meta['success'], source_meta.get('failure_reason')),
             "stage_encoding": stage_encoding, "video": video, "model_provenance": model_provenance,
             "independent_replay": replay_evidence, "content_hash": digest,
@@ -301,6 +316,10 @@ def package_episode(case, root, job_id, asset_hash, *, fault=None, job_payload=N
         identities = model_object_identities(result['task'], asset_hash, model_proof)
         metadata.update(admission="production_verified", objects_need_asset_role_resolution=False,
                         object_identities=identities)
+    if contract.get('probe_state_version')=='full-integration-and-sensor-v1':
+        metadata['quality_contract']={'schema':'collection-quality-v2',
+            'tactile_profile_id':canonical_hash(contract.get('sensor',{})),
+            'replay_scope':'outcome_and_open_loop_trajectory'}
     write_json(stage / "episode.json", metadata)
     verification = verify_episode(stage, _video_proof=video_proof)
     write_json(stage / "verification.json", verification)

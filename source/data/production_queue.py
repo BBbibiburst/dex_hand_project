@@ -37,7 +37,7 @@ class ProductionQueue:
                             'episodes': {'job_id', 'asset_hash', 'lineage_hash', 'content_hash', 'seconds'},
                             'events': {'job_id', 'state', 'details', 'timestamp'}}
                 if initializing:
-                    allowed = {'jobs', 'episodes', 'events', 'template_stats', 'queue_meta', 'attempt_metrics', 'template_efficiency'}
+                    allowed = {'jobs', 'episodes', 'events', 'template_stats', 'queue_meta', 'attempt_metrics', 'template_efficiency', 'cross_batch_refs'}
                     if tables - allowed:
                         raise ValueError('Unexpected tables in interrupted initialization')
                     if 'jobs' in tables and db.execute("SELECT count(*) FROM jobs WHERE attempts>0 OR state<>'PENDING'").fetchone()[0]:
@@ -68,6 +68,13 @@ class ProductionQueue:
                     success INTEGER NOT NULL, verification TEXT NOT NULL,
                     FOREIGN KEY(job_id) REFERENCES jobs(job_id)
                 );
+                CREATE TABLE IF NOT EXISTS cross_batch_refs (
+                    batch_id TEXT NOT NULL, job_id TEXT NOT NULL,
+                    lineage_hash TEXT NOT NULL, content_hash TEXT NOT NULL,
+                    PRIMARY KEY(batch_id,job_id)
+                );
+                CREATE INDEX IF NOT EXISTS cross_batch_content ON cross_batch_refs(content_hash);
+                CREATE INDEX IF NOT EXISTS cross_batch_lineage ON cross_batch_refs(lineage_hash);
                 CREATE TABLE IF NOT EXISTS events (
                     id INTEGER PRIMARY KEY, job_id TEXT NOT NULL, state TEXT NOT NULL,
                     details TEXT NOT NULL, timestamp REAL NOT NULL
@@ -332,6 +339,9 @@ class ProductionQueue:
                 raise ValueError("Episode must enter VALIDATING before registration")
             duplicate = db.execute("SELECT job_id FROM episodes WHERE lineage_hash=? OR content_hash=?",
                                    (lineage_hash, content_hash)).fetchone()
+            if not duplicate:
+                duplicate=db.execute("SELECT batch_id || '/' || job_id AS job_id FROM cross_batch_refs "
+                    "WHERE lineage_hash=? OR content_hash=? LIMIT 1",(lineage_hash,content_hash)).fetchone()
             if duplicate:
                 state = "DUPLICATE"
                 self.event(db, job_id, state, {"existing_job": duplicate["job_id"]})
@@ -345,6 +355,26 @@ class ProductionQueue:
                        (state, job_id))
             self._terminal(db, row, state, success)
             return state
+
+    def import_external_references(self, records):
+        """External hashes prevent future credit; never import old hours into episodes."""
+        with self.transaction() as db:
+            for r in records:
+                if not r['batch_id'] or not r['job_id'] or any(
+                        len(r[k])!=64 or any(c not in '0123456789abcdef' for c in r[k])
+                        for k in ('lineage_hash','content_hash')):
+                    raise ValueError('Invalid external duplicate reference')
+                old=db.execute('SELECT * FROM cross_batch_refs WHERE batch_id=? AND job_id=?',
+                               (r['batch_id'],r['job_id'])).fetchone()
+                if old and (old['lineage_hash'],old['content_hash'])!=(r['lineage_hash'],r['content_hash']):
+                    raise ValueError('External batch/job identity changed; refusing overwrite')
+                db.execute('INSERT OR IGNORE INTO cross_batch_refs VALUES(?,?,?,?)',
+                           (r['batch_id'],r['job_id'],r['lineage_hash'],r['content_hash']))
+
+    def asset_episode_counts(self):
+        with self.connect() as db:
+            return {(r['task'],r['asset_hash']):r['n'] for r in db.execute(
+                'SELECT task,asset_hash,count(*) AS n FROM episodes GROUP BY task,asset_hash')}
 
     def record_attempt_metrics(self, job_id, attempt, wall_seconds, state, *, candidate_seconds=None):
         import math

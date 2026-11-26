@@ -1,0 +1,41 @@
+{
+  "schema": "collection-quality-patch-20261126",
+  "files": {
+    "source/grasping/task_transfer.py": {
+      "before": "ae176b54fac085c5fcab8a9614527141fe3b8da9f4a27363349b5f671b9c95af",
+      "after": "34ba3b501df8d8d20b3b841407ed44ca9e5e387f1870cd1e470049ecfa727a52"
+    },
+    "source/grasping/probe_state.py": {
+      "before": null,
+      "after": "62671d3c0b156adf1e4f0f4e8bd65d8dd24dc53228540a21c8cf912b72434700"
+    },
+    "apps/replay_p32_task.py": {
+      "before": "6a96cc05b78e9aa768abbbdc865da73187484cb5c027847e04d97097c3b7ee7e",
+      "after": "757300546c1b027581ebeaf1a03134771a410a773582bae2f8e803d85f76fb3c"
+    },
+    "apps/run_p32_online_contract.py": {
+      "before": "c8765d1a937a4c094c2f0b7adcc9962efde469e27e52064efe400f946811aaec",
+      "after": "f0e4c167983d8101b73aba17a71b1b837095842efad8248681ff64f10c39a838"
+    },
+    "apps/production_worker.py": {
+      "before": "4a445bc116608c0f71a959fb9631cb9f7ee6de1f83a8d08ebfdbe3e978e5a9df",
+      "after": "b3e53abc3ca4ad2e36dbfca0bcedcdfca48cfba9a1420bdfa0cc0f5f0ee3b63c"
+    },
+    "source/data/production_artifacts.py": {
+      "before": "a41c464af480a52ad0f5fffb96c3572807f230a20f59d31e9a1f2c4d1daa2fda",
+      "after": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865"
+    },
+    "source/data/production_scheduler.py": {
+      "before": "12e78bb99ff8041d26d95f09bdc369dcae5272e99739bff9074f061f8f7ea1de",
+      "after": "f79d85ededbf0d70663f810395a01db978cf01c8b0dd9cd444af36aabbf0e223"
+    },
+    "source/data/production_queue.py": {
+      "before": "3aa9b5fbc4f0631d0891d6309d0d3b3ccb2c1345d2c67d2b26abd81b30b37ebe",
+      "after": "10d0f301069aee73f1bb8e5709eec2c5c150adde616e45347d6f9f0fd1505c1c"
+    },
+    "source/data/collection_catalogue.py": {
+      "before": null,
+      "after": "02b90cfa8ed7a8efd61d37129cd742a3e4ab6764d26ff67a7e18826994455695"
+    }
+  }
+}

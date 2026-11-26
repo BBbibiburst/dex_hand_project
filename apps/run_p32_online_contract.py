@@ -184,6 +184,7 @@ def run(task, manifest, seed, output, rgb=False, handle_manifest=None, nut_grasp
             "model_provenance": provenance,
             "sensor": environments[-1].tactile_sensor.metadata(),
             "sensor_sampling": "one_processed_read_per_time_and_raw_state",
+            "probe_state_version": "full-integration-and-sensor-v1",
             "reference_manifest_sha256": record["reference_sha256"],
             "rgb_status": "NOT_YET_IMPLEMENTED",
             "production_eligible": False,
@@ -227,8 +228,7 @@ def run(task, manifest, seed, output, rgb=False, handle_manifest=None, nut_grasp
         if video is not None and not video.closed:
             video.abort()
         for env in environments:
-            if env.renderer is not None:
-                env.close()
+            env.close()
         record["wall_seconds"] = time.monotonic() - started
         record['wall_profile'] = profile.snapshot()
         if video is not None:

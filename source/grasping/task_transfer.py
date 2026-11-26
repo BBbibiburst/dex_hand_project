@@ -14,6 +14,7 @@ from source.envs.manipulation.arenas import BinsArena
 from source.envs.manipulation.placement import FixedTablePlacementSampler
 from source.geometry import mat_to_quat
 from source.grasping.contracts import DemonstrationEpisode, GraspCandidate
+from source.grasping.probe_state import SimulationCheckpoint
 from source.grasping.executor import (
     STAGE_CODES,
     ExecutionConfig,
@@ -104,14 +105,7 @@ def _select_transport_hand(env, grip_hand: np.ndarray, object_name: str = "objec
 
     arm = env.controller.arm_controller
     hand = env.controller.hand_controller
-    qpos = env.data.qpos.copy()
-    qvel = env.data.qvel.copy()
-    ctrl = env.data.ctrl.copy()
-    time = float(env.data.time)
-    elapsed = int(env.elapsed_steps)
-    previous_q = arm._prev_target_q.copy()
-    previous_velocity = arm._filtered_velocity.copy()
-    previous_ee = arm._prev_ee_target.copy()
+    checkpoint = SimulationCheckpoint(env)
     ee_position = env.data.site_xpos[arm.site_id].copy()
     ee_quaternion = mat_to_quat(env.data.site_xmat[arm.site_id])
     object_position = env.task._body_pos(env.model, env.data, object_name).copy()
@@ -127,66 +121,52 @@ def _select_transport_hand(env, grip_hand: np.ndarray, object_name: str = "objec
     deltas = (-0.20, 0.0, 0.20, 0.40)
     best_score = float("inf")
     best_hand = grip_hand.copy()
-    for finger_delta in deltas:
-        for thumb_delta in deltas:
-            fraction = base_fraction.copy()
-            fraction[:4] += finger_delta
-            fraction[5] += thumb_delta
-            trial_hand = actuator_targets_from_fractions(env, np.clip(fraction, 0.0, 1.0))
-            env.data.qpos[:] = qpos
-            env.data.qvel[:] = qvel
-            env.data.ctrl[:] = ctrl
-            env.data.time = time
-            env.elapsed_steps = elapsed
-            arm._prev_target_q = previous_q.copy()
-            arm._filtered_velocity = previous_velocity.copy()
-            arm._prev_ee_target = previous_ee.copy()
-            mujoco.mj_forward(env.model, env.data)
-            probe = _Recorder(object_name)
-            _run_pose_segment(
-                env,
-                probe,
-                stage="clear",
-                target_position=ee_position,
-                target_quaternion=ee_quaternion,
-                start_hand=grip_hand,
-                target_hand=trial_hand,
-                steps=8,
-                smooth=True,
-            )
-            _run_pose_segment(
-                env,
-                probe,
-                stage="clear",
-                target_position=ee_position + np.asarray([0.0, 0.004, 0.0]),
-                target_quaternion=ee_quaternion,
-                start_hand=trial_hand,
-                target_hand=trial_hand,
-                steps=12,
-                smooth=True,
-            )
-            final_object = env.task._body_pos(env.model, env.data, object_name).copy()
-            final_ee = env.data.site_xpos[arm.site_id].copy()
-            relative_drift = np.linalg.norm(
-                (final_object - final_ee) - (object_position - ee_position)
-            )
-            height_loss = max(0.0, object_position[2] - final_object[2])
-            arrays = probe.arrays()
-            final_force = float(arrays["robot_object_normal_force"][-1])
-            score = 20.0 * relative_drift + 30.0 * height_loss - 0.01 * min(final_force, 10.0)
-            if score < best_score:
-                best_score = score
-                best_hand = trial_hand
-    env.data.qpos[:] = qpos
-    env.data.qvel[:] = qvel
-    env.data.ctrl[:] = ctrl
-    env.data.time = time
-    env.elapsed_steps = elapsed
-    arm._prev_target_q = previous_q
-    arm._filtered_velocity = previous_velocity
-    arm._prev_ee_target = previous_ee
-    mujoco.mj_forward(env.model, env.data)
-    return best_hand
+    try:
+        for finger_delta in deltas:
+            for thumb_delta in deltas:
+                fraction = base_fraction.copy()
+                fraction[:4] += finger_delta
+                fraction[5] += thumb_delta
+                trial_hand = actuator_targets_from_fractions(env, np.clip(fraction, 0.0, 1.0))
+                checkpoint.restore()
+                probe = _Recorder(object_name)
+                _run_pose_segment(
+                    env,
+                    probe,
+                    stage="clear",
+                    target_position=ee_position,
+                    target_quaternion=ee_quaternion,
+                    start_hand=grip_hand,
+                    target_hand=trial_hand,
+                    steps=8,
+                    smooth=True,
+                )
+                _run_pose_segment(
+                    env,
+                    probe,
+                    stage="clear",
+                    target_position=ee_position + np.asarray([0.0, 0.004, 0.0]),
+                    target_quaternion=ee_quaternion,
+                    start_hand=trial_hand,
+                    target_hand=trial_hand,
+                    steps=12,
+                    smooth=True,
+                )
+                final_object = env.task._body_pos(env.model, env.data, object_name).copy()
+                final_ee = env.data.site_xpos[arm.site_id].copy()
+                relative_drift = np.linalg.norm(
+                    (final_object - final_ee) - (object_position - ee_position)
+                )
+                height_loss = max(0.0, object_position[2] - final_object[2])
+                arrays = probe.arrays()
+                final_force = float(arrays["robot_object_normal_force"][-1])
+                score = 20.0 * relative_drift + 30.0 * height_loss - 0.01 * min(final_force, 10.0)
+                if score < best_score:
+                    best_score = score
+                    best_hand = trial_hand
+        return best_hand
+    finally:
+        checkpoint.restore()
 
 
 def _combine_arrays(
