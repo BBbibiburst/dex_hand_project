@@ -68,7 +68,7 @@ def test_pending_prevents_duplicate_and_sparse_batch_is_small(tmp_path):
     q=ProductionQueue(tmp_path/'q.sqlite');rows=[template('lift_'+str(i),asset=chr(97+i)) for i in range(5)]
     rows+=[template('nut','nut_assembly','f')]
     for t in rows:blocked(q,t)
-    result=app.seed_probes(q,rows,config(),32000,app.DEFAULTS,now=1000)
+    result=app.seed_probes(q,rows,config(),32000,{**app.DEFAULTS,'maximum_new_probes':4},now=1000)
     assert len(result['added'])==4
     with q.connect() as db:
         tasks=[r[0] for r in db.execute('SELECT task FROM jobs ORDER BY created_at,rowid')]
@@ -86,7 +86,7 @@ def test_transaction_rolls_back_when_second_payload_invalid(tmp_path):
     q=ProductionQueue(tmp_path/'q.sqlite');rows=[template('a'),template('b')]
     for t in rows:blocked(q,t)
     rows[1]['base_seed']=object()
-    with pytest.raises((TypeError,ValueError)):app.seed_probes(q,rows,config(),32000,app.DEFAULTS,now=1000)
+    with pytest.raises((TypeError,ValueError)):app.seed_probes(q,rows,config(),32000,{**app.DEFAULTS,'maximum_new_probes':2},now=1000)
     with q.connect() as db:
         assert db.execute('SELECT count(*) FROM jobs').fetchone()[0]==0
         assert not db.execute('SELECT value FROM queue_meta WHERE key LIKE ?',(app.POLICY+'%',)).fetchall()
@@ -275,13 +275,56 @@ def test_pending_of_completed_task_does_not_block_needed_task_probe(tmp_path):
     with q.connect() as db:assert db.execute("SELECT state FROM jobs WHERE job_id='old_push'").fetchone()[0]=='PENDING'
 
 
-def test_child_cpu_limit_is_inherited_and_parent_affinity_is_restored(watchdog):
+@pytest.mark.parametrize('cpu_limit',[0,2])
+def test_child_cpu_limit_is_inherited_and_parent_affinity_is_restored(watchdog,cpu_limit):
     import os
     if not hasattr(os,'sched_getaffinity'):pytest.skip('Linux affinity required')
+    watchdog.state['cpu_limit']=cpu_limit
     before=os.sched_getaffinity(0);apps=watchdog.project/'apps';apps.mkdir();mark=watchdog.directory/'child_affinity.json'
     (apps/'five_task_production.py').write_text("import pathlib,sys,json,os\npathlib.Path("+repr(str(mark))+").write_text(json.dumps(sorted(os.sched_getaffinity(0))))\np=pathlib.Path(sys.argv[sys.argv.index('--output')+1]);p.mkdir(parents=True);(p/'supervisor.json').write_text(json.dumps({'termination':'QUOTA_COMPLETE_FILE_VERIFIED'}))\n")
     q=ProductionQueue(watchdog.directory/'q.sqlite');session=watchdog.directory/'sessions/affinity'
     (session/'preparation').mkdir(parents=True)
     term,code=watchdog.run_child({'database':str(q.path),'sampling_seed':32000},session)
-    assert code==0 and len(json.loads(mark.read_text()))<=min(8,len(before))
+    expected=before if cpu_limit==0 else set(sorted(before)[:cpu_limit])
+    assert code==0 and set(json.loads(mark.read_text()))==expected
     assert os.sched_getaffinity(0)==before
+
+
+def test_legacy_defaults_migrate_without_resetting_recovery_or_sessions(tmp_path):
+    p=tmp_path/'project';p.mkdir();d=tmp_path/'state';d.mkdir();root=tmp_path/'data'
+    old={'policy':app.POLICY,'project':str(p),'dataset_root':str(root),
+         'options':{**app.DEFAULTS,'initial_cpu_limit':8,'maximum_new_probes':4},
+         'cpu_limit':8,'sessions':17,'restart_timestamps':[123,456],
+         'managed_backups':['preserved'],'activity':[1234,107777]}
+    (d/'state.json').write_text(json.dumps(old))
+    w=app.Watchdog(p,root,d,app.options())
+    assert w.state['cpu_limit']==0 and w.state['options']['maximum_new_probes']==0
+    for key in ['sessions','restart_timestamps','managed_backups','activity']:assert w.state[key]==old[key]
+    assert json.loads((d/'state.before-resource-adaptive-20261127.json').read_text())==old
+    again=app.Watchdog(p,root,d,app.options())
+    assert again.state==w.state
+
+
+def test_migration_preserves_actual_memory_downscale(tmp_path):
+    p=tmp_path/'project';p.mkdir();d=tmp_path/'state';d.mkdir();root=tmp_path/'data'
+    old={'policy':app.POLICY,'project':str(p),'dataset_root':str(root),
+         'options':{**app.DEFAULTS,'initial_cpu_limit':8,'maximum_new_probes':4},'cpu_limit':4}
+    (d/'state.json').write_text(json.dumps(old))
+    assert app.Watchdog(p,root,d,app.options()).state['cpu_limit']==4
+
+
+def test_probe_capacity_follows_server_worker_plan(tmp_path,monkeypatch):
+    import source.data.production_parallel as parallel
+    monkeypatch.setattr(parallel,'worker_plan',lambda c:{'initial_admitted_workers':24})
+    q=ProductionQueue(tmp_path/'q.sqlite');templates=[template('lift_'+str(i),asset=hex(i+1)[2:]) for i in range(30)]
+    for t in templates:blocked(q,t)
+    result=app.seed_probes(q,templates,config(),32000,app.options(),now=1000)
+    assert len(result['added'])==24
+
+
+def test_custom_policy_change_still_requires_review(tmp_path):
+    p=tmp_path/'project';p.mkdir();d=tmp_path/'state';d.mkdir();root=tmp_path/'data'
+    old={'policy':app.POLICY,'project':str(p),'dataset_root':str(root),
+         'options':{**app.DEFAULTS,'initial_cpu_limit':16},'cpu_limit':16}
+    (d/'state.json').write_text(json.dumps(old))
+    with pytest.raises(ValueError,match='explicit reviewed'):app.Watchdog(p,root,d,app.options())

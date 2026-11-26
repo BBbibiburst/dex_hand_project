@@ -18,11 +18,11 @@ _spec = importlib.util.spec_from_file_location('external_collection_base', Path(
 base = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(base)
 POLICY = 'collection-autorecover-quality-v3'
-DEFAULTS = {'probe_cooldown_seconds': 900, 'probes_without_success': 3, 'maximum_new_probes': 4,
+DEFAULTS = {'probe_cooldown_seconds': 900, 'probes_without_success': 3, 'maximum_new_probes': 0,
             'restart_window_seconds': 3600, 'maximum_restarts_per_window': 6,
             'backoff_initial_seconds': 30, 'backoff_maximum_seconds': 300,
             'resource_wait_seconds': 3600, 'poll_seconds': 5, 'stall_seconds': 900,
-            'shutdown_grace_seconds': 120, 'initial_cpu_limit': 8, 'minimum_cpu_limit': 2}
+            'shutdown_grace_seconds': 120, 'initial_cpu_limit': 0, 'minimum_cpu_limit': 2}
 
 
 def atomic_json(path, value):
@@ -44,13 +44,13 @@ def options(path=None):
     if set(result) != set(DEFAULTS):
         raise ValueError('Unknown watchdog option')
     for key, value in result.items():
-        if type(value) is not int or value < 1:
-            raise ValueError('Watchdog options must be positive integers: ' + key)
-    if result['probes_without_success'] > 3 or result['maximum_new_probes'] > 8:
-        raise ValueError('Recovery cannot exceed three consecutive probes or eight simultaneous new jobs')
+        if type(value) is not int or value < (0 if key in ('initial_cpu_limit','maximum_new_probes') else 1):
+            raise ValueError('Invalid watchdog integer option (zero means automatic only for CPU/probe capacity): ' + key)
+    if result['probes_without_success'] > 3 or result['maximum_new_probes'] > 128:
+        raise ValueError('Recovery cannot exceed three consecutive probes or 128 simultaneous new jobs')
     if result['maximum_restarts_per_window'] > 10:
         raise ValueError('Restart budget exceeds ten')
-    if not result['minimum_cpu_limit'] <= result['initial_cpu_limit'] <= 128:
+    if result['initial_cpu_limit'] != 0 and not result['minimum_cpu_limit'] <= result['initial_cpu_limit'] <= 128:
         raise ValueError('Invalid CPU-affinity bounds')
     if result['backoff_initial_seconds'] > result['backoff_maximum_seconds']:
         raise ValueError('Backoff bounds reversed')
@@ -95,6 +95,15 @@ def diagnose(project, root):
         return 'STOP_CHECK_ERROR', {'ready': False, 'errors': [f'{type(error).__name__}: {error}']}
 
 
+def probe_capacity(config, policy):
+    """Fill the configured resource-adaptive worker pool, not a fixed four-job batch."""
+    if policy['maximum_new_probes']:
+        return policy['maximum_new_probes']
+    from source.data.production_parallel import worker_plan
+    plan = worker_plan({'worker_policy':'resource-adaptive-v1', 'workers':'auto', **config})
+    return max(1, plan['initial_admitted_workers'])
+
+
 def seed_probes(queue, templates, config, seed, policy, *, now=None):
     """New candidate indices only. Success replenishes budget; restart does not."""
     from source.data.production_templates import candidate
@@ -106,6 +115,7 @@ def seed_probes(queue, templates, config, seed, policy, *, now=None):
         coverage_success_only=config.get('coverage_requires_success', True))
     added, cooling, isolated = [], [], []
     normal_available = False
+    capacity = probe_capacity(config, policy)
     with queue.transaction() as db:
         pending=db.execute("SELECT task FROM jobs WHERE state='PENDING'").fetchall()
         if (db.execute("SELECT count(*) FROM jobs WHERE state IN ('RUNNING','VALIDATING')").fetchone()[0]
@@ -138,7 +148,7 @@ def seed_probes(queue, templates, config, seed, policy, *, now=None):
             eligible.append((count, row['scheduled'], t['template_id'], t, dict(row), key, record))
         # Preserve task diversity within a small batch, then prefer sparse assets.
         taken_tasks = set()
-        while eligible and len(added) < policy['maximum_new_probes']:
+        while eligible and len(added) < capacity:
             item = min(eligible, key=lambda x:(x[3]['task'] in taken_tasks,x[0],x[1],x[2]));eligible.remove(item)
             _,_,_,t,row,key,record=item;taken_tasks.add(t['task'])
             payload = candidate(t,seed,row['last_candidate_index']+1,config.get('perturbation_contract'))
@@ -249,12 +259,25 @@ class Watchdog:
         identity={'policy':POLICY,'project':str(project),'dataset_root':str(root)}
         self.state=base.read(self.path) if self.path.exists() else {**identity,'restart_timestamps':[],'sessions':0}
         if any(self.state.get(k)!=v for k,v in identity.items()):raise ValueError('Watchdog state belongs to another dataset')
+        legacy = {**DEFAULTS, 'initial_cpu_limit':8, 'maximum_new_probes':4}
+        if self.state.get('options') == legacy and policy == DEFAULTS:
+            # Only the shipped legacy defaults are migrated. Keep budgets, sessions and progress.
+            backup = state_dir/'state.before-resource-adaptive-20261127.json'
+            if not backup.exists():atomic_json(backup,self.state)
+            old_limit = self.state.get('cpu_limit',8)
+            self.state['cpu_limit'] = 0 if old_limit == 8 else old_limit
+            self.state['options'] = policy
+            self.state['resource_policy_migration'] = {'date':'2026-11-27','backup':str(backup),
+                'old_cpu_limit':old_limit,'default_cpu_cap_removed':old_limit==8}
+            atomic_json(self.path,self.state)
         if self.state.get('options') not in (None,policy):raise ValueError('Policy changed; use an explicit reviewed state migration')
         self.state['options']=policy
         self.state.setdefault('cpu_limit',policy['initial_cpu_limit'])
+        self.state['cpu_limit_mode']='inherit-server-affinity' if self.state['cpu_limit']==0 else 'explicit-or-resource-reduced'
 
     def save(self,status,**values):
         previous=self.state.get('status')
+        self.state['cpu_limit_mode']='inherit-server-affinity' if self.state['cpu_limit']==0 else 'explicit-or-resource-reduced'
         self.state.update(status=status,heartbeat_unix=time.time(),**values);atomic_json(self.path,self.state)
         if previous!=status:self.event('STATE_CHANGED',status=status)
 
@@ -286,12 +309,14 @@ class Watchdog:
         with (session/'console.log').open('xb') as log:
             affinity=os.sched_getaffinity(0) if hasattr(os,'sched_getaffinity') else None
             try:
-                if affinity:os.sched_setaffinity(0,sorted(affinity)[:self.state['cpu_limit']])
+                if affinity and self.state['cpu_limit']:os.sched_setaffinity(0,sorted(affinity)[:self.state['cpu_limit']])
                 self.child=subprocess.Popen(command,cwd=self.project,stdout=log,stderr=subprocess.STDOUT,start_new_session=True,
                     env={**os.environ,'PYTHONPATH':str(self.project),'MUJOCO_GL':'egl'})
             finally:
                 if affinity:os.sched_setaffinity(0,affinity)
-            self.event('CHILD_STARTED',pid=self.child.pid,command=command,cpu_limit=self.state['cpu_limit'])
+            self.event('CHILD_STARTED',pid=self.child.pid,command=command,cpu_limit=self.state['cpu_limit'],
+                inherited_cpu_count=len(affinity) if affinity else os.cpu_count(),
+                cpu_limit_mode=self.state['cpu_limit_mode'])
             try:
                 while self.child.poll() is None and not self.stopped.is_set():
                     recovering=False
@@ -375,7 +400,8 @@ class Watchdog:
                 self.save('SESSION_FINISHED',last_termination=termination,last_returncode=code)
                 if self.stopped.is_set() or termination=='USER_STOP':break
                 if termination=='RESOURCE_MEMORY_STOP' or code==-signal.SIGKILL:
-                    self.state['cpu_limit']=max(self.policy['minimum_cpu_limit'],self.state['cpu_limit']//2)
+                    previous_limit=self.state['cpu_limit'] or (len(os.sched_getaffinity(0)) if hasattr(os,'sched_getaffinity') else (os.cpu_count() or 1))
+                    self.state['cpu_limit']=max(self.policy['minimum_cpu_limit'],previous_limit//2)
                     self.event('RESOURCE_CPU_LIMIT_REDUCED',cpu_limit=self.state['cpu_limit'])
                 choice=decision(termination,code)
                 if termination=='WATCHDOG_STALLED':choice='RETRY_CRASH'
