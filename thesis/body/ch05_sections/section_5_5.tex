@@ -1,4 +1,4 @@
-% Standalone section draft; not included in the official thesis main file.
+% Active section fragment; included through body/ch05_dual_domain_reconstruction.tex.
 \section{基于伪配对监督的跨域潜变量映射}
 \label{sec:ch05_latent_translator}
 
@@ -27,20 +27,37 @@ Translator由两层单向GRU和线性投影组成。GRU每帧输入64维，隐�
 训练数据流如图\ref{fig:ch05_translator_paths}所示。两域Encoder仅提供均值缓存，Real Decoder参数也保持冻结，但计算NLL时不切断其对预测潜变量的梯度，因此损失仍可经Decoder回传至Translator，只有$\theta$参与更新。参数冻结意味着不累积其参数梯度，并不意味着该模块退出计算图；映射输出对条件似然的影响仍由固定读出函数传递。Decoder首帧用BOS，后续以真实前帧Mask递推隐状态；真实当前帧Mask作为幅值头条件，同时监督Mask头logit的BCE。两者角色不同，该Teacher Forcing似然不代表自由运行质量。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
- 训练：Paired Sim $\rightarrow$ 冻结$E_s$均值 $\rightarrow T_\theta
- \rightarrow$ 预测Real latent\\[3pt]
- 配对Real $\rightarrow$ 冻结$E_r$均值 $\rightarrow$ Huber监督\\[3pt]
- 预测Real latent与配对Real $\rightarrow$ 冻结$D_r$真实Mask条件NLL\\[3pt]
- Huber与NLL梯度回传至$T_\theta$；仅更新Translator\\[5pt]
- 部署：Natural Sim $\rightarrow E_s$均值 $\rightarrow T_\theta
- \rightarrow D_r$自由解码 $\rightarrow4\times712$触觉
- \par\vspace*{2.5mm}
- \end{minipage}}
- \caption{伪配对监督训练与自由推理的数据流}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_translator_paths.pdf}
+  \caption{伪配对监督训练与自由推理的数据流}
  \label{fig:ch05_translator_paths}
 \end{figure}
+
+算法\ref{alg:translator_training_and_decode}区分伪配对训练与自由推理；训练时冻结Decoder参数不阻断其对输入潜变量的梯度。
+\begin{algorithm}[H]
+\small
+\caption{伪配对监督的潜变量映射与自由读出}\label{alg:translator_training_and_decode}
+\KwIn{独立训练的两域VAE、训练伪配对及Natural Sim输入}
+\KwOut{Translator参数与Real域风格触觉窗口}
+冻结两域VAE参数，仅令Translator参数可更新\;
+\ForEach{训练批次 $(X_s,X_r)$}{
+计算后验均值 $Z_s=\mu_s(X_s)$、$Z_r=\mu_r(X_r)$\;
+得到预测 $\widehat Z_r=T_\theta(Z_s)$\;
+计算潜变量Huber损失\;
+用真实前帧Mask作为循环上下文、真实当帧Mask作为幅值条件计算Decoder NLL\;
+由Huber与$0.1$倍NLL之和反向传播，仅更新Translator\;
+}
+在规定候选轮次内依据验证目标选择检查点\;
+\ForEach{部署输入 $X_s$}{
+令 $Z_s=\mu_s(X_s)$，计算 $T_\theta(Z_s)$\;
+Real Decoder依次使用BOS及预测前帧Mask，自回归生成当帧Mask\;
+计算Gamma混合均值并恢复正值尺度，与预测Mask相乘\;
+输出按原帧序组织的$4\times712$非负响应\;
+}
+\end{algorithm}
+%
+
+
 
 训练和验证分别使用1200与240个配对窗口。随机种子为4303，采用AdamW，学习率$3\times10^{-4}$、权重衰减$10^{-4}$，批量64，梯度范数上限5。每轮打乱训练窗口并执行19步，45轮共855步；在第30至45轮内按验证联合目标选择权重，最终采用第30轮，对应570次参数更新。末批包含48窗，验证时按各批样本数加权汇总，与训练采用相同的Huber和NLL组合，不依据域分类器分数挑选检查点。总训练步数与所存检查点经历的更新次数应分别记录。Natural Sim不直接参与该映射的配对训练。部署时仅需Natural输入，经Sim均值编码、Translator和Real Decoder生成完整触觉；Mask由模型预测，幅值取恢复尺度后的Gamma混合均值$s_{\rm pos}\sum_k\omega_k a_k/b_k$，无需Real样本、GMM或探针。
 

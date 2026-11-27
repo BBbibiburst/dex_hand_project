@@ -1,0 +1,51 @@
+{
+  "method": "offline current production surface_plot_data; no MuJoCo model compilation, integration or simulation",
+  "coordinates": "local STL, m converted to mm for axis display; each panel equal 3D aspect, panels separately scaled",
+  "representatives": [
+    {
+      "patch": "skin_0_0_p",
+      "shape": [
+        4,
+        8
+      ],
+      "strategy": "segment",
+      "mesh": "assets/grippers/dex_hand/meshes/skin_0_0_p.STL",
+      "mesh_sha256": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+      "points_sha256": "2e2e9187dbf07d4737b4fc2676db125580e340d400ce2b8256f095c04aae494a"
+    },
+    {
+      "patch": "skin_0_1_p",
+      "shape": [
+        4,
+        8
+      ],
+      "strategy": "segment",
+      "mesh": "assets/grippers/dex_hand/meshes/skin_0_1_p.STL",
+      "mesh_sha256": "26e59eee9d295df58bf585740edf9529972d3800da4ec954c3d02aac724a82b5",
+      "points_sha256": "7c15e66d35cb0e093f1d99c25a6c983fa72cf83338377babad1c87054204f9c4"
+    },
+    {
+      "patch": "skin_0_2_p",
+      "shape": [
+        7,
+        8
+      ],
+      "strategy": "fingertip-ellipsoid",
+      "mesh": "assets/grippers/dex_hand/meshes/skin_0_2_p.STL",
+      "mesh_sha256": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+      "points_sha256": "c5ba5b91167d569de2901f9fb95ce6217c5a2e3ae8548172f4c5caf895e4a6c8"
+    },
+    {
+      "patch": "skin_palm_p",
+      "shape": [
+        7,
+        16
+      ],
+      "strategy": "mesh-uv",
+      "mesh": "assets/grippers/dex_hand/meshes/skin_palm_p.STL",
+      "mesh_sha256": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+      "points_sha256": "0b2df75524a6d54b1ffa0b88718603837878a887d83e1ad1cb33e66068af7ccf"
+    }
+  ],
+  "legend": "gray: original STL; blue/green: connections between adjacent samples; orange: sample centers; connections are not electrode or collision edges"
+}

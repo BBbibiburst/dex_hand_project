@@ -1,0 +1,14 @@
+{
+  "before_tex": "546f8b04f89418489b52809ecaba37ebe21e38bf7a09f904074ac6469935964a",
+  "after_tex": "8144eb0b26188c319318b44fc10e263aa414a251a76b423fe9a0cfb4a913b3d6",
+  "figure_pdf_sha256": "6afca93cfa87bf4fa4e1e226c15cbd5e9264a69bc4293006d9459bd578b92cad",
+  "preview_sha256": "1838530d712b9120779c5ef02a469bcf8b9d54705c57a1db595f3a79b4dfba73",
+  "pages": 95,
+  "figure_pages": [
+    26
+  ],
+  "warnings": [
+    "Overfull \\hbox (5.79674pt too wide) in paragraph at lines 78--78",
+    "Overfull \\hbox (2.0989pt too wide) in paragraph at lines 78--78"
+  ]
+}

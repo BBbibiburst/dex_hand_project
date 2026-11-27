@@ -1,0 +1,969 @@
+{
+  "sources": [
+    "thesis/thesis.tex",
+    "thesis/front/cover.tex",
+    "thesis/front/abstract.tex",
+    "thesis/body/ch01_introduction.tex",
+    "thesis/body/ch02_simulation_platform.tex",
+    "thesis/body/ch03_grasp_demonstrations.tex",
+    "thesis/body/ch04_multimodal_data.tex",
+    "thesis/body/ch05_dual_domain_reconstruction.tex",
+    "thesis/body/ch05_sections/section_5_1.tex",
+    "thesis/body/ch05_sections/section_5_2.tex",
+    "thesis/body/ch05_sections/section_5_3.tex",
+    "thesis/body/ch05_sections/section_5_4.tex",
+    "thesis/body/ch05_sections/section_5_5.tex",
+    "thesis/body/ch05_sections/section_5_6.tex",
+    "thesis/body/ch06_adversarial_evaluation.tex",
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "thesis/body/ch07_conclusion.tex",
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+    "thesis/back/acknowledgements.tex"
+  ],
+  "figures": 32,
+  "tables": 32,
+  "assets": [
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "path": "figures/ch02/assembled_robot_tachin.pdf",
+      "options": "width=0.96\\textwidth",
+      "exists": true,
+      "sha256": "bb0cc1cdace703486a9cdc11da3dcba9abefbe1601e8fe43cc6fee3b6e15e18a",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        650.998046875,
+        346.362060546875
+      ],
+      "embedded_images": [
+        {
+          "width": 46,
+          "height": 67
+        },
+        {
+          "width": 72,
+          "height": 377
+        },
+        {
+          "width": 66,
+          "height": 37
+        },
+        {
+          "width": 290,
+          "height": 444
+        }
+      ],
+      "vector_drawing_paths": 51
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "path": "figures/ch02/fingertip_sampling.pdf",
+      "options": "width=0.76\\textwidth",
+      "exists": true,
+      "sha256": "7397b7eaff7881cfa2d963e589045979c69ca56da6b826bd68ad13eb3d818451",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        504.0,
+        360.0
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 3936
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "path": "figures/ch02/taxel_local_frame.pdf",
+      "options": "width=0.66\\textwidth",
+      "exists": true,
+      "sha256": "7e14593a186ea41bb11538d16202378a899e0bedbc3869f4e5ca0dd4af34eb03",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        432.0,
+        360.0
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 133
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "path": "figures/ch04/sink_historical_precision_r2.pdf",
+      "options": "width=0.78\\textwidth",
+      "exists": true,
+      "sha256": "97746768350b9b253b39bed17d6d7a2b92a9ba73a4cdc8b092feda165025c3f2",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        475.20001220703125,
+        93.5999984741211
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 12
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "path": "figures/ch06/shared_vector_field.pdf",
+      "options": "width=0.98\\textwidth,trim=0 4bp 0 26bp,clip",
+      "exists": true,
+      "sha256": "55b5c2596c6ea160efe3f89f6af61a3a842fdccbe8e153cd0ca8e587936d54da",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        864.0,
+        475.20001220703125
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 146
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "path": "figures/ch06/mask_gradient_paths.pdf",
+      "options": "width=\\textwidth",
+      "exists": true,
+      "sha256": "32ecdfca47d430485d82b6638a00665436172de8e43c48e05db9dea0b883c342",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        864.0,
+        468.0
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 221
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "path": "figures/ch06/f0_swd_baseline.pdf",
+      "options": "width=0.90\\textwidth",
+      "exists": true,
+      "sha256": "9eab60eff638272b2520b8b7afb9fefb10eab453c242ba8a957825f42087c4b0",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        492.85626220703125,
+        234.24874877929688
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 28
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "path": "figures/ch06/round_acceptance_states.pdf",
+      "options": "width=\\textwidth",
+      "exists": true,
+      "sha256": "a1c5a8c496315bff14b672b54aad41d841179e16c01142a63bc6e6d56dee13bb",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        852.8318481445312,
+        248.4210205078125
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 106
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "path": "figures/ch06/multi_round_distribution.pdf",
+      "options": "width=\\textwidth",
+      "exists": true,
+      "sha256": "3037634bd0d819e41874c7f0f3c3436a4a9b94453c89693ff929d1cf5d139bae",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        705.75390625,
+        248.44561767578125
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 60
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "path": "figures/ch06/multiview_refiner_architecture.pdf",
+      "options": "width=\\textwidth",
+      "exists": true,
+      "sha256": "45e35c1808d10b48e15990a9c0bb57a3041e3eb649ecf734f529d57bea0d3f50",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        784.7999877929688,
+        352.79998779296875
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 91
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "path": "figures/ch06/multiview_gradient_training.pdf",
+      "options": "width=\\textwidth",
+      "exists": true,
+      "sha256": "a2d6499b4cfa24e1a2c241351f16baaf8b00ae793d48e211852243cf684ea275",
+      "forced_width_and_height": false,
+      "pages": 1,
+      "page_rect": [
+        0.0,
+        0.0,
+        856.8179321289062,
+        251.22438049316406
+      ],
+      "embedded_images": [],
+      "vector_drawing_paths": 181
+    }
+  ],
+  "items": [
+    {
+      "file": "thesis/body/ch01_introduction.tex",
+      "line": 59,
+      "kind": "table",
+      "labels": [
+        "tab:related_work_routes"
+      ],
+      "caption_line": "相关技术路线及其监督与适用条件}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 13,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_architecture"
+      ],
+      "caption_line": "仿真平台模块及控制、观测数据流}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 29,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_modules"
+      ],
+      "caption_line": "仿真平台主要模块与功能}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 57,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_robot_model"
+      ],
+      "caption_line": "由当前XML与STL离线组合的机械臂和手部模型（静态关节零位，右侧为手部放大图；未显示底座，非任务执行截图）}",
+      "includegraphics": [
+        "figures/ch02/assembled_robot_tachin.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 73,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_drive"
+      ],
+      "caption_line": "当前模型的关节与驱动关系}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 85,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_actuators"
+      ],
+      "caption_line": "机械臂及灵巧手执行器配置}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 135,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_control"
+      ],
+      "caption_line": "指定配置下的控制层次与多速率执行流程}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 150,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_control_parameters"
+      ],
+      "caption_line": "主要控制与物理参数及其适用范围}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 183,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_patch_order"
+      ],
+      "caption_line": "五指与手掌触觉阵列的维度及索引组织}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 213,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_fingertip"
+      ],
+      "caption_line": "当前指尖STL及外壳拟合后的阵列采样点（网格局部坐标）}",
+      "includegraphics": [
+        "figures/ch02/fingertip_sampling.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 222,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_layout_parameters"
+      ],
+      "caption_line": "不同曲面布局方法的关键实现参数}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 239,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_frame"
+      ],
+      "caption_line": "由相邻采样点构造的局部切线和法向（外向修正前）}",
+      "includegraphics": [
+        "figures/ch02/taxel_local_frame.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 254,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_patch_layout"
+      ],
+      "caption_line": "16个Patch的阵列规格与712维索引区间}",
+      "includegraphics": [],
+      "body_reference_count": 2
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 291,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_processing"
+      ],
+      "caption_line": "原生触觉读数到processed观测的处理链}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 319,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_signal_stages"
+      ],
+      "caption_line": "触觉观测各阶段的输出与语义}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 345,
+      "kind": "figure",
+      "labels": [
+        "fig:ch02_validation"
+      ],
+      "caption_line": "平台实现与历史观测记录的分层核查结构}",
+      "includegraphics": [],
+      "body_reference_count": 0
+    },
+    {
+      "file": "thesis/body/ch02_simulation_platform.tex",
+      "line": 362,
+      "kind": "table",
+      "labels": [
+        "tab:ch02_episode_validation"
+      ],
+      "caption_line": "五条历史开发Episode的触觉观测核查结果}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 19,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_overall_pipeline"
+      ],
+      "caption_line": "抓取候选到专家示教的分级构建流程}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 45,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_candidate_parameters"
+      ],
+      "caption_line": "候选优化参数及约束的实际作用}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 67,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_candidate_sources"
+      ],
+      "caption_line": "已有候选模块在分级生成流程中的职责}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 115,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_reachability"
+      ],
+      "caption_line": "局部腕姿态扩展与两个目标的可达性筛选}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 156,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_strict_replay"
+      ],
+      "caption_line": "分段轨迹执行与Strict Replay质量验收}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 173,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_strict_thresholds"
+      ],
+      "caption_line": "当前final配置的Strict Replay验收条件}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 209,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_task_stages"
+      ],
+      "caption_line": "五类任务的示教阶段与主要执行约束}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 228,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_task_transfer"
+      ],
+      "caption_line": "多任务示教的共用来源与任务专属控制关系}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 254,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_historical_batches"
+      ],
+      "caption_line": "历史批量路由与任务记录及其统计限制}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 275,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_sugar_strict"
+      ],
+      "caption_line": "Sugar Box局部扰动示教的历史Strict结果}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 299,
+      "kind": "table",
+      "labels": [
+        "tab:ch03_generation_failures"
+      ],
+      "caption_line": "历史90次扰动尝试的汇总分类}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 318,
+      "kind": "figure",
+      "labels": [
+        "fig:ch03_examples"
+      ],
+      "caption_line": "典型成功与失败案例的待补原始画面}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 15,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_fields"
+      ],
+      "caption_line": "主要数据字段的维度与实际语义}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 37,
+      "kind": "figure",
+      "labels": [
+        "fig:ch04_carriers"
+      ],
+      "caption_line": "数据载体及其转换关系示意}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 68,
+      "kind": "figure",
+      "labels": [
+        "fig:ch04_timing"
+      ],
+      "caption_line": "执行前采集与历史执行后记录的索引关系}",
+      "includegraphics": [],
+      "body_reference_count": 0
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 91,
+      "kind": "figure",
+      "labels": [
+        "fig:ch04_multirate"
+      ],
+      "caption_line": "控制记录与RGB采样频率分离的合同示意}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 106,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_recording_versions"
+      ],
+      "caption_line": "不同记录路径的时序与版本边界}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 149,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_quality_gates"
+      ],
+      "caption_line": "分层数据质量检查及其判定范围}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 173,
+      "kind": "figure",
+      "labels": [
+        "fig:ch04_admission"
+      ],
+      "caption_line": "分层质量审查与数据准入关系}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 212,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_lerobot_inventory"
+      ],
+      "caption_line": "三组LeRobot数据的实际数值库存}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 231,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_version_quality"
+      ],
+      "caption_line": "旧在线记录与v4开发包的质量对照}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 253,
+      "kind": "table",
+      "labels": [
+        "tab:ch04_sink_precision"
+      ],
+      "caption_line": "Sink历史回放状态与精度对照}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch04_multimodal_data.tex",
+      "line": 267,
+      "kind": "figure",
+      "labels": [
+        "fig:ch04_sink_precision"
+      ],
+      "caption_line": "由已有报告绘制的Sink回放偏差对照（历史记录，非本轮新实验）}",
+      "includegraphics": [
+        "figures/ch04/sink_historical_precision_r2.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 15,
+      "kind": "table",
+      "labels": [
+        "tab:ch05_domain_feature_difference"
+      ],
+      "caption_line": "旧P37数据校准后触觉的表示分解诊断}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 7,
+      "kind": "figure",
+      "labels": [
+        "fig:ch05_gmm_physical_pipeline"
+      ],
+      "caption_line": "GMM统计先验引导仿真接触与伪配对构建流程}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 42,
+      "kind": "table",
+      "labels": [
+        "tab:ch05_probe_dictionary"
+      ],
+      "caption_line": "球形探针响应字典的组织}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 62,
+      "kind": "figure",
+      "labels": [
+        "fig:ch05_gmm_candidate_selection"
+      ],
+      "caption_line": "软分量分解、候选压缩与单一伪配对选择示意}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_4.tex",
+      "line": 7,
+      "kind": "figure",
+      "labels": [
+        "fig:ch05_dual_vae"
+      ],
+      "caption_line": "双域VAE独立表示学习与条件解码结构}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_5.tex",
+      "line": 29,
+      "kind": "figure",
+      "labels": [
+        "fig:ch05_translator_paths"
+      ],
+      "caption_line": "伪配对监督训练与自由推理的数据流}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 7,
+      "kind": "figure",
+      "labels": [
+        "fig:ch05_c0_validation_protocol"
+      ],
+      "caption_line": "迁移前冻结C0的Validation评价协议}",
+      "includegraphics": [],
+      "body_reference_count": 0
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 24,
+      "kind": "table",
+      "labels": [
+        "tab:ch05_transfer_summary"
+      ],
+      "caption_line": "同划分Natural Validation的跨域评价汇总}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 36,
+      "kind": "table",
+      "labels": [
+        "tab:ch05_validation_instances"
+      ],
+      "caption_line": "C3与C27的冻结Validation逐实例结果}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 41,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_shared_vector_field"
+      ],
+      "caption_line": "共享参数向量场迁移框架。灰色模块冻结，蓝色模块可训练；积分展开复用同一组参数，四帧序列在各次向量场调用内部处理。}",
+      "includegraphics": [
+        "figures/ch06/shared_vector_field.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 54,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_mapping_comparison"
+      ],
+      "caption_line": "直接潜变量映射与共享向量场方法的关系}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 31,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_mask_gradient_paths"
+      ],
+      "caption_line": "Decoder与判别器输入端的两处Mask梯度路径。实线为前向，虚线为生成器更新时的反向；B组的判别Mask支路中断，C组以代理导数传递，连续支路保留。}",
+      "includegraphics": [
+        "figures/ch06/mask_gradient_paths.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 38,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_discriminator_comparison"
+      ],
+      "caption_line": "判别器输入配置及原冻结C0联合结果}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 7,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_f0_swd_baseline"
+      ],
+      "caption_line": "统一评价中Original与初始生成器的SWD对照。相对下降及区间均取自既有组Bootstrap记录，不代表完整迁移通过。}",
+      "includegraphics": [
+        "figures/ch06/f0_swd_baseline.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 22,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_round_acceptance_states"
+      ],
+      "caption_line": "各判别器状态下生成器更新前后的接受率。每组仅在同一冻结D内比较；第0轮为原域判别器诊断，Real接受率按Session宏平均。}",
+      "includegraphics": [
+        "figures/ch06/round_acceptance_states.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 31,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_multi_round_distribution"
+      ],
+      "caption_line": "固定分布评价合同下各生成器状态的SWD与MMD。两项均越低越好，生成结果未随优化轮次单调改善。}",
+      "includegraphics": [
+        "figures/ch06/multi_round_distribution.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 17,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_multiview_refiner_architecture"
+      ],
+      "caption_line": "残差生成与多视角判别结构。虚线表示冻结的双域VAE；Patch仅按既定通道索引分组。}",
+      "includegraphics": [
+        "figures/ch06/multiview_refiner_architecture.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 28,
+      "kind": "figure",
+      "labels": [
+        "fig:ch06_multiview_gradient_training"
+      ],
+      "caption_line": "生成阶段各Epoch首步的分支梯度范数及逐Epoch平均对抗项。曲线来自历史训练日志，梯度非零不代表质量改善。}",
+      "includegraphics": [
+        "figures/ch06/multiview_gradient_training.pdf"
+      ],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 35,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_multiview_results"
+      ],
+      "caption_line": "固定分布评价下的生成结果与终点诊断}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 16,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_quality_dependency_comparison"
+      ],
+      "caption_line": "共同评价合同下的分布、邻域与依赖指标}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 45,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_quality_negative_controls"
+      ],
+      "caption_line": "同源Validation派生负对照的互补诊断}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 10,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_real_session_reliability"
+      ],
+      "caption_line": "开发Real Session的Joint接受率}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 32,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_loso_envelope_coverage"
+      ],
+      "caption_line": "各判别分支的LOSO包络覆盖率}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    },
+    {
+      "file": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 47,
+      "kind": "table",
+      "labels": [
+        "tab:ch06_score_envelope_diagnostic"
+      ],
+      "caption_line": "Real校准分数包络与生成样本上界超出比例}",
+      "includegraphics": [],
+      "body_reference_count": 1
+    }
+  ],
+  "duplicate_labels": [],
+  "missing_refs": [],
+  "equations": 32
+}

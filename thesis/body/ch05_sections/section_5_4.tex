@@ -1,24 +1,13 @@
-% Standalone section fragment. Not included in thesis.tex.
+% Active section fragment; included through body/ch05_dual_domain_reconstruction.tex.
 \section{基于双域变分自编码器的触觉表示学习}
 \label{sec:ch05_dual_vae_representation}
 
-统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器\cite{kingma2014vae}，分别建立Real VAE与Sim VAE，如图\ref{fig:ch05_dual_vae}所示。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。
+统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器\cite{kingma2014vae}，分别建立Real VAE与Sim VAE，如图\ref{fig:ch05_dual_vae}所示。该双域表示与下一节Translator组成的初始方案记为C3。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
- Real Train $\rightarrow E_r\rightarrow (\boldsymbol\mu_r,\boldsymbol\ell_r)
- \rightarrow Z_r\rightarrow D_r\rightarrow$ Real自重建\\[5pt]
- Natural Sim与Paired Sim $\rightarrow E_s\rightarrow (\boldsymbol\mu_s,\boldsymbol\ell_s)
- \rightarrow Z_s\rightarrow D_s\rightarrow$ Sim自重建\\[5pt]
- 两路参数独立；训练潜变量由重参数化采样获得\\[3pt]
- 各Decoder：前帧Mask与潜变量 $\rightarrow$ 时序状态 $\rightarrow$ 当帧Mask\\[3pt]
- 训练：随机潜变量，前帧及当帧使用真实Mask\\[3pt]
- 自由推理：后验均值，前帧及当帧使用预测Mask\\[3pt]
- 时序状态与当帧Mask $\rightarrow$ 条件Gamma混合幅值
- \par\vspace*{2.5mm}
- \end{minipage}}
- \caption{双域VAE独立表示学习与条件解码结构}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_dual_vae.pdf}
+  \caption{双域VAE独立表示学习与条件解码结构}
  \label{fig:ch05_dual_vae}
 \end{figure}
 
@@ -56,4 +45,4 @@ Decoder以零隐状态开始，首帧使用可学习的32维序列起始向量BO
 
 Real训练池为5153窗，Sim训练池包含4049个Natural窗与1200个Paired窗，Sim采用分层混合批次，每步从Natural Sim和Paired Sim各取32窗，合成64窗，每轮127步。较小的Paired组重复访问，实现批次等量混合，而非按原始规模比例采样。Real每轮81步，两域总优化步数分别为3645和5715，重复访问不增加独立样本。两域分别拟合尺度，Real与Sim的输入尺度分别约为0.14118和0.04089，正值尺度分别约为0.0050025和$10^{-7}$。Sim正值尺度触及下限，其拟合按合并训练元素进行，与训练时两类窗口等量采样的权重不同，上述尺度均由传感器处理后的无量纲触觉数值计算，不对应实际压力或力学单位。采用AdamW、学习率$10^{-3}$、批量64，两域均训练45轮，仅在第30至45轮按各自验证目标选择检查点，最终均选第30轮，属于限定候选区间内的选择，而非全部轮次的无约束最优。验证损失取后验均值，但仍使用真实Mask条件，不能替代自由重建检验。Real按验证重建项与KL加权和选取权重，Sim则对Natural与Paired验证目标等权汇合；两套模型均未依据域分类器成绩选择。
 
-上述为C3基础模型。后续C13仅调整Real Decoder的当前帧Mask条件嵌入与幅值头，其余Encoder、Mask预测及循环骨干冻结；C23复用其自重建输出诊断，C24仅在相同可训练范围增加时序幅值约束，具体结果留待实验分析。各域重建目标只要求潜表示能够服务于本域读出，不约束同一维度表示相同接触特征。即使采用相同先验，也不能直接将两套坐标中的近邻解释为物理对应。独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。
+上述为C3基础模型。后续C13仅调整Real Decoder的当前帧Mask条件嵌入与幅值头，其余Encoder、Mask预测及循环骨干冻结；C23是复用C13输出的Real自重建读出诊断；C24是同一可训练范围内增加时序幅值约束的修复版本，具体结果留待实验分析。各域重建目标只要求潜表示能够服务于本域读出，不约束同一维度表示相同接触特征。即使采用相同先验，也不能直接将两套坐标中的近邻解释为物理对应。独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。

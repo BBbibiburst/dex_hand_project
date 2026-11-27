@@ -1,0 +1,418 @@
+[
+  {
+    "case": "lift_sugar_rgb_00",
+    "status": "VERIFIED_DIRECT",
+    "video": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/agentview.mp4",
+    "sha256": "29f3a6a17eaaa3f7db2038e41866ff5a923239ef348a84cabc9e2a41766b93fc",
+    "manifest": "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json",
+    "manifest_sha256": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+    "seed": 7011,
+    "root": "UNKNOWN",
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "20",
+    "declared_frames": 447,
+    "time_base": "1/10240",
+    "duration_seconds": 22.35,
+    "npz_shapes": {
+      "qpos": [
+        447,
+        26
+      ],
+      "qvel": [
+        447,
+        25
+      ],
+      "ctrl": [
+        447,
+        13
+      ],
+      "action": [
+        447,
+        13
+      ],
+      "object_position": [
+        447,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        447,
+        4
+      ],
+      "stage": [
+        447
+      ],
+      "reward": [
+        447
+      ],
+      "task_success": [
+        447
+      ],
+      "robot_object_contact_count": [
+        447
+      ],
+      "robot_object_normal_force": [
+        447
+      ],
+      "robot_object_digit_contact_count": [
+        447,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        447,
+        5
+      ],
+      "tactile": [
+        447,
+        712
+      ],
+      "palm_object_contact": [
+        447
+      ],
+      "object_support_contact": [
+        447
+      ],
+      "timestamp": [
+        447
+      ],
+      "state": [
+        447,
+        39
+      ],
+      "sensor_tactile": [
+        447,
+        712
+      ],
+      "object_state": [
+        447,
+        1,
+        7
+      ],
+      "pre_qpos": [
+        447,
+        26
+      ],
+      "pre_qvel": [
+        447,
+        25
+      ],
+      "next_timestamp": [
+        447
+      ],
+      "position_action": [
+        447,
+        13
+      ],
+      "ik_action": [
+        447,
+        13
+      ]
+    },
+    "stage_names_source": "manifest and executor stage_codes",
+    "decoded_frames": 447,
+    "monotonic_pts": true,
+    "pts_gap_min": 0.04999999999999716,
+    "pts_gap_max": 0.05000000000000071,
+    "dimension_consistent": true,
+    "black_frame_heuristic_indices": [],
+    "decode_error": null,
+    "video_vs_npz_timestamp_max_error": 4.270361841918202e-12,
+    "stage_ranges": [
+      {
+        "stage_code": 0,
+        "stage": "settle",
+        "start": 0,
+        "end": 11
+      },
+      {
+        "stage_code": 1,
+        "stage": "transit",
+        "start": 12,
+        "end": 81
+      },
+      {
+        "stage_code": 2,
+        "stage": "pregrasp",
+        "start": 82,
+        "end": 136
+      },
+      {
+        "stage_code": 3,
+        "stage": "approach",
+        "start": 137,
+        "end": 181
+      },
+      {
+        "stage_code": 4,
+        "stage": "close",
+        "start": 182,
+        "end": 226
+      },
+      {
+        "stage_code": 5,
+        "stage": "hold",
+        "start": 227,
+        "end": 266
+      },
+      {
+        "stage_code": 6,
+        "stage": "lift",
+        "start": 267,
+        "end": 356
+      },
+      {
+        "stage_code": 7,
+        "stage": "verify",
+        "start": 357,
+        "end": 446
+      }
+    ]
+  },
+  {
+    "case": "nut_retain_lower_rgb_00",
+    "status": "VERIFIED_DIRECT",
+    "video": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/agentview.mp4",
+    "sha256": "a95fbe6c81cdcee0a494cea5566555f9c8dcda5995ca65c85a0f764927e4403c",
+    "manifest": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json",
+    "manifest_sha256": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+    "seed": 0,
+    "root": "UNKNOWN",
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "fps": "20",
+    "declared_frames": 599,
+    "time_base": "1/10240",
+    "duration_seconds": 29.95,
+    "npz_shapes": {
+      "qpos": [
+        599,
+        26
+      ],
+      "qvel": [
+        599,
+        25
+      ],
+      "ctrl": [
+        599,
+        13
+      ],
+      "action": [
+        599,
+        13
+      ],
+      "object_position": [
+        599,
+        3
+      ],
+      "object_quaternion_wxyz": [
+        599,
+        4
+      ],
+      "stage": [
+        599
+      ],
+      "reward": [
+        599
+      ],
+      "task_success": [
+        599
+      ],
+      "robot_object_contact_count": [
+        599
+      ],
+      "robot_object_normal_force": [
+        599
+      ],
+      "robot_object_digit_contact_count": [
+        599,
+        5
+      ],
+      "robot_object_digit_normal_force": [
+        599,
+        5
+      ],
+      "tactile": [
+        599,
+        712
+      ],
+      "palm_object_contact": [
+        599
+      ],
+      "object_support_contact": [
+        599
+      ],
+      "timestamp": [
+        599
+      ],
+      "state": [
+        599,
+        39
+      ],
+      "sensor_tactile": [
+        599,
+        712
+      ],
+      "object_state": [
+        599,
+        2,
+        7
+      ],
+      "pre_qpos": [
+        599,
+        26
+      ],
+      "pre_qvel": [
+        599,
+        25
+      ],
+      "next_timestamp": [
+        599
+      ],
+      "position_action": [
+        599,
+        13
+      ],
+      "ik_action": [
+        599,
+        13
+      ]
+    },
+    "stage_names_source": "executor stage_codes; historical manifest lacks explicit mapping",
+    "decoded_frames": 599,
+    "monotonic_pts": true,
+    "pts_gap_min": 0.04999999999999716,
+    "pts_gap_max": 0.05000000000000071,
+    "dimension_consistent": true,
+    "black_frame_heuristic_indices": [],
+    "decode_error": null,
+    "video_vs_npz_timestamp_max_error": 1.3560708111981512e-11,
+    "stage_ranges": [
+      {
+        "stage_code": 0,
+        "stage": "settle",
+        "start": 0,
+        "end": 24
+      },
+      {
+        "stage_code": 1,
+        "stage": "transit",
+        "start": 25,
+        "end": 104
+      },
+      {
+        "stage_code": 2,
+        "stage": "pregrasp",
+        "start": 105,
+        "end": 169
+      },
+      {
+        "stage_code": 3,
+        "stage": "approach",
+        "start": 170,
+        "end": 219
+      },
+      {
+        "stage_code": 4,
+        "stage": "close",
+        "start": 220,
+        "end": 274
+      },
+      {
+        "stage_code": 5,
+        "stage": "hold",
+        "start": 275,
+        "end": 304
+      },
+      {
+        "stage_code": 6,
+        "stage": "lift",
+        "start": 305,
+        "end": 376
+      },
+      {
+        "stage_code": 8,
+        "stage": "transport",
+        "start": 377,
+        "end": 480
+      },
+      {
+        "stage_code": 9,
+        "stage": "descend",
+        "start": 481,
+        "end": 498
+      },
+      {
+        "stage_code": 12,
+        "stage": "task_verify",
+        "start": 499,
+        "end": 598
+      }
+    ]
+  },
+  {
+    "case": "nut_original_handle_00",
+    "status": "MISSING",
+    "historical_result": {
+      "task": "nut_assembly",
+      "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+      "seed": 0,
+      "simulation_executed": true,
+      "rgb_status": "NOT_YET_IMPLEMENTED",
+      "reference_sha256": "cdbc911ffd66e8ced0d109a896445ec16ef885b97a2c87e15b197b3e19030cfd",
+      "handle_manifest": "outputs/dex_hand_top100_v2/grasp/ycb_005_tomato_soup_can/seed_0000/manifest.json",
+      "handle_sha256": "3660453887bafb8bfa49e909cb8fc4c98cffd92bc86cc67dfacc4cdf8432be82",
+      "success": false,
+      "failure_reason": "grasped bolt was not stably inserted in the fixed nut",
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 941,
+        "duration_seconds": 47.04999999998105,
+        "tactile_nonzero_fraction": 0.05559170855771412
+      },
+      "object_names": [
+        "assembly_bolt",
+        "fixed_nut_body"
+      ],
+      "contract_passed": true,
+      "wall_seconds": 55.255840115999945
+    },
+    "manifest": "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/manifest.json",
+    "manifest_sha256": "b9443bfdecddf10d849c0fe76551733df081a1835e3b247c5db84ff95f52df7c",
+    "root": "UNKNOWN"
+  },
+  {
+    "case": "nut_handle_lower_00",
+    "status": "MISSING",
+    "historical_result": {
+      "task": "nut_assembly",
+      "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+      "seed": 0,
+      "simulation_executed": true,
+      "rgb_status": "NOT_YET_IMPLEMENTED",
+      "reference_sha256": "cdbc911ffd66e8ced0d109a896445ec16ef885b97a2c87e15b197b3e19030cfd",
+      "nut_grasp_offset_z": -0.015,
+      "handle_manifest": "outputs/dex_hand_top100_v2/grasp/ycb_005_tomato_soup_can/seed_0000/manifest.json",
+      "handle_sha256": "3660453887bafb8bfa49e909cb8fc4c98cffd92bc86cc67dfacc4cdf8432be82",
+      "success": false,
+      "failure_reason": "grasped bolt was not stably inserted in the fixed nut",
+      "contract": {
+        "schema": "five-task-online-v2",
+        "frames": 941,
+        "duration_seconds": 47.04999999998105,
+        "tactile_nonzero_fraction": 0.052294654264528534
+      },
+      "object_names": [
+        "assembly_bolt",
+        "fixed_nut_body"
+      ],
+      "modalities_sha256": "f6e94270b0a1b13011b51d163119911941a2dc675b903d7705b2916eba79a517",
+      "contract_passed": true,
+      "wall_seconds": 22.962725466999927
+    },
+    "manifest": "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/manifest.json",
+    "manifest_sha256": "cf0d1b20e846ede2969c173fcda63eb1704d0c639d866f1b8a24ca8f28662192",
+    "root": "UNKNOWN"
+  }
+]

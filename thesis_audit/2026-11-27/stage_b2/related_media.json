@@ -1,0 +1,292 @@
+[
+  {
+    "video": "outputs/five_task_p44_integration_2026-11-05/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p44_integration_2026-11-05/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "76fe4e5502ae5a0ee73fd08c9f8945c8418f5c2ace590cdbc45fc907602238d2"
+      },
+      {
+        "path": "outputs/five_task_p44_integration_2026-11-05/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "c1c0c7273ce59ee66e5dc27c945097d030cbb916993105725ae7bf14dc13a077"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/nut_000_3106428ada24fdc54dce/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/nut_000_3106428ada24fdc54dce/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "76fe4e5502ae5a0ee73fd08c9f8945c8418f5c2ace590cdbc45fc907602238d2"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/work/nut_000_c8ce8a4cb2b18c2fc569/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": []
+  },
+  {
+    "video": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/work/nut_000_d52cd30e2fc71640e4b5/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/work/nut_000_d52cd30e2fc71640e4b5/attempt_001/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "69fe66efc635c083bcfee94cf220fad01e5ed781bccab46cf3a2182208590915"
+      },
+      {
+        "path": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/work/nut_000_d52cd30e2fc71640e4b5/attempt_001/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "9a8f7a750e180bdabfc5981f125ead174ea1f57b3e47a3a7e6573a86860b5b52"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/episodes/nut_000_d52cd30e2fc71640e4b5/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p41_hour_canary_2026-11-03/dataset/episodes/nut_000_d52cd30e2fc71640e4b5/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "69fe66efc635c083bcfee94cf220fad01e5ed781bccab46cf3a2182208590915"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p53_integration_2026-11-06/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p53_integration_2026-11-06/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "76fe4e5502ae5a0ee73fd08c9f8945c8418f5c2ace590cdbc45fc907602238d2"
+      },
+      {
+        "path": "outputs/five_task_p53_integration_2026-11-06/dataset/work/nut_000_3106428ada24fdc54dce/attempt_001/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "99485ed7205988b3466e855fc26eaa26efac0fa8f681de0a0f8bc4567e437450"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p53_integration_2026-11-06/dataset/episodes/nut_000_3106428ada24fdc54dce/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p53_integration_2026-11-06/dataset/episodes/nut_000_3106428ada24fdc54dce/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "76fe4e5502ae5a0ee73fd08c9f8945c8418f5c2ace590cdbc45fc907602238d2"
+      }
+    ]
+  },
+  {
+    "video": "outputs/server_nut_packaging_fix_2026-11-07/after/episodes/nut_after/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/server_nut_packaging_fix_2026-11-07/after/episodes/nut_after/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "76fe4e5502ae5a0ee73fd08c9f8945c8418f5c2ace590cdbc45fc907602238d2"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p32_coordinator_2026-11-03/work/nut_000_ab25a6dd140e8e9d72fe/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p32_coordinator_2026-11-03/work/nut_000_ab25a6dd140e8e9d72fe/attempt_001/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "29a2659ca0a12a90b7abfb4ce61261cf1770b5fd8dce0cf8282e017da8609515"
+      },
+      {
+        "path": "outputs/five_task_p32_coordinator_2026-11-03/work/nut_000_ab25a6dd140e8e9d72fe/attempt_001/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "74ccea9f451e4ba8e92e0f4509e0edeb20a509b3f9ba29d3eb3458a8c5caa2e3"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p32_coordinator_2026-11-03/episodes/nut_000_ab25a6dd140e8e9d72fe/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p32_coordinator_2026-11-03/episodes/nut_000_ab25a6dd140e8e9d72fe/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "29a2659ca0a12a90b7abfb4ce61261cf1770b5fd8dce0cf8282e017da8609515"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/agentview.mp4",
+    "classification": "VERIFIED_RELATED",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9"
+      },
+      {
+        "path": "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657"
+      }
+    ]
+  },
+  {
+    "video": "outputs/ppt_20260906_assets/nut.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": []
+  },
+  {
+    "video": "outputs/demo_videos/top100_nut_assembly.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": []
+  },
+  {
+    "video": "outputs/demo_videos/nut_assembly_v41.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": []
+  },
+  {
+    "video": "outputs/five_task_p39_v4_four_tasks_2026-11-03/dataset/work/nut_000_b7aadc93f5e09aeeef13/attempt_001/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p39_v4_four_tasks_2026-11-03/dataset/work/nut_000_b7aadc93f5e09aeeef13/attempt_001/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "933b84616a48afe12577f68b57d2bf3facfc57627cca583d69732ba264aba0b5"
+      },
+      {
+        "path": "outputs/five_task_p39_v4_four_tasks_2026-11-03/dataset/work/nut_000_b7aadc93f5e09aeeef13/attempt_001/result.json",
+        "schema": null,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": "outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json",
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "1ae468cad143af9533e110d9635d3e517e7a43ec162f2cc723513b1280e6ba4d"
+      }
+    ]
+  },
+  {
+    "video": "outputs/five_task_p39_v4_four_tasks_2026-11-03/dataset/episodes/nut_000_b7aadc93f5e09aeeef13/agentview.mp4",
+    "classification": "UNVERIFIED for target failure Episode",
+    "metadata": [
+      {
+        "path": "outputs/five_task_p39_v4_four_tasks_2026-11-03/dataset/episodes/nut_000_b7aadc93f5e09aeeef13/source_episode/manifest.json",
+        "schema": 1,
+        "seed": 0,
+        "success": true,
+        "reference_manifest": null,
+        "metadata_reference": null,
+        "episode_id": null,
+        "root_id": null,
+        "sha256": "933b84616a48afe12577f68b57d2bf3facfc57627cca583d69732ba264aba0b5"
+      }
+    ]
+  }
+]

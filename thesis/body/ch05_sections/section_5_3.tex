@@ -1,20 +1,13 @@
-% CH05-5.3 only: standalone section fragment, not included in thesis.tex.
+% Active section fragment; included through body/ch05_dual_domain_reconstruction.tex.
 \section{GMM统计先验引导的仿真触觉伪配对构建}
 \label{sec:ch05_gmm_pseudopairs}
 
 真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再通过原有传感器链路获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。所得配对提供统计监督，不代表两域经历了相同的物理接触。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- Real Train $\rightarrow$ Patch索引偏移统计 $\rightarrow$ 冻结GMM\\[2pt]
- $\downarrow$ 对指定Real目标作分量响应分解\\[2pt]
- 字典位置检索与加载估计 $\rightarrow$ 球形探针物理执行\\[2pt]
- $\downarrow$ 原生触觉读取与既有信号处理\\[2pt]
- 完整$4\times712$响应 $\rightarrow$ 统计准入与伪配对登记
- \par\vspace*{2.5mm}
- \end{minipage}}
- \caption{GMM统计先验引导仿真接触与伪配对构建流程}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_gmm_physical_pipeline.pdf}
+  \caption{GMM统计先验引导仿真接触与伪配对构建流程}
  \label{fig:ch05_gmm_physical_pipeline}
 \end{figure}
 
@@ -60,16 +53,9 @@ GMM按Patch建模。各Taxel行列索引映射至$[-0.5,0.5]^2$网格，以训�
 字典将可执行条件与观测响应关联，见表\ref{tab:ch05_probe_dictionary}。各Patch分量按$m_{pk}$合并排序后保留最多5个。对每个保留分量，先在手部驱动指令为0、深度0.25~mm且非零响应的字典条目中，选择响应质心最接近$\boldsymbol c_{pk}$的位置；再利用同位置的响应总量与深度关系插值估计基础加载。四帧Patch总量相对其均值的变化用于设置加载因子，而不直接写入触觉数组。基础命令受既定范围约束，不能解释为真实材料压陷量。具体而言，四帧加载因子限制在$[0,2]$；反馈按目标与生成Patch总响应之比估计调整倍率，并将倍率限制在$[0.5,2]$、基础深度限制在$[0.1,1]$~mm。该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 一个Real目标 $\rightarrow$ 各Patch软分量：$r_{pjk},m_{pk},\boldsymbol c_{pk}$\\[2pt]
- $\downarrow$ 全部分量按分量响应量排序，保留至多5个\\[2pt]
- 字典基元组合 $\rightarrow$ 至多3次物理候选与反馈\\[2pt]
- $\downarrow$ 取已执行候选中代价最小者，再检查准入条件\\[2pt]
- 一组Real--Sim伪配对；完整多解概率未进入后续监督
- \par\vspace*{2.5mm}
- \end{minipage}}
- \caption{软分量分解、候选压缩与单一伪配对选择示意}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_gmm_candidate_selection.pdf}
+  \caption{软分量分解、候选压缩与单一伪配对选择示意}
  \label{fig:ch05_gmm_candidate_selection}
 \end{figure}
 
@@ -82,3 +68,24 @@ GMM按Patch建模。各Taxel行列索引映射至$[-0.5,0.5]^2$网格，以训�
 其中，$s_a$为逐帧Patch响应比例余弦相似度的四帧均值，零响应帧也计入。$d_a$在Real主响应Patch双方活跃帧上，比较Sim质心与Real质心加GMM混合均值的锚点；无双方活跃帧时，排序中该项取1且不允许登记。该锚点未改变责任度求值坐标，未消除原点不一致，仍为索引启发式参照。混合均值按冻结权重$\pi_{pk}$计算，而非按$m_{pk}$计算；混合协方差同时包含分量协方差与分量间均值差异。$e_a$是Sim协方差与该混合协方差之差的Frobenius范数的四帧均值，零Sim帧协方差按0计入，未除以目标协方差范数。响应比例及质心、协方差计算中的响应总量分母设$10^{-12}$下限，这不构成误差的相对归一化。仅当所选结果非零、$s_a\ge0.8$、$d_a\le0.2$、$e_a\le0.1$且不重复时登记。argmin包含未通过候选，故即使出现通过者，最终最小代价者仍可能不达门槛而被拒收。仅比较已执行集合，不保证全局最优。上述距离均在索引空间计算，不是物理接触误差。目标按元数据预定顺序处理，不以域分类器评分。来源、探针条件和匹配记录可追溯，并检查窗口数值重复；未通过候选的Episode与评分均保存，数值唯一不证明物理初态独立。
 
 图\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。
+
+算法\ref{alg:gmm_pseudo_pair}归纳统计目标到物理候选的实际选择过程。候选循环的提前停止与最终准入分开执行，不保证找到一个通过者后一定登记。
+\begin{algorithm}[H]
+\small
+\caption{GMM统计引导的物理候选与伪配对选择}\label{alg:gmm_pseudo_pair}
+\KwIn{指定Real窗口、冻结GMM、探针字典及统计准入条件}
+\KwOut{登记的统计伪配对或拒收记录}
+按现有固定网格求责任度，以响应量分解各Patch分量\;
+按分量响应量降序保留至多5个分量，不将责任度解释为物理归属概率\;
+检索字典位置，由响应量插值得到探针深度及四帧加载因子\;
+初始化已执行集合$\mathcal A=\varnothing$\;
+\For{$a=0,1,2$}{
+首候选使用字典估计；后续按反馈修正深度，第三次另作单格质心修正\;
+执行物理探针，读取并处理触觉，保存Episode与评分\;
+计算$s_a,d_a,e_a$，将候选加入$\mathcal A$\;
+\If{当前候选满足统计门槛}{提前结束候选循环\;}
+}
+在$\mathcal A$内选择$1-s_a+d_a+e_a$最小的候选\;
+对所选候选重新检查统计门槛、非零响应及重复条件\;
+通过则登记Real--Sim伪配对，否则记录拒收；保留既有执行证据\;
+\end{algorithm}

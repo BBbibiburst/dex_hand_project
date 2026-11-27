@@ -1,7 +1,7 @@
 \section{多视角判别与残差重建探索}
 \label{sec:ch06_multiview_residual_refiner}
 
-多轮优化提高了当前判别器下的接受率，却未维持固定距离评价中的质量。为此，本节探索条件残差Refiner与Global、Spatial、Temporal多视角判别约束。实验从$F_0$重新开始，而非续接上一节$F_3$，采用Seed 5001、单轮训练；两套VAE冻结，共享向量场与Refiner可训练。$D_{50}$是实验标识，不表示训练50轮。
+多轮优化提高了当前判别器下的接受率，却未维持固定距离评价中的质量。为此，本节探索条件残差Refiner与Global、Spatial、Temporal多视角判别约束。本实验记为P50，从$F_0$重新开始，而非续接上一节$F_3$，采用Seed 5001、单轮训练；两套VAE冻结，共享向量场与Refiner可训练。$F_{50}$表示本实验生成器的终点结果，$D_{50}$表示多视角判别器；下标50对应实验编号，不表示训练50轮。
 
 Refiner逐帧拼接$\log(1+Y_0)$与$z_s$，输入776维，经Linear投影至64维、GELU及隐藏维数64的GRU，再由零初始化Linear输出712维残差。其实际读出为
 \begin{equation}

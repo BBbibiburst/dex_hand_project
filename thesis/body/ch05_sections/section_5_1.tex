@@ -1,8 +1,8 @@
-% Standalone section draft; not included in thesis.tex.
+% Active section fragment; included through body/ch05_dual_domain_reconstruction.tex.
 \section{真实与仿真触觉差异分析}
 \label{sec:ch05_real_sim_difference}
 
-真实与仿真触觉具有相同数组维度，并不意味着能够直接用于同一操作表示。本文采用的观测按16个Patch组织，共712个标量通道，仿真阵列覆盖五指及手掌。其传感器原生raw读数来自MuJoCo native touch，对感知区域内的法向接触力累加\cite{mujoco2026xml}；仿真processed观测则经过死区、限幅、非线性响应、时间滤波及邻域扩散处理。Real processed观测来自实机自身采集处理流程，因此两域processed均应视为处理后的数值响应，不能直接称为真实压力或共同力学单位。对这种观测进行迁移，需要检查保留了哪些接触信息，而不只是核对输出形状。
+真实与仿真触觉具有相同数组维度，并不意味着能够直接用于同一操作表示。本文采用的观测按16个Patch组织，共712个标量通道，仿真阵列覆盖五指及手掌。其传感器原生raw读数来自MuJoCo native touch，对感知区域内的法向接触力累加\cite{mujoco2026xml}；仿真processed观测则经过死区、限幅、非线性响应、时间滤波及Patch内邻域扩散处理（实现参数名为crosstalk）。Real processed观测来自实机自身采集处理流程，因此两域processed均应视为处理后的数值响应，不能直接称为真实压力或共同力学单位。对这种观测进行迁移，需要检查保留了哪些接触信息，而不只是核对输出形状。
 
 P37旧开发数据的Real Train/Validation为5153/1408窗，Sim为1824/406窗；P43当前主线中，Real Train/Validation分别为5153/780窗，Natural Sim Train/Validation分别为4049/905窗，均采用$4\times712$窗口。P37统计不外推至P43，后者规模仅描述当前数据划分，不代表差异复现。两者不混合，窗口不作独立采集主体。
 
@@ -10,7 +10,7 @@ P37旧开发数据的Real Train/Validation为5153/1408窗，Sim为1824/406窗；
 
 幅值分析仅取$X>0$的响应。旧训练集汇总正值中位数，Real约为0.00500250，未转换Sim约为$1.03974\times10^{-5}$；P95分别约1.50101与0.459485。这些是各域全部正值池的统计，不是逐Patch分位数的平均，也不是接触力误差。幅值分解以每帧正值的P10、P25、P50、P75、P90构成有效$4\times5$表示，其余通道仅补零以复用网络接口；不输入Taxel位置、正值数量或空Patch标志。对包含至少一帧全零响应帧的窗口，按照预定规则予以排除，故该表示只刻画有响应条件下的幅值，不能覆盖完全无接触状态。
 
-表\ref{tab:ch05_domain_feature_difference}列出旧P37数据上既有转换输出经幅值校准后的表示分解诊断。Full与分位数先作log1p，各表示分别用Train拟合标准化，Probe由Logistic、kNN各1个及MLP、GRU、Transformer各Seed11、12、13组成，共11个；Full复用P38在相同输出、划分和预处理上的Probe拟合，不新增训练。此处为迁移后Probe诊断，非后文冻结C0验收。定义$D=1-2|\mathrm{BA}-0.5|$，只度量BA偏离0.5的程度；表中三个表示的最小D均低于0.90，表明至少存在Probe未满足固定阈值下的BA等价门槛；其排序判别能力仍需结合AUC判断。因此，不能仅凭这些结果认定支持或正值摘要已经实现域混淆。幅值调整保持Mask不变，不代表完整触觉已匹配。
+表\ref{tab:ch05_domain_feature_difference}列出旧P37数据上既有转换输出经幅值校准后的表示分解诊断。Full与分位数先作log1p，各表示分别用Train拟合标准化，Probe由Logistic、kNN各1个及MLP、GRU、Transformer各Seed11、12、13组成，共11个；Full复用P38在相同输出、划分和预处理上的Probe拟合，不新增训练。此处为迁移后Probe诊断，非后文迁移前冻结的域分类评价基线（C0）验收。定义$D=1-2|\mathrm{BA}-0.5|$，只度量BA偏离0.5的程度；表中三个表示的最小D均低于0.90，表明至少存在Probe未满足固定阈值下的BA等价门槛；其排序判别能力仍需结合AUC判断。因此，不能仅凭这些结果认定支持或正值摘要已经实现域混淆。幅值调整保持Mask不变，不代表完整触觉已匹配。
 
 \begin{table}[htbp]
  \centering\small

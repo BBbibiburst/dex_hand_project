@@ -1,8 +1,8 @@
-% Standalone 6.3 draft; historical CSV analysis only, not included in thesis.tex.
+% Active section fragment; included through body/ch06_adversarial_evaluation.tex.
 \section{多轮对抗优化实验}
 \label{sec:ch06_multi_round_adversarial}
 
-前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\%，定义$R_W=(\mathrm{SWD}_{\mathrm{Original}}-\mathrm{SWD}_{F_0})/\mathrm{SWD}_{\mathrm{Original}}$，本次为0.4977202817，95\%组Bootstrap区间约为$[0.408514,0.566743]$，如图\ref{fig:ch06_f0_swd_baseline}所示。这只支持指定距离合同下的改善，不能解释为迁移成功率。
+前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节将这一多轮实验记为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\%，定义$R_W=(\mathrm{SWD}_{\mathrm{Original}}-\mathrm{SWD}_{F_0})/\mathrm{SWD}_{\mathrm{Original}}$，本次为0.4977202817，95\%组Bootstrap区间约为$[0.408514,0.566743]$，如图\ref{fig:ch06_f0_swd_baseline}所示。这只支持指定距离合同下的改善，不能解释为迁移成功率。
 
 \begin{figure}[htbp]
  \centering

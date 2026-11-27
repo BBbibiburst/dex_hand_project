@@ -1,25 +1,19 @@
-% Independent section draft; no official main-file integration.
+% Active section fragment; included through body/ch05_dual_domain_reconstruction.tex.
 \section{跨域触觉重建实验结果与分析}
 \label{sec:ch05_reconstruction_results}
 
-为检验统计伪配对与双域表示是否支持完整触觉转换，本节采用迁移前训练并冻结的C0评价器。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。
+为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
- 原Real Train与Natural Sim Train $\rightarrow$ 训练11个C0后冻结\\[3pt]
- Real Validation与Translated Natural Validation\\[3pt]
- $\downarrow$ 原log1p、Scaler及通道顺序\\[3pt]
- 冻结C0、阈值0.5 $\rightarrow$ 逐实例BA、AUC、D及联合判定
- \par\vspace*{2.5mm}
- \end{minipage}}
- \caption{迁移前冻结C0的Validation评价协议}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_c0_validation_protocol.pdf}
+  \caption{迁移前冻结C0的Validation评价协议}
  \label{fig:ch05_c0_validation_protocol}
 \end{figure}
 
 记两类召回率为$R_r$与$R_s$，则$\mathrm{BA}=(R_r+R_s)/2$，$D=1-2|\mathrm{BA}-0.5|$。每个实例必须同时满足BA在$[0.45,0.55]$、AUC在$[0.475,0.525]$及$D\ge0.90$，且11个实例全部满足才算联合通过。BA与D门槛数学等价，不是两项独立证据；AUC检验分数排序，不能在小于0.5时反转后参加验收。点估计按窗口计算，不应误称Session或Root等权宏平均。原始未转换数据上，11个C0的Validation BA均超过0.98，表明其已能区分原始两域；但冻结后的测试只覆盖这些模型学到的判别特征，即使通过也不能替代触觉结构与输入响应保持检查。
 
-表\ref{tab:ch05_transfer_summary}汇总同角色跨域结果。C3采用原双域VAE与GRU Translator，其Validation结果取已有冻结链路复现，而非历史开发Test。虽然D全部达标，仅kNN同时满足AUC条件。表\ref{tab:ch05_validation_instances}中，C3的MLP分数仍保持正向排序差异，GRU和部分Transformer则出现反向排序；两种情况均不满足域不可辨识要求。例如MLP Seed11将905个迁移窗口全部判Real，Real中776/780判对，BA约0.497436；但AUC为0.591571。固定阈值下的高D因此可能来自类别预测偏向，不能证明分布已接近。
+表\ref{tab:ch05_transfer_summary}汇总C3、C13与C27的同角色跨域结果。C27指保留原C3双域VAE、改进Translator训练的方案，未与C13的Decoder修复合并。C3采用原双域VAE与GRU Translator，其Validation结果取已有冻结链路复现，而非历史开发Test。虽然D全部达标，仅kNN同时满足AUC条件。表\ref{tab:ch05_validation_instances}中，C3的MLP分数仍保持正向排序差异，GRU和部分Transformer则出现反向排序；两种情况均不满足域不可辨识要求。例如MLP Seed11将905个迁移窗口全部判Real，Real中776/780判对，BA约0.497436；但AUC为0.591571。固定阈值下的高D因此可能来自类别预测偏向，不能证明分布已接近。
 
 \begin{table}[htbp]
  \centering\small

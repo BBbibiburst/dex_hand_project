@@ -1,8 +1,8 @@
-% Standalone draft, 2026-11-26; not included in the thesis main file.
+% Active section fragment; included through body/ch06_adversarial_evaluation.tex.
 \section{共享参数向量场迁移方法}
 \label{sec:ch06_shared_vector_field}
 
-第五章利用统计伪配对监督Translator，在独立训练的双域VAE之间学习直接潜变量映射，再由Real Decoder生成目标域触觉。该方法通过GRU内部状态建模四帧序列，但未显式构造潜变量的积分更新路径；配对潜变量误差也不能直接说明Natural Sim输出的域分布是否接近Real。为在保留既有表示与读出模块的条件下研究可调整的迁移路径，本文将原映射扩展为源条件共享参数向量场，通过数值积分获得目标潜状态。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。
+第五章利用统计伪配对监督Translator，在独立训练的双域VAE之间学习直接潜变量映射，再由Real Decoder生成目标域触觉。该方法通过GRU内部状态建模四帧序列，但未显式构造潜变量的积分更新路径；配对潜变量误差也不能直接说明Natural Sim输出的域分布是否接近Real。为在保留既有表示与读出模块的条件下研究可调整的迁移路径，本文将原映射扩展为源条件共享参数向量场，通过数值积分获得目标潜状态。本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。
 
 记Natural Sim输入为$X_s\in\mathbb R_{\ge0}^{4\times712}$，沿用第五章的记号，以冻结Sim Encoder的后验均值$Z_s=\mu_s(X_s)\in\mathbb R^{4\times64}$作为源条件。积分状态$H(\tau)$同样具有$4\times64$形状，位于Real Decoder接收的潜变量坐标中。与直接令输出等于$T_\theta(Z_s)$不同，向量场同时考虑源条件、当前积分状态和积分坐标，其定义为
 \begin{equation}
@@ -69,3 +69,20 @@
 \end{table}
 
 表\ref{tab:ch06_mapping_comparison}概括了两种计算形式的关系。最终推理只需Sim Encoder、共享场及Real Decoder，不额外调用原C3教师；Real Encoder和Sim Decoder虽保留在完整模型中，也不位于部署链路。Decoder采用预测Mask与恢复尺度的Gamma混合均值输出非负响应。由此得到的是Real域风格触觉，而非已认证的真实接触测量。共享场提供了在既有潜表示上修正迁移路径的机制，但增加积分步数是否改善分布及输入保持，仍须由后续实验判断，不能由框架本身推导出迁移成功。
+
+共享场的部署过程归纳为算法\ref{alg:shared_field_inference}。积分下标与四帧序列下标分别处理，教师模型不参与部署。
+\begin{algorithm}[H]
+\small
+\caption{共享参数向量场的潜变量积分与触觉读出}\label{alg:shared_field_inference}
+\KwIn{Natural Sim窗口$X_s$、冻结VAE、共享场参数及$K\in\{1,2,4,8\}$}
+\KwOut{Real域风格触觉窗口$\widehat X_r$}
+计算$Z_s=\mu_s(X_s)$，初始化$H_0=0$\;
+\For{$k=0,\ldots,K-1$}{
+令$\tau=k/K$，构造$[\tau,1-\tau,\sin(\pi\tau),\cos(\pi\tau)]$\;
+拼接$H_k$、$Z_s$与积分坐标特征，输入修正网络\;
+本次调用内沿四帧运行GRU，计算修正项$C_k$\;
+计算$V_k=T_\theta(Z_s)+C_k$\;
+更新$H_{k+1}=H_k+V_k/K$，各步复用同一向量场参数\;
+}
+利用冻结Real Decoder自由读出$\widehat X_r=D_r(H_K)$\;
+\end{algorithm}

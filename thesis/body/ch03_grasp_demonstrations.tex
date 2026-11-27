@@ -17,17 +17,9 @@
 其中，$\boldsymbol t_{oh}\in\mathbb R^3$和$\boldsymbol R_{oh}\in SO(3)$描述物体坐标系下的手部目标，$\mathcal C$存储接触点、法向及距离，$\boldsymbol m$为候选质量和来源指标。驱动比例需进一步转换为具体执行器的控制范围，不等于十二个手部关节的独立角度。候选合同检查维度、旋转合法性和比例范围，这些检查只能保证表达有效，不能证明实际接触已经成立。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 物体几何、初始位姿和任务条件\\[4pt]
- $\downarrow$\\[4pt]
- 几何候选与物理反馈细化 $\rightarrow$ 机器人目标转换与可达筛选\\[4pt]
- $\downarrow$\\[4pt]
- 局部腕姿态扩展与分段执行 $\rightarrow$ 轨迹记录\\[4pt]
- $\downarrow$\\[4pt]
- 独立Strict质量检查 $\rightarrow$ 任务专属示教与结果记录
- \end{minipage}}
- \caption{抓取候选到专家示教的分级构建流程}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_overall_pipeline.pdf}
+  \caption{抓取候选到专家示教的分级构建流程}
  \label{fig:ch03_overall_pipeline}
 \end{figure}
 
@@ -65,19 +57,9 @@ GraspQP通过可微抓取质量评价支持候选优化\cite{zurbrugg2025graspqp
 物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。但档案多样性是搜索机制，不直接等于独立初态或不同成功模式已经得到充分验证。本项目使用的是适配实现，并未据此声称完整复现第三方Isaac系统。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 物体表面与六驱动手部代理\\[4pt]
- $\downarrow$\\[4pt]
- GraspQP官方指标 $+$ 本地几何约束 $\rightarrow$ 初始优化候选\\[4pt]
- $\downarrow$\\[4pt]
- DexEvolve-style变异、交叉、接触修正与物理反馈\\[4pt]
- $\downarrow$\\[4pt]
- 候选档案 $\rightarrow$ Wrist Lattice局部扩展\\[4pt]
- $\downarrow$ 未解决且满足后续条件\\[4pt]
- MJWarp PPO模板选择与驱动编辑
- \end{minipage}}
- \caption{已有候选模块在分级生成流程中的职责}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_candidate_sources.pdf}
+  \caption{已有候选模块在分级生成流程中的职责}
  \label{fig:ch03_candidate_sources}
 \end{figure}
 
@@ -113,19 +95,9 @@ Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。�
 模板构建依据执行配置保留位置误差不超过0.025~m、旋转误差不超过0.22~rad的候选。这两个容差属于当前生成执行层的筛选设置，不是第二章控制器内部更严格的迭代终止容差。满足筛选容差后，还需要根据腕部编辑幅度、源轨迹动态跟踪误差和候选评分确定执行顺序。这样既考虑静态残差，也保留对原有接触构型的偏好，避免搜索一开始就使用偏移很大的变体。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 源候选的局部腕姿态编辑：平移、旋转及耦合格点\\[4pt]
- $\downarrow$\\[4pt]
- 对象相对目标 $\rightarrow$ 世界手部目标 $\rightarrow$ 安装旋转补偿\\[4pt]
- $\downarrow$\\[4pt]
- 预抓取目标IK $\rightarrow$ 抓取目标IK\\[4pt]
- $\downarrow$\\[4pt]
- 残差阈值筛选 $\rightarrow$ 评分、编辑幅度与源跟踪误差排序\\[4pt]
- $\downarrow$\\[4pt]
- 有限预算下的动态执行；不是全轨迹无碰撞认证
- \end{minipage}}
- \caption{局部腕姿态扩展与两个目标的可达性筛选}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_reachability.pdf}
+  \caption{局部腕姿态扩展与两个目标的可达性筛选}
  \label{fig:ch03_reachability}
 \end{figure}
 
@@ -154,17 +126,9 @@ Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。�
 末端目标按控制周期输入第二章所述IK控制器，控制器以已有目标和状态作为后续求解的参考，并限制关节更新与目标速度。这里不重复DLS推导，而强调其在连续执行中的角色：目标位姿是上层轨迹要求，实际关节状态由受限求解、执行器伺服和物理推进共同产生。执行过程保存接近位置和旋转残差，若超出执行配置允许范围，则停止将该候选视为有效接近。对接触建立后的阶段，还需要检查拇指对向皮肤接触、物体抬升和保持状态，防止仅凭完成命令序列就认定任务成功。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 当前真实状态 $\rightarrow$ 分段插值目标 $\rightarrow$ IK与位置命令\\[4pt]
- $\downarrow$ 物理推进与阶段记录\\[4pt]
- 完整轨迹 $\rightarrow$ 按低层ctrl独立回放\\[4pt]
- $\downarrow$\\[4pt]
- 尾段抬升、速度、角速度、皮肤接触、桌面接触及穿透\\[4pt]
- $\downarrow$ 联合判定\\[4pt]
- FINAL\_VERIFIED / FINAL\_REJECTED
- \end{minipage}}
- \caption{分段轨迹执行与Strict Replay质量验收}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_strict_replay.pdf}
+  \caption{分段轨迹执行与Strict Replay质量验收}
  \label{fig:ch03_strict_replay}
 \end{figure}
 
@@ -194,6 +158,24 @@ Strict中的皮肤接触与抓持具有具体语义，不将任意机器人连�
 验收状态由实际profile及布尔结果共同确定，final配置通过时记为FINAL\_VERIFIED，否则为FINAL\_REJECTED。生成过程中的某个变量即使名为strict\_execution，也不能替代该最终状态。类似地，物理执行返回success与严格回放通过是不同证据，候选档案、模板清单和示教导出需要保留验证层级。导出入口默认先进行final检查，诊断性允许未验证轨迹的开关不能作为正式质量保证。
 
 轨迹重放还必须使用正确的动作语义。旧生成记录中的action可以是末端IK指令，ctrl则保存实际施加的机械臂七通道与手部六通道位置命令。二者均可能为十三维，但直接用前者替代后者会改变回放问题。记录器保存的关节状态、对象姿态和控制量有助于检查这种对应，完整时间关联则在第四章讨论。Strict通过只说明给定模型、初态、控制序列及阈值下的结果，不认证任意后续模型版本均能复现，也不把同一轨迹的后缀当成新的独立专家示教。
+
+算法\ref{alg:grasp_demonstration_pipeline}归纳候选到示教的分层处理关系，各任务仍采用其专属执行与验证条件，不将这一归纳视为所有任务均调用同一实现。
+\begin{algorithm}[H]
+\small
+\caption{抓取候选筛选与专家示教验证流程}\label{alg:grasp_demonstration_pipeline}
+\KwIn{物体与资产版本、初始条件、候选来源及任务配置}
+\KwOut{示教记录、任务结果及适用的验证状态}
+利用已有候选来源获得几何候选，保留来源与评分\;
+\ForEach{有限预算内的候选及局部腕姿编辑}{
+将物体相对目标转换至机器人末端目标，补偿安装变换\;
+求解预抓取与抓取目标IK，检查残差和关节条件\;
+\If{未通过当前层的筛选}{登记失败类别，继续下一候选\;}
+按任务配置构造分段目标并执行，记录状态、低层命令与结果\;
+对要求独立Strict检查的轨迹，依据对应配置执行回放与联合检查\;
+分别登记任务结果和验证状态，保留失败记录及来源\;
+}
+按任务专属条件整理专家示教，不以单目标可达替代完整执行检查\;
+\end{algorithm}
 
 \section{多任务专家示教生成}
 \label{sec:multitask_demonstration}
@@ -226,15 +208,9 @@ PickPlace以源抓持为基础，增加抬高避让、横向运输、下降、�
 Stack除被操作物之外还需要支撑物的状态。源抓持能够提供手与物体的相对关系，但堆叠目标必须根据支撑物位置、物体尺寸和下降范围进一步确定。任务后缀通过运输、下降和释放形成支撑关系，再检查物体是否稳定放置。并非每个物体都适合当前堆叠定义，因此已有批次先选取task-valid对象域。对这一筛选应保留来源，不能将限定物体域上的成功比例写成对任意物体的覆盖能力。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- Lift抓持与承载记录 $\rightarrow$ PickPlace搬移释放后缀\\[4pt]
- \phantom{Lift抓持与承载记录} $\rightarrow$ Stack支撑与稳定放置后缀\\[5pt]
- Push：几何接近 $\rightarrow$ 有效接触 $\rightarrow$ 反馈推动\\[5pt]
- NutAssembly：Bolt抓持 $\rightarrow$ 姿态伺服 $\rightarrow$ 对准下降\\[5pt]
- 共享DemonstrationEpisode合同，不共享完全相同的控制逻辑
- \end{minipage}}
- \caption{多任务示教的共用来源与任务专属控制关系}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_task_transfer.pdf}
+  \caption{多任务示教的共用来源与任务专属控制关系}
  \label{fig:ch03_task_transfer}
 \end{figure}
 
@@ -313,16 +289,13 @@ NutAssembly包含抓持Bolt、姿态伺服、平移、下降与装配结果评�
 
 更大一组历史扰动生成报告登记90次尝试，其中46条接受、18条Strict不稳定、26条Lift失败，见表\ref{tab:ch03_generation_failures}。这组数据在本章保留为L1历史汇总，没有在本轮逐一重新认证全部90条原始轨迹。报告中的低抬升和角速度超限诊断还可能重叠，不应把所有诊断项当作互斥失败类别相加。该批次与上述Sugar示教存在来源重用，二者也不能累计成一百条新的独立验证。这些结果表明，能够生成几何或可达候选之后，承载与尾段稳定性仍需分别处理。
 
-典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}保留真实案例图位，后续只能从对应视频和manifest取得画面，不使用合成图片代替物理执行结果。
+典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}展示由对应原始视频提取的成功案例画面；两条失败记录仅呈现其结果，不使用其他运行的画面替代。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\parbox[c][2.0cm][c]{0.89\textwidth}{\centering
- 真实案例图位：Lift历史Strict通过轨迹与Nut抓持保持对照。\\
- 待从已有视频中提取并绑定对应manifest和阶段；\\
- 当前不以示意性画面代替实验截图。}}
- \caption{典型成功与失败案例的待补原始画面}
- \label{fig:ch03_examples}
+\centering
+\includegraphics[width=0.97\textwidth]{figures/revision_20261127/historical_examples.pdf}
+\caption{历史成功Episode原视频画面与失败结果对照（非Strict回放截图，失败案例缺直接录像）}
+\label{fig:ch03_examples}
 \end{figure}
 
 现有结果支持分层评价与任务专属控制的必要性，尚不支持模块间的公平优越性结论。缓存、variant和局部成功不合并为统一成功率；未定位原件的14物体与127物体批次不列入验证结果，也不用其他数量替代。

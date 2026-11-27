@@ -1,0 +1,64 @@
+{
+  "pages": 94,
+  "previous_pages": 93,
+  "algorithms": 5,
+  "duplicate_labels": [],
+  "missing_reference_targets": [],
+  "warnings": [
+    "Overfull \\hbox (5.79674pt too wide) in paragraph at lines 78--78",
+    "Overfull \\hbox (2.0989pt too wide) in paragraph at lines 78--78"
+  ],
+  "blank_pages": [],
+  "rendered_check_pages": [
+    21,
+    25,
+    28,
+    40,
+    62,
+    66,
+    73
+  ],
+  "unexpected_protected_changes": [],
+  "changed_sources": [
+    {
+      "path": "thesis/body/ch02_simulation_platform.tex",
+      "before": "3ca0e9d87abb03ec94952ca30975651236db0761f92a99c8e9f8c706e40180ba",
+      "after": "546f8b04f89418489b52809ecaba37ebe21e38bf7a09f904074ac6469935964a"
+    },
+    {
+      "path": "thesis/body/ch03_grasp_demonstrations.tex",
+      "before": "876fd4df1b847e4f88749d3de0fdb718bef0d9d78dddce83ec8a765955728b4a",
+      "after": "761ab3a1e6b8b10d727080ea54c9b5f7038e43227ca8bedd913dd654da61e437"
+    },
+    {
+      "path": "thesis/body/ch04_multimodal_data.tex",
+      "before": "ebb7b8568b8835e000d342ed5c89002a2b71546cead4acf60459f4cbc4a9a9b5",
+      "after": "09c855abd76e50bc39f74a44924a9f18d4f5e8ea89c64be8953ab91251c94543"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_3.tex",
+      "before": "cb54bcf348aa948c16c2ca7c887da2ae4be1ef710f00885dd3d3c49c5cc14b5b",
+      "after": "cfb82a6f8672e5ed54dda1a958342e9a8aec4a4892fb02c926b839dbae5c4744"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_4.tex",
+      "before": "d7e012d8e907a0cff2b07a25af9e75c17f1991da5df962c1dc200bb3797c627a",
+      "after": "aeb3abade6bd79103a434fed7bb75f1b16863f3705e46713102c22e8a79043e7"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_5.tex",
+      "before": "c054e0b40d8632ab52a719a1cffd0bf97e3217b0a2b9c266dfd0fee360af7806",
+      "after": "156a56965ea758b00a84a1f97c2a7db20d80967026cc5fd921461035992f3486"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_6.tex",
+      "before": "246bfad7f50a3661925d9f5d1de973db1208ef428d262caae90b743a994284bd",
+      "after": "edc8e80c0feb393cbd2ceb6036327f4332abb95c1362f2822238f7fd6b0bb35e"
+    },
+    {
+      "path": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "before": "2619d9cd1030a8fac8c91bc1a4da31471d27526fda5af72e3c506eaee11eae45",
+      "after": "f9906457cbe5696dcd291438dea7eabec646b57e462eda166f1937868867b628"
+    }
+  ]
+}

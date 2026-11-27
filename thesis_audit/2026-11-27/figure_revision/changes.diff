@@ -1,0 +1,570 @@
+--- before/thesis/body/ch02_simulation_platform.tex
++++ after/thesis/body/ch02_simulation_platform.tex
+@@ -12,16 +12,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  任务配置与初始条件\\[4pt]
+-  $\downarrow$\\[4pt]
+-  模型层：机械臂、灵巧手、底座、物体\\[4pt]
+-  控制层：动作解释与执行器目标 $\rightarrow$ MuJoCo接触与状态推进\\[4pt]
+-  $\downarrow$\\[4pt]
+-  感知层：状态与触觉观测 $\rightarrow$ 任务层：评价与终止\\[4pt]
+-  $\downarrow$\\[4pt]
+-  记录层：关联保存动作、观测及执行信息
+-  \end{minipage}}
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_architecture.pdf}
+   \caption{仿真平台模块及控制、观测数据流}
+   \label{fig:ch02_architecture}
+ \end{figure}
+@@ -56,8 +47,8 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.96\textwidth]{figures/ch02/assembled_robot_tachin.pdf}
+-  \caption{由当前XML与STL离线组合的机械臂和手部模型（静态关节零位，右侧为手部放大图；未显示底座，非任务执行截图）}
++  \includegraphics[width=0.96\textwidth]{figures/revision_20261127/robot_model.pdf}
++  \caption{当前XML/STL模型的MuJoCo静态渲染：机械臂、底座与灵巧手组合及手部局部（关节零位，非任务执行或实机照片）}
+   \label{fig:ch02_robot_model}
+ \end{figure}
+ 
+@@ -72,12 +63,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \fbox{\begin{minipage}{0.89\textwidth}\centering
+-  机械臂：7个位置通道 $\rightarrow$ 7个转动关节\\[5pt]
+-  四指：每指1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 2个转动关节\\[5pt]
+-  拇指：1个对掌通道 $\rightarrow$ 1个转动关节\\[3pt]
+-  \phantom{拇指：}1个屈曲通道 $\rightarrow$ 固定腱 $\rightarrow$ 3个转动关节
+-  \end{minipage}}
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_drive.pdf}
+   \caption{当前模型的关节与驱动关系}
+   \label{fig:ch02_drive}
+ \end{figure}
+@@ -134,15 +120,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  position模式：关节位置目标；ik模式：末端位姿经IK转换\\[4pt]
+-   $\downarrow$ 按各模式处理目标；IK路径包含限步与平滑\\[4pt]
+-  机械臂与手部位置执行器目标\\[4pt]
+-  $\downarrow$ 在控制周期内保持\\[4pt]
+-  50个物理子步：动力学、碰撞及接触约束求解\\[4pt]
+-  $\downarrow$\\[4pt]
+-  观测读取 $\rightarrow$ 任务评价与下一周期
+-  \end{minipage}}
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_control.pdf}
+   \caption{指定配置下的控制层次与多速率执行流程}
+   \label{fig:ch02_control}
+ \end{figure}
+@@ -181,17 +159,10 @@
+ 每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\times8$，指尖为$7\times8$；手掌设置$7\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\ref{tab:ch02_patch_layout}。指节几何具有重复性，但采样点仍由相应STL计算，不能用一组平面坐标替换全部曲面。
+ 
+ \begin{figure}[htbp]
+-  \centering
+-  \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  仿真手指索引0、1、2、3、4：每指按下列顺序组织\\[5pt]
+-  Patch 0：$4\times8$ $\rightarrow$ Patch 1：$4\times8$
+-  $\rightarrow$ Patch 2：$7\times8$\\[5pt]
+-  五指小计：$5\times(32+32+56)=600$\\[5pt]
+-  手掌Patch：$7\times16=112$ $\rightarrow$ 合计712\\[5pt]
+-  每个Patch内部按行主序展开；此图表示索引拓扑，不是实物电极图。
+-  \end{minipage}}
+-  \caption{五指与手掌触觉阵列的维度及索引组织}
+-  \label{fig:ch02_patch_order}
++\centering
++\includegraphics[width=0.97\textwidth]{figures/revision_20261127/tactile_layout.pdf}
++\caption{当前MuJoCo模型中的16个Patch与712个box感知区域（颜色区分局部阵列，不表示真实压力或实机标定电极）}
++\label{fig:ch02_patch_order}
+ \end{figure}
+ 
+ segment策略面向指节皮肤。实现先对三角网格进行加密采样，通过主成分分析建立局部轴向与截面方向，再结合三角面朝向及径向分布筛选外表面。主成分方向来自几何点云的主要变化方向，并不自动具有固定的实物解剖含义。截面拟合和有效角度范围用于构造连续外壳样本，随后将样本组织成规则参数网格。与直接按原网格顶点布点相比，该过程能够减少三角网格局部密度差异对阵列索引分布的直接影响，但不保证最终点间距处处相等。
+@@ -281,6 +252,24 @@
+ 
+ 阵列索引按手指0至4、每指Patch 0至2、最后手掌的顺序连接，各Patch内部采用行主序。索引顺序同时服务于传感器命名、观测展开与后处理还原，因而必须保持一致。该组织保证了仿真内部从曲面位置到数组通道的可追溯性，但不认证实机电气通道到同名索引的物理对应。后续展示触觉时可将区间恢复为原二维方阵，而不是把712个通道当作一条具有物理邻接关系的长序列。
+ 
++曲面阵列的构建步骤归纳为算法\ref{alg:curved_tactile_build}。其输出为模型内的感知区域及传感器索引，不是独立碰撞单元或经标定的真实电极。
++\begin{algorithm}[H]
++\small
++\caption{曲面触觉阵列构建}\label{alg:curved_tactile_build}
++\KwIn{皮肤网格、所属刚体变换、16个Patch布局与尺寸配置}
++\KwOut{712个box site、touch传感器及有序地址映射}
++\ForEach{按既定顺序遍历的Patch $p$}{
++读取对应STL及行列数，按配置布局策略计算曲面采样点\;
++将网格坐标转换至所属刚体局部坐标，核对点数\;
++\ForEach{按行主序遍历的采样点}{
++由相邻差分构造切线并正交化，确定朝外局部坐标系\;
++由邻域间距、overlap及最小半宽计算site尺寸\;
++向所属刚体添加box site，并关联原生touch传感器\;
++}
++}
++编译模型，绑定传感器地址并登记Patch索引区间\;
++\end{algorithm}
++
+ \section{712维触觉观测及处理流程}
+ \label{sec:tactile_processing}
+ 
+@@ -290,13 +279,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  曲面采样 $\rightarrow$ box site与原生touch $\rightarrow$ 地址绑定\\[5pt]
+-  sensordata读取 $\rightarrow$ 死区与截断 $\rightarrow$ 幂响应\\[5pt]
+-  $\rightarrow$ IIR滤波 $\rightarrow$ Patch内邻域扩散\\[5pt]
+-  $\rightarrow$ 可选高斯滤波与噪声（指定profile关闭）\\[5pt]
+-  $\rightarrow$ 归一化 $\rightarrow$ float32的712维processed观测
+-  \end{minipage}}
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_processing.pdf}
+   \caption{原生触觉读数到processed观测的处理链}
+   \label{fig:ch02_processing}
+ \end{figure}
+@@ -344,15 +327,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \fbox{\begin{minipage}{0.91\textwidth}\centering
+-  实现核查：XML、构建器、控制接口、传感器地址\\[5pt]
+-  $\downarrow$ 与记录检查分开报告\\[5pt]
+-  历史记录：Episode数组 $+$ manifest $+$ 结果文件\\[5pt]
+-  $\downarrow$\\[5pt]
+-  shape与类型 $\rightarrow$ finite与非负 $\rightarrow$ 非零及时间间隔\\[5pt]
+-  $\downarrow$\\[5pt]
+-  有限功能证据；不替代当前模型动态重放或实机标定
+-  \end{minipage}}
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_validation.pdf}
+   \caption{平台实现与历史观测记录的分层核查结构}
+   \label{fig:ch02_validation}
+ \end{figure}
+--- before/thesis/body/ch03_grasp_demonstrations.tex
++++ after/thesis/body/ch03_grasp_demonstrations.tex
+@@ -17,17 +17,9 @@
+ 其中，$\boldsymbol t_{oh}\in\mathbb R^3$和$\boldsymbol R_{oh}\in SO(3)$描述物体坐标系下的手部目标，$\mathcal C$存储接触点、法向及距离，$\boldsymbol m$为候选质量和来源指标。驱动比例需进一步转换为具体执行器的控制范围，不等于十二个手部关节的独立角度。候选合同检查维度、旋转合法性和比例范围，这些检查只能保证表达有效，不能证明实际接触已经成立。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 物体几何、初始位姿和任务条件\\[4pt]
+- $\downarrow$\\[4pt]
+- 几何候选与物理反馈细化 $\rightarrow$ 机器人目标转换与可达筛选\\[4pt]
+- $\downarrow$\\[4pt]
+- 局部腕姿态扩展与分段执行 $\rightarrow$ 轨迹记录\\[4pt]
+- $\downarrow$\\[4pt]
+- 独立Strict质量检查 $\rightarrow$ 任务专属示教与结果记录
+- \end{minipage}}
+- \caption{抓取候选到专家示教的分级构建流程}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_overall_pipeline.pdf}
++  \caption{抓取候选到专家示教的分级构建流程}
+  \label{fig:ch03_overall_pipeline}
+ \end{figure}
+ 
+@@ -65,19 +57,9 @@
+ 物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。但档案多样性是搜索机制，不直接等于独立初态或不同成功模式已经得到充分验证。本项目使用的是适配实现，并未据此声称完整复现第三方Isaac系统。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 物体表面与六驱动手部代理\\[4pt]
+- $\downarrow$\\[4pt]
+- GraspQP官方指标 $+$ 本地几何约束 $\rightarrow$ 初始优化候选\\[4pt]
+- $\downarrow$\\[4pt]
+- DexEvolve-style变异、交叉、接触修正与物理反馈\\[4pt]
+- $\downarrow$\\[4pt]
+- 候选档案 $\rightarrow$ Wrist Lattice局部扩展\\[4pt]
+- $\downarrow$ 未解决且满足后续条件\\[4pt]
+- MJWarp PPO模板选择与驱动编辑
+- \end{minipage}}
+- \caption{已有候选模块在分级生成流程中的职责}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_candidate_sources.pdf}
++  \caption{已有候选模块在分级生成流程中的职责}
+  \label{fig:ch03_candidate_sources}
+ \end{figure}
+ 
+@@ -113,19 +95,9 @@
+ 模板构建依据执行配置保留位置误差不超过0.025~m、旋转误差不超过0.22~rad的候选。这两个容差属于当前生成执行层的筛选设置，不是第二章控制器内部更严格的迭代终止容差。满足筛选容差后，还需要根据腕部编辑幅度、源轨迹动态跟踪误差和候选评分确定执行顺序。这样既考虑静态残差，也保留对原有接触构型的偏好，避免搜索一开始就使用偏移很大的变体。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 源候选的局部腕姿态编辑：平移、旋转及耦合格点\\[4pt]
+- $\downarrow$\\[4pt]
+- 对象相对目标 $\rightarrow$ 世界手部目标 $\rightarrow$ 安装旋转补偿\\[4pt]
+- $\downarrow$\\[4pt]
+- 预抓取目标IK $\rightarrow$ 抓取目标IK\\[4pt]
+- $\downarrow$\\[4pt]
+- 残差阈值筛选 $\rightarrow$ 评分、编辑幅度与源跟踪误差排序\\[4pt]
+- $\downarrow$\\[4pt]
+- 有限预算下的动态执行；不是全轨迹无碰撞认证
+- \end{minipage}}
+- \caption{局部腕姿态扩展与两个目标的可达性筛选}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_reachability.pdf}
++  \caption{局部腕姿态扩展与两个目标的可达性筛选}
+  \label{fig:ch03_reachability}
+ \end{figure}
+ 
+@@ -154,17 +126,9 @@
+ 末端目标按控制周期输入第二章所述IK控制器，控制器以已有目标和状态作为后续求解的参考，并限制关节更新与目标速度。这里不重复DLS推导，而强调其在连续执行中的角色：目标位姿是上层轨迹要求，实际关节状态由受限求解、执行器伺服和物理推进共同产生。执行过程保存接近位置和旋转残差，若超出执行配置允许范围，则停止将该候选视为有效接近。对接触建立后的阶段，还需要检查拇指对向皮肤接触、物体抬升和保持状态，防止仅凭完成命令序列就认定任务成功。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 当前真实状态 $\rightarrow$ 分段插值目标 $\rightarrow$ IK与位置命令\\[4pt]
+- $\downarrow$ 物理推进与阶段记录\\[4pt]
+- 完整轨迹 $\rightarrow$ 按低层ctrl独立回放\\[4pt]
+- $\downarrow$\\[4pt]
+- 尾段抬升、速度、角速度、皮肤接触、桌面接触及穿透\\[4pt]
+- $\downarrow$ 联合判定\\[4pt]
+- FINAL\_VERIFIED / FINAL\_REJECTED
+- \end{minipage}}
+- \caption{分段轨迹执行与Strict Replay质量验收}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_strict_replay.pdf}
++  \caption{分段轨迹执行与Strict Replay质量验收}
+  \label{fig:ch03_strict_replay}
+ \end{figure}
+ 
+@@ -195,6 +159,24 @@
+ 
+ 轨迹重放还必须使用正确的动作语义。旧生成记录中的action可以是末端IK指令，ctrl则保存实际施加的机械臂七通道与手部六通道位置命令。二者均可能为十三维，但直接用前者替代后者会改变回放问题。记录器保存的关节状态、对象姿态和控制量有助于检查这种对应，完整时间关联则在第四章讨论。Strict通过只说明给定模型、初态、控制序列及阈值下的结果，不认证任意后续模型版本均能复现，也不把同一轨迹的后缀当成新的独立专家示教。
+ 
++算法\ref{alg:grasp_demonstration_pipeline}归纳候选到示教的分层处理关系，各任务仍采用其专属执行与验证条件，不将这一归纳视为所有任务均调用同一实现。
++\begin{algorithm}[H]
++\small
++\caption{抓取候选筛选与专家示教验证流程}\label{alg:grasp_demonstration_pipeline}
++\KwIn{物体与资产版本、初始条件、候选来源及任务配置}
++\KwOut{示教记录、任务结果及适用的验证状态}
++利用已有候选来源获得几何候选，保留来源与评分\;
++\ForEach{有限预算内的候选及局部腕姿编辑}{
++将物体相对目标转换至机器人末端目标，补偿安装变换\;
++求解预抓取与抓取目标IK，检查残差和关节条件\;
++\If{未通过当前层的筛选}{登记失败类别，继续下一候选\;}
++按任务配置构造分段目标并执行，记录状态、低层命令与结果\;
++对要求独立Strict检查的轨迹，依据对应配置执行回放与联合检查\;
++分别登记任务结果和验证状态，保留失败记录及来源\;
++}
++按任务专属条件整理专家示教，不以单目标可达替代完整执行检查\;
++\end{algorithm}
++
+ \section{多任务专家示教生成}
+ \label{sec:multitask_demonstration}
+ 
+@@ -226,15 +208,9 @@
+ Stack除被操作物之外还需要支撑物的状态。源抓持能够提供手与物体的相对关系，但堆叠目标必须根据支撑物位置、物体尺寸和下降范围进一步确定。任务后缀通过运输、下降和释放形成支撑关系，再检查物体是否稳定放置。并非每个物体都适合当前堆叠定义，因此已有批次先选取task-valid对象域。对这一筛选应保留来源，不能将限定物体域上的成功比例写成对任意物体的覆盖能力。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- Lift抓持与承载记录 $\rightarrow$ PickPlace搬移释放后缀\\[4pt]
+- \phantom{Lift抓持与承载记录} $\rightarrow$ Stack支撑与稳定放置后缀\\[5pt]
+- Push：几何接近 $\rightarrow$ 有效接触 $\rightarrow$ 反馈推动\\[5pt]
+- NutAssembly：Bolt抓持 $\rightarrow$ 姿态伺服 $\rightarrow$ 对准下降\\[5pt]
+- 共享DemonstrationEpisode合同，不共享完全相同的控制逻辑
+- \end{minipage}}
+- \caption{多任务示教的共用来源与任务专属控制关系}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_task_transfer.pdf}
++  \caption{多任务示教的共用来源与任务专属控制关系}
+  \label{fig:ch03_task_transfer}
+ \end{figure}
+ 
+@@ -313,16 +289,13 @@
+ 
+ 更大一组历史扰动生成报告登记90次尝试，其中46条接受、18条Strict不稳定、26条Lift失败，见表\ref{tab:ch03_generation_failures}。这组数据在本章保留为L1历史汇总，没有在本轮逐一重新认证全部90条原始轨迹。报告中的低抬升和角速度超限诊断还可能重叠，不应把所有诊断项当作互斥失败类别相加。该批次与上述Sugar示教存在来源重用，二者也不能累计成一百条新的独立验证。这些结果表明，能够生成几何或可达候选之后，承载与尾段稳定性仍需分别处理。
+ 
+-典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}保留真实案例图位，后续只能从对应视频和manifest取得画面，不使用合成图片代替物理执行结果。
+-
+-\begin{figure}[htbp]
+- \centering
+- \fbox{\parbox[c][2.0cm][c]{0.89\textwidth}{\centering
+- 真实案例图位：Lift历史Strict通过轨迹与Nut抓持保持对照。\\
+- 待从已有视频中提取并绑定对应manifest和阶段；\\
+- 当前不以示意性画面代替实验截图。}}
+- \caption{典型成功与失败案例的待补原始画面}
+- \label{fig:ch03_examples}
++典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}展示由对应原始视频提取的成功案例画面；两条失败记录仅呈现其结果，不使用其他运行的画面替代。
++
++\begin{figure}[htbp]
++\centering
++\includegraphics[width=0.97\textwidth]{figures/revision_20261127/historical_examples.pdf}
++\caption{历史成功Episode原视频画面与失败结果对照（非Strict回放截图，失败案例缺直接录像）}
++\label{fig:ch03_examples}
+ \end{figure}
+ 
+ 现有结果支持分层评价与任务专属控制的必要性，尚不支持模块间的公平优越性结论。缓存、variant和局部成功不合并为统一成功率；未定位原件的14物体与127物体批次不列入验证结果，也不用其他数量替代。
+--- before/thesis/body/ch04_multimodal_data.tex
++++ after/thesis/body/ch04_multimodal_data.tex
+@@ -35,16 +35,9 @@
+ 表\ref{tab:ch04_fields}中两种动作都为十三维，但语义不同。position\_action保存实际低层位置目标；ik\_action前七维为末端位置与四元数，后六维为手部命令。将IK目标当作关节位置不仅改变单位，还改变学习目标的含义。类似地，目标位姿不能作为实际测量的末端位姿使用，object\_state中的目标site也不应计为独立运动物体。触觉沿用第二章定义的712维processed观测，记录层不重新赋予其真实压力含义。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 原始执行：source NPZ $+$ Manifest\\[4pt]
+- $\downarrow$ 字段、时序与来源核对\\[4pt]
+- 规范modalities $+$ Episode元数据 $+$ 验证记录\\[4pt]
+- $\downarrow$ 按具体导出合同映射\\[4pt]
+- LeRobot数值特征、图像或视频、Episode索引\\[4pt]
+- 真实触觉独立记录另行登记，不自动形成Real--Sim物理配对
+- \end{minipage}}
+- \caption{数据载体及其转换关系示意}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_carriers.pdf}
++  \caption{数据载体及其转换关系示意}
+  \label{fig:ch04_carriers}
+ \end{figure}
+ 
+@@ -66,15 +59,9 @@
+ 在线记录适配器在物理推进之前采集仿真时钟、策略状态、触觉和对象姿态，推进结束后补充next\_timestamp与实际位置命令。它同时适配普通step和低层step\_physics路径，只将任务记录器最终接受的步骤提交到正式序列，避免把规划器内部探测过程混入示教。低层代码可能先写控制缓冲区再调用物理推进，因此提供prepare\_recorded\_control接口，在覆盖命令之前保存执行前状态。否则，state中的上一命令可能已被当前命令替换，破坏其原有定义。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 在线：读取$o_i^{-}$ $\rightarrow$ 施加$u_i$ $\rightarrow$ 得到$o_i^{+}$\\[5pt]
+- 训练配对：$o_i^{-}$ $+$ $u_i$\\[5pt]
+- 旧记录：保存$o_{i-1}^{+}$ $\rightarrow$ 当前动作$u_i$ $\rightarrow$ 保存$o_i^{+}$\\[5pt]
+- 合法连续时可配对：$o_{i-1}^{+}$ $+$ $u_i$\\[5pt]
+- 不直接配对当前执行后结果$o_i^{+}$与动作$u_i$
+- \end{minipage}}
+- \caption{执行前采集与历史执行后记录的索引关系}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_timing.pdf}
++  \caption{执行前采集与历史执行后记录的索引关系}
+  \label{fig:ch04_timing}
+ \end{figure}
+ 
+@@ -89,15 +76,9 @@
+ 其中近似相等表示按实现容差比较浮点时间。仅在相邻控制步连续执行且均被记录、期间没有额外物理推进或重置时，$t_{i+1}$才与$t_i^{+}$一致。未接受步骤、跳步或异常中断可能使两者不再衔接，不能将此关系推广到存在记录缺口的序列；在线检查会拒绝不满足连续时间合同的数据。视频PTS可使用相对帧时间，仿真时间则保留绝对时钟，两者需要由首帧偏移和采样索引连接。时间单调只能排除部分结构错误，不能证明每张图像确实来自对应物理状态。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 20~Hz控制行：0，1，2，3，4，5，6，7，8，$\ldots$\\[5pt]
+- 状态与触觉：每个被接受的控制行记录\\[5pt]
+- 默认20~Hz RGB：0，1，2，3，4，5，6，7，8，$\ldots$\\[5pt]
+- 5~Hz RGB示例：0，4，8，$\ldots$；保留对应控制行索引\\[5pt]
+- 图像降频不删除中间控制行，不填造缺少的图像
+- \end{minipage}}
+- \caption{控制记录与RGB采样频率分离的合同示意}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_multirate.pdf}
++  \caption{控制记录与RGB采样频率分离的合同示意}
+  \label{fig:ch04_multirate}
+ \end{figure}
+ 
+@@ -171,18 +152,9 @@
+ 旧Stack案例则没有pre\_qpos和pre\_qvel，无法完成当前要求的物理连续性核验。它与旧PickPlace还缺少规范modalities文件，不能描述为所有旧记录都已经完成统一导出。这里的处理是保留问题和版本身份，而不是在本轮删除、补写或重建数据。审计发现的缺陷应与影响范围一起保存，否则后续程序可能仅因旧文件能够读取就重新把它当作已修复数据。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 执行结果与验证状态 $\rightarrow$ 结构、数值及阶段合同\\[4pt]
+- $\downarrow$\\[4pt]
+- 时间关联与动作语义 $\rightarrow$ 来源、版本与文件Hash\\[4pt]
+- $\downarrow$\\[4pt]
+- 内容重复与用途检查 $\rightarrow$ VALIDATING后登记\\[4pt]
+- $\downarrow$\\[4pt]
+- 登记：\mbox{EXPORTED} / \mbox{DUPLICATE}；异常隔离：\mbox{QUARANTINED}\\[4pt]
+- 训练准入仍需对应标签、分组与研究用途
+- \end{minipage}}
+- \caption{分层质量审查与数据准入关系}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_admission.pdf}
++  \caption{分层质量审查与数据准入关系}
+  \label{fig:ch04_admission}
+ \end{figure}
+ 
+--- before/thesis/body/ch05_sections/section_5_3.tex
++++ after/thesis/body/ch05_sections/section_5_3.tex
+@@ -5,16 +5,9 @@
+ 真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再通过原有传感器链路获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。所得配对提供统计监督，不代表两域经历了相同的物理接触。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- Real Train $\rightarrow$ Patch索引偏移统计 $\rightarrow$ 冻结GMM\\[2pt]
+- $\downarrow$ 对指定Real目标作分量响应分解\\[2pt]
+- 字典位置检索与加载估计 $\rightarrow$ 球形探针物理执行\\[2pt]
+- $\downarrow$ 原生触觉读取与既有信号处理\\[2pt]
+- 完整$4\times712$响应 $\rightarrow$ 统计准入与伪配对登记
+- \par\vspace*{2.5mm}
+- \end{minipage}}
+- \caption{GMM统计先验引导仿真接触与伪配对构建流程}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_gmm_physical_pipeline.pdf}
++  \caption{GMM统计先验引导仿真接触与伪配对构建流程}
+  \label{fig:ch05_gmm_physical_pipeline}
+ \end{figure}
+ 
+@@ -60,16 +53,9 @@
+ 字典将可执行条件与观测响应关联，见表\ref{tab:ch05_probe_dictionary}。各Patch分量按$m_{pk}$合并排序后保留最多5个。对每个保留分量，先在手部驱动指令为0、深度0.25~mm且非零响应的字典条目中，选择响应质心最接近$\boldsymbol c_{pk}$的位置；再利用同位置的响应总量与深度关系插值估计基础加载。四帧Patch总量相对其均值的变化用于设置加载因子，而不直接写入触觉数组。基础命令受既定范围约束，不能解释为真实材料压陷量。具体而言，四帧加载因子限制在$[0,2]$；反馈按目标与生成Patch总响应之比估计调整倍率，并将倍率限制在$[0.5,2]$、基础深度限制在$[0.1,1]$~mm。该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.91\textwidth}\centering
+- 一个Real目标 $\rightarrow$ 各Patch软分量：$r_{pjk},m_{pk},\boldsymbol c_{pk}$\\[2pt]
+- $\downarrow$ 全部分量按分量响应量排序，保留至多5个\\[2pt]
+- 字典基元组合 $\rightarrow$ 至多3次物理候选与反馈\\[2pt]
+- $\downarrow$ 取已执行候选中代价最小者，再检查准入条件\\[2pt]
+- 一组Real--Sim伪配对；完整多解概率未进入后续监督
+- \par\vspace*{2.5mm}
+- \end{minipage}}
+- \caption{软分量分解、候选压缩与单一伪配对选择示意}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_gmm_candidate_selection.pdf}
++  \caption{软分量分解、候选压缩与单一伪配对选择示意}
+  \label{fig:ch05_gmm_candidate_selection}
+ \end{figure}
+ 
+@@ -82,3 +68,24 @@
+ 其中，$s_a$为逐帧Patch响应比例余弦相似度的四帧均值，零响应帧也计入。$d_a$在Real主响应Patch双方活跃帧上，比较Sim质心与Real质心加GMM混合均值的锚点；无双方活跃帧时，排序中该项取1且不允许登记。该锚点未改变责任度求值坐标，未消除原点不一致，仍为索引启发式参照。混合均值按冻结权重$\pi_{pk}$计算，而非按$m_{pk}$计算；混合协方差同时包含分量协方差与分量间均值差异。$e_a$是Sim协方差与该混合协方差之差的Frobenius范数的四帧均值，零Sim帧协方差按0计入，未除以目标协方差范数。响应比例及质心、协方差计算中的响应总量分母设$10^{-12}$下限，这不构成误差的相对归一化。仅当所选结果非零、$s_a\ge0.8$、$d_a\le0.2$、$e_a\le0.1$且不重复时登记。argmin包含未通过候选，故即使出现通过者，最终最小代价者仍可能不达门槛而被拒收。仅比较已执行集合，不保证全局最优。上述距离均在索引空间计算，不是物理接触误差。目标按元数据预定顺序处理，不以域分类器评分。来源、探针条件和匹配记录可追溯，并检查窗口数值重复；未通过候选的Episode与评分均保存，数值唯一不证明物理初态独立。
+ 
+ 图\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。
++
++算法\ref{alg:gmm_pseudo_pair}归纳统计目标到物理候选的实际选择过程。候选循环的提前停止与最终准入分开执行，不保证找到一个通过者后一定登记。
++\begin{algorithm}[H]
++\small
++\caption{GMM统计引导的物理候选与伪配对选择}\label{alg:gmm_pseudo_pair}
++\KwIn{指定Real窗口、冻结GMM、探针字典及统计准入条件}
++\KwOut{登记的统计伪配对或拒收记录}
++按现有固定网格求责任度，以响应量分解各Patch分量\;
++按分量响应量降序保留至多5个分量，不将责任度解释为物理归属概率\;
++检索字典位置，由响应量插值得到探针深度及四帧加载因子\;
++初始化已执行集合$\mathcal A=\varnothing$\;
++\For{$a=0,1,2$}{
++首候选使用字典估计；后续按反馈修正深度，第三次另作单格质心修正\;
++执行物理探针，读取并处理触觉，保存Episode与评分\;
++计算$s_a,d_a,e_a$，将候选加入$\mathcal A$\;
++\If{当前候选满足统计门槛}{提前结束候选循环\;}
++}
++在$\mathcal A$内选择$1-s_a+d_a+e_a$最小的候选\;
++对所选候选重新检查统计门槛、非零响应及重复条件\;
++通过则登记Real--Sim伪配对，否则记录拒收；保留既有执行证据\;
++\end{algorithm}
+--- before/thesis/body/ch05_sections/section_5_4.tex
++++ after/thesis/body/ch05_sections/section_5_4.tex
+@@ -5,20 +5,9 @@
+ 统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器\cite{kingma2014vae}，分别建立Real VAE与Sim VAE，如图\ref{fig:ch05_dual_vae}所示。该双域表示与下一节Translator组成的初始方案记为C3。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
+- Real Train $\rightarrow E_r\rightarrow (\boldsymbol\mu_r,\boldsymbol\ell_r)
+- \rightarrow Z_r\rightarrow D_r\rightarrow$ Real自重建\\[5pt]
+- Natural Sim与Paired Sim $\rightarrow E_s\rightarrow (\boldsymbol\mu_s,\boldsymbol\ell_s)
+- \rightarrow Z_s\rightarrow D_s\rightarrow$ Sim自重建\\[5pt]
+- 两路参数独立；训练潜变量由重参数化采样获得\\[3pt]
+- 各Decoder：前帧Mask与潜变量 $\rightarrow$ 时序状态 $\rightarrow$ 当帧Mask\\[3pt]
+- 训练：随机潜变量，前帧及当帧使用真实Mask\\[3pt]
+- 自由推理：后验均值，前帧及当帧使用预测Mask\\[3pt]
+- 时序状态与当帧Mask $\rightarrow$ 条件Gamma混合幅值
+- \par\vspace*{2.5mm}
+- \end{minipage}}
+- \caption{双域VAE独立表示学习与条件解码结构}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_dual_vae.pdf}
++  \caption{双域VAE独立表示学习与条件解码结构}
+  \label{fig:ch05_dual_vae}
+ \end{figure}
+ 
+--- before/thesis/body/ch05_sections/section_5_5.tex
++++ after/thesis/body/ch05_sections/section_5_5.tex
+@@ -27,20 +27,37 @@
+ 训练数据流如图\ref{fig:ch05_translator_paths}所示。两域Encoder仅提供均值缓存，Real Decoder参数也保持冻结，但计算NLL时不切断其对预测潜变量的梯度，因此损失仍可经Decoder回传至Translator，只有$\theta$参与更新。参数冻结意味着不累积其参数梯度，并不意味着该模块退出计算图；映射输出对条件似然的影响仍由固定读出函数传递。Decoder首帧用BOS，后续以真实前帧Mask递推隐状态；真实当前帧Mask作为幅值头条件，同时监督Mask头logit的BCE。两者角色不同，该Teacher Forcing似然不代表自由运行质量。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
+- 训练：Paired Sim $\rightarrow$ 冻结$E_s$均值 $\rightarrow T_\theta
+- \rightarrow$ 预测Real latent\\[3pt]
+- 配对Real $\rightarrow$ 冻结$E_r$均值 $\rightarrow$ Huber监督\\[3pt]
+- 预测Real latent与配对Real $\rightarrow$ 冻结$D_r$真实Mask条件NLL\\[3pt]
+- Huber与NLL梯度回传至$T_\theta$；仅更新Translator\\[5pt]
+- 部署：Natural Sim $\rightarrow E_s$均值 $\rightarrow T_\theta
+- \rightarrow D_r$自由解码 $\rightarrow4\times712$触觉
+- \par\vspace*{2.5mm}
+- \end{minipage}}
+- \caption{伪配对监督训练与自由推理的数据流}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_translator_paths.pdf}
++  \caption{伪配对监督训练与自由推理的数据流}
+  \label{fig:ch05_translator_paths}
+ \end{figure}
++
++算法\ref{alg:translator_training_and_decode}区分伪配对训练与自由推理；训练时冻结Decoder参数不阻断其对输入潜变量的梯度。
++\begin{algorithm}[H]
++\small
++\caption{伪配对监督的潜变量映射与自由读出}\label{alg:translator_training_and_decode}
++\KwIn{独立训练的两域VAE、训练伪配对及Natural Sim输入}
++\KwOut{Translator参数与Real域风格触觉窗口}
++冻结两域VAE参数，仅令Translator参数可更新\;
++\ForEach{训练批次 $(X_s,X_r)$}{
++计算后验均值 $Z_s=\mu_s(X_s)$、$Z_r=\mu_r(X_r)$\;
++得到预测 $\widehat Z_r=T_\theta(Z_s)$\;
++计算潜变量Huber损失\;
++用真实前帧Mask作为循环上下文、真实当帧Mask作为幅值条件计算Decoder NLL\;
++由Huber与$0.1$倍NLL之和反向传播，仅更新Translator\;
++}
++在规定候选轮次内依据验证目标选择检查点\;
++\ForEach{部署输入 $X_s$}{
++令 $Z_s=\mu_s(X_s)$，计算 $T_\theta(Z_s)$\;
++Real Decoder依次使用BOS及预测前帧Mask，自回归生成当帧Mask\;
++计算Gamma混合均值并恢复正值尺度，与预测Mask相乘\;
++输出按原帧序组织的$4\times712$非负响应\;
++}
++\end{algorithm}
++%
++
++
+ 
+ 训练和验证分别使用1200与240个配对窗口。随机种子为4303，采用AdamW，学习率$3\times10^{-4}$、权重衰减$10^{-4}$，批量64，梯度范数上限5。每轮打乱训练窗口并执行19步，45轮共855步；在第30至45轮内按验证联合目标选择权重，最终采用第30轮，对应570次参数更新。末批包含48窗，验证时按各批样本数加权汇总，与训练采用相同的Huber和NLL组合，不依据域分类器分数挑选检查点。总训练步数与所存检查点经历的更新次数应分别记录。Natural Sim不直接参与该映射的配对训练。部署时仅需Natural输入，经Sim均值编码、Translator和Real Decoder生成完整触觉；Mask由模型预测，幅值取恢复尺度后的Gamma混合均值$s_{\rm pos}\sum_k\omega_k a_k/b_k$，无需Real样本、GMM或探针。
+ 
+--- before/thesis/body/ch05_sections/section_5_6.tex
++++ after/thesis/body/ch05_sections/section_5_6.tex
+@@ -5,15 +5,9 @@
+ 为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。
+ 
+ \begin{figure}[htbp]
+- \centering
+- \fbox{\begin{minipage}{0.92\textwidth}\centering\small
+- 原Real Train与Natural Sim Train $\rightarrow$ 训练11个C0后冻结\\[3pt]
+- Real Validation与Translated Natural Validation\\[3pt]
+- $\downarrow$ 原log1p、Scaler及通道顺序\\[3pt]
+- 冻结C0、阈值0.5 $\rightarrow$ 逐实例BA、AUC、D及联合判定
+- \par\vspace*{2.5mm}
+- \end{minipage}}
+- \caption{迁移前冻结C0的Validation评价协议}
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch05_c0_validation_protocol.pdf}
++  \caption{迁移前冻结C0的Validation评价协议}
+  \label{fig:ch05_c0_validation_protocol}
+ \end{figure}
+ 
+--- before/thesis/body/ch06_sections/section_6_1_shared_vector_field.tex
++++ after/thesis/body/ch06_sections/section_6_1_shared_vector_field.tex
+@@ -69,3 +69,20 @@
+ \end{table}
+ 
+ 表\ref{tab:ch06_mapping_comparison}概括了两种计算形式的关系。最终推理只需Sim Encoder、共享场及Real Decoder，不额外调用原C3教师；Real Encoder和Sim Decoder虽保留在完整模型中，也不位于部署链路。Decoder采用预测Mask与恢复尺度的Gamma混合均值输出非负响应。由此得到的是Real域风格触觉，而非已认证的真实接触测量。共享场提供了在既有潜表示上修正迁移路径的机制，但增加积分步数是否改善分布及输入保持，仍须由后续实验判断，不能由框架本身推导出迁移成功。
++
++共享场的部署过程归纳为算法\ref{alg:shared_field_inference}。积分下标与四帧序列下标分别处理，教师模型不参与部署。
++\begin{algorithm}[H]
++\small
++\caption{共享参数向量场的潜变量积分与触觉读出}\label{alg:shared_field_inference}
++\KwIn{Natural Sim窗口$X_s$、冻结VAE、共享场参数及$K\in\{1,2,4,8\}$}
++\KwOut{Real域风格触觉窗口$\widehat X_r$}
++计算$Z_s=\mu_s(X_s)$，初始化$H_0=0$\;
++\For{$k=0,\ldots,K-1$}{
++令$\tau=k/K$，构造$[\tau,1-\tau,\sin(\pi\tau),\cos(\pi\tau)]$\;
++拼接$H_k$、$Z_s$与积分坐标特征，输入修正网络\;
++本次调用内沿四帧运行GRU，计算修正项$C_k$\;
++计算$V_k=T_\theta(Z_s)+C_k$\;
++更新$H_{k+1}=H_k+V_k/K$，各步复用同一向量场参数\;
++}
++利用冻结Real Decoder自由读出$\widehat X_r=D_r(H_K)$\;
++\end{algorithm}

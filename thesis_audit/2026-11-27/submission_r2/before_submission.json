@@ -1,0 +1,32 @@
+{
+  "head": "5a7900c55c09a3000067c8b19ab3e090a404c6a0",
+  "active_modified_files": {
+    "thesis/body/ch01_introduction.tex": "b99d7efbb7eece491a0ebef6bf4882104dcfa56fbd395cea9a4ac4a03e64e290",
+    "thesis/body/ch02_simulation_platform.tex": "8144eb0b26188c319318b44fc10e263aa414a251a76b423fe9a0cfb4a913b3d6",
+    "thesis/body/ch03_grasp_demonstrations.tex": "761ab3a1e6b8b10d727080ea54c9b5f7038e43227ca8bedd913dd654da61e437",
+    "thesis/body/ch04_multimodal_data.tex": "09c855abd76e50bc39f74a44924a9f18d4f5e8ea89c64be8953ab91251c94543",
+    "thesis/body/ch05_sections/section_5_1.tex": "bb8f2c7c7aa1bf22db27d3cd1d0962d9650cb77e0c6aef6b2739491474ee84f1",
+    "thesis/body/ch05_sections/section_5_2.tex": "9af8a7f2465dd6f65211f9670ec8e32fd3d69543cf59a76b33bc2d20dda65fed",
+    "thesis/body/ch05_sections/section_5_3.tex": "cfb82a6f8672e5ed54dda1a958342e9a8aec4a4892fb02c926b839dbae5c4744",
+    "thesis/body/ch05_sections/section_5_4.tex": "aeb3abade6bd79103a434fed7bb75f1b16863f3705e46713102c22e8a79043e7",
+    "thesis/body/ch05_sections/section_5_5.tex": "156a56965ea758b00a84a1f97c2a7db20d80967026cc5fd921461035992f3486",
+    "thesis/body/ch05_sections/section_5_6.tex": "edc8e80c0feb393cbd2ceb6036327f4332abb95c1362f2822238f7fd6b0bb35e",
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": "f9906457cbe5696dcd291438dea7eabec646b57e462eda166f1937868867b628",
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": "e0b20360b29214ac0e5f1187c1d5a1793b8ece59ec40d377daafa28eb9fb363a",
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": "de999c7ce5dbfdff55b935f05502e13f5abae59cc6b9aad981dd8f61f86c2579",
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": "f70994bad9f0e5ad6804b0b68fd92dcf6b8d5b45d22abef96aad74d3663d1688",
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": "2bacf80d0be436d751a02c811d0df32d7026915fbb37b4f76907db6a64ff6165",
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": "ce35b5603bf8e612447fef49c1f13d404b707946515921b75d70e4fdadd0855e"
+  },
+  "old_release": {
+    "thesis/releases/draft_2026-11-27/SHA256SUMS": "955bbeb2c96b0e85da60bcdceebf2a67d0a231cfd98f4d850cc65e6d03b7fda1",
+    "thesis/releases/draft_2026-11-27/SUBMISSION_REVIEW.md": "b25174f29b5289210b050da60e75a403929bfd5bf7c46bc99bb5f2468769aaee",
+    "thesis/releases/draft_2026-11-27/WORDCOUNT.md": "31104af7d4fdda745705e0fdf70cf29053fd5985d8ab62994139bcf1cac81095",
+    "thesis/releases/draft_2026-11-27/thesis_source.zip": "8c5945d96f0dec8603d1af1f7271ef724c589dbdccb496ec8f1c617588cb94c3",
+    "thesis/releases/draft_2026-11-27/thesis_draft.pdf": "f1d679cd4e6f352fa93ab73bdcb593d644405a1ef8227532eadc2c85787bd28b",
+    "thesis/releases/draft_2026-11-27/texcount_files.txt": "bf3751f9ba694e2f5162360adf3806bc950f1d0f5b31f951b1c9be53d928cb9e",
+    "thesis/releases/draft_2026-11-27/SOURCE_MANIFEST.json": "45e66c9457c2d2524038511f6a002da8e5c50a529c5c92d0d0a7029240c1cd14",
+    "thesis/releases/draft_2026-11-27/build.log": "378f27ea7521b4a2e337120d1ed35165d1765b9641c030694f8269ca15a17e9b"
+  }
+}

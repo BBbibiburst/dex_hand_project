@@ -1,4 +1,4 @@
-% Standalone 6.2 draft, not included in the official thesis main file.
+% Active section fragment; included through body/ch06_adversarial_evaluation.tex.
 \section{判别器设计与梯度优化机制}
 \label{sec:ch06_discriminator_gradient}
 
@@ -18,7 +18,7 @@
 \end{equation}
 其中$\operatorname{sg}$表示停止梯度，$\sigma$为sigmoid。前向仍以硬Mask乘Gamma混合幅值均值，反向借用sigmoid导数，解决的是Decoder内部从logit到输出的离散路径。生成触觉再次进入判别器时，后者重新计算$M_D=\mathbf1[Y>0]$；该比较在实现中不保留输入梯度，数学上阈值函数几乎处处导数为零。因此，Decoder的STE不会自动穿过判别器端的再次二值化，但连续幅值支路仍可提供梯度，不能将这一断点写成生成器完全无法训练。
 
-为核查输入表示与梯度机制，设置表\ref{tab:ch06_discriminator_comparison}的三种配置。C组在判别输入端另加STE：
+为核查输入表示与梯度机制，在P44基础上开展编号为P45的结构对照，设置表\ref{tab:ch06_discriminator_comparison}的三种配置。C组在判别输入端另加STE：
 \begin{equation}
  \begin{aligned}
  q(Y)&=\sigma\!\left((Y-\epsilon)/\tau_m\right),\\

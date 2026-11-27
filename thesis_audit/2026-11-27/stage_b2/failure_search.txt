@@ -1,0 +1,15 @@
+docs/writing_audit/ch03_material_audit_v1_2026-11-20/source_index.json:1559:    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/result.json": "06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74",
+docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_EVIDENCE_MATRIX.md:91:- `outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/result.json`：`06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74`。
+outputs/five_task_p32_b_2026-11-03/summary.json:124:      "case": "nut_handle_lower_00",
+outputs/five_task_p32_b_2026-11-03/summary.json:164:      "case": "nut_original_handle_00",
+docs/progress/2026-11-03_p32_b_online_recorder.md:13:| nut_original_handle_00 | 否 | 941 | 47.05 | 0.05559 | Bolt+固定Nut | 未运行 |
+docs/progress/2026-11-03_p32_b_online_recorder.md:14:| nut_handle_lower_00 | 否 | 941 | 47.05 | 0.05229 | Bolt+固定Nut | 未运行 |
+docs/progress/2026-11-03_p32_b_online_recorder.md:64:timeout 120 /home/zmy/miniconda3/envs/mujoco/bin/python apps/run_p32_online_contract.py --task nut_assembly --manifest outputs/nut_assembly_top100_final/variant_000/best_trajectory/manifest.json --handle-manifest outputs/dex_hand_top100_v2/grasp/ycb_005_tomato_soup_can/seed_0000/manifest.json --seed 0 --output outputs/five_task_p32_b_2026-11-03/nut_original_handle_00
+outputs/five_task_p32_b_2026-11-03/nut_stage_diagnosis.json:4:      "case": "nut_original_handle_00",
+outputs/five_task_p32_b_2026-11-03/nut_stage_diagnosis.json:87:      "source": "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/episode.npz"
+outputs/five_task_p32_b_2026-11-03/nut_stage_diagnosis.json:90:      "case": "nut_handle_lower_00",
+outputs/five_task_p32_b_2026-11-03/nut_stage_diagnosis.json:173:      "source": "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/episode.npz"
+outputs/five_task_p32_b_2026-11-03/run_commands.json:43:      "case": "nut_handle_lower_00",
+outputs/five_task_p32_b_2026-11-03/run_commands.json:54:        "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00",
+outputs/five_task_p32_b_2026-11-03/run_commands.json:65:      "case": "nut_original_handle_00",
+outputs/five_task_p32_b_2026-11-03/run_commands.json:76:        "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00",

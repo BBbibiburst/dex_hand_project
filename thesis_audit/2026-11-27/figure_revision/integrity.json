@@ -1,0 +1,119 @@
+{
+  "expected_source_changes": [
+    {
+      "path": "thesis/body/ch02_simulation_platform.tex",
+      "before": "3ca0e9d87abb03ec94952ca30975651236db0761f92a99c8e9f8c706e40180ba",
+      "after": "546f8b04f89418489b52809ecaba37ebe21e38bf7a09f904074ac6469935964a"
+    },
+    {
+      "path": "thesis/body/ch03_grasp_demonstrations.tex",
+      "before": "876fd4df1b847e4f88749d3de0fdb718bef0d9d78dddce83ec8a765955728b4a",
+      "after": "761ab3a1e6b8b10d727080ea54c9b5f7038e43227ca8bedd913dd654da61e437"
+    },
+    {
+      "path": "thesis/body/ch04_multimodal_data.tex",
+      "before": "ebb7b8568b8835e000d342ed5c89002a2b71546cead4acf60459f4cbc4a9a9b5",
+      "after": "09c855abd76e50bc39f74a44924a9f18d4f5e8ea89c64be8953ab91251c94543"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_3.tex",
+      "before": "cb54bcf348aa948c16c2ca7c887da2ae4be1ef710f00885dd3d3c49c5cc14b5b",
+      "after": "cfb82a6f8672e5ed54dda1a958342e9a8aec4a4892fb02c926b839dbae5c4744"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_4.tex",
+      "before": "d7e012d8e907a0cff2b07a25af9e75c17f1991da5df962c1dc200bb3797c627a",
+      "after": "aeb3abade6bd79103a434fed7bb75f1b16863f3705e46713102c22e8a79043e7"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_5.tex",
+      "before": "c054e0b40d8632ab52a719a1cffd0bf97e3217b0a2b9c266dfd0fee360af7806",
+      "after": "156a56965ea758b00a84a1f97c2a7db20d80967026cc5fd921461035992f3486"
+    },
+    {
+      "path": "thesis/body/ch05_sections/section_5_6.tex",
+      "before": "246bfad7f50a3661925d9f5d1de973db1208ef428d262caae90b743a994284bd",
+      "after": "edc8e80c0feb393cbd2ceb6036327f4332abb95c1362f2822238f7fd6b0bb35e"
+    },
+    {
+      "path": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "before": "2619d9cd1030a8fac8c91bc1a4da31471d27526fda5af72e3c506eaee11eae45",
+      "after": "f9906457cbe5696dcd291438dea7eabec646b57e462eda166f1937868867b628"
+    }
+  ],
+  "unexpected_protected_changes": [],
+  "protected_comparison_baseline": "../stage_b2/baseline.json",
+  "outputs": {
+    "thesis_figure_revision_preview.pdf": "a07a646a8e735b6120a059e98ba85d74904e3178471e5c6f9c778957250d15df",
+    "redesign.py": "f60994b73cc483cec72b72bd68a0e6bb1bb8a2cf1187f3d81ff8e7ab36514a01",
+    "EVIDENCE_MAP.md": "b4c8bab6bc0ece8b3031d731ab2a6d85fae975a06b5ecda4a3f05fc0c4ccbf2c",
+    "integrate_models.py": "57856128ffb7c04f12f87dabd0cd2d9bbce4be60263f6f72ce1cdbc00207c30a",
+    "changes.diff": "61594d3bcc020176dcd13238db30550025958af9e3d6e2a735ca093e5d428527",
+    "figure_overview.png": "72f085d6d8967e32acd941bf3fd14eb9b9f082d309dbb93542114e375aa6727d",
+    "static_checks.json": "17890787595da6e3f3fc98c7ff7640175529f7db95578b2a4c5973d33044f90f",
+    "model_panel.png": "677825281b65dfd80673af1abef66c2ee0e0d21b194040d52c2cf184aec8bbc3",
+    "changed_files.json": "6810bac2a06ea1219c6d1ff0818543756abd54221ebc7e61e50fae81d78482c2",
+    "wordcount.txt": "d2818bf52decdc446d9dd626d53badde9c9726728dfc83c37eec54c80e2ee51e",
+    "render_models.py": "2cf8179d71b4e96c23089bd1b6fb0c23a917974489cbfeb211bbd48de7192b1e",
+    "tactile_mujoco_reverse.png": "6d4a07f1669c7c0532f9d9da827dd835cb772d6087e85c255649d220e8bb3908",
+    "add_algorithms.py": "352cbbecea430afb2d83da4abd674c2828db0f340fad9422f0dc00601d826daa",
+    "build_preview.py": "9ff967272d6bff6189b8da16014542ebd48bd25875c9c3f22b47aeefcf49f519",
+    "render_provenance.json": "18971cba6175b03c0e101194aa54f7f22cc1fde1a50ab5ac405e538e8bf4bea9",
+    "hand_mujoco.png": "37d376ac65af5f8fe5d313da28f8a3bb463fad55b4b07444b6179886eb74dc2a",
+    "REVIEW.md": "1338243e83bf1fb2a9862597a43c1ca075f4e319db5c4e72a9e9b9f2e267cf6b",
+    "robot_mujoco.png": "ee856fde64a1d384660569609fbc6be78adefd57ae52406e11d2c161a405c53c",
+    "tactile_mujoco.png": "776b8c76ab726bcb03ca9b737b2191f606bba8d20b34ac2dc1166e9edf732ec3",
+    "build.log": "a0f4f3a94f5708a3ff11fac4495d2715283b4445a38df3948da3f347710d758f",
+    "page_checks/page_21.png": "f21034068db126cd839639e4aba2ab03f45a127727c67ce81c68f77ea2d5102a",
+    "page_checks/final_page_25.png": "e72dfe7fb1d0120f30d3dfba970dddbac04c8fd5941430df781f8cef5e051a37",
+    "page_checks/final_page_62.png": "be5781076b64a80e5847ebd24af0e44de0ac35858e290fa9bacc1c0d5e9946a0",
+    "page_checks/page_67.png": "c00668fe8c7d52417c65ccf3ed339dcc982e09fea97c1ae76a9c1fff5b69ac8a",
+    "page_checks/final_page_73.png": "af1a3c9f9e7c6aae53d5f82f68fd95b770aad0bfdfd19a2e4b4080a764e2c4f1",
+    "page_checks/final_page_21.png": "68db7cca9170629466cf0d34dad910492cb89950a8839e512bf7c5534ecc5727",
+    "page_checks/final_page_66.png": "c5159253e062a6019b10e62bd176ed95f2248d7137a80e1cb419db4c3fa8cdda",
+    "page_checks/final_page_40.png": "7904a0ac037a05ef39bd19c2a0f218a7daca05ed77136add36b577bfb5963fbe",
+    "page_checks/page_28.png": "74f4cc4f0dc356f30ec0e505e4145d5811123ada9f1cb607955a6d7c51722654",
+    "page_checks/final_page_28.png": "3d933148e11567e4966164ef7560f95953557106815f4bdeba9260a316c6c27d",
+    "page_checks/page_74.png": "7059d7f8a0df8e1cd29e06b09b5bf2ace893abb7bc8c8e572d21221f37daaac5",
+    "page_checks/page_25.png": "dfeebb3507e6955fec7ae93727fed5e691773aa600c40d9b4f845110b181e66b",
+    "page_checks/final_overview.png": "7c692d697090fa7a84d2b718d4de80345ebe5fe43ea4867ded2de067ef1480ef",
+    "before/thesis/body/ch03_grasp_demonstrations.tex": "876fd4df1b847e4f88749d3de0fdb718bef0d9d78dddce83ec8a765955728b4a",
+    "before/thesis/body/ch04_multimodal_data.tex": "ebb7b8568b8835e000d342ed5c89002a2b71546cead4acf60459f4cbc4a9a9b5",
+    "before/thesis/body/ch02_simulation_platform.tex": "3ca0e9d87abb03ec94952ca30975651236db0761f92a99c8e9f8c706e40180ba",
+    "before/thesis/body/ch05_sections/section_5_5.tex": "c054e0b40d8632ab52a719a1cffd0bf97e3217b0a2b9c266dfd0fee360af7806",
+    "before/thesis/body/ch05_sections/section_5_4.tex": "d7e012d8e907a0cff2b07a25af9e75c17f1991da5df962c1dc200bb3797c627a",
+    "before/thesis/body/ch05_sections/section_5_6.tex": "246bfad7f50a3661925d9f5d1de973db1208ef428d262caae90b743a994284bd",
+    "before/thesis/body/ch05_sections/section_5_3.tex": "cb54bcf348aa948c16c2ca7c887da2ae4be1ef710f00885dd3d3c49c5cc14b5b",
+    "before/thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": "2619d9cd1030a8fac8c91bc1a4da31471d27526fda5af72e3c506eaee11eae45"
+  },
+  "assets": {
+    "thesis/figures/revision_20261127/ch04_carriers.pdf": "58bf941b6c09148076e1cfbcb9a986c60cd24aa44f03e3be4766b975766b0a3a",
+    "thesis/figures/revision_20261127/ch03_candidate_sources.pdf": "d38a107026321ff1138465e858a51f69fc0e56812600a1996536259466450ff3",
+    "thesis/figures/revision_20261127/ch05_translator_paths.pdf": "7336a349d9b718fae4251769c2a4e2b6dba6a395525c9e3e2a7e43d89117fac8",
+    "thesis/figures/revision_20261127/ch05_dual_vae.pdf": "8321e482684b91e65abd9341479f953c9b553775a7b3e52fbef414dd92c7deeb",
+    "thesis/figures/revision_20261127/tactile_layout.pdf": "999ba2a24120c2b19072383ca9cf9c83124d1eeabeac3d8c859af2423c7e0fe0",
+    "thesis/figures/revision_20261127/ch02_processing.pdf": "d1db7fb23fede2d3c70ebe06b34f7a99d315d09f95422a349be3d098447ace4f",
+    "thesis/figures/revision_20261127/robot_model.pdf": "c2de4c4a28a262ea6caba379c48e9c492fd695044a4490cc2163cef3480e90a2",
+    "thesis/figures/revision_20261127/ch03_task_transfer.pdf": "e245647c2116c9299abda435d9a019a08b132e139bbd46170bdf593b52481bb1",
+    "thesis/figures/revision_20261127/ch05_c0_validation_protocol.pdf": "e5e6fbefe0cfa662991f770069d6ce82ac7b4ee78b8a649c90771002b9fa5677",
+    "thesis/figures/revision_20261127/nut_retain_lower_rgb_00_frame_0548_task_verify.png": "1f5c188b8ce7f844d13030cee667112238e52076763c2bf96052eb2b9ea9e2f6",
+    "thesis/figures/revision_20261127/lift_sugar_rgb_00_frame_0401_verify.png": "3ede5fca9600327e4d52fadc5ba495c671c3cbb9041b3bb0f950d233987d802c",
+    "thesis/figures/revision_20261127/tactile_mujoco_reverse.png": "6d4a07f1669c7c0532f9d9da827dd835cb772d6087e85c255649d220e8bb3908",
+    "thesis/figures/revision_20261127/ch04_timing.pdf": "3e3184dcd850f7f6aeec390e7d6d2eed040373017b2c6bb9bd327f20fe7f3c83",
+    "thesis/figures/revision_20261127/ch05_gmm_candidate_selection.pdf": "5e0b5054e2314605cd5f8fd6b892b5c2dfcaec22d4695c3bbb61959b0229e94a",
+    "thesis/figures/revision_20261127/ch02_architecture.pdf": "16aea9830d315fa03fc561305fbf1141006aa9dfebee94730eb1b9741d4e8e38",
+    "thesis/figures/revision_20261127/ch03_overall_pipeline.pdf": "ee9ffc3b6cb2992f2bb7ffdffbbd229b9bc6fe3bbae20a6480be7f17bc6d39fc",
+    "thesis/figures/revision_20261127/ch04_multirate.pdf": "02d19332ed00b0325a0a470652c20ec5306890417d0758470e86f40b9ccafa50",
+    "thesis/figures/revision_20261127/ch03_strict_replay.pdf": "0daeb6d4eed4b0e22da1b59d45e730250a1005fff674f8877d47037ed3564f11",
+    "thesis/figures/revision_20261127/hand_mujoco.png": "37d376ac65af5f8fe5d313da28f8a3bb463fad55b4b07444b6179886eb74dc2a",
+    "thesis/figures/revision_20261127/historical_examples.pdf": "59354ee9730f274e3b75aab71132b4403f2d97736e16ed0411e5e2907104171e",
+    "thesis/figures/revision_20261127/ch03_reachability.pdf": "3c2cc19696a91fd43a4c1cb81817f4446f21391b63848f6910367594645f8be1",
+    "thesis/figures/revision_20261127/ch02_drive.pdf": "106a4a918dbf7e1eed7a133b4b034266048361de796e7a72f07ca634cca52a6d",
+    "thesis/figures/revision_20261127/ch04_admission.pdf": "849346ad7233c75ccf17465ab5b4c975477c6d4e6c75fc1c0419e3e0d96971a5",
+    "thesis/figures/revision_20261127/ch02_validation.pdf": "e48e60bdb84a0e83317926008e6fb9a5bc8765fe8d62f5136103296225c5a354",
+    "thesis/figures/revision_20261127/robot_mujoco.png": "ee856fde64a1d384660569609fbc6be78adefd57ae52406e11d2c161a405c53c",
+    "thesis/figures/revision_20261127/tactile_mujoco.png": "776b8c76ab726bcb03ca9b737b2191f606bba8d20b34ac2dc1166e9edf732ec3",
+    "thesis/figures/revision_20261127/ch05_gmm_physical_pipeline.pdf": "04bc1ee791c32bf86d669cb96a8425ea1ef1fa0d7bfa6b5d2621f85b1fc815a1",
+    "thesis/figures/revision_20261127/ch02_control.pdf": "3babc27b5b30dfd7b2c624eac61717d0b0eb3fff65553bd595afe2a6eb48f0be"
+  }
+}

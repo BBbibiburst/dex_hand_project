@@ -35,16 +35,9 @@
 表\ref{tab:ch04_fields}中两种动作都为十三维，但语义不同。position\_action保存实际低层位置目标；ik\_action前七维为末端位置与四元数，后六维为手部命令。将IK目标当作关节位置不仅改变单位，还改变学习目标的含义。类似地，目标位姿不能作为实际测量的末端位姿使用，object\_state中的目标site也不应计为独立运动物体。触觉沿用第二章定义的712维processed观测，记录层不重新赋予其真实压力含义。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 原始执行：source NPZ $+$ Manifest\\[4pt]
- $\downarrow$ 字段、时序与来源核对\\[4pt]
- 规范modalities $+$ Episode元数据 $+$ 验证记录\\[4pt]
- $\downarrow$ 按具体导出合同映射\\[4pt]
- LeRobot数值特征、图像或视频、Episode索引\\[4pt]
- 真实触觉独立记录另行登记，不自动形成Real--Sim物理配对
- \end{minipage}}
- \caption{数据载体及其转换关系示意}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_carriers.pdf}
+  \caption{数据载体及其转换关系示意}
  \label{fig:ch04_carriers}
 \end{figure}
 
@@ -66,15 +59,9 @@
 在线记录适配器在物理推进之前采集仿真时钟、策略状态、触觉和对象姿态，推进结束后补充next\_timestamp与实际位置命令。它同时适配普通step和低层step\_physics路径，只将任务记录器最终接受的步骤提交到正式序列，避免把规划器内部探测过程混入示教。低层代码可能先写控制缓冲区再调用物理推进，因此提供prepare\_recorded\_control接口，在覆盖命令之前保存执行前状态。否则，state中的上一命令可能已被当前命令替换，破坏其原有定义。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 在线：读取$o_i^{-}$ $\rightarrow$ 施加$u_i$ $\rightarrow$ 得到$o_i^{+}$\\[5pt]
- 训练配对：$o_i^{-}$ $+$ $u_i$\\[5pt]
- 旧记录：保存$o_{i-1}^{+}$ $\rightarrow$ 当前动作$u_i$ $\rightarrow$ 保存$o_i^{+}$\\[5pt]
- 合法连续时可配对：$o_{i-1}^{+}$ $+$ $u_i$\\[5pt]
- 不直接配对当前执行后结果$o_i^{+}$与动作$u_i$
- \end{minipage}}
- \caption{执行前采集与历史执行后记录的索引关系}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_timing.pdf}
+  \caption{执行前采集与历史执行后记录的索引关系}
  \label{fig:ch04_timing}
 \end{figure}
 
@@ -89,15 +76,9 @@
 其中近似相等表示按实现容差比较浮点时间。仅在相邻控制步连续执行且均被记录、期间没有额外物理推进或重置时，$t_{i+1}$才与$t_i^{+}$一致。未接受步骤、跳步或异常中断可能使两者不再衔接，不能将此关系推广到存在记录缺口的序列；在线检查会拒绝不满足连续时间合同的数据。视频PTS可使用相对帧时间，仿真时间则保留绝对时钟，两者需要由首帧偏移和采样索引连接。时间单调只能排除部分结构错误，不能证明每张图像确实来自对应物理状态。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 20~Hz控制行：0，1，2，3，4，5，6，7，8，$\ldots$\\[5pt]
- 状态与触觉：每个被接受的控制行记录\\[5pt]
- 默认20~Hz RGB：0，1，2，3，4，5，6，7，8，$\ldots$\\[5pt]
- 5~Hz RGB示例：0，4，8，$\ldots$；保留对应控制行索引\\[5pt]
- 图像降频不删除中间控制行，不填造缺少的图像
- \end{minipage}}
- \caption{控制记录与RGB采样频率分离的合同示意}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_multirate.pdf}
+  \caption{控制记录与RGB采样频率分离的合同示意}
  \label{fig:ch04_multirate}
 \end{figure}
 
@@ -171,18 +152,9 @@ v4规范包还保存float64完整积分状态及实际控制，供后续回放�
 旧Stack案例则没有pre\_qpos和pre\_qvel，无法完成当前要求的物理连续性核验。它与旧PickPlace还缺少规范modalities文件，不能描述为所有旧记录都已经完成统一导出。这里的处理是保留问题和版本身份，而不是在本轮删除、补写或重建数据。审计发现的缺陷应与影响范围一起保存，否则后续程序可能仅因旧文件能够读取就重新把它当作已修复数据。
 
 \begin{figure}[htbp]
- \centering
- \fbox{\begin{minipage}{0.91\textwidth}\centering
- 执行结果与验证状态 $\rightarrow$ 结构、数值及阶段合同\\[4pt]
- $\downarrow$\\[4pt]
- 时间关联与动作语义 $\rightarrow$ 来源、版本与文件Hash\\[4pt]
- $\downarrow$\\[4pt]
- 内容重复与用途检查 $\rightarrow$ VALIDATING后登记\\[4pt]
- $\downarrow$\\[4pt]
- 登记：\mbox{EXPORTED} / \mbox{DUPLICATE}；异常隔离：\mbox{QUARANTINED}\\[4pt]
- 训练准入仍需对应标签、分组与研究用途
- \end{minipage}}
- \caption{分层质量审查与数据准入关系}
+  \centering
+  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_admission.pdf}
+  \caption{分层质量审查与数据准入关系}
  \label{fig:ch04_admission}
 \end{figure}
 
@@ -289,4 +261,4 @@ Real记录与仿真示教没有已认证同步物理配对，物理通道映射�
 
 已有数据核验确认了指定Sugar导出字段与源记录的一致性，也发现旧PickPlace命令连续性和旧Stack字段缺失问题。五任务v4开发包及Sink历史回放对照提供了版本化质量控制的有限依据，但不构成服务器全量验收、独立Root认证或全局无泄漏证明。保留来源、Hash、验证层级和失败记录，使这些局限能够被明确识别，而非通过统一文件名掩盖。
 
-在上述数据条件下，后续研究需要进一步区分真实触觉与仿真触觉的分布及监督关系。下一章将基于已保存的真实统计信息和冻结触觉子集讨论跨域重建，不将规范化存储等同于两域已经具有同步物理对应。
+在上述数据条件下，后续研究需要进一步区分真实触觉与仿真触觉的分布及监督关系。本章的数据组织、来源追踪与质量控制为后续研究提供管理基础；下一章使用单独登记并冻结的Real、Natural Sim与Paired Sim触觉子集，本章讨论的LeRobot示教导出并非其初始跨域模型直接读取的训练输入。两套体系在仿真触觉观测和质量规范上相关，但没有已认证的一一数据对应，服务器示教库存也不能与触觉窗口数混为同一规模。
