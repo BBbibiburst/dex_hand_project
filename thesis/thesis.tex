@@ -1,6 +1,6 @@
 % !TeX program = xelatex
 % !TeX encoding = UTF-8
-% 已接入审核中的第一至第五章初稿；未完成章节不冒充正式正文。
+% 已接入审核中的第一至第七章初稿；未完成章节不冒充正式正文。
 \documentclass[fontset=fandol,type=master,campus=harbin]{hithesisbook}
 \usepackage{hithesis}
 \graphicspath{{figures/}{figures/framework/}{figures/network/}{figures/experiments/}}
@@ -17,7 +17,9 @@
 \include{body/ch03_grasp_demonstrations}
 \include{body/ch04_multimodal_data}
 \include{body/ch05_dual_domain_reconstruction}
-% 第六、七章待后续授权写作；旧六章骨架保留，避免把总结误编号为第六章。
+\include{body/ch06_adversarial_evaluation}
+\include{body/ch07_conclusion}
+% 旧总结占位文件保留，不重复引入。
 % \include{body/ch06_conclusion}
 \backmatter
 \bibliographystyle{hithesis}
@@ -27,6 +29,6 @@
 % 有真实内容后按学院要求启用：
 % \begin{appendix}\input{back/appendix}\end{appendix}
 % \include{back/publications}
-% \authorization
-% \include{back/acknowledgements}
+\authorization
+\include{back/acknowledgements}
 \end{document}

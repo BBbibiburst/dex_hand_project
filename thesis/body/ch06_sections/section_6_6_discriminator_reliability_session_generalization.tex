@@ -1,0 +1,67 @@
+\section{判别器可靠性及跨Session泛化分析}
+\label{sec:ch06_discriminator_reliability}
+
+前文区分了边际分布、邻域覆盖、输入依赖和判别接受情况。进一步作出迁移质量判断，还需审查评价器能否稳定接受真实触觉。本节依据冻结$D_{50}$的历史只读审计，分析真实域接受能力、生成分数及跨Session校准差异，不继续优化生成器。本次P51只读审计未执行训练或参数优化，$D_{50}$权重保持冻结，未改变类别方向；本节仅复核已有记录，不重复历史推理。
+
+历史模型文件SHA256与审计登记一致，重放记录给出的最大logit差为0，分类结果相同。Real fit为24个Session、4217窗，inner为8个Session、936窗，后者用于包络校准；开发评价使用另外4个Real Session、780窗及10个Sim Root、905窗。分组无交叉，但外层已有开发暴露，不能称为独立盲测。固定Real为1、Sim为0，概率阈值仍为0.5，即logit阈值0；Joint要求三支同时接受，连续Joint分数取三支logit最小值。
+
+真实域Joint接受率先在Session内计算，再作等权宏平均，结果为0.6808333333，未达到原参考目标0.90。历史Bootstrap以4个评价Session为单位有放回抽样，每次抽取4组，对相应组接受率取等权均值；共1000次，以重采样宏均值的2.5\%和97.5\%经验分位数给出95\%区间$[0.4866666667,0.875]$，上界仍低于0.90。表\ref{tab:ch06_real_session_reliability}显示，前两个Session均为87.5\%，另外两个仅约50.67\%和46.67\%。因此，宏观结果不能掩盖个别采集会话的低接受能力，780个Real窗口中566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$；其按窗口加权，与Session等权统计对象不同，不能替代正式宏口径。仅4个评价Session使不确定性估计受限，组内大量窗口不能补成大量独立Session；该区间也不认证未知采集条件下的覆盖。
+
+\begin{table}[htbp]
+\centering
+\caption{开发Real Session的Joint接受率}
+\label{tab:ch06_real_session_reliability}
+\begin{tabular}{lrr}
+\toprule
+Real评价Session（日期与时刻） & 窗口 & Joint接受率\\
+\midrule
+20260814\_150537 & 240 & 87.500\%\\
+20260814\_151336 & 240 & 87.500\%\\
+20260816\_172352 & 150 & 50.667\%\\
+20260816\_173235 & 150 & 46.667\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+相比之下，$F_{50}$的Joint FR为1，即生成样本全部被判为Real；其固定标签方向AUC仅为0.02726444845，反映分数排序严重反向，不能翻转后宣称通过。记录的混淆矩阵为$\left[\begin{smallmatrix}0&905\\214&566\end{smallmatrix}\right]$，行依次为真实类别Sim、Real，列依次为预测Sim、Real；它表示905个生成窗口均被接受，同时214个真实窗口被拒绝。矩阵是窗口计数，不是组宏比例。高FR只说明生成分数越过阈值，与真实样本接受能力不足可以同时出现；它既不证明域不可区分，也不证明生成分布正确。AUC则描述连续分数的排序能力，并非分布距离或物理质量。
+
+为观察分数是否偏离Real参照，历史审计以8个inner Session等权、组内窗口等权，在Global、Spatial、Temporal原始logit及Joint最小logit上分别取2.5\%和97.5\%加权分位数。分位数通过排序累计权重插值得到。这是经验分数包络，不是经物理标定的触觉置信区间；Joint包络也不同于三支各自包络的交集，不能替代原0.5分类阈值。
+
+校准稳定性采用历史Leave-One-Session-Out诊断：每次以7个inner Session重建包络，在留下的1个Session检查覆盖，遍历8组且不选择最佳划分。
+
+\begin{table}[htbp]
+\centering
+\caption{各判别分支的LOSO包络覆盖率}
+\label{tab:ch06_loso_envelope_coverage}
+\begin{tabular}{lrr}
+\toprule
+分支 & 平均覆盖率 & 最低覆盖率\\
+Global & 77.083\% & 4.167\%\\
+Spatial & 81.124\% & 20.417\%\\
+Temporal & 94.713\% & 80.000\%\\
+Joint & 85.573\% & 12.917\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Real校准分数包络与生成样本上界超出比例}
+\label{tab:ch06_score_envelope_diagnostic}
+\begin{tabular}{lrrr}
+\toprule
+分支 & logit下界 & logit上界 & $F_{50}$高于上界\\
+\midrule
+Global & -3.871067 & 3.667660 & 95.704\%\\
+Spatial & -1.904541 & 3.850504 & 97.907\%\\
+Temporal & -0.573113 & 1.827313 & 84.431\%\\
+Joint & -3.871067 & 1.825418 & 84.993\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+表\ref{tab:ch06_score_envelope_diagnostic}中，$F_{50}$各支均有大量分数超过Real上界，比例按Sim Root宏平均。这解释了单纯追求更高Real分数可能越出既有真实分数范围，但不应由此为包络追加成功判据。未转换Original的Joint包络覆盖约100\%，也说明落入包络不能单独完成域验收。
+
+表\ref{tab:ch06_loso_envelope_coverage}中，Temporal平均较高，但其余分支的最低覆盖与平均相差明显。Global最低发生于20260814\_143310，Spatial最低于20260813\_165855，Joint最低于20260814\_155240；Temporal最低亦为20260814\_143310。说明平均覆盖不能充分代表跨Session稳定性，不能将某一组的较好校准直接推广到另一组。该诊断仍限于8个历史inner Session，未登记新的稳定性硬门槛，不能推出跨Session理论不可达，也不能单凭会话标签归因传感器、任务或物体因素。
+
+因此，既定Real宏接受要求未满足，P51保留NO-GO：$D_{50}$不适合作为当前实验的最终可靠迁移评价器。梯度有效、生成接受率高与评价器可靠是不同命题；后者是解释前述迁移结果的重要前提。结论仅限该模型及现有开发数据，不外推到P49的$D_3$，不否定所有判别器或迁移方法，也不以调整阈值、翻转AUC或更换包络修饰失败结果。

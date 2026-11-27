@@ -1,28 +1,37 @@
 % !TeX root = ../thesis.tex
 % 所有身份、学位、日期信息必须由本人及学院核实后填写。
 \hitsetup{
-  statesecrets={待确认},
-  natclassifiedindex={待填写},
-  intclassifiedindex={待填写},
-  ctitlecover={面向灵巧手触觉信号的仿真到现实迁移方法研究},
-  ctitle={面向灵巧手触觉信号的仿真到现实迁移方法研究},
-  cxueke={待确认学位类别},
-  csubject={待确认专业名称},
-  caffil={待填写学院名称},
-  cauthor={待填写姓名},
-  csupervisor={待填写导师姓名及职称},
-  cstudentid={待填写学号},
-  cstudenttype={待确认学位类型},
-  firstpagecdate={待填写日期},
-  cdate={待填写日期},
-  etitle={Title to be confirmed},
-  exueke={TBD},
-  esubject={Major to be confirmed},
-  eaffil={School to be completed},
-  eauthor={Name to be completed},
-  esupervisor={Supervisor to be completed},
-  edate={Date to be completed},
-  estudenttype={Degree type to be confirmed},
-  ckeywords={待填写关键词},
-  ekeywords={Keywords to be completed}
+  statesecrets={公开},
+  natclassifiedindex={TP301.6},
+  intclassifiedindex={004.9},
+  ctitlecover={灵巧手仿真示教数据构建与触觉跨域重建方法研究},
+  ctitle={灵巧手仿真示教数据构建与触觉跨域重建方法研究},
+  cxueke={专业学位},
+  csubject={电子信息},
+  caffil={计算学部},
+  cauthor={张明远},
+  csupervisor={张展 教授},
+  cstudentid={24S103344},
+  cstudenttype={专业学位论文},
+  firstpagecdate={2026年12月14日},
+  cdate={2026年12月14日},
+  etitle={Simulation-Based Demonstration Data Construction and Cross-Domain Tactile Reconstruction for Dexterous Hands},
+  exueke={Engineering},
+  esubject={Electronic Information},
+  eaffil={Faculty of Computing},
+  eauthor={Zhang Mingyuan},
+  esupervisor={Prof. Zhang Zhan},
+  edate={December 14, 2026},
+  estudenttype={},
+  ckeywords={灵巧手,机器人仿真,专家示教,多模态数据质量,触觉跨域重建},
+  ekeywords={dexterous hand, robot simulation, expert demonstrations, multimodal data quality, cross-domain tactile reconstruction}
 }
+
+% 按用户确认的参考封面显示申请学位；不修改模板文件。
+\ExplSyntaxOn
+\__hit_terms_set:nn {global-long}
+  {
+    edegree = {Professional~Master},
+    declaretext = {本人郑重声明：此处所提交的学位论文《\g__hit_info_ctitle_tl》，是本人在导师指导下，在哈尔滨工业大学攻读学位期间独立进行学术研究工作或专业实践工作所取得的成果，且学位论文中除已标注引用文献、资料的部分外不包含他人完成或已发表的成果。对本学位论文的学术研究工作或专业实践工作做出重要贡献的个人和集体，均已在文中以明确方式注明；对使用AI工具的情况均已在文中以明确方式标注。}
+  }
+\ExplSyntaxOff

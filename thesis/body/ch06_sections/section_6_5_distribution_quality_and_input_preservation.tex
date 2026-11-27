@@ -1,0 +1,66 @@
+\section{触觉分布质量与输入保持评价}
+\label{sec:ch06_distribution_quality_input_preservation}
+
+前两节表明，当前判别器接受样本，不保证输出逼近Real分布。本节进一步区分边际距离、局部覆盖和输入依赖，检验不同指标能否识别相应退化。各项沿用已有Validation及冻结评价合同，不据终点表现重新调整尺度，也不将指标合成为新的迁移成功分数。
+
+距离表示由Real Train的$\log(1+X)$逐坐标均值和标准差确定，标准差下限为0.05。展平后采用1024个固定单位随机投影，Real按Session、Sim按Root等权，计算
+\begin{equation}
+ \mathrm{SWD}(R,Y)=\frac{1}{1024}\sum_{\ell=1}^{1024}
+ \int\left|F_{R,\ell}(u)-F_{Y,\ell}(u)\right|\,\mathrm du .
+ \label{eq:ch06_projected_wasserstein}
+\end{equation}
+其中$F_{R,\ell}$、$F_{Y,\ell}$为相应加权投影累积分布。该量是投影边际Wasserstein-1的均值，不是完整高维距离，更不认证逐样本正确。MMD使用相同表示，以固定512个Real Train窗口的两两距离中位数确定带宽，对0.5、1、2倍带宽的RBF核取平均，计算组加权V统计量后取非负平方根，不能称为无偏U统计。
+
+表\ref{tab:ch06_quality_dependency_comparison}中，Original是未转换的Natural Sim processed Validation窗口，并非零潜变量解码。定义$R_W=(\mathrm{SWD}_{\mathrm{Original}}-\mathrm{SWD}_{F_0})/\mathrm{SWD}_{\mathrm{Original}}$，P48登记值为0.4977202817338595，即49.77\%；$R_W$的95\%组Bootstrap区间约为$[0.408514,0.566743]$，不是SWD原值区间。该值沿用P48记录，不用后续输出重算。P48与后续$F_0$的SWD原值相差约$2\times10^{-11}$，保留各自来源；P50与CPU参照还存在上一节所述读出后端差异，同一测量合同不等于输出逐位相同。
+
+\begin{table}[htbp]
+\centering
+\caption{共同评价合同下的分布、邻域与依赖指标}
+\label{tab:ch06_quality_dependency_comparison}
+\begingroup\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+输出 & SWD & MMD & P@5 & R@5 & HSIC\\
+\midrule
+Original & 0.411343 & 0.392554 & 0.181615 & 0.195821 & 1.000000\\
+$F_0$ & 0.206609 & 0.343678 & 0.108859 & 0.039936 & 0.507147\\
+P49 $F_3$ & 0.411330 & 0.676806 & 0 & 0 & 0.492566\\
+$F_{50}$ & 4.247227 & 0.882140 & 0 & 0 & 0.514820\\
+ $F_{50}$终点关闭Refiner（诊断） & 0.340365 & 0.365503 & 0.243167 & 0.000321 & 0.433952\\
+\bottomrule
+\end{tabular}
+\endgroup
+\end{table}
+
+局部覆盖沿用PRDC的严格小于号邻域判定，取$k=3,5,10,20$，共用100次子样本；Real窗口为参考，Sim按Root比例配额，区别于距离的组等权。Precision为落入至少一个真实样本$k$近邻球的生成点比例，Recall为落入至少一个生成样本$k$近邻球的真实点比例；Density对各生成点所处真实邻域数除以$k$后取均值，可大于1；Coverage为最近生成点距离严格小于该真实点$k$近邻半径的真实点比例。高Precision不保证高Recall： $F_{50}$终点关闭Refiner（诊断）虽有0.243167的P@5，R@5仅0.000321，不能视为覆盖充分，更不能替代正式终点。四个邻域量观察的集合关系不同，故表中选取$k=5$只是便于展示，不能由这一列另造统一通过阈值。100次共用抽样用于降低比较中的采样波动，不代表100次独立采集，也不将相邻窗口视为独立物理条件。$F_0$也只是相对非退化参照。
+
+输入依赖采用Root内中心化RBF Gram矩阵的归一化核对齐：
+\begin{equation}
+ \mathrm{HSIC}_{\mathrm{norm}}(X,Y)=
+ \frac{\langle K_c,L_c\rangle_F}{\|K_c\|_F\|L_c\|_F}.
+ \label{eq:ch06_normalized_hsic}
+\end{equation}
+各Root按既定正两两距离规则确定带宽，考察0.5、1、2倍，主结果取1倍，再作Root宏平均；常量核分母不超过$10^{-20}$时置零。HSIC反映统计依赖，既不是因果证明，也不恢复同步物理接触关系。表中两个失败终点仍有约0.5的HSIC，说明依赖存在不能抵消边际质量不足。
+
+\begin{table}[htbp]
+\centering
+\caption{同源Validation派生负对照的互补诊断}
+\label{tab:ch06_quality_negative_controls}
+\begin{tabular}{lrrrl}
+\toprule
+对照 & Joint FR & SWD & HSIC & 完整护栏\\
+\midrule
+Constant & 0 & 0.332755 & 0 & 未通过\\
+RealDonor & 0.665093 & 0.220266 & 0.116226 & 未通过\\
+PairShuffle & 1.000000 & 4.247227 & 0.312631 & 未通过\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+表\ref{tab:ch06_quality_negative_controls}进一步揭示盲区。Constant可获得看似良好的部分Precision，却缺少覆盖与变化；RealDonor提供真实边际样本，不保留对应输入关系。PairShuffle仅打乱配对而保留输出集合，SWD不能检测这种损坏，PRDC也不能，需要依赖对照补充。这些是历史派生诊断，不是新增独立采集或物理验证。三种对照分别暴露常量退化、来源条件缺失与对应关系损坏，完整护栏均将其拒绝，并不证明所有未知退化都能被识别。特别是Original的自身依赖为1，也不意味着其真实域分布质量合格。
+
+综合护栏各相对阈值均以登记$F_0$对应项为参照：SWD/MMD不超过1.1倍，各$k$下PRDC各项下降不超过0.02；HSIC至少0.8倍且与PairShuffle差异的组Bootstrap下界为正；跨窗标准差至少0.5倍，唯一窗口数至少0.9倍。尾部、时序、空间及零结构误差不超过1.1倍，最大响应不超过$F_0$输出最大响应的1.5倍，而非Real最大值。上述距离及误差上界比较按源码加$10^{-8}$数值容差。严重收缩另按标准差低于0.1倍或HSIC低于0.2倍标记，不能与正常通过条件混淆。这些不是通用物理验收标准。尾部对照正值分位数，空间检查索引激活及Patch份额，短时序检查帧间变化；其中Mask以$x>0$定义数值支持，不是物理接触真值；Real帧索引差分不是经真实时间标定的物理导数，也不能认证真实Taxel配准。各分项保留原始判定，不以一项改善抵消另一项失败，也不把全部相对护栏通过误写为完整迁移认证。
+
+既有替代路线也未完成验收认证：P46的RVC因Constant负对照而NO-GO；P48的4对10组匹配等价检验中，12个候选均未通过预设的区间上界小于0的判定条件，但不等于证明绝对不等价。其JSD Probe实际训练43个、按规则未训练48个，后者不能记零分，也不能据此认证全部家族可靠。$\log2-\mathrm{CE}$仅为分类器限制下的代理，负值不是负真实JS散度。
+
+因此，距离、邻域、依赖与Mask、幅值、短时序结构描述各有分工，FR、BA和AUC则诊断接受及分类表现，彼此不能替代，均不能单独认证物理Sim-to-Real。下一节进一步检查判别器自身的跨Session泛化能力。

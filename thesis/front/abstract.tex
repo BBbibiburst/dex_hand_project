@@ -1,7 +1,24 @@
 % !TeX root = ../thesis.tex
 \begin{cabstract}
-待填写中文摘要。
+灵巧手触觉研究需要可执行的机器人示教、语义明确的多模态数据和可靠的迁移评价。几何抓取候选不必然满足整机约束，轨迹文件可读取也不代表动作与观测关系正确；同维仿真与真实触觉更不意味着物理等价。针对这些问题，本文研究灵巧手仿真示教数据构建与触觉跨域重建方法。
+
+构建RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，统一机器人控制、任务执行和触觉记录，依据曲面几何建立16个Patch、712维处理后触觉观测体系，并检查指定历史任务记录。适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，结合腕部姿态扩展、可达性、碰撞约束和连续轨迹求解，形成候选生成、机器人约束筛选与专家示教验证流程，分别判定候选质量、任务结果和严格回放质量。
+
+建立状态、动作、视觉与触觉的记录合同，区分位置命令与逆运动学目标、策略观测与完整仿真状态，核查动作和执行前后观测的时序配对及格式转换。通过来源追踪、数值有效性、连续性、完整性和重复关系检查，验证指定修复数据，并识别历史命令不连续与状态字段缺失问题，形成限定数据范围内的分层质量准入依据。
+
+在缺少认证同步物理配对的条件下，利用真实触觉统计先验指导仿真物理探针构造伪配对，分别训练双域变分自编码器，以门控循环单元映射网络连接独立潜空间。进一步探索共享参数向量场积分、对抗优化、多视角判别和残差修正，结合分布距离、邻域覆盖、输入依赖和跨会话判别表现进行综合评价。
+
+实验中，潜变量映射改进版本在原冻结验证协议的11个分类器实例中仅2个联合通过。共享场初始比较基线的指定切片Wasserstein距离相对未转换仿真输入下降49.77\%，只支持有限的边际改善。对抗优化虽可使生成样本在对应判别器下的接受率达到100\%，分布质量并未同步改善；多视角残差终点发生明显距离退化，后续冻结审计亦表明当前判别器未满足既定真实域接受要求。结果揭示接受率、分布相似性、输入依赖与评价器可靠性不能相互替代。本文形成了仿真示教数据构建、触觉重建与质量诊断的探索链路，但尚未完成完整触觉仿真到现实迁移验收或真实机器人任务收益验证。
 \end{cabstract}
+
 \begin{eabstract}
-English abstract to be completed.
+Tactile research for dexterous manipulation requires executable demonstrations, multimodal data with explicit semantics, and reliable transfer evaluation. Geometrically plausible grasps need not satisfy whole-robot constraints; readable trajectories need not preserve command-observation relationships; and equal-dimensional simulated and real tactile observations need not be physically equivalent. This thesis investigates simulation-based demonstration data construction and cross-domain tactile reconstruction.
+
+A multi-task platform integrates an RM75B manipulator and an underactuated dexterous hand developed by Tachin-Tech with unified control, task execution, and tactile recording. A curved sensing layout provides processed observations with 16 patches and 712 scalar channels, inspected using selected historical task records. Official GraspQP evaluation metrics are adapted, and evolutionary search is implemented with reference to DexEvolve. Wrist-pose expansion, reachability, collision constraints, and continuous trajectories connect grasp candidates to expert demonstrations. Candidate quality, task outcomes, and strict replay quality are distinguished.
+
+Recording contracts separate position commands from inverse-kinematics targets and policy observations from complete simulation states. Temporal pairing and conversion are examined alongside provenance, validity, continuity, completeness, and duplication. Selected repairs are verified, while command discontinuities and missing state fields are identified in historical records, supporting layered admission within the inspected data scope.
+
+Without certified synchronous physical pairs, real tactile statistics guide simulated probes to construct pseudo-pairs. Separate variational autoencoders learn domain-specific representations, connected by a gated recurrent unit mapping network. Shared-parameter vector fields, adversarial optimization, multi-view discrimination, and residual refinement are explored using complementary distribution, neighborhood, input-dependence, and cross-session evaluations.
+
+The adapted latent mapping meets the joint requirements for only two of eleven classifier instances under the original frozen validation protocol. The initial shared-field baseline reduces the specified sliced Wasserstein distance by 49.77\% relative to unconverted simulation inputs, indicating limited marginal improvement. Adversarial optimization can achieve 100\% generated-sample acceptance under the corresponding discriminator without improving distribution quality. The multi-view residual endpoint exhibits substantial distance degradation, and a frozen audit finds that the current discriminator fails the prescribed real-domain acceptance requirement. Acceptance, distributional similarity, input dependence, and evaluator reliability are therefore not interchangeable. The resulting pipeline links simulated demonstrations, data quality control, tactile reconstruction, and diagnosis, while complete tactile sim-to-real acceptance and benefits to real-robot tasks remain unverified.
 \end{eabstract}
