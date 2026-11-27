@@ -15,10 +15,16 @@ import time
 from apps.apply_collection_quality_patch import read, sha, canonical, write_json
 
 
+def deployment_manifest(project):
+    manifest = read(project/'configs/collection_quality_patch_20261126.json')
+    extension = read(project/'configs/collection_scheduler_patch_20261127.json')
+    return {**manifest, 'files':{**manifest['files'], **extension['files']}}
+
+
 def approve_execution(old, current, manifest):
     expected = dict(old['source_sha256'])
     for name, entry in manifest['files'].items():
-        if expected.get(name) not in (entry['before'], entry['after']):
+        if expected.get(name) not in (entry['before'], entry['after'], *entry.get('approved_predecessors', [])):
             raise ValueError('Unrecognized frozen patch base: ' + name)
         expected[name] = entry['after']
     if current != {**old, 'source_sha256': expected}:
@@ -170,4 +176,4 @@ if __name__ == '__main__':
     p.add_argument('--project',type=Path,required=True)
     p.add_argument('--dataset-root',type=Path,required=True)
     a=p.parse_args(); project=a.project.resolve(); os.chdir(project)
-    print(json.dumps(deploy(project,a.dataset_root.resolve(),read(project/'configs/collection_quality_patch_20261126.json')),ensure_ascii=False,indent=2))
+    print(json.dumps(deploy(project,a.dataset_root.resolve(),deployment_manifest(project)),ensure_ascii=False,indent=2))

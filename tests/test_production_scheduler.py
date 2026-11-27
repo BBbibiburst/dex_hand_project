@@ -135,3 +135,32 @@ def test_fulfilled_failure_quota_cannot_make_failed_template_look_productive(tmp
            'template_failure_limit': 10,
            'task_outcome_hours': {task: {'success': 200., 'failure': 0.} for task in TASKS}}
     assert enqueue_next(queue, [good, bad], cfg, 42)['asset_hash'] == good['asset_hash']
+
+
+def test_single_nut_template_can_fill_worker_pool_with_distinct_candidates(tmp_path):
+    queue=ProductionQueue(tmp_path/'queue.sqlite');row=template('nut_one','nut_assembly')
+    jobs=[]
+    for i in range(24):
+        planned=enqueue_next(queue,[row],config(),42,max_active_per_template=24)
+        assert planned['state']=='ENQUEUED'
+        job=queue.claim();assert job['payload']['candidate_index']==i
+        jobs.append(job)
+    assert len({j['job_id'] for j in jobs})==24
+    assert len({canonical_hash(j['payload']['conditions']) for j in jobs})>1
+    assert enqueue_next(queue,[row],config(),42,max_active_per_template=24)['state']=='WAITING_OR_BLOCKED'
+    queue.fail(jobs[0]['job_id'],jobs[0]['lease_token'],'Strict rejected',retryable=False)
+    # Existing failure threshold is still binding even with available slots.
+    assert enqueue_next(queue,[row],config(),42,max_active_per_template=24)['state']=='WAITING_OR_BLOCKED'
+    assert queue.scheduling_stats()[0]['nut_one']['active']==23
+
+
+def test_parallel_template_indices_continue_after_database_reopen(tmp_path):
+    q=ProductionQueue(tmp_path/'queue.sqlite');t=template('nut_one','nut_assembly')
+    for i in range(3):assert enqueue_next(q,[t],config(),42,max_active_per_template=4)['state']=='ENQUEUED'
+    q=ProductionQueue(q.path)
+    fourth=enqueue_next(q,[t],config(),42,max_active_per_template=4)
+    with q.connect() as db:
+        import json
+        payload=json.loads(db.execute('SELECT payload FROM jobs WHERE job_id=?',(fourth['job_id'],)).fetchone()[0])
+    assert payload['candidate_index']==3
+    assert enqueue_next(q,[t],config(),42,max_active_per_template=4)['state']=='WAITING_OR_BLOCKED'

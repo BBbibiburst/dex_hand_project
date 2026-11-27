@@ -228,7 +228,8 @@ def _coordinate(config, root, max_episodes, sampling_seed, resume=False, append_
                             return
                     job = queue.claim(quota["needed_tasks"], lease_seconds=300)
                     if job is None and append_candidates:
-                        planned = enqueue_next(queue, templates, config, sampling_seed)
+                        planned = enqueue_next(queue, templates, config, sampling_seed,
+                                               max_active_per_template=admission.plan['pool_workers'])
                         if planned['state'] == 'ENQUEUED':
                             job = queue.claim(quota['needed_tasks'], lease_seconds=300)
                         elif planned['state'] == 'WAITING_OR_BLOCKED':

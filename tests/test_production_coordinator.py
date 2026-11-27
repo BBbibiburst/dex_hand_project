@@ -133,3 +133,33 @@ def test_exited_worker_does_not_leave_encoder_like_child_alive():
             os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError:
             pass
+
+
+def test_single_template_runs_four_concurrent_workers_not_one(tmp_path,monkeypatch):
+    """Barrier requires all four fake workers to start before any can finish."""
+    import threading,os
+    import source.data.production_coordinator as module
+    import source.data.production_parallel as parallel
+    config=load_config(Path('configs/five_task_production.json'))
+    config.update(worker_policy='resource-adaptive-v1',workers=4,maximum_workers=4)
+    monkeypatch.setattr(parallel,'hardware_resources',lambda:{'cpu_capacity':8,'total_memory_bytes':64*1024**3,'available_memory_bytes':60*1024**3})
+    t={'template_id':'only_nut','task':'nut_assembly','asset_hash':'a'*64,'base_seed':0,'perturbation_fields':['dx_m']}
+    monkeypatch.setattr(module,'load_templates',lambda *_:[t])
+    monkeypatch.setattr(module,'reconcile_episode',lambda *_:{'state':'NO_ARTIFACT'})
+    monkeypatch.setattr(module,'package_episode',lambda *a,**k:None)
+    monkeypatch.setattr(module,'stop_child',lambda _:None)
+    barrier=threading.Barrier(4,timeout=5);started=[];lock=threading.Lock()
+    class Process:
+        pid=os.getpid();returncode=0
+        def poll(self):return 0
+    def spawn(*args,**kwargs):
+        with lock:started.append(1)
+        barrier.wait()
+        return Process()
+    monkeypatch.setattr(module.subprocess,'Popen',spawn)
+    def register(q,j,root,**kwargs):
+        q.validating(j['job_id'],j['lease_token'])
+        return q.register(j['job_id'],j['lease_token'],lineage_hash=canonical_hash(j['job_id']),content_hash=canonical_hash(j['job_id']),relative_path='artificial/'+j['job_id'],seconds=1,success=True,verification={'passed':True,'artificial_test':True})
+    monkeypatch.setattr(module,'register_artifact',register)
+    result=module._coordinate(config,tmp_path/'parallel_fixture',4,42,append_candidates=True)
+    assert len(started)==4 and result['inventory']['episodes']==4

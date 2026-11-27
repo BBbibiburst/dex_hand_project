@@ -4,7 +4,9 @@ from source.data.five_task_dataset import canonical_hash
 from source.data.production_templates import candidate
 
 
-def enqueue_next(queue, templates, config, sampling_seed):
+def enqueue_next(queue, templates, config, sampling_seed, *, max_active_per_template=1):
+    if type(max_active_per_template) is not int or not 1 <= max_active_per_template <= 128:
+        raise ValueError("Template concurrency must be an integer between 1 and 128")
     quota = queue.quota_status(config['task_hours'], min_assets=config['minimum_independent_assets'],
                                count_failures=config['count_failed_episodes'], outcome_hours=config.get('task_outcome_hours'),
                                coverage_success_only=config.get('coverage_requires_success', True))
@@ -43,7 +45,7 @@ def enqueue_next(queue, templates, config, sampling_seed):
         if reason:
             blocked.append({'template_id': template['template_id'], 'task': task, 'reason': reason})
             continue
-        if row.get('active', 0):
+        if row.get('active', 0) >= max_active_per_template:
             continue
         total = row.get('successful', 0) + row.get('failed', 0) + row.get('duplicates', 0)
         penalty = (row.get('failed', 0) + row.get('duplicates', 0)) / max(1, total)
@@ -65,6 +67,7 @@ def enqueue_next(queue, templates, config, sampling_seed):
                 template.get('validation_status') != 'CURRENT_SINGLE_CONDITION_SUCCESS', template['template_id'])
         choices.append((rank, template, row, {'schema': 'asset-balanced-selection-v2',
                         'registered_asset_episodes':asset_counts.get((task,template['asset_hash']),0),
+                        'template_active':row.get('active',0), 'template_parallel_limit':max_active_per_template,
                         'measured_physical_per_worker_second': rate, 'timing_complete': complete,
                         'exploration_slot': exploration, 'timed_attempts': measured.get('timed', 0)}))
     if not choices:

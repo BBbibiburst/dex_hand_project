@@ -60,3 +60,7 @@ conda activate mujoco
 PYTHONPATH=. python apps/watch_collection.py \
   --config "/media/ftcl/外置存储1/dex_hand_dataset_batch2/config.json" --interval 5
 ```
+
+## 后续必需修复
+
+若worker池24但单模板仍只执行1条，参见[单模板串行瓶颈修复及必须执行的deploy步骤](SCHEDULER_PARALLELISM_FIX_20261127.md)。这次涉及冻结执行源码，不能跳过deploy。

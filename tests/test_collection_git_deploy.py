@@ -61,3 +61,17 @@ def test_pointer_relocation(tmp_path):
     value={'original_database':str(db),'dataset_root':str(old),'active_database':'/old/dataset_index_recovery/run/q.sqlite'}
     assert module.relocate_pointer(value,old,root,db)['active_database']==str(selected)
     with pytest.raises(ValueError):module.relocate_pointer({**value,'active_database':'/etc/passwd'},old,root,db)
+
+
+def test_approved_scheduler_predecessor_is_pinned_and_environment_remains_frozen():
+    old={'python':'original','packages':{'mujoco':'3.12.0'},'shared_resource_sha256':{'mesh':'fixed'},'source_sha256':{'scheduler':'quality-v1','other':'same'}}
+    current={**old,'source_sha256':{'scheduler':'parallel-v2','other':'same'}}
+    manifest={'files':{'scheduler':{'before':'original','after':'parallel-v2','approved_predecessors':['quality-v1']}}}
+    module.approve_execution(old,current,manifest)
+    with pytest.raises(ValueError):module.approve_execution(old,{**current,'packages':{'mujoco':'wrong'}},manifest)
+    with pytest.raises(ValueError):module.approve_execution({**old,'source_sha256':{'scheduler':'unknown','other':'same'}},current,manifest)
+
+
+def test_repository_deployment_manifest_matches_current_source_bytes():
+    p=Path(__file__).resolve().parents[1];manifest=module.deployment_manifest(p)
+    for name,item in manifest['files'].items():assert module.sha(p/name)==item['after']
