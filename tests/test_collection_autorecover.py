@@ -328,3 +328,97 @@ def test_custom_policy_change_still_requires_review(tmp_path):
          'options':{**app.DEFAULTS,'initial_cpu_limit':16},'cpu_limit':16}
     (d/'state.json').write_text(json.dumps(old))
     with pytest.raises(ValueError,match='explicit reviewed'):app.Watchdog(p,root,d,app.options())
+
+
+def test_live_recovery_seeds_idle_lift_while_nut_is_running(tmp_path,monkeypatch):
+    import source.data.production_parallel as parallel
+    monkeypatch.setattr(parallel,'worker_plan',lambda c:{'initial_admitted_workers':1,'pool_workers':24})
+    q=ProductionQueue(tmp_path/'q.sqlite');lifts=[template('lift_'+str(i),asset=hex(i+1)[2:]) for i in range(30)]
+    for t in lifts:blocked(q,t)
+    q.enqueue('nut_active','nut_assembly','f'*64,{'template_id':'nut','candidate_index':0})
+    nut=q.claim(['nut_assembly'])
+    result=app.seed_probes(q,lifts,config(),32000,app.options(),now=1000,while_running=True)
+    assert len(result['added'])==24 and 'lift' in result['starved_tasks']
+    with q.connect() as db:
+        row=db.execute("SELECT * FROM jobs WHERE job_id='nut_active'").fetchone()
+        assert row['state']=='RUNNING' and row['lease_token']==nut['lease_token']
+        assert db.execute("SELECT count(*) FROM jobs WHERE task='lift' AND state='PENDING'").fetchone()[0]==24
+    # Pending recovery jobs prevent an unbounded second batch for the same task.
+    assert not app.seed_probes(q,lifts,config(),32000,app.options(),now=1001,while_running=True)['added']
+
+
+def test_live_recovery_retains_per_template_cooldown_and_budget_with_busy_nut(tmp_path):
+    path=tmp_path/'q.sqlite';q=ProductionQueue(path);t=template();blocked(q,t)
+    q.enqueue('nut_active','nut_assembly','f'*64,{'template_id':'nut','candidate_index':0})
+    nut=q.claim(['nut_assembly']);policy={**app.DEFAULTS,'maximum_new_probes':4}
+    ids=[]
+    for attempt in range(3):
+        now=1000+attempt*900
+        result=app.seed_probes(q,[t],config(),32000,policy,now=now,while_running=True)
+        assert len(result['added'])==1;ids+=result['added']
+        job=q.claim(['lift']);q.fail(job['job_id'],job['lease_token'],'Strict failed',retryable=False)
+        assert not app.seed_probes(q,[t],config(),32000,policy,now=now+1,while_running=True)['added']
+        q=ProductionQueue(path)
+    result=app.seed_probes(q,[t],config(),32000,policy,now=100000,while_running=True)
+    assert not result['added'] and result['isolated']==[t['template_id']]
+    assert len(set(ids))==3
+    with q.connect() as db:
+        row=db.execute("SELECT * FROM jobs WHERE job_id='nut_active'").fetchone()
+        assert row['state']=='RUNNING' and row['lease_token']==nut['lease_token']
+        assert db.execute('SELECT consecutive_failures FROM template_stats WHERE template_id=?',(t['template_id'],)).fetchone()[0]==6
+
+
+def test_live_recovery_pending_other_task_does_not_block_idle_lift(tmp_path):
+    q=ProductionQueue(tmp_path/'q.sqlite');t=template();blocked(q,t)
+    q.enqueue('nut_pending','nut_assembly','f'*64,{'template_id':'nut','candidate_index':0})
+    result=app.seed_probes(q,[t],config(),32000,app.DEFAULTS,now=1000,while_running=True)
+    assert len(result['added'])==1
+
+
+def setup_live_feeder(watchdog,monkeypatch):
+    import source.data.production_templates as module
+    q=ProductionQueue(watchdog.directory/'q.sqlite');t=template();blocked(q,t)
+    q.enqueue('nut_active','nut_assembly','f'*64,{'template_id':'nut','candidate_index':0})
+    nut=q.claim(['nut_assembly'])
+    c={**config(),'queue_database':str(q.path),'template_library':'library.json','object_registry':'registry.json'}
+    for name in ('library.json','registry.json'):(watchdog.project/name).write_text('{}')
+    (watchdog.root/'config.json').write_text(json.dumps(c))
+    (watchdog.root/'run_contract.json').write_text(json.dumps({'template_sha256':app.base.digest(watchdog.project/'library.json'),'registry_sha256':app.base.digest(watchdog.project/'registry.json')}))
+    monkeypatch.setattr(module,'load_templates',lambda *a:[t])
+    return q,t,nut
+
+
+def test_running_child_observes_live_lift_refill_without_nut_restart(watchdog,monkeypatch):
+    q,t,nut=setup_live_feeder(watchdog,monkeypatch)
+    apps=watchdog.project/'apps';apps.mkdir();mark=watchdog.directory/'live_refill_observed.json'
+    script="""import sys,pathlib,json,time,sqlite3,os
+q=sqlite3.connect(DB)
+end=time.monotonic()+10
+while time.monotonic()<end:
+    nut=q.execute("SELECT state FROM jobs WHERE job_id='nut_active'").fetchone()[0]
+    count=q.execute("SELECT count(*) FROM jobs WHERE task='lift' AND state='PENDING'").fetchone()[0]
+    if count:
+        pathlib.Path(MARK).write_text(json.dumps({'nut_state':nut,'lift_pending':count,'pid':os.getpid()}))
+        p=pathlib.Path(sys.argv[sys.argv.index('--output')+1]);p.mkdir(parents=True,exist_ok=True)
+        (p/'supervisor.json').write_text(json.dumps({'termination':'QUOTA_COMPLETE_FILE_VERIFIED'}))
+        sys.exit(0)
+    time.sleep(.02)
+sys.exit(4)
+""".replace('DB',repr(str(q.path))).replace('MARK',repr(str(mark)))
+    (apps/'five_task_production.py').write_text(script)
+    session=watchdog.directory/'sessions/live';(session/'preparation').mkdir(parents=True)
+    term,code=watchdog.run_child({'database':str(q.path),'sampling_seed':32000},session)
+    result=json.loads(mark.read_text())
+    assert code==0 and term=='QUOTA_COMPLETE_FILE_VERIFIED'
+    assert result['nut_state']=='RUNNING' and result['lift_pending']==1
+    assert result['pid']==watchdog.child.pid
+    assert watchdog.state['live_recovery']['added']
+    assert 'LIVE_RECOVERY_PROBES_QUEUED' in (watchdog.directory/'events.jsonl').read_text()
+
+
+def test_live_feeder_rejects_changed_frozen_catalogue(watchdog,monkeypatch):
+    q,t,nut=setup_live_feeder(watchdog,monkeypatch)
+    feeder=app.LiveProbeFeeder(watchdog.project,watchdog.root,32000,watchdog.policy)
+    (watchdog.project/'library.json').write_text('{"tampered":true}')
+    with pytest.raises(ValueError,match='Frozen catalogue'):feeder.refill(q.path,now=1000)
+    with q.connect() as db:assert db.execute("SELECT count(*) FROM jobs WHERE task='lift'").fetchone()[0]==0

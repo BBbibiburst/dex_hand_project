@@ -95,16 +95,16 @@ def diagnose(project, root):
         return 'STOP_CHECK_ERROR', {'ready': False, 'errors': [f'{type(error).__name__}: {error}']}
 
 
-def probe_capacity(config, policy):
+def probe_capacity(config, policy, *, include_running=False):
     """Fill the configured resource-adaptive worker pool, not a fixed four-job batch."""
     if policy['maximum_new_probes']:
         return policy['maximum_new_probes']
     from source.data.production_parallel import worker_plan
     plan = worker_plan({'worker_policy':'resource-adaptive-v1', 'workers':'auto', **config})
-    return max(1, plan['initial_admitted_workers'])
+    return max(1, plan['pool_workers'] if include_running else plan['initial_admitted_workers'])
 
 
-def seed_probes(queue, templates, config, seed, policy, *, now=None):
+def seed_probes(queue, templates, config, seed, policy, *, now=None, while_running=False):
     """New candidate indices only. Success replenishes budget; restart does not."""
     from source.data.production_templates import candidate
     from source.data.production_capture import capture_from_config
@@ -115,15 +115,23 @@ def seed_probes(queue, templates, config, seed, policy, *, now=None):
         coverage_success_only=config.get('coverage_requires_success', True))
     added, cooling, isolated = [], [], []
     normal_available = False
-    capacity = probe_capacity(config, policy)
+    capacity = probe_capacity(config, policy, include_running=while_running)
     with queue.transaction() as db:
-        pending=db.execute("SELECT task FROM jobs WHERE state='PENDING'").fetchall()
-        if (db.execute("SELECT count(*) FROM jobs WHERE state IN ('RUNNING','VALIDATING')").fetchone()[0]
-                or any(r['task'] in quota['needed_tasks'] for r in pending)):
+        busy_tasks = {r['task'] for r in db.execute(
+            "SELECT DISTINCT task FROM jobs WHERE state IN ('PENDING','RUNNING','VALIDATING')")}
+        target_tasks = set(quota['needed_tasks'])
+        if while_running:
+            # Recover an idle task even while another task remains productive.
+            target_tasks -= busy_tasks
+        elif busy_tasks & target_tasks or db.execute(
+                "SELECT count(*) FROM jobs WHERE state IN ('RUNNING','VALIDATING')").fetchone()[0]:
             return {'added': [], 'state': 'RESUME_EXISTING', 'next_retry_at': None, 'isolated': []}
+        if not target_tasks:
+            return {'added': [], 'state':'NO_STARVED_TASK', 'next_retry_at':None,
+                    'isolated':[], 'starved_tasks':[]}
         eligible = []
         for t in templates:
-            if t['task'] not in quota['needed_tasks']:
+            if t['task'] not in target_tasks:
                 continue
             row = db.execute('SELECT * FROM template_stats WHERE template_id=?', (t['template_id'],)).fetchone()
             if row is None:
@@ -167,8 +175,39 @@ def seed_probes(queue, templates, config, seed, policy, *, now=None):
             db.execute('INSERT INTO queue_meta VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',(key,json.dumps(record)))
             added.append(job)
     return {'added':added,'state':'PROBES_QUEUED' if added else 'NORMAL_SCHEDULER' if normal_available else 'COOLDOWN' if cooling else 'NO_PROBE',
-            'next_retry_at':min(cooling) if cooling else None,'isolated':isolated}
+            'next_retry_at':min(cooling) if cooling else None,'isolated':isolated,
+            'starved_tasks':sorted(target_tasks), 'capacity':capacity}
 
+
+
+class LiveProbeFeeder:
+    """Bounded task-specific recovery alongside the running coordinator.
+
+    Only idle needed tasks are considered. SQLite BEGIN IMMEDIATE serializes
+    reservation with the scheduler; no lease, counter or historical job is reset.
+    """
+    def __init__(self, project, root, seed, policy):
+        from source.data.production_templates import load_templates
+        self.project,self.root,self.seed,self.policy=project,root,seed,policy
+        self.config=base.read(root/'config.json')
+        self.contract=base.read(root/'run_contract.json')
+        self._check_frozen_inputs()
+        self.templates=load_templates(project/self.config['template_library'],
+                                      project/self.config['object_registry'])
+
+    def _check_frozen_inputs(self):
+        if (base.read(self.root/'config.json') != self.config
+                or base.read(self.root/'run_contract.json') != self.contract):
+            raise ValueError('Frozen collection metadata changed during live recovery')
+        for field,key in [('template_sha256','template_library'),('registry_sha256','object_registry')]:
+            if base.digest(self.project/self.config[key]) != self.contract[field]:
+                raise ValueError('Frozen catalogue changed during live recovery: '+key)
+
+    def refill(self, database, *, now=None):
+        from source.data.production_queue import ProductionQueue
+        self._check_frozen_inputs()
+        return seed_probes(ProductionQueue(Path(database)),self.templates,self.config,
+                           self.seed,self.policy,now=now,while_running=True)
 
 class PreflightChanged(RuntimeError):
     def __init__(self, report):
@@ -306,6 +345,7 @@ class Watchdog:
                  '--sampling-seed',str(report['sampling_seed']),'--maximum-restarts','3','--output',str(session/'supervisor')]
         session.mkdir(parents=True,exist_ok=True)
         last_activity=None;last_change=time.monotonic();stalled=False
+        live_feeder=None;last_live_refill=None
         with (session/'console.log').open('xb') as log:
             affinity=os.sched_getaffinity(0) if hasattr(os,'sched_getaffinity') else None
             try:
@@ -327,6 +367,17 @@ class Watchdog:
                             report['database']=str(active_database(self.root,self.project/c['queue_database']))
                         current=activity(report['database'])
                         if current!=last_activity:last_activity=current;last_change=time.monotonic()
+                        if ((self.root/'config.json').is_file() and
+                                (last_live_refill is None or time.monotonic()-last_live_refill>=60)):
+                            if live_feeder is None:
+                                live_feeder=LiveProbeFeeder(self.project,self.root,report['sampling_seed'],self.policy)
+                            recovery=live_feeder.refill(report['database'])
+                            previous_recovery=self.state.get('live_recovery',{})
+                            self.state['live_recovery']={**recovery,'checked_unix':time.time()}
+                            last_live_refill=time.monotonic()
+                            if (recovery['added'] or recovery['state']!=previous_recovery.get('state')
+                                    or recovery.get('starved_tasks')!=previous_recovery.get('starved_tasks')):
+                                self.event('LIVE_RECOVERY_PROBES_QUEUED' if recovery['added'] else 'LIVE_RECOVERY_STATUS',**recovery)
                     except sqlite3.DatabaseError as e:
                         from source.data.production_index import is_database_corruption
                         if is_database_corruption(e):recovering=True

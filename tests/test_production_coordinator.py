@@ -163,3 +163,75 @@ def test_single_template_runs_four_concurrent_workers_not_one(tmp_path,monkeypat
     monkeypatch.setattr(module,'register_artifact',register)
     result=module._coordinate(config,tmp_path/'parallel_fixture',4,42,append_candidates=True)
     assert len(started)==4 and result['inventory']['episodes']==4
+
+
+def test_live_lift_probe_is_dispatched_while_nut_session_stays_running(tmp_path,monkeypatch):
+    """Four busy Nut workers, then live recovery inserts Lift without restarting."""
+    import os,json,threading
+    from concurrent.futures import ThreadPoolExecutor
+    import source.data.production_coordinator as module
+    import source.data.production_parallel as parallel
+    from apps import collection_autorecover as recovery
+    # The coordinator is in a test thread; signal registration is covered by other tests.
+    monkeypatch.setattr(module.signal,'signal',lambda *a:None)
+    config=load_config(Path('configs/five_task_production.json'))
+    config.update(worker_policy='resource-adaptive-v1',workers=4,maximum_workers=4)
+    monkeypatch.setattr(parallel,'hardware_resources',lambda:{'cpu_capacity':8,'total_memory_bytes':64*1024**3,'available_memory_bytes':60*1024**3})
+    lift={'template_id':'blocked_lift','task':'lift','asset_hash':'a'*64,'base_seed':0,'perturbation_fields':['dx_m']}
+    nut={**lift,'template_id':'nut','task':'nut_assembly','asset_hash':'b'*64}
+    templates=[lift,nut]
+    monkeypatch.setattr(module,'load_templates',lambda *_:templates)
+    monkeypatch.setattr(module,'reconcile_episode',lambda *_:{'state':'NO_ARTIFACT'})
+    monkeypatch.setattr(module,'package_episode',lambda *a,**k:None)
+    monkeypatch.setattr(module,'stop_child',lambda _:None)
+    actual_schedule=module.enqueue_next;seeded=False
+    def schedule(q,*args,**kwargs):
+        nonlocal seeded
+        if not seeded:
+            with q.transaction() as db:
+                db.execute('INSERT INTO template_stats(template_id,scheduled,active,successful,failed,consecutive_failures,last_candidate_index) VALUES(?,10,0,4,6,3,9)',(lift['template_id'],))
+            seeded=True
+        return actual_schedule(q,*args,**kwargs)
+    monkeypatch.setattr(module,'enqueue_next',schedule)
+    nut_started=threading.Event();release_nut=threading.Event();lift_started=threading.Event();starts=[];nut_counts_at_lift=[];lock=threading.Lock()
+    class Process:
+        pid=os.getpid();returncode=0
+        def __init__(self,task,first_nut):self.task,self.first_nut=task,first_nut
+        def poll(self):
+            if self.task=='nut_assembly':
+                if not release_nut.is_set():return None
+                if not self.first_nut and not lift_started.is_set():return None
+            return 0
+    def spawn(command,**kwargs):
+        task=json.loads(Path(command[command.index('--job')+1]).read_text())['task']
+        with lock:
+            starts.append(task)
+            if starts.count('nut_assembly')==4:nut_started.set()
+            if task=='lift':
+                import sqlite3
+                with sqlite3.connect(root/'inventory.sqlite') as db:
+                    nut_counts_at_lift.append(db.execute("SELECT count(*) FROM jobs WHERE task='nut_assembly' AND state='RUNNING'").fetchone()[0])
+                lift_started.set()
+            first_nut=task=='nut_assembly' and starts.count('nut_assembly')==1
+        return Process(task,first_nut)
+    monkeypatch.setattr(module.subprocess,'Popen',spawn)
+    def register(q,j,root,**kwargs):
+        q.validating(j['job_id'],j['lease_token'])
+        return q.register(j['job_id'],j['lease_token'],lineage_hash=canonical_hash(j['job_id']),content_hash=canonical_hash(j['job_id']),relative_path='artificial/'+j['job_id'],seconds=1,success=True,verification={'passed':True,'artificial_test':True})
+    monkeypatch.setattr(module,'register_artifact',register)
+    root=tmp_path/'live_dispatch'
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future=executor.submit(module._coordinate,config,root,5,42,append_candidates=True)
+        try:
+            assert nut_started.wait(8)
+            q=ProductionQueue(root/'inventory.sqlite')
+            result=recovery.seed_probes(q,templates,config,42,recovery.options(),now=1000,while_running=True)
+            assert len(result['added'])==1
+            with q.connect() as db:
+                assert db.execute("SELECT count(*) FROM jobs WHERE task='nut_assembly' AND state='RUNNING'").fetchone()[0]==4
+        finally:
+            release_nut.set()
+        result=future.result(timeout=10)
+    assert lift_started.is_set() and starts.count('lift')==1 and starts.count('nut_assembly')==4
+    assert result['inventory']['episodes']==5
+    assert nut_counts_at_lift==[3]
