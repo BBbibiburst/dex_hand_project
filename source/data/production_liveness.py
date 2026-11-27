@@ -71,6 +71,15 @@ class LeaseKeeper:
         if self.error is not None:
             raise RuntimeError(f'Episode lease or runtime guard failed: {self.error}') from self.error
 
+    def fail(self, reason, **policy):
+        """Join renewal before releasing this lease for retry or quarantine.
+
+        Otherwise a pulse can observe our own PENDING transition as lost ownership
+        and stop every other worker. Genuine ownership loss still fails closed.
+        """
+        self.close()
+        return self.queue.fail(self.job['job_id'], self.job['lease_token'], reason, **policy)
+
     def close(self):
         self.finished.set()
         if self.thread is not None:

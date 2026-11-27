@@ -167,3 +167,65 @@ def test_quarantined_job_is_normal_lease_completion(tmp_path):
         keeper.check()
     finally:
         keeper.close()
+
+
+def test_retry_waits_for_inflight_pulse_before_releasing_lease(tmp_path, monkeypatch):
+    queue, claimed = job(tmp_path)
+    stopped = threading.Event()
+    entered = threading.Event()
+    release = threading.Event()
+    original = queue.heartbeat
+    pulses = []
+
+    def heartbeat(*args, **kwargs):
+        pulses.append(1)
+        if len(pulses) > 1:
+            entered.set()
+            assert release.wait(2)
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(queue, 'heartbeat', heartbeat)
+    keeper = LeaseKeeper(queue, claimed, stopped, interval=.01)
+    keeper.start()
+    assert entered.wait(1)
+    result = []
+    worker = threading.Thread(target=lambda: result.append(keeper.fail('retryable timeout', retryable=True)))
+    worker.start()
+    try:
+        assert keeper.finished.wait(1)
+        with queue.connect() as db:
+            row = db.execute('SELECT state,lease_token FROM jobs WHERE job_id=?', (claimed['job_id'],)).fetchone()
+        assert row['state'] == 'RUNNING' and row['lease_token'] == claimed['lease_token']
+    finally:
+        release.set()
+        worker.join(2)
+        keeper.close()
+    assert not worker.is_alive() and result == ['PENDING']
+    keeper.check()
+    assert not stopped.is_set()
+    retried = queue.claim()
+    assert retried['job_id'] == claimed['job_id'] and retried['lease_token'] != claimed['lease_token']
+    with pytest.raises(ValueError, match='Stale or invalid lease'):
+        queue.heartbeat(claimed['job_id'], claimed['lease_token'])
+
+
+def test_twenty_four_retry_completions_do_not_stop_other_workers(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    queue = ProductionQueue(tmp_path / 'queue.sqlite')
+    stopped = threading.Event()
+    keepers = []
+    for i in range(24):
+        queue.enqueue(f'retry{i}', 'lift', 'a' * 64, {})
+        claimed = queue.claim()
+        keeper = LeaseKeeper(queue, claimed, stopped, interval=.001)
+        keeper.start()
+        keepers.append(keeper)
+    try:
+        with ThreadPoolExecutor(max_workers=24) as pool:
+            states = list(pool.map(lambda k: k.fail('retryable failure', retryable=True), keepers))
+        assert states == ['PENDING'] * 24
+        assert not stopped.is_set()
+        assert all(k.error is None and not k.thread.is_alive() for k in keepers)
+    finally:
+        for k in keepers:
+            k.close()

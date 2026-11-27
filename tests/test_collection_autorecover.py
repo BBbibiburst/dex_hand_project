@@ -422,3 +422,24 @@ def test_live_feeder_rejects_changed_frozen_catalogue(watchdog,monkeypatch):
     (watchdog.project/'library.json').write_text('{"tampered":true}')
     with pytest.raises(ValueError,match='Frozen catalogue'):feeder.refill(q.path,now=1000)
     with q.connect() as db:assert db.execute("SELECT count(*) FROM jobs WHERE task='lift'").fetchone()[0]==0
+
+
+def test_runtime_guard_failure_preserves_cause_before_summary_replacement(watchdog):
+    apps=watchdog.project/'apps';apps.mkdir()
+    (apps/'five_task_production.py').write_text(
+        "import pathlib,sys,json\n"
+        "p=pathlib.Path(sys.argv[sys.argv.index('--output')+1]);p.mkdir(parents=True)\n"
+        "(p/'supervisor.json').write_text(json.dumps({'termination':'RUNTIME_GUARD_FAILED'}))\n")
+    detail={'termination':'RUNTIME_GUARD_FAILED','runtime_guard_failures':[
+        {'error':'RuntimeError: Executable source changed','record_path':'runtime/failures/old.json'}],
+        'stop_signals':[],'wall_budget_seconds':None,'integrity_failures':[]}
+    (watchdog.root/'summary.json').write_text(json.dumps(detail))
+    q=ProductionQueue(watchdog.directory/'q.sqlite');session=watchdog.directory/'sessions/actual'
+    (session/'preparation').mkdir(parents=True)
+    term,code=watchdog.run_child({'database':str(q.path),'sampling_seed':32000},session)
+    assert term=='RUNTIME_GUARD_FAILED' and code==0
+    assert app.decision(term,code)=='STOP_RUNTIME_GUARD_FAILED'
+    (watchdog.root/'summary.json').write_text('{}')
+    assert json.loads((session/'child_stop_summary.json').read_text())==detail
+    state=json.loads(watchdog.path.read_text())
+    assert state['last_stop_details']['runtime_guard_failures']==detail['runtime_guard_failures']

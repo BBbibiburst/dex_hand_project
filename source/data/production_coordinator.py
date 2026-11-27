@@ -351,9 +351,8 @@ def _coordinate(config, root, max_episodes, sampling_seed, resume=False, append_
                     if policy['stop_coordinator']:
                         stopped.set()
                     try:
-                        state = queue.fail(job["job_id"], job["lease_token"], str(error),
-                                           retryable=policy['retryable'], attempt_limit=policy['attempt_limit'],
-                                           details=policy)
+                        state = keeper.fail(str(error), retryable=policy['retryable'],
+                                            attempt_limit=policy['attempt_limit'], details=policy)
                     except ValueError:
                         state = 'LEASE_LOST_REQUIRES_RECONCILIATION'
                     with counts_lock:

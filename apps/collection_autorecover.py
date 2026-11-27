@@ -401,7 +401,18 @@ class Watchdog:
         term=base.read(p).get('termination') if p.exists() else None
         if term in ('STOP_OR_WALL_BUDGET','RUNTIME_GUARD_FAILED'):
             summary=self.root/'summary.json'
-            if summary.is_file():term=resource_stop(base.read(summary)) or term
+            if summary.is_file():
+                details=base.read(summary)
+                # Preserve the evidence before the next coordinator replaces summary.json.
+                snapshot=session/'child_stop_summary.json'
+                atomic_json(snapshot,details)
+                causes={k:details.get(k) for k in (
+                    'termination','stop_signals','wall_budget_seconds',
+                    'runtime_guard_failures','integrity_failures')}
+                self.save('CHILD_STOP_DIAGNOSTICS',last_stop_details=causes,
+                          last_stop_summary=str(snapshot))
+                self.event('CHILD_STOP_DIAGNOSTICS',summary=str(snapshot),**causes)
+                term=resource_stop(details) or term
         return term,code
 
     def run(self):
