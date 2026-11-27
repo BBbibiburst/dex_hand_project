@@ -10,9 +10,17 @@
     },
     "source/data/production_coordinator.py": {
       "before": "d454be06e919313377d8e65b0ed226bcbd802abc3e3193bf38fa5912ff9ff26c",
-      "after": "5bdeee5f2c1be8f9d66d8ffe355efa9e116d54c7c285294bc2de98be351b439a",
+      "after": "827aff6ba58feadebeec4fb32f20b0398fd2247720240d50936f72bb6b405e48",
       "approved_predecessors": [
-        "d454be06e919313377d8e65b0ed226bcbd802abc3e3193bf38fa5912ff9ff26c"
+        "d454be06e919313377d8e65b0ed226bcbd802abc3e3193bf38fa5912ff9ff26c",
+        "5bdeee5f2c1be8f9d66d8ffe355efa9e116d54c7c285294bc2de98be351b439a"
+      ]
+    },
+    "source/data/production_liveness.py": {
+      "before": "7eb977fe6ede65b7302473095c37381b9a83ee896b0893446f17cfa6130afdf9",
+      "after": "fc702c4d84f88503383fb849f84799267c7d6cee5b99b09b6e9efae0fb30538a",
+      "approved_predecessors": [
+        "7eb977fe6ede65b7302473095c37381b9a83ee896b0893446f17cfa6130afdf9"
       ]
     }
   }
