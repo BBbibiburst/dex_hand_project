@@ -1,0 +1,167 @@
+[
+  {
+    "task": "抬升",
+    "source": "lift_sugar_rgb_00",
+    "field": "sensor_tactile",
+    "shape": [
+      447,
+      712
+    ],
+    "dtype": "float32",
+    "range": [
+      0.0,
+      0.9017789363861084
+    ],
+    "video_frames": 447,
+    "video_rate": "20",
+    "selected_frame_indices": [
+      0,
+      446
+    ],
+    "selected_video_times": [
+      0.0,
+      22.3
+    ],
+    "record_timestamp_first_last": [
+      0.0,
+      22.30000000000427
+    ],
+    "files": {
+      "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+      "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/agentview.mp4": "29f3a6a17eaaa3f7db2038e41866ff5a923239ef348a84cabc9e2a41766b93fc",
+      "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88"
+    }
+  },
+  {
+    "task": "抓取放置",
+    "source": "pick_tomato_rgb_00",
+    "field": "sensor_tactile",
+    "shape": [
+      638,
+      712
+    ],
+    "dtype": "float32",
+    "range": [
+      0.0,
+      0.9430000185966492
+    ],
+    "video_frames": 638,
+    "video_rate": "20",
+    "selected_frame_indices": [
+      0,
+      637
+    ],
+    "selected_video_times": [
+      0.0,
+      31.85
+    ],
+    "record_timestamp_first_last": [
+      0.0,
+      31.850000000015942
+    ],
+    "files": {
+      "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+      "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/agentview.mp4": "fba9ec63e8613e7a1b5ccccb5ce8879d79dcf527576f565b43306145d2e5d979",
+      "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/manifest.json": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8"
+    }
+  },
+  {
+    "task": "堆叠",
+    "source": "stack_ring_rgb_01",
+    "field": "sensor_tactile",
+    "shape": [
+      376,
+      712
+    ],
+    "dtype": "float32",
+    "range": [
+      0.0,
+      0.9394312500953674
+    ],
+    "video_frames": 376,
+    "video_rate": "20",
+    "selected_frame_indices": [
+      0,
+      375
+    ],
+    "selected_video_times": [
+      0.0,
+      18.75
+    ],
+    "record_timestamp_first_last": [
+      0.0,
+      18.749999999999932
+    ],
+    "files": {
+      "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+      "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/agentview.mp4": "dc3339feda0b31b1a164c90aceb83a2507dbec118fc4e885fbd3b5ec251b9c11",
+      "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/manifest.json": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139"
+    }
+  },
+  {
+    "task": "推动",
+    "source": "push_tomato_rgb_00",
+    "field": "sensor_tactile",
+    "shape": [
+      605,
+      712
+    ],
+    "dtype": "float32",
+    "range": [
+      0.0,
+      1.0
+    ],
+    "video_frames": 605,
+    "video_rate": "20",
+    "selected_frame_indices": [
+      0,
+      604
+    ],
+    "selected_video_times": [
+      0.0,
+      30.2
+    ],
+    "record_timestamp_first_last": [
+      0.0,
+      30.200000000013926
+    ],
+    "files": {
+      "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+      "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/agentview.mp4": "7e7c0db50c16c030146dd603069ec0b6a07fed44d9cf957182475c641ab45d3b",
+      "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/manifest.json": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65"
+    }
+  },
+  {
+    "task": "螺母装配",
+    "source": "nut_retain_lower_rgb_00",
+    "field": "sensor_tactile",
+    "shape": [
+      599,
+      712
+    ],
+    "dtype": "float32",
+    "range": [
+      0.0,
+      0.9077436327934265
+    ],
+    "video_frames": 599,
+    "video_rate": "20",
+    "selected_frame_indices": [
+      0,
+      598
+    ],
+    "selected_video_times": [
+      0.0,
+      29.9
+    ],
+    "record_timestamp_first_last": [
+      0.0,
+      29.90000000001356
+    ],
+    "files": {
+      "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+      "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/agentview.mp4": "a95fbe6c81cdcee0a494cea5566555f9c8dcda5995ca65c85a0f764927e4403c",
+      "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9"
+    }
+  }
+]

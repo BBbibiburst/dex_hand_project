@@ -1,0 +1,10 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch06_sections__section_6_4_multiview_residual_refiner.tex
+Sum count: 1431
+Words in text: 1321
+Words in headers: 12
+Words outside text (captions, etc.): 98
+Number of headers: 1
+Number of floats/tables/figures: 3
+Number of math inlines: 15
+Number of math displayed: 1
+

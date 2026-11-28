@@ -1,0 +1,13 @@
+{
+  "status": "UPPER_BOUND_FAILED_TRANSPORT_C_NOT_RUN",
+  "folds": 4,
+  "p24_train_groups_only": true,
+  "historical_validation_read": false,
+  "historical_test_read": false,
+  "upper_bound_worst_required_domain_confusion": 0.5500363667479571,
+  "upper_bound_best_required_domain_confusion": 0.5946513376239984,
+  "upper_bound_passed": false,
+  "transport_c_executed": false,
+  "conclusion": "Training-Real sampling is still distinguishable from held-out Real sessions; current cross-session evaluation does not provide a reachable 0.90 confusion upper bound.",
+  "recommended_next_step": "Stratify or condition the Real target by acquisition configuration and task/object protocol, then repeat the upper-bound test before any nonparametric transport or GAN."
+}

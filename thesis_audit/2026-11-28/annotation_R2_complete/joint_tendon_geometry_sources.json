@@ -1,0 +1,142 @@
+{
+  "files": {
+    "assets/grippers/dex_hand/dex_hand.xml": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+    "assets/robots/rm75b/rm75b.xml": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+    "configs/robot_profiles/rm75b_dex_hand.json": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399"
+  },
+  "method": "current model compilation + mj_forward + MuJoCo renderer only, zero mj_step/IK/physical execution",
+  "joints": [
+    "finger_first_0_j",
+    "finger_second_0_j",
+    "finger_first_1_j",
+    "finger_second_1_j",
+    "finger_first_2_j",
+    "finger_second_2_j",
+    "finger_first_3_j",
+    "finger_second_3_j",
+    "thumb_rotate_j",
+    "thumb_first_j",
+    "thumb_second_j",
+    "thumb_third_j"
+  ],
+  "tendons": [
+    "finger_0_flexor",
+    "finger_1_flexor",
+    "finger_2_flexor",
+    "finger_3_flexor",
+    "thumb_opposition",
+    "thumb_flexor"
+  ],
+  "coefficient_matrix": [
+    [
+      0.003,
+      0.003,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.003,
+      0.003,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.003,
+      0.003,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.003,
+      0.003,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0085,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0035,
+      0.004,
+      0.004
+    ]
+  ],
+  "joint_anchor_ids": {
+    "arm": [
+      "joint1",
+      "joint2",
+      "joint3",
+      "joint4",
+      "joint5",
+      "joint6",
+      "joint7"
+    ],
+    "hand": [
+      "dexhand_finger_first_0_j",
+      "dexhand_finger_second_0_j",
+      "dexhand_finger_first_1_j",
+      "dexhand_finger_second_1_j",
+      "dexhand_finger_first_2_j",
+      "dexhand_finger_second_2_j",
+      "dexhand_finger_first_3_j",
+      "dexhand_finger_second_3_j",
+      "dexhand_thumb_rotate_j",
+      "dexhand_thumb_first_j",
+      "dexhand_thumb_second_j",
+      "dexhand_thumb_third_j"
+    ]
+  },
+  "unit_note": "fixed tendon coefficients have length per angular coordinate; diagram visualizes linear transmission, not literal routed tendons"
+}

@@ -1,0 +1,202 @@
+{
+  "files": {
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/agentview.mp4": "29f3a6a17eaaa3f7db2038e41866ff5a923239ef348a84cabc9e2a41766b93fc",
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/manifest.json": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8",
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/agentview.mp4": "fba9ec63e8613e7a1b5ccccb5ce8879d79dcf527576f565b43306145d2e5d979",
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/manifest.json": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139",
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/agentview.mp4": "dc3339feda0b31b1a164c90aceb83a2507dbec118fc4e885fbd3b5ec251b9c11",
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/manifest.json": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65",
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/agentview.mp4": "7e7c0db50c16c030146dd603069ec0b6a07fed44d9cf957182475c641ab45d3b",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/agentview.mp4": "a95fbe6c81cdcee0a494cea5566555f9c8dcda5995ca65c85a0f764927e4403c",
+    "source/grasping/executor.py": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "source/grasping/task_transfer.py": "34ba3b501df8d8d20b3b841407ed44ca9e5e387f1870cd1e470049ecfa727a52",
+    "source/grasping/stack_transfer.py": "ea508777ae8936b4f0fcd65c3ae91cfb2bdf2b9ec5d57a6432c980776cf08e75",
+    "source/grasping/push_transfer.py": "16707ff4d2e688b6e46dd109547cf8ba830b67548e2962e49675fd3791139f22",
+    "source/grasping/nut_transfer.py": "dad11466d10fd8e49a6c91dc6655748a2211d76eff6349735344866626aaa95f"
+  },
+  "cases": [
+    {
+      "task": "抬升",
+      "source": "lift_sugar_rgb_00",
+      "stage_code_and_frame": [
+        {
+          "label": "预抓取",
+          "code": 2,
+          "frame": 109
+        },
+        {
+          "label": "闭合",
+          "code": 4,
+          "frame": 204
+        },
+        {
+          "label": "抬升",
+          "code": 6,
+          "frame": 312
+        },
+        {
+          "label": "验证",
+          "code": 7,
+          "frame": 402
+        }
+      ],
+      "selection": "midpoint saved row of each registered stage, no new execution",
+      "display_crop_normalized": [
+        0.32,
+        0.25,
+        0.98,
+        0.98
+      ],
+      "decoded_video_frames": 447,
+      "nut_note": "transport/descend are source stage labels; detailed object-pose servo semantics checked in nut_transfer.py"
+    },
+    {
+      "task": "抓取放置",
+      "source": "pick_tomato_rgb_00",
+      "stage_code_and_frame": [
+        {
+          "label": "闭合",
+          "code": 4,
+          "frame": 192
+        },
+        {
+          "label": "运输",
+          "code": 8,
+          "frame": 428
+        },
+        {
+          "label": "释放",
+          "code": 10,
+          "frame": 545
+        },
+        {
+          "label": "任务验证",
+          "code": 12,
+          "frame": 623
+        }
+      ],
+      "selection": "midpoint saved row of each registered stage, no new execution",
+      "display_crop_normalized": [
+        0.32,
+        0.25,
+        0.98,
+        0.98
+      ],
+      "decoded_video_frames": 638,
+      "nut_note": "transport/descend are source stage labels; detailed object-pose servo semantics checked in nut_transfer.py"
+    },
+    {
+      "task": "堆叠",
+      "source": "stack_ring_rgb_01",
+      "stage_code_and_frame": [
+        {
+          "label": "运输",
+          "code": 8,
+          "frame": 30
+        },
+        {
+          "label": "下降",
+          "code": 9,
+          "frame": 43
+        },
+        {
+          "label": "释放",
+          "code": 10,
+          "frame": 86
+        },
+        {
+          "label": "任务验证",
+          "code": 12,
+          "frame": 301
+        }
+      ],
+      "selection": "midpoint saved row of each registered stage, no new execution",
+      "display_crop_normalized": [
+        0.32,
+        0.25,
+        0.98,
+        0.98
+      ],
+      "decoded_video_frames": 376,
+      "nut_note": "transport/descend are source stage labels; detailed object-pose servo semantics checked in nut_transfer.py"
+    },
+    {
+      "task": "推动",
+      "source": "push_tomato_rgb_00",
+      "stage_code_and_frame": [
+        {
+          "label": "预接近",
+          "code": 2,
+          "frame": 140
+        },
+        {
+          "label": "接触接近",
+          "code": 3,
+          "frame": 235
+        },
+        {
+          "label": "推动",
+          "code": 8,
+          "frame": 375
+        },
+        {
+          "label": "任务验证",
+          "code": 12,
+          "frame": 565
+        }
+      ],
+      "selection": "midpoint saved row of each registered stage, no new execution",
+      "display_crop_normalized": [
+        0.32,
+        0.25,
+        0.98,
+        0.98
+      ],
+      "decoded_video_frames": 605,
+      "nut_note": "transport/descend are source stage labels; detailed object-pose servo semantics checked in nut_transfer.py"
+    },
+    {
+      "task": "装配",
+      "source": "nut_retain_lower_rgb_00",
+      "stage_code_and_frame": [
+        {
+          "label": "闭合",
+          "code": 4,
+          "frame": 247
+        },
+        {
+          "label": "抬升",
+          "code": 6,
+          "frame": 341
+        },
+        {
+          "label": "调整/运输",
+          "code": 8,
+          "frame": 429
+        },
+        {
+          "label": "装配/下降",
+          "code": 9,
+          "frame": 490
+        }
+      ],
+      "selection": "midpoint saved row of each registered stage, no new execution",
+      "display_crop_normalized": [
+        0.32,
+        0.25,
+        0.98,
+        0.98
+      ],
+      "decoded_video_frames": 599,
+      "nut_note": "transport/descend are source stage labels; detailed object-pose servo semantics checked in nut_transfer.py"
+    }
+  ],
+  "role": "historical video frames, not strict replay re-render or new validation"
+}

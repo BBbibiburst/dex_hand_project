@@ -1,0 +1,10 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch07_sections__section_7_2_main_research_conclusions.tex
+Sum count: 671
+Words in text: 665
+Words in headers: 6
+Words outside text (captions, etc.): 0
+Number of headers: 1
+Number of floats/tables/figures: 0
+Number of math inlines: 5
+Number of math displayed: 0
+

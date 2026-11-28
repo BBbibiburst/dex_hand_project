@@ -1,0 +1,27 @@
+{
+  "equations_tables_algorithms": {
+    "thesis/body/ch01_introduction.tex": {
+      "equation_blocks_unchanged": true,
+      "table_blocks_unchanged": true,
+      "algorithm_blocks_unchanged": true
+    },
+    "thesis/body/ch02_simulation_platform.tex": {
+      "equation_blocks_unchanged": true,
+      "table_blocks_unchanged": true,
+      "algorithm_blocks_unchanged": true
+    },
+    "thesis/body/ch03_grasp_demonstrations.tex": {
+      "equation_blocks_unchanged": true,
+      "table_blocks_unchanged": true,
+      "algorithm_blocks_unchanged": true
+    }
+  },
+  "duplicate_labels": [],
+  "undefined_ref_cite": false,
+  "missing_character": false,
+  "overfull_hbox": [
+    "5.79674pt too wide) in paragraph at lines 82--82",
+    "2.0989pt too wide) in paragraph at lines 82--82"
+  ],
+  "build_completed": true
+}

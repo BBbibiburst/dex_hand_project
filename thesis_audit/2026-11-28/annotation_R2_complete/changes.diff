@@ -1,0 +1,404 @@
+--- before/thesis/body/ch01_introduction.tex
++++ after/thesis/body/ch01_introduction.tex
+@@ -25,7 +25,9 @@
+ 
+ 机器人仿真为控制和操作研究提供动力学、碰撞检测与接触计算基础。MuJoCo采用广义坐标描述多关节系统，并将接触和约束求解纳入动力学计算，支持执行器及机构约束建模\cite{todorov2012mujoco}。面向大规模策略学习，Isaac Gym通过GPU物理仿真和张量接口连接环境状态与学习过程，减少仿真与训练之间的数据传输开销\cite{makoviychuk2021isaacgym}。这类平台主要解决物体和机器人如何运动、如何发生接触的问题，而特定触觉传感器的输出还涉及接触量如何作用于敏感材料，以及形变或受力如何转换为信号。动力学求解器提供的接触信息并不能自动替代传感器模型；仿真管线的计算效率也不能直接说明触觉观测的物理精度。
+ 
+-触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，通过传感器的相机、光照和表面配置生成视觉触觉图像，并可利用真实背景图像修正部分外观差异\cite{wang2022tacto}。Taxim针对GelSight建立实例驱动的光学模型，并利用有限元标定的形变关系模拟标记位移\cite{si2022taxim}。前者侧重灵活渲染，后者进一步结合特定传感器的校准与形变传播，两者均依赖各自的几何和读出假设。对曲面阵列而言，还需明确感知单元的位置、朝向与覆盖区域，以及空间采样后信号处理的作用。本文通过MuJoCo原生触觉传感器和后续处理获得712维标量观测，其评价需关注阵列的空间响应与幅值关系，与视觉触觉的成像评价有所区别。原生接触响应、阵列采样与处理后幅值应分别描述，接触求解中的柔顺性与真实敏感材料内部形变也属于不同的建模层次。对于同一接触，感知区域覆盖方式会影响哪些单元产生响应，滤波和邻域传播又会改变最终的激活范围与幅值。由此得到的空间扩散，既可能反映传感器模型，也可能来自读出后的处理，不能仅凭热图外观相近就认定材料响应一致。分析曲面触觉阵列时，需要保留几何布局、接触采样和信号处理之间的区别，才能判断差异出现在哪一环节。因而，传感器布局和处理过程的可追溯性，是分析仿真与真实触觉差异的前提。
++物理引擎与操作研究框架承担不同职责。MuJoCo提供关节、执行器、固定腱以及接触约束等计算机制，具体机器人的任务状态机、触觉布局与数据记录仍需在其上组织。SAPIEN将PhysX、关节物体资产与渲染接口结合，侧重可交互物体及部件级操作\cite{xiang2020sapien}；其任务与资产组织方式为操作研究提供了另一种平台基础。本文选择MuJoCo描述欠驱动传动与接触，并自行组合模型、控制、任务和记录接口，使触觉读出能够随操作过程保存。这一选择依据当前机构和数据接口需求，不以引擎名称推断其他平台的欠驱动建模能力。
++
++触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，通过传感器的相机、光照和表面配置生成视觉触觉图像，并可利用真实背景图像修正部分外观差异\cite{wang2022tacto}。Taxim针对GelSight建立实例驱动的光学模型，并利用有限元标定的形变关系模拟标记位移\cite{si2022taxim}。前者侧重灵活渲染，后者进一步结合特定传感器的校准与形变传播，两者均依赖各自的几何和读出假设。对曲面阵列而言，还需明确感知单元的位置、朝向与覆盖区域，以及空间采样后信号处理的作用。本文通过MuJoCo原生触觉传感器和后续处理获得712维标量观测，其评价需关注阵列的空间响应与幅值关系，与视觉触觉的成像评价有所区别。阵列布局决定接触由哪些单元采样，信号处理进一步改变激活范围和幅值。因此，本文分别描述几何布局、原生读出与处理后响应，使后续差异分析能够定位到具体环节。
+ 
+ \subsection{灵巧手抓取生成与可执行操作}
+ \label{subsec:grasp_generation_execution}
+@@ -39,7 +41,11 @@
+ \subsection{专家示教与多模态操作数据}
+ \label{subsec:demonstrations_multimodal_data}
+ 
++灵巧手人工示教同时涉及手臂定位、多指姿态与接触保持。本文前期在仿真中尝试交互式示教时，观察到手指遮挡使局部接触难以从单一视角判断，多指协调和手臂运动又增加了反复调整成本。这是作者的定性操作经验。相关研究将感知、运动重定向与避碰作为遥操作系统的共同问题：AnyTeleop通过模块化手姿估计、重定向和运动生成适配不同手臂与手型，并报告快速运动跟踪丢失和手部自遮挡造成的姿态不可靠问题\cite{qin2023anyteleop}。因此，仿真中的人工示教同样需要合适的交互与反馈接口，自动构建可执行轨迹可以补充单纯依靠人工重复操作的采集方式。
++
+ 操作示教可以通过人工遥操作获得，也可以依托规划、控制器和已有轨迹自动生成。人工能够根据执行反馈处理复杂情形，但扩大采集规模需要重复操作与场景复位；自动生成便于覆盖初态变化，却依赖任务描述、感知和控制接口。MimicGen将少量源示教分解为物体中心的子任务片段，经坐标变换和插值适配到新场景，再实际执行并保留成功轨迹\cite{mandlekar2023mimicgen}。其扩展能力建立在已知子任务顺序、物体位姿和末端控制形式等条件之上，不能直接推广到任意手型和操作。关于离线示教学习的系统性研究还表明，示教质量、观测选择及历史信息会影响策略表现\cite{mandlekar2022demonstrations}。因此，轨迹生成数量与轨迹对学习的实际价值需要分别检查。
++
++仿真框架进一步将物理计算组织为可复用的操作环境。robosuite在MuJoCo上组合机器人、控制器、场景和观测接口，支持按任务配置环境并复用控制频率、奖励和回合设置\cite{zhu2020robosuite}。ManiSkill则基于SAPIEN提供多样关节物体与操作任务，并组织点云、RGB-D及专家示教以支持交互学习和示教学习\cite{mu2021maniskill}。前者强调模块化机器人环境，后者强调物体变化与技能泛化，两者都说明规模化数据采集需要同时设计任务接口、控制和记录流程。本文据此将特定欠驱动手与曲面触觉读出纳入统一环境，并单独检查示教记录的语义与时序。
+ 
+ 数据集研究从采集来源、环境覆盖和模态组成等方面扩展了操作学习的条件。BridgeData V2组织跨环境、物体和任务的操作记录，并以目标及语言条件学习检验数据的用途\cite{walke2023bridgedata}；DROID采用分布式遥操作和统一采集装置拓展真实场景，并通过联合训练评价其利用效果\cite{khazatsky2024droid}。二者关注环境和操作多样性，上海交通大学的RH20T则进一步将视觉、力觉、音频和机器人状态等记录纳入采集与标定流程\cite{fang2024rh20t}。这些工作表明，不同数据集解决的采集问题并不相同。轨迹数和帧数描述数据规模，模态可用性、动作记录方式、校准和任务验证则规定了数据的适用范围。触觉观测的有无及其传感机制，仍需依据各数据集的实际组成分别判断。
+ 
+@@ -50,11 +56,9 @@
+ 
+ Sim-to-Real研究需要处理模型近似和真实采集条件引起的差异。一类方法从仿真侧改善物理模型或扩大参数覆盖。Tobin等通过随机化纹理、光照和相机条件训练视觉定位模型，说明在特定任务中可以降低对单一渲染条件的依赖\cite{tobin2017randomization}；这一结果并不直接保证触觉材料或读出参数随机化同样有效。对触觉而言，传感器内部结构和敏感材料决定了接触到信号的转换。Sferrazza和D'Andrea利用有限元模型生成软材料形变和图像特征，以仿真力分布监督回归模型，并通过相机映射与校准应用于真实视觉触觉观测\cite{sferrazza2022simtoreal}。该路线以物理模型和标定条件连接两域，涉及的分布力真值来源也需与真实独立测量区分。因此，物理建模与数据驱动校准并非相互排斥，关键在于各阶段能够获得什么监督，以及模型误差会如何传递到最终读出。
+ 
+-与本文方法较为接近的是Narang等针对BioTac传感器开展的研究。他们建立三维有限元接触模型，分别以变分自编码器（Variational Autoencoder，VAE）学习仿真形变和真实电信号的潜表示，再利用有限的配对监督训练潜空间投影，实现两类观测之间的转换\cite{narang2021latentprojections}。其意义在于将复杂物理形变与传感器电响应分开表示，通过监督映射连接独立潜空间，而不是假定两套编码器自动对齐。本文面向途见科技灵巧手的712维处理后触觉，仿真端采用MuJoCo原生触觉读出，真实端使用既有实机记录，监督对应的构造条件与该研究不同。
++与本文方法较为接近的是Narang等针对BioTac传感器开展的研究。他们建立三维有限元接触模型，分别以变分自编码器（Variational Autoencoder，VAE）学习仿真形变和真实电信号的潜表示，再利用有限的配对监督训练潜空间投影，实现两类观测之间的转换\cite{narang2021latentprojections}。其意义在于将复杂物理形变与传感器电响应分开表示，通过监督映射连接独立潜空间，而不是假定两套编码器自动对齐。本文同样分别学习两域表示并研究潜变量映射，但观测和监督来源有所不同：目标为途见科技灵巧手的712维处理后标量响应，仿真读出来自MuJoCo原生touch及处理链，真实侧来自既有实机记录；监督由真实统计先验引导物理探针构造。本文因而既研究统计伪配对如何建立，也检验由此获得的映射向自然任务仿真输入推广时的适用性，最终评价完整触觉窗口的分布与结构。
+ 
+-具体而言，利用真实训练集（Real Train）拟合的高斯混合模型（Gaussian Mixture Model，GMM）及区域（Patch）响应统计，在固定索引坐标下描述响应中心和协方差，再查询16个Patch的响应字典，确定球形探针的位置和加载条件，经MuJoCo实际接触生成与Real窗口统计对应的伪配对仿真数据（Paired Sim）。这种对应属于统计伪配对，而非同步物理配对。
+-
+-Real VAE使用真实训练数据，Sim VAE同时使用自然任务仿真数据（Natural Sim）和Paired Sim训练，两者独立学习表示；随后冻结两个VAE，利用Paired Sim与对应Real窗口的潜变量，训练基于门控循环单元（Gated Recurrent Unit，GRU）的潜变量映射网络（Translator）。推理时，自然仿真输入先被编码，再经潜变量映射和真实域解码，生成完整四帧712维触觉，不再调用GMM或球形探针。因此，本文需要检验统计监督的可靠性，以及这种对应能否适用于自然任务输入。
++本文以真实训练集（Real Train）的高斯混合模型（Gaussian Mixture Model，GMM）和感知区域（Patch）统计指导探针接触，构造统计伪配对仿真数据（Paired Sim）；两域独立学习表示，再以门控循环单元（Gated Recurrent Unit，GRU）映射网络（Translator）连接潜变量。自然任务仿真数据（Natural Sim）在部署时经编码、映射和真实域解码生成完整四帧712维输出。第五章据此检验统计监督向自然任务输入的适用性。
+ 
+ 缺少配对监督时，迁移方法需要借助分布目标和额外结构约束。VAE通过重建与先验正则学习概率潜表示，但两域分别服从相同先验，并不保证潜变量各维具有相同语义\cite{kingma2014vae}。CycleGAN利用对抗目标和循环一致性限制非配对转换，UNIT则通过共享潜空间假设、权重共享及重建约束连接两域\cite{zhu2017cyclegan,liu2017unit}。这些方法为非配对重建提供了建模思路，同时也说明仅有两个边际分布不足以确定唯一对应。另一类域适应方法以任务表示为目标，例如域对抗神经网络（Domain-Adversarial Neural Network，DANN）在保留源域任务判别性的同时，通过梯度反转抑制域信息\cite{ganin2016dann}。这种特征适应与完整触觉输出重建具有不同目的：前者关注任务所需表示，后者还需要恢复激活位置、幅值及帧间关系。潜空间中域信息的减少，为表示适应提供证据，完整712维观测是否对齐则仍需在输出端检验。
+ 
+@@ -66,7 +70,7 @@
+   \label{tab:related_work_routes}
+   \begingroup
+   \setlength{\tabcolsep}{3pt}
+-  \begin{tabularx}{\textwidth}{p{0.10\textwidth}p{0.15\textwidth}XXX}
++  \begin{tabularx}{\textwidth}{p{0.10\textwidth}p{0.18\textwidth}XXX}
+     \toprule
+     技术方向 & 代表方法 & 主要输入与监督 & 解决的问题 & 适用条件及局限 \\
+     \midrule
+@@ -83,6 +87,8 @@
+   \endgroup
+ \end{table}
+ 
++表\ref{tab:related_work_routes}按输入与监督区分候选优化、执行、触觉建模和跨域转换。本文将平台与示教约束作为数据生成条件，再研究有限统计监督如何支持完整触觉重建；各方法的验证对象随之从候选构型、执行轨迹转向输出分布和输入对应关系。
++
+ \section{研究问题与技术难点}
+ \label{sec:research_problems}
+ 
+@@ -92,7 +98,7 @@
+ 
+ 可执行轨迹只有与观测建立可靠关联，才能形成可用示教数据。状态、动作、视觉与触觉记录可能具有不同采样频率，观测发生在动作执行前还是执行后，也会改变其所表达的控制关系。转换中的索引丢失、重复与模态缺失，会使格式合法的数据仍存在内容问题。本文需要保留执行来源、时间和字段语义，将单次仿真内部关联与独立实机记录区分开，并通过一致性检查和质量审计识别异常。这里需要解决的是数据证据与操作过程之间的对应，而非仅完成文件保存或格式转换。
+ 
+-触觉跨域重建进一步受到监督条件限制。现有Real与Sim记录缺少经过认证的同步物理配对，真实统计特征能够约束响应比例、中心和扩散等描述，却不足以唯一确定产生这些响应的接触状态。由此构造的探针数据可能对应多个真实目标，其覆盖也可能不同于自然任务输入。两域独立学习的潜表示还存在坐标与语义差异，相同维度或先验不能替代对应监督。因此，需要区分伪配对构造、域内重建和潜变量映射分别承担的作用，考察有限统计监督能否支持完整触觉输出，而不将训练配对上的拟合直接推广到自然仿真数据。
++触觉跨域重建需要将真实响应的统计特征转化为可用监督。响应比例、中心和扩散等描述约束了观测分布，但相近统计量仍可能来自不同接触状态。由此构造的探针数据可能对应多个真实目标，其覆盖也可能不同于自然任务输入。两域独立学习的潜表示还存在坐标与语义差异，相同维度或先验不能替代对应监督。因此，需要区分伪配对构造、域内重建和潜变量映射分别承担的作用，考察有限统计监督能否支持完整触觉输出，而不将训练配对上的拟合直接推广到自然仿真数据。
+ 
+ 重建结果还需要通过与目标相符的评价加以检验。某个域分类器接受生成样本，只能说明该判别边界下的读出发生变化；输出仍可能损失接触位置、幅值差异或帧间关系。分布接近也不自动证明生成结果依赖对应输入。真实采集会话之间的变化，还可能影响评价器对真实样本的接受与跨组泛化。本文因而需要分开检查域判别、分布质量和输入保持，并明确分类器的训练与冻结角色。评价器自身的分组表现和退化对照同样属于证据，据此判断优化改善所支持的结论范围。
+ 
+--- before/thesis/body/ch03_grasp_demonstrations.tex
++++ after/thesis/body/ch03_grasp_demonstrations.tex
+@@ -18,12 +18,12 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_overall_pipeline.pdf}
+-  \caption{抓取候选到专家示教的分级构建流程}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/grasp_evidence_pipeline.pdf}
++  \caption{Sugar Box同物体案例的候选几何、执行反馈与示教构建证据}
+  \label{fig:ch03_overall_pipeline}
+ \end{figure}
+ 
+-图\ref{fig:ch03_overall_pipeline}中，机器人约束筛选将对象相对目标转换为世界坐标下的机械臂末端目标，轨迹执行再连接接近、闭合、保持和后续操作。只有经过执行，才能获得状态、接触和物体运动等反馈；Strict质量验收进一步检查尾段稳定性。Lift提供抓持和抬升的基本案例，搬移与堆叠可在抓持前缀上构造任务后缀，推动和装配则需要额外的接触或姿态控制。五类任务共享示教数据合同，但不共享完全相同的物理执行逻辑。本章重点讨论示教如何形成，记录关联、数据转换与全量质量审计留在第四章。
++图\ref{fig:ch03_overall_pipeline}以Sugar Box贯穿候选几何与执行反馈：物体表面和保存的接触候选为几何评价提供输入，进化档案补充物理反馈，腕姿扩展与IK筛选再连接机械臂目标，连续命令进入实际执行与Strict回放。各画面保留原始记录身份，用于说明同一物体上的各环节，而非将不同候选拼成同一条优化轨迹。机器人约束筛选将对象相对目标转换为世界坐标下的机械臂末端目标，轨迹执行再连接接近、闭合、保持和后续操作。只有经过执行，才能获得状态、接触和物体运动等反馈；Strict质量验收进一步检查尾段稳定性。Lift提供抓持和抬升的基本案例，搬移与堆叠可在抓持前缀上构造任务后缀，推动和装配则需要额外的接触或姿态控制。五类任务共享示教数据合同，但不共享完全相同的物理执行逻辑。本章重点讨论示教如何形成，记录关联、数据转换与全量质量审计留在第四章。
+ 
+ \section{多来源抓取候选生成}
+ \label{sec:grasp_candidate_generation}
+@@ -54,12 +54,12 @@
+ 
+ 几何候选进入DexEvolve-style细化阶段后，评价对象从接触构型扩展到执行行为。DexEvolve原研究采用进化优化获得多样且稳健的灵巧抓取\cite{zurbrugg2026dexevolve}，本文保留候选群体、变异、交叉和档案管理的组织思想，并针对六驱动手及现有仿真执行接口作适配。平移、旋转和驱动比例分别施加扰动，驱动变化限制在有效范围内；交叉则组合不同候选的位姿与手部配置。候选在执行前还可进行接触修正和去穿透处理，使搜索不仅依赖最初的几何种子。
+ 
+-物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。档案在搜索中保留不同构型；其执行表现由后续机器人约束检查与任务验证评价。
+-
+-\begin{figure}[htbp]
+-  \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_candidate_sources.pdf}
+-  \caption{已有候选模块在分级生成流程中的职责}
++物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。档案按平移、旋转和驱动比例构成的嵌入计算候选距离；新候选若与最近档案项的距离小于新颖性阈值，仅在适应度更高时替换该项，否则作为新构型加入。父代选择再以局部密度修正适应度，减少拥挤邻域反复占用搜索预算；最终按适应度整理候选，供后续腕姿与机器人约束筛选。
++
++\begin{figure}[htbp]
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/candidate_geometry_feedback.pdf}
++  \caption{代表候选、进化档案、腕姿模板与条件PPO分支的保存记录}
+  \label{fig:ch03_candidate_sources}
+ \end{figure}
+ 
+@@ -67,7 +67,7 @@
+ 
+ 统一生成预算配置当前采用64个种子、150步GraspQP优化并执行12个候选；进化阶段使用24个初始个体、每代12个子代、16代，名义候选评价次数为216，随后向腕部扩展提供最多6个档案候选。这些是当前入口默认预算；历史批次及缓存复用的实际代价需另行区分。
+ 
+-图\ref{fig:ch03_candidate_sources}中的MJWarp PPO仅作为条件性补充，在格点阶段未解决且仍有可用模板时进行模板选择与手部驱动编辑。历史Top100路由中存在2条RL\_SUCCESS记录，但这并不构成强化学习优于其他模块的消融证据。整体而言，可微指标提供几何方向，进化反馈检验物理行为，格点扩展处理机器人可达性，后续编辑尝试解决局部未完成案例。各模块依赖不同输入和预算，应分别说明作用，不能混合命名为一个新的原创抓取优化算法。
++图\ref{fig:ch03_candidate_sources}展示同次运行保存的几何候选、进化代表候选及档案最优适应度；接触点与法向直接来自候选文件，六维驱动比例反映不同抓持配置。MJWarp PPO仅作为条件性补充，在格点阶段未解决且仍有可用模板时进行模板选择与手部驱动编辑，图中另以Refrigerator记录展示该分支保存的模板选择与六维手部编辑，和Sugar Box的几何、进化与腕姿记录分别标识。历史Top100路由中存在2条RL\_SUCCESS记录，但这并不构成强化学习优于其他模块的消融证据。整体而言，可微指标提供几何方向，进化反馈检验物理行为，格点扩展处理机器人可达性，后续编辑尝试解决局部未完成案例。各模块依赖不同输入和预算，应分别说明作用，不能混合命名为一个新的原创抓取优化算法。
+ 
+ \section{基于可达性约束的抓取筛选}
+ \label{sec:grasp_reachability}
+@@ -96,8 +96,8 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_reachability.pdf}
+-  \caption{局部腕姿态扩展与两个目标的可达性筛选}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/wrist_recorded_targets.pdf}
++  \caption{腕姿模板的保存目标、预检残差与历史执行结果}
+  \label{fig:ch03_reachability}
+ \end{figure}
+ 
+@@ -106,6 +106,8 @@
+ 不同约束在流程中承担不同职责。候选优化中的桌面距离惩罚限制明显不合理的初始几何，任务迁移中的保守下降高度控制局部接近，执行过程监测接触和目标误差，Strict则对尾部桌面接触及稳定性作最终判断。这些机制相互补充，但不应合并为一个未经实现的全局碰撞约束。对失败也应保留层次：无有效候选、静态IK残差过大、动态接近偏差、闭合后缺少对向接触和抬升失稳对应不同问题。只有明确失败发生在哪一层，才能避免把所有失败归因于抓取几何质量。
+ 
+ 局部搜索还受预算限制。模板构建对可执行候选排序后，只运行有限数量的完整尝试，并可优先复用已有参考。这有助于控制批量生成代价，但意味着最终保留下来的模板不等于全部可达候选，也不构成对整个抓取空间的穷举。本文将这种筛选视为面向具体机器人和源候选的约束连接环节，其有效范围由后续实际执行与验收结果共同确定。
++
++图\ref{fig:ch03_reachability}将腕姿编辑与已保存的预检结果对应。同次日志登记39个编辑中18个通过预抓取及抓取两目标检查，模板索引保存其中12个执行或复用模板。图中的残差是两目标误差的最大值；橙色模板虽然预检残差较小，实际执行仍失败。这说明腕姿可达性只解决目标求解条件，后续接触保持仍需通过物理执行检查。被预检排除候选的逐姿态状态未保存在该索引中，因此图中以原日志给出筛选规模，不另画未经记录的不可达姿态。
+ 
+ \section{连续逆运动学与轨迹验证}
+ \label{sec:grasp_trajectory_verification}
+@@ -127,8 +129,8 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_strict_replay.pdf}
+-  \caption{分段轨迹执行与Strict Replay质量验收}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/recorded_tracking_strict.pdf}
++  \caption{保存模型与关节状态的末端跟踪重建及同源历史Strict结果}
+  \label{fig:ch03_strict_replay}
+ \end{figure}
+ 
+@@ -140,6 +142,8 @@
+   \caption{Sugar Box历史抬升示教的位置命令、物体高度与接触反馈}
+   \label{fig:ch03_recorded_trajectory}
+ \end{figure}
++
++图\ref{fig:ch03_strict_replay}进一步利用另一条开发记录保存的模型快照与447帧关节状态，作静态正运动学重建。位置差为步末末端位置与同一行保存IK目标之差的范数，朝向差取四元数对应的最短旋转角；它们包含目标滤波、伺服和动力学跟踪影响，区别于IK求解器内部残差。关键阶段画面也仅恢复保存姿态。图中同源历史Strict文件登记322帧回放为FINAL\_VERIFIED，源序列与回放帧数分别标注，未在本次绘图中重新执行验证。
+ 
+ 已有普通Replay接口主要检查控制序列能否回放，以及尾段任务成功比例。其成功条件要求最后一个尾段标记为成功，且尾段成功比例至少为0.8。该接口并未完整表达严格示教所需的稳定性条件，因此另外采用图\ref{fig:ch03_strict_replay}所示的Strict Replay。在对应仿真环境中重放实际低层控制序列后，Strict同时检查抬升、速度、角速度、皮肤接触和环境碰撞等指标，当前final配置见表\ref{tab:ch03_strict_thresholds}。
+ 
+@@ -216,14 +220,16 @@
+ 
+ Stack除被操作物之外还需要支撑物的状态。源抓持能够提供手与物体的相对关系，但堆叠目标必须根据支撑物位置、物体尺寸和下降范围进一步确定。任务后缀通过运输、下降和释放形成支撑关系，再检查物体是否稳定放置。并非每个物体都适合当前堆叠定义，因此已有批次先选取task-valid对象域。对这一筛选应保留来源，不能将限定物体域上的成功比例写成对任意物体的覆盖能力。
+ 
+-\begin{figure}[htbp]
+-  \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch03_task_transfer.pdf}
+-  \caption{多任务示教的共用来源与任务专属控制关系}
++图\ref{fig:ch03_task_transfer}按各源序列保存的阶段选取中点画面。Lift展示抓持前缀与抬升，PickPlace展示抓持后的运输和释放；Stack所示记录从已有抓持状态后的运输阶段开始，支撑物贯穿下降和释放过程。推动与装配分别展示持续接触和抓持后姿态调整、下降的不同操作要求。
++
++\begin{figure}[htbp]
++  \centering
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/five_task_phase_records.pdf}
++  \caption{五类历史专家示教的实际阶段画面（按保存阶段中点选帧）}
+  \label{fig:ch03_task_transfer}
+ \end{figure}
+ 
+-Push通过手掌或手指几何建立推动接触，并依据物体当前状态与目标位置的偏差反馈推进。其执行验证同时检查接触建立和物体实际位移，触觉用于描述推动阶段的接触响应。图\ref{fig:ch03_task_transfer}将该过程单独表示，以对应桌面支撑条件下的持续接触控制。
++Push通过手掌或手指几何建立推动接触，并依据物体当前状态与目标位置的偏差反馈推进。其执行验证同时检查接触建立和物体实际位移，触觉用于描述推动阶段的接触响应。图\ref{fig:ch03_task_transfer}给出预接近、接触接近、推动及任务验证的历史画面，展示桌面支撑条件下的持续接触控制。
+ 
+ NutAssembly包含抓持Bolt、姿态伺服、平移、下降与装配结果评价。抓持阶段的细小偏差可能使物体倾斜，在后续下降前就丢失可用接触，因此不能把所有装配失败都归因于对孔精度。现有实现保留手部控制策略对承载过程的影响，也保留旧variant与后续几何版本不兼容的记录。局部成功可以用于分析某个控制条件是否值得保留，却不足以说明不同初态都能稳定装配，更不能把旧版本成功清单当成当前几何的最终验收。
+ 
+@@ -232,9 +238,9 @@
+ \section{抓取及示教质量实验}
+ \label{sec:grasp_quality_experiments}
+ 
+-本节区分历史批量路由状态与具有源manifest、数组及Strict结果的具体轨迹。文件核对不等于重新运行验证；候选成功、任务成功和FINAL通过具有不同分母，以下不将其合并，也不对不同条件的批次进行算法排名。
+-
+-历史批量记录见表\ref{tab:ch03_historical_batches}。Lift候选路由涉及100个对象标识，其中98条登记为LATTICE\_SUCCESS，2条为RL\_SUCCESS，说明该批次主要通过格点模板阶段获得可用结果，不能据此推断进化优化或强化学习的独立贡献。PickPlace与Push汇总虽然均登记100条SUCCESS，但前者全部为cached，后者有98条cached，因此不能解释为本轮重新完成的两百次物理执行。Stack在task-valid筛选域中得到43条成功与5条失败，而NutAssembly的100条记录以variant为单位，不等于100种独立操作物体。
++本节依次考察候选路由能否提供可用模板、局部扰动示教是否满足Strict条件，以及执行失败发生在哪些阶段。表\ref{tab:ch03_historical_batches}先集中列明历史批量记录的来源与统计单位，再用具有源数组和验证文件的具体案例分析接触保持与轨迹质量。
++
++Lift的100个对象标识中，98条由格点模板路由登记成功，2条由强化学习编辑路由登记成功，表明局部腕姿搜索是该批次主要的模板来源。PickPlace与Push分别登记100条SUCCESS，其缓存身份在表中单列；Stack在task-valid对象域中记录43条成功与5条失败；NutAssembly按variant记录100条成功。这些结果描述分级流程的产物覆盖，模块独立贡献则需要另设共同预算和初态的比较。
+ 
+ \begin{table}[htbp]
+  \centering\small
+@@ -253,7 +259,7 @@
+  \end{tabular}
+ \end{table}
+ 
+-批次版本也影响这些记录的适用范围。Top100汇总保存18项源码Hash，本次材料核对发现12项与当前相同、5项不同、1项对应文件缺失。虽然其中手部XML及部分候选模块一致，仍不能把当前全部执行逻辑回填成历史运行配置。缓存行中的零耗时也不代表候选优化不需要计算。该组结果可说明分级流程已产生多任务历史产物，却不能作为统一模型、统一初态与统一Strict合同下的综合通过率。
++上述批量表统一保留历史身份：Top100登记的18项源码Hash中，核对时12项相同、5项不同、1项对应文件缺失；cached表示复用结果，variant表示几何或配置变体，均以原记录单位计量。以下Sugar Box局部扰动与90次历史尝试另按各自来源和判据分析，避免以不同批次组成统一成功率。
+ 
+ 局部扰动示教采用Sugar Box的10条既有记录。每份均有对应manifest，包含不同seed及不同NPZ Hash，源文件Hash与原审计登记一致，10份历史Strict结果均为FINAL\_VERIFIED。表\ref{tab:ch03_sugar_strict}列出其最终抬升和尾段角速度，展示严格通过并不只依赖数组中的成功标签。各记录使用同一物体和相近源抓取，历史审计记载不同初始位置的两两距离为0.707--2.828~mm，属于局部条件变化，不是大范围工作空间或跨物体泛化测试。
+ 
+@@ -279,7 +285,7 @@
+  \end{tabular}
+ \end{table}
+ 
+-这些记录支持源模板附近存在多个历史Strict通过序列。seed和Hash提供可追溯性，却不能消除同物体、同模板关联；10/10不是对未见场景的通过率估计，也不提供候选算法的公平对照。
++10条序列均在源模板附近通过历史Strict条件，说明该抓取在所记录的小范围初态变化下能够保持承载与尾段稳定。该结果适用于同物体、相近源抓取的局部条件，评价重点是示教质量而非算法间排名。
+ 
+ \begin{table}[htbp]
+  \centering\small
+@@ -296,14 +302,14 @@
+  \end{tabular}
+ \end{table}
+ 
+-更大一组历史扰动生成报告登记90次尝试，其中46条接受、18条Strict不稳定、26条Lift失败，见表\ref{tab:ch03_generation_failures}。这组数据在本章保留为L1历史汇总，没有在本轮逐一重新认证全部90条原始轨迹。报告中的低抬升和角速度超限诊断还可能重叠，不应把所有诊断项当作互斥失败类别相加。该批次与上述Sugar示教存在来源重用，二者也不能累计成一百条新的独立验证。这些结果表明，能够生成几何或可达候选之后，承载与尾段稳定性仍需分别处理。
+-
+-典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}展示由对应原始视频提取的成功案例画面；两条失败记录仅呈现其结果，不使用其他运行的画面替代。
++表\ref{tab:ch03_generation_failures}的历史报告按90次尝试登记46条接受、18条Strict不稳定和26条Lift失败。Lift失败对应未完成成功抬升，Strict不稳定则说明完成前序执行后仍可能在尾段速度、角速度或接触条件上不合格。两层淘汰分别对应承载建立和稳定示教的不同要求。该表为历史汇总证据；附加诊断可能重叠，且与前述局部示教存在来源重用，故保留原分母分别报告。
++
++典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\ref{fig:ch03_examples}直接对照三条保存序列的物体高度、接触数和阶段。失败记录没有视频，图中使用其自身数组；不同记录长度与阶段进度分别呈现，便于检查抓持、运输和装配阶段的接触变化。
+ 
+ \begin{figure}[htbp]
+ \centering
+-\includegraphics[width=0.97\textwidth]{figures/revision_20261127/historical_examples.pdf}
+-\caption{历史成功Episode原视频画面与失败结果对照（非Strict回放截图，失败案例缺直接录像）}
++\includegraphics[width=0.97\textwidth]{figures/annotation_R2/assembly_failure_records.pdf}
++\caption{装配历史成功与失败记录的物体高度、接触反馈和阶段对照}
+ \label{fig:ch03_examples}
+ \end{figure}
+ 
+--- before/thesis/body/ch04_multimodal_data.tex
++++ after/thesis/body/ch04_multimodal_data.tex
+@@ -36,12 +36,12 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch04_carriers.pdf}
+-  \caption{数据载体及其转换关系示意}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/data_lineage_instances.pdf}
++  \caption{v4抓取放置与Sugar Box修复导出的实际来源、字段及行索引关系}
+  \label{fig:ch04_carriers}
+ \end{figure}
+ 
+-原始NPZ保存密集数组，Manifest记录来源和配置，规范modalities提供统一字段，LeRobot则提供后续训练使用的特征与索引组织，关系见图\ref{fig:ch04_carriers}。这些载体并非互相独立的数据集，每次转换都需要保留父来源。格式版本还应与语义合同分开：LeRobot的codebase\_version不等于五任务在线记录版本。真实触觉窗口也不具备仿真Episode的全部动作和RGB字段，不能为了统一存储而假定缺失模态已经存在。
++原始NPZ保存密集数组，Manifest记录来源和配置，规范modalities提供统一字段，LeRobot则提供后续训练使用的特征与索引组织，关系见图\ref{fig:ch04_carriers}。图中分别使用v4抓取放置包和Sugar Box修复导出两个实例：前者保留source\_episode、规范modalities及登记文件Hash，后者将源477行中的动作与观测按偏移映射为340帧LeRobot序列。两者属于不同执行来源，转换路径各自保留父来源与版本，来源哈希用于追踪而非推断独立Root。格式版本还应与语义合同分开：LeRobot的codebase\_version不等于五任务在线记录版本。真实触觉窗口也不具备仿真Episode的全部动作和RGB字段，不能为了统一存储而假定缺失模态已经存在。
+ 
+ \section{示教数据采集与关联机制}
+ \label{sec:data_recording_alignment}
+--- before/thesis/body/ch02_simulation_platform.tex
++++ after/thesis/body/ch02_simulation_platform.tex
+@@ -12,7 +12,7 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_architecture.pdf}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/platform_actual_architecture.pdf}
+   \caption{仿真平台模块及控制、观测数据流}
+   \label{fig:ch02_architecture}
+ \end{figure}
+@@ -41,14 +41,14 @@
+ \section{RM75B机械臂与途见科技自研灵巧手模型}
+ \label{sec:robot_model}
+ 
+-机器人组合模型由RM75B机械臂、途见科技自研灵巧手和安装底座构成。机械臂采用MuJoCo模型描述格式（MuJoCo Modeling Format，MJCF），以XML文件组织刚体、关节、执行器和传感器。该模型定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\_joint1至pos\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。
++机器人组合模型选用与实验室设备型号对应的RM75B机械臂及途见科技自研欠驱动灵巧手，并通过底座和末端安装变换完成组合。XML规定关节、驱动和刚体连接，STL保存连杆与皮肤形状，URDF保留机构描述参考；当前构建器实际加载XML及其网格资产，统一模型接口。本文在该资产配置上研究控制与感知布局，几何尺寸误差、动力学参数和触觉响应的实机标定作为后续验证内容。机械臂采用MuJoCo模型描述格式（MuJoCo Modeling Format，MJCF），以XML文件组织刚体、关节、执行器和传感器。该模型定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\_joint1至pos\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。
+ 
+ 机械臂各级连杆通过局部位置和四元数描述相对变换，末端定义right\_hand安装体和right\_hand\_site。安装体用于附着手部模型，末端site用于位姿读取及逆运动学计算，两者职责不同。组合构建器将手部安装到指定body，并施加机械臂描述中给定的附加旋转，其XYZ欧拉角为$(-90^\circ,-90^\circ,0^\circ)$。该旋转通过四元数参与坐标组合，必须与父body原有变换共同使用。因此，附加安装角不能直接解释为灵巧手在世界坐标系中的姿态。对于定义在几何局部坐标系中的点，其所属刚体坐标由旋转和平移共同确定；同样的变换规则也用于后续触觉采样点安装。
+ 
+ \begin{figure}[htbp]
+   \centering
+   \includegraphics[width=0.96\textwidth]{figures/revision_20261127/robot_model.pdf}
+-  \caption{当前XML/STL模型的MuJoCo静态渲染：机械臂、底座与灵巧手组合及手部局部（关节零位，非任务执行或实机照片）}
++  \caption{当前XML/STL模型的MuJoCo静态渲染：机械臂、底座与灵巧手组合及手部局部（关节零位）}
+   \label{fig:ch02_robot_model}
+ \end{figure}
+ 
+@@ -63,8 +63,8 @@
+ 
+ \begin{figure}[htbp]
+   \centering
+-  \includegraphics[width=0.97\textwidth]{figures/revision_20261127/ch02_drive.pdf}
+-  \caption{当前模型的关节与驱动关系}
++  \includegraphics[width=0.97\textwidth]{figures/annotation_R2/joint_tendon_geometry.pdf}
++  \caption{当前MuJoCo关节几何与XML固定腱系数、执行器对应关系}
+   \label{fig:ch02_drive}
+ \end{figure}
+ 
+@@ -154,14 +154,14 @@
+ \section{复杂曲面触觉阵列建模}
+ \label{sec:curved_tactile_array}
+ 
+-灵巧手指节和指尖具有不同曲率，直接在固定平面上均匀放置感知区域容易造成区域偏离表面、朝向不一致或局部重复覆盖。平台采用由皮肤STL网格派生采样点的方式，将阵列布局与所属刚体的几何关系连接起来。阵列按手指与手掌的感知区域组织，使采样位置随各指节刚体运动，并保持固定的通道顺序。与以图像合成为主要输出的视觉触觉模拟器\cite{wang2022tacto,si2022taxim}不同，本平台在曲面附近布置原生touch感知区域，输出有序标量阵列。
++灵巧手指节和指尖具有不同曲率，直接在固定平面上均匀放置感知区域容易造成区域偏离表面、朝向不一致或局部重复覆盖。平台按实验室灵巧手的指节、指尖和手掌感知区域组织阵列，由相应皮肤STL派生采样点，再将局部位置与朝向安装到所属指节刚体。该建模过程使仿真感知区域随机构运动，并保留区域与通道的对应。阵列按手指与手掌的感知区域组织，使采样位置随各指节刚体运动，并保持固定的通道顺序。与以图像合成为主要输出的视觉触觉模拟器\cite{wang2022tacto,si2022taxim}不同，本平台在曲面附近布置原生touch感知区域，输出有序标量阵列。
+ 
+ 每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\times8$，指尖为$7\times8$；手掌设置$7\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\ref{tab:ch02_patch_layout}。各区域的采样点分别由所属STL计算，以适应指节、指尖与手掌的曲率差异。
+ 
+ \begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.97\textwidth]{figures/revision_20261127/tactile_layout.pdf}
+-\caption{当前MuJoCo模型中的16个Patch与712个box感知区域（颜色区分局部阵列，不表示真实压力或实机标定电极）}
++\caption{当前MuJoCo模型中的16个Patch与712个box感知区域（颜色区分局部阵列）}
+ \label{fig:ch02_patch_order}
+ \end{figure}
+ 
+@@ -208,6 +208,17 @@
+     \hline
+   \end{tabular}
+ \end{table}
++
++三类策略的区别来自表面几何：指节适合沿主要轴向组织截面，指尖需要处理封闭弯曲外壳与极点，手掌则通过投影三角形保留不规则网格。图\ref{fig:ch02_sampling_steps}给出实际采样函数的中间输出。指节和指尖先从STL识别密集外壳样本，再按各自Bezier配置拟合并取参数单元中心；手掌在PCA参数域设置格点，通过三角形定位与重心插值恢复三维位置。图中从原始几何到密集样本、再到最终阵列的变化，展示了规则索引如何依附不同曲面，而非将三种形状套用同一平面网格。
++
++\begin{figure}[p]
++ \centering
++ \includegraphics[width=0.98\textwidth,height=0.80\textheight,keepaspectratio]{figures/annotation_R2/sampling_processes.pdf}
++ \caption{三类曲面采样的实际中间输出：STL与局部轴、外壳或参数域、最终采样中心}
++ \label{fig:ch02_sampling_steps}
++\end{figure}
++
++对图中三个代表区域，最终采样点最近邻距离的最小值与中位数分别为：指节3.609/3.910~mm，指尖1.504/3.034~mm，手掌4.820/4.866~mm。距离按各点到其余采样点的最小欧氏距离计算，描述本次几何布局中的间距变化；曲率、感知区尺寸及接触覆盖还需结合各自模型分析。
+ 
+ 网格采样点还需安装到正确的刚体上。程序先应用skin geom的局部旋转和平移，再根据行列相邻点差分构造切线。列方向归一化为$\boldsymbol e_x$，行方向经Gram--Schmidt正交化得到$\boldsymbol e_y$，法向由两者叉乘确定，局部方向矩阵为$[\boldsymbol e_x,\boldsymbol e_y,\boldsymbol n]$。随后依据点相对body或Patch参考位置进行外向修正。该步骤是保持感知区朝向一致的几何启发式，不能称为已经认证的实物表面法线。图\ref{fig:ch02_frame}展示局部切线与叉乘法向，特意区分外向修正前的坐标构造。
+ 
+@@ -365,6 +376,8 @@
+ 
+ 上述检查确认了平台的模型、控制和观测接口，以及五条指定历史记录的数组有效性与基本采样关系。抓取候选如何转化为稳定操作，是下一章的研究问题；第四章则进一步检查这些执行记录的时序、来源及数据质量。真实触觉标定与跨域物理对应将在触觉重建的问题定义中统一讨论。
+ 
++五类任务使用桌面、机器人及任务对象组成场景，初始条件由物体位姿、手部配置和目标区域确定。Lift以桌面物体为对象，依次接近、闭合、保持和抬升，任务接口按物体高度判断抬升结果；严格示教另检查尾段稳定性。PickPlace增加目标区域，抓持后运输、下降、释放并检查物体进入目标且手部离开。Stack在场景中增加支撑物，搬移目标物体到支撑面，释放后检查物体间接触与持续稳定。Push在桌面支撑下建立手物接触，反馈推动至目标区域，并检查位置、竖直范围与平面速度。NutAssembly场景包含待操作件与固定装配结构，抓持后调整姿态、运输和下降，按具体几何版本检查对准、插入及稳定状态。表中历史案例对应Sugar Box抬升、Tomato Soup Can搬移与推动、Stacking Ring堆叠及保留抓持命令的装配记录；各历史结果按自身manifest和版本解释，当前接口用于说明任务定义。
++
+ 五类任务分别考察抓持后的垂直抬升、搬移与放置、物体堆叠、桌面推动以及螺母装配。图\ref{fig:ch02_historical_scenes}从上述五条记录的原始场景视频中提取首帧与末帧，展示物体、机械臂和灵巧手的相对位置及场景变化。起终帧用于说明各任务的操作对象与环境，任务结果仍按相应执行记录和验证条件判定。各任务的轨迹构建与执行条件在第三章进一步介绍。
+ 
+ \begin{figure}[p]
+--- before/thesis/body/ch05_sections/section_5_3.tex
++++ after/thesis/body/ch05_sections/section_5_3.tex
+@@ -2,7 +2,7 @@
+ \section{GMM统计先验引导的仿真触觉伪配对构建}
+ \label{sec:ch05_gmm_pseudopairs}
+ 
+-在缺少同步物理配对时，可利用的监督来自真实触觉的统计结构，包括响应聚集位置、扩散范围及多峰模式。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再经原有传感器读取与处理获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。这种构造将统计目标转为可执行的探针条件，为后续潜变量映射提供伪配对监督。
++真实触觉的响应聚集位置、扩散范围及多峰模式，为仿真探针的接触构造提供统计指导。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再经原有传感器读取与处理获得触觉输出。图\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。这种构造将统计目标转为可执行的探针条件，为后续潜变量映射提供伪配对监督。
+ 
+ \begin{figure}[htbp]
+   \centering
+--- before/thesis/front/abstract.tex
++++ after/thesis/front/abstract.tex
+@@ -1,8 +1,8 @@
+ % !TeX root = ../thesis.tex
+ \begin{cabstract}
+-灵巧手操作需要通过多指接触完成抓取、搬移与装配，示教采集涉及反复操作、物体复位和设备维护。仿真便于控制初始条件、重复执行任务并记录完整状态，为扩大示教覆盖和分析接触过程提供了实验手段。然而，抓取方案的可执行性、示教数据的时序一致性以及仿真触觉与真实触觉的差异，直接影响这些数据的使用。本文围绕上述问题，研究灵巧手仿真示教数据构建与触觉跨域重建方法。
++灵巧手操作需要通过多指接触完成抓取、搬移与装配，示教采集涉及反复操作、物体复位和设备维护，多指接触还增加了安全控制与操作协调难度。仿真便于控制初始条件、批量生成并重复执行任务，以及记录完整状态和接触信息，为扩大示教覆盖和分析接触过程提供了实验手段。然而，抓取方案的可执行性、示教数据的时序一致性以及仿真触觉与真实触觉的差异，直接影响这些数据的使用。本文围绕上述问题，研究灵巧手仿真示教数据构建与触觉跨域重建方法。
+ 
+-构建RealMAN（睿尔曼智能）RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，集成控制、任务执行与传感器记录。根据指节、指尖和手掌的几何差异构建曲面阵列，获得16个触觉区域、712维处理后观测。在此基础上，适配GraspQP官方评价指标，参考DexEvolve设计实现进化搜索，通过腕部姿态扩展、可达性、碰撞约束和连续轨迹检查，将抓取候选转化为专家示教。Sugar Box的10条历史局部扰动记录均通过严格回放验证，验证范围为同一物体及相近源抓取。
++构建RealMAN（睿尔曼智能）RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，集成控制、任务执行与传感器记录。根据指节、指尖和手掌的几何差异构建曲面阵列，获得16个触觉区域、712维处理后观测，五类任务各一条历史记录的触觉数组均通过维度、有限性与非负性检查。在此基础上，将GraspQP官方评价指标适配到六驱动手部代理，参考DexEvolve设计实现进化搜索，并结合腕姿格点扩展、IK可达性、碰撞约束和连续轨迹检查，将抓取候选转化为专家示教，并对抬升轨迹进行严格回放验证。Sugar Box的10条历史局部扰动记录均通过严格回放验证，验证范围为同一物体及相近源抓取。
+ 
+ 针对多模态示教的记录与使用，建立状态和动作的字段定义、执行前后观测的时序配对及数据转换流程，并结合来源、数值、连续性和重复关系开展分层质量检查。指定Sugar Box修复数据的340行导出动作、状态命令区及触觉与源记录对应字段的最大绝对差均为0；同时识别出历史命令不连续和状态字段缺失问题，明确不同版本数据的适用条件。
+ 
+@@ -12,9 +12,9 @@
+ \end{cabstract}
+ 
+ \begin{eabstract}
+-Dexterous manipulation relies on multi-finger contact for grasping, transport, and assembly. Collecting demonstrations requires repeated operation, object resetting, and equipment maintenance. Simulation enables controlled initial conditions, repeatable execution, and access to complete states, supporting broader demonstration coverage and contact analysis. The usefulness of these data depends on executable grasps, consistent recording, and the gap between simulated and real tactile responses. This thesis investigates simulation-based demonstration data construction and cross-domain tactile reconstruction.
++Dexterous manipulation relies on multi-finger contact for grasping, transport, and assembly. Collecting demonstrations requires repeated operation, object resetting, and equipment maintenance, while multi-finger contact adds safety and coordination demands. Simulation enables controlled initial conditions, batch generation, repeatable execution, and access to complete states and contact information, supporting broader demonstration coverage and contact analysis. The usefulness of these data depends on executable grasps, consistent recording, and the gap between simulated and real tactile responses. This thesis investigates simulation-based demonstration data construction and cross-domain tactile reconstruction.
+ 
+-A multi-task platform integrates a RealMAN RM75B manipulator and an underactuated dexterous hand developed by Tachin-Tech, including control, task execution, and sensor recording. Curved arrays adapted to the finger segments, fingertips, and palm provide 16 sensing patches and 712 processed channels. Official GraspQP metrics are adapted, and evolutionary search is implemented with reference to DexEvolve. Wrist-pose expansion, reachability, collision constraints, and continuous-trajectory checks connect grasp candidates to expert demonstrations. Ten historical Sugar Box records with local perturbations pass strict replay verification within the scope of one object and closely related source grasps.
++A multi-task platform integrates a RealMAN RM75B manipulator and an underactuated dexterous hand developed by Tachin-Tech, including control, task execution, and sensor recording. Curved arrays adapted to the finger segments, fingertips, and palm provide 16 sensing patches and 712 processed channels. One historical record from each of five tasks passes tactile dimension, finiteness, and non-negativity checks. Official GraspQP metrics are adapted to a six-drive hand surrogate, and evolutionary search is implemented with reference to DexEvolve. Wrist-pose lattice expansion, inverse-kinematics reachability, collision constraints, and continuous-trajectory checks connect grasp candidates to expert demonstrations, with strict replay verification for lifting trajectories. Ten historical Sugar Box records with local perturbations pass strict replay verification within the scope of one object and closely related source grasps.
+ 
+ Multimodal recording defines state and action fields, pre-action and post-action temporal pairing, and format conversion. Layered checks examine provenance, numerical validity, continuity, and duplication. For a specified repaired Sugar Box export, the maximum absolute differences for the action, command portion of the state, and tactile fields are all zero across 340 rows relative to their corresponding source fields. Historical command discontinuities and missing state fields are also identified, establishing version-specific conditions for data use.
+ 
+--- before/thesis/reference.bib
++++ after/thesis/reference.bib
+@@ -353,3 +353,39 @@
+   url = {https://mujoco.readthedocs.io/en/stable/computation/index.html},
+   citedate = {2026-11-20}
+ }
++
++% Annotation R2: verified original publications; existing metadata retained.
++@online{zhu2020robosuite,
++  title = {robosuite: A Modular Simulation Framework and Benchmark for Robot Learning},
++  author = {Zhu, Yuke and Wong, Josiah and Mandlekar, Ajay and Mart{\'i}n-Mart{\'i}n, Roberto},
++  year = {2020},
++  note = {arXiv:2009.12293v1},
++  citedate = {2026-11-28},
++  url = {https://arxiv.org/abs/2009.12293v1}
++}
++@inproceedings{xiang2020sapien,
++  title = {{SAPIEN}: A SimulAted Part-Based Interactive ENvironment},
++  author = {Xiang, Fanbo and Qin, Yuzhe and Mo, Kaichun and Xia, Yikuan and Zhu, Hao and Liu, Fangchen and Liu, Minghua and Jiang, Hanxiao and Yuan, Yifu and Wang, He and Yi, Li and Chang, Angel X. and Guibas, Leonidas J. and Su, Hao},
++  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
++  year = {2020},
++  citedate = {2026-11-28},
++  url = {https://openaccess.thecvf.com/content_CVPR_2020/html/Xiang_SAPIEN_A_SimulAted_Part-Based_Interactive_ENvironment_CVPR_2020_paper.html}
++}
++@inproceedings{mu2021maniskill,
++  title = {{ManiSkill}: Generalizable Manipulation Skill Benchmark with Large-Scale Demonstrations},
++  author = {Mu, Tongzhou and Ling, Zhan and Xiang, Fanbo and Yang, Derek and Li, Xuanlin and Tao, Stone and Huang, Zhiao and Jia, Zhiwei and Su, Hao},
++  booktitle = {Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks},
++  volume = {1},
++  year = {2021},
++  citedate = {2026-11-28},
++  url = {https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/eda80a3d5b344bc40f3bc04f65b7a357-Abstract-round2.html}
++}
++@inproceedings{qin2023anyteleop,
++  title = {{AnyTeleop}: A General Vision-Based Dexterous Robot Arm-Hand Teleoperation System},
++  author = {Qin, Yuzhe and Yang, Wei and Huang, Binghao and Van Wyk, Karl and Su, Hao and Wang, Xiaolong and Chao, Yu-Wei and Fox, Dieter},
++  booktitle = {Proceedings of Robotics: Science and Systems},
++  year = {2023},
++  citedate = {2026-11-28},
++  doi = {10.15607/RSS.2023.XIX.015},
++  url = {https://www.roboticsproceedings.org/rss19/p015.html}
++}

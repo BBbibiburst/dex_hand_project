@@ -1,0 +1,206 @@
+{
+  "files": {
+    "assets/maniskill/ycb/models/004_sugar_box/textured.obj": "7bd97d5cb4baaa5a5df4818384c4e2cb2717461d7ef085396e89ff9bc26283c9",
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/graspqp_seed/manifest.json": "0c657710df9f42bead734d5588d0c8aa084615ce1216cf9b6d0d00ad98277b78",
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/manifest.json": "c7bccc306dbd27eb0d94342efcf718b9652f721d969eb490db57a9e09edb9485",
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/run.json": "5f61878749dedbadc64e37533bf94afe3aafcd00464bf15e1c0ce53ef9dfb078",
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/dexevolve_archive.json": "f25f35ebba5aecc9fdd4664962a33031b0779cd772bd33422c1f953eab617c75",
+    "outputs/dex_hand_top100_v2/lattice/ycb_004_sugar_box/index.json": "55513f4694daef388ee393402e2944c3bbe76147c61c4871485ab2ea0e09db1d",
+    "outputs/dex_hand_top100_v2/rl/gso_3D_Dollhouse_Refrigerator/best_trajectory/manifest.json": "c3e9695ebef24daf370768f309956d670e01b54f822853a2761ea7b189dcf40d",
+    "outputs/dex_hand_top100_v2/logs/ycb_004_sugar_box.log": "9ffb57de61b11d841bc656e3d5ab44212f56912d5cc3c990595c33fc30b112fb",
+    "source/rl/grasp_edit/templates.py": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309",
+    "source/grasping/executor.py": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb"
+  },
+  "method": "stored candidate contact points/normals and run history; current source mesh read-only centering/scaling; no optimization/IK/model inference or mj_step",
+  "selected_candidates": {
+    "graspqp_seed": 4000054,
+    "final": 3000007
+  },
+  "no_causal_seed_claim": "Different representative candidates from same run, not a one-to-one tracked candidate optimization trajectory",
+  "lattice_precheck_role": "maximum residual across pregrasp and grasp, not separately stored residuals",
+  "missing": "Unreachable candidates were filtered before template index; no per-candidate rejected IK state is available here. Orange means physical execution failed after precheck, NOT IK unreachable.",
+  "PPO": {
+    "source": "outputs/dex_hand_top100_v2/rl/gso_3D_Dollhouse_Refrigerator/best_trajectory/manifest.json",
+    "role": "different object Refrigerator conditional route, saved 6D normalized edit; no rerun and no claim of same Sugar Box execution",
+    "success": true
+  },
+  "archive_history": [
+    {
+      "generation": 1.0,
+      "archive_size": 29.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 2.0,
+      "archive_size": 33.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 3.0,
+      "archive_size": 39.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 4.0,
+      "archive_size": 44.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 5.0,
+      "archive_size": 47.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 6.0,
+      "archive_size": 50.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 7.0,
+      "archive_size": 53.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 8.0,
+      "archive_size": 59.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 9.0,
+      "archive_size": 61.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 10.0,
+      "archive_size": 64.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 11.0,
+      "archive_size": 67.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 12.0,
+      "archive_size": 70.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 13.0,
+      "archive_size": 76.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 14.0,
+      "archive_size": 80.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 15.0,
+      "archive_size": 86.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    },
+    {
+      "generation": 16.0,
+      "archive_size": 88.0,
+      "best_fitness": 49.65646289434433,
+      "best_success": 1.0,
+      "lifetime": 1.0,
+      "transport_contact_fraction": 1.0,
+      "verify_contact_fraction": 1.0,
+      "distance_energy": 0.006403664580144051,
+      "penetration_energy": 0.000873905224499063
+    }
+  ]
+}

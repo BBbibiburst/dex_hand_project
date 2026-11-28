@@ -1,0 +1,15 @@
+{
+  "files": {
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "source/robots/builder.py": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356",
+    "source/control/composite.py": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+    "source/envs/rl_env.py": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+    "configs/robot_profiles/rm75b_dex_hand.json": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399",
+    "source/data/production_artifacts.py": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865",
+    "source/data/lerobot_recorder.py": "cf3d184d7d57f202ed962399e16e6913a9c65002e287b82d853b0b558ed8ac0c"
+  },
+  "model_thumbnail": "current compiled zero-joint model; see joint_tendon_geometry_sources.json",
+  "response": "all 447x712 rows of historical Lift sensor_tactile; no simulated new response",
+  "diagram": "control/observation/data are distinct arrows; LeRobot is conversion capability, not a claim that every recorded episode is exported",
+  "timing": "profile control_dt .05 s and builder physics timestep .001 s"
+}

@@ -1,0 +1,55 @@
+{
+  "files": {
+    "assets/grippers/dex_hand/meshes/skin_0_0_p.STL": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+    "assets/grippers/dex_hand/meshes/skin_0_2_p.STL": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+    "assets/grippers/dex_hand/meshes/skin_palm_p.STL": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+    "source/sensors/tactile/fitting/segment.py": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd",
+    "source/sensors/tactile/fitting/fingertip.py": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b",
+    "source/sensors/tactile/fitting/projection.py": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f"
+  },
+  "records": [
+    {
+      "patch": "skin_0_0_p",
+      "shape": [
+        4,
+        8
+      ],
+      "mesh_triangles": 2732,
+      "raw_shell_sample_count": 576,
+      "nearest_neighbor_mm": {
+        "min": 3.608579536235248,
+        "median": 3.9101104007564773
+      },
+      "method": "actual production geometry functions; no MuJoCo step or model training"
+    },
+    {
+      "patch": "skin_0_2_p",
+      "shape": [
+        7,
+        8
+      ],
+      "mesh_triangles": 3806,
+      "raw_shell_sample_count": 504,
+      "nearest_neighbor_mm": {
+        "min": 1.5039037623079938,
+        "median": 3.033681872938178
+      },
+      "method": "actual production geometry functions; no MuJoCo step or model training"
+    },
+    {
+      "patch": "skin_palm_p",
+      "shape": [
+        7,
+        16
+      ],
+      "mesh_triangles": 1768,
+      "raw_shell_sample_count": null,
+      "nearest_neighbor_mm": {
+        "min": 4.820185994011761,
+        "median": 4.866285885093909
+      },
+      "method": "actual production geometry functions; no MuJoCo step or model training"
+    }
+  ],
+  "metric_role": "descriptive geometry only; no new contact performance, coverage advantage or physical calibration claim"
+}

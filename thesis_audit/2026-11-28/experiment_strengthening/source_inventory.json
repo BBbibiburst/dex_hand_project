@@ -1,0 +1,2669 @@
+{
+  "active_sources": {
+    "thesis/thesis.tex": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+    "thesis/front/cover.tex": "406722c207f90bbe06001596e44841613f9479a438c5feb6c4ef282bcc029e42",
+    "thesis/front/abstract.tex": "85bc09d7c6b66beb17bc6299041f2ed4c4fbf304e98f09770a19e58e2fdde26e",
+    "thesis/body/ch01_introduction.tex": "b99d7efbb7eece491a0ebef6bf4882104dcfa56fbd395cea9a4ac4a03e64e290",
+    "thesis/body/ch02_simulation_platform.tex": "8144eb0b26188c319318b44fc10e263aa414a251a76b423fe9a0cfb4a913b3d6",
+    "thesis/body/ch03_grasp_demonstrations.tex": "761ab3a1e6b8b10d727080ea54c9b5f7038e43227ca8bedd913dd654da61e437",
+    "thesis/body/ch04_multimodal_data.tex": "09c855abd76e50bc39f74a44924a9f18d4f5e8ea89c64be8953ab91251c94543",
+    "thesis/body/ch05_dual_domain_reconstruction.tex": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+    "thesis/body/ch05_sections/section_5_1.tex": "bb8f2c7c7aa1bf22db27d3cd1d0962d9650cb77e0c6aef6b2739491474ee84f1",
+    "thesis/body/ch05_sections/section_5_2.tex": "9af8a7f2465dd6f65211f9670ec8e32fd3d69543cf59a76b33bc2d20dda65fed",
+    "thesis/body/ch05_sections/section_5_3.tex": "cfb82a6f8672e5ed54dda1a958342e9a8aec4a4892fb02c926b839dbae5c4744",
+    "thesis/body/ch05_sections/section_5_4.tex": "aeb3abade6bd79103a434fed7bb75f1b16863f3705e46713102c22e8a79043e7",
+    "thesis/body/ch05_sections/section_5_5.tex": "156a56965ea758b00a84a1f97c2a7db20d80967026cc5fd921461035992f3486",
+    "thesis/body/ch05_sections/section_5_6.tex": "edc8e80c0feb393cbd2ceb6036327f4332abb95c1362f2822238f7fd6b0bb35e",
+    "thesis/body/ch06_adversarial_evaluation.tex": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": "f9906457cbe5696dcd291438dea7eabec646b57e462eda166f1937868867b628",
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": "e0b20360b29214ac0e5f1187c1d5a1793b8ece59ec40d377daafa28eb9fb363a",
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": "de999c7ce5dbfdff55b935f05502e13f5abae59cc6b9aad981dd8f61f86c2579",
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": "ac554828ffef5de9f9477c46a3f13bd2c921e300a010f80b58c330d9b3f57158",
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": "f70994bad9f0e5ad6804b0b68fd92dcf6b8d5b45d22abef96aad74d3663d1688",
+    "thesis/body/ch07_conclusion.tex": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": "2bacf80d0be436d751a02c811d0df32d7026915fbb37b4f76907db6a64ff6165",
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": "ce35b5603bf8e612447fef49c1f13d404b707946515921b75d70e4fdadd0855e",
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+    "thesis/back/acknowledgements.tex": "32c04107c42c7fb9cdbb56ff72befe088df73c11ea90c390fd29c870c189b21a"
+  },
+  "figures": [
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 13,
+      "labels": [
+        "fig:ch02_architecture"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch02_architecture.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 48,
+      "labels": [
+        "fig:ch02_robot_model"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/robot_model.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 64,
+      "labels": [
+        "fig:ch02_drive"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch02_drive.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 121,
+      "labels": [
+        "fig:ch02_control"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch02_control.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 161,
+      "labels": [
+        "fig:ch02_patch_order"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/tactile_layout.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 189,
+      "labels": [
+        "fig:ch02_fingertip"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/surface_layout_strategies.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 214,
+      "labels": [
+        "fig:ch02_frame"
+      ],
+      "external_graphics": [
+        "figures/ch02/taxel_local_frame.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 284,
+      "labels": [
+        "fig:ch02_processing"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch02_processing.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 332,
+      "labels": [
+        "fig:ch02_validation"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch02_validation.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 19,
+      "labels": [
+        "fig:ch03_overall_pipeline"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch03_overall_pipeline.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 59,
+      "labels": [
+        "fig:ch03_candidate_sources"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch03_candidate_sources.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 97,
+      "labels": [
+        "fig:ch03_reachability"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch03_reachability.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 128,
+      "labels": [
+        "fig:ch03_strict_replay"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch03_strict_replay.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 210,
+      "labels": [
+        "fig:ch03_task_transfer"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch03_task_transfer.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 294,
+      "labels": [
+        "fig:ch03_examples"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/historical_examples.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 37,
+      "labels": [
+        "fig:ch04_carriers"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch04_carriers.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 61,
+      "labels": [
+        "fig:ch04_timing"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch04_timing.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 78,
+      "labels": [
+        "fig:ch04_multirate"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch04_multirate.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 154,
+      "labels": [
+        "fig:ch04_admission"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch04_admission.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 239,
+      "labels": [
+        "fig:ch04_sink_precision"
+      ],
+      "external_graphics": [
+        "figures/ch04/sink_historical_precision_r2.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 7,
+      "labels": [
+        "fig:ch05_gmm_physical_pipeline"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch05_gmm_physical_pipeline.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 55,
+      "labels": [
+        "fig:ch05_gmm_candidate_selection"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch05_gmm_candidate_selection.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "line": 7,
+      "labels": [
+        "fig:ch05_dual_vae"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch05_dual_vae.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "line": 29,
+      "labels": [
+        "fig:ch05_translator_paths"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch05_translator_paths.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 7,
+      "labels": [
+        "fig:ch05_c0_validation_protocol"
+      ],
+      "external_graphics": [
+        "figures/revision_20261127/ch05_c0_validation_protocol.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 41,
+      "labels": [
+        "fig:ch06_shared_vector_field"
+      ],
+      "external_graphics": [
+        "figures/ch06/shared_vector_field.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 31,
+      "labels": [
+        "fig:ch06_mask_gradient_paths"
+      ],
+      "external_graphics": [
+        "figures/ch06/mask_gradient_paths.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 7,
+      "labels": [
+        "fig:ch06_f0_swd_baseline"
+      ],
+      "external_graphics": [
+        "figures/ch06/f0_swd_baseline.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 22,
+      "labels": [
+        "fig:ch06_round_acceptance_states"
+      ],
+      "external_graphics": [
+        "figures/ch06/round_acceptance_states.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 31,
+      "labels": [
+        "fig:ch06_multi_round_distribution"
+      ],
+      "external_graphics": [
+        "figures/ch06/multi_round_distribution.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 17,
+      "labels": [
+        "fig:ch06_multiview_refiner_architecture"
+      ],
+      "external_graphics": [
+        "figures/ch06/multiview_refiner_architecture.pdf"
+      ],
+      "placeholder": false
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 28,
+      "labels": [
+        "fig:ch06_multiview_gradient_training"
+      ],
+      "external_graphics": [
+        "figures/ch06/multiview_gradient_training.pdf"
+      ],
+      "placeholder": false
+    }
+  ],
+  "tables": 32,
+  "equations": 32,
+  "algorithms": 5,
+  "first_mentions": [
+    {
+      "term": "GraspQP",
+      "source": "thesis/front/abstract.tex",
+      "first_file_line": 5,
+      "excerpt": "构建RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，统一机器人控制、任务执行和触觉记录，依据曲面几何建立16个Patch、712维处理后触觉观测体系，并检查指定历史任务记录。适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，结合腕部姿态扩展、可达性、碰撞约束和连续轨迹求解，形成候选生成、机器人约束筛选与专家示教验证流程，分别判定候选质量、任务结果和严格回放质量。"
+    },
+    {
+      "term": "DexEvolve",
+      "source": "thesis/front/abstract.tex",
+      "first_file_line": 5,
+      "excerpt": "构建RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，统一机器人控制、任务执行和触觉记录，依据曲面几何建立16个Patch、712维处理后触觉观测体系，并检查指定历史任务记录。适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，结合腕部姿态扩展、可达性、碰撞约束和连续轨迹求解，形成候选生成、机器人约束筛选与专家示教验证流程，分别判定候选质量、任务结果和严格回放质量。"
+    },
+    {
+      "term": "GraspQP",
+      "source": "thesis/body/ch01_introduction.tex",
+      "first_file_line": 28,
+      "excerpt": "优化目标如何近似真实抓持，是候选生成中的关键问题。GraspQP将接触扳手的受限组合写为隐式二次规划，以构建可微的力闭合能量，并结合调整后的采样优化过程兼顾候选质量与多样性\\cite{zurbrugg2025graspqp}。与依赖解析能量的搜索不同，DexEvolve在解析候选基础上引入仿真反馈，通过选择、变异和交叉细化抓取，随后将所得分布蒸馏为基于点云的生成模型\\cite{zurbrugg2026dexevolve}。两者体现了不同的处理思路：解析优化便于定义搜索方向，物理反馈则能够检验并修正部分简化假设带来的偏差。物理检验也并非没有条件，其结果受到接触参数、扰动方式和执行控制的影响。因此，比较这些方法时，需要区分候选的几何评价、实际抓持稳定性以及候选多样性，不能仅以同名的成功率指标判断优劣。"
+    },
+    {
+      "term": "DexEvolve",
+      "source": "thesis/body/ch01_introduction.tex",
+      "first_file_line": 28,
+      "excerpt": "优化目标如何近似真实抓持，是候选生成中的关键问题。GraspQP将接触扳手的受限组合写为隐式二次规划，以构建可微的力闭合能量，并结合调整后的采样优化过程兼顾候选质量与多样性\\cite{zurbrugg2025graspqp}。与依赖解析能量的搜索不同，DexEvolve在解析候选基础上引入仿真反馈，通过选择、变异和交叉细化抓取，随后将所得分布蒸馏为基于点云的生成模型\\cite{zurbrugg2026dexevolve}。两者体现了不同的处理思路：解析优化便于定义搜索方向，物理反馈则能够检验并修正部分简化假设带来的偏差。物理检验也并非没有条件，其结果受到接触参数、扰动方式和执行控制的影响。因此，比较这些方法时，需要区分候选的几何评价、实际抓持稳定性以及候选多样性，不能仅以同名的成功率指标判断优劣。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch01_introduction.tex",
+      "first_file_line": 53,
+      "excerpt": "与本文方法较为接近的是Narang等针对BioTac传感器开展的研究。他们建立三维有限元接触模型，分别以VAE学习仿真形变和真实电信号的潜表示，再利用有限的配对监督训练潜空间投影，实现两类观测之间的转换\\cite{narang2021latentprojections}。其意义在于将复杂物理形变与传感器电响应分开表示，通过监督映射连接独立潜空间，而不是假定两套编码器自动对齐。本文面向途见科技灵巧手的712维处理后触觉，仿真端采用MuJoCo原生触觉读出，真实端使用既有实机记录，监督对应的构造条件与该研究不同。具体而言，利用Real Train拟合的GMM及Patch响应统计，在固定索引坐标下描述响应中心和协方差，再查询16个Patch的响应字典，确定球形探针的位置和加载条件，经MuJoCo实际接触生成与Real"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch01_introduction.tex",
+      "first_file_line": 53,
+      "excerpt": "与本文方法较为接近的是Narang等针对BioTac传感器开展的研究。他们建立三维有限元接触模型，分别以VAE学习仿真形变和真实电信号的潜表示，再利用有限的配对监督训练潜空间投影，实现两类观测之间的转换\\cite{narang2021latentprojections}。其意义在于将复杂物理形变与传感器电响应分开表示，通过监督映射连接独立潜空间，而不是假定两套编码器自动对齐。本文面向途见科技灵巧手的712维处理后触觉，仿真端采用MuJoCo原生触觉读出，真实端使用既有实机记录，监督对应的构造条件与该研究不同。具体而言，利用Real Train拟合的GMM及Patch响应统计，在固定索引坐标下描述响应中心和协方差，再查询16个Patch的响应字典，确定球形探针的位置和加载条件，经MuJoCo实际接触生成与Real"
+    },
+    {
+      "term": "Strict",
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "first_file_line": 364,
+      "excerpt": "历史manifest及结果文件将五条案例的成功状态登记为True，这是原有任务执行记录的声明，不是本轮重放后重新获得的成功结果。Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "first_file_line": 364,
+      "excerpt": "历史manifest及结果文件将五条案例的成功状态登记为True，这是原有任务执行记录的声明，不是本轮重放后重新获得的成功结果。Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。"
+    },
+    {
+      "term": "GraspQP",
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "first_file_line": 33,
+      "excerpt": "GraspQP通过可微抓取质量评价支持候选优化\\cite{zurbrugg2025graspqp}。本项目调用其官方指标工厂，结合物体表面点、法向和手部代理构造接触评价。优化变量包括三维平移、六维旋转参数及六个驱动比例的logit，驱动比例通过sigmoid限制在有效区间。旋转参数在评价时恢复为旋转矩阵，从而避免直接优化九个任意矩阵元素。物体采样和手部皮肤点变换到同一坐标下后，程序按手指接触点组计算到物体的距离，并以软权重构造接触位置和法向。由此形成的接触集合用于官方质量指标计算，而不是把最近点距离本身当作力闭合证明。"
+    },
+    {
+      "term": "DexEvolve",
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "first_file_line": 55,
+      "excerpt": "几何候选进入DexEvolve-style细化阶段后，评价对象从接触构型扩展到执行行为。DexEvolve原研究采用进化优化获得多样且稳健的灵巧抓取\\cite{zurbrugg2026dexevolve}，本项目保留候选群体、变异、交叉和档案管理的组织思想，并针对六驱动手及现有仿真执行接口作适配。平移、旋转和驱动比例分别施加扰动，驱动变化限制在有效范围内；交叉则组合不同候选的位姿与手部配置。候选在执行前还可进行接触修正和去穿透处理，使搜索不仅依赖最初的几何种子。"
+    },
+    {
+      "term": "Wrist Lattice",
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "first_file_line": 66,
+      "excerpt": "Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。它在源候选附近改变腕部平移和朝向，再以机器人逆运动学残差排序，保留可进一步执行的模板。当前默认集合包含39个格点，平移基本尺度为0.01~m，旋转基本尺度为$15^\\circ$，并包含若干倍尺度的单轴旋转以及平移、旋转耦合编辑。局部改变不会把手部根节点整体绕物体远距离扫动，适合在已有接触构型附近寻找机械臂更易跟踪的目标。其局限是搜索依赖源候选和固定邻域，不能保证发现相距较远的可达抓取模式；39个格点也不是39个独立实验样本。"
+    },
+    {
+      "term": "Strict",
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "first_file_line": 26,
+      "excerpt": "图\\ref{fig:ch03_overall_pipeline}中，机器人约束筛选将对象相对目标转换为世界坐标下的机械臂末端目标，轨迹执行再连接接近、闭合、保持和后续操作。只有经过执行，才能获得状态、接触和物体运动等反馈；Strict质量验收进一步检查尾段稳定性。Lift提供抓持和抬升的基本案例，搬移与堆叠可在抓持前缀上构造任务后缀，推动和装配则需要额外的接触或姿态控制。五类任务共享示教数据合同，但不共享完全相同的物理执行逻辑。本章重点讨论示教如何形成，记录关联、数据转换与全量质量审计留在第四章。"
+    },
+    {
+      "term": "Strict",
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "first_file_line": 110,
+      "excerpt": "历史导出修复首先处理动作来源。Strict回放所需低层控制来自ctrl，而非旧记录中的笛卡尔action。导出器检查控制序列与源ctrl的尾部对应关系，再选取前一条执行后观测作为相应执行前输入。重新执行导出时，程序直接在step之前读状态和图像，之后才施加动作；非重新执行路径则恢复源观测所在的仿真状态，并使用对应触觉。两条路径需要分别记录，不将恢复后渲染与新物理执行混称。"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "first_file_line": 11,
+      "excerpt": "数据组织以Episode和Frame为基本单位。Episode表示一次执行及其来源记录，Frame表示该序列中保存的一行观测或转移。Root用于表示按具体规则划分的初态与来源组，不能直接由Episode数量或随机seed数量推导。一个源执行可以派生多个后缀、窗口或导出版本，文件数增加并不意味着独立物理条件增加。对于需要检验泛化的模型，还应根据实际来源确定分组边界，而不是先把所有Frame随机打散再划分数据。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "first_file_line": 251,
+      "excerpt": "真实触觉与Natural Sim的冻结训练合同需另行登记，不混入上述Episode与Frame库存。已有P44合同声明Real Train为5153窗口、32 Session，Real Validation为780窗口、4 Session；Natural Train为4049窗口、50 Root，Validation为905窗口、10 Root。这些是历史合同声明，本轮未重新认证原始Real全库。合同还保留Real历史不等间隔帧与Natural来源20~Hz连续采样的区别，因此不能把四帧窗口数量解释为同样的物理持续时间或相同数量的独立接触过程。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "first_file_line": 251,
+      "excerpt": "真实触觉与Natural Sim的冻结训练合同需另行登记，不混入上述Episode与Frame库存。已有P44合同声明Real Train为5153窗口、32 Session，Real Validation为780窗口、4 Session；Natural Train为4049窗口、50 Root，Validation为905窗口、10 Root。这些是历史合同声明，本轮未重新认证原始Real全库。合同还保留Real历史不等间隔帧与Natural来源20~Hz连续采样的区别，因此不能把四帧窗口数量解释为同样的物理持续时间或相同数量的独立接触过程。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "first_file_line": 7,
+      "excerpt": "P37旧开发数据的Real Train/Validation为5153/1408窗，Sim为1824/406窗；P43当前主线中，Real Train/Validation分别为5153/780窗，Natural Sim Train/Validation分别为4049/905窗，均采用$4\\times712$窗口。P37统计不外推至P43，后者规模仅描述当前数据划分，不代表差异复现。两者不混合，窗口不作独立采集主体。"
+    },
+    {
+      "term": "C0",
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "first_file_line": 13,
+      "excerpt": "表\\ref{tab:ch05_domain_feature_difference}列出旧P37数据上既有转换输出经幅值校准后的表示分解诊断。Full与分位数先作log1p，各表示分别用Train拟合标准化，Probe由Logistic、kNN各1个及MLP、GRU、Transformer各Seed11、12、13组成，共11个；Full复用P38在相同输出、划分和预处理上的Probe拟合，不新增训练。此处为迁移后Probe诊断，非后文迁移前冻结的域分类评价基线（C0）验收。定义$D=1-2|\\mathrm{BA}-0.5|$，只度量BA偏离0.5的程度；表中三个表示的最小D均低于0.90，表明至少存在Probe未满足固定阈值下的BA等价门槛；其排序判别能力仍需结合AUC判断。因此，不能仅凭这些结果认定支持或正值"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "first_file_line": 7,
+      "excerpt": "本章使用第\\ref{sec:data_quality_summary}节所区分的单独登记并冻结的触觉子集，不直接读取LeRobot示教导出。其中三类数据分别承担不同角色：Real提供真实域观测，用于域内表示学习，并提供统计先验及伪配对目标侧信息；Natural Sim来自自然任务仿真，与Paired Sim共同参与Sim域表示学习，也是最终转换对象；Paired Sim则由真实统计先验指导仿真物理探针生成，按登记关系与Real窗口构成统计伪配对，为潜变量映射提供有限监督。任意Real与Sim窗口并无已知共同接触状态，不能直接互作真实标签。现有1200个训练窗口与240个验证窗口也不代表1440个独立Root；登记关联不构成同步物理接触真值，来源复用与覆盖限制仍须保留。Natural参与Sim表示学习，不等于其具"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "first_file_line": 7,
+      "excerpt": "本章使用第\\ref{sec:data_quality_summary}节所区分的单独登记并冻结的触觉子集，不直接读取LeRobot示教导出。其中三类数据分别承担不同角色：Real提供真实域观测，用于域内表示学习，并提供统计先验及伪配对目标侧信息；Natural Sim来自自然任务仿真，与Paired Sim共同参与Sim域表示学习，也是最终转换对象；Paired Sim则由真实统计先验指导仿真物理探针生成，按登记关系与Real窗口构成统计伪配对，为潜变量映射提供有限监督。任意Real与Sim窗口并无已知共同接触状态，不能直接互作真实标签。现有1200个训练窗口与240个验证窗口也不代表1440个独立Root；登记关联不构成同步物理接触真值，来源复用与覆盖限制仍须保留。Natural参与Sim表示学习，不等于其具"
+    },
+    {
+      "term": "C0",
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "first_file_line": 18,
+      "excerpt": "据此采用三层分析框架：输出层检查完整$4\\times712$、数值有效性、激活支持、正值幅值和短时序关系，形状正确不足以认定结构保持；这些结构维度不另设未经验证的统一通过阈值。域评价沿用原始Real Train 5153窗与Natural Sim Train 4049窗训练后冻结的11个C0实例，即Logistic、kNN各一个及MLP、GRU、Transformer各Seed11、12、13，保留模型权重、kNN参照库、原Scaler与log1p、通道及帧序、Real=1与Sim=0标签、0.5阈值和原Train/Validation/Test分组，迁移评价不重训分类器或重拟合Scaler。BA取两类召回率的均值。每个实例须同时满足BA在$[0.45,0.55]$、AUC在$[0.475,0.525]$以及"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "first_file_line": 47,
+      "excerpt": " 状态指纹 & 首个保存步的qpos与目标球心量化后联合散列，共160种，非独立Root认证\\\\"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "first_file_line": 14,
+      "excerpt": "GMM按Patch建模。各Taxel行列索引映射至$[-0.5,0.5]^2$网格，以训练集该Patch正值响应的第5百分位筛选有效响应。每个Session最多取48帧，每帧按响应权重抽取16个位置，并减去该帧响应质心；随后按Session轮转抽样，形成最多2048个二维偏移点。因此，拟合对象是响应相对质心的扩散偏移，而非原始712维数组、物理压力或后续VAE潜变量。记偏移为$\\boldsymbol u$，第$p$个Patch的分布为"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "first_file_line": 70,
+      "excerpt": "图\\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "first_file_line": 70,
+      "excerpt": "图\\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "first_file_line": 46,
+      "excerpt": "Real训练池为5153窗，Sim训练池包含4049个Natural窗与1200个Paired窗，Sim采用分层混合批次，每步从Natural Sim和Paired Sim各取32窗，合成64窗，每轮127步。较小的Paired组重复访问，实现批次等量混合，而非按原始规模比例采样。Real每轮81步，两域总优化步数分别为3645和5715，重复访问不增加独立样本。两域分别拟合尺度，Real与Sim的输入尺度分别约为0.14118和0.04089，正值尺度分别约为0.0050025和$10^{-7}$。Sim正值尺度触及下限，其拟合按合并训练元素进行，与训练时两类窗口等量采样的权重不同，上述尺度均由传感器处理后的无量纲触觉数值计算，不对应实际压力或力学单位。采用AdamW、学习率$10^{-3}$、批量64，两域"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "first_file_line": 5,
+      "excerpt": "统计伪配对为两域提供有限对应，但触觉窗口仍同时包含精确零值、正值幅度和跨帧变化。为在映射前提取各域表示，本文采用变分自编码器\\cite{kingma2014vae}，分别建立Real VAE与Sim VAE，如图\\ref{fig:ch05_dual_vae}所示。该双域表示与下一节Translator组成的初始方案记为C3。两者结构相同，Encoder与Decoder参数独立，通过各自输入的自重建学习表示；均输出$4\\times64$潜变量，但维数一致并不赋予共同语义坐标。Real分支仅学习真实窗口，Sim分支同时接收自然任务仿真和伪配对仿真，重建目标仍为各自的Sim输入，对应Real窗口不作为Sim自重建标签。"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "first_file_line": 64,
+      "excerpt": "这种映射的有效范围受监督来源限制。GMM责任度不是物理接触归属概率，Top-5分量筛选与单一候选选择压缩了多解信息，Translator未接收完整分量概率或候选分布。1200与240窗也不代表1440个独立Root。Paired Validation上，Translator与配对训练Real均值模板的潜变量Huber分别为0.32591983675956726和0.4942297637462616，按全部窗口、帧及潜维平均。该模板仅沿1200个配对训练目标的窗口维取均值，保留四帧位置，并广播至待评价窗口，不使用验证目标拟合。然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "first_file_line": 64,
+      "excerpt": "这种映射的有效范围受监督来源限制。GMM责任度不是物理接触归属概率，Top-5分量筛选与单一候选选择压缩了多解信息，Translator未接收完整分量概率或候选分布。1200与240窗也不代表1440个独立Root。Paired Validation上，Translator与配对训练Real均值模板的潜变量Huber分别为0.32591983675956726和0.4942297637462616，按全部窗口、帧及潜维平均。该模板仅沿1200个配对训练目标的窗口维取均值，保留四帧位置，并广播至待评价窗口，不使用验证目标拟合。然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "first_file_line": 40,
+      "excerpt": "\\KwIn{独立训练的两域VAE、训练伪配对及Natural Sim输入}"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "first_file_line": 5,
+      "excerpt": "双域VAE分别获得域内表示，但相同的潜变量维数并不构成语义对应。为利用统计伪配对建立联系，本文在两套VAE训练完成后固定其参数，以配对窗口的后验均值构造监督。记第$n$组Paired Sim与Real窗口为$(X_{s,n},X_{r,n})$，其均值表示分别为$Z_{s,n}=\\mu_s(X_{s,n})$与$Z_{r,n}=\\mu_r(X_{r,n})$，均具有$4\\times64$形状。Translator学习"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "first_file_line": 5,
+      "excerpt": "为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "first_file_line": 5,
+      "excerpt": "为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "first_file_line": 5,
+      "excerpt": "为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。"
+    },
+    {
+      "term": "C0",
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "first_file_line": 5,
+      "excerpt": "为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "first_file_line": 16,
+      "excerpt": "表\\ref{tab:ch05_transfer_summary}汇总C3、C13与C27的同角色跨域结果。C27指保留原C3双域VAE、改进Translator训练的方案，未与C13的Decoder修复合并。C3采用原双域VAE与GRU Translator，其Validation结果取已有冻结链路复现，而非历史开发Test。虽然D全部达标，仅kNN同时满足AUC条件。表\\ref{tab:ch05_validation_instances}中，C3的MLP分数仍保持正向排序差异，GRU和部分Transformer则出现反向排序；两种情况均不满足域不可辨识要求。例如MLP Seed11将905个迁移窗口全部判Real，Real中776/780判对，BA约0.497436；但AUC为0.591571。固定阈值下的高"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "first_file_line": 5,
+      "excerpt": "第五章利用统计伪配对监督Translator，在独立训练的双域VAE之间学习直接潜变量映射，再由Real Decoder生成目标域触觉。该方法通过GRU内部状态建模四帧序列，但未显式构造潜变量的积分更新路径；配对潜变量误差也不能直接说明Natural Sim输出的域分布是否接近Real。为在保留既有表示与读出模块的条件下研究可调整的迁移路径，本文将原映射扩展为源条件共享参数向量场，通过数值积分获得目标潜状态。本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "first_file_line": 5,
+      "excerpt": "第五章利用统计伪配对监督Translator，在独立训练的双域VAE之间学习直接潜变量映射，再由Real Decoder生成目标域触觉。该方法通过GRU内部状态建模四帧序列，但未显式构造潜变量的积分更新路径；配对潜变量误差也不能直接说明Natural Sim输出的域分布是否接近Real。为在保留既有表示与读出模块的条件下研究可调整的迁移路径，本文将原映射扩展为源条件共享参数向量场，通过数值积分获得目标潜状态。本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。"
+    },
+    {
+      "term": "C0",
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "first_file_line": 41,
+      "excerpt": " \\caption{判别器输入配置及原冻结C0联合结果}"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "first_file_line": 58,
+      "excerpt": "训练采用两轮D预热及18轮G/D交替更新，Adam学习率$10^{-4}$、betas为$(0,0.99)$，梯度范数裁剪5。D以两类各半的批次平均BCE优化，Lazy R1每16步触发，$\\gamma=0.1$，触发时系数为$\\gamma\\times16/2$。C在D更新及Real R1路径禁用Mask代理，避免额外改变这一正则机制；G更新时启用代理，冻结D参数但保留其对$Y$的梯度。生成器使用非饱和对抗项，并保留权重0.5295653698327406的Patch份额与相对帧差保持项、权重0.001的修正场约束，以及首个对抗轮从1衰减至第六轮0的同源教师项。场约束按Real Train后验均值的逐维标准差归一化，下限为0.1，只约束修正项，不含Translator基项；教师项比较同源输出按固定尺度归一化的对"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 14,
+      "excerpt": "多轮实验使用Real Train的5153窗、32个Session及Natural Train的4049窗、50个Root；外层Validation分别为780窗、4个Session和905窗、10个Root。判别器内部再划分Real fit的24个Session、4217窗与inner的8个Session、936窗，Natural fit的40个Root、3249窗与inner的10个Root、800窗。各轮沿用这一隔离；inner不参与D更新，但生成器可用全部Natural Train，因此它不是生成器独立测试。外层Validation也已有开发暴露，以下结果均不称为盲测结论。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 14,
+      "excerpt": "多轮实验使用Real Train的5153窗、32个Session及Natural Train的4049窗、50个Root；外层Validation分别为780窗、4个Session和905窗、10个Root。判别器内部再划分Real fit的24个Session、4217窗与inner的8个Session、936窗，Natural fit的40个Root、3249窗与inner的10个Root、800窗。各轮沿用这一隔离；inner不参与D更新，但生成器可用全部Natural Train，因此它不是生成器独立测试。外层Validation也已有开发暴露，以下结果均不称为盲测结论。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 5,
+      "excerpt": "前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节将这一多轮实验记为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\\%，定义$R_W=(\\mathrm{SWD}_{\\mathrm{Original}}-\\mathrm{SWD}_{F_0}"
+    },
+    {
+      "term": "C0",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 40,
+      "excerpt": "更值得注意的是，$D_3$下$F_3$虽全部被判为Real，AUC仍约为0.997728。阈值判定只检查分数落在哪一侧，而AUC衡量连续分数将Real排在生成样本之前的能力；全部超过0.5仍可在阈值上方保持清晰排序，故两者不矛盾。AUC也不直接度量生成分布质量。因此，FR达到100\\%并不等于域不可辨识，更不能替代原11实例C0联合评价。这些结果提示生成场能够适应当前判别边界，但分布逼近及输入保持并未同时得到保证。单Seed、既有开发划分和保留的梯度限制也约束了归因范围，后续需要进一步检查生成结构与评价器可靠性，而非仅增加优化轮数。"
+    },
+    {
+      "term": "FR",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 29,
+      "excerpt": "FR定义为Sim生成样本被当前冻结判别器按0.5阈值判为Real的接受比例，先在Root内计算，再对10个Root宏平均；Real接受率先在Session内计算，再对4个Session宏平均，二者不是相同统计指标。如图\\ref{fig:ch06_round_acceptance_states}所示，$F_0$在$D_0$下本来就达到100\\% FR，不是生成器更新收益。$D_1$下$F_0\\rightarrow F_1$的FR由约0.000775升至1，$D_2$下$F_1\\rightarrow F_2$、$D_3$下$F_2\\rightarrow F_3$均由0升至1。对应Real宏接受率分别约为0.998958、1和1。它们证明各次更新改变了当前判别边界下的输出判定；由于D已经改变，不能将各轮FR拼成同一评"
+    },
+    {
+      "term": "SWD",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 5,
+      "excerpt": "前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节将这一多轮实验记为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\\%，定义$R_W=(\\mathrm{SWD}_{\\mathrm{Original}}-\\mathrm{SWD}_{F_0}"
+    },
+    {
+      "term": "MMD",
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "first_file_line": 34,
+      "excerpt": " \\caption{固定分布评价合同下各生成器状态的SWD与MMD。两项均越低越好，生成结果未随优化轮次单调改善。}"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 52,
+      "excerpt": "表\\ref{tab:ch06_multiview_results}中终点距离明显恶化，虽然Joint FR为100\\%，Real Joint接受率仅68.0833\\%；两者仍分别按Root和Session宏平均。距离使用共同的冻结预处理和评价合同，避免针对终点重新调整尺度。关闭Refiner没有重训或重新选模，不能替代主结果。历史机制审计还发现，将初始输出统一放大2倍，前64个Train输出的指定检查中preserve变化为0；flow仅约束基础场修正项，不直接约束新增残差。这揭示幅值约束缺口，但不能据此认定失败的唯一原因。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 52,
+      "excerpt": "表\\ref{tab:ch06_multiview_results}中终点距离明显恶化，虽然Joint FR为100\\%，Real Joint接受率仅68.0833\\%；两者仍分别按Root和Session宏平均。距离使用共同的冻结预处理和评价合同，避免针对终点重新调整尺度。关闭Refiner没有重训或重新选模，不能替代主结果。历史机制审计还发现，将初始输出统一放大2倍，前64个Train输出的指定检查中preserve变化为0；flow仅约束基础场修正项，不直接约束新增残差。这揭示幅值约束缺口，但不能据此认定失败的唯一原因。"
+    },
+    {
+      "term": "FR",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 52,
+      "excerpt": "表\\ref{tab:ch06_multiview_results}中终点距离明显恶化，虽然Joint FR为100\\%，Real Joint接受率仅68.0833\\%；两者仍分别按Root和Session宏平均。距离使用共同的冻结预处理和评价合同，避免针对终点重新调整尺度。关闭Refiner没有重训或重新选模，不能替代主结果。历史机制审计还发现，将初始输出统一放大2倍，前64个Train输出的指定检查中preserve变化为0；flow仅约束基础场修正项，不直接约束新增残差。这揭示幅值约束缺口，但不能据此认定失败的唯一原因。"
+    },
+    {
+      "term": "SWD",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 42,
+      "excerpt": "状态 & SWD & MMD & 实验角色\\\\"
+    },
+    {
+      "term": "MMD",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 42,
+      "excerpt": "状态 & SWD & MMD & 实验角色\\\\"
+    },
+    {
+      "term": "Refiner",
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "first_file_line": 4,
+      "excerpt": "多轮优化提高了当前判别器下的接受率，却未维持固定距离评价中的质量。为此，本节探索条件残差Refiner与Global、Spatial、Temporal多视角判别约束。本实验记为P50，从$F_0$重新开始，而非续接上一节$F_3$，采用Seed 5001、单轮训练；两套VAE冻结，共享向量场与Refiner可训练。$F_{50}$表示本实验生成器的终点结果，$D_{50}$表示多视角判别器；下标50对应实验编号，不表示训练50轮。"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 6,
+      "excerpt": "距离表示由Real Train的$\\log(1+X)$逐坐标均值和标准差确定，标准差下限为0.05。展平后采用1024个固定单位随机投影，Real按Session、Sim按Root等权，计算"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 6,
+      "excerpt": "距离表示由Real Train的$\\log(1+X)$逐坐标均值和标准差确定，标准差下限为0.05。展平后采用1024个固定单位随机投影，Real按Session、Sim按Root等权，计算"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 14,
+      "excerpt": "表\\ref{tab:ch06_quality_dependency_comparison}中，Original是未转换的Natural Sim processed Validation窗口，并非零潜变量解码。定义$R_W=(\\mathrm{SWD}_{\\mathrm{Original}}-\\mathrm{SWD}_{F_0})/\\mathrm{SWD}_{\\mathrm{Original}}$，P48登记值为0.4977202817338595，即49.77\\%；$R_W$的95\\%组Bootstrap区间约为$[0.408514,0.566743]$，不是SWD原值区间。该值沿用P48记录，不用后续输出重算。P48与后续$F_0$的SWD原值相差约$2\\times10^{-11}$，保留各自来源；P50与CP"
+    },
+    {
+      "term": "FR",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 51,
+      "excerpt": "对照 & Joint FR & SWD & HSIC & 完整护栏\\\\"
+    },
+    {
+      "term": "SWD",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 8,
+      "excerpt": " \\mathrm{SWD}(R,Y)=\\frac{1}{1024}\\sum_{\\ell=1}^{1024}"
+    },
+    {
+      "term": "MMD",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 12,
+      "excerpt": "其中$F_{R,\\ell}$、$F_{Y,\\ell}$为相应加权投影累积分布。该量是投影边际Wasserstein-1的均值，不是完整高维距离，更不认证逐样本正确。MMD使用相同表示，以固定512个Real Train窗口的两两距离中位数确定带宽，对0.5、1、2倍带宽的RBF核取平均，计算组加权V统计量后取非负平方根，不能称为无偏U统计。"
+    },
+    {
+      "term": "PRDC",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 35,
+      "excerpt": "局部覆盖沿用PRDC的严格小于号邻域判定，取$k=3,5,10,20$，共用100次子样本；Real窗口为参考，Sim按Root比例配额，区别于距离的组等权。Precision为落入至少一个真实样本$k$近邻球的生成点比例，Recall为落入至少一个生成样本$k$近邻球的真实点比例；Density对各生成点所处真实邻域数除以$k$后取均值，可大于1；Coverage为最近生成点距离严格小于该真实点$k$近邻半径的真实点比例。高Precision不保证高Recall： $F_{50}$终点关闭Refiner（诊断）虽有0.243167的P@5，R@5仅0.000321，不能视为覆盖充分，更不能替代正式终点。四个邻域量观察的集合关系不同，故表中选取$k=5$只是便于展示，不能由这一列另造统一通过阈值。100次共用抽"
+    },
+    {
+      "term": "HSIC",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 23,
+      "excerpt": "输出 & SWD & MMD & P@5 & R@5 & HSIC\\\\"
+    },
+    {
+      "term": "Refiner",
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "first_file_line": 29,
+      "excerpt": " $F_{50}$终点关闭Refiner（诊断） & 0.340365 & 0.365503 & 0.243167 & 0.000321 & 0.433952\\\\"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "first_file_line": 6,
+      "excerpt": "历史模型文件SHA256与审计登记一致，重放记录给出的最大logit差为0，分类结果相同。Real fit为24个Session、4217窗，inner为8个Session、936窗，后者用于包络校准；开发评价使用另外4个Real Session、780窗及10个Sim Root、905窗。分组无交叉，但外层已有开发暴露，不能称为独立盲测。固定Real为1、Sim为0，概率阈值仍为0.5，即logit阈值0；Joint要求三支同时接受，连续Joint分数取三支logit最小值。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "first_file_line": 1,
+      "excerpt": "\\section{判别器可靠性及跨Session泛化分析}"
+    },
+    {
+      "term": "FR",
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "first_file_line": 26,
+      "excerpt": "相比之下，$F_{50}$的Joint FR为1，即生成样本全部被判为Real；其固定标签方向AUC仅为0.02726444845，反映分数排序严重反向，不能翻转后宣称通过。记录的混淆矩阵为$\\left[\\begin{smallmatrix}0&905\\\\214&566\\end{smallmatrix}\\right]$，行依次为真实类别Sim、Real，列依次为预测Sim、Real；它表示905个生成窗口均被接受，同时214个真实窗口被拒绝。矩阵是窗口计数，不是组宏比例。高FR只说明生成分数越过阈值，与真实样本接受能力不足可以同时出现；它既不证明域不可区分，也不证明生成分布正确。AUC则描述连续分数的排序能力，并非分布距离或物理质量。"
+    },
+    {
+      "term": "GraspQP",
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "first_file_line": 6,
+      "excerpt": "针对几何抓取候选不能直接转化为机器人可执行操作的问题，本文适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，并结合腕部姿态扩展形成多来源候选。通过机械臂逆运动学和连续轨迹求解连接分阶段专家示教，并按第\\ref{sec:grasp_reachability}节所述，结合桌面几何惩罚、局部接近约束、执行监测和尾段Strict检查验证轨迹与任务结果，区分操作完成与示教质量。局部扰动轨迹和失败分类为流程的适用范围提供了历史依据，并形成后续数据记录的轨迹来源。该工作体现为现有工具的适配整合与验证流程构建，不将第三方算法本身作为原创，也不把候选质量、Strict通过与实际任务成功合并为同一结论。"
+    },
+    {
+      "term": "DexEvolve",
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "first_file_line": 6,
+      "excerpt": "针对几何抓取候选不能直接转化为机器人可执行操作的问题，本文适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，并结合腕部姿态扩展形成多来源候选。通过机械臂逆运动学和连续轨迹求解连接分阶段专家示教，并按第\\ref{sec:grasp_reachability}节所述，结合桌面几何惩罚、局部接近约束、执行监测和尾段Strict检查验证轨迹与任务结果，区分操作完成与示教质量。局部扰动轨迹和失败分类为流程的适用范围提供了历史依据，并形成后续数据记录的轨迹来源。该工作体现为现有工具的适配整合与验证流程构建，不将第三方算法本身作为原创，也不把候选质量、Strict通过与实际任务成功合并为同一结论。"
+    },
+    {
+      "term": "Strict",
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "first_file_line": 6,
+      "excerpt": "针对几何抓取候选不能直接转化为机器人可执行操作的问题，本文适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，并结合腕部姿态扩展形成多来源候选。通过机械臂逆运动学和连续轨迹求解连接分阶段专家示教，并按第\\ref{sec:grasp_reachability}节所述，结合桌面几何惩罚、局部接近约束、执行监测和尾段Strict检查验证轨迹与任务结果，区分操作完成与示教质量。局部扰动轨迹和失败分类为流程的适用范围提供了历史依据，并形成后续数据记录的轨迹来源。该工作体现为现有工具的适配整合与验证流程构建，不将第三方算法本身作为原创，也不把候选质量、Strict通过与实际任务成功合并为同一结论。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "first_file_line": 10,
+      "excerpt": "针对仿真与真实触觉存在分布差异且缺少认证同步物理配对的问题，本文利用真实统计先验与仿真探针构建伪配对，分别学习独立双域VAE表示，再由GRU Translator建立潜变量映射。在此基础上研究共享参数向量场、对抗优化及多视角判别与残差修正，并结合分布距离、邻域覆盖、输入依赖和判别器跨Session可靠性开展综合评价。这些工作使用单独登记并冻结的触觉子集，沿用前述数据管理与质量规范，但不将LeRobot导出直接作为跨域模型的训练输入，也不认证两套数据的一一对应。由此形成统计监督、跨域重建与质量诊断的方法探索链路，不意味着全部平台数据均参与训练。现有实验获得了限定指标下的局部改善，同时揭示接受率、分布质量和评价可靠性的差异，尚未完成完整触觉Sim-to-Real迁移验收。"
+    },
+    {
+      "term": "Translator",
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "first_file_line": 10,
+      "excerpt": "针对仿真与真实触觉存在分布差异且缺少认证同步物理配对的问题，本文利用真实统计先验与仿真探针构建伪配对，分别学习独立双域VAE表示，再由GRU Translator建立潜变量映射。在此基础上研究共享参数向量场、对抗优化及多视角判别与残差修正，并结合分布距离、邻域覆盖、输入依赖和判别器跨Session可靠性开展综合评价。这些工作使用单独登记并冻结的触觉子集，沿用前述数据管理与质量规范，但不将LeRobot导出直接作为跨域模型的训练输入，也不认证两套数据的一一对应。由此形成统计监督、跨域重建与质量诊断的方法探索链路，不意味着全部平台数据均参与训练。现有实验获得了限定指标下的局部改善，同时揭示接受率、分布质量和评价可靠性的差异，尚未完成完整触觉Sim-to-Real迁移验收。"
+    },
+    {
+      "term": "Strict",
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "first_file_line": 4,
+      "excerpt": "本文的仿真实现与指定案例表明，统一机器人模型、控制接口、任务接口和触觉观测合同，能够为多任务操作提供可复用的实验基础。候选转化为轨迹时，可达性筛选、桌面几何与局部接近约束、连续执行监测及尾段Strict检查承担不同层次的检验：几何质量不能替代IK可达性，可达性不能替代任务成功，任务成功也不能替代Strict示教质量。各层判断针对不同条件，当前证据仅支持已有模型、任务及案例范围，不能外推为通用抓取能力或实机有效性。"
+    },
+    {
+      "term": "FR",
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "first_file_line": 8,
+      "excerpt": "跨域实验显示，局部指标改善尚不足以证明完整迁移。C27在原冻结Validation的11个实例中仅2个联合通过；$F_0$相对Original的SWD下降49.77\\%，仅为指定合同下的边际改善。在第\\ref{sec:ch06_multi_round_adversarial}节披露的修订后开发协议下，多轮对抗终点在$D_3$下FR达100\\%，不能据此认定域不可辨识；多视角残差终点$F_{50}$虽Joint FR为100\\%，分布距离却明显退化。P51因未满足既定Real接受要求对$D_{50}$判定NO-GO，该判别器不能作为当前实验的最终可靠评价器，该结论不外推$D_3$或其他方法。由此可见，接受率不等于分布相似，边际相似不保证输入输出对应，统计依赖不等于物理语义，梯度可达也不保证优化有效。评价器可靠性同"
+    },
+    {
+      "term": "SWD",
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "first_file_line": 8,
+      "excerpt": "跨域实验显示，局部指标改善尚不足以证明完整迁移。C27在原冻结Validation的11个实例中仅2个联合通过；$F_0$相对Original的SWD下降49.77\\%，仅为指定合同下的边际改善。在第\\ref{sec:ch06_multi_round_adversarial}节披露的修订后开发协议下，多轮对抗终点在$D_3$下FR达100\\%，不能据此认定域不可辨识；多视角残差终点$F_{50}$虽Joint FR为100\\%，分布距离却明显退化。P51因未满足既定Real接受要求对$D_{50}$判定NO-GO，该判别器不能作为当前实验的最终可靠评价器，该结论不外推$D_3$或其他方法。由此可见，接受率不等于分布相似，边际相似不保证输入输出对应，统计依赖不等于物理语义，梯度可达也不保证优化有效。评价器可靠性同"
+    },
+    {
+      "term": "Root",
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "first_file_line": 6,
+      "excerpt": "抓取与示教验证仍受指定物体、初态和资产版本限制，不同候选方法尚缺统一预算和判据下的公平比较，缓存与同模板变体也不能直接作为独立样本。后续应统一物理参数、计算预算和任务条件，开展跨物体、跨初态验证，并完善资产版本、Root lineage、轨迹及转换数据之间的来源追踪。视频、状态、动作和时间关联还需全流程审计，局部样本通过不能替代生产全库认证，单纯增加数据量也不足以解决质量与独立性问题。"
+    },
+    {
+      "term": "Session",
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "first_file_line": 10,
+      "excerpt": "评价所用Real Session有限，部分Validation已有开发暴露，单Seed、容量与数值后端差异也限制了结果归因。后续需要独立Session、Root及多Seed验证，并统一模型容量、训练预算和推理后端的比较条件，结合分布、覆盖、输入依赖、跨Session稳定性及物理接触证据评价结果。当前对特定判别器的可靠性限制不应推广到所有评价器。最终仍需通过真实机器人抓取和操作成功率、接触稳定性检验触觉迁移的任务价值，现有统计指标不能替代这一验证，也不能保证未来方法获得收益。"
+    },
+    {
+      "term": "Natural Sim",
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "first_file_line": 8,
+      "excerpt": "统计伪配对存在多解与监督歧义，独立潜空间尚无认证的逐点物理语义，Natural Sim缺少同步Real目标，限制了重建评价与监督可靠性。后续应先核查统计坐标及配对前提，再研究多解的稳定性和可辨识性，在统一条件下比较单一、多候选及软监督组织方式；只有相应前提得到验证，才进一步探索潜变量结构约束与接触信息辅助监督。共享场和残差路径已实现，但仍需检验梯度优化、输入保持与生成质量的关系，不能预设增加监督形式即可改善迁移。"
+    }
+  ],
+  "expression_counts": [
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/thesis.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/cover.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "不能",
+      "count": 1
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "链路",
+      "count": 1
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "依据",
+      "count": 2
+    },
+    {
+      "source": "thesis/front/abstract.tex",
+      "phrase": "形成了",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "不能",
+      "count": 14
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "不等于",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "不保证",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "链路",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "依据",
+      "count": 8
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "不能",
+      "count": 24
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "不等于",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "不保证",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "尚未",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "链路",
+      "count": 3
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "依据",
+      "count": 6
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "不能",
+      "count": 26
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "不等于",
+      "count": 4
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "不保证",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "依据",
+      "count": 6
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "不能",
+      "count": 45
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "不等于",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "不代表",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "不保证",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "依据",
+      "count": 3
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_dual_domain_reconstruction.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "不能",
+      "count": 8
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "不代表",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "不能",
+      "count": 4
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "不等于",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "尚未",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "不能",
+      "count": 4
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "不等于",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "不保证",
+      "count": 4
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "链路",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "不能",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "不等于",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "不能",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "不代表",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "依据",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "不能",
+      "count": 11
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "链路",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_adversarial_evaluation.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "不能",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "链路",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "不能",
+      "count": 5
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "不保证",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "不能",
+      "count": 9
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "不等于",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "不能",
+      "count": 6
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "不保证",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "不能",
+      "count": 13
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "不等于",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "不保证",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "不能",
+      "count": 11
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_conclusion.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "不能",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "不代表",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "链路",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "依据",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "不能",
+      "count": 9
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "不等于",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "不保证",
+      "count": 2
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "不能",
+      "count": 6
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "尚未",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "依据",
+      "count": 1
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "phrase": "形成了",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "不能",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "不等于",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "不代表",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "不保证",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "尚未",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "链路",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "依据",
+      "count": 0
+    },
+    {
+      "source": "thesis/back/acknowledgements.tex",
+      "phrase": "形成了",
+      "count": 0
+    }
+  ],
+  "editing_candidates": [
+    {
+      "source": "thesis/front/abstract.tex",
+      "line": 11,
+      "text": "实验中，潜变量映射改进版本在原冻结验证协议的11个分类器实例中仅2个联合通过。共享场初始比较基线的指定切片Wasserstein距离相对未转换仿真输入下降49.77\\%，只支持有限的边际改善。对抗优化虽可使生成样本在对应判别器下的接受率达到100\\%，分布质量并未同步改善；多视角残差终点发生明显距离退化，后续冻结审计亦表明当前判别器未满足既定真实域接受要求。结果揭示接受率、分布相似性、输入依赖与评价器可靠性不能相互替代。本文形成了仿真示教数据构建、触觉重建与质量诊断的探索链路，但尚未完成完整触觉仿真到现实迁移验收或真实机器人任务收益验证。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 14,
+      "text": "专家示教的使用还依赖数据本身的组织与质量。机器人状态描述执行条件，动作记录控制指令，视觉反映场景及物体变化，触觉则补充局部接触信息；这些数据只有与具体执行过程建立明确关联，才能用于分析观测与动作之间的关系。关于离线示教学习的研究表明，示教质量、观测选择与历史信息都会影响策略表现，数据条数增加并不能替代对数据内容的检查\\cite{mandlekar2022demonstrations}。BridgeData V2通过组织不同任务、环境和采集来源支持操作学习，RH20T则将多模态记录的时间戳、坐标标定与数据处理纳入采集流程\\cite{walke2023bridgedata,fang2024rh20t}。本项目已有抓取抬升、抓取放置、堆叠、推动和螺母装配任务的开发记录，并进行了LeRobot格式的数据构建。对于这些来源和版本不同的数据，需要检查记录发生在动作执行前还是执行后、采样频率是否一致，以及转换后是否保留原始执行索引。同一次仿真执行内部的数据关联，也应与仿真和实机之间的同步采集区别对待，不能仅凭相同的字段或时间戳形式认定两域已经建立物理配对。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 16,
+      "text": "即使操作和记录链路能够运行，仿真触觉也不能仅凭输出维度与实机一致，就被视为具有相同含义的观测。传感器结构、接触到响应的转换方式，以及滤波、归一化等处理，都会影响最终信号的表达。TACTO面向视觉触觉传感器，将物理仿真中的接触与传感器成像联系起来；Taxim则针对GelSight的光学响应和标记位移建立模型，并利用实测数据进行校准\\cite{wang2022tacto,si2022taxim}。这些工作体现了触觉模型对具体传感机制和读出假设的依赖，不能直接作为本项目阵列观测的物理等价依据。本项目的仿真端通过MuJoCo原生触觉传感器及后续信号处理获得712维标量观测，实机端使用既有处理后触觉记录，目前缺少经过认证的同步物理接触配对。因此，真实与仿真触觉的跨域重建既要研究分布差异，也要关注输入接触结构能否保留。利用真实触觉数据的统计特征构造的伪配对可以提供有限的对应监督，但不能直接作为同一次物理接触的真值；其适用范围和重建效果仍需通过实验评价。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 26,
+      "text": "抓取生成需要根据物体几何和手部结构，确定接触位置、手掌位姿及手指配置。解析方法通常以力闭合、接触约束和穿透惩罚等指标评价候选，数据驱动方法则利用已有抓取样本学习从物体观测到抓取配置的关系。Bohg等的综述按照物体先验和数据来源梳理了相关路线，并指出抓取选择还需考虑机器人可达性\\cite{bohg2014grasp}。对于多指手，接触组合和关节配置相互影响，生成过程既要避免手物穿透，又要保留不同抓持方式。北京大学等机构的DexGraspNet利用可微力闭合估计与几何能量优化生成抓取，再通过物理仿真检验候选，为学习式抓取提供数据\\cite{wang2023dexgraspnet}。这种路线将抓取搜索与数据构建联系起来，但其评价仍与所采用的手型、接触假设和仿真测试有关，不能直接解释为任意机械臂系统上的任务成功率。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 28,
+      "text": "优化目标如何近似真实抓持，是候选生成中的关键问题。GraspQP将接触扳手的受限组合写为隐式二次规划，以构建可微的力闭合能量，并结合调整后的采样优化过程兼顾候选质量与多样性\\cite{zurbrugg2025graspqp}。与依赖解析能量的搜索不同，DexEvolve在解析候选基础上引入仿真反馈，通过选择、变异和交叉细化抓取，随后将所得分布蒸馏为基于点云的生成模型\\cite{zurbrugg2026dexevolve}。两者体现了不同的处理思路：解析优化便于定义搜索方向，物理反馈则能够检验并修正部分简化假设带来的偏差。物理检验也并非没有条件，其结果受到接触参数、扰动方式和执行控制的影响。因此，比较这些方法时，需要区分候选的几何评价、实际抓持稳定性以及候选多样性，不能仅以同名的成功率指标判断优劣。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 35,
+      "text": "机器人仿真为控制和操作研究提供动力学、碰撞检测与接触计算基础。MuJoCo采用广义坐标描述多关节系统，并将接触和约束求解纳入动力学计算，支持执行器及机构约束建模\\cite{todorov2012mujoco}。面向大规模策略学习，Isaac Gym通过GPU物理仿真和张量接口连接环境状态与学习过程，减少仿真与训练之间的数据传输开销\\cite{makoviychuk2021isaacgym}。这类平台主要解决物体和机器人如何运动、如何发生接触的问题，而特定触觉传感器的输出还涉及接触量如何作用于敏感材料，以及形变或受力如何转换为信号。动力学求解器提供的接触信息并不能自动替代传感器模型；仿真管线的计算效率也不能直接说明触觉观测的物理精度。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 37,
+      "text": "触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，通过传感器的相机、光照和表面配置生成视觉触觉图像，并可利用真实背景图像修正部分外观差异\\cite{wang2022tacto}。Taxim针对GelSight建立实例驱动的光学模型，并利用有限元标定的形变关系模拟标记位移\\cite{si2022taxim}。前者侧重灵活渲染，后者进一步结合特定传感器的校准与形变传播，两者均依赖各自的几何和读出假设。对曲面阵列而言，还需明确感知单元的位置、朝向与覆盖区域，以及空间采样后信号处理的作用。本文通过MuJoCo原生触觉传感器和后续处理获得712维标量观测，其评价需关注阵列的空间响应与幅值关系，与视觉触觉的成像评价有所区别。原生接触响应、阵列采样与处理后幅值应分别描述，接触求解中的柔顺性与真实敏感材料内部形变也属于不同的建模层次。对于同一接触，感知区域覆盖方式会影响哪些单元产生响应，滤波和邻域传播又会改变最终的激活范围与幅值。由此得到的空间扩散，既可能反映传感器模型，也可能来自读出后的处理，不能仅凭热图外观相近就认定材料响应一致。分析曲面触觉阵列时，需要保留几何布局、接触采样和信号处理之间的区别，才能判断差异出现在哪一环节。因而，传感器布局和处理过程的可追溯性，是分析仿真与真实触觉差异的前提。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 42,
+      "text": "操作示教可以通过人工遥操作获得，也可以依托规划、控制器和已有轨迹自动生成。人工能够根据执行反馈处理复杂情形，但扩大采集规模需要重复操作与场景复位；自动生成便于覆盖初态变化，却依赖任务描述、感知和控制接口。MimicGen将少量源示教分解为物体中心的子任务片段，经坐标变换和插值适配到新场景，再实际执行并保留成功轨迹\\cite{mandlekar2023mimicgen}。其扩展能力建立在已知子任务顺序、物体位姿和末端控制形式等条件之上，不能直接推广到任意手型和操作。关于离线示教学习的系统性研究还表明，示教质量、观测选择及历史信息会影响策略表现\\cite{mandlekar2022demonstrations}。因此，轨迹生成数量与轨迹对学习的实际价值需要分别检查。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 57,
+      "text": "迁移评价也必须与上述目标对应。生成对抗网络关于分布一致的理论结论依赖理想判别器和优化条件，有限判别器下的高接受率并不自动满足这些前提\\cite{goodfellow2014gan}。核两样本检验提供了比较分布的另一种方式，但其结果依赖核、表示和样本条件\\cite{gretton2012mmd}；密度与覆盖等生成评价则分别检查样本质量和分布覆盖，仍受到特征空间选择的影响\\cite{naeem2020metrics}。这些指标不能独自说明输出保留了哪一个输入的接触信息。训练中参与优化的判别器、迁移前冻结的域分类器和迁移后重新训练的分类器，检验的边界也不同，评价时应明确各自的数据与训练角色。对于触觉跨域重建，需要将判别器表现、分布统计和输入依赖分开考察，并检查空间响应与帧间变化。表\\ref{tab:related_work_routes}归纳了相关路线的监督与适用条件。本文据此关注具体机器人上的可执行示教、明确来源的触觉读出，以及有限统计监督下的重建与结构保持，不预设某一表示或判别目标能够同时解决这些问题。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 91,
+      "text": "触觉跨域重建进一步受到监督条件限制。现有Real与Sim记录缺少经过认证的同步物理配对，真实统计特征能够约束响应比例、中心和扩散等描述，却不足以唯一确定产生这些响应的接触状态。由此构造的探针数据可能对应多个真实目标，其覆盖也可能不同于自然任务输入。两域独立学习的潜表示还存在坐标与语义差异，相同维度或先验不能替代对应监督。因此，需要区分伪配对构造、域内重建和潜变量映射分别承担的作用，考察有限统计监督能否支持完整触觉输出，而不将训练配对上的拟合直接推广到自然仿真数据。"
+    },
+    {
+      "source": "thesis/body/ch01_introduction.tex",
+      "line": 100,
+      "text": "在平台与触觉建模方面，构建RM75B机械臂与途见科技自研欠驱动灵巧手的仿真组合，将任务环境、控制接口和曲面触觉阵列纳入操作流程。围绕感知单元的空间布局，建立原生触觉读取及后续信号处理链，获得712维标量观测，并在抓取抬升、抓取放置、堆叠、推动和螺母装配任务中形成开发验证记录。这部分工作的特色在于连接机器人运动、局部接触观测与任务记录，为不同操作阶段提供一致的仿真接口；其验证范围是模型与记录链路的功能，不等同于真实传感器物理标定或实机部署。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 9,
+      "text": "多任务灵巧手操作要求机器人在同一场景中完成接近、接触、抓持和物体运动等连续过程。机械臂决定手部能够到达的位置与姿态，欠驱动灵巧手通过有限驱动通道形成接触，触觉观测则反映接触发生后的局部响应。这些环节相互影响，不能仅通过一个抓取姿态或单独的传感器模型描述。为支持后续专家示教生成与触觉数据研究，本文搭建RM75B机械臂与途见科技灵巧手仿真平台，将机器人模型、控制接口、触觉阵列、任务逻辑和记录模块组织到统一执行流程中。平台基于MuJoCo完成多刚体动力学和接触计算\\cite{todorov2012mujoco}，本章讨论仿真实现及其观测含义，不涉及实机集成认证。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 37,
+      "text": "一次控制周期中，环境先将动作送入控制器，再推进若干物理子步，随后读取观测并进行任务评价。记录模块位于执行链路的接口处，不参与接触力求解。这样的顺序有助于区分控制目标、物理状态和观测结果，避免把目标动作直接当成已经完成的运动。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 39,
+      "text": "平台设置Lift、PickPlace、Stack、Push和NutAssembly五类任务接口，分别面向抬升、搬移放置、堆叠、推动和装配过程。任务工厂负责选择任务对象，并由任务实例补充相应场景。接口注册说明软件具有对应入口，但不能代替具体条件下的执行验证。本章仅以已有代表性记录核查观测输出，抓取生成与任务性能分析在第三章展开，数据组织及质量控制在第四章讨论。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 44,
+      "text": "机器人组合模型由RM75B机械臂、途见科技自研灵巧手和安装底座构成。机械臂MJCF定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\\_joint1至pos\\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 46,
+      "text": "机械臂各级连杆通过局部位置和四元数描述相对变换，末端定义right\\_hand安装体和right\\_hand\\_site。安装体用于附着手部模型，末端site用于位姿读取及逆运动学计算，两者职责不同。组合构建器将手部安装到指定body，并施加机械臂描述中给定的附加旋转，其XYZ欧拉角为$(-90^\\circ,-90^\\circ,0^\\circ)$。该旋转通过四元数参与坐标组合，必须与父body原有变换共同使用。因此，附加安装角不能直接解释为灵巧手在世界坐标系中的姿态。对于定义在几何局部坐标系中的点，其所属刚体坐标由旋转和平移共同确定；同样的变换规则也用于后续触觉采样点安装。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 93,
+      "text": "手部关节还配置被动弹簧及阻尼。驱动腱提供整体屈曲作用，而不同关节在接触物体后受到不同约束，未受阻关节仍可改变姿态，由此表达模型中的欠驱动适应行为。该机制并不意味着接触后每个关节都获得唯一稳定解，其运动还受弹簧、摩擦及求解参数影响。表\\ref{tab:ch02_actuators}采用模型的SI单位约定：机械臂$k_p$单位为N$\\cdot$m/rad，腱执行器$k_p$单位为N/m；腱力与关节力矩不能直接比较。这些是仿真参数，不是实物标定值。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 100,
+      "text": "平台的控制过程可分为目标解释、执行器位置伺服和物理积分三个层次。目标解释确定机器人希望到达的关节或末端状态，位置执行器据此产生驱动力，接触求解器再计算约束下的状态变化。MuJoCo提供接触与多刚体约束的统一计算框架\\cite{todorov2012mujoco,mujoco2026computation}，但具体运动仍由组合模型、局部几何和参数共同决定。独立机械臂XML中的求解设置在组合构建时被覆盖：实际构建器采用Newton求解器、100次迭代上限、椭圆摩擦锥与0.001~s物理步长，不能将原机械臂文件中的PGS配置直接作为组合环境参数。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 102,
+      "text": "手部皮肤碰撞几何采用mesh类型，当前padgeom默认接触维数为4，滑动、扭转和滚动摩擦参数依次为1.3、0.02和0.0002，接触参考参数为$(0.01,1)$。这些设置适用于对应几何类别，并非所有接触的统一取值。模型对部分手指与拇指、手掌与手指接触另设显式pair，物体和桌面也具有自身参数，最终接触行为需要结合配对规则解释。触觉布局虽然引用同一皮肤网格资产，仍不能把拟合表面直接等同于引擎内部碰撞表示。接触约束具有数值柔顺性，也不表示模型已经包含可变形触觉皮肤。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 150,
+      "text": "手部控制器接收六个位置通道，并根据执行器的传动类型读取坐标。固定腱执行器不能按照单一关节地址解释，其当前位置应从执行器对应的传动坐标获得。底层由MJCF位置执行器及其阻尼设置完成伺服，而不是在控制代码中另设一个通用力矩PD控制器\\cite{mujoco2026xml}。表\\ref{tab:ch02_control_parameters}中的IK参数是构造默认值，调用方可以覆盖，不能据此认定每条历史Episode都执行了同一套逆运动学。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 159,
+      "text": "每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\\times8$，指尖为$7\\times8$；手掌设置$7\\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\\ref{tab:ch02_patch_layout}。指节几何具有重复性，但采样点仍由相应STL计算，不能用一组平面坐标替换全部曲面。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 180,
+      "text": "其中，$B_i^{d_u}$和$B_j^{d_v}$为Bernstein基函数，$\\boldsymbol A$为采样参数对应的设计矩阵，$\\boldsymbol P$存储三维样本，$\\boldsymbol W$为样本权重。正则强度$\\rho$由配置系数与加权设计矩阵的平均对角尺度共同确定，不能直接等同于配置中的无量纲系数。曲面坐标沿用网格的长度单位，参数坐标本身无量纲。最终Taxel位于参数单元中心，避免将相邻单元同时放到同一边界上。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 186,
+      "text": "手掌采用mesh-uv策略。程序对网格进行PCA投影，在局部二维参数域内设置规则采样位置，再通过投影三角形的重心坐标插值恢复三维点。当多个表面投影重叠时，需要选择对应外表面；当采样位置落在投影缺口或边界之外时，使用实现中的最近三角形回退。该方法保留了采样点与网格的关系，但二维规则网格不等于曲面等面积划分，投影折叠和回退区域也可能产生不同的局部间距。表\\ref{tab:ch02_layout_parameters}列出三类布局的关键差异，不能仅根据策略名称推断其几何性质。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 212,
+      "text": "网格采样点还需安装到正确的刚体上。程序先应用skin geom的局部旋转和平移，再根据行列相邻点差分构造切线。列方向归一化为$\\boldsymbol e_x$，行方向经Gram--Schmidt正交化得到$\\boldsymbol e_y$，法向由两者叉乘确定，局部方向矩阵为$[\\boldsymbol e_x,\\boldsymbol e_y,\\boldsymbol n]$。随后依据点相对body或Patch参考位置进行外向修正。该步骤是保持感知区朝向一致的几何启发式，不能称为已经认证的实物表面法线。图\\ref{fig:ch02_frame}展示局部切线与叉乘法向，特意区分外向修正前的坐标构造。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 227,
+      "text": "其中，$d_c,d_r$为对应方向可用相邻距离的最小值，$\\gamma$为overlap系数，$h_{\\min}$为最小半宽；法向半厚度$h_z$单独配置。指定profile取$\\gamma=1.25$、$h_{\\min}=0.0005$~m、$h_z=0.004$~m，而传感器类默认厚度和overlap分别为0.0015~m和1.0。二者必须按具体配置区分。box site是有体积的感知区域，不参与独立Taxel碰撞；区域之间允许重叠，其截面面积也不等于经过标定的真实电极面积。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 282,
+      "text": "原生touch在相应body和site感知条件下累加接触法向力，输出非负标量\\cite{mujoco2026xml}。在模型采用SI单位的约定下，它可解释为模拟法向力读数，但没有除以真实电极面积，也不包含完整切向力向量。一个接触可能被重叠感知区重复覆盖，因此全部Taxel读数求和不必等于机器人受到的总外力。该读出也不等同于视觉触觉图像或材料内部连续压力场\\cite{si2022taxim,sferrazza2022simtoreal}。当前712维链路来自simple\\_box与原生touch，不以touch\\_grid插件作为直接生成来源。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 302,
+      "text": "其中，$t$为连续调用的观测索引，$\\mathcal C_c$为下述Patch内邻域扩散算子，$\\boldsymbol y_t$为processed向量。末行适用于当前关闭高斯滤波和噪声、开启归一化的profile：先完成邻域扩散及范围限制，再除以饱和尺度$s$，最后转换为float32。滤波初态由处理器reset路径决定，不能假定任何数据片段都以相同方式独立初始化。指定profile使用$d=0.002$、$s=1$、$p=0.7$、$\\alpha=0.45$，并开启归一化。死区和饱和设置改变了弱响应及尾部范围，幂变换与时间滤波又改变幅值和相邻观测关系，因此处理后的值不再保留原始模拟力的直接单位含义。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 304,
+      "text": "邻域扩散在每个Patch恢复的二维阵列中进行。该仿真后处理操作的实现参数名为crosstalk，不表示已完成真实电子皮肤的物理串扰标定。系数$c=0.12$表示每个源单元保留$1-c$的响应，其余部分按可用的8邻域数量平均分配。边界单元的邻居少于内部单元，程序按源单元归一化，不能写成所有接收单元统一除以8。邻域扩散只作用于同一Patch，数组中相邻但属于不同Patch的两个索引不会据此交换响应。当前profile的gaussian\\_sigma和noise\\_std均为0，高斯滤波与随机噪声属于可选能力，并未在该配置中启用。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 323,
+      "text": "表\\ref{tab:ch02_signal_stages}区分了几何采样、原生传感器值和后处理观测。最终向量保持表\\ref{tab:ch02_patch_layout}的通道顺序，可还原为局部热图；热图色标只是显示方式，不改变原数组的物理语义。真实采集侧的processed还具有自身驱动和处理条件，不能仅凭同为712维就认为它与仿真观测单位相同。本文在后续跨域研究中保持这一区分，不将无量纲processed数据称为Pa或经过认证的真实压力。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 328,
+      "text": "平台功能核查需要回答两个不同层次的问题：模型和接口是否具有所描述的实现，以及已有执行记录是否包含符合定义的触觉观测。前者可以通过模型、构建器及控制代码核对，后者需要检查实际数组和关联元数据。两类证据都不能单独替代完整动态复验。本节依据现有文件开展只读核查，没有重新执行物理任务，也未新增仿真样本；历史记录中的成功状态与本轮直接检查的数组结果分别报告。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 330,
+      "text": "模型核查确认机械臂存在七个位置执行器，当前手部存在十二个转动关节及六个腱驱动通道，组合构建器具有模型安装和传感器扩展接口。控制流程包含动作写入、物理子步推进、观测读取和任务评价，触觉读取使用名称绑定后的数据地址。这些结果支持模型配置和软件接口层面的描述，但本轮没有据此宣称所有执行器均完成运动测试，也没有检验每个碰撞条件下的稳定性。历史编译模型审计记录中存在712个原生touch传感器，可作为先前构建结果的来源证据，不能被解释为本轮重新加载当前模型得到的结果。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 358,
+      "text": "检查结果如表\\ref{tab:ch02_episode_validation}所示。五条sensor\\_tactile均符合上述shape、类型、有限性与非负要求，且并非全零。timestamp为float64，其相邻增量在浮点误差范围内为0.05~s，与20~Hz保存节奏相符。这一结果说明所检查历史记录保留了规则时间索引下的触觉数组，但不意味着物理子步内所有接触变化均被保存，也不能由此认证视觉、动作和触觉在任意历史文件中均完全同步。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 360,
+      "text": "不同记录的非零比例差异较大，其中Push为0.495\\%，Stack为18.263\\%。该差异说明触觉稀疏程度随记录条件变化，统一维数并未使不同任务得到相同接触分布。但仅凭这五条数据，不能将差异完全归因于任务类型：物体、轨迹、接触阶段及处理条件也可能影响激活情况。这里不对任务进行统计排名，不用单条记录估计任务总体响应，更不把非零比例较高解释为操作质量较好。低激活记录的存在也提示，后续数据审计应保留实际响应，而不是为满足非零要求补写信号。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 362,
+      "text": "五份NPZ同时包含tactile和sensor\\_tactile两个字段，二者实际数值并不完全相同。记录合同采用后者检查，因而本节非零比例不能与前者的统计直接互换。字段名称相近不构成相同采样时刻或相同处理路径的证据，若需要进一步解释两者关系，必须回到对应版本的记录调用位置。本节保留这一差异，不将某一字段未经核验地命名为原始力，也不依据数组差值推断信号处理的因果作用。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 364,
+      "text": "历史manifest及结果文件将五条案例的成功状态登记为True，这是原有任务执行记录的声明，不是本轮重放后重新获得的成功结果。Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 366,
+      "text": "更重要的是，历史记录与当前XML、曲面拟合及信号处理配置之间的完整版本一致性尚未确认，记为UNKNOWN。关节状态或控制数组维数相容，只能表明接口形式相容，不能证明物理模型、碰撞参数和全部代码相同。因此，本章将当前实现描述与历史观测检查并列，而不将它们合并为同一冻结版本的端到端动态验收。若后续需要提出这种更强结论，应补足当时模型及配置档案；本轮没有通过新增实验填补该缺口。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 368,
+      "text": "由此可见，现有材料支持平台具有明确的模型、控制和观测组织方式，并支持五条指定历史记录中触觉数组的数值与基本采样合同。触觉非零不能证明真实力标定正确，仿真观测合法也不意味着Real与Sim物理对应已经建立。抓取候选能否转化为稳定任务轨迹，仍需第三章的可达性和任务验证；全量数据的关联、去重与质量结论，则由第四章另行审计。本节不以有限功能记录替代这些后续论证。"
+    },
+    {
+      "source": "thesis/body/ch02_simulation_platform.tex",
+      "line": 375,
+      "text": "控制链路将关节目标或末端IK求解与底层位置伺服、物理积分分开，在指定配置下按20~Hz控制和1000~Hz积分执行。触觉阵列由皮肤STL派生，通过指节与指尖外壳拟合、手掌参数域投影及局部坐标构造形成16个Patch，再由712个原生touch感知区读取标量响应。死区、幂响应、时间滤波和邻域扩散进一步产生无量纲processed观测，其含义不同于经过标定的真实压力。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 17,
+      "text": "其中，$\\boldsymbol t_{oh}\\in\\mathbb R^3$和$\\boldsymbol R_{oh}\\in SO(3)$描述物体坐标系下的手部目标，$\\mathcal C$存储接触点、法向及距离，$\\boldsymbol m$为候选质量和来源指标。驱动比例需进一步转换为具体执行器的控制范围，不等于十二个手部关节的独立角度。候选合同检查维度、旋转合法性和比例范围，这些检查只能保证表达有效，不能证明实际接触已经成立。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 57,
+      "text": "物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。但档案多样性是搜索机制，不直接等于独立初态或不同成功模式已经得到充分验证。本项目使用的是适配实现，并未据此声称完整复现第三方Isaac系统。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 66,
+      "text": "Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。它在源候选附近改变腕部平移和朝向，再以机器人逆运动学残差排序，保留可进一步执行的模板。当前默认集合包含39个格点，平移基本尺度为0.01~m，旋转基本尺度为$15^\\circ$，并包含若干倍尺度的单轴旋转以及平移、旋转耦合编辑。局部改变不会把手部根节点整体绕物体远距离扫动，适合在已有接触构型附近寻找机械臂更易跟踪的目标。其局限是搜索依赖源候选和固定邻域，不能保证发现相距较远的可达抓取模式；39个格点也不是39个独立实验样本。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 70,
+      "text": "图\\ref{fig:ch03_candidate_sources}中的MJWarp PPO仅作为条件性补充，在格点阶段未解决且仍有可用模板时进行模板选择与手部驱动编辑。历史Top100路由中存在2条RL\\_SUCCESS记录，但这并不构成强化学习优于其他模块的消融证据。整体而言，可微指标提供几何方向，进化反馈检验物理行为，格点扩展处理机器人可达性，后续编辑尝试解决局部未完成案例。各模块依赖不同输入和预算，应分别说明作用，不能混合命名为一个新的原创抓取优化算法。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 84,
+      "text": "其中，$\\boldsymbol R_{eh}$为手部安装相对旋转，$w,o,h,e$分别表示世界、物体、候选手部参考与末端坐标。位置量单位为m，旋转无量纲。这里采用执行器接口中实际使用的安装参考，不能把STL局部原点任意替换为另一个掌心点后仍沿用同一公式。若缺少安装补偿，即使目标手部方向在几何上正确，机械臂实际跟踪方向也可能与之不同。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 93,
+      "text": "其中，$e_p^{\\max}$和$e_R^{\\max}$分别为两个目标上的最大位置与旋转残差，$\\ell$为相应末端行程。三个系数是代码中的数值权重，用于产生排序，而非经过物理标定的统一距离单位。评分较小表示在该初值和求解配置下更易到达，不表示对应抓持必定稳定。静态排序还临时放宽目标速度约束，使残差更接近求解可达性的检查；真正执行时仍使用相应速度限制和平滑，不能将两条路径的跟踪结果视为相同。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 104,
+      "text": "图\\ref{fig:ch03_reachability}所示预检的作用范围需要明确：已核验实现主要覆盖预抓取与抓取两个目标，并没有据此证明完整Lift轨迹的每个路点都通过连续碰撞认证。两个端点均可达时，中间路径仍可能靠近桌面或改变IK分支；静态残差较小时，动态跟踪也可能因速度限制而产生更大误差。因此，筛选结果只决定候选是否值得进入执行，后续阶段仍需读取真实状态和接触结果，不能把它称为通用连续无碰撞规划器。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 108,
+      "text": "局部搜索还受预算限制。模板构建对可执行候选排序后，只运行有限数量的完整尝试，并可优先复用已有参考。这有助于控制批量生成代价，但意味着最终保留下来的模板不等于全部可达候选，也不构成对整个抓取空间的穷举。本文将这种筛选视为面向具体机器人和源候选的约束连接环节，其有效范围由后续实际执行与验收结果共同确定。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 113,
+      "text": "通过静态筛选后，候选还需要变成从机器人当前状态出发的连续命令。执行器将目标分解为稳定初态、过渡、预抓取、接近、闭合、保持、抬升和验证等阶段，每个阶段具有目标末端位姿、手部命令和控制步数。分段组织的目的不是人为把操作拆成互不相关的动作，而是在接触建立前后采用不同目标，并保留阶段边界上的误差及接触信息。前一阶段输出的实际状态构成后一阶段的起点，因而不能只保存各阶段名义目标而忽略执行结果。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 124,
+      "text": "其中，$\\boldsymbol a_h$为六个手部执行器的位置命令；关闭平滑时直接使用$u$。该映射使参数曲线端点斜率为零，能够缓和相邻阶段的名义速度突变，但并不保证实际物体速度也为零。接触力、手部加载和关节伺服仍影响动力学结果，不能把插值平滑等同于抓持稳定。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 158,
+      "text": "验收状态由实际profile及布尔结果共同确定，final配置通过时记为FINAL\\_VERIFIED，否则为FINAL\\_REJECTED。生成过程中的某个变量即使名为strict\\_execution，也不能替代该最终状态。类似地，物理执行返回success与严格回放通过是不同证据，候选档案、模板清单和示教导出需要保留验证层级。导出入口默认先进行final检查，诊断性允许未验证轨迹的开关不能作为正式质量保证。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 185,
+      "text": "Lift执行从稳定初态开始，经过过渡和预抓取接近，在close阶段逐步建立手部闭合命令，在hold阶段检查和维持接触，然后抬升并进入verify。接近阶段需要机械臂跟踪手部目标，接触阶段则要求驱动命令与物体几何形成有效加载；两者失败不能用同一几何指标解释。完整阶段记录让后续能够判断失败发生在物体接触之前还是加载之后，也为其他任务选择可用抓持前缀提供依据。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 187,
+      "text": "PickPlace以源抓持为基础，增加抬高避让、横向运输、下降、释放、撤离及任务验证。转移时既要保留物体初态与抓持目标的关系，也要考虑手部和桌面之间的几何余量。当前实现存在恢复已验证Lift终态并复用原前缀的路径，也存在从reset重新执行的选择。前者可以避免重复执行中的数值漂移，却不能被描述成整个拼接序列在该次运行中全部重新产生。对示教而言，前缀来源及衔接方式应明确保留，不能只凭拼接后数组长度判断物理连续性。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 208,
+      "text": "Stack除被操作物之外还需要支撑物的状态。源抓持能够提供手与物体的相对关系，但堆叠目标必须根据支撑物位置、物体尺寸和下降范围进一步确定。任务后缀通过运输、下降和释放形成支撑关系，再检查物体是否稳定放置。并非每个物体都适合当前堆叠定义，因此已有批次先选取task-valid对象域。对这一筛选应保留来源，不能将限定物体域上的成功比例写成对任意物体的覆盖能力。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 217,
+      "text": "Push不以先形成稳定悬持为必要前提，而是依据手掌或手指几何建立推动接触，检测物体接触并按目标状态反馈推进。手部到达目标附近并不说明物体已经产生期望位移，因此需要单独检查实际运动与接触条件。该任务不能直接继承Lift的成功定义，触觉激活也只能作为接触相关信息，不能替代目标位移评价。图\\ref{fig:ch03_task_transfer}因此将推动作为专属控制链，而非强行接在抬升轨迹之后。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 219,
+      "text": "NutAssembly包含抓持Bolt、姿态伺服、平移、下降与装配结果评价。抓持阶段的细小偏差可能使物体倾斜，在后续下降前就丢失可用接触，因此不能把所有装配失败都归因于对孔精度。现有实现保留手部控制策略对承载过程的影响，也保留旧variant与后续几何版本不兼容的记录。局部成功可以用于分析某个控制条件是否值得保留，却不足以说明不同初态都能稳定装配，更不能把旧版本成功清单当成当前几何的最终验收。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 226,
+      "text": "本节区分历史批量路由状态与具有源manifest、数组及Strict结果的具体轨迹。文件核对不等于重新运行验证；候选成功、任务成功和FINAL通过具有不同分母，以下不将其合并，也不对不同条件的批次进行算法排名。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 228,
+      "text": "历史批量记录见表\\ref{tab:ch03_historical_batches}。Lift候选路由涉及100个对象标识，其中98条登记为LATTICE\\_SUCCESS，2条为RL\\_SUCCESS，说明该批次主要通过格点模板阶段获得可用结果，不能据此推断进化优化或强化学习的独立贡献。PickPlace与Push汇总虽然均登记100条SUCCESS，但前者全部为cached，后者有98条cached，因此不能解释为本轮重新完成的两百次物理执行。Stack在task-valid筛选域中得到43条成功与5条失败，而NutAssembly的100条记录以variant为单位，不等于100种独立操作物体。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 247,
+      "text": "批次版本也影响这些记录的适用范围。Top100汇总保存18项源码Hash，本次材料核对发现12项与当前相同、5项不同、1项对应文件缺失。虽然其中手部XML及部分候选模块一致，仍不能把当前全部执行逻辑回填成历史运行配置。缓存行中的零耗时也不代表候选优化不需要计算。该组结果可说明分级流程已产生多任务历史产物，却不能作为统一模型、统一初态与统一Strict合同下的综合通过率。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 273,
+      "text": "这些记录支持源模板附近存在多个历史Strict通过序列。seed和Hash提供可追溯性，却不能消除同物体、同模板关联；10/10不是对未见场景的通过率估计，也不提供候选算法的公平对照。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 290,
+      "text": "更大一组历史扰动生成报告登记90次尝试，其中46条接受、18条Strict不稳定、26条Lift失败，见表\\ref{tab:ch03_generation_failures}。这组数据在本章保留为L1历史汇总，没有在本轮逐一重新认证全部90条原始轨迹。报告中的低抬升和角速度超限诊断还可能重叠，不应把所有诊断项当作互斥失败类别相加。该批次与上述Sugar示教存在来源重用，二者也不能累计成一百条新的独立验证。这些结果表明，能够生成几何或可达候选之后，承载与尾段稳定性仍需分别处理。"
+    },
+    {
+      "source": "thesis/body/ch03_grasp_demonstrations.tex",
+      "line": 292,
+      "text": "典型Lift案例的历史Strict结果中，最终抬升为0.0608926~m，尾段接触和抓持比例均为1，支持在该条件下持续承载的解释。NutAssembly则保留原始执行失败、降低抓点后仍失败、在降低抓点基础上保留hold抓持命令后单例成功的对照。该结果提示问题可能在装配之前的抓持保持阶段已经形成，而非只与末端对准有关；但它只是局部控制条件的对照，不能解释为跨seed稳定提升。图\\ref{fig:ch03_examples}展示由对应原始视频提取的成功案例画面；两条失败记录仅呈现其结果，不使用其他运行的画面替代。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 11,
+      "text": "数据组织以Episode和Frame为基本单位。Episode表示一次执行及其来源记录，Frame表示该序列中保存的一行观测或转移。Root用于表示按具体规则划分的初态与来源组，不能直接由Episode数量或随机seed数量推导。一个源执行可以派生多个后缀、窗口或导出版本，文件数增加并不意味着独立物理条件增加。对于需要检验泛化的模型，还应根据实际来源确定分组边界，而不是先把所有Frame随机打散再划分数据。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 35,
+      "text": "表\\ref{tab:ch04_fields}中两种动作都为十三维，但语义不同。position\\_action保存实际低层位置目标；ik\\_action前七维为末端位置与四元数，后六维为手部命令。将IK目标当作关节位置不仅改变单位，还改变学习目标的含义。类似地，目标位姿不能作为实际测量的末端位姿使用，object\\_state中的目标site也不应计为独立运动物体。触觉沿用第二章定义的712维processed观测，记录层不重新赋予其真实压力含义。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 44,
+      "text": "原始NPZ保存密集数组，Manifest记录来源和配置，规范modalities提供统一字段，LeRobot则提供后续训练使用的特征与索引组织，关系见图\\ref{fig:ch04_carriers}。这些载体并非互相独立的数据集，每次转换都需要保留父来源。格式版本还应与语义合同分开：LeRobot的codebase\\_version不等于五任务在线记录版本。真实触觉窗口也不具备仿真Episode的全部动作和RGB字段，不能为了统一存储而假定缺失模态已经存在。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 49,
+      "text": "观测与动作的关联决定模型实际学习的问题。以执行前观测预测即将施加的动作，与给模型提供动作执行后的状态，虽然可以生成相同长度的数组，却具有不同的因果含义。若将当前动作与其造成的post-action结果直接配对，训练过程可能利用执行结果反推动作，而不是根据执行前状态选择控制。因此，采集程序需要明确每一行位于控制周期的哪个位置，不能仅依赖行号和时间递增判断关联正确。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 57,
+      "text": "式\\ref{eq:ch04_causal_pairing}不是对所有旧数据都成立的自动修复规则。若中间发生状态恢复、未保存的试探步骤或时间缺口，前一条记录未必就是当前动作的真实起点，需要结合实际执行路径检查。移位还要求源动作语义正确，不能修复把IK输入当成关节命令的问题。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 68,
+      "text": "触觉处理还具有内部时间状态。同一物理状态被多次读取时，如果每次都推进低通滤波或重新采样噪声，新增观测操作本身就可能改变保存值。当前适配器以仿真时间和原始读数内容作为缓存键，同一键只处理一次并返回副本，使额外采集不重复推动信号处理。该机制解释了为什么记录层不仅需要调用传感器接口，还需管理读取时机；它是当前代码的行为，不能回填为所有历史记录均具有的属性。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 76,
+      "text": "其中近似相等表示按实现容差比较浮点时间。仅在相邻控制步连续执行且均被记录、期间没有额外物理推进或重置时，$t_{i+1}$才与$t_i^{+}$一致。未接受步骤、跳步或异常中断可能使两者不再衔接，不能将此关系推广到存在记录缺口的序列；在线检查会拒绝不满足连续时间合同的数据。视频PTS可使用相对帧时间，仿真时间则保留绝对时钟，两者需要由首帧偏移和采样索引连接。时间单调只能排除部分结构错误，不能证明每张图像确实来自对应物理状态。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 85,
+      "text": "RGB具有独立采样配置。默认合同为1920$\\times$1080、20~Hz，速度配置可降至640$\\times$360、5~Hz，状态和控制仍为20~Hz。图\\ref{fig:ch04_multirate}说明，低频图像需要保存其控制行索引，而不是删除两张图像之间的动作。程序按显式合同检查采样位置，不能把默认视频频率当作全部服务器数据的实测参数。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 103,
+      "text": "Episode终止与异常中断同样影响可保存范围。在线适配器只有在完成对应物理步骤并被记录器接受后才提交行，视频编码异常需向上层传播，不能继续登记缺失模态。表\\ref{tab:ch04_recording_versions}中的版本区别因此不仅是字段增减，还涉及生成顺序和验证范围。修复代码的存在、数据已重新导出以及数据通过重新审计是三个不同状态，旧文件不能仅因程序更新而自动获得新合同标记。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 112,
+      "text": "P31时序修复对等长数组执行观测截去末行、动作截去首行的操作，并保存偏移说明和被丢弃的首动作索引。它改变了配对关系，但不自动把IK动作变为关节命令。因此，动作语义修复和索引修复必须独立检查；仅通过shape、finite或调用名为causal的函数，均不能说明训练目标已经正确。对于字段不完整或来源不明的文件，应保留旧版本身份，而不是补零后强行进入统一格式。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 119,
+      "text": "检查指定映射。误差为零只对所比较字段成立，不能扩大为未检查图像、完整状态或物理回放一致。若变换包含量化或重采样，还需按实际合同设置误差解释，而不能一律要求任意格式变换逐比特相同。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 123,
+      "text": "v4规范包还保存float64完整积分状态及实际控制，供后续回放使用，这些辅助字段与策略输入分开。Manifest与Episode元数据记录源文件、转换合同及SHA256，文件Hash用于确认文件是否改变，来源说明用于解释其语义。两者缺一不可：相同字段名称或相同文件Hash并不能替代采集与索引规则，统一存储需要的是可追溯合同，而不是只有统一目录形式。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 128,
+      "text": "数据质量不能由单一成功标签决定。任务执行成功说明机器人在给定条件下完成目标，Strict通过说明对应轨迹满足特定稳定性约束；两者均未直接检查训练动作的含义或观测时序。反过来，数组finite、shape合法也不说明轨迹完成任务。因此，本章将质量控制分为执行与验证状态、结构数值、时间关联、来源版本、重复隔离以及训练角色六个层次，使每一层回答明确的问题，而不将全部检查折叠成一个模糊的有效标记。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 148,
+      "text": "结构检查约束state、position\\_action、ik\\_action和sensor\\_tactile的形状与float32类型，检查对象姿态、数值有限性、触觉非负及时间增量。对于已声明版本的阶段编码，还需保证阶段数组长度一致、编码不重复且观测到的编码具有合法含义。字段缺失不能默认为零，尤其不能把未记录触觉伪装成全零触觉。时间和命令连续性检查则需要相应字段及开关实际启用，不能从函数返回的版本名称直接推断所有检查都已执行。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 150,
+      "text": "在线状态中的上一命令可以与前一行实际动作比较，保存的执行前qpos/qvel也可与上一行执行后状态比较。这些关系可检出部分记录错位或隐藏状态跳变，但不能替代完整物理回放。旧PickPlace案例中，state后十三维与前一position\\_action比较，有373个相邻转移超过$10^{-6}$容差，最大差约0.1。这一发现说明该记录不满足当前命令连续性检查，并不能在没有进一步定位时断言其全部模态反因果或指定唯一故障原因。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 152,
+      "text": "旧Stack案例则没有pre\\_qpos和pre\\_qvel，无法完成当前要求的物理连续性核验。它与旧PickPlace还缺少规范modalities文件，不能描述为所有旧记录都已经完成统一导出。这里的处理是保留问题和版本身份，而不是在本轮删除、补写或重建数据。审计发现的缺陷应与影响范围一起保存，否则后续程序可能仅因旧文件能够读取就重新把它当作已修复数据。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 163,
+      "text": "队列通过任务状态、租约和事务组织提交。worker在有效lease下提交结果，登记要求进入\\mbox{VALIDATING}且外部verification明确通过。登记时，来源或内容重复者进入\\mbox{DUPLICATE}，无重复者插入Episode表并进入\\mbox{EXPORTED}；\\mbox{QUARANTINED}属于失败或重试耗尽后的隔离路径，并非成功登记的另一出口。过期租约、重试上限和隔离机制用于处理异常，不能让旧worker继续登记已失去所有权的任务。文件写入、验证与数据库登记是不同步骤，异常恢复需要对照已有文件和状态，而不能仅依据进程是否存在判断数据已完整保存。上述机制是实现事实，不代表任意磁盘断连之后都已经证明无损恢复。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 173,
+      "text": "Hash只能识别定义范围内的相等，不能证明两个不同Hash具有不同物理初态，也不能排除近似轨迹或相同模板派生的样本。训练划分还需要按来源组管理，同一Root的窗口、后缀和重导出版本不能因文件不同而分散到训练与验证两侧。对于缺少完整lineage的历史文件，应把独立性标记为未知，而不是用新的随机划分掩盖来源缺口。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 175,
+      "text": "数据清洗也不应等同于删除所有失败轨迹。合法失败仍可用于失败诊断或具有明确标签的其他研究，但不能直接当作成功专家标签；是否计入生产时长应遵循对应冻结规则。历史版本保留来源和合同标记，既能支持修复效果比较，也能避免旧性能结论继续建立在错误语义上。表\\ref{tab:ch04_quality_gates}所示分层审查因此强调按用途准入：任务成功、Strict通过、格式有效、时序正确与可用于具体训练之间存在依赖，却不能互相替代。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 182,
+      "text": "三组LeRobot库存见表\\ref{tab:ch04_lerobot_inventory}。实际episode\\_index数量和Parquet行数与info中的Episode、Frame声明一致，state、action和tactile分别符合39、13、712维，所读数值finite，触觉非负。这个结果说明指定数值文件可按所声明结构读取，但不证明早期版本的动作语义和时序正确。两个旧目录仍保留其历史合同问题，不能因为当前程序已经修复，就把旧数据和模型性能重新解释为合规基线。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 199,
+      "text": "三组数据的触觉非零比例分别约为12.7297\\%、9.4029\\%和11.0972\\%，这是对各目录所选全部数值行的重新计算，不是任务成功率或物理准确率。task\\_index分别对应两个、三个和一个lift:物体标签，实际都属于Lift操作，不能解释为覆盖两种、三种和一种物理任务。三个info均仅声明train范围，未提供本轮可认证的独立验证和测试划分。Episode数量因此不能直接替代独立Root数量，也不能将三个版本相加为36个独立采集主体。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 201,
+      "text": "修复版的一致性检查进一步回到原始来源。340行导出action与源ctrl、state命令区与前一源ctrl、触觉与前一源tactile均得到最大绝对差0，支持该索引映射在指定数值字段上成立。它不意味着所有39维状态都已单独重算，也不包括RGB像素逐帧检查。对三组数据的完整Episode数值摘要比较未发现完全相同的摘要，但这一检查既不含图像，也不排除截断后缀、轻微差异或同源版本重复，不能据此宣布无泄漏。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 219,
+      "text": "旧五任务在线样本共2665行，表\\ref{tab:ch04_version_quality}中的PickPlace与Stack缺陷说明，同一历史批次也不能只依据某个样本通过就整体升级。相对地，所选五个v4包覆盖Lift、PickPlace、Stack、Push和NutAssembly，共2727个控制行。其命令及所存qpos/qvel连续性检查通过，规范action、触觉、state与源映射逐项一致，登记文件Hash全部匹配且无登记文件缺失。这里确认的是保存数据及文件关系，不能替代新的物理执行。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 223,
+      "text": "历史Sink对照提供了回放合同影响的另一实例。同一380帧源在旧float32路径下回放失败，最大qpos分量偏差为1.628897；保存完整积分状态并使用float64控制的路径回放通过，记录偏差为0，见表\\ref{tab:ch04_sink_precision}及图\\ref{fig:ch04_sink_precision}。这些数值来自已保存回放报告，不是本轮新实验；本轮只读取源数组并确认辅助字段和数据类型。qpos包含不同类型的坐标，最大分量偏差也不能统一解释为某一长度误差。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 249,
+      "text": "两种设置同时改变完整状态保存与控制精度，因此该对照支持原状态/精度合同不足的解释，但没有分离两个因素的独立贡献。偏差0也只指报告中对应保存状态的比较方式，不能推广为任意任务、模型版本和浮点后端均逐位复现。保存额外状态能够增加回放证据，却不产生新的物理多样性；同一条件的旧隔离副本和新通过副本不能重复累计为新增时长。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 251,
+      "text": "真实触觉与Natural Sim的冻结训练合同需另行登记，不混入上述Episode与Frame库存。已有P44合同声明Real Train为5153窗口、32 Session，Real Validation为780窗口、4 Session；Natural Train为4049窗口、50 Root，Validation为905窗口、10 Root。这些是历史合同声明，本轮未重新认证原始Real全库。合同还保留Real历史不等间隔帧与Natural来源20~Hz连续采样的区别，因此不能把四帧窗口数量解释为同样的物理持续时间或相同数量的独立接触过程。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 253,
+      "text": "Real记录与仿真示教没有已认证同步物理配对，物理通道映射也仍有限制。它们可以按来源组织，并用于后续明确监督条件的跨域研究，但不能作为已经同步的视觉、动作与真实触觉联合数据集。Validation名称本身也不消除历史开发暴露，训练角色和独立性需要结合实际使用记录解释，而不是仅凭文件名判断。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 255,
+      "text": "本节统计不覆盖服务器批次2的实时数据库和完整磁盘。当前全量有效小时、独立Root及全局泄漏状况均不能由这几组样本外推。重复读取扩容索引反映的是采样使用量，不是新增物理仿真时长。现有证据支持版本化合同能够发现问题、指定转换和开发包满足所列检查；它尚不支持全部历史数据均可训练、全任务模态完全同步或正式生产指标已通过的结论。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 260,
+      "text": "本章从训练样本需要具有明确输入、动作和来源关系出发，建立了多模态数据表示、采集关联、规范转换及分层审查的论证。39维策略状态与完整仿真状态分开，两种十三维动作按语义区分，触觉和RGB按各自采样合同关联。执行前记录、控制缓冲预备和触觉缓存共同说明，采集时机本身是数据定义的一部分，不能由格式和维数代替。"
+    },
+    {
+      "source": "thesis/body/ch04_multimodal_data.tex",
+      "line": 264,
+      "text": "在上述数据条件下，后续研究需要进一步区分真实触觉与仿真触觉的分布及监督关系。本章的数据组织、来源追踪与质量控制为后续研究提供管理基础；下一章使用单独登记并冻结的Real、Natural Sim与Paired Sim触觉子集，本章讨论的LeRobot示教导出并非其初始跨域模型直接读取的训练输入。两套体系在仿真触觉观测和质量规范上相关，但没有已认证的一一数据对应，服务器示教库存也不能与触觉窗口数混为同一规模。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 5,
+      "text": "真实与仿真触觉具有相同数组维度，并不意味着能够直接用于同一操作表示。本文采用的观测按16个Patch组织，共712个标量通道，仿真阵列覆盖五指及手掌。其传感器原生raw读数来自MuJoCo native touch，对感知区域内的法向接触力累加\\cite{mujoco2026xml}；仿真processed观测则经过死区、限幅、非线性响应、时间滤波及Patch内邻域扩散处理（实现参数名为crosstalk）。Real processed观测来自实机自身采集处理流程，因此两域processed均应视为处理后的数值响应，不能直接称为真实压力或共同力学单位。对这种观测进行迁移，需要检查保留了哪些接触信息，而不只是核对输出形状。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 9,
+      "text": "令$X_{tj}$为第$t$帧第$j$通道响应，精确非零Mask定义为$M_{tj}=\\mathbf1[X_{tj}>0]$。在旧训练集上，Real与未转换Sim的激活比例分别约17.60\\%和13.31\\%，说明数值支持范围存在差异。Mask表示保留每帧712个激活位置，可以反映Patch内部支持及区域组合，却不是物理接触真值。滤波残留等微弱正值也会计入激活；固定通道顺序更不意味着完成两域物理配准，不能将Patch索引热图解释为认证曲面坐标，或对任意同编号Taxel作物理位置叠加。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 11,
+      "text": "幅值分析仅取$X>0$的响应。旧训练集汇总正值中位数，Real约为0.00500250，未转换Sim约为$1.03974\\times10^{-5}$；P95分别约1.50101与0.459485。这些是各域全部正值池的统计，不是逐Patch分位数的平均，也不是接触力误差。幅值分解以每帧正值的P10、P25、P50、P75、P90构成有效$4\\times5$表示，其余通道仅补零以复用网络接口；不输入Taxel位置、正值数量或空Patch标志。对包含至少一帧全零响应帧的窗口，按照预定规则予以排除，故该表示只刻画有响应条件下的幅值，不能覆盖完全无接触状态。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 13,
+      "text": "表\\ref{tab:ch05_domain_feature_difference}列出旧P37数据上既有转换输出经幅值校准后的表示分解诊断。Full与分位数先作log1p，各表示分别用Train拟合标准化，Probe由Logistic、kNN各1个及MLP、GRU、Transformer各Seed11、12、13组成，共11个；Full复用P38在相同输出、划分和预处理上的Probe拟合，不新增训练。此处为迁移后Probe诊断，非后文迁移前冻结的域分类评价基线（C0）验收。定义$D=1-2|\\mathrm{BA}-0.5|$，只度量BA偏离0.5的程度；表中三个表示的最小D均低于0.90，表明至少存在Probe未满足固定阈值下的BA等价门槛；其排序判别能力仍需结合AUC判断。因此，不能仅凭这些结果认定支持或正值摘要已经实现域混淆。幅值调整保持Mask不变，不代表完整触觉已匹配。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 28,
+      "text": "三种表示的特征空间、预处理及纳入条件不同，D值不能相减计算信息贡献，也不证明支持与幅度独立。低维分位数舍弃了响应所在通道及跨Patch组合，即使边际分布相似，也可能无法维持原接触结构。差异还可能来自任务构成、采集协议与处理链，不能全部归因于传感器物理性能。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_1.tex",
+      "line": 30,
+      "text": "四帧窗口还承载激活持续、出现、消失及幅值变化。P37验证集第1至第2帧的Mask变化比例，Real约1.7154\\%，未转换Sim约0.0958\\%，分母为各自窗口与通道总数，而非条件转移概率。真实帧间隔并非恒定，帧间差分不能直接解释为物理时间导数或频率差异。幅值还需检查相邻帧全通道绝对差，不能仅用Mask持续性代替响应强度变化。因此，完整重建应同时保留激活支持、正值幅度及短时序关系。下一节据此在缺少同步物理配对的条件下定义跨域重建问题。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "line": 5,
+      "text": "前节表明，真实与仿真触觉即使具有相同观测维度，其激活支持、幅值及短时序关系也不能直接互换。本文以自然任务仿真产生的processed触觉为输入，研究向Real域风格观测的转换。单个窗口包含四帧、每帧712个通道，输入与输出均保留既有通道及帧序。目标输出应为完整$4\\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征，不将其直接称为真实传感器输出，也不以低维统计摘要代替完整观测。保留帧序不要求两域采样间隔相同，帧间变化也不直接表示物理时间导数。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "line": 7,
+      "text": "本章使用第\\ref{sec:data_quality_summary}节所区分的单独登记并冻结的触觉子集，不直接读取LeRobot示教导出。其中三类数据分别承担不同角色：Real提供真实域观测，用于域内表示学习，并提供统计先验及伪配对目标侧信息；Natural Sim来自自然任务仿真，与Paired Sim共同参与Sim域表示学习，也是最终转换对象；Paired Sim则由真实统计先验指导仿真物理探针生成，按登记关系与Real窗口构成统计伪配对，为潜变量映射提供有限监督。任意Real与Sim窗口并无已知共同接触状态，不能直接互作真实标签。现有1200个训练窗口与240个验证窗口也不代表1440个独立Root；登记关联不构成同步物理接触真值，来源复用与覆盖限制仍须保留。Natural参与Sim表示学习，不等于其具有对应Real目标，亦不等于直接参与原始配对映射训练。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "line": 16,
+      "text": "目标同时包括接近Real完整观测统计，以及尽可能保留源输入的空间索引结构、激活支持、幅值和短时序变化；后者是待检验要求，不是已实现的物理语义保持。两域Taxel尚无逐一物理对应认证，也未建立共同力学单位；同维潜表示不意味着共同语义坐标。现有监督不提供Natural输入的同步Real真值，因而潜变量回归误差及真实Mask条件下的Decoder似然，均不能代替自由输出质量。上述目标不等同于模型实际优化的联合损失，真实机器人任务收益也尚未得到验证。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_2.tex",
+      "line": 23,
+      "text": "且11个实例全部满足才完成联合验收。BA与D门槛数学等价，不是两项独立证据，AUC另行评价分数排序；该检验只覆盖既定判别器，不能证明全部域信息消失。评价使用780个Real与905个Translated Natural Sim开发Validation窗口，不包装为独立盲测。物理与任务层仍需物理对应关系、同步接触真值或真实机器人操作等独立证据进一步验证，目前尚未获得充分认证。三层用于组织分析，并非已经全部通过；当前完整迁移目标仍未完成，后续分别展开监督构建、表示与映射，并检验其有效范围。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 5,
+      "text": "真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。为利用这些信息，本文以真实训练数据建立高斯混合模型（Gaussian Mixture Model，GMM）统计先验，引导球形探针在仿真手部形成接触，再通过原有传感器链路获得触觉输出。图\\ref{fig:ch05_gmm_physical_pipeline}给出构建过程。所得配对提供统计监督，不代表两域经历了相同的物理接触。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 21,
+      "text": "其中，$\\pi_{pk}$为混合权重，$\\boldsymbol\\mu_{pk}$和完整协方差$\\boldsymbol\\Sigma_{pk}$描述偏移中心与扩散。实现采用EM拟合，候选分量数为1、2、3，最多60次迭代，以BIC选择，并检查Session三折核稳定性。协方差初始化与更新分别加入$0.0025\\boldsymbol I$和$0.0004\\boldsymbol I$正则项。虽保存了分阶段模型，本节逆构造使用全阶段合并先验；参数拟合不使用Real Validation。BIC采用$-2\\log L+(6K_p-1)\\log n$，其中$n$为拟合偏移点数，不能作为独立采集数量。若阶段数据不足，回退同Patch合并阶段数据；三折平均核总变差超过0.25且\\mbox{分量数}大于1时，回退单分量模型。对Session限制取帧并轮转抽样，可减轻长记录对拟合样本构成的支配，但不消除会话间差异。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 53,
+      "text": "字典将可执行条件与观测响应关联，见表\\ref{tab:ch05_probe_dictionary}。各Patch分量按$m_{pk}$合并排序后保留最多5个。对每个保留分量，先在手部驱动指令为0、深度0.25~mm且非零响应的字典条目中，选择响应质心最接近$\\boldsymbol c_{pk}$的位置；再利用同位置的响应总量与深度关系插值估计基础加载。四帧Patch总量相对其均值的变化用于设置加载因子，而不直接写入触觉数组。基础命令受既定范围约束，不能解释为真实材料压陷量。具体而言，四帧加载因子限制在$[0,2]$；反馈按目标与生成Patch总响应之比估计调整倍率，并将倍率限制在$[0.5,2]$、基础深度限制在$[0.1,1]$~mm。该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_3.tex",
+      "line": 70,
+      "text": "图\\ref{fig:ch05_gmm_candidate_selection}中的两次压缩具有不同影响：Top-5可能丢弃较弱的响应分量，单一最佳候选则将多种可能的物理条件压缩为一个监督目标。既有数据包含1200个训练窗口和240个验证窗口，均为$4\\times712$，但1440窗不等于1440个独立Root。Real与Sim物理Taxel对应尚未认证，统计准入也不保证Natural Sim输入被充分覆盖。后续Translator只使用选定窗口的对应关系，未完整保留分量责任度和候选多解概率。保留这些信息用于软监督是一种后续方向，其收益仍待验证。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "line": 30,
+      "text": "其中$s_{\\rm pos}$为训练池正值中位数，下限为$10^{-7}$。时序状态使前帧接触影响后续预测，当帧完整Mask则向幅值头提供激活区域上下文。两分量用于表达正值分布的不同形状，不对应经过认证的物理接触类别。该分支区分零值事件与连续幅值，且幅值条件于Mask，并非两个无关输出；这不等于已证明显式Mask优于其他建模方式。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "line": 46,
+      "text": "Real训练池为5153窗，Sim训练池包含4049个Natural窗与1200个Paired窗，Sim采用分层混合批次，每步从Natural Sim和Paired Sim各取32窗，合成64窗，每轮127步。较小的Paired组重复访问，实现批次等量混合，而非按原始规模比例采样。Real每轮81步，两域总优化步数分别为3645和5715，重复访问不增加独立样本。两域分别拟合尺度，Real与Sim的输入尺度分别约为0.14118和0.04089，正值尺度分别约为0.0050025和$10^{-7}$。Sim正值尺度触及下限，其拟合按合并训练元素进行，与训练时两类窗口等量采样的权重不同，上述尺度均由传感器处理后的无量纲触觉数值计算，不对应实际压力或力学单位。采用AdamW、学习率$10^{-3}$、批量64，两域均训练45轮，仅在第30至45轮按各自验证目标选择检查点，最终均选第30轮，属于限定候选区间内的选择，而非全部轮次的无约束最优。验证损失取后验均值，但仍使用真实Mask条件，不能替代自由重建检验。Real按验证重建项与KL加权和选取权重，Sim则对Natural与Paired验证目标等权汇合；两套模型均未依据域分类器成绩选择。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_4.tex",
+      "line": 48,
+      "text": "上述为C3基础模型。后续C13仅调整Real Decoder的当前帧Mask条件嵌入与幅值头，其余Encoder、Mask预测及循环骨干冻结；C23是复用C13输出的Real自重建读出诊断；C24是同一可训练范围内增加时序幅值约束的修复版本，具体结果留待实验分析。各域重建目标只要求潜表示能够服务于本域读出，不约束同一维度表示相同接触特征。即使采用相同先验，也不能直接将两套坐标中的近邻解释为物理对应。独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_5.tex",
+      "line": 64,
+      "text": "这种映射的有效范围受监督来源限制。GMM责任度不是物理接触归属概率，Top-5分量筛选与单一候选选择压缩了多解信息，Translator未接收完整分量概率或候选分布。1200与240窗也不代表1440个独立Root。Paired Validation上，Translator与配对训练Real均值模板的潜变量Huber分别为0.32591983675956726和0.4942297637462616，按全部窗口、帧及潜维平均。该模板仅沿1200个配对训练目标的窗口维取均值，保留四帧位置，并广播至待评价窗口，不使用验证目标拟合。然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 5,
+      "text": "为检验统计伪配对与双域表示是否支持完整触觉转换，本节沿用第\\ref{sec:ch05_unpaired_problem}节定义的迁移前冻结域分类评价基线C0。其由原Real Train与Natural Sim Train训练，包括Logistic、kNN及MLP、GRU、Transformer各Seed 11、12、13，共11个实例。权重、Scaler、log1p处理、通道顺序与0.5阈值保持不变，标签方向为Real=1、Sim=0。跨域评价比较780个Real Validation窗口与同划分905个Natural Sim窗口的转换结果，分别来自4个Session和10个Root。这些是开发验证数据，不是新独立盲测；后训练的Probe不能替代该协议。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 14,
+      "text": "记两类召回率为$R_r$与$R_s$，则$\\mathrm{BA}=(R_r+R_s)/2$，$D=1-2|\\mathrm{BA}-0.5|$。每个实例必须同时满足BA在$[0.45,0.55]$、AUC在$[0.475,0.525]$及$D\\ge0.90$，且11个实例全部满足才算联合通过。BA与D门槛数学等价，不是两项独立证据；AUC检验分数排序，不能在小于0.5时反转后参加验收。点估计按窗口计算，不应误称Session或Root等权宏平均。原始未转换数据上，11个C0的Validation BA均超过0.98，表明其已能区分原始两域；但冻结后的测试只覆盖这些模型学到的判别特征，即使通过也不能替代触觉结构与输入响应保持检查。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 16,
+      "text": "表\\ref{tab:ch05_transfer_summary}汇总C3、C13与C27的同角色跨域结果。C27指保留原C3双域VAE、改进Translator训练的方案，未与C13的Decoder修复合并。C3采用原双域VAE与GRU Translator，其Validation结果取已有冻结链路复现，而非历史开发Test。虽然D全部达标，仅kNN同时满足AUC条件。表\\ref{tab:ch05_validation_instances}中，C3的MLP分数仍保持正向排序差异，GRU和部分Transformer则出现反向排序；两种情况均不满足域不可辨识要求。例如MLP Seed11将905个迁移窗口全部判Real，Real中776/780判对，BA约0.497436；但AUC为0.591571。固定阈值下的高D因此可能来自类别预测偏向，不能证明分布已接近。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 55,
+      "text": "C23进一步用原始Real与其C13重建输出作读出诊断，6/11满足同一数值门槛，包括Logistic、kNN、三个MLP及GRU Seed13；其余时序分类器未满足。该结果揭示目标域自重建仍存在可辨识痕迹，不是Natural迁移通过6/11。C24仅在相同幅值参数范围增加保留相邻帧的变化约束，同780个Real验证窗中，输出与Real的相邻保留帧log1p增量绝对误差由0.00281497降至0.00161364，但全窗全通道MSE升至0.02715745，汇总输出正值P99由3.54426降至3.28971，四帧总响应的跨窗标准差由67.58367降至57.52224；读出诊断仅kNN与Transformer Seed13满足，共2/11。时间统计改善与幅值尾部退化并存，不能将压低变化误差等同于更真实的触觉。Real帧间隔不均匀，该损失也不是物理时间导数。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 57,
+      "text": "C27保留原C3双域VAE，只适配Translator，增加Natural覆盖、Real坐标中的分布矩及源Patch响应份额约束，未混入C13 Decoder。新增通过GRU Seed12，使联合数由1增至2；但MLP、Logistic、GRU Seed11/13及三个Transformer仍未满足，且各实例AUC变化并非一致向0.5靠近。这支持有限适配带来局部变化，\\mbox{不能}支持整体成功或稳定优势；D的11/11也不能覆盖其余九个实例的排序差异。"
+    },
+    {
+      "source": "thesis/body/ch05_sections/section_5_6.tex",
+      "line": 59,
+      "text": "瓶颈证据指向监督与读出的共同限制，而非单纯未训练充分。配对状态复用、近Sim输入对应不同Real目标以及多解压缩提示监督歧义。Paired Train与Paired Validation中，19种放置后首帧指纹跨组复用，涉及后者97窗。指纹仅取九位小数精度的qpos与探针位置，不含速度等完整状态，不能等同于物理初态完全相同；但Real Session隔离也不能消除该复用风险。Natural又缺少对应Real真值，配对回归改善不能确认域外输入正确。加载与空间构型调整未解决全部配对覆盖，连续场、Taxel积分及处理诊断仅解释物理读出；这些都不是新的迁移成绩。扩散采样修复虽改善稳定性，仍未共同超过GRU的配对指标；直接OT和共享Encoder路线分别因坐标前提及结构保持停止，未执行的OT或C0不记为0/11。现有证据不能确定各因素的因果份额，也没有认证Taxel物理对应或真实任务收益。因而本章完成的是可追溯的重建与诊断链路，尚未完成完整域迁移验收。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 5,
+      "text": "第五章利用统计伪配对监督Translator，在独立训练的双域VAE之间学习直接潜变量映射，再由Real Decoder生成目标域触觉。该方法通过GRU内部状态建模四帧序列，但未显式构造潜变量的积分更新路径；配对潜变量误差也不能直接说明Natural Sim输出的域分布是否接近Real。为在保留既有表示与读出模块的条件下研究可调整的迁移路径，本文将原映射扩展为源条件共享参数向量场，通过数值积分获得目标潜状态。本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 28,
+      "text": "该式定义潜状态的计算路径，而非物理动力学。实际实现不求解析解，而以显式Euler法近似该初值问题，部署链路见图\\ref{fig:ch06_shared_vector_field}："
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+      "line": 71,
+      "text": "表\\ref{tab:ch06_mapping_comparison}概括了两种计算形式的关系。最终推理只需Sim Encoder、共享场及Real Decoder，不额外调用原C3教师；Real Encoder和Sim Decoder虽保留在完整模型中，也不位于部署链路。Decoder采用预测Mask与恢复尺度的Gamma混合均值输出非负响应。由此得到的是Real域风格触觉，而非已认证的真实接触测量。共享场提供了在既有潜表示上修正迁移路径的机制，但增加积分步数是否改善分布及输入保持，仍须由后续实验判断，不能由框架本身推导出迁移成功。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 19,
+      "text": "其中$\\operatorname{sg}$表示停止梯度，$\\sigma$为sigmoid。前向仍以硬Mask乘Gamma混合幅值均值，反向借用sigmoid导数，解决的是Decoder内部从logit到输出的离散路径。生成触觉再次进入判别器时，后者重新计算$M_D=\\mathbf1[Y>0]$；该比较在实现中不保留输入梯度，数学上阈值函数几乎处处导数为零。因此，Decoder的STE不会自动穿过判别器端的再次二值化，但连续幅值支路仍可提供梯度，不能将这一断点写成生成器完全无法训练。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 56,
+      "text": "三组生成器初始权重一致。A仅复制原D首层的幅值半列，其余共同层完全复制；C复制原D全部对应参数，A与C随后分别训练。B直接复用已有运行，并非第三次独立训练。A参数量较少，容量及有效正则路径不同，不能将其与B的差异纯归因于是否存在Mask。B与C容量相同，也仍受单Seed及固定训练配置限制。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 58,
+      "text": "训练采用两轮D预热及18轮G/D交替更新，Adam学习率$10^{-4}$、betas为$(0,0.99)$，梯度范数裁剪5。D以两类各半的批次平均BCE优化，Lazy R1每16步触发，$\\gamma=0.1$，触发时系数为$\\gamma\\times16/2$。C在D更新及Real R1路径禁用Mask代理，避免额外改变这一正则机制；G更新时启用代理，冻结D参数但保留其对$Y$的梯度。生成器使用非饱和对抗项，并保留权重0.5295653698327406的Patch份额与相对帧差保持项、权重0.001的修正场约束，以及首个对抗轮从1衰减至第六轮0的同源教师项。场约束按Real Train后验均值的逐维标准差归一化，下限为0.1，只约束修正项，不含Translator基项；教师项比较同源输出按固定尺度归一化的对数响应差。各项沿用本次配置的窗口批次均值，不能套用后续组加权损失。A、C分别完成D1280步和G1152步，使用一致的窗口排列及步数调度，固定第20轮终点，不按C0结果选择权重。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+      "line": 62,
+      "text": "原11个冻结C0实例仍沿用第五章的固定预处理及阈值。每个实例要求$\\mathrm{BA}\\in[0.45,0.55]$、$\\mathrm{AUC}\\in[0.475,0.525]$及域混淆指标$D_{\\rm BA}\\ge0.90$。表中所有候选的该指标专项均为11/11，但联合条件还要求AUC；BA与$D_{\\rm BA}$门槛数学等价，不能重复当作独立证据。没有候选达到11/11联合通过；C修复梯度未解决完整迁移，B的部分通过也不能反推Mask梯度不重要。后续需要进一步检验多轮优化能否改善生成质量，以及判别器接受率能否充分反映这种改善。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 5,
+      "text": "前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节将这一多轮实验记为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\\%，定义$R_W=(\\mathrm{SWD}_{\\mathrm{Original}}-\\mathrm{SWD}_{F_0})/\\mathrm{SWD}_{\\mathrm{Original}}$，本次为0.4977202817，95\\%组Bootstrap区间约为$[0.408514,0.566743]$，如图\\ref{fig:ch06_f0_swd_baseline}所示。这只支持指定距离合同下的改善，不能解释为迁移成功率。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 18,
+      "text": "生成器继承A组终点，不意味着判别器也沿用连续输入配置。本实验重新建立全局Mask加连续幅值判别器，保留硬Mask输入不可导的限制，没有采用C组的判别器STE。两套VAE继续冻结，训练保留对抗、输入保持及修正场约束，教师权重为零；域内采用分组等权损失，区别于前述窗口均值训练。因而，本实验检验的是这一具体多轮配置，不能把结果归结为对所有梯度修复方案的验证。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 20,
+      "text": "执行中还发生了明确记录的协议修订。初始登记额外要求inner与fit的CE差不超过0.2，在$D_1$完成、$G_1$开始前触发停止。2026年11月19日经授权，将该差距改为诊断项，保留原停止记录，从已有$D_1/F_0$及对应Adam状态继续，不重训$D_1$，也不重置预算。复核得到$D_1$ inner BA约0.924151、AUC约0.969299，但一个Real Session召回仅0.133333，说明宏观判别能力并不能掩盖组间薄弱环节。后续结果应视为保留修订记录的开发性诊断，而非始终未变更的预注册执行。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 29,
+      "text": "FR定义为Sim生成样本被当前冻结判别器按0.5阈值判为Real的接受比例，先在Root内计算，再对10个Root宏平均；Real接受率先在Session内计算，再对4个Session宏平均，二者不是相同统计指标。如图\\ref{fig:ch06_round_acceptance_states}所示，$F_0$在$D_0$下本来就达到100\\% FR，不是生成器更新收益。$D_1$下$F_0\\rightarrow F_1$的FR由约0.000775升至1，$D_2$下$F_1\\rightarrow F_2$、$D_3$下$F_2\\rightarrow F_3$均由0升至1。对应Real宏接受率分别约为0.998958、1和1。它们证明各次更新改变了当前判别边界下的输出判定；由于D已经改变，不能将各轮FR拼成同一评价器下的连续改善曲线。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 38,
+      "text": "固定距离评价沿用相同Validation、Real Train预处理及冻结投影和核设置，不按各轮输出重新拟合参照。这一评价给出了不同判断。图\\ref{fig:ch06_multi_round_distribution}中，$F_1$的SWD/MMD由$F_0$的0.206609/0.343678升至0.530662/0.833567，并在既有护栏中出现严重样本差异收缩。$F_2$恢复至0.286444/0.517922，仍未回到初始水平；$F_3$又反弹至0.411330/0.676806。同一P49合同下Original的SWD/MMD为0.411343/0.392554，故$F_3$的SWD已接近未转换输入，但MMD仍较高。终点两项距离均高于$F_0$，不能称为多轮质量持续提升，也不能把中间恢复忽略后描述成单调恶化。其中，跨窗口离散程度按2848个时序坐标的窗口间标准差再取均值计算，不作Root加权，并非物理接触多样性的认证指标。该量从约0.054778降至$F_1$的0.000201；905个Validation输出按完整窗口字节内容去重后仍有877种，但这种数值唯一性不能排除实际响应收缩。终点的分布、邻域覆盖、幅值及空间护栏仍未满足参照限制，部分时序项通过不能抵消这些不足。$F_0$作为相对非退化参照，并不因此获得完整质量认证。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+      "line": 40,
+      "text": "更值得注意的是，$D_3$下$F_3$虽全部被判为Real，AUC仍约为0.997728。阈值判定只检查分数落在哪一侧，而AUC衡量连续分数将Real排在生成样本之前的能力；全部超过0.5仍可在阈值上方保持清晰排序，故两者不矛盾。AUC也不直接度量生成分布质量。因此，FR达到100\\%并不等于域不可辨识，更不能替代原11实例C0联合评价。这些结果提示生成场能够适应当前判别边界，但分布逼近及输入保持并未同时得到保证。单Seed、既有开发划分和保留的梯度限制也约束了归因范围，后续需要进一步检查生成结构与评价器可靠性，而非仅增加优化轮数。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 15,
+      "text": "其中运算逐元素进行，$Y_0$为基础生成结果，$r$为对数响应修正量，不能简写为直接相加的响应残差。该模块利用已有输出和来源潜变量进行条件修正。零初始化使同后端初始残差为零，读出保持基础输出；训练后残差不再受此初值限制。小修正下两项接近的指数结果相减可能产生浮点消去，数值表现需结合计算后端理解。四帧由循环网络依次关联，修正同时依赖触觉响应与来源表示，而非无条件生成新的窗口。共享场与Refiner分别有306176、120968个可训练参数，合计427144个。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 24,
+      "text": "图\\ref{fig:ch06_multiview_refiner_architecture}中的判别输入均由归一化log响应构造，不含二值Mask。Global展平完整窗口，维数2848；Spatial汇集每帧16个Patch的均值、二阶矩和最大值，共192维；二阶矩为归一化log响应的$\\operatorname{mean}(l^2)$，不是方差或标准差；Temporal使用三组相邻帧差，共2136维。这些特征分别覆盖整体响应、固定Patch内分布及短时帧差；Spatial不建立通道间物理邻接关系，Temporal差分也不是经过时间标定的物理导数。各支均为Linear至128维、LayerNorm、LeakyReLU、Linear至64维、LeakyReLU及单logit输出。三支BCE等权组合，Joint要求三支同时接受，辅助连续分数取最小logit。$D_{50}$共688643个参数，与前述判别器容量及输入均不同；未做删支后独立重训，不能归因各分支贡献或宣称同容量优势。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 26,
+      "text": "D训练10个Epoch、660步后冻结，G训练20个Epoch、1280步，固定取第20轮终点。采样采用全窗打乱、短域循环及全局组权重损失，并非每批严格组均衡。图\\ref{fig:ch06_multiview_gradient_training}展示各Epoch首步的分支梯度诊断：三支均有有限非零梯度，能够传至共享场和Refiner，但这只证明计算路径存在。诊断针对各Epoch首批分别求导，不能外推为每个样本、每个更新步都具有相同梯度。D在生成阶段固定，VAE参数保持冻结，梯度仍可穿过Real Decoder回传；结构可导与统计约束充分是不同问题。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 52,
+      "text": "表\\ref{tab:ch06_multiview_results}中终点距离明显恶化，虽然Joint FR为100\\%，Real Joint接受率仅68.0833\\%；两者仍分别按Root和Session宏平均。距离使用共同的冻结预处理和评价合同，避免针对终点重新调整尺度。关闭Refiner没有重训或重新选模，不能替代主结果。历史机制审计还发现，将初始输出统一放大2倍，前64个Train输出的指定检查中preserve变化为0；flow仅约束基础场修正项，不直接约束新增残差。这揭示幅值约束缺口，但不能据此认定失败的唯一原因。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+      "line": 56,
+      "text": "因此，残差路径及多视角梯度均已建立，但现有单Seed实验未证明迁移质量改善。接受率不能抵消距离退化，下一节将结合分布距离、邻域覆盖与输入依赖进一步分析其适用边界。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 12,
+      "text": "其中$F_{R,\\ell}$、$F_{Y,\\ell}$为相应加权投影累积分布。该量是投影边际Wasserstein-1的均值，不是完整高维距离，更不认证逐样本正确。MMD使用相同表示，以固定512个Real Train窗口的两两距离中位数确定带宽，对0.5、1、2倍带宽的RBF核取平均，计算组加权V统计量后取非负平方根，不能称为无偏U统计。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 14,
+      "text": "表\\ref{tab:ch06_quality_dependency_comparison}中，Original是未转换的Natural Sim processed Validation窗口，并非零潜变量解码。定义$R_W=(\\mathrm{SWD}_{\\mathrm{Original}}-\\mathrm{SWD}_{F_0})/\\mathrm{SWD}_{\\mathrm{Original}}$，P48登记值为0.4977202817338595，即49.77\\%；$R_W$的95\\%组Bootstrap区间约为$[0.408514,0.566743]$，不是SWD原值区间。该值沿用P48记录，不用后续输出重算。P48与后续$F_0$的SWD原值相差约$2\\times10^{-11}$，保留各自来源；P50与CPU参照还存在上一节所述读出后端差异，同一测量合同不等于输出逐位相同。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 35,
+      "text": "局部覆盖沿用PRDC的严格小于号邻域判定，取$k=3,5,10,20$，共用100次子样本；Real窗口为参考，Sim按Root比例配额，区别于距离的组等权。Precision为落入至少一个真实样本$k$近邻球的生成点比例，Recall为落入至少一个生成样本$k$近邻球的真实点比例；Density对各生成点所处真实邻域数除以$k$后取均值，可大于1；Coverage为最近生成点距离严格小于该真实点$k$近邻半径的真实点比例。高Precision不保证高Recall： $F_{50}$终点关闭Refiner（诊断）虽有0.243167的P@5，R@5仅0.000321，不能视为覆盖充分，更不能替代正式终点。四个邻域量观察的集合关系不同，故表中选取$k=5$只是便于展示，不能由这一列另造统一通过阈值。100次共用抽样用于降低比较中的采样波动，不代表100次独立采集，也不将相邻窗口视为独立物理条件。$F_0$也只是相对非退化参照。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 43,
+      "text": "各Root按既定正两两距离规则确定带宽，考察0.5、1、2倍，主结果取1倍，再作Root宏平均；常量核分母不超过$10^{-20}$时置零。HSIC反映统计依赖，既不是因果证明，也不恢复同步物理接触关系。表中两个失败终点仍有约0.5的HSIC，说明依赖存在不能抵消边际质量不足。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 60,
+      "text": "表\\ref{tab:ch06_quality_negative_controls}进一步揭示盲区。Constant可获得看似良好的部分Precision，却缺少覆盖与变化；RealDonor提供真实边际样本，不保留对应输入关系。PairShuffle仅打乱配对而保留输出集合，SWD不能检测这种损坏，PRDC也不能，需要依赖对照补充。这些是历史派生诊断，不是新增独立采集或物理验证。三种对照分别暴露常量退化、来源条件缺失与对应关系损坏，完整护栏均将其拒绝，并不证明所有未知退化都能被识别。特别是Original的自身依赖为1，也不意味着其真实域分布质量合格。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 62,
+      "text": "综合护栏各相对阈值均以登记$F_0$对应项为参照：SWD/MMD不超过1.1倍，各$k$下PRDC各项下降不超过0.02；HSIC至少0.8倍且与PairShuffle差异的组Bootstrap下界为正；跨窗标准差至少0.5倍，唯一窗口数至少0.9倍。尾部、时序、空间及零结构误差不超过1.1倍，最大响应不超过$F_0$输出最大响应的1.5倍，而非Real最大值。上述距离及误差上界比较按源码加$10^{-8}$数值容差。严重收缩另按标准差低于0.1倍或HSIC低于0.2倍标记，不能与正常通过条件混淆。这些不是通用物理验收标准。尾部对照正值分位数，空间检查索引激活及Patch份额，短时序检查帧间变化；其中Mask以$x>0$定义数值支持，不是物理接触真值；Real帧索引差分不是经真实时间标定的物理导数，也不能认证真实Taxel配准。各分项保留原始判定，不以一项改善抵消另一项失败，也不把全部相对护栏通过误写为完整迁移认证。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 64,
+      "text": "既有替代路线也未完成验收认证：P46的RVC因Constant负对照而NO-GO；P48的4对10组匹配等价检验中，12个候选均未通过预设的区间上界小于0的判定条件，但不等于证明绝对不等价。其JSD Probe实际训练43个、按规则未训练48个，后者不能记零分，也不能据此认证全部家族可靠。$\\log2-\\mathrm{CE}$仅为分类器限制下的代理，负值不是负真实JS散度。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+      "line": 66,
+      "text": "因此，距离、邻域、依赖与Mask、幅值、短时序结构描述各有分工，FR、BA和AUC则诊断接受及分类表现，彼此不能替代，均不能单独认证物理Sim-to-Real。下一节进一步检查判别器自身的跨Session泛化能力。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 6,
+      "text": "历史模型文件SHA256与审计登记一致，重放记录给出的最大logit差为0，分类结果相同。Real fit为24个Session、4217窗，inner为8个Session、936窗，后者用于包络校准；开发评价使用另外4个Real Session、780窗及10个Sim Root、905窗。分组无交叉，但外层已有开发暴露，不能称为独立盲测。固定Real为1、Sim为0，概率阈值仍为0.5，即logit阈值0；Joint要求三支同时接受，连续Joint分数取三支logit最小值。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 8,
+      "text": "真实域Joint接受率先在Session内计算，再作等权宏平均，结果为0.6808333333，未达到原参考目标0.90。历史Bootstrap以4个评价Session为单位有放回抽样，每次抽取4组，对相应组接受率取等权均值；共1000次，以重采样宏均值的2.5\\%和97.5\\%经验分位数给出95\\%区间$[0.4866666667,0.875]$，上界仍低于0.90。表\\ref{tab:ch06_real_session_reliability}显示，前两个Session均为87.5\\%，另外两个仅约50.67\\%和46.67\\%。因此，宏观结果不能掩盖个别采集会话的低接受能力，780个Real窗口中566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$；其按窗口加权，与Session等权统计对象不同，不能替代正式宏口径。仅4个评价Session使不确定性估计受限，组内大量窗口不能补成大量独立Session；该区间也不认证未知采集条件下的覆盖。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 26,
+      "text": "相比之下，$F_{50}$的Joint FR为1，即生成样本全部被判为Real；其固定标签方向AUC仅为0.02726444845，反映分数排序严重反向，不能翻转后宣称通过。记录的混淆矩阵为$\\left[\\begin{smallmatrix}0&905\\\\214&566\\end{smallmatrix}\\right]$，行依次为真实类别Sim、Real，列依次为预测Sim、Real；它表示905个生成窗口均被接受，同时214个真实窗口被拒绝。矩阵是窗口计数，不是组宏比例。高FR只说明生成分数越过阈值，与真实样本接受能力不足可以同时出现；它既不证明域不可区分，也不证明生成分布正确。AUC则描述连续分数的排序能力，并非分布距离或物理质量。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 28,
+      "text": "为观察分数是否偏离Real参照，历史审计以8个inner Session等权、组内窗口等权，在Global、Spatial、Temporal原始logit及Joint最小logit上分别取2.5\\%和97.5\\%加权分位数。分位数通过排序累计权重插值得到。这是经验分数包络，不是经物理标定的触觉置信区间；Joint包络也不同于三支各自包络的交集，不能替代原0.5分类阈值。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 63,
+      "text": "表\\ref{tab:ch06_score_envelope_diagnostic}中，$F_{50}$各支均有大量分数超过Real上界，比例按Sim Root宏平均。这解释了单纯追求更高Real分数可能越出既有真实分数范围，但不应由此为包络追加成功判据。未转换Original的Joint包络覆盖约100\\%，也说明落入包络不能单独完成域验收。"
+    },
+    {
+      "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+      "line": 65,
+      "text": "表\\ref{tab:ch06_loso_envelope_coverage}中，Temporal平均较高，但其余分支的最低覆盖与平均相差明显。Global最低发生于20260814\\_143310，Spatial最低于20260813\\_165855，Joint最低于20260814\\_155240；Temporal最低亦为20260814\\_143310。说明平均覆盖不能充分代表跨Session稳定性，不能将某一组的较好校准直接推广到另一组。该诊断仍限于8个历史inner Session，未登记新的稳定性硬门槛，不能推出跨Session理论不可达，也不能单凭会话标签归因传感器、任务或物体因素。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "line": 6,
+      "text": "针对几何抓取候选不能直接转化为机器人可执行操作的问题，本文适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，并结合腕部姿态扩展形成多来源候选。通过机械臂逆运动学和连续轨迹求解连接分阶段专家示教，并按第\\ref{sec:grasp_reachability}节所述，结合桌面几何惩罚、局部接近约束、执行监测和尾段Strict检查验证轨迹与任务结果，区分操作完成与示教质量。局部扰动轨迹和失败分类为流程的适用范围提供了历史依据，并形成后续数据记录的轨迹来源。该工作体现为现有工具的适配整合与验证流程构建，不将第三方算法本身作为原创，也不把候选质量、Strict通过与实际任务成功合并为同一结论。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "line": 8,
+      "text": "在专家示教基础上，本文围绕数据语义、采集时序和来源追踪建立多源数据组织与质量控制体系。通过区分策略观测与完整仿真状态、位置命令与逆运动学目标，明确状态和动作合同，检查动作命令与执行前后观测的时序配对关系，并完成NPZ、Manifest与LeRobot之间的转换组织。质量检查覆盖数值有效性、连续性、完整性、版本和重复关系，既核验了指定修复数据的字段映射，也保留旧记录中的命令不连续与状态字段缺失问题。由此形成从采集、转换到训练准入的分层检查依据，但指定样本修复不代表全量生产认证，文件Hash也不能替代来源独立性或全局泄漏审计。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+      "line": 10,
+      "text": "针对仿真与真实触觉存在分布差异且缺少认证同步物理配对的问题，本文利用真实统计先验与仿真探针构建伪配对，分别学习独立双域VAE表示，再由GRU Translator建立潜变量映射。在此基础上研究共享参数向量场、对抗优化及多视角判别与残差修正，并结合分布距离、邻域覆盖、输入依赖和判别器跨Session可靠性开展综合评价。这些工作使用单独登记并冻结的触觉子集，沿用前述数据管理与质量规范，但不将LeRobot导出直接作为跨域模型的训练输入，也不认证两套数据的一一对应。由此形成统计监督、跨域重建与质量诊断的方法探索链路，不意味着全部平台数据均参与训练。现有实验获得了限定指标下的局部改善，同时揭示接受率、分布质量和评价可靠性的差异，尚未完成完整触觉Sim-to-Real迁移验收。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "line": 4,
+      "text": "本文的仿真实现与指定案例表明，统一机器人模型、控制接口、任务接口和触觉观测合同，能够为多任务操作提供可复用的实验基础。候选转化为轨迹时，可达性筛选、桌面几何与局部接近约束、连续执行监测及尾段Strict检查承担不同层次的检验：几何质量不能替代IK可达性，可达性不能替代任务成功，任务成功也不能替代Strict示教质量。各层判断针对不同条件，当前证据仅支持已有模型、任务及案例范围，不能外推为通用抓取能力或实机有效性。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "line": 6,
+      "text": "示教数据的可用性取决于语义和记录关系，而不只取决于文件能否读取或转换。策略观测与完整仿真状态、位置命令与IK目标需要区分，动作与观测的时序配对、数值有效性、版本来源和重复关系也应分别审查。指定修复与检查支持相应样本满足对应条件，历史命令不连续和状态字段缺失则说明格式合法不足以认定训练资格。文件Hash、Manifest和规模只能提供部分追踪依据，不能单独证明来源独立、全局无泄漏或物理真实性，也不能将局部修复扩大为全量生产认证。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+      "line": 8,
+      "text": "跨域实验显示，局部指标改善尚不足以证明完整迁移。C27在原冻结Validation的11个实例中仅2个联合通过；$F_0$相对Original的SWD下降49.77\\%，仅为指定合同下的边际改善。在第\\ref{sec:ch06_multi_round_adversarial}节披露的修订后开发协议下，多轮对抗终点在$D_3$下FR达100\\%，不能据此认定域不可辨识；多视角残差终点$F_{50}$虽Joint FR为100\\%，分布距离却明显退化。P51因未满足既定Real接受要求对$D_{50}$判定NO-GO，该判别器不能作为当前实验的最终可靠评价器，该结论不外推$D_3$或其他方法。由此可见，接受率不等于分布相似，边际相似不保证输入输出对应，统计依赖不等于物理语义，梯度可达也不保证优化有效。评价器可靠性同样是迁移结论的前提。本文完成了统计伪监督、潜变量映射、共享参数向量场及多视角评价的系列探索，但现有证据尚不能证明完整触觉Sim-to-Real迁移成功。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "line": 4,
+      "text": "现有触觉观测建立在仿真模型与既定布局上，尚未完成真实传感器空间位置、物理单位及接触响应的系统标定，固定通道索引不能证明两域Taxel的物理对应。后续需要建立可追溯的标定流程，通过可控接触比较不同材料、载荷和姿态下的响应，再开展同一物体与任务条件下的仿真实机对照。可将具有明确几何来源的3D打印物体作为初步载体，逐步检验抓取候选的实机可执行性与触觉对应关系，而非仅依据观测维数判断一致性。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "line": 6,
+      "text": "抓取与示教验证仍受指定物体、初态和资产版本限制，不同候选方法尚缺统一预算和判据下的公平比较，缓存与同模板变体也不能直接作为独立样本。后续应统一物理参数、计算预算和任务条件，开展跨物体、跨初态验证，并完善资产版本、Root lineage、轨迹及转换数据之间的来源追踪。视频、状态、动作和时间关联还需全流程审计，局部样本通过不能替代生产全库认证，单纯增加数据量也不足以解决质量与独立性问题。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "line": 8,
+      "text": "统计伪配对存在多解与监督歧义，独立潜空间尚无认证的逐点物理语义，Natural Sim缺少同步Real目标，限制了重建评价与监督可靠性。后续应先核查统计坐标及配对前提，再研究多解的稳定性和可辨识性，在统一条件下比较单一、多候选及软监督组织方式；只有相应前提得到验证，才进一步探索潜变量结构约束与接触信息辅助监督。共享场和残差路径已实现，但仍需检验梯度优化、输入保持与生成质量的关系，不能预设增加监督形式即可改善迁移。"
+    },
+    {
+      "source": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+      "line": 10,
+      "text": "评价所用Real Session有限，部分Validation已有开发暴露，单Seed、容量与数值后端差异也限制了结果归因。后续需要独立Session、Root及多Seed验证，并统一模型容量、训练预算和推理后端的比较条件，结合分布、覆盖、输入依赖、跨Session稳定性及物理接触证据评价结果。当前对特定判别器的可靠性限制不应推广到所有评价器。最终仍需通过真实机器人抓取和操作成功率、接触稳定性检验触觉迁移的任务价值，现有统计指标不能替代这一验证，也不能保证未来方法获得收益。"
+    }
+  ]
+}

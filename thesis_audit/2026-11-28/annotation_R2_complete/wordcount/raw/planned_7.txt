@@ -1,0 +1,16 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/planned_7.tex
+Sum count: 2413
+Words in text: 2387
+Words in headers: 26
+Words outside text (captions, etc.): 0
+Number of headers: 4
+Number of floats/tables/figures: 0
+Number of math inlines: 5
+Number of math displayed: 0
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+5+0 (1/0/0/0) Chapter: 总结与展望
+  982+8+0 (1/0/0/0) Section: 主要研究工作总结
+  665+6+0 (1/0/5/0) Section: 主要研究结论
+  740+7+0 (1/0/0/0) Section: 不足与未来展望
+

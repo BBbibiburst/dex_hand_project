@@ -1,0 +1,254 @@
+--- before/thesis/front/cover.tex
++++ thesis/front/cover.tex
+@@ -7,21 +7,21 @@
+   ctitlecover={灵巧手仿真示教数据构建与触觉跨域重建方法研究},
+   ctitle={灵巧手仿真示教数据构建与触觉跨域重建方法研究},
+   cxueke={专业学位},
+-  csubject={电子信息},
++  csubject={计算机技术},
+   caffil={计算学部},
+   cauthor={张明远},
+   csupervisor={张展 教授},
+   cstudentid={24S103344},
+   cstudenttype={专业学位论文},
+-  firstpagecdate={2026年12月14日},
+-  cdate={2026年12月14日},
++  firstpagecdate={2026年12月},
++  cdate={2026年12月},
+   etitle={Simulation-Based Demonstration Data Construction and Cross-Domain Tactile Reconstruction for Dexterous Hands},
+   exueke={Engineering},
+-  esubject={Electronic Information},
++  esubject={Computer Technology},
+   eaffil={Faculty of Computing},
+   eauthor={Zhang Mingyuan},
+   esupervisor={Prof. Zhang Zhan},
+-  edate={December 14, 2026},
++  edate={December 2026},
+   estudenttype={},
+   ckeywords={灵巧手,机器人仿真,专家示教,多模态数据质量,触觉跨域重建},
+   ekeywords={dexterous hand, robot simulation, expert demonstrations, multimodal data quality, cross-domain tactile reconstruction}
+--- before/thesis/front/abstract.tex
++++ thesis/front/abstract.tex
+@@ -1,24 +1,24 @@
+ % !TeX root = ../thesis.tex
+ \begin{cabstract}
+-灵巧手触觉研究需要可执行的机器人示教、语义明确的多模态数据和可靠的迁移评价。几何抓取候选不必然满足整机约束，轨迹文件可读取也不代表动作与观测关系正确；同维仿真与真实触觉更不意味着物理等价。针对这些问题，本文研究灵巧手仿真示教数据构建与触觉跨域重建方法。
++灵巧手操作需要通过多指接触完成抓取、搬移与装配，示教采集涉及反复操作、物体复位和设备维护。仿真便于控制初始条件、重复执行任务并记录完整状态，为扩大示教覆盖和分析接触过程提供了实验手段。然而，抓取方案的可执行性、示教数据的时序一致性以及仿真触觉与真实触觉的差异，直接影响这些数据的使用。本文围绕上述问题，研究灵巧手仿真示教数据构建与触觉跨域重建方法。
+ 
+-构建RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，统一机器人控制、任务执行和触觉记录，依据曲面几何建立16个Patch、712维处理后触觉观测体系，并检查指定历史任务记录。适配GraspQP官方抓取评价指标，参考DexEvolve设计实现进化搜索，结合腕部姿态扩展、可达性、碰撞约束和连续轨迹求解，形成候选生成、机器人约束筛选与专家示教验证流程，分别判定候选质量、任务结果和严格回放质量。
++构建RealMAN（睿尔曼智能）RM75B机械臂与途见科技自研欠驱动灵巧手的多任务仿真平台，集成控制、任务执行与传感器记录。根据指节、指尖和手掌的几何差异构建曲面阵列，获得16个触觉区域、712维处理后观测。在此基础上，适配GraspQP官方评价指标，参考DexEvolve设计实现进化搜索，通过腕部姿态扩展、可达性、碰撞约束和连续轨迹检查，将抓取候选转化为专家示教。Sugar Box的10条历史局部扰动记录均通过严格回放验证，验证范围为同一物体及相近源抓取。
+ 
+-建立状态、动作、视觉与触觉的记录合同，区分位置命令与逆运动学目标、策略观测与完整仿真状态，核查动作和执行前后观测的时序配对及格式转换。通过来源追踪、数值有效性、连续性、完整性和重复关系检查，验证指定修复数据，并识别历史命令不连续与状态字段缺失问题，形成限定数据范围内的分层质量准入依据。
++针对多模态示教的记录与使用，建立状态和动作的字段定义、执行前后观测的时序配对及数据转换流程，并结合来源、数值、连续性和重复关系开展分层质量检查。指定Sugar Box修复数据的340行导出动作、状态命令区及触觉与源记录对应字段的最大绝对差均为0；同时识别出历史命令不连续和状态字段缺失问题，明确不同版本数据的适用条件。
+ 
+-在缺少认证同步物理配对的条件下，利用真实触觉统计先验指导仿真物理探针构造伪配对，分别训练双域变分自编码器，以门控循环单元映射网络连接独立潜空间。进一步探索共享参数向量场积分、对抗优化、多视角判别和残差修正，结合分布距离、邻域覆盖、输入依赖和跨会话判别表现进行综合评价。
++针对触觉跨域差异，利用真实数据的统计先验指导仿真物理探针构造伪配对，以独立双域变分自编码器学习时序表示，并训练门控循环单元网络映射两域潜变量。进一步引入共享参数向量场积分，探索对抗优化、多视角判别和残差修正，分别检查分布距离、邻域覆盖、输入依赖与判别器的跨会话表现。
+ 
+-实验中，潜变量映射改进版本在原冻结验证协议的11个分类器实例中仅2个联合通过。共享场初始比较基线的指定切片Wasserstein距离相对未转换仿真输入下降49.77\%，只支持有限的边际改善。对抗优化虽可使生成样本在对应判别器下的接受率达到100\%，分布质量并未同步改善；多视角残差终点发生明显距离退化，后续冻结审计亦表明当前判别器未满足既定真实域接受要求。结果揭示接受率、分布相似性、输入依赖与评价器可靠性不能相互替代。本文形成了仿真示教数据构建、触觉重建与质量诊断的探索链路，但尚未完成完整触觉仿真到现实迁移验收或真实机器人任务收益验证。
++实验表明，潜变量映射改进版本在原冻结验证协议的11个分类器实例中有2个联合通过。训练后的共享向量场单步基线在指定切片Wasserstein距离下，相对未转换仿真输入下降49.77\%。后续对抗优化的生成接受率可达100\%，但分布质量未同步改善，多视角残差终点出现明显距离退化。冻结审计进一步发现当前判别器未达到既定真实域接受要求。这些结果说明，接受率、分布相似性与输入对应关系需要分别验证。本文完成了仿真示教构建、指定数据质量验证及触觉跨域重建探索，完整触觉仿真到现实迁移与实机任务收益仍需进一步检验。
+ \end{cabstract}
+ 
+ \begin{eabstract}
+-Tactile research for dexterous manipulation requires executable demonstrations, multimodal data with explicit semantics, and reliable transfer evaluation. Geometrically plausible grasps need not satisfy whole-robot constraints; readable trajectories need not preserve command-observation relationships; and equal-dimensional simulated and real tactile observations need not be physically equivalent. This thesis investigates simulation-based demonstration data construction and cross-domain tactile reconstruction.
++Dexterous manipulation relies on multi-finger contact for grasping, transport, and assembly. Collecting demonstrations requires repeated operation, object resetting, and equipment maintenance. Simulation enables controlled initial conditions, repeatable execution, and access to complete states, supporting broader demonstration coverage and contact analysis. The usefulness of these data depends on executable grasps, consistent recording, and the gap between simulated and real tactile responses. This thesis investigates simulation-based demonstration data construction and cross-domain tactile reconstruction.
+ 
+-A multi-task platform integrates an RM75B manipulator and an underactuated dexterous hand developed by Tachin-Tech with unified control, task execution, and tactile recording. A curved sensing layout provides processed observations with 16 patches and 712 scalar channels, inspected using selected historical task records. Official GraspQP evaluation metrics are adapted, and evolutionary search is implemented with reference to DexEvolve. Wrist-pose expansion, reachability, collision constraints, and continuous trajectories connect grasp candidates to expert demonstrations. Candidate quality, task outcomes, and strict replay quality are distinguished.
++A multi-task platform integrates a RealMAN RM75B manipulator and an underactuated dexterous hand developed by Tachin-Tech, including control, task execution, and sensor recording. Curved arrays adapted to the finger segments, fingertips, and palm provide 16 sensing patches and 712 processed channels. Official GraspQP metrics are adapted, and evolutionary search is implemented with reference to DexEvolve. Wrist-pose expansion, reachability, collision constraints, and continuous-trajectory checks connect grasp candidates to expert demonstrations. Ten historical Sugar Box records with local perturbations pass strict replay verification within the scope of one object and closely related source grasps.
+ 
+-Recording contracts separate position commands from inverse-kinematics targets and policy observations from complete simulation states. Temporal pairing and conversion are examined alongside provenance, validity, continuity, completeness, and duplication. Selected repairs are verified, while command discontinuities and missing state fields are identified in historical records, supporting layered admission within the inspected data scope.
++Multimodal recording defines state and action fields, pre-action and post-action temporal pairing, and format conversion. Layered checks examine provenance, numerical validity, continuity, and duplication. For a specified repaired Sugar Box export, the maximum absolute differences for the action, command portion of the state, and tactile fields are all zero across 340 rows relative to their corresponding source fields. Historical command discontinuities and missing state fields are also identified, establishing version-specific conditions for data use.
+ 
+-Without certified synchronous physical pairs, real tactile statistics guide simulated probes to construct pseudo-pairs. Separate variational autoencoders learn domain-specific representations, connected by a gated recurrent unit mapping network. Shared-parameter vector fields, adversarial optimization, multi-view discrimination, and residual refinement are explored using complementary distribution, neighborhood, input-dependence, and cross-session evaluations.
++Real tactile statistics guide simulated physical probes to construct pseudo-pairs. Independent variational autoencoders learn temporal representations for the two domains, connected by a gated recurrent unit mapping network. Shared-parameter vector-field integration, adversarial optimization, multi-view discrimination, and residual refinement are then explored. Evaluation separately examines distribution distances, neighborhood coverage, input dependence, and cross-session discriminator behavior.
+ 
+-The adapted latent mapping meets the joint requirements for only two of eleven classifier instances under the original frozen validation protocol. The initial shared-field baseline reduces the specified sliced Wasserstein distance by 49.77\% relative to unconverted simulation inputs, indicating limited marginal improvement. Adversarial optimization can achieve 100\% generated-sample acceptance under the corresponding discriminator without improving distribution quality. The multi-view residual endpoint exhibits substantial distance degradation, and a frozen audit finds that the current discriminator fails the prescribed real-domain acceptance requirement. Acceptance, distributional similarity, input dependence, and evaluator reliability are therefore not interchangeable. The resulting pipeline links simulated demonstrations, data quality control, tactile reconstruction, and diagnosis, while complete tactile sim-to-real acceptance and benefits to real-robot tasks remain unverified.
++The adapted latent mapping satisfies the joint requirements for two of eleven classifier instances under the original frozen validation protocol. The trained shared-field single-step baseline reduces the specified sliced Wasserstein distance by 49.77\% relative to unconverted simulation inputs. Subsequent adversarial optimization reaches 100\% generated-sample acceptance without corresponding distribution-quality improvement, while the multi-view residual endpoint exhibits substantial distance degradation. A frozen audit further finds that the current discriminator fails the prescribed real-domain acceptance requirement. Acceptance, distributional similarity, and input correspondence therefore require separate verification. This thesis establishes simulated demonstration construction, specified data-quality verification, and tactile reconstruction experiments; complete tactile sim-to-real transfer and real-robot task benefits require further evaluation.
+ \end{eabstract}
+--- before/thesis/body/ch01_introduction.tex
++++ thesis/body/ch01_introduction.tex
+@@ -5,20 +5,27 @@
+ \section{研究背景与意义}
+ \label{sec:research_background}
+ 
+-机器人灵巧操作需要在物体、手指与环境持续交互的过程中实现运动和接触的协调。与将物体从一个位置搬运到另一位置相比，调整物体姿态、稳定持握以及沿约束方向完成装配，对局部接触状态和运动精度提出了不同要求。多指灵巧手能够通过改变接触位置与手指配合方式完成多样化操作，但也需要处理多个接触点之间的相互作用。已有手内操作研究展示了换指、多指协调及利用重力调整物体姿态等行为，体现了这类任务中运动控制与接触变化的紧密联系\cite{openai2020dexterous}。对于持续接触和多指协调任务，预先给定的末端位姿通常还需要与观测和执行反馈相结合，以估计当前状态、选择动作并修正后续运动。如何获得与接触过程相关的感知信息，并使其服务于可执行的操作，是研究灵巧手操作的一项基础问题。
++灵巧手操作依靠多个手指共同接触和移动物体。机器人既要规划手指运动，也要在接触变化时保持物体稳定。与将物体从一个位置搬运到另一位置相比，调整物体姿态、稳定持握以及沿约束方向完成装配，对局部接触状态和运动精度提出了不同要求。多指灵巧手能够通过改变接触位置与手指配合方式完成多样化操作，但也需要处理多个接触点之间的相互作用。已有手内操作研究展示了换指、多指协调及利用重力调整物体姿态等行为，体现了这类任务中运动控制与接触变化的紧密联系\cite{openai2020dexterous}。对于持续接触和多指协调任务，预先给定的末端位姿通常还需要与观测和执行反馈相结合，以估计当前状态、选择动作并修正后续运动。如何获得与接触过程相关的感知信息，并使其服务于可执行的操作，是研究灵巧手操作的一项基础问题。
+ 
+-视觉能够提供物体外形、空间位置与周围环境信息，是操作规划的重要依据。当机械臂和手指接近物体时，遮挡可能削弱对局部接触区域的观察；接触已经发生并不意味着物体能够保持稳定，初始位姿相近的抓取也可能因接触条件不同而产生不同结果。触觉通过直接接触获取局部信息，可为接触状态识别、物体属性判断及滑移检测提供线索，与视觉观测形成补充\cite{luo2017tactile}。Calandra等将视觉、触觉与候选动作共同用于预测抓取调整后的结果，并据此选择重抓取动作，说明接触后的反馈具有参与动作调整的价值\cite{calandra2018feeling}。这种价值并不意味着触觉可以独立替代视觉，而是表明不同模态对应着不同的可观测信息。对于多指接触，还需要同时关注响应发生的位置、强弱及其随时间的变化，才能进一步研究哪些感知特征与持握、移动和释放等操作阶段有关。
++视觉能够提供物体外形、空间位置与周围环境信息，是操作规划的重要依据。当机械臂和手指接近物体时，遮挡可能削弱对局部接触区域的观察；接触已经发生并不意味着物体能够保持稳定，初始位姿相近的抓取也可能因接触条件不同而产生不同结果。触觉通过直接接触获取局部信息，可为接触状态识别、物体属性判断及滑移检测提供线索，与视觉观测形成补充\cite{luo2017tactile}。Calandra等将视觉、触觉与候选动作共同用于预测抓取调整后的结果，并据此选择重抓取动作，说明接触后的反馈具有参与动作调整的价值\cite{calandra2018feeling}。视觉提供场景与物体的整体信息，触觉补充被手指遮挡的局部接触反馈。对于多指接触，还需要同时关注响应发生的位置、强弱及其随时间的变化，才能进一步研究哪些感知特征与持握、移动和释放等操作阶段有关。
+ 
+-对上述问题开展研究，需要能够反复执行并比较操作过程的实验条件。真实机器人试验涉及设备使用、物体复位与维护，接触操作还受到碰撞和施力范围等安全约束。多指操作研究中对实际试验耗时与成本的讨论，以及接触丰富示教采集中的安全问题，反映了扩大实机试验规模的现实困难\cite{openai2020dexterous,fang2024rh20t}。仿真能够提供可配置的场景和初态，便于在受控条件下生成轨迹、记录观测并分析失败，但其对真实系统的近似仍需单独检验\cite{tobin2017randomization}。在仿真中，具有较好几何评价的抓取候选也不等同于机器人能够到达并完成的抓取；已有抓取研究将候选获取与可达性筛选区分开来\cite{bohg2014grasp}。本文搭建的仿真平台采用RM75B机械臂与途见科技（北京）有限公司（以下简称途见科技）自研的欠驱动灵巧手模型，需要将物体相对抓取姿态转化为机械臂运动，并检查接近、闭合、保持和后续任务执行。因此，候选生成、机器人可达性筛选与轨迹及任务验证需要相互衔接，才能获得可供使用的专家示教。
++对上述问题开展研究，需要能够反复执行并比较操作过程的实验条件。真实机器人试验涉及设备使用、物体复位与维护，接触操作还受到碰撞和施力范围等安全约束。多指操作研究中对实际试验耗时与成本的讨论，以及接触丰富示教采集中的安全问题，反映了扩大实机试验规模的现实困难\cite{openai2020dexterous,fang2024rh20t}。仿真允许保存和恢复场景初态，调整物体位姿与接触参数，并直接读取关节、物体及接触状态。由此可以重复分析同一失败过程，自动生成示教，并在部署前筛查碰撞与不可达配置，减少反复复位和试错所需的实机操作。仿真到实机的应用仍需处理模型误差\cite{tobin2017randomization}。在仿真中，具有较好几何评价的抓取候选也不等同于机器人能够到达并完成的抓取；已有抓取研究将候选获取与可达性筛选区分开来\cite{bohg2014grasp}。本文选择与实验室硬件配置相对应的RealMAN（睿尔曼智能）RM75B机械臂与途见科技（北京）有限公司（以下简称途见科技）自研的欠驱动灵巧手模型，需要将物体相对抓取姿态转化为机械臂运动，并检查接近、闭合、保持和后续任务执行。因此，候选生成、机器人可达性筛选与轨迹及任务验证需要相互衔接，才能获得可供使用的专家示教。
+ 
+-专家示教的使用还依赖数据本身的组织与质量。机器人状态描述执行条件，动作记录控制指令，视觉反映场景及物体变化，触觉则补充局部接触信息；这些数据只有与具体执行过程建立明确关联，才能用于分析观测与动作之间的关系。关于离线示教学习的研究表明，示教质量、观测选择与历史信息都会影响策略表现，数据条数增加并不能替代对数据内容的检查\cite{mandlekar2022demonstrations}。BridgeData V2通过组织不同任务、环境和采集来源支持操作学习，RH20T则将多模态记录的时间戳、坐标标定与数据处理纳入采集流程\cite{walke2023bridgedata,fang2024rh20t}。本项目已有抓取抬升、抓取放置、堆叠、推动和螺母装配任务的开发记录，并进行了LeRobot格式的数据构建。对于这些来源和版本不同的数据，需要检查记录发生在动作执行前还是执行后、采样频率是否一致，以及转换后是否保留原始执行索引。同一次仿真执行内部的数据关联，也应与仿真和实机之间的同步采集区别对待，不能仅凭相同的字段或时间戳形式认定两域已经建立物理配对。
++专家示教的使用还依赖数据本身的组织与质量。机器人状态描述执行条件，动作记录控制指令，视觉反映场景及物体变化，触觉则补充局部接触信息；这些数据只有与具体执行过程建立明确关联，才能用于分析观测与动作之间的关系。关于离线示教学习的研究表明，示教质量、观测选择与历史信息都会影响策略表现，数据条数增加并不能替代对数据内容的检查\cite{mandlekar2022demonstrations}。BridgeData V2通过组织不同任务、环境和采集来源支持操作学习，RH20T则将多模态记录的时间戳、坐标标定与数据处理纳入采集流程\cite{walke2023bridgedata,fang2024rh20t}。本文已有抓取抬升、抓取放置、堆叠、推动和螺母装配任务的开发记录，并进行了LeRobot格式的数据构建。对于这些来源和版本不同的数据，需要检查记录发生在动作执行前还是执行后、采样频率是否一致，以及转换后是否保留原始执行索引。同一次仿真执行内部的数据关联，也应与仿真和实机之间的同步采集区别对待，不能仅凭相同的字段或时间戳形式认定两域已经建立物理配对。
+ 
+-即使操作和记录链路能够运行，仿真触觉也不能仅凭输出维度与实机一致，就被视为具有相同含义的观测。传感器结构、接触到响应的转换方式，以及滤波、归一化等处理，都会影响最终信号的表达。TACTO面向视觉触觉传感器，将物理仿真中的接触与传感器成像联系起来；Taxim则针对GelSight的光学响应和标记位移建立模型，并利用实测数据进行校准\cite{wang2022tacto,si2022taxim}。这些工作体现了触觉模型对具体传感机制和读出假设的依赖，不能直接作为本项目阵列观测的物理等价依据。本项目的仿真端通过MuJoCo原生触觉传感器及后续信号处理获得712维标量观测，实机端使用既有处理后触觉记录，目前缺少经过认证的同步物理接触配对。因此，真实与仿真触觉的跨域重建既要研究分布差异，也要关注输入接触结构能否保留。利用真实触觉数据的统计特征构造的伪配对可以提供有限的对应监督，但不能直接作为同一次物理接触的真值；其适用范围和重建效果仍需通过实验评价。
++即使操作和记录链路能够运行，仿真触觉也不能仅凭输出维度与实机一致，就被视为具有相同含义的观测。传感器结构、接触到响应的转换方式，以及滤波、归一化等处理，都会影响最终信号的表达。TACTO面向视觉触觉传感器，将物理仿真中的接触与传感器成像联系起来；Taxim则针对GelSight的光学响应和标记位移建立模型，并利用实测数据进行校准\cite{wang2022tacto,si2022taxim}。这些工作分别从光学成像和材料形变解释触觉响应，说明传感器结构与读出机制应共同纳入建模。本文的仿真端通过MuJoCo原生触觉传感器及后续信号处理获得712维标量观测，实机端使用既有处理后触觉记录，目前缺少经过认证的同步物理接触配对。因此，真实与仿真触觉的跨域重建既要研究分布差异，也要关注输入接触结构能否保留。利用真实触觉数据的统计特征构造的伪配对可以提供有限的对应监督，但不能直接作为同一次物理接触的真值；其适用范围和重建效果仍需通过实验评价。
+ 
+ 基于这些需求，本文将仿真平台、专家示教、数据质量与触觉跨域重建放在相互关联的研究过程中考察。机器人与触觉观测的集成，为在统一仿真条件下分析多任务接触过程提供实验载体；将抓取候选与机械臂约束、轨迹执行相结合，有助于明确几何抓取方案转化为可执行专家示教所需满足的条件。对多模态数据来源、关联和转换过程进行审计，则使后续分析能够追溯到具体执行记录，减少数据语义不一致带来的歧义。在此基础上，利用真实统计信息探索仿真触觉重建，研究分布逼近与输入结构保持之间的关系，可以帮助认识仿真数据用于真实触觉研究时的条件与局限。这些工作的工程价值在于连接模型、操作与数据流程，方法研究价值则在于分析可执行性、监督对应和重建质量之间的联系，而不在于将平台集成或某一评价指标的改善直接等同于真实操作能力的提升。
+ 
+ \section{国内外研究现状}
+ \label{sec:related_work}
++
++\subsection{机器人仿真与触觉感知建模}
++\label{subsec:simulation_tactile_modeling}
++
++机器人仿真为控制和操作研究提供动力学、碰撞检测与接触计算基础。MuJoCo采用广义坐标描述多关节系统，并将接触和约束求解纳入动力学计算，支持执行器及机构约束建模\cite{todorov2012mujoco}。面向大规模策略学习，Isaac Gym通过GPU物理仿真和张量接口连接环境状态与学习过程，减少仿真与训练之间的数据传输开销\cite{makoviychuk2021isaacgym}。这类平台主要解决物体和机器人如何运动、如何发生接触的问题，而特定触觉传感器的输出还涉及接触量如何作用于敏感材料，以及形变或受力如何转换为信号。动力学求解器提供的接触信息并不能自动替代传感器模型；仿真管线的计算效率也不能直接说明触觉观测的物理精度。
++
++触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，通过传感器的相机、光照和表面配置生成视觉触觉图像，并可利用真实背景图像修正部分外观差异\cite{wang2022tacto}。Taxim针对GelSight建立实例驱动的光学模型，并利用有限元标定的形变关系模拟标记位移\cite{si2022taxim}。前者侧重灵活渲染，后者进一步结合特定传感器的校准与形变传播，两者均依赖各自的几何和读出假设。对曲面阵列而言，还需明确感知单元的位置、朝向与覆盖区域，以及空间采样后信号处理的作用。本文通过MuJoCo原生触觉传感器和后续处理获得712维标量观测，其评价需关注阵列的空间响应与幅值关系，与视觉触觉的成像评价有所区别。原生接触响应、阵列采样与处理后幅值应分别描述，接触求解中的柔顺性与真实敏感材料内部形变也属于不同的建模层次。对于同一接触，感知区域覆盖方式会影响哪些单元产生响应，滤波和邻域传播又会改变最终的激活范围与幅值。由此得到的空间扩散，既可能反映传感器模型，也可能来自读出后的处理，不能仅凭热图外观相近就认定材料响应一致。分析曲面触觉阵列时，需要保留几何布局、接触采样和信号处理之间的区别，才能判断差异出现在哪一环节。因而，传感器布局和处理过程的可追溯性，是分析仿真与真实触觉差异的前提。
+ 
+ \subsection{灵巧手抓取生成与可执行操作}
+ \label{subsec:grasp_generation_execution}
+@@ -28,13 +35,6 @@
+ 优化目标如何近似真实抓持，是候选生成中的关键问题。GraspQP将接触扳手的受限组合写为隐式二次规划，以构建可微的力闭合能量，并结合调整后的采样优化过程兼顾候选质量与多样性\cite{zurbrugg2025graspqp}。与依赖解析能量的搜索不同，DexEvolve在解析候选基础上引入仿真反馈，通过选择、变异和交叉细化抓取，随后将所得分布蒸馏为基于点云的生成模型\cite{zurbrugg2026dexevolve}。两者体现了不同的处理思路：解析优化便于定义搜索方向，物理反馈则能够检验并修正部分简化假设带来的偏差。物理检验也并非没有条件，其结果受到接触参数、扰动方式和执行控制的影响。因此，比较这些方法时，需要区分候选的几何评价、实际抓持稳定性以及候选多样性，不能仅以同名的成功率指标判断优劣。
+ 
+ 从稳定抓持进一步走向可执行操作，还需要建立目标姿态与运动过程之间的联系。UniDexGrasp将多样抓取候选生成与目标条件抓取策略分开，通过姿态分布建模、课程学习和教师学生策略学习连接视觉观测与抓取执行\cite{xu2023unidexgrasp}。这表明候选生成与执行能够协同设计，但两者仍有各自的约束。对于机械臂与欠驱动灵巧手组成的系统，手部配置需要符合驱动耦合关系，腕部目标需要满足机械臂运动学约束，接近和搬运过程还需检查碰撞及任务要求。本文的RM75B机械臂与途见科技灵巧手仿真平台据此将开源抓取方法的适配、可达性筛选与执行验证相衔接。第三方方法提供候选基础，本文的适配工作侧重具体平台上的约束连接与专家轨迹构建。其中，目标位姿的可达性检查与完整轨迹验证承担不同职责，需要分别给出依据。
+-
+-\subsection{机器人仿真与触觉感知建模}
+-\label{subsec:simulation_tactile_modeling}
+-
+-机器人仿真为控制和操作研究提供动力学、碰撞检测与接触计算基础。MuJoCo采用广义坐标描述多关节系统，并将接触和约束求解纳入动力学计算，支持执行器及机构约束建模\cite{todorov2012mujoco}。面向大规模策略学习，Isaac Gym通过GPU物理仿真和张量接口连接环境状态与学习过程，减少仿真与训练之间的数据传输开销\cite{makoviychuk2021isaacgym}。这类平台主要解决物体和机器人如何运动、如何发生接触的问题，而特定触觉传感器的输出还涉及接触量如何作用于敏感材料，以及形变或受力如何转换为信号。动力学求解器提供的接触信息并不能自动替代传感器模型；仿真管线的计算效率也不能直接说明触觉观测的物理精度。
+-
+-触觉模拟因传感机制不同而呈现不同路线。TACTO将物理场景同步与光学渲染相连接，通过传感器的相机、光照和表面配置生成视觉触觉图像，并可利用真实背景图像修正部分外观差异\cite{wang2022tacto}。Taxim针对GelSight建立实例驱动的光学模型，并利用有限元标定的形变关系模拟标记位移\cite{si2022taxim}。前者侧重灵活渲染，后者进一步结合特定传感器的校准与形变传播，两者均依赖各自的几何和读出假设。对曲面阵列而言，还需明确感知单元的位置、朝向与覆盖区域，以及空间采样后信号处理的作用。本文通过MuJoCo原生触觉传感器和后续处理获得712维标量观测，其评价需关注阵列的空间响应与幅值关系，与视觉触觉的成像评价有所区别。原生接触响应、阵列采样与处理后幅值应分别描述，接触求解中的柔顺性与真实敏感材料内部形变也属于不同的建模层次。对于同一接触，感知区域覆盖方式会影响哪些单元产生响应，滤波和邻域传播又会改变最终的激活范围与幅值。由此得到的空间扩散，既可能反映传感器模型，也可能来自读出后的处理，不能仅凭热图外观相近就认定材料响应一致。分析曲面触觉阵列时，需要保留几何布局、接触采样和信号处理之间的区别，才能判断差异出现在哪一环节。因而，传感器布局和处理过程的可追溯性，是分析仿真与真实触觉差异的前提。
+ 
+ \subsection{专家示教与多模态操作数据}
+ \label{subsec:demonstrations_multimodal_data}
+--- before/thesis/body/ch03_grasp_demonstrations.tex
++++ thesis/body/ch03_grasp_demonstrations.tex
+@@ -30,7 +30,7 @@
+ 
+ 欠驱动手的关节并非独立受控，直接优化全部关节角可能偏离实际可执行构型。本文以六个驱动比例为手部参数，利用仿真采样拟合的皮肤点轨迹代理连接驱动与接触几何。该代理用于可微评价，其范围受采样和模型版本限制，最终行为仍需物理反馈检验。
+ 
+-GraspQP通过可微抓取质量评价支持候选优化\cite{zurbrugg2025graspqp}。本项目调用其官方指标工厂，结合物体表面点、法向和手部代理构造接触评价。优化变量包括三维平移、六维旋转参数及六个驱动比例的logit，驱动比例通过sigmoid限制在有效区间。旋转参数在评价时恢复为旋转矩阵，从而避免直接优化九个任意矩阵元素。物体采样和手部皮肤点变换到同一坐标下后，程序按手指接触点组计算到物体的距离，并以软权重构造接触位置和法向。由此形成的接触集合用于官方质量指标计算，而不是把最近点距离本身当作力闭合证明。
++GraspQP通过可微抓取质量评价支持候选优化\cite{zurbrugg2025graspqp}。本文调用其官方指标工厂，结合物体表面点、法向和手部代理构造接触评价。优化变量包括三维平移、六维旋转参数及六个驱动比例的logit，驱动比例通过sigmoid限制在有效区间。旋转参数在评价时恢复为旋转矩阵，从而避免直接优化九个任意矩阵元素。物体采样和手部皮肤点变换到同一坐标下后，程序按手指接触点组计算到物体的距离，并以软权重构造接触位置和法向。由此形成的接触集合用于官方质量指标计算，而不是把最近点距离本身当作力闭合证明。
+ 
+ 单独优化抓取指标可能得到难以执行的构型，因此目标还加入接触距离、穿透、桌面距离、平移漂移和驱动耦合约束。接触距离项鼓励手部采样点接近物体；穿透和桌面项限制明显不合理的几何关系；漂移项抑制手部偏离初始种子过远；驱动耦合项约束部分手指比例的离散程度。各项具有不同归一化尺度与权重，其数值意义应结合实际实现解释。表\ref{tab:ch03_candidate_parameters}列出变量和约束的职责。本文在这一环节完成的是面向具体手部的指标适配与流程集成，不将GraspQP本身作为原创方法，也不声称几何目标已覆盖所有接触稳定性条件。
+ 
+@@ -52,9 +52,9 @@
+  \end{tabular}
+ \end{table}
+ 
+-几何候选进入DexEvolve-style细化阶段后，评价对象从接触构型扩展到执行行为。DexEvolve原研究采用进化优化获得多样且稳健的灵巧抓取\cite{zurbrugg2026dexevolve}，本项目保留候选群体、变异、交叉和档案管理的组织思想，并针对六驱动手及现有仿真执行接口作适配。平移、旋转和驱动比例分别施加扰动，驱动变化限制在有效范围内；交叉则组合不同候选的位姿与手部配置。候选在执行前还可进行接触修正和去穿透处理，使搜索不仅依赖最初的几何种子。
+-
+-物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。但档案多样性是搜索机制，不直接等于独立初态或不同成功模式已经得到充分验证。本项目使用的是适配实现，并未据此声称完整复现第三方Isaac系统。
++几何候选进入DexEvolve-style细化阶段后，评价对象从接触构型扩展到执行行为。DexEvolve原研究采用进化优化获得多样且稳健的灵巧抓取\cite{zurbrugg2026dexevolve}，本文保留候选群体、变异、交叉和档案管理的组织思想，并针对六驱动手及现有仿真执行接口作适配。平移、旋转和驱动比例分别施加扰动，驱动变化限制在有效范围内；交叉则组合不同候选的位姿与手部配置。候选在执行前还可进行接触修正和去穿透处理，使搜索不仅依赖最初的几何种子。
++
++物理反馈通过实际执行候选获得接触保持、物体相对漂移和扰动响应等指标，必要时使用MJWarp后端评价寿命相关目标。几何质量较高的构型仍可能在接近时偏离物体，或在加载后因接触方向不合适而失稳，因而物理反馈不能由静态接触分数完全替代。进化档案利用候选距离、新颖性及局部密度等信息保留不同构型，避免全部预算集中到近乎重复的局部解。档案在搜索中保留不同构型；其执行表现由后续机器人约束检查与任务验证评价。
+ 
+ \begin{figure}[htbp]
+   \centering
+--- before/thesis/body/ch02_simulation_platform.tex
++++ thesis/body/ch02_simulation_platform.tex
+@@ -41,7 +41,7 @@
+ \section{RM75B机械臂与途见科技自研灵巧手模型}
+ \label{sec:robot_model}
+ 
+-机器人组合模型由RM75B机械臂、途见科技自研灵巧手和安装底座构成。机械臂MJCF定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\_joint1至pos\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。
++机器人组合模型由RM75B机械臂、途见科技自研灵巧手和安装底座构成。机械臂采用MuJoCo模型描述格式（MuJoCo Modeling Format，MJCF），以XML文件组织刚体、关节、执行器和传感器。该模型定义七个串联转动关节，依次命名为joint1至joint7，其位置目标分别由pos\_joint1至pos\_joint7执行器接收。各关节的轴、范围与连杆变换由XML给定，控制器据执行器关联关系定位实际关节地址，而不是假定它们在状态数组中始终连续排列。七自由度结构为末端位姿调节提供冗余，但冗余自由度能否用于避碰或姿态优化，还取决于实际控制目标和求解约束，不能仅由关节数量推断。
+ 
+ 机械臂各级连杆通过局部位置和四元数描述相对变换，末端定义right\_hand安装体和right\_hand\_site。安装体用于附着手部模型，末端site用于位姿读取及逆运动学计算，两者职责不同。组合构建器将手部安装到指定body，并施加机械臂描述中给定的附加旋转，其XYZ欧拉角为$(-90^\circ,-90^\circ,0^\circ)$。该旋转通过四元数参与坐标组合，必须与父body原有变换共同使用。因此，附加安装角不能直接解释为灵巧手在世界坐标系中的姿态。对于定义在几何局部坐标系中的点，其所属刚体坐标由旋转和平移共同确定；同样的变换规则也用于后续触觉采样点安装。
+ 
+@@ -92,7 +92,7 @@
+ 
+ 手部关节还配置被动弹簧及阻尼。驱动腱提供整体屈曲作用，而不同关节在接触物体后受到不同约束，未受阻关节仍可改变姿态，由此表达模型中的欠驱动适应行为。该机制并不意味着接触后每个关节都获得唯一稳定解，其运动还受弹簧、摩擦及求解参数影响。表\ref{tab:ch02_actuators}采用模型的SI单位约定：机械臂$k_p$单位为N$\cdot$m/rad，腱执行器$k_p$单位为N/m；腱力与关节力矩不能直接比较。这些是仿真参数，不是实物标定值。
+ 
+-需要说明，当前手部XML没有显式滑动推杆、闭链等式约束或可变形Flex网格。部分执行器名称保留act\_push字样，但名称不改变固定腱传动的实际定义。本文以当前XML描述机构，不将历史名称解释为已经实现的闭链结构，也不把接触柔顺参数等同于硅胶形变。模型资产能够追溯到项目内XML、URDF与STL文件，但其相对实机的几何误差和物理参数标定尚未得到认证。图\ref{fig:ch02_robot_model}按当前安装变换展示关节零位的静态几何，不表示任务执行姿态或动态验证结果；驱动关系按图\ref{fig:ch02_drive}表达。
++手部采用刚体关节与固定腱传动描述欠驱动耦合，执行器通过腱长坐标同时作用于关联关节。模型的机构、安装变换和皮肤几何分别保存在XML、URDF与STL资产中。图\ref{fig:ch02_robot_model}展示安装后的组合模型与手部局部，图\ref{fig:ch02_drive}给出执行器、固定腱和关节之间的传动关系。
+ 
+ \section{灵巧手接触建模与控制方法}
+ \label{sec:contact_control}
+@@ -147,16 +147,16 @@
+   \end{tabular}
+ \end{table}
+ 
+-手部控制器接收六个位置通道，并根据执行器的传动类型读取坐标。固定腱执行器不能按照单一关节地址解释，其当前位置应从执行器对应的传动坐标获得。底层由MJCF位置执行器及其阻尼设置完成伺服，而不是在控制代码中另设一个通用力矩PD控制器\cite{mujoco2026xml}。表\ref{tab:ch02_control_parameters}中的IK参数是构造默认值，调用方可以覆盖，不能据此认定每条历史Episode都执行了同一套逆运动学。
+-
+-指定profile的控制周期为0.05~s，环境按其与物理步长之比确定每周期50个子步，对应20~Hz控制和1000~Hz物理积分。图\ref{fig:ch02_control}中，动作只在控制周期开始时更新，执行器目标在子步内保持，环境完成物理推进后读取观测。物理频率决定数值推进间隔，记录频率决定保存多少时刻，两者都不等同于真实传感器带宽。接触可能在子步内出现或消失，因此20~Hz观测并不包含所有物理子步上的瞬态变化，这也是解释触觉时序时需要保留的采样边界。
++手部控制器接收六个位置通道，并根据执行器的传动类型读取坐标。固定腱执行器的位置由其关联关节的加权组合确定，控制器据此读取腱传动坐标，并与目标腱长比较。底层由MJCF位置执行器及其阻尼设置完成伺服，而不是在控制代码中另设一个通用力矩PD控制器\cite{mujoco2026xml}。表\ref{tab:ch02_control_parameters}列出控制器的默认参数，具体任务可在构造时覆盖。
++
++指定profile的控制周期为0.05~s，环境按其与物理步长之比确定每周期50个子步，对应20~Hz控制和1000~Hz物理积分。图\ref{fig:ch02_control}中，动作只在控制周期开始时更新，执行器目标在子步内保持，环境完成物理推进后读取观测。物理积分频率决定状态推进间隔，观测采样频率决定保存时刻。接触可能在子步内出现或消失，因此20~Hz观测并不包含所有物理子步上的瞬态变化，这也是解释触觉时序时需要保留的采样边界。
+ 
+ \section{复杂曲面触觉阵列建模}
+ \label{sec:curved_tactile_array}
+ 
+-灵巧手指节和指尖具有不同曲率，直接在固定平面上均匀放置感知区域容易造成区域偏离表面、朝向不一致或局部重复覆盖。平台采用由皮肤STL网格派生采样点的方式，将阵列布局与所属刚体的几何关系连接起来。该设计关注仿真内部采样位置与读出区域的一致性，不以输出通道数相同推断实机电极布局相同。与以图像合成为主要输出的视觉触觉模拟器\cite{wang2022tacto,si2022taxim}不同，本平台在曲面附近布置原生touch感知区域，输出有序标量阵列。
+-
+-每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\times8$，指尖为$7\times8$；手掌设置$7\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\ref{tab:ch02_patch_layout}。指节几何具有重复性，但采样点仍由相应STL计算，不能用一组平面坐标替换全部曲面。
++灵巧手指节和指尖具有不同曲率，直接在固定平面上均匀放置感知区域容易造成区域偏离表面、朝向不一致或局部重复覆盖。平台采用由皮肤STL网格派生采样点的方式，将阵列布局与所属刚体的几何关系连接起来。阵列按手指与手掌的感知区域组织，使采样位置随各指节刚体运动，并保持固定的通道顺序。与以图像合成为主要输出的视觉触觉模拟器\cite{wang2022tacto,si2022taxim}不同，本平台在曲面附近布置原生touch感知区域，输出有序标量阵列。
++
++每个手指设置近端、另一指节区域和指尖三个Patch，前两者为$4\times8$，指尖为$7\times8$；手掌设置$7\times16$阵列。五指共600个单元，手掌112个单元，总计16个Patch、712个感知单元。图\ref{fig:ch02_patch_order}按仿真索引展示布局组织，具体区间见表\ref{tab:ch02_patch_layout}。各区域的采样点分别由所属STL计算，以适应指节、指尖与手掌的曲率差异。
+ 
+ \begin{figure}[htbp]
+ \centering
+@@ -224,7 +224,7 @@
+  h_y=\max\!\left(h_{\min},\frac{\gamma d_r}{2}\right).
+  \label{eq:ch02_site_size}
+ \end{equation}
+-其中，$d_c,d_r$为对应方向可用相邻距离的最小值，$\gamma$为overlap系数，$h_{\min}$为最小半宽；法向半厚度$h_z$单独配置。指定profile取$\gamma=1.25$、$h_{\min}=0.0005$~m、$h_z=0.004$~m，而传感器类默认厚度和overlap分别为0.0015~m和1.0。二者必须按具体配置区分。box site是有体积的感知区域，不参与独立Taxel碰撞；区域之间允许重叠，其截面面积也不等于经过标定的真实电极面积。
++其中，$d_c,d_r$为对应方向可用相邻距离的最小值，$\gamma$为overlap系数，$h_{\min}$为最小半宽；法向半厚度$h_z$单独配置。指定profile取$\gamma=1.25$、$h_{\min}=0.0005$~m、$h_z=0.004$~m，而传感器类默认厚度和overlap分别为0.0015~m和1.0。二者必须按具体配置区分。box site用于指定有体积的感知区域，碰撞仍由皮肤几何参与计算；相邻感知区域允许重叠，以减少采样间隙。
+ 
+ \begin{table}[htbp]
+   \centering\small
+@@ -279,7 +279,7 @@
+ 
+ 曲面布局确定感知区域的位置，触觉读出则决定每个区域记录什么量。构建器在组合手部之前调用传感器的augment\_spec接口，为每个采样点添加box site和一个MuJoCo原生mjSENS\_TOUCH传感器。模型完成构建后，bind依据传感器名称查找编号，检查输出维数为1，并保存sensor\_adr所指示的数据地址。地址与传感器编号不是同一概念，其他类型传感器可能占据不同长度的sensordata区间。read\_raw按已绑定地址读取712个值并转换为float32副本，避免后续物理更新改变已经返回的数组。
+ 
+-原生touch在相应body和site感知条件下累加接触法向力，输出非负标量\cite{mujoco2026xml}。在模型采用SI单位的约定下，它可解释为模拟法向力读数，但没有除以真实电极面积，也不包含完整切向力向量。一个接触可能被重叠感知区重复覆盖，因此全部Taxel读数求和不必等于机器人受到的总外力。该读出也不等同于视觉触觉图像或材料内部连续压力场\cite{si2022taxim,sferrazza2022simtoreal}。当前712维链路来自simple\_box与原生touch，不以touch\_grid插件作为直接生成来源。
++原生touch在相应body和site感知条件下累加接触法向力，输出非负标量\cite{mujoco2026xml}。在模型采用SI单位的约定下，它可解释为模拟法向力读数，但没有除以真实电极面积，也不包含完整切向力向量。一个接触可能被重叠感知区重复覆盖，因此全部Taxel读数求和不必等于机器人受到的总外力。该读出也不等同于视觉触觉图像或材料内部连续压力场\cite{si2022taxim,sferrazza2022simtoreal}。当前模型将上述box感知区域与原生touch逐一绑定，再按固定索引读取712维响应。
+ 
+ \begin{figure}[htbp]
+   \centering
+@@ -355,6 +355,15 @@
+   \end{tabular}
+ \end{table}
+ 
++图\ref{fig:ch02_historical_heatmaps}展示同一批记录的完整触觉序列。横向保留712个通道的原始顺序，纵向为记录帧索引，白线分隔16个感知区域。五条记录采用相同色标，能够同时观察响应出现在哪些通道、持续多少帧及其幅值变化。例如，推动记录的响应集中于少量通道，堆叠记录的激活范围更广；具体非零比例见表\ref{tab:ch02_episode_validation}。此处热图使用保存的处理后仿真响应，坐标为通道索引与帧索引。
++
++\begin{figure}[htbp]
++  \centering
++  \includegraphics[width=0.96\textwidth]{figures/annotation_r2/historical_tactile_heatmaps.pdf}
++  \caption{五条历史任务记录的处理后触觉热图（共用数值色标）}
++  \label{fig:ch02_historical_heatmaps}
++\end{figure}
++
+ 检查结果如表\ref{tab:ch02_episode_validation}所示。五条sensor\_tactile均符合上述shape、类型、有限性与非负要求，且并非全零。timestamp为float64，其相邻增量在浮点误差范围内为0.05~s，与20~Hz保存节奏相符。这一结果说明所检查历史记录保留了规则时间索引下的触觉数组，但不意味着物理子步内所有接触变化均被保存，也不能由此认证视觉、动作和触觉在任意历史文件中均完全同步。
+ 
+ 不同记录的非零比例差异较大，其中Push为0.495\%，Stack为18.263\%。该差异说明触觉稀疏程度随记录条件变化，统一维数并未使不同任务得到相同接触分布。但仅凭这五条数据，不能将差异完全归因于任务类型：物体、轨迹、接触阶段及处理条件也可能影响激活情况。这里不对任务进行统计排名，不用单条记录估计任务总体响应，更不把非零比例较高解释为操作质量较好。低激活记录的存在也提示，后续数据审计应保留实际响应，而不是为满足非零要求补写信号。
+@@ -366,6 +375,15 @@
+ 更重要的是，历史记录与当前XML、曲面拟合及信号处理配置之间的完整版本一致性尚未确认，记为UNKNOWN。关节状态或控制数组维数相容，只能表明接口形式相容，不能证明物理模型、碰撞参数和全部代码相同。因此，当前实现与历史观测分别报告；端到端动态复验还需补足当时的模型和配置档案。
+ 
+ 上述检查确认了平台的模型、控制和观测接口，以及五条指定历史记录的数组有效性与基本采样关系。抓取候选如何转化为稳定操作，是下一章的研究问题；第四章则进一步检查这些执行记录的时序、来源及数据质量。真实触觉标定与跨域物理对应将在触觉重建的问题定义中统一讨论。
++
++五类任务分别考察抓持后的垂直抬升、搬移与放置、物体堆叠、桌面推动以及螺母装配。图\ref{fig:ch02_historical_scenes}从上述五条记录的原始场景视频中提取首帧与末帧，展示物体、机械臂和灵巧手的相对位置及场景变化。起终帧用于说明各任务的操作对象与环境，任务结果仍按相应执行记录和验证条件判定。各任务的轨迹构建与执行条件在第三章进一步介绍。
++
++\begin{figure}[p]
++  \centering
++  \includegraphics[width=0.92\textwidth,height=0.83\textheight,keepaspectratio]{figures/annotation_r2/historical_five_task_scenes.pdf}
++  \caption{五任务历史仿真场景的记录起点与终点（原始视频帧）}
++  \label{fig:ch02_historical_scenes}
++\end{figure}
+ 
+ \section{本章小结}
+ \label{sec:platform_summary}
+--- before/thesis/THESIS_PERSONAL_INFORMATION.csv
++++ thesis/THESIS_PERSONAL_INFORMATION.csv
+@@ -10,14 +10,14 @@
+ 2. 学校、学院、专业及学位,校区,一校区,当前主文件为campus=harbin；仅核对记录，不自动改模板
+ 2. 学校、学院、专业及学位,学院中文名称,计算学部,caffil
+ 2. 学校、学院、专业及学位,学院英文名称,Faculty of Computing,按用户确认，参照师兄封面的申请学位及机构、导师英文表述；申请学位中文完整显示为专业学位硕士。
+-2. 学校、学院、专业及学位,专业/学科中文正式名称,电子信息,csubject；以学籍和封面口径为准
+-2. 学校、学院、专业及学位,专业/学科英文正式名称,Electronic Information,esubject
++2. 学校、学院、专业及学位,专业/学科中文正式名称,计算机技术,csubject；以学籍和封面口径为准
++2. 学校、学院、专业及学位,专业/学科英文正式名称,Computer Technology,esubject
+ 2. 学校、学院、专业及学位,学位所属学科门类/封面学位名称所需中文表述,专业学位,按用户确认，参照师兄封面的申请学位及机构、导师英文表述；申请学位中文完整显示为专业学位硕士。
+ 2. 学校、学院、专业及学位,对应英文学位学科表述,Professional Master,按用户确认，参照师兄封面的申请学位及机构、导师英文表述；申请学位中文完整显示为专业学位硕士。
+ 2. 学校、学院、专业及学位,学位类型中文表述,专业学位,cstudenttype；如学术学位/专业学位，提供学校规定的准确措辞
+-3. 论文题目与日期,外封面日期,2026年12月14日,firstpagecdate；请注明年月及期望显示格式
+-3. 论文题目与日期,中文内页日期,2026年12月14日,cdate；不要默认与组会或当前日期相同
+-3. 论文题目与日期,英文内页日期,2026年12月14日,edate；与相应中文日期一致
++3. 论文题目与日期,外封面日期,2026年12月,firstpagecdate；请注明年月及期望显示格式
++3. 论文题目与日期,中文内页日期,2026年12月,cdate；不要默认与组会或当前日期相同
++3. 论文题目与日期,英文内页日期,2026年12月,edate；与相应中文日期一致
+ 4. 分类与保密信息,密级,公开,statesecrets；以实际要求为准，不自行填“公开”
+ 3. 论文题目与日期,最终中文题目,灵巧手仿真示教数据构建与触觉跨域重建方法研究,2026-11-27用户确认；ctitlecover、ctitle统一使用
+ 3. 论文题目与日期,最终英文题目,Simulation-Based Demonstration Data Construction and Cross-Domain Tactile Reconstruction for Dexterous Hands,对应已确认中文题目的英文译题，本轮起草待审核；etitle

@@ -29,3 +29,5 @@
 # Preserve thesis evidence bytes (including CRLF) so archived SHA256 remains valid.
 thesis/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/writing_audit/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve revision ledgers, raw build logs and diffs byte-for-byte for SHA256 checks.
+thesis_audit/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol

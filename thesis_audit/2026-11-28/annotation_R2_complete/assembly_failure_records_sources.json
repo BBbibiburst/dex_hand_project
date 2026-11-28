@@ -1,0 +1,40 @@
+{
+  "files": {
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/episode.npz": "d32c1025840be38eb62da6ddd05f98dc4fee31eba463de0208e122fe112433e6",
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/manifest.json": "b9443bfdecddf10d849c0fe76551733df081a1835e3b247c5db84ff95f52df7c",
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/result.json": "06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74",
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/episode.npz": "8a075a91c2b8bea7c08098342dd84718c8e824ee5c3a074ca5f8db73d52ae13a",
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/manifest.json": "cf0d1b20e846ede2969c173fcda63eb1704d0c639d866f1b8a24ca8f28662192",
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/result.json": "3e8b88b81182eefe60551ac932dac0dc478d9bef0788a4cfb1e5dc753900a9b8",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657"
+  },
+  "cases": [
+    {
+      "case": "nut_original_handle_00",
+      "label": "原抓持命令",
+      "rows": 941,
+      "recorded_success": false,
+      "recorded_failure_reason": "grasped bolt was not stably inserted in the fixed nut"
+    },
+    {
+      "case": "nut_handle_lower_00",
+      "label": "降低抓点",
+      "rows": 941,
+      "recorded_success": false,
+      "recorded_failure_reason": "grasped bolt was not stably inserted in the fixed nut"
+    },
+    {
+      "case": "nut_retain_lower_rgb_00",
+      "label": "降低抓点并保留抓持",
+      "rows": 599,
+      "recorded_success": true,
+      "recorded_failure_reason": null
+    }
+  ],
+  "method": "all recorded rows plotted with source timestamps; no re-execution, new success detection or smoothing",
+  "comparison_scope": "historical local conditions; not multi-seed ablation or uniform durations",
+  "stage_map": "original shared stage codes; row duration differs between cases",
+  "video_status": "failed cases had no RGB; arrays used directly, not borrowed screenshots"
+}

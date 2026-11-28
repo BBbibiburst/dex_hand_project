@@ -1,0 +1,56 @@
+{
+  "files": {
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/episode.json": "3e6328dd1343f27d5bd1882f43df447dc1c16f967176643451149448b00a666d",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/source_episode/manifest.json": "f6eff9ae790cc4d4c3d5a0c9ee65144405b9cabc46480b6cb735478c6abbb25d",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/source_episode/episode.npz": "0d87cc11d0280d7963ba7772067b9c6015ec40989b65b94be656af09db028669",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/modalities.npz": "c7ecfc1dc4cd8fca29139a323e4a7b4c719ddef3df44b7c112a3e71b0ec7ba98",
+    "outputs/dp_p2_2026-10-11/diagnostics/action_chain/action_chain_report.json": "4582adbba1348020880c5a693ede67539808f4a62cb4ed2050fe8b925fe8f67f",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/manifest.json": "cd4e9ae42eac4c2fb0e1f279a096ce1d88c68aed027630198bf923944a2f1b85",
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/episode.npz": "7a83aada2f92fe6bed45813968c57499fd73357c7842414eedb349a72d70336a",
+    "outputs/dp_p2_2026-10-11/lerobot_single_sugar_fixed/data/chunk-000/file-000.parquet": "6dc185c3ceb9053a1e4064b8777c64f8308125a5a5458fe8623ff2ff541be5ef",
+    "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/data_contract.csv": "5408a12416fa814d3b54b5b3f4f77207fe3cb491093b7c538632462d487aaf77",
+    "source/data/production_artifacts.py": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865"
+  },
+  "v4_shapes": {
+    "state": [
+      638,
+      39
+    ],
+    "action": [
+      638,
+      13
+    ],
+    "tactile": [
+      638,
+      712
+    ],
+    "timestamp": [
+      638
+    ]
+  },
+  "v4_admission": "development_verified_not_formal_production",
+  "lineage_hash": "b6695189cb423667172d8e2f9886261c1ffe9ffa6dd9025298b03eaed22c0396",
+  "origin_case": "outputs/five_task_p44_integration_2026-11-05/dataset/work/pick_tomato_10e460303770c865bf7e/attempt_001",
+  "fixed_export": {
+    "rows": 340,
+    "episode_indices": [
+      0
+    ],
+    "frame_index_range": [
+      0,
+      339
+    ],
+    "source_rows": 477,
+    "source_action_range": [
+      137,
+      476
+    ],
+    "source_observation_range": [
+      136,
+      475
+    ]
+  },
+  "two_routes": "v4 PickPlace and LeRobot Sugar are different traced examples, not a fictional single export chain",
+  "Root": "UNKNOWN independent physical roots; lineage_hash is not a root count",
+  "Real": "existing frozen contract only; no Real/Test/Holdout raw arrays read"
+}

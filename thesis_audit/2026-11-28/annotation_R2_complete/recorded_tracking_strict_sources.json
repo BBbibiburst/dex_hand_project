@@ -1,0 +1,69 @@
+{
+  "files": {
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/model.mjb.gz": "c46f4be8da5df09780644ca3455e1dc68cd24ab8eacd52a44bf20cb6209c2a05",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/episode.npz": "af39b260049e417fae6e079ce72ceeb44fe6c0c5d1a564f58b515c6e3994340b",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/manifest.json": "6b7cd8f3485fa1b0767a60159102b8956b12e7f3bb27c2d299443b543a0cc74b",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/strict_final.json": "971d9ddece83dfdca0c66a04197e76ff3a06c95b5f8c3d9d4a8914337645f5bb",
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/independent_replay.json": "7e32bab4f92cf66acac5003ca72f761a23e95175c062eda708218c75c29fdd60",
+    "source/robots/arms/rm75b.py": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+    "source/data/production_recorder.py": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "source/grasping/executor.py": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa"
+  },
+  "method": "stored qpos + stored MJB + mj_kinematics only; no mj_step, new IK solve or new Strict replay",
+  "target_semantics": "saved raw ik_action, not internal filtered target; pose at recorded qpos is post-step; compare to target for same row",
+  "error_definition": "norm(site_xpos(qpos_i)-ik_action_i[:3]); 2 arccos(abs(dot(normalized target quaternion, site quaternion)))",
+  "not_ik_residual": "tracking difference includes target filtering and actuator/dynamics; not solver iteration residual",
+  "frames": 447,
+  "selected_frames": [
+    {
+      "stage": "预抓取",
+      "code": 2,
+      "frame": 109
+    },
+    {
+      "stage": "闭合",
+      "code": 4,
+      "frame": 204
+    },
+    {
+      "stage": "抬升",
+      "code": 6,
+      "frame": 312
+    },
+    {
+      "stage": "验证",
+      "code": 7,
+      "frame": 402
+    }
+  ],
+  "display_crop_normalized": [
+    0.32,
+    0.25,
+    0.98,
+    0.98
+  ],
+  "historical_strict": {
+    "success": true,
+    "profile": "final",
+    "verification_status": "FINAL_VERIFIED",
+    "frames": 322,
+    "final_lift": 0.0605519393168471,
+    "max_lift": 0.0710152656248434,
+    "tail_min_lift": 0.0605519393168471,
+    "tail_mean_lift": 0.06154242149093092,
+    "tail_max_speed": 0.002191317735818282,
+    "tail_max_angular_speed": 0.0036800534029481583,
+    "tail_contact_fraction": 1.0,
+    "tail_grasp_fraction": 1.0,
+    "tail_opposition_mean": 0.9997998006936044,
+    "robot_table_contacts": 0,
+    "tail_robot_table_contact_fraction": 0.0,
+    "tail_robot_table_max": 0,
+    "max_penetration": 0.00303502260001125,
+    "tail_max_penetration": 0.00024207030226312142,
+    "tail_robot_object_contact_mean": 8.0,
+    "tail_tactile_max": 0.8799999952316284,
+    "quality_score": 6.6667516081978455
+  },
+  "historical_strict_frames_separate": true
+}

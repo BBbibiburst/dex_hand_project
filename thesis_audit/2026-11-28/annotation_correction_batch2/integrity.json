@@ -1,0 +1,232 @@
+{
+  "source_comparison": {
+    "thesis/body/ch05_dual_domain_reconstruction.tex": {
+      "before": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "after": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "unchanged": true
+    },
+    "thesis/body/ch01_introduction.tex": {
+      "before": "5a60d2c12b68721eb87d0676d471acf8c9716069cf44191c637debd3426a9f29",
+      "after": "638c1d79247bd290c05a1b97310c4fd6b927f4344b4f9280202f05b409c2c344",
+      "unchanged": false
+    },
+    "thesis/body/ch03_grasp_demonstrations.tex": {
+      "before": "13890952d62653946d76e3900a93ef9d378051d72b4d890492d17b93ac8aff52",
+      "after": "d150ea38cded810f426ccd315bfd5dc97f66fb4c15b97f1bc51ba5caaf0fe392",
+      "unchanged": false
+    },
+    "thesis/body/ch04_multimodal_data.tex": {
+      "before": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "after": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_adversarial_evaluation.tex": {
+      "before": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "after": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "unchanged": true
+    },
+    "thesis/body/ch05_experiments.tex": {
+      "before": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "after": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "unchanged": true
+    },
+    "thesis/body/ch03_dual_vae.tex": {
+      "before": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "after": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "unchanged": true
+    },
+    "thesis/body/ch04_adversarial_transfer.tex": {
+      "before": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "after": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "unchanged": true
+    },
+    "thesis/body/ch06_conclusion.tex": {
+      "before": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "after": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "unchanged": true
+    },
+    "thesis/body/ch02_data_and_problem.tex": {
+      "before": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "after": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "unchanged": true
+    },
+    "thesis/body/ch07_conclusion.tex": {
+      "before": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "after": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "unchanged": true
+    },
+    "thesis/body/ch02_simulation_platform.tex": {
+      "before": "eb5a0c2be75b4a976d56172868574fc744f2daa2851793c86b9387ea1e2341ee",
+      "after": "18d79d7f7507ea2bd8ceb9ccbcfaf1189640acc41da8add3ff051d75f7dd7b4f",
+      "unchanged": false
+    },
+    "thesis/body/ch05_sections/section_5_5.tex": {
+      "before": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "after": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_4.tex": {
+      "before": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "after": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_6.tex": {
+      "before": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "after": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_3.tex": {
+      "before": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "after": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_1.tex": {
+      "before": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "after": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_2.tex": {
+      "before": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "after": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "after": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": {
+      "before": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "after": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": {
+      "before": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "after": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": {
+      "before": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "after": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": {
+      "before": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "after": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": {
+      "before": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "after": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": {
+      "before": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "after": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": {
+      "before": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "after": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": {
+      "before": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "after": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "unchanged": true
+    },
+    "thesis/front/denotation.tex": {
+      "before": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "after": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "unchanged": true
+    },
+    "thesis/front/cover.tex": {
+      "before": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+      "after": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+      "unchanged": true
+    },
+    "thesis/front/abstract.tex": {
+      "before": "00d890c75148a5efb4f0a5cfa1b964e3a75c32f1ab46da75b6e2c8fc7fbc09d6",
+      "after": "00d890c75148a5efb4f0a5cfa1b964e3a75c32f1ab46da75b6e2c8fc7fbc09d6",
+      "unchanged": true
+    },
+    "thesis/thesis.tex": {
+      "before": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "after": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "unchanged": true
+    },
+    "thesis/reference.bib": {
+      "before": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "after": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "unchanged": true
+    },
+    "thesis/THESIS_PERSONAL_INFORMATION.csv": {
+      "before": "e5d3fa655dc6167d294098afe904161faedf0cb56105ca1db6612a17b2a5466c",
+      "after": "e5d3fa655dc6167d294098afe904161faedf0cb56105ca1db6612a17b2a5466c",
+      "unchanged": true
+    },
+    "thesis_audit/2026-11-28/experiment_strengthening/MASTER_PLAN.md": {
+      "before": "1f7e5cd05eb474a8e1de72e96f7360f28b69f26d80fcbe6985b89f4e21032141",
+      "after": "0ac01ca0595acb6606768a30cbcd8dda259d602021674f70eb87cca96dfc6607",
+      "unchanged": false
+    }
+  },
+  "protected_all_unchanged": true,
+  "previous_R2_pdf_unchanged": true,
+  "read_only_source_current_hashes": {
+    "source/control/arm.py": "f511f6f3ed5ec4bed81e791c3dbf1bd7059256a8a12fff127cc5187cc00793b3",
+    "source/control/composite.py": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+    "source/control/end_effectors.py": "5f0e68dff7663dcb1a1b6cc7b834fc546d18ee222c61cd2e7687cb130339193a",
+    "source/envs/rl_env.py": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+    "source/sensors/tactile/signal_processing.py": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+    "assets/grippers/dex_hand/dex_hand.xml": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+    "configs/robot_profiles/rm75b_dex_hand.json": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399"
+  },
+  "trajectory_inputs_rechecked": {
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88"
+  },
+  "artifacts": {
+    "thesis_audit/2026-11-28/annotation_correction_batch2/check_page_025.png": "d89eb72be45d4cd6776cc6c5d0c41c0b9af9f0cc3960a16afba082638169091f",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/changes.diff": "94ec2a207536a23d318fef95a6258a167d0f8379d4633784ddb577e1a20bfbc0",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/READING_DRAFT.md": "d1cf42ebc3ce04a9155494fe25d944ff490a8a6103add79e111a5cdd3aec0397",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/static_checks.json": "62336818ac02af9dc724cebc4e9073fdcae843343f0674d30d00edaf44bc3739",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/thesis_annotation_batch2.pdf": "427aa3949e7017474bae113990deeda081ed32c9de29639f02291eca85f73965",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/trajectory_source.json": "90d0842ff9f984d756c928d3baac65fb7a01d25e9bc4acd4781e34242c282de9",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/edits.json": "67f9fb4253ed44f4b7591f06d003d245dd672d461ad113ce12394e1b712e7842",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/ANNOTATION_LEDGER.md": "881e11ae1f3d9fa17ae0f359c92f3ddecf026397c3b355a9b3d70d9bee1cb389",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/pdf_pages.json": "d55e1cebecc30ff2b226a78d0684bd711f65d246b7ecad783be0fc2d3288bda1",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/check_page_030.png": "9295379cfdcb0188fb2bca58225b77eb0b01b9d2bb2190cb86490b5a29a4ec50",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/make_trajectory_figure.py": "65b27bd3e52e24d40395eb51b4643fffd0dd80c4f8d0050a00807174d575c09c",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/build_preview.py": "f54be161dd986cf9c62edb11f5155f7a339c45c8ddc5e86a06b562c8c1d6772f",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/SOURCE_EVIDENCE.md": "1dc437a7e6e0d44648d2744ede441b8efad3b7640d1f7aa66c9fa309b47c0840",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/ANNOTATION_LEDGER.csv": "35dd8e11c6728e4ef31daa50d3f68bac099883bc1da01808c05210812419b9cc",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/baseline.json": "54b5f16f20998bd03c3a95f8def1cdf0ed71cc8f33c2ea701a066c35c940dc9a",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/finalize.py": "5626625e77eaa42b65abe54e7f429e3c9a1220b40ffbcc1ef7128fefbdc476ba",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/REVIEW.md": "9cd62ebaeae0f1dc1f6a3b465c425f6eebc2d0ff50aaaaf52e7663122d9cabc1",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/make_method_figures.py": "29fc345f3ff37a4936fea445018cca91463ebbfc0a56717d84ef67f1928179dc",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/build.log": "a373da7a7263d6860c7e0775f5d4d455bf2d043e6cfb35d8b51bc2b3915275e7",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/revise.py": "03be8ae710d8f383b29bd648339a6d066a467da53957ea35960999dbadc70ba9",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/EXECUTION_NOTES.md": "53e2e209177807d69b137e3cf667699aea381418276aac55412c29f9f1d7be42",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/VALIDATION.md": "f6678e194583d92c7f0dc86d80024fe6ae660e56dc0875e482625df5bc866e53",
+    "thesis_audit/2026-11-28/annotation_correction_batch2/check_page_042.png": "1f294977301d86cee274f657502323ab86ce385995f21e0e3f61e212976ccd2f",
+    "thesis/figures/annotation_batch2/tactile_processing_operators.pdf": "b019256d95a75639168bb0d9a884cf042762fb6fd86664776534c7a673c7fb9b",
+    "thesis/figures/annotation_batch2/historical_lift_trajectory.png": "d60fb4defc15cdc52dbd3d467cc9a5df4675a99c646c1a24964faf9bc8ac3e1a",
+    "thesis/figures/annotation_batch2/control_implementation.pdf": "af6f9b0c65a8d61605c52895e53d761c02d5bedac9d00b8d503f7b9ccb0f81d2",
+    "thesis/figures/annotation_batch2/tactile_processing_operators.png": "bc4c9e2ae8245f874941d02521fca16f7412016045ab41e6d1d3ff71c96023ee",
+    "thesis/figures/annotation_batch2/control_implementation.png": "64ef14afb8c88651f373ec2fcb4f653508409d6e3f7f518173ab366254c96dd8",
+    "thesis/figures/annotation_batch2/historical_lift_trajectory.pdf": "cc8f2d728f2e30aafdde3e0dd3c2d09298d1c9fba5e7762b7e1c8c79ea017483"
+  },
+  "execution": {
+    "training": false,
+    "model_inference": false,
+    "simulation": false,
+    "read_test_holdout_arrays": false,
+    "experiment_metric_recompute": false,
+    "historical_record_plotting": true,
+    "physical_tasks": false,
+    "commit_push": false,
+    "freeze": false
+  },
+  "scope": "Pre/post hash comparison covers source_comparison only; experimental source current hashes are not fabricated pre/post whole-dataset checks."
+}

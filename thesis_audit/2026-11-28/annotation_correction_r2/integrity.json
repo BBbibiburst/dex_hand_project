@@ -1,0 +1,673 @@
+{
+  "source_comparison": {
+    "thesis/front/denotation.tex": {
+      "before": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "after": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "unchanged": true
+    },
+    "thesis/front/cover.tex": {
+      "before": "406722c207f90bbe06001596e44841613f9479a438c5feb6c4ef282bcc029e42",
+      "after": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+      "unchanged": false
+    },
+    "thesis/front/abstract.tex": {
+      "before": "85bc09d7c6b66beb17bc6299041f2ed4c4fbf304e98f09770a19e58e2fdde26e",
+      "after": "00d890c75148a5efb4f0a5cfa1b964e3a75c32f1ab46da75b6e2c8fc7fbc09d6",
+      "unchanged": false
+    },
+    "thesis/body/ch05_dual_domain_reconstruction.tex": {
+      "before": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "after": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "unchanged": true
+    },
+    "thesis/body/ch01_introduction.tex": {
+      "before": "c1daeb4e22e4a63c8bb23d6b27ac22ea5304e7399c6701f250717186bd7880e2",
+      "after": "5a60d2c12b68721eb87d0676d471acf8c9716069cf44191c637debd3426a9f29",
+      "unchanged": false
+    },
+    "thesis/body/ch03_grasp_demonstrations.tex": {
+      "before": "2e1e8fd654532049e9393382929cdb314489b6911789a7c379ccb3a903006a3b",
+      "after": "13890952d62653946d76e3900a93ef9d378051d72b4d890492d17b93ac8aff52",
+      "unchanged": false
+    },
+    "thesis/body/ch04_multimodal_data.tex": {
+      "before": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "after": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_adversarial_evaluation.tex": {
+      "before": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "after": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "unchanged": true
+    },
+    "thesis/body/ch05_experiments.tex": {
+      "before": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "after": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "unchanged": true
+    },
+    "thesis/body/ch03_dual_vae.tex": {
+      "before": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "after": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "unchanged": true
+    },
+    "thesis/body/ch04_adversarial_transfer.tex": {
+      "before": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "after": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "unchanged": true
+    },
+    "thesis/body/ch06_conclusion.tex": {
+      "before": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "after": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "unchanged": true
+    },
+    "thesis/body/ch02_data_and_problem.tex": {
+      "before": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "after": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "unchanged": true
+    },
+    "thesis/body/ch07_conclusion.tex": {
+      "before": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "after": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "unchanged": true
+    },
+    "thesis/body/ch02_simulation_platform.tex": {
+      "before": "752cb46e5821e4d57b7f6e7250ec19a910ab096c36a017796d5a4e26f24f3804",
+      "after": "eb5a0c2be75b4a976d56172868574fc744f2daa2851793c86b9387ea1e2341ee",
+      "unchanged": false
+    },
+    "thesis/body/ch05_sections/section_5_5.tex": {
+      "before": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "after": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_4.tex": {
+      "before": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "after": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_6.tex": {
+      "before": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "after": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_3.tex": {
+      "before": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "after": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_1.tex": {
+      "before": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "after": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_2.tex": {
+      "before": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "after": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "after": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": {
+      "before": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "after": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": {
+      "before": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "after": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": {
+      "before": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "after": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": {
+      "before": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "after": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": {
+      "before": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "after": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": {
+      "before": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "after": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": {
+      "before": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "after": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": {
+      "before": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "after": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "unchanged": true
+    },
+    "thesis/releases/ch01_2026-11-20/before/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/releases/ch01_2026-11-20/source/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/front/cover.tex": {
+      "before": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "after": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/regu.tex": {
+      "before": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "after": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/introduction.tex": {
+      "before": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "after": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/recruit.tex": {
+      "before": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "after": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/front/coverart.tex": {
+      "before": "2a3099c32f78ceeca7ba02a9f0396e633b7f9ab444d7fab738b2d2afcd6327a5",
+      "after": "2a3099c32f78ceeca7ba02a9f0396e633b7f9ab444d7fab738b2d2afcd6327a5",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_shenzhen_doctor_midterm.tex": {
+      "before": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "after": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_harbin_bachelor_opening.tex": {
+      "before": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "after": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_shenzhen_doctor_opening.tex": {
+      "before": "7d5a0b997e77555d0c0a723f3f1177c627fcf96b7daab7f0f4cec0fe8d1b01fc",
+      "after": "7d5a0b997e77555d0c0a723f3f1177c627fcf96b7daab7f0f4cec0fe8d1b01fc",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_weihai_bachelor_opening.tex": {
+      "before": "a63e55cee305f0db8e1a12d97760a69d740a96cbc7d267478211063041248aea",
+      "after": "a63e55cee305f0db8e1a12d97760a69d740a96cbc7d267478211063041248aea",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_weihai_bachelor_midterm.tex": {
+      "before": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "after": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/front/coverart.tex": {
+      "before": "94ba799bda54f53fc724dfc54e13dd1e9eea1d3a2a58ff1fab0d3ee1b179c2ce",
+      "after": "94ba799bda54f53fc724dfc54e13dd1e9eea1d3a2a58ff1fab0d3ee1b179c2ce",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_shenzhen_doctor_midterm.tex": {
+      "before": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "after": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_harbin_bachelor_opening.tex": {
+      "before": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "after": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_weihai_bachelor_opening.tex": {
+      "before": "6f6b15d72ab687c183936912cf481b6e567717303832a036a212ac9a7cf99457",
+      "after": "6f6b15d72ab687c183936912cf481b6e567717303832a036a212ac9a7cf99457",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_weihai_bachelor_midterm.tex": {
+      "before": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "after": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/front/cover.tex": {
+      "before": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "after": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/regu.tex": {
+      "before": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "after": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/introduction.tex": {
+      "before": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "after": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/recruit.tex": {
+      "before": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "after": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/acknowledgements.tex": {
+      "before": "edd94c4aacb78eaa9ff2f7b617e060e4a79ca6c54c1b692d42480cb49e240a88",
+      "after": "edd94c4aacb78eaa9ff2f7b617e060e4a79ca6c54c1b692d42480cb49e240a88",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/cover.tex": {
+      "before": "5dc2f175f3bc973eaca6db157e49199d88b473ef88f3025b785f444dd782d602",
+      "after": "5dc2f175f3bc973eaca6db157e49199d88b473ef88f3025b785f444dd782d602",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/body/eng_regu.tex": {
+      "before": "6fc52ca6781146b3e91a9abf31decbe66ba5e28498784d52ed6efcec10fdccfd",
+      "after": "6fc52ca6781146b3e91a9abf31decbe66ba5e28498784d52ed6efcec10fdccfd",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/front/abstract.tex": {
+      "before": "aa61ba0c09813438ae74967606283e8d903277d92e696e8a6ee04988bb6087bb",
+      "after": "aa61ba0c09813438ae74967606283e8d903277d92e696e8a6ee04988bb6087bb",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch02_simulation_platform.tex": {
+      "before": "3d181034773d44878aa27fb6a76917890e661f5c3ae8d20200b6263408098f38",
+      "after": "3d181034773d44878aa27fb6a76917890e661f5c3ae8d20200b6263408098f38",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "f8c21f73f1f26365db8752eee8e218aa2f87a9fc2c96b93df0dc900451e4ef95",
+      "after": "f8c21f73f1f26365db8752eee8e218aa2f87a9fc2c96b93df0dc900451e4ef95",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before/body/ch01_introduction.tex": {
+      "before": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2",
+      "after": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2",
+      "unchanged": true
+    },
+    "thesis/thesis.tex": {
+      "before": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "after": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "unchanged": true
+    },
+    "thesis/reference.bib": {
+      "before": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "after": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "unchanged": true
+    },
+    "thesis/THESIS_PERSONAL_INFORMATION.csv": {
+      "before": "b7e1adbcb6a4cc34cb1e9fa9fc45171e6dec3539c0102f7d1563f8dff669354e",
+      "after": "e5d3fa655dc6167d294098afe904161faedf0cb56105ca1db6612a17b2a5466c",
+      "unchanged": false
+    }
+  },
+  "protected_checked": {
+    "thesis/front/denotation.tex": {
+      "before": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "after": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "unchanged": true
+    },
+    "thesis/body/ch05_dual_domain_reconstruction.tex": {
+      "before": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "after": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "unchanged": true
+    },
+    "thesis/body/ch04_multimodal_data.tex": {
+      "before": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "after": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_adversarial_evaluation.tex": {
+      "before": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "after": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "unchanged": true
+    },
+    "thesis/body/ch05_experiments.tex": {
+      "before": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "after": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "unchanged": true
+    },
+    "thesis/body/ch03_dual_vae.tex": {
+      "before": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "after": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "unchanged": true
+    },
+    "thesis/body/ch04_adversarial_transfer.tex": {
+      "before": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "after": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "unchanged": true
+    },
+    "thesis/body/ch06_conclusion.tex": {
+      "before": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "after": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "unchanged": true
+    },
+    "thesis/body/ch02_data_and_problem.tex": {
+      "before": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "after": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "unchanged": true
+    },
+    "thesis/body/ch07_conclusion.tex": {
+      "before": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "after": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_5.tex": {
+      "before": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "after": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_4.tex": {
+      "before": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "after": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_6.tex": {
+      "before": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "after": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_3.tex": {
+      "before": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "after": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_1.tex": {
+      "before": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "after": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_2.tex": {
+      "before": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "after": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "after": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": {
+      "before": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "after": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": {
+      "before": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "after": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": {
+      "before": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "after": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": {
+      "before": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "after": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": {
+      "before": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "after": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": {
+      "before": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "after": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": {
+      "before": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "after": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": {
+      "before": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "after": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "unchanged": true
+    },
+    "thesis/releases/ch01_2026-11-20/before/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/releases/ch01_2026-11-20/source/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/front/cover.tex": {
+      "before": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "after": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/regu.tex": {
+      "before": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "after": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/introduction.tex": {
+      "before": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "after": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "unchanged": true
+    },
+    "thesis/upstream/release-v3.2a/chinese-harbin-master-v3.2a/body/recruit.tex": {
+      "before": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "after": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/front/coverart.tex": {
+      "before": "2a3099c32f78ceeca7ba02a9f0396e633b7f9ab444d7fab738b2d2afcd6327a5",
+      "after": "2a3099c32f78ceeca7ba02a9f0396e633b7f9ab444d7fab738b2d2afcd6327a5",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_shenzhen_doctor_midterm.tex": {
+      "before": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "after": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_harbin_bachelor_opening.tex": {
+      "before": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "after": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_shenzhen_doctor_opening.tex": {
+      "before": "7d5a0b997e77555d0c0a723f3f1177c627fcf96b7daab7f0f4cec0fe8d1b01fc",
+      "after": "7d5a0b997e77555d0c0a723f3f1177c627fcf96b7daab7f0f4cec0fe8d1b01fc",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_weihai_bachelor_opening.tex": {
+      "before": "a63e55cee305f0db8e1a12d97760a69d740a96cbc7d267478211063041248aea",
+      "after": "a63e55cee305f0db8e1a12d97760a69d740a96cbc7d267478211063041248aea",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reports/body/report_weihai_bachelor_midterm.tex": {
+      "before": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "after": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/front/coverart.tex": {
+      "before": "94ba799bda54f53fc724dfc54e13dd1e9eea1d3a2a58ff1fab0d3ee1b179c2ce",
+      "after": "94ba799bda54f53fc724dfc54e13dd1e9eea1d3a2a58ff1fab0d3ee1b179c2ce",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_shenzhen_doctor_midterm.tex": {
+      "before": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "after": "b8c58f02c33ee780c52fdf211a17daa1e1f50e2088884c443144c4f41336623f",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_harbin_bachelor_opening.tex": {
+      "before": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "after": "5014fb72b14b96816afcb1a3ff7ab65652ab7acef9efc78dd7f62f64c4f890ff",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_weihai_bachelor_opening.tex": {
+      "before": "6f6b15d72ab687c183936912cf481b6e567717303832a036a212ac9a7cf99457",
+      "after": "6f6b15d72ab687c183936912cf481b6e567717303832a036a212ac9a7cf99457",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitart/reportplus/body/report_weihai_bachelor_midterm.tex": {
+      "before": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "after": "8d5fbb1730c85621d4a936247fa862cd9431992836e5badd050f7b092ea1cf39",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/front/cover.tex": {
+      "before": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "after": "50ab144410ea0e890e6a22f38d1f95fb01f4a8ae0aa8eb0709caf75789f3c119",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/regu.tex": {
+      "before": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "after": "194ab7bbfa44a03d3452a1afba8ca47191d746d6c6ae3c23c4ea8d9ac7070769",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/introduction.tex": {
+      "before": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "after": "8eb0b8ddbf7b19564c146e56319f1d551514afae6d55bec180586c869b830494",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/chinese/body/recruit.tex": {
+      "before": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "after": "3568b7af27d55a7777351645888c414dfb1b78648c16548fb7a10b184c318cd1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/acknowledgements.tex": {
+      "before": "edd94c4aacb78eaa9ff2f7b617e060e4a79ca6c54c1b692d42480cb49e240a88",
+      "after": "edd94c4aacb78eaa9ff2f7b617e060e4a79ca6c54c1b692d42480cb49e240a88",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/denotation.tex": {
+      "before": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "after": "cb79873e1e1c20bc691652850a0eb4365371a2e3d68db5663d65405d8c69ecc1",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/front/cover.tex": {
+      "before": "5dc2f175f3bc973eaca6db157e49199d88b473ef88f3025b785f444dd782d602",
+      "after": "5dc2f175f3bc973eaca6db157e49199d88b473ef88f3025b785f444dd782d602",
+      "unchanged": true
+    },
+    "thesis/upstream/hithesis/examples/hitbook/english/body/eng_regu.tex": {
+      "before": "6fc52ca6781146b3e91a9abf31decbe66ba5e28498784d52ed6efcec10fdccfd",
+      "after": "6fc52ca6781146b3e91a9abf31decbe66ba5e28498784d52ed6efcec10fdccfd",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/front/abstract.tex": {
+      "before": "aa61ba0c09813438ae74967606283e8d903277d92e696e8a6ee04988bb6087bb",
+      "after": "aa61ba0c09813438ae74967606283e8d903277d92e696e8a6ee04988bb6087bb",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch01_introduction.tex": {
+      "before": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "after": "12688b88b49066ed176fb73ac1b31614d921f9248b5ef06fb9de3348a15c0c31",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch02_simulation_platform.tex": {
+      "before": "3d181034773d44878aa27fb6a76917890e661f5c3ae8d20200b6263408098f38",
+      "after": "3d181034773d44878aa27fb6a76917890e661f5c3ae8d20200b6263408098f38",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/hand_naming_revision_2026-11-27/before/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "f8c21f73f1f26365db8752eee8e218aa2f87a9fc2c96b93df0dc900451e4ef95",
+      "after": "f8c21f73f1f26365db8752eee8e218aa2f87a9fc2c96b93df0dc900451e4ef95",
+      "unchanged": true
+    },
+    "thesis/docs/writing_audit/ch01_1_2_writing_v2_2026-11-20/before/body/ch01_introduction.tex": {
+      "before": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2",
+      "after": "17539220fb8cb97b4dce58a563002952866ab97e59d709d13d523e4806d886e2",
+      "unchanged": true
+    },
+    "thesis/thesis.tex": {
+      "before": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "after": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "unchanged": true
+    },
+    "thesis/reference.bib": {
+      "before": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "after": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "unchanged": true
+    }
+  },
+  "protected_checked_all_unchanged": true,
+  "original_annotated_pdf_unchanged": true,
+  "original_annotated_pdf_sha256": "5544b61ac75fc8a1f33e6e4361cb3e44c1b648cb22fc02dd3bc3f48ec6a55f1f",
+  "artifacts": {
+    "thesis_audit/2026-11-28/annotation_correction_r2/build_checks.json": "477f8c0f9ffa6912e140d15129cd122938394167e3f218d3ab5cfc5a3b4dd928",
+    "thesis_audit/2026-11-28/annotation_correction_r2/changes.diff": "379eb15fe0aca46ecf4b8c5e09044a22e9b786b4af903233414b0cbfb905762e",
+    "thesis_audit/2026-11-28/annotation_correction_r2/READING_DRAFT.md": "bf44501d5149c92a9a2c90dd724b635c4a8aea565f87b856bd0557e94f465ac3",
+    "thesis_audit/2026-11-28/annotation_correction_r2/annotations_original.json": "ca1989b954b3312050ed0a7d96fb58d634afc221af5f6bef302611eae516c8bf",
+    "thesis_audit/2026-11-28/annotation_correction_r2/check_page_036.png": "6367b77359eb412130a3e313c42480164e9782ecc674065a4c1b779f02025765",
+    "thesis_audit/2026-11-28/annotation_correction_r2/thesis_annotation_correction_r2.pdf": "765c8d3562748480664961b7497b86a25c8215619b3c69f6aa49615b97959485",
+    "thesis_audit/2026-11-28/annotation_correction_r2/check_page_002.png": "09331c3724b0e14a3c77947c7a535bbe037dc3ba588c5342d4255631e4a330d9",
+    "thesis_audit/2026-11-28/annotation_correction_r2/ANNOTATION_LEDGER.md": "a1c580bc93d7546e55e9cf9549fa204932e2faabe9b3e543c7a00cd50346be7f",
+    "thesis_audit/2026-11-28/annotation_correction_r2/figure_sources.json": "d9ef20c209904f66fcc82c08e3af43aa2767506fe519fe940bb28c624b620a26",
+    "thesis_audit/2026-11-28/annotation_correction_r2/pdf_pages.json": "f368054d8b4dd590cef688cde96ef104bb32f8776f567b4297771a25aa665f76",
+    "thesis_audit/2026-11-28/annotation_correction_r2/check_page_034.png": "21a2983c5dd2f5b092d393822abdb0796134cecded768ea265802f72334b1ee7",
+    "thesis_audit/2026-11-28/annotation_correction_r2/build_preview.py": "f816baf1a969dca167d3436f94511c4123507d68894c9d15233d550e6c8ef4d5",
+    "thesis_audit/2026-11-28/annotation_correction_r2/ANNOTATION_LEDGER.csv": "ef00069da82a65dcf7aa0869e99561cc3c8059152c309376db15069c0b0bfd50",
+    "thesis_audit/2026-11-28/annotation_correction_r2/baseline.json": "7ad3f20c3a85b82024341db8eb07cde0e355cb7ec4e2ee87c1d87d9798d5643f",
+    "thesis_audit/2026-11-28/annotation_correction_r2/make_ledger.py": "467917e7d367d361f447853cbb394c6756a9a45c9d77f47bc5a963831cd84738",
+    "thesis_audit/2026-11-28/annotation_correction_r2/finalize.py": "1d8639438bc26208ebb98dccedbace5dccfc21def633df692831c81768db0f31",
+    "thesis_audit/2026-11-28/annotation_correction_r2/F0_PROVENANCE.md": "2a296ae3f1b24369708f418ecfa93fcd415a9358ac91e892467575d302a522f7",
+    "thesis_audit/2026-11-28/annotation_correction_r2/REVIEW.md": "b4b729d5cd43724e43de31630ccbf37d72fed0bbf6a335e2f232f8916d0c87aa",
+    "thesis_audit/2026-11-28/annotation_correction_r2/make_record_figures.py": "a4569d178a79d625932df9e8e6fff68f4d2c4328dadba6b800d67b3a89af5501",
+    "thesis_audit/2026-11-28/annotation_correction_r2/build.log": "e8ec4d808ee859c38f5407d7359b683dd4379663b8574edb38618c74ac40860d",
+    "thesis_audit/2026-11-28/annotation_correction_r2/check_page_003.png": "56b2e5f5b35892b59804437fa606cb11b73b7d19945a18fd31286fe20b890106",
+    "thesis_audit/2026-11-28/annotation_correction_r2/VALIDATION.md": "e603bdd0c64fe53cd1cdf71cb273029b1e0e6266acbe4eae5965e896f403dee8",
+    "thesis/figures/annotation_r2/historical_five_task_scenes.pdf": "de250ebdbf9feab06ff46e34f77d5fb3f85a799609d6ba3665a912ced1bf5e2e",
+    "thesis/figures/annotation_r2/historical_five_task_scenes.png": "171697fac78aa84ba5405110e55f99e309ccfe399c1d9ff051d1719a24e0f496",
+    "thesis/figures/annotation_r2/historical_tactile_heatmaps.png": "c1014085e292fe7014dc94ccb1bd05c0da8b65a74b32fa91d0acb0f68c533c4e",
+    "thesis/figures/annotation_r2/historical_tactile_heatmaps.pdf": "435843ca7806ef1657ece66054f8e80ef349d810149df42c246d62fb6bacc4e8"
+  },
+  "F0_sources_current_hashes": {
+    "outputs/tactile_p45_mask_ablation_2026-11-18/A/training_summary.json": "65227daad4912a6800ee01fc0af9ae6641ed650cec714136fb6ab5926f5d2263",
+    "outputs/tactile_p48_unified_four_route_audit_2026-11-19/code/generate.py": "93f26c3209f5ba7fb9a837c8a862c99e4185346deb972ebaf051639b43cb4c4f",
+    "outputs/tactile_p48_unified_four_route_audit_2026-11-19/metrics_swd.csv": "15d5106776442af3d2907713a539a4a2a5adc6ddec4210d844fc355386e2e233",
+    "outputs/tactile_p49_round_frozen_adversarial_2026-11-19/code/train.py": "2cc8ae84b561515ae917a7c6d45531d466702a91716dc661b14ad989e6dc67b7"
+  },
+  "execution": {
+    "new_training": false,
+    "model_inference": false,
+    "simulation": false,
+    "read_test_holdout_arrays": false,
+    "video_decode": "five historical P32 task videos only",
+    "commit_push": false,
+    "freeze": false
+  },
+  "scope_note": "Only source_comparison entries have pre/post comparison. Figure sources have current hashes and read-only processing, not a fabricated pre-run snapshot of all experimental assets."
+}

@@ -2,7 +2,7 @@
 \section{多轮对抗优化实验}
 \label{sec:ch06_multi_round_adversarial}
 
-前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节将这一多轮实验记为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\%，定义$R_W=(\mathrm{SWD}_{\mathrm{Original}}-\mathrm{SWD}_{F_0})/\mathrm{SWD}_{\mathrm{Original}}$，本次为0.4977202817，95\%组Bootstrap区间约为$[0.408514,0.566743]$，如图\ref{fig:ch06_f0_swd_baseline}所示。这只支持指定距离合同下的改善，不能解释为迁移成功率。
+前述对照区分了判别输入与梯度路径，但尚未回答：判别器适应已有生成结果后，再更新生成场，能否持续改善迁移质量。本节以逐轮冻结判别边界的方式检验这一问题，实验记录编号为P49，$F_i$与$D_i$分别表示生成器与判别器的阶段状态，后者不同于第五章由BA定义的域混淆指标$D$。为建立可比较的起点，先对冻结候选开展统一分布评价。切片Wasserstein距离（Sliced Wasserstein Distance，SWD）通过多个一维投影比较两组响应分布；最大均值差异（Maximum Mean Discrepancy，MMD）则用核函数度量分布差异。本节联合观察两者，判断判别器接受率的变化是否伴随分布逼近，具体计算见第\ref{sec:ch06_distribution_quality_input_preservation}节。以未转换Natural Sim为Original，将上一节A组训练终点按$K=1$读出的生成器记为$F_0$；该权重本身采用四种$K$调度训练，并非仅用单步训练或重新随机初始化。统一评价未新增生成器训练，其组等权SWD由Original的0.411343降至$F_0$的0.206609，相对下降49.77\%，定义$R_W=(\mathrm{SWD}_{\mathrm{Original}}-\mathrm{SWD}_{F_0})/\mathrm{SWD}_{\mathrm{Original}}$，本次为0.4977202817，95\%组Bootstrap区间约为$[0.408514,0.566743]$，如图\ref{fig:ch06_f0_swd_baseline}所示。这里的相对下降描述指定距离下的分布改善，其评价对象是两组样本分布。
 
 \begin{figure}[htbp]
  \centering
@@ -26,7 +26,7 @@
  \label{fig:ch06_round_acceptance_states}
 \end{figure}
 
-FR定义为Sim生成样本被当前冻结判别器按0.5阈值判为Real的接受比例，先在Root内计算，再对10个Root宏平均；Real接受率先在Session内计算，再对4个Session宏平均，二者不是相同统计指标。如图\ref{fig:ch06_round_acceptance_states}所示，$F_0$在$D_0$下本来就达到100\% FR，不是生成器更新收益。$D_1$下$F_0\rightarrow F_1$的FR由约0.000775升至1，$D_2$下$F_1\rightarrow F_2$、$D_3$下$F_2\rightarrow F_3$均由0升至1。对应Real宏接受率分别约为0.998958、1和1。它们证明各次更新改变了当前判别边界下的输出判定；由于D已经改变，不能将各轮FR拼成同一评价器下的连续改善曲线。
+生成样本接受率（Fake Acceptance Rate，FR）表示Sim生成样本被当前冻结判别器按0.5阈值判为Real的比例，先在Root内计算，再对10个Root宏平均；Real接受率先在Session内计算，再对4个Session宏平均，二者不是相同统计指标。如图\ref{fig:ch06_round_acceptance_states}所示，$F_0$在$D_0$下本来就达到100\% FR，不是生成器更新收益。$D_1$下$F_0\rightarrow F_1$的FR由约0.000775升至1，$D_2$下$F_1\rightarrow F_2$、$D_3$下$F_2\rightarrow F_3$均由0升至1。对应Real宏接受率分别约为0.998958、1和1。它们证明各次更新改变了当前判别边界下的输出判定；由于D已经改变，不能将各轮FR拼成同一评价器下的连续改善曲线。
 
 \begin{figure}[htbp]
  \centering

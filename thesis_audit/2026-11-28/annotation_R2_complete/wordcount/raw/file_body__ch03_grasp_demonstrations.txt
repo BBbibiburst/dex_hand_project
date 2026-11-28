@@ -1,0 +1,20 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch03_grasp_demonstrations.tex
+Sum count: 9190
+Words in text: 8836
+Words in headers: 86
+Words outside text (captions, etc.): 268
+Number of headers: 8
+Number of floats/tables/figures: 13
+Number of math inlines: 20
+Number of math displayed: 4
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+21+0 (1/0/0/0) Chapter: 面向灵巧手操作的抓取候选生成与专家示教构建
+  676+11+24 (1/1/4/1) Section: 抓取任务定义与总体流程
+  1744+9+39 (1/2/1/0) Section: 多来源抓取候选生成
+  1384+12+21 (1/1/7/2) Section: 基于可达性约束的抓取筛选
+  1956+11+74 (1/3/8/1) Section: 连续逆运动学与轨迹验证
+  1416+9+40 (1/2/0/0) Section: 多任务专家示教生成
+  1259+9+70 (1/4/0/0) Section: 抓取及示教质量实验
+  401+4+0 (1/0/0/0) Section: 本章小结
+

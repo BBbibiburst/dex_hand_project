@@ -1,0 +1,22 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch01_introduction.tex
+Sum count: 8928
+Words in text: 8827
+Words in headers: 86
+Words outside text (captions, etc.): 15
+Number of headers: 10
+Number of floats/tables/figures: 1
+Number of math inlines: 0
+Number of math displayed: 0
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+2+0 (1/0/0/0) Chapter: 绪论
+  1934+7+0 (1/0/0/0) Section: 研究背景与意义
+  0+7+0 (1/0/0/0) Section: 国内外研究现状
+  786+12+0 (1/0/0/0) Subsection: 机器人仿真与触觉感知建模
+  863+13+0 (1/0/0/0) Subsection: 灵巧手抓取生成与可执行操作
+  1288+12+0 (1/0/0/0) Subsection: 专家示教与多模态操作数据
+  1821+8+15 (1/1/0/0) Subsection: 触觉Sim-to-Real与跨域重建
+  1006+9+0 (1/0/0/0) Section: 研究问题与技术难点
+  908+10+0 (1/0/0/0) Section: 主要研究内容与创新点
+  221+6+0 (1/0/0/0) Section: 论文组织结构
+

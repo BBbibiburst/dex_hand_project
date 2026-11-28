@@ -1,0 +1,20 @@
+from pathlib import Path
+import json
+R=Path('/home/zmy/dex_hand_project');O=R/'thesis_audit/2026-11-28/writing_reconstruction_r1';e=json.loads((O/'edits.json').read_text())
+def rep(n,a,b,why):
+ p=R/'thesis/body'/n;s=p.read_text();assert s.count(a)==1,(n,a[:45],s.count(a));p.write_text(s.replace(a,b,1));e.append({'source':str(p.relative_to(R)),'before':a,'after':b,'purpose':why})
+rep('ch01_introduction.tex','分别以VAE学习仿真形变和真实电信号的潜表示','分别以变分自编码器（Variational Autoencoder，VAE）学习仿真形变和真实电信号的潜表示','首次给出VAE名称')
+rep('ch01_introduction.tex','具体而言，利用Real Train拟合的GMM及Patch响应统计，','\n\n具体而言，利用真实训练集（Real Train）拟合的高斯混合模型（Gaussian Mixture Model，GMM）及区域（Patch）响应统计，','分开相关工作和本文监督设计，释义统计方法')
+rep('ch01_introduction.tex','生成与Real窗口统计对应的Paired Sim。','生成与Real窗口统计对应的伪配对仿真数据（Paired Sim）。','首次说明配对数据角色')
+rep('ch01_introduction.tex','Real VAE使用真实训练数据，Sim VAE同时使用Natural Sim和Paired Sim训练，','\n\nReal VAE使用真实训练数据，Sim VAE同时使用自然任务仿真数据（Natural Sim）和Paired Sim训练，','以数据角色说明两域表示，切开长术语段')
+rep('ch01_introduction.tex','利用Paired Sim与对应Real窗口的潜变量监督训练GRU Translator。','利用Paired Sim与对应Real窗口的潜变量，训练基于门控循环单元（Gated Recurrent Unit，GRU）的潜变量映射网络（Translator）。','首次解释GRU与Translator的关系')
+rep('ch01_introduction.tex','Natural Sim依次经Sim Encoder、GRU Translator和Real Decoder生成完整四帧712维触觉，','自然仿真输入先被编码，再经潜变量映射和真实域解码，生成完整四帧712维触觉，','用实际运算过程替代连续英文模块名')
+rep('ch01_introduction.tex','因此，本文需要研究的是统计监督的可靠性及其向自然任务输入的适用性，而不是将双VAE与潜映射的组合本身视为新的研究贡献。','因此，本文需要检验统计监督的可靠性，以及这种对应能否适用于自然任务输入。','相关工作段以研究问题结束')
+rep('ch01_introduction.tex','例如DANN在保留源域任务判别性的同时，','例如域对抗神经网络（Domain-Adversarial Neural Network，DANN）在保留源域任务判别性的同时，','首次展开DANN')
+rep('ch06_sections/section_6_1_shared_vector_field.tex','本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。','对应实验记录编号为P44。该设计沿用两域独立表示，着重研究积分更新形式对迁移结果的影响；两域物理对应的前提仍采用第五章的问题定义。','用研究变量说明扩展范围，跨域前提引用既有定义')
+rep('ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex','局部覆盖沿用PRDC的严格小于号邻域判定，','局部覆盖采用精确率、召回率、密度与覆盖率四项指标（Precision、Recall、Density、Coverage，PRDC），分别检查真实与生成样本邻域的相互覆盖。沿用严格小于号邻域判定，','定义PRDC及其研究用途')
+rep('ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex','对0.5、1、2倍带宽的RBF核取平均，','对0.5、1、2倍带宽的径向基函数（Radial Basis Function，RBF）核取平均，','首次解释核函数缩写')
+rep('ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex','输入依赖采用Root内中心化RBF Gram矩阵的归一化核对齐：','输入依赖采用基于希尔伯特--施密特独立性准则（Hilbert--Schmidt Independence Criterion，HSIC）的归一化核对齐。先在Root内构造并中心化RBF Gram矩阵，再计算：','说明HSIC度量对象及实际变体')
+rep('ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex','HSIC反映统计依赖，既不是因果证明，也不恢复同步物理接触关系。','HSIC描述的是输入与输出的统计依赖，其物理语义仍需同步接触或任务证据检验。','将多次否定改为统计指标和物理证据的分工')
+rep('ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex','因此，距离、邻域、依赖与Mask、幅值、短时序结构描述各有分工，FR、BA和AUC则诊断接受及分类表现，彼此不能替代，均不能单独认证物理Sim-to-Real。下一节进一步检查判别器自身的跨Session泛化能力。','上述评价分别检查分布接近程度、样本覆盖、输入响应及短时序结构，FR、BA和AUC则反映判别器的接受与排序表现。各指标的分歧有助于定位退化发生在哪一层。下一节继续检查判别器对真实数据的跨Session泛化能力，以明确这些分数的可靠参照。','由指标清单提升为如何解释指标分歧')
+(O/'edits.json').write_text(json.dumps(e,ensure_ascii=False,indent=2));print('total',len(e))

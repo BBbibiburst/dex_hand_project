@@ -1,0 +1,1242 @@
+[
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 36,
+    "function": "test_probe_cooldown_and_budget_persist_without_counter_reset"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 54,
+    "function": "test_actual_new_success_replenishes_budget"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 67,
+    "function": "test_pending_prevents_duplicate_and_sparse_batch_is_small"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 79,
+    "function": "test_failed_only_template_cannot_be_unblocked"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 85,
+    "function": "test_transaction_rolls_back_when_second_payload_invalid"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 101,
+    "function": "test_exit_reason_policy"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 105,
+    "function": "test_classification_never_treats_contract_failure_as_memory_shortage"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 113,
+    "function": "test_restart_budget_is_persistent_and_expires"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 124,
+    "function": "test_unknown_policy_keys_or_unbounded_limits_rejected"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 144,
+    "function": "test_watchdog_restarts_crash_and_then_completes"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 153,
+    "function": "test_watchdog_resumes_after_memory_recovers"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 161,
+    "function": "test_watchdog_user_stop_never_restarts"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 168,
+    "function": "test_restart_storm_remains_stopped_after_manager_restart"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 175,
+    "function": "test_preparation_resource_race_rechecks_without_bypassing"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 187,
+    "function": "test_actual_child_is_terminated_on_stall_and_can_be_resumed"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 199,
+    "function": "test_actual_child_completion_reads_summary_from_existing_preparation"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 208,
+    "function": "test_only_explicit_resource_stop_can_be_retried"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 221,
+    "function": "test_resource_recovers_before_recheck_can_restart"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 228,
+    "function": "test_wait_limit_is_not_reset_by_process_restart"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 235,
+    "function": "test_healthy_template_runs_while_another_template_cools"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 244,
+    "function": "test_sigterm_stops_actual_child_and_does_not_restart"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 257,
+    "function": "test_long_final_file_verification_is_not_a_stalled_collector"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 268,
+    "function": "test_pending_of_completed_task_does_not_block_needed_task_probe"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 279,
+    "function": "test_child_cpu_limit_is_inherited_and_parent_affinity_is_restored"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 293,
+    "function": "test_legacy_defaults_migrate_without_resetting_recovery_or_sessions"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 308,
+    "function": "test_migration_preserves_actual_memory_downscale"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 316,
+    "function": "test_probe_capacity_follows_server_worker_plan"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 325,
+    "function": "test_custom_policy_change_still_requires_review"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 333,
+    "function": "test_live_recovery_seeds_idle_lift_while_nut_is_running"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 350,
+    "function": "test_live_recovery_retains_per_template_cooldown_and_budget_with_busy_nut"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 371,
+    "function": "test_live_recovery_pending_other_task_does_not_block_idle_lift"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 391,
+    "function": "test_running_child_observes_live_lift_refill_without_nut_restart"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 419,
+    "function": "test_live_feeder_rejects_changed_frozen_catalogue"
+  },
+  {
+    "source": "tests/test_collection_autorecover.py",
+    "line": 427,
+    "function": "test_runtime_guard_failure_preserves_cause_before_summary_replacement"
+  },
+  {
+    "source": "tests/test_collection_dashboard.py",
+    "line": 28,
+    "function": "test_snapshot_uses_credited_unique_data_without_writing"
+  },
+  {
+    "source": "tests/test_collection_dashboard.py",
+    "line": 52,
+    "function": "test_recent_rate_and_zero_progress_do_not_make_up_eta"
+  },
+  {
+    "source": "tests/test_collection_dashboard.py",
+    "line": 67,
+    "function": "test_empty_database_is_not_created"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 28,
+    "function": "test_git_deploy_relocates_without_reset"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 40,
+    "function": "test_failure_restores_metadata"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 48,
+    "function": "test_unknown_code_and_missing_queue_refused"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 58,
+    "function": "test_pointer_relocation"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 66,
+    "function": "test_approved_scheduler_predecessor_is_pinned_and_environment_remains_frozen"
+  },
+  {
+    "source": "tests/test_collection_git_deploy.py",
+    "line": 75,
+    "function": "test_repository_deployment_manifest_matches_current_source_bytes"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 25,
+    "function": "test_checkpoint_restores_complete_solver_and_sensor_state"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 37,
+    "function": "test_preload_probe_restores_state_even_when_trial_raises"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 48,
+    "function": "test_each_probe_starts_from_identical_solver_history"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 68,
+    "function": "test_cross_batch_namespaced_view_keeps_different_content_and_deduplicates_aliases"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 74,
+    "function": "test_transitive_content_and_lineage_duplicates_have_one_canonical_record"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 79,
+    "function": "test_profile_mixing_is_rejected_and_views_partition_by_profile"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 85,
+    "function": "test_legacy_or_development_record_cannot_become_new_verified_expert"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 97,
+    "function": "test_external_references_prevent_new_credit_without_importing_historical_hours"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 105,
+    "function": "test_external_reference_namespaces_do_not_overwrite_same_job_id"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 113,
+    "function": "test_replay_gate_cannot_be_loosened"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 119,
+    "function": "test_drifted_failure_is_reviewed_and_not_admitted_as_valid_failure"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 124,
+    "function": "test_consistent_copy_is_preferred_over_legacy_drift_alias"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 129,
+    "function": "test_recorded_geometry_binding_ignores_recompiled_collision_cache"
+  },
+  {
+    "source": "tests/test_collection_quality_fix.py",
+    "line": 141,
+    "function": "test_sparse_asset_is_preferred_over_fast_already_abundant_asset"
+  },
+  {
+    "source": "tests/test_collection_quality_upgrade.py",
+    "line": 31,
+    "function": "test_upgrade_preserves_raw_quota_and_is_idempotent"
+  },
+  {
+    "source": "tests/test_collection_quality_upgrade.py",
+    "line": 42,
+    "function": "test_failed_upgrade_restores_code_and_bootstrap_proofs"
+  },
+  {
+    "source": "tests/test_collection_quality_upgrade.py",
+    "line": 52,
+    "function": "test_upgrade_rejects_unknown_source_or_catalogue_change"
+  },
+  {
+    "source": "tests/test_collection_runtime_upgrade.py",
+    "line": 43,
+    "function": "test_restricted_upgrade_preserves_episodes_inventory_and_resume_contract"
+  },
+  {
+    "source": "tests/test_collection_runtime_upgrade.py",
+    "line": 59,
+    "function": "test_interrupted_upgrade_can_finish_without_resetting_data"
+  },
+  {
+    "source": "tests/test_collection_runtime_upgrade.py",
+    "line": 79,
+    "function": "test_upgrade_rejects_physical_or_unapproved_source_change"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 35,
+    "function": "test_adds_next_candidate_without_resetting_old_history"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 50,
+    "function": "test_existing_pending_prevents_duplicate_probe"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 56,
+    "function": "test_budget_survives_restart_and_does_not_repeat_old_job"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 68,
+    "function": "test_never_successful_templates_remain_isolated"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 73,
+    "function": "test_healthy_template_stays_with_original_scheduler"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 79,
+    "function": "test_capture_contract_is_pinned_and_task_complete_not_requeued"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 92,
+    "function": "test_duplicate_block_is_bounded_without_clearing_counter"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 99,
+    "function": "test_atomic_rollback_if_later_candidate_is_invalid"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 109,
+    "function": "test_check_missing_database_does_not_create_it"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 132,
+    "function": "test_prepare_backs_up_before_new_jobs_and_keeps_episode_files"
+  },
+  {
+    "source": "tests/test_external_collection_resume.py",
+    "line": 157,
+    "function": "test_preparation_refuses_failed_preflight_before_writes"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 26,
+    "function": "test_data_hours_do_not_certify_software_or_admit_development_files"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 33,
+    "function": "test_duplicate_semantic_content_is_not_credited_and_blocks_acceptance"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 45,
+    "function": "test_file_report_honours_separate_outcome_deficits"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 55,
+    "function": "test_nonfinite_physical_time_is_rejected"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 62,
+    "function": "test_storage_counts_hardlinked_allocation_once_and_skips_external_symlink"
+  },
+  {
+    "source": "tests/test_production_acceptance.py",
+    "line": 74,
+    "function": "test_export_cannot_write_into_dataset_being_measured"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 16,
+    "function": "test_formal_nut_identity_binds_bolt_not_fixed_nut"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 32,
+    "function": "test_packaging_does_not_copy_linux_file_attributes"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 45,
+    "function": "test_content_tree_copy_rejects_links_and_existing_destination"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 57,
+    "function": "test_versioned_stage_mapping_is_checked_in_packaging"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 73,
+    "function": "test_valid_failed_episode_exposes_reported_reason_to_file_audit"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 84,
+    "function": "test_replay_auxiliary_precision_does_not_manufacture_unique_observed_content"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 120,
+    "function": "test_crash_recovery_registers_existing_file_without_regeneration"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 136,
+    "function": "test_file_tampering_and_formal_admission_are_rejected"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 151,
+    "function": "test_self_declared_formal_admission_requires_verifiable_proofs"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 161,
+    "function": "test_replay_proof_is_preserved_and_bound_to_source"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 175,
+    "function": "test_file_audit_checks_immutable_queue_payload_not_only_episode_totals"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 189,
+    "function": "test_real_worker_exit_after_rename_is_recovered_without_waiting_lease"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 214,
+    "function": "test_duplicate_copy_is_preserved_outside_valid_episode_directory"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 232,
+    "function": "test_packaging_decodes_once_but_registration_and_final_audit_decode_independently"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 255,
+    "function": "test_decode_proof_cannot_be_reused_for_changed_bytes_or_saved_json"
+  },
+  {
+    "source": "tests/test_production_artifacts.py",
+    "line": 276,
+    "function": "test_decode_proof_rejects_video_changed_while_decoding"
+  },
+  {
+    "source": "tests/test_production_bootstrap.py",
+    "line": 21,
+    "function": "test_actual_process_exit_during_initialization_resumes_without_extra_jobs"
+  },
+  {
+    "source": "tests/test_production_bootstrap.py",
+    "line": 64,
+    "function": "test_interrupted_intent_rejects_changed_seed_and_unowned_root"
+  },
+  {
+    "source": "tests/test_production_canary.py",
+    "line": 8,
+    "function": "test_canary_driver_cannot_use_formal_or_unbounded_target"
+  },
+  {
+    "source": "tests/test_production_capture.py",
+    "line": 16,
+    "function": "test_speed_profile_is_explicit_and_old_config_stays_hd"
+  },
+  {
+    "source": "tests/test_production_capture.py",
+    "line": 23,
+    "function": "test_sparse_rgb_preserves_each_control_sample_and_explicit_indices"
+  },
+  {
+    "source": "tests/test_production_capture.py",
+    "line": 48,
+    "function": "test_speed_config_supports_server_dataset_path_without_windows_volume"
+  },
+  {
+    "source": "tests/test_production_capture.py",
+    "line": 59,
+    "function": "test_invalid_fps_cannot_silently_change_control_timing"
+  },
+  {
+    "source": "tests/test_production_compatibility.py",
+    "line": 8,
+    "function": "test_zero_perturbation_selection_does_not_change_historical_library"
+  },
+  {
+    "source": "tests/test_production_compatibility.py",
+    "line": 23,
+    "function": "test_failure_or_more_windows_does_not_create_additional_compatible_assets"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 7,
+    "function": "test_candidates_are_reproducible_and_different"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 14,
+    "function": "test_physics_or_excessive_perturbations_rejected"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 19,
+    "function": "test_pose_rotation_keeps_normalized_quaternion"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 25,
+    "function": "test_stack_goal_changes_before_factory_without_mutating_original_config"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 33,
+    "function": "test_default_sampling_preserves_original_rng_contract"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 40,
+    "function": "test_configurable_ranges_are_deterministic_and_do_not_mutate_config"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 53,
+    "function": "test_sampling_contract_rejects_invalid_ranges"
+  },
+  {
+    "source": "tests/test_production_conditions.py",
+    "line": 60,
+    "function": "test_sampling_contract_rejects_physics_fields_or_missing_task"
+  },
+  {
+    "source": "tests/test_production_config.py",
+    "line": 10,
+    "function": "test_default_plan_is_1000h_and_success_only"
+  },
+  {
+    "source": "tests/test_production_config.py",
+    "line": 16,
+    "function": "test_explicit_outcome_example_preserves_all_five_200h_targets"
+  },
+  {
+    "source": "tests/test_production_config.py",
+    "line": 27,
+    "function": "test_contract_cannot_be_silently_reduced"
+  },
+  {
+    "source": "tests/test_production_config.py",
+    "line": 36,
+    "function": "test_recovery_policy_must_be_explicit_boolean_if_present"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 11,
+    "function": "test_pilot_cannot_start_under_formal_dataset_root"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 17,
+    "function": "test_pilot_has_explicit_attempt_budget"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 23,
+    "function": "test_canary_does_not_offer_unbounded_or_formal_root_execution"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 35,
+    "function": "test_formal_preflight_rejects_before_creating_root"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 47,
+    "function": "test_common_loop_enqueues_more_candidates_and_obeys_attempt_budget"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 86,
+    "function": "test_expired_session_budget_starts_no_worker"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 97,
+    "function": "test_formal_catalogue_cannot_silently_miss_asset_target"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 108,
+    "function": "test_exited_worker_does_not_leave_encoder_like_child_alive"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 138,
+    "function": "test_single_template_runs_four_concurrent_workers_not_one"
+  },
+  {
+    "source": "tests/test_production_coordinator.py",
+    "line": 168,
+    "function": "test_live_lift_probe_is_dispatched_while_nut_session_stays_running"
+  },
+  {
+    "source": "tests/test_production_delivery.py",
+    "line": 11,
+    "function": "test_delivery_rejects_unsafe_member_names"
+  },
+  {
+    "source": "tests/test_production_delivery.py",
+    "line": 16,
+    "function": "test_delivery_verifier_recomputes_archived_bytes_and_rejects_tamper"
+  },
+  {
+    "source": "tests/test_production_duration.py",
+    "line": 14,
+    "function": "test_duration_requires_checked_arrays_and_actual_timestamps"
+  },
+  {
+    "source": "tests/test_production_duration.py",
+    "line": 26,
+    "function": "test_pre_dedup_duration_never_adds_duplicate_to_registered_hours"
+  },
+  {
+    "source": "tests/test_production_duration.py",
+    "line": 44,
+    "function": "test_old_inventory_read_only_missing_duration_remains_unknown"
+  },
+  {
+    "source": "tests/test_production_eta.py",
+    "line": 33,
+    "function": "test_projection_uses_observed_concurrency_not_number_of_workers"
+  },
+  {
+    "source": "tests/test_production_eta.py",
+    "line": 43,
+    "function": "test_coverage_does_not_get_invented_eta"
+  },
+  {
+    "source": "tests/test_production_eta.py",
+    "line": 51,
+    "function": "test_crashed_session_or_changed_parallelism_invalidates_calibration"
+  },
+  {
+    "source": "tests/test_production_eta.py",
+    "line": 65,
+    "function": "test_live_owner_and_lease_separate_in_progress_from_lost_timing"
+  },
+  {
+    "source": "tests/test_production_eta.py",
+    "line": 86,
+    "function": "test_missing_success_outcome_keeps_success_only_eta_unknown"
+  },
+  {
+    "source": "tests/test_production_exact_state.py",
+    "line": 5,
+    "function": "test_full_integration_restore_reproduces_recorded_double_precision_controls"
+  },
+  {
+    "source": "tests/test_production_execution_contract.py",
+    "line": 4,
+    "function": "test_shared_runtime_guard_does_not_rehash_unchanged_files_and_detects_edits"
+  },
+  {
+    "source": "tests/test_production_execution_contract.py",
+    "line": 37,
+    "function": "test_shared_runtime_guard_detects_added_source_files"
+  },
+  {
+    "source": "tests/test_production_execution_contract.py",
+    "line": 52,
+    "function": "test_source_changes_and_additions_change_execution_identity"
+  },
+  {
+    "source": "tests/test_production_execution_contract.py",
+    "line": 77,
+    "function": "test_transitive_application_helpers_are_frozen_including_function_imports"
+  },
+  {
+    "source": "tests/test_production_execution_contract.py",
+    "line": 95,
+    "function": "test_tools_dependencies_used_by_task_execution_are_frozen"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 13,
+    "function": "test_valid_task_failures_are_diagnostics_not_exception_retry_policies"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 35,
+    "function": "test_failure_categories_are_typed"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 42,
+    "function": "test_failure_limit_is_durable_and_never_exceeds_job_limit"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 62,
+    "function": "test_worker_policy_cannot_raise_its_own_retry_budget"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 69,
+    "function": "test_actual_worker_rejects_changed_asset_before_simulation"
+  },
+  {
+    "source": "tests/test_production_failures.py",
+    "line": 87,
+    "function": "test_coordinator_uses_worker_policy_instead_of_generic_exit"
+  },
+  {
+    "source": "tests/test_production_finalization.py",
+    "line": 12,
+    "function": "test_sql_completion_without_files_is_rejected_by_automatic_report"
+  },
+  {
+    "source": "tests/test_production_finalization.py",
+    "line": 37,
+    "function": "test_report_exception_retains_first_error_and_rejects_acceptance"
+  },
+  {
+    "source": "tests/test_production_finalization.py",
+    "line": 49,
+    "function": "test_cli_returns_nonzero_when_final_file_acceptance_fails"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 39,
+    "function": "test_recovery_preserves_corrupt_database_and_exhausts_unknown_retries"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 57,
+    "function": "test_recovery_refuses_live_worker_or_disabled_policy"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 69,
+    "function": "test_recovery_does_not_activate_when_payload_history_is_missing"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 77,
+    "function": "test_active_pointer_cannot_select_unrelated_database"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 89,
+    "function": "test_live_worker_detection_uses_actual_process_and_dataset_path"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 103,
+    "function": "test_recovery_before_first_export_preserves_exhausted_candidate"
+  },
+  {
+    "source": "tests/test_production_index.py",
+    "line": 121,
+    "function": "test_unrelated_valid_sqlite_is_never_rebuilt"
+  },
+  {
+    "source": "tests/test_production_input_restore.py",
+    "line": 24,
+    "function": "test_restore_backs_up_differences_and_does_not_touch_code"
+  },
+  {
+    "source": "tests/test_production_input_restore.py",
+    "line": 42,
+    "function": "test_restore_rejects_escaped_symlink"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 17,
+    "function": "test_lease_survives_long_packaging_without_physics_worker"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 31,
+    "function": "test_guard_failure_stops_coordinator_and_is_not_hidden"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 51,
+    "function": "test_registration_race_is_normal_completion_not_lease_failure"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 68,
+    "function": "test_initial_guard_failure_stops_before_any_worker"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 83,
+    "function": "test_background_failure_callback_preserves_first_diagnostic"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 111,
+    "function": "test_failure_reporting_error_does_not_hide_original_guard_error"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 129,
+    "function": "test_twenty_four_blocked_heartbeats_cancel_without_releasing_writer"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 158,
+    "function": "test_quarantined_job_is_normal_lease_completion"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 172,
+    "function": "test_retry_waits_for_inflight_pulse_before_releasing_lease"
+  },
+  {
+    "source": "tests/test_production_liveness.py",
+    "line": 212,
+    "function": "test_twenty_four_retry_completions_do_not_stop_other_workers"
+  },
+  {
+    "source": "tests/test_production_monitor.py",
+    "line": 6,
+    "function": "test_worker_snapshots_are_separate_and_replace_atomically"
+  },
+  {
+    "source": "tests/test_production_parallel.py",
+    "line": 21,
+    "function": "test_server_gets_more_than_two_workers_without_host_specs"
+  },
+  {
+    "source": "tests/test_production_parallel.py",
+    "line": 27,
+    "function": "test_small_host_remains_memory_limited_and_auto_is_explicit"
+  },
+  {
+    "source": "tests/test_production_parallel.py",
+    "line": 42,
+    "function": "test_pending_processes_reserve_memory_before_their_rss_increases"
+  },
+  {
+    "source": "tests/test_production_parallel.py",
+    "line": 56,
+    "function": "test_worker_error_releases_admission_and_later_host_growth_is_used"
+  },
+  {
+    "source": "tests/test_production_parallel.py",
+    "line": 75,
+    "function": "test_fixed_legacy_limits_and_explicit_adaptive_ceiling"
+  },
+  {
+    "source": "tests/test_production_periodic_audit.py",
+    "line": 24,
+    "function": "test_periodic_file_audit_survives_restart_and_detects_sql_mismatch"
+  },
+  {
+    "source": "tests/test_production_periodic_audit.py",
+    "line": 41,
+    "function": "test_periodic_audit_rejects_changed_episode_bytes"
+  },
+  {
+    "source": "tests/test_production_periodic_audit.py",
+    "line": 50,
+    "function": "test_cycle_has_frozen_ceiling_and_revisits_old_records"
+  },
+  {
+    "source": "tests/test_production_periodic_audit.py",
+    "line": 75,
+    "function": "test_startup_integrity_failure_stops_before_worker_launch"
+  },
+  {
+    "source": "tests/test_production_portability.py",
+    "line": 6,
+    "function": "test_local_frozen_copy_wins_over_existing_absolute_historical_path"
+  },
+  {
+    "source": "tests/test_production_portability.py",
+    "line": 19,
+    "function": "test_template_loader_relocates_all_pinned_inputs_without_original_machine"
+  },
+  {
+    "source": "tests/test_production_preflight.py",
+    "line": 6,
+    "function": "test_formal_target_cannot_escape_f_volume"
+  },
+  {
+    "source": "tests/test_production_preflight.py",
+    "line": 11,
+    "function": "test_root_fallback_rejected_even_when_directory_exists"
+  },
+  {
+    "source": "tests/test_production_preview.py",
+    "line": 7,
+    "function": "test_missing_inventory_preview_does_not_create_dataset"
+  },
+  {
+    "source": "tests/test_production_preview.py",
+    "line": 17,
+    "function": "test_preview_matches_scheduler_without_changing_jobs_or_events"
+  },
+  {
+    "source": "tests/test_production_profile.py",
+    "line": 10,
+    "function": "test_phase_profile_retains_exception_spans_and_concurrent_counts"
+  },
+  {
+    "source": "tests/test_production_profile.py",
+    "line": 27,
+    "function": "test_profile_summary_keeps_inclusive_scopes_separate_and_reports_corruption"
+  },
+  {
+    "source": "tests/test_production_profile.py",
+    "line": 42,
+    "function": "test_pilot_cli_passes_explicit_wall_budget"
+  },
+  {
+    "source": "tests/test_production_provenance.py",
+    "line": 24,
+    "function": "test_compiled_entities_preserve_pose_order_and_roles"
+  },
+  {
+    "source": "tests/test_production_provenance.py",
+    "line": 32,
+    "function": "test_invalid_model_provenance_rejected"
+  },
+  {
+    "source": "tests/test_production_provenance.py",
+    "line": 48,
+    "function": "test_compressed_model_is_lossless_and_reloads_without_raw_file"
+  },
+  {
+    "source": "tests/test_production_provenance.py",
+    "line": 66,
+    "function": "test_decompression_is_bounded"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 25,
+    "function": "test_immutable_jobs_and_unique_parallel_claims"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 37,
+    "function": "test_recovery_rejects_old_worker_and_caps_retries"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 49,
+    "function": "test_dedup_and_success_quota_survive_reopen"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 61,
+    "function": "test_incomplete_output_cannot_register"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 71,
+    "function": "test_1000_hours_do_not_complete_missing_object_coverage"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 88,
+    "function": "test_task_priority_filter_is_respected"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 95,
+    "function": "test_concurrent_duplicate_registration_and_independent_hash_checks"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 112,
+    "function": "test_live_worker_is_not_restarted_when_observation_lease_expires"
+  },
+  {
+    "source": "tests/test_production_queue.py",
+    "line": 127,
+    "function": "test_legacy_or_unrelated_inventory_is_not_modified"
+  },
+  {
+    "source": "tests/test_production_quotas.py",
+    "line": 18,
+    "function": "test_excess_success_cannot_replace_missing_failure_quota"
+  },
+  {
+    "source": "tests/test_production_quotas.py",
+    "line": 38,
+    "function": "test_failed_only_assets_do_not_satisfy_success_required_coverage"
+  },
+  {
+    "source": "tests/test_production_quotas.py",
+    "line": 50,
+    "function": "test_invalid_outcome_contract_rejected"
+  },
+  {
+    "source": "tests/test_production_quotas.py",
+    "line": 57,
+    "function": "test_stalled_watchdog_persists_and_real_progress_resets_it"
+  },
+  {
+    "source": "tests/test_production_rebuild.py",
+    "line": 15,
+    "function": "test_rebuild_checks_files_preserves_original_and_does_not_claim"
+  },
+  {
+    "source": "tests/test_production_rebuild.py",
+    "line": 36,
+    "function": "test_rebuild_refuses_tampered_files_and_existing_output"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 8,
+    "function": "test_current_stage_contract_replaces_incomplete_legacy_prefix_without_changing_arrays"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 30,
+    "function": "test_stage_contract_rejects_unknown_version_ambiguous_codes_and_noninteger_stages"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 55,
+    "function": "test_uncontacted_sensor_is_valid_and_duration_includes_last_step"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 59,
+    "function": "test_previous_command_causality"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 67,
+    "function": "test_v4_requires_complete_float64_replay_pair_and_preserves_legacy_schema"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 80,
+    "function": "test_unrecorded_state_jump_is_rejected_even_if_commands_are_causal"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 92,
+    "function": "test_invalid_capture_rejected"
+  },
+  {
+    "source": "tests/test_production_recorder.py",
+    "line": 106,
+    "function": "test_capture_is_before_action_and_low_level_command_is_after_controller"
+  },
+  {
+    "source": "tests/test_production_resources.py",
+    "line": 9,
+    "function": "test_retained_scan_retries_disappearing_directory_but_not_permission_error"
+  },
+  {
+    "source": "tests/test_production_resources.py",
+    "line": 34,
+    "function": "test_retained_scan_is_bounded_and_missing_root_never_looks_empty"
+  },
+  {
+    "source": "tests/test_production_resources.py",
+    "line": 57,
+    "function": "test_memory_reserve_uses_available_memory_and_is_configurable"
+  },
+  {
+    "source": "tests/test_production_resources.py",
+    "line": 66,
+    "function": "test_canary_rejects_changed_test_filesystem"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 18,
+    "function": "test_new_asset_preferred_over_second_active_template_for_same_asset"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 27,
+    "function": "test_failed_template_isolated_without_redistributing_its_quota"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 41,
+    "function": "test_duplicate_limit_and_candidate_indices_persist_across_restart"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 74,
+    "function": "test_measured_efficiency_breaks_ties_after_coverage_and_survives_restart"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 86,
+    "function": "test_exploration_and_new_asset_coverage_are_not_overridden_by_efficiency"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 100,
+    "function": "test_missing_or_rebuilt_history_disables_efficiency_scores"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 110,
+    "function": "test_missing_timing_is_not_treated_as_zero_cost_and_cache_rebuild_is_idempotent"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 129,
+    "function": "test_fulfilled_failure_quota_cannot_make_failed_template_look_productive"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 140,
+    "function": "test_single_nut_template_can_fill_worker_pool_with_distinct_candidates"
+  },
+  {
+    "source": "tests/test_production_scheduler.py",
+    "line": 157,
+    "function": "test_parallel_template_indices_continue_after_database_reopen"
+  },
+  {
+    "source": "tests/test_production_statistics.py",
+    "line": 10,
+    "function": "test_asset_statistics_include_duplicate_cost_without_double_credit"
+  },
+  {
+    "source": "tests/test_production_statistics.py",
+    "line": 33,
+    "function": "test_lost_timing_does_not_create_a_fast_eta_and_status_is_read_only"
+  },
+  {
+    "source": "tests/test_production_statistics.py",
+    "line": 53,
+    "function": "test_attempt_metric_identity_is_immutable"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 53,
+    "function": "test_supervisor_restarts_corrupt_exit_then_uses_resume"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 64,
+    "function": "test_supervisor_does_not_restart_normal_or_nonretryable_exit"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 72,
+    "function": "test_supervisor_preflight_refusal_creates_no_control_files"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 82,
+    "function": "test_attach_database_failure_cleans_up_actual_child"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 106,
+    "function": "test_supervisor_sigterm_stops_actual_child_without_restart"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 133,
+    "function": "test_restart_budget_is_finite"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 141,
+    "function": "test_config_change_between_restarts_stops_supervisor"
+  },
+  {
+    "source": "tests/test_production_supervisor.py",
+    "line": 157,
+    "function": "test_cli_marks_database_corruption_as_recoverable_exit"
+  },
+  {
+    "source": "tests/test_production_templates.py",
+    "line": 10,
+    "function": "test_pilot_library_tracks_real_identity_without_inflating_asset_count"
+  },
+  {
+    "source": "tests/test_production_templates.py",
+    "line": 21,
+    "function": "test_template_hash_drift_rejected"
+  },
+  {
+    "source": "tests/test_production_templates.py",
+    "line": 30,
+    "function": "test_payload_binds_ranges_and_enabled_fields"
+  },
+  {
+    "source": "tests/test_production_video.py",
+    "line": 9,
+    "function": "test_actual_encoder_full_decode_and_pts"
+  },
+  {
+    "source": "tests/test_production_video.py",
+    "line": 24,
+    "function": "test_dead_encoder_propagates_and_does_not_wait_forever"
+  },
+  {
+    "source": "tests/test_tactile_layout.py",
+    "line": 10,
+    "function": "test_dex_hand_patch_info_is_read_only"
+  }
+]

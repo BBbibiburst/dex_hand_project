@@ -1,0 +1,7 @@
+{
+  "machine": "current local workstation; not server",
+  "cpu_logical": "16",
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU, 8188 MiB",
+  "disk": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sdd       1007G  175G  782G  19% /\n",
+  "all_future_costs_are_planning_caps": true
+}

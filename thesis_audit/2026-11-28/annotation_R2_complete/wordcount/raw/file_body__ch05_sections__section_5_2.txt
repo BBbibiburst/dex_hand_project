@@ -1,0 +1,10 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch05_sections__section_5_2.tex
+Sum count: 1114
+Words in text: 1097
+Words in headers: 17
+Words outside text (captions, etc.): 0
+Number of headers: 1
+Number of floats/tables/figures: 0
+Number of math inlines: 7
+Number of math displayed: 2
+

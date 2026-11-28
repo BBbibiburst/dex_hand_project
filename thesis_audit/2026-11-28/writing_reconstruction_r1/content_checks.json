@@ -1,0 +1,184 @@
+[
+  {
+    "file": "thesis/thesis.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/front/cover.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/front/abstract.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch01_introduction.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch02_simulation_platform.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch03_grasp_demonstrations.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch04_multimodal_data.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_dual_domain_reconstruction.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_1.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_2.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_3.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_4.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_5.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch05_sections/section_5_6.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_adversarial_evaluation.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch07_conclusion.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+    "changed": true,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  },
+  {
+    "file": "thesis/back/acknowledgements.tex",
+    "changed": false,
+    "protected_scientific_blocks_identical": true,
+    "labels_identical": true,
+    "numeric_literals_except_ref_keys_and_model_experiment_identifiers_identical": true
+  }
+]

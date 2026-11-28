@@ -1,0 +1,638 @@
+[
+  {
+    "path": "docs/writing_audit/ch03_material_audit_v1_2026-11-20/CH03_MATERIAL_AUDIT.md",
+    "sha256": "644b90f8a31bca415018232818e4322d9986a4e7ea6ad1c37d612561026369c9",
+    "bytes": 13741,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "docs/writing_audit/ch04_material_audit_v1_2026-11-20/CH04_MATERIAL_AUDIT.md",
+    "sha256": "e1105b3462b57a313e8a5efd4e85e8d4bcf5877c9bbd61ff5e3fc98107f68c30",
+    "bytes": 11024,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_audit_20261125/audit_summary.json",
+    "sha256": "e92a98672d2a21af25e6205c2584800575a12a533b28b4f15bec194932b957ea",
+    "bytes": 11168,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_fix_20261126/delivery.json",
+    "sha256": "8859d4399404b03cfc487659580a7cd314d75f423070be779f92857a4986a10e",
+    "bytes": 155,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_fix_20261126/fingerprint_validation.json",
+    "sha256": "fe42ada5b9add4cdc1093752a72e024fffa2236cfff6634d30b77dd6036148e4",
+    "bytes": 96,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_fix_20261126/historical_gate_validation.json",
+    "sha256": "d343cd0603cd1beebdd6320f5075b255b5e863c9392ebaac3eca41abe3f6465a",
+    "bytes": 2950,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_fix_20261126/new_pickplace_case_01_validation.json",
+    "sha256": "d5083a38d6751d8002a34686e7ea200e87a6934f1b41b90bf9a7b52fd6d6cf23",
+    "bytes": 669,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/collection_quality_fix_20261126/remaining_replay_validation.json",
+    "sha256": "99b3d879bd6ba4710dc2f202d6ba84446533ffcc29495eedd996ce86a8ac31d6",
+    "bytes": 1957,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/dex_hand_top100_v2/summary.json",
+    "sha256": "e9a23b52f43d434d9634b25ae92ebc38fc96e2e81b84db5a130c0574bb9c77c3",
+    "bytes": 115886,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/nut_assembly_top100_final/summary.json",
+    "sha256": "42ca95049066483a19a58d77d116311478f082aa02f35c03bbdfc854ad5c4342",
+    "bytes": 9405,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/pick_place_top100_final/summary.json",
+    "sha256": "a70295cbaee6cc3a132d08d1fabf0c1080beb5c3914b660bf72f6e19a11a64d5",
+    "bytes": 19611,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/push_top100_final/summary.json",
+    "sha256": "8e5e829600d4c86e011ee7927990ed070072aea27da85e0095a8e5626c71b088",
+    "bytes": 14754,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/stack_task_valid_v24/summary.json",
+    "sha256": "18ec12b71cb095e7dc40984364060ffb5e5d290a6fa6b67bceec964727f8bc40",
+    "bytes": 46352,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_acceptance_review_2026-11-18/ACCEPTANCE_ASSESSMENT.md",
+    "sha256": "aed45a2ef09ff88045586c04a56a54deef9d0196dc7e9e0717ac937029ac573b",
+    "bytes": 3450,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_acceptance_review_2026-11-18/ACCEPTANCE_STATUS.json",
+    "sha256": "502a97324930e5a7513d1bd14ade055fbb0f19e16220aa9b955ed82064f65580",
+    "bytes": 752,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c13_c22_research_decision_2026-11-18/REPORT.md",
+    "sha256": "8e1b195a9977c97c15886caf41426d218fc93b18a0a7d026d9a406a8d2cd62ac",
+    "bytes": 12334,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c13_c22_research_decision_2026-11-18/decision.json",
+    "sha256": "20ddde2129b28380c6bb92f392fdd1775a317b03e304c4c59fbdbe75d368b894",
+    "bytes": 511,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c13_c22_research_decision_2026-11-18/experiment_protocol_summary.csv",
+    "sha256": "d3d5e3609206a2041bd877fbe807aa502ad0491ebd65cbe5252e7b033e51c4df",
+    "bytes": 1255,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c13_frozen_c0_validation_2026-11-18/metrics.csv",
+    "sha256": "7ab17c8bfc8485801042906411cbe7589ef25943dee9cf484fcdb67974347954",
+    "bytes": 2965,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c18_frozen_mask_screen_2026-11-18/REPORT.md",
+    "sha256": "0df2de4828898fb460b9d0f765140b86411cb5efdbda09ff08e8c5c23109de11",
+    "bytes": 6059,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c18_frozen_mask_screen_2026-11-18/final_decision.json",
+    "sha256": "25e8cd44f25c33d64cf8505ad0de000ac6a8b081f596c9939830875eb041f5e3",
+    "bytes": 345,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c20_energy_condition_projection_2026-11-18/final_decision.json",
+    "sha256": "8a4c1148b896966204901c63d987e1af4b8bfa72398f9637001dc37cd6f42007",
+    "bytes": 261,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c21_analytic_condition_bridge_2026-11-18/final_decision.json",
+    "sha256": "1bca73d958177d142e1bf2df00e2baa57af3c552a3c6e0e4e7e5b593f0fcc72c",
+    "bytes": 162,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c22_backbone_adaptation_2026-11-18/benchmark.json",
+    "sha256": "38cf5c70b24921d88b8ce4cb87ff4e5d3c06303016cb096c722d1b02e0fbf3aa",
+    "bytes": 1342,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c22_backbone_adaptation_2026-11-18/training_complete.json",
+    "sha256": "6e784b78efab0e91e32d68d7f765877578ed543958e8b4010588a05491364577",
+    "bytes": 552,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c23_real_reconstruction_c0_2026-11-18/decision.json",
+    "sha256": "47c656ea26f6590b4dbd423cbf62ad5dbacd8b2ceb55f13bc0a5bfd26369f2c0",
+    "bytes": 1092,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/decision.json",
+    "sha256": "7b146a01d8e14ec76e4a97906123a3e2860a0f71da5174d8992570fea4aad5b3",
+    "bytes": 742,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c25_latent_gmm_ot_feasibility_2026-11-18/decision.json",
+    "sha256": "f6b9d260bb3657fa17f013caca149904bcc743efb3843e1dca4c48a0118d2216",
+    "bytes": 909,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c26_shared_frozen_encoder_2026-11-18/decision.json",
+    "sha256": "f1dd3228eae88238347ce643ce7d07a896708a83c324165bfb0e4b908139fa1a",
+    "bytes": 821,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/C3_candidate_comparison.csv",
+    "sha256": "a377499b35cab7c931f657f513b40843554ce4e67dbde50e4dd8491af7dd8d8b",
+    "bytes": 1180,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/decision.json",
+    "sha256": "49e1ff8fdf80e449338cfb01159dddc20d852e8b185d31aaf177dc7f57424ae3",
+    "bytes": 571,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p28_transport_feasibility_2026-10-27/summary.json",
+    "sha256": "290a505d4a7b81034b33d0901765ade831ca9bf68484e85e4e34c80dadfd9b81",
+    "bytes": 26041,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p28_transport_feasibility_2026-10-27/transport_results.json",
+    "sha256": "f7ee295320d08a0d3f078e861dd3e0fb6dbbb1b3ac13aaa033db52f24830b24e",
+    "bytes": 144,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p28_transport_feasibility_2026-10-27/upper_bound_results.json",
+    "sha256": "6874dacf2cc1e50794bf94e6c77c0ffa5b5d5f347716dc024f62aa319637c0f5",
+    "bytes": 167643,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p38_calibration_ablation_2026-11-15/p38_report.md",
+    "sha256": "6a380c761f393d4612aaec982b7dc2bc63db5b81bfa2805343a15d4a3ed6d662",
+    "bytes": 6475,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/expand.py",
+    "sha256": "33890428f74c557f6aa5f95433e4f77eb32afd85d0ac7f96fe6cba49449be15e",
+    "bytes": 10032,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/code/models.py",
+    "sha256": "e90dd0cd08f250d85ce5c89df16f1b760ab915fae41d81a934c251cbe4e694f0",
+    "bytes": 3696,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c8_geometry_aware_soft_skin_2026-11-17/c8_report.md",
+    "sha256": "d3fef8ca54995b0d31f6df5085e49e533ff88ebccba7d0c059730e9676b1b6dc",
+    "bytes": 7823,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c8_geometry_aware_soft_skin_2026-11-17/code/geometry.py",
+    "sha256": "ca706581a46e372b843c7f149c9ce5ab2eb9dea0ad6336327e8c09e1a7e8a803",
+    "bytes": 7085,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c8_geometry_aware_soft_skin_2026-11-17/patch_coverage.csv",
+    "sha256": "aacb427a5bcddfae8bd32598cfb3bb6c1c8d4a6968d07fd3369be474d39d6b3f",
+    "bytes": 1982,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c8_geometry_aware_soft_skin_2026-11-17/signal_spread_ablation.csv",
+    "sha256": "718823931ce7615584825a62d36d6ef702a18a5d2047a672322b2072f69f397f",
+    "bytes": 142296,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c8_geometry_aware_soft_skin_2026-11-17/skin_area_conservation.csv",
+    "sha256": "ca3878379f3edd9c374237cf19de37c981abcd05ca0ab484442bc429b051e75c",
+    "bytes": 6247,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c9_taxel_resolution_limit_2026-11-17/c9_report.md",
+    "sha256": "52e4aceac6671fd6829761c32280d681f797de67ab13fbd2c38e37d37cfd980a",
+    "bytes": 9029,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p43_c9_taxel_resolution_limit_2026-11-17/layer_summary.json",
+    "sha256": "1cb6eaa8d9a18650a02ca5b417d8c97e0e101bcab80dadb516e7f75853af85fe",
+    "bytes": 1314,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/code/model.py",
+    "sha256": "5023615d96964482c85ad6a5be68d763f31588d6bf6022f4de038b86f7a006c5",
+    "bytes": 2779,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p45_mask_ablation_2026-11-18/code/train.py",
+    "sha256": "05bbfcfc65bb6fbc8a99d6b5900078979897ba5f70557fcfc4b8e9f0d2d9e782",
+    "bytes": 14389,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p45_mask_ablation_2026-11-18/config.json",
+    "sha256": "15101439089d0c98e798cf29cc4d3055450dd7fd6100aaa603fdb3a947f8e1d1",
+    "bytes": 4059,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p45_mask_ablation_2026-11-18/decision.json",
+    "sha256": "f6554e78a1f5bb1ea89b4e5f18fd122749af9e8a63c47a5a353e8161cab8a5bd",
+    "bytes": 1317,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p48_unified_four_route_audit_2026-11-19/metrics_swd.csv",
+    "sha256": "15d5106776442af3d2907713a539a4a2a5adc6ddec4210d844fc355386e2e233",
+    "bytes": 3345,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_p51_discriminator_trust_audit_2026-11-19/decision.json",
+    "sha256": "36490d8df81ee0fd26c8c0e631d787fee7d6024b96d88fdcccdbf085a9c42b73",
+    "bytes": 414,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_research_route_audit_2026-11-18/REPORT.md",
+    "sha256": "0657fafd2cf1495db0179df3b9907968a9e900ccc1caf7701b4b1585c71e9620",
+    "bytes": 35030,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "outputs/tactile_research_route_audit_2026-11-18/STATE_CARD.md",
+    "sha256": "4ca7ae2de76154a6bcba45163a63925ea30c3ffd763c3bdff74b7d23f9544f21",
+    "bytes": 1868,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/data/production_artifacts.py",
+    "sha256": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865",
+    "bytes": 23760,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/data/production_queue.py",
+    "sha256": "10d0f301069aee73f1bb8e5709eec2c5c150adde616e45347d6f9f0fd1505c1c",
+    "bytes": 30374,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/data/production_recorder.py",
+    "sha256": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+    "bytes": 12069,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/grasping/dexevolve.py",
+    "sha256": "f75c5e27a1cede8aebe14af645ce3ceeb60c5599f0d7e7d19cad520dfd8b3af0",
+    "bytes": 18143,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/grasping/executor.py",
+    "sha256": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+    "bytes": 30759,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/grasping/graspqp_adapter.py",
+    "sha256": "c1c8a9c57d4779cbb732f9f4ed67ae65c900e8b806397d7abeb6574a2865c1f1",
+    "bytes": 9486,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/rl/grasp_edit/templates.py",
+    "sha256": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309",
+    "bytes": 22584,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/sensors/tactile/dex_hand.py",
+    "sha256": "a107c535e39490d4b605c8568c884cb353652588a951a7a4ffe667272ffcee0c",
+    "bytes": 21297,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/sensors/tactile/fitting/layout.py",
+    "sha256": "314935d11cbd45a62b2280b24f42708e3adfa4c3ff6f32213b52785886798a4d",
+    "bytes": 1202,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/sensors/tactile/signal_processing.py",
+    "sha256": "1252a12322e4e808be931531b3dfdd304ba0ce2564843a61720ed764e87f9a7a",
+    "bytes": 8052,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "source/verification/strict_replay.py",
+    "sha256": "25edfdfbd2c10a5fae26b722fb06c6f105e16569deae12fe7352fa7e43fcb830",
+    "bytes": 21272,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "tests/test_collection_quality_fix.py",
+    "sha256": "99a494549f38bad7627afbcc33612ed464d2ede8945b69e933a17aa477a64f00",
+    "bytes": 10087,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "tests/test_production_artifacts.py",
+    "sha256": "e0ab8ca2d756218ef1f289cc00ef1f3951f7b08349f41ccfd360e249f3478e2b",
+    "bytes": 13754,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "tests/test_production_recorder.py",
+    "sha256": "b471a8af520939d8f23fcd6e9b7fe97f655f86ea00098a91c122733ccac54174",
+    "bytes": 7488,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/EXPERIMENT_EVIDENCE.md",
+    "sha256": "b95b1eaf428f6a35ff0bdb2f9c18e054e5bd8935a91f6829f14df421d79cd961",
+    "bytes": 25419,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/REFERENCE_THESIS_ANALYSIS.md",
+    "sha256": "63a0a867af7a7e3c5faa9534ca76c9af6ed56a3b612a5607b02f9b7bdbb2eb3f",
+    "bytes": 12666,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/ROBOTICS_EVIDENCE.md",
+    "sha256": "a6c0c1b97f8eb9212d8539fbffc4285ec78f58e62d2eca8e3775d61684377786",
+    "bytes": 12764,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/SYMBOLS_AND_TERMS.md",
+    "sha256": "33f99217c647a7ae10599cd5d49234e9c910db4f5c50286049a5e3309b115c83",
+    "bytes": 12266,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/THESIS_PLAN_V2.md",
+    "sha256": "b3a4d425fe6fd8c2811affaae0911ed7d11453e1f576f660315a84a0a3bca056",
+    "bytes": 26698,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/THESIS_WRITING_STANDARD.md",
+    "sha256": "2b93cf36928440665bf5a6e49e3fb8934e1ddb5740b1885dcbedf4d299e56daf",
+    "bytes": 14117,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/back/acknowledgements.tex",
+    "sha256": "32c04107c42c7fb9cdbb56ff72befe088df73c11ea90c390fd29c870c189b21a",
+    "bytes": 1044,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch01_introduction.tex",
+    "sha256": "b99d7efbb7eece491a0ebef6bf4882104dcfa56fbd395cea9a4ac4a03e64e290",
+    "bytes": 28968,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch02_simulation_platform.tex",
+    "sha256": "8144eb0b26188c319318b44fc10e263aa414a251a76b423fe9a0cfb4a913b3d6",
+    "bytes": 36636,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch03_grasp_demonstrations.tex",
+    "sha256": "761ab3a1e6b8b10d727080ea54c9b5f7038e43227ca8bedd913dd654da61e437",
+    "bytes": 32177,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch04_multimodal_data.tex",
+    "sha256": "09c855abd76e50bc39f74a44924a9f18d4f5e8ea89c64be8953ab91251c94543",
+    "bytes": 28089,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_dual_domain_reconstruction.tex",
+    "sha256": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+    "bytes": 456,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_1.tex",
+    "sha256": "bb8f2c7c7aa1bf22db27d3cd1d0962d9650cb77e0c6aef6b2739491474ee84f1",
+    "bytes": 4685,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_2.tex",
+    "sha256": "9af8a7f2465dd6f65211f9670ec8e32fd3d69543cf59a76b33bc2d20dda65fed",
+    "bytes": 4156,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_3.tex",
+    "sha256": "cfb82a6f8672e5ed54dda1a958342e9a8aec4a4892fb02c926b839dbae5c4744",
+    "bytes": 9204,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_4.tex",
+    "sha256": "aeb3abade6bd79103a434fed7bb75f1b16863f3705e46713102c22e8a79043e7",
+    "bytes": 6310,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_5.tex",
+    "sha256": "156a56965ea758b00a84a1f97c2a7db20d80967026cc5fd921461035992f3486",
+    "bytes": 6006,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch05_sections/section_5_6.tex",
+    "sha256": "edc8e80c0feb393cbd2ceb6036327f4332abb95c1362f2822238f7fd6b0bb35e",
+    "bytes": 6681,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_adversarial_evaluation.tex",
+    "sha256": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+    "bytes": 561,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+    "sha256": "f9906457cbe5696dcd291438dea7eabec646b57e462eda166f1937868867b628",
+    "bytes": 8204,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex",
+    "sha256": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+    "bytes": 6487,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "sha256": "e0b20360b29214ac0e5f1187c1d5a1793b8ece59ec40d377daafa28eb9fb363a",
+    "bytes": 7060,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "sha256": "de999c7ce5dbfdff55b935f05502e13f5abae59cc6b9aad981dd8f61f86c2579",
+    "bytes": 5633,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "sha256": "ac554828ffef5de9f9477c46a3f13bd2c921e300a010f80b58c330d9b3f57158",
+    "bytes": 6812,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "sha256": "f70994bad9f0e5ad6804b0b68fd92dcf6b8d5b45d22abef96aad74d3663d1688",
+    "bytes": 5889,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch07_conclusion.tex",
+    "sha256": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+    "bytes": 285,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "sha256": "2bacf80d0be436d751a02c811d0df32d7026915fbb37b4f76907db6a64ff6165",
+    "bytes": 3427,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+    "sha256": "ce35b5603bf8e612447fef49c1f13d404b707946515921b75d70e4fdadd0855e",
+    "bytes": 2307,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex",
+    "sha256": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+    "bytes": 2419,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/front/abstract.tex",
+    "sha256": "85bc09d7c6b66beb17bc6299041f2ed4c4fbf304e98f09770a19e58e2fdde26e",
+    "bytes": 5699,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/front/cover.tex",
+    "sha256": "406722c207f90bbe06001596e44841613f9479a438c5feb6c4ef282bcc029e42",
+    "bytes": 1930,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/reference.bib",
+    "sha256": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+    "bytes": 17074,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/releases/draft_2026-11-27_r2/SOURCE_MANIFEST.json",
+    "sha256": "06497038b8f5251c9e0c1a523c23b937747f72af5bf411aa2b13166b019e4360",
+    "bytes": 11304,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/releases/draft_2026-11-27_r2/THESIS_WORD_COUNT.json",
+    "sha256": "0068ec97535e7e9fa55a7f981b4f4944d0c68cd7aa914eacf6b010d405c79603",
+    "bytes": 185594,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/releases/draft_2026-11-27_r2/thesis_draft.pdf",
+    "sha256": "ffccb795580dbec50bb4b8eaff86650cdc2bc8fd553704c8b02c94b442c1fd91",
+    "bytes": 2494067,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis/thesis.tex",
+    "sha256": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+    "bytes": 1245,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis_audit/2026-11-27/figure_2_6_revision/provenance.json",
+    "sha256": "68dda93bc430f723e40b34df8826dbabd6fb69d2cbfbf93768db2363591b1756",
+    "bytes": 1882,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis_audit/2026-11-27/figure_revision/REVIEW.md",
+    "sha256": "1338243e83bf1fb2a9862597a43c1ca075f4e319db5c4e72a9e9b9f2e267cf6b",
+    "bytes": 2298,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis_audit/2026-11-27/stage_b1/STAGE_B1_UNRESOLVED.md",
+    "sha256": "06db3bff429c09b4b9e55b7497493f1c0635afd07bd24f5218d3f36fd358f1d0",
+    "bytes": 2905,
+    "scope": "static code/current text or existing record only; no model inference"
+  },
+  {
+    "path": "thesis_audit/2026-11-27/stage_b2/STAGE_B2_VIDEO_FORENSICS.md",
+    "sha256": "b0f91ad3309c9bf88556019e56255eaeab3636c40370efa85b6e079bffe89380",
+    "bytes": 3799,
+    "scope": "static code/current text or existing record only; no model inference"
+  }
+]

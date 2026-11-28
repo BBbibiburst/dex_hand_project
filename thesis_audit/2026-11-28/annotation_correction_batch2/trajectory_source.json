@@ -1,0 +1,47 @@
+{
+  "source_files": {
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88"
+  },
+  "fields": {
+    "timestamp": [
+      447
+    ],
+    "stage": [
+      447
+    ],
+    "ctrl": [
+      447,
+      13
+    ],
+    "object_position": [
+      447,
+      3
+    ],
+    "robot_object_contact_count": [
+      447
+    ]
+  },
+  "stages": {
+    "settle": 0,
+    "transit": 1,
+    "pregrasp": 2,
+    "approach": 3,
+    "close": 4,
+    "hold": 5,
+    "lift": 6,
+    "verify": 7,
+    "transport": 8,
+    "descend": 9,
+    "release": 10,
+    "retreat": 11,
+    "task_verify": 12,
+    "clear": 13
+  },
+  "calculation": "time axis timestamp-timestamp[0]; all rows retained; no smoothing or new success computation",
+  "role": "historical P32 Lift example; not current Strict threshold revalidation or end-effector tracking measurement",
+  "manifest_selectors": [
+    "metadata.stage_codes",
+    "metadata.online_contract.position_action_layout"
+  ]
+}

@@ -1,0 +1,296 @@
+[
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/sim_vae/checkpoint.pt",
+    "bytes": 4386293,
+    "sha256": "c92af67fd97d29cc600a7a338899ad47b293b495b25896155dde2707ccc6db62",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/real_vae/checkpoint.pt",
+    "bytes": 4386293,
+    "sha256": "99beaf8e6402b1c34a59add2a86036f56ebc8fd1b69c472c2542198774a1e815",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/translator/checkpoint.pt",
+    "bytes": 731381,
+    "sha256": "c98e1146ae2f8d17ce05ecffacbfeaf24e1cf07db4d51783c69355fcacfb7b6a",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_12/checkpoint.pt",
+    "bytes": 2240825,
+    "sha256": "eebfcd5db39978e4aa0b12a80a5b0ea4ada6fc6e7ca324505241fe43ae616420",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_11/checkpoint.pt",
+    "bytes": 1298551,
+    "sha256": "fe761d858c994bc65343e3cba53e95554e5ae0b10d2fbaff16afe085c10b4865",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_12/checkpoint.pt",
+    "bytes": 1298551,
+    "sha256": "e49381065bd5647bd1e66482f8f174f6907162b8c2c89cada285c23d2a5bb3a8",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/logistic/checkpoint.pt",
+    "bytes": 24701,
+    "sha256": "4b2d2472af896dd1ed028ee0899003970e0be10ef79d635b2f95786d4e282b01",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_12/checkpoint.pt",
+    "bytes": 1438645,
+    "sha256": "301e6274dd4772fe54a48da6e865e04f24b523eca30187991d05cbead31cecee",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_11/checkpoint.pt",
+    "bytes": 2240825,
+    "sha256": "a69353fe458cf372cf1fabd7bebfe3d996d615e0494b173ab5128ad7a179ec91",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_13/checkpoint.pt",
+    "bytes": 1438645,
+    "sha256": "483f99a36d5aa78dbd156c991a9ade333c4b9786e203dea33ce7ecb5590f62df",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/transformer_11/checkpoint.pt",
+    "bytes": 1438645,
+    "sha256": "60dac23f7cdd9a59318b7aef8824c0944fc855b7798bd9f70b27f1a6af458dc1",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/mlp_13/checkpoint.pt",
+    "bytes": 2240825,
+    "sha256": "aa5e903e66be197f528ded0902138748f71728a07e2865f44b791e6f829b2e34",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c3_dictionary_inverse_c0_2026-11-16/c0/gru_13/checkpoint.pt",
+    "bytes": 1298551,
+    "sha256": "57f581cb96712d41a81f0ff325b0ae5c8ce095c9d33502fd966cfc6be434f156",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p43_c13_amplitude_context_repair_2026-11-18/checkpoint.pt",
+    "bytes": 4386357,
+    "sha256": "6dea2be871e03d4fedc5c9b8022b98c1d8866fed6bf4ed496a2ea6ccd1ddc2c7",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c22_backbone_adaptation_2026-11-18/checkpoint.pt",
+    "bytes": 2150773,
+    "sha256": "cdd6a3a83b3dbcb6a8349ac0fd2bb1e488662abf5798e435971ba2b7c10a7015",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/checkpoint.pt",
+    "bytes": 4386421,
+    "sha256": "c07a457c199df315c70dd543e3e642319c0cc9b8d47b92f32e5a8c4f299c6109",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/endpoint_checkpoint.pt",
+    "bytes": 4386736,
+    "sha256": "94f26b62eebd4a072e2c9a73c5de775602416b2f1c683e9c5cf794d1e45cfd8a",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c24_temporal_amplitude_repair_2026-11-18/initial_checkpoint.pt",
+    "bytes": 4386637,
+    "sha256": "8e55f19c7c14440521682fbc16194cc394c5e39ab570f94d59a63898729b185e",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/candidate/checkpoint.pt",
+    "bytes": 731381,
+    "sha256": "8a0f9aa0441a44f372d0c5b1d9367fee39e2c93b0d86ccab9cb94bb207d31685",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/candidate/endpoint.pt",
+    "bytes": 731285,
+    "sha256": "6c8fbed7e8649f6d76073ac6b335d9f9c9e5d76c90df1bab7b7b2ad14d69ecc4",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_c27_c3_route_improvement_2026-11-18/candidate/initial_translator.pt",
+    "bytes": 731445,
+    "sha256": "8410f3e2873f9a4e57ea51cb5831220e0a1768f3a42f0a63d7698a5ae1ba1dc4",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/discriminator_initial.pt",
+    "bytes": 4430683,
+    "sha256": "7cda078c0782f3d83667deb8ef79868e104b6f2e6c982dcf27ce081865ea5e66",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/discriminator.pt",
+    "bytes": 4430307,
+    "sha256": "fa17b48b2d879c64b85028a231ed7b345a5540e824773166d24778ced6cc2e0e",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/generator.pt",
+    "bytes": 10003490,
+    "sha256": "cb4012995ae7eaf20d8d173d0e0181a5a54ea824e44a45c6046a575e2197c9ee",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/generator_initial.pt",
+    "bytes": 10004234,
+    "sha256": "6866dc8efd423ee46f0dbf1e602ea07fc3b2e18698a56af04bcf508cacd95719",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/D50.pt",
+    "bytes": 18857311,
+    "sha256": "f436a4a3b4ad93f9c5853da89873dcb51b3be2a2564a1965e36b17e20883533a",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_08.pt",
+    "bytes": 22375271,
+    "sha256": "04a96c7d419089171424b1f4bfc43ddddb68e047ecd0fa9382440d7b82e9e05d",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/F50.pt",
+    "bytes": 22498727,
+    "sha256": "678e7bd3828f885fd62fe3c745b3e9235479ba85a02581d12119da19dc290ab0",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_20.pt",
+    "bytes": 22498727,
+    "sha256": "678e7bd3828f885fd62fe3c745b3e9235479ba85a02581d12119da19dc290ab0",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_17.pt",
+    "bytes": 22467879,
+    "sha256": "b6788c857b63c3334e5eaafa9603a2174cf88546db7002cc03ab230b9f2ddb47",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_05.pt",
+    "bytes": 22344423,
+    "sha256": "97cbb5ffb2c653f49f2c403ed0ec49e7cb7fc7cf993d95ce5887b9cab2866c18",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_07.pt",
+    "bytes": 22364967,
+    "sha256": "96dadbf61a67b5e47f4037d1fe0dbb0bd46259c1ba9ec3d7ac60c410999ff066",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_12.pt",
+    "bytes": 22416423,
+    "sha256": "397930dcc7562cd12b4fff99477ffbd9f5841280bcc11accb1e25442b7d617e6",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_16.pt",
+    "bytes": 22457575,
+    "sha256": "69cfd37934e71bb384ad254507520a887b9698aa4957fa9d001c7c49791531a1",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_14.pt",
+    "bytes": 22437031,
+    "sha256": "d4168ec6c1617c50262d5537cc29e505233e90c158c3f5bd41b69bfab4a23c3f",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_06.pt",
+    "bytes": 22354727,
+    "sha256": "501cac6f27681e9148d25e73e8c2ecc58707a52caebf78a867d73962794e72e8",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/resume.pt",
+    "bytes": 22498727,
+    "sha256": "678e7bd3828f885fd62fe3c745b3e9235479ba85a02581d12119da19dc290ab0",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/initial.pt",
+    "bytes": 13254406,
+    "sha256": "53418497efdc1bda5f188021eb9a8db849cdd8dffc51651b76c9f7e958daa9db",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_10.pt",
+    "bytes": 22395879,
+    "sha256": "eb4f2a845b9c464b55e882cc5ac26f988e9c4363e77e6cdd542774da61c957cb",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_13.pt",
+    "bytes": 22426727,
+    "sha256": "8baab97900adaaea8ecbf3e1a81fc938eb4c4f307a67beff361ffafb81109d72",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_15.pt",
+    "bytes": 22447271,
+    "sha256": "fb5ce78df54f873d8bfd509f413b6cffaa45a9f04aad3a3644880e316ea09465",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_03.pt",
+    "bytes": 22323815,
+    "sha256": "0c26a0b490cf72757aade20a3bb08a6ba18586008b9c39786b0234a3f62fbbd3",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_18.pt",
+    "bytes": 22478183,
+    "sha256": "dd42c914af8097bc1128c5fb8d3c59941b6be274e58012432230fd0f318a742b",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_11.pt",
+    "bytes": 22406119,
+    "sha256": "e2f06400db456ffe6df2db73665cba02dfc61a9e24fca65b2d7a763d63f55b9d",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_01.pt",
+    "bytes": 22303271,
+    "sha256": "62b68909621260ce3ede42d6c8755c88caf532002b75764697e8af191aa7474c",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_19.pt",
+    "bytes": 22488423,
+    "sha256": "bf83330246ebe747f52b0da9262da1ad6c7d3480bae1c7cd792a455ea81130ad",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_04.pt",
+    "bytes": 22334119,
+    "sha256": "c3f8add8511b15467cb96e35bd02635fa151b92a551553a5cc419d3099bc4006",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_02.pt",
+    "bytes": 22313511,
+    "sha256": "328ad52dd82ac37dc66e598cda9eb9f18e59361325370f85a867ff83f12675f4",
+    "status": "L2 byte identity only, not scientific validity"
+  },
+  {
+    "path": "outputs/tactile_p50_residual_multiview_2026-11-19/checkpoints/G_epoch_09.pt",
+    "bytes": 22385575,
+    "sha256": "792ec1c8d75bf873b3c986987053326217405f0a9aa4ed9a5ece7be0152ce211",
+    "status": "L2 byte identity only, not scientific validity"
+  }
+]

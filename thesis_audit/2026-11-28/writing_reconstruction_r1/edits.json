@@ -1,0 +1,488 @@
+[
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "三者分别提供实验条件、可追溯数据和重建分析依据，其贡献需要结合实现与验证范围说明，平台集成、开源适配和迁移效果不作同一层次的创新判断。",
+    "after": "三条主线依次回答实验条件如何建立、可执行示教如何转为可追溯数据，以及有限监督能否支持触觉重建。平台集成侧重接口与观测的一致性，方法适配侧重机器人执行约束，跨域研究则通过实验检验重建效果。",
+    "purpose": "将抽象贡献声明改为具体研究问题"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "其验证范围是模型与记录链路的功能，不等同于真实传感器物理标定或实机部署。",
+    "after": "相应验证检查模型接口和观测记录的一致性，真实传感器标定与实机部署则属于后续工作。",
+    "purpose": "将防御性否定改为清晰验证对象"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "工作重点是将第三方方法适配到具体驱动和执行约束，连接示教生成与数据审计，而非将原算法作为本文原创，也不以历史汇总代替全量数据验收。",
+    "after": "工作重点是适配具体驱动与执行约束，并追踪示教从生成到训练使用的记录关系；候选方法的来源及数据检查范围分别在对应章节说明。",
+    "purpose": "来源/范围集中对应章节，不重复原创免责声明"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "这些环节相互影响，不能仅通过一个抓取姿态或单独的传感器模型描述。",
+    "after": "这些环节相互影响，因此需要在同一执行过程中联合描述运动、接触与观测。",
+    "purpose": "从否定替代转为平台设计理由"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "本章讨论仿真实现及其观测含义，不涉及实机集成认证。",
+    "after": "本章说明各模块如何协同执行，以及触觉读数在该模型中的具体含义。",
+    "purpose": "章首直接提出论证任务"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "五份NPZ同时包含tactile和sensor\\_tactile两个字段，二者实际数值并不完全相同。记录合同采用后者检查，因而本节非零比例不能与前者的统计直接互换。字段名称相近不构成相同采样时刻或相同处理路径的证据，若需要进一步解释两者关系，必须回到对应版本的记录调用位置。本节保留这一差异，不将某一字段未经核验地命名为原始力，也不依据数组差值推断信号处理的因果作用。",
+    "after": "五份NPZ同时保存tactile和sensor\\_tactile，二者数值存在差异。本节按记录合同统一使用sensor\\_tactile计算非零比例。两个字段的具体关系取决于相应版本的采样时刻与处理调用，现有检查尚未定位该差异的完整来源。",
+    "purpose": "明确统计选择，合并三句重复防御"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。",
+    "after": "Lift另有Strict严格轨迹回放验证记录，其余任务按各自任务结果报告。Root表示按初态及来源关系划分的仿真样本组；确定五份记录之间的独立性，还需核对重置关系和轨迹派生来源。因此，样本清单分别登记帧数、执行记录数与来源分组，开发样本也单独计量。",
+    "purpose": "首次解释Strict/Root，缩合重复计数边界"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "因此，本章将当前实现描述与历史观测检查并列，而不将它们合并为同一冻结版本的端到端动态验收。若后续需要提出这种更强结论，应补足当时模型及配置档案；本轮没有通过新增实验填补该缺口。",
+    "after": "因此，当前实现与历史观测分别报告；端到端动态复验还需补足当时的模型和配置档案。",
+    "purpose": "集中说明缺口，移除本轮工作口吻"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "由此可见，现有材料支持平台具有明确的模型、控制和观测组织方式，并支持五条指定历史记录中触觉数组的数值与基本采样合同。触觉非零不能证明真实力标定正确，仿真观测合法也不意味着Real与Sim物理对应已经建立。抓取候选能否转化为稳定任务轨迹，仍需第三章的可达性和任务验证；全量数据的关联、去重与质量结论，则由第四章另行审计。本节不以有限功能记录替代这些后续论证。",
+    "after": "上述检查确认了平台的模型、控制和观测接口，以及五条指定历史记录的数组有效性与基本采样关系。抓取候选如何转化为稳定操作，是下一章的研究问题；第四章则进一步检查这些执行记录的时序、来源及数据质量。真实触觉标定与跨域物理对应将在触觉重建的问题定义中统一讨论。",
+    "purpose": "将章末限制堆叠改为证据总结和章节过渡"
+  },
+  {
+    "source": "thesis/body/ch02_simulation_platform.tex",
+    "before": "控制链路将关节目标或末端IK求解与底层位置伺服、物理积分分开",
+    "after": "控制过程区分关节目标或末端IK求解、底层位置伺服和物理积分",
+    "purpose": "用实际控制层次替代链路套语"
+  },
+  {
+    "source": "thesis/body/ch03_grasp_demonstrations.tex",
+    "before": "因此，本章将专家示教构建组织为候选生成、机器人约束筛选、轨迹执行和质量验收四个层次，研究从物体几何输入到可保存控制序列的转换，而不将某一几何评分直接作为任务成功判据。",
+    "after": "因此，本章从候选生成、机器人约束筛选、轨迹执行和质量验收四个层次展开：先寻找可抓取构型，再检验机械臂能否到达、操作能否执行以及所得轨迹是否满足示教要求。",
+    "purpose": "以研究层次解释必要性"
+  },
+  {
+    "source": "thesis/body/ch03_grasp_demonstrations.tex",
+    "before": "Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。",
+    "after": "腕部姿态格点扩展（Wrist Lattice）用于搜索源候选附近更容易被机械臂到达的手腕位姿。",
+    "purpose": "首次中文解释腕姿搜索功能"
+  },
+  {
+    "source": "thesis/body/ch03_grasp_demonstrations.tex",
+    "before": "本章围绕几何抓取候选如何转化为可执行专家示教，构建并说明了候选表达、几何与物理反馈细化、机器人约束筛选、连续轨迹执行及严格质量验收的工作链。",
+    "after": "本章研究几何抓取候选到可执行专家示教的转换。候选表达限定手部控制变量，物理反馈检查抓持行为，可达性筛选与连续执行检验机器人运动条件，严格回放进一步检查轨迹质量。",
+    "purpose": "小结提炼各方法解决的问题而非罗列工作链"
+  },
+  {
+    "source": "thesis/body/ch03_grasp_demonstrations.tex",
+    "before": "这些环节具有不同作用，不以统一算法名称掩盖已有方法来源。",
+    "after": "各环节在保留已有方法来源的基础上，分别处理抓持质量与机器人执行约束。",
+    "purpose": "正面交代方法分工及来源"
+  },
+  {
+    "source": "thesis/body/ch03_grasp_demonstrations.tex",
+    "before": "专家示教生成只解决了控制序列从何而来的问题。轨迹进入后续学习和数据生产前，还需要检查多模态观测与动作的时间关系、执行来源和质量信息能否可靠关联。下一章据此讨论数据组织与质量审计，而不把示教文件的存在直接等同于训练数据已经完成验收。",
+    "after": "执行成功的轨迹还需要转为语义明确的训练样本：策略在何时得到观测、下一步施加什么动作，以及这些记录来自哪次执行，都影响学习目标。下一章据此讨论多模态数据的组织、时序关联和质量审查。",
+    "purpose": "用训练需求解释章节递进"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "本章从训练样本需要具有明确输入、动作和来源关系出发，建立了多模态数据表示、采集关联、规范转换及分层审查的论证。",
+    "after": "本章围绕训练样本的输入、动作和来源关系，说明数据采集与转换中需要保持的语义和时序约束。",
+    "purpose": "将元叙事“建立论证”改为研究内容"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "执行前记录、控制缓冲预备和触觉缓存共同说明，采集时机本身是数据定义的一部分，不能由格式和维数代替。",
+    "after": "执行前记录确定动作所依据的观测，控制缓冲预备保留实际命令，触觉缓存避免重复读取改变滤波状态；三者共同保证记录时机与样本含义一致。",
+    "purpose": "说明模块为何必要"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "五任务v4开发包及Sink历史回放对照提供了版本化质量控制的有限依据，但不构成服务器全量验收、独立Root认证或全局无泄漏证明。保留来源、Hash、验证层级和失败记录，使这些局限能够被明确识别，而非通过统一文件名掩盖。",
+    "after": "五任务v4开发包及Sink历史回放对照检验了指定版本的字段一致性和回放精度。来源、Hash、验证层级与失败记录共同限定了数据的适用范围，便于后续按训练用途筛选；全量库存的独立性和泄漏检查仍需另行完成。",
+    "purpose": "总结实证对象，合并全量认证免责声明"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "本章的数据组织、来源追踪与质量控制为后续研究提供管理基础；",
+    "after": "来源和处理版本的登记，使后续研究能够明确区分可比较的数据；",
+    "purpose": "具体说明数据管理如何支持研究"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_1.tex",
+    "before": "两者不混合，窗口不作独立采集主体。",
+    "after": "后续统计按相应版本分别报告，并以来源分组考察样本独立性。",
+    "purpose": "将连续禁令改为统计安排"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_1.tex",
+    "before": "滤波残留等微弱正值也会计入激活；固定通道顺序更不意味着完成两域物理配准，不能将Patch索引热图解释为认证曲面坐标，或对任意同编号Taxel作物理位置叠加。",
+    "after": "滤波残留等微弱正值也会计入激活。因此，Mask首先反映数值支持范围；跨域热图按固定通道索引比较，物理配准的前提在下一节统一界定。",
+    "purpose": "集中物理前提至问题定义"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_2.tex",
+    "before": "目标输出应为完整$4\\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征，不将其直接称为真实传感器输出，也不以低维统计摘要代替完整观测。",
+    "after": "目标输出为完整$4\\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征。使用完整观测而非低维摘要，是为了同时检验响应位置、幅值及跨帧结构。",
+    "purpose": "用研究目标解释完整输出必要性"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_4.tex",
+    "before": "该分支区分零值事件与连续幅值，且幅值条件于Mask，并非两个无关输出；这不等于已证明显式Mask优于其他建模方式。",
+    "after": "这一条件结构将是否激活与激活后的响应幅值分开建模，同时通过Mask保留两者联系。显式Mask与其他表示的比较留待实验部分讨论。",
+    "purpose": "突出设计理由而非方法自我辩护"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_4.tex",
+    "before": "独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。",
+    "after": "因此，域内自重建之后仍需要学习两套潜变量坐标之间的映射。下一节利用有限伪配对提供这种监督。",
+    "purpose": "用未解决的问题自然引出Translator"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_5.tex",
+    "before": "这种映射的有效范围受监督来源限制。",
+    "after": "配对验证首先考察映射能否拟合所给监督，随后再检验其在自然任务输入上的输出质量。",
+    "purpose": "结果段由问题引出而非免责声明开头"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_5.tex",
+    "before": "然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验。",
+    "after": "这一优势未覆盖全部Session，表明映射效果还受配对来源影响。Natural缺少同步Real目标，因此下一节将结合冻结评价器与结构指标，检验潜变量拟合改善能否延伸到712维输出。",
+    "purpose": "保留Session例外并说明为何需要下一阶段评价"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_6.tex",
+    "before": "该现象不证明幅值无作用，只说明这一修复范围不足以完成整体转换。",
+    "after": "这表明降低目标域自重建误差与消除Natural输出的判别特征是两个不同目标，局部幅值修复只改善了前者。",
+    "purpose": "明确正负结果各自回答的问题"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_6.tex",
+    "before": "该结果揭示目标域自重建仍存在可辨识痕迹，不是Natural迁移通过6/11。",
+    "after": "这组6/11结果对应Real自重建读出，显示目标域表示和解码本身也会引入可辨识痕迹。",
+    "purpose": "用评价对象解释诊断意义"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_6.tex",
+    "before": "这支持有限适配带来局部变化，\\mbox{不能}支持整体成功或稳定优势；D的11/11也不能覆盖其余九个实例的排序差异。",
+    "after": "适配后的收益集中在部分判别特征上；D虽为11/11，其余九个实例仍存在排序差异，整体联合验收尚未完成。",
+    "purpose": "以逐实例证据收束，保留整体失败结论"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_6.tex",
+    "before": "因而本章完成的是可追溯的重建与诊断链路，尚未完成完整域迁移验收。",
+    "after": "综合来看，统计伪配对能够支持潜变量拟合，局部读出和映射修复也改变了部分指标，但这些改善尚未汇合为完整域迁移验收通过的结果。",
+    "purpose": "移除链路空泛总结，归纳实际发现"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "before": "本节将这一多轮实验记为P49，",
+    "after": "本节以逐轮冻结判别边界的方式检验这一问题，实验记录编号为P49，",
+    "purpose": "以研究设计为主，实验编号作为追踪信息"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "before": "先对冻结候选开展统一分布评价。",
+    "after": "先对冻结候选开展统一分布评价。切片Wasserstein距离（Sliced Wasserstein Distance，SWD）通过多个一维投影比较两组响应分布；最大均值差异（Maximum Mean Discrepancy，MMD）则用核函数度量分布差异。本节联合观察两者，判断判别器接受率的变化是否伴随分布逼近，具体计算见第\\ref{sec:ch06_distribution_quality_input_preservation}节。",
+    "purpose": "首次使用前解释SWD/MMD含义与作用"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "before": "这只支持指定距离合同下的改善，不能解释为迁移成功率。",
+    "after": "这里的相对下降描述指定距离下的分布改善，其评价对象是两组样本分布。",
+    "purpose": "简化首次结果解释，保留正式评价讨论"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex",
+    "before": "FR定义为Sim生成样本被当前冻结判别器按0.5阈值判为Real的接受比例，",
+    "after": "生成样本接受率（Fake Acceptance Rate，FR）表示Sim生成样本被当前冻结判别器按0.5阈值判为Real的比例，",
+    "purpose": "正式补英文缩写含义"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "before": "为此，本节探索条件残差Refiner与Global、Spatial、Temporal多视角判别约束。本实验记为P50，",
+    "after": "本节从输出修正和判别信息两方面考察这一问题：条件残差修正器（Refiner）调整已有生成结果，全局（Global）、区域统计（Spatial）和时序（Temporal）分支分别检查不同响应特征。实验记录编号为P50，",
+    "purpose": "先解释改进动机与术语，再给实验编号"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "before": "但这只证明计算路径存在。诊断针对各Epoch首批分别求导，不能外推为每个样本、每个更新步都具有相同梯度。",
+    "after": "说明这些判别特征均能参与生成器更新。该诊断逐Epoch选取首批求导，描述的是这一采样范围内的梯度传递。",
+    "purpose": "把免责声明改为梯度诊断的具体对象"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "before": "这揭示幅值约束缺口，但不能据此认定失败的唯一原因。",
+    "after": "这一检查提示：优化可以在保持相对响应关系的同时放大整体幅值，因而现有保持项仍留下幅值变化的自由度。该机制与终点退化相容，具体贡献还需受控实验区分。",
+    "purpose": "解释保持项的机制局限，不编造唯一因果"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "before": "这些是历史审计，并非本轮推理，同一评价合同不保证跨后端输出数值等价，故限制架构效果的纯因果归因，但不意味着实验整体无效。",
+    "after": "这些历史审计说明，相同评价规则下仍需保留推理后端及近零响应的数值差异；讨论架构效果时应将其与结构变化一并考虑。",
+    "purpose": "移除本轮口吻与反复防御，保留数值限制"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex",
+    "before": "因此，残差路径及多视角梯度均已建立，但现有单Seed实验未证明迁移质量改善。接受率不能抵消距离退化，下一节将结合分布距离、邻域覆盖与输入依赖进一步分析其适用边界。",
+    "after": "这项单Seed探索呈现出明确的分歧：多视角约束能够影响生成器，生成样本也更易被接受，但固定距离反而退化。下一节据此从分布、邻域覆盖与输入依赖三个角度检查生成结果，以区分对判别器的适应和触觉重建质量。",
+    "purpose": "用实验发现和未解决问题结束小节"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "本节依据编号为P51的冻结$D_{50}$历史只读审计，分析真实域接受能力、生成分数及跨Session校准差异，不继续优化生成器。本次P51只读审计未执行训练或参数优化，$D_{50}$权重保持冻结，未改变类别方向；本节仅复核已有记录，不重复历史推理。",
+    "after": "本节转向评价器自身，分析真实域接受能力、生成分数及跨Session校准差异。相应审计记录编号为P51；审计未执行训练或参数优化，$D_{50}$权重及类别方向均保持冻结。",
+    "purpose": "以评价可靠性为主线，压缩执行日志式重复"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "校准稳定性采用历史Leave-One-Session-Out诊断：",
+    "after": "校准稳定性采用留一采集会话诊断（Leave-One-Session-Out，LOSO），考察包络迁移到未参与校准的会话时能否保持覆盖：",
+    "purpose": "首次定义LOSO并说明诊断目的"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "梯度有效、生成接受率高与评价器可靠是不同命题；后者是解释前述迁移结果的重要前提。结论仅限该模型及现有开发数据，不外推到P49的$D_3$，不否定所有判别器或迁移方法，也不以调整阈值、翻转AUC或更换包络修饰失败结果。",
+    "after": "这一判断针对该模型及现有开发数据，P49的$D_3$不在此次审计范围内。前述生成质量分析由此补充了一个必要前提：评价器首先应稳定接受真实触觉，生成样本的高分才具有可解释的参照。",
+    "purpose": "结尾保留模型范围，删除泛化否定清单"
+  },
+  {
+    "source": "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex",
+    "before": "文件Hash、Manifest和规模只能提供部分追踪依据，不能单独证明来源独立、全局无泄漏或物理真实性，也不能将局部修复扩大为全量生产认证。",
+    "after": "文件Hash和Manifest承担版本与来源追踪，来源独立性、跨划分重复和全量生产质量则需要相应层次的检查。",
+    "purpose": "用职责归纳替代多重否定"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "三者共同保证记录时机与样本含义一致。",
+    "after": "三者用于维持记录时机与样本含义的一致性。",
+    "purpose": "用设计目的表述，避免把机制当全量保证"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_6.tex",
+    "before": "局部幅值修复只改善了前者。",
+    "after": "在既定联合门槛下，修复的收益主要体现在前者。",
+    "purpose": "不把联合计数不变扩展成所有迁移指标均无变化"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_3.tex",
+    "before": "真实与仿真触觉存在统计差异，而当前数据缺少经过认证的同步物理接触配对，不能将任意两条序列直接作为对应真值。真实数据中仍包含响应聚集位置、扩散范围及多峰结构等信息。",
+    "after": "在缺少同步物理配对时，可利用的监督来自真实触觉的统计结构，包括响应聚集位置、扩散范围及多峰模式。",
+    "purpose": "用监督缺口及可利用信息引出方法"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_3.tex",
+    "before": "再通过原有传感器链路获得触觉输出。",
+    "after": "再经原有传感器读取与处理获得触觉输出。",
+    "purpose": "具体命名感知操作"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_3.tex",
+    "before": "所得配对提供统计监督，不代表两域经历了相同的物理接触。",
+    "after": "这种构造将统计目标转为可执行的探针条件，为后续潜变量映射提供伪配对监督。",
+    "purpose": "说明探针的研究作用，物理前提在5.2统一保留"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_3.tex",
+    "before": "该估计依赖两域processed响应的数值关系，未建立共同力学量纲，因此触及控制边界不能被解释为已经达到正确接触强度。",
+    "after": "该估计以两域processed响应的数值关系指导加载，控制边界限制的是探针操作范围；其与物理接触强度的对应仍取决于标定。",
+    "purpose": "解释控制边界的具体含义"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_3.tex",
+    "before": "仅比较已执行集合，不保证全局最优。上述距离均在索引空间计算，不是物理接触误差。目标按元数据预定顺序处理，不以域分类器评分。来源、探针条件和匹配记录可追溯，并检查窗口数值重复；未通过候选的Episode与评分均保存，数值唯一不证明物理初态独立。",
+    "after": "该选择限定于已执行集合，所用距离均为索引空间统计量。目标按元数据预定顺序处理，域分类器不参与候选评分。来源、探针条件和匹配记录随Episode保存，未通过候选的评分也予以保留；窗口去重用于排除数值重复，物理初态独立性则另作来源检查。",
+    "purpose": "合并选择范围/统计角色/来源检查，保留实际机制"
+  },
+  {
+    "source": "thesis/body/ch05_sections/section_5_4.tex",
+    "before": "两者结构相同，Encoder与Decoder参数独立，",
+    "after": "两者结构相同，编码器（Encoder）与解码器（Decoder）参数独立，",
+    "purpose": "首次介绍网络部件的中文名称"
+  },
+  {
+    "source": "thesis/body/ch04_multimodal_data.tex",
+    "before": "这里的多源既包括不同任务和记录路径，也包括独立采集的真实触觉资料；不同来源不因具有相同维度就自动成为同步配对。",
+    "after": "这里的多源包括不同任务、不同记录路径及独立采集的真实触觉资料，各自保留来源和采样关系。",
+    "purpose": "章首直接定义多源，配对边界集中后文"
+  },
+  {
+    "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "before": "这部分工作侧重系统集成与感知建模，其验证范围为所列模型实现和记录，不等同于实机触觉标定或真实机器人部署。",
+    "after": "这部分工作侧重系统集成与感知建模，统一了后续抓取和触觉研究所用的执行接口与观测定义。",
+    "purpose": "研究工作总结聚焦实际完成，实机不足留7.3"
+  },
+  {
+    "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "before": "局部扰动轨迹和失败分类为流程的适用范围提供了历史依据，并形成后续数据记录的轨迹来源。该工作体现为现有工具的适配整合与验证流程构建，不将第三方算法本身作为原创，也不把候选质量、Strict通过与实际任务成功合并为同一结论。",
+    "after": "局部扰动轨迹与失败分类检验了该流程在已有案例中的表现，所得专家轨迹也是后续数据记录的来源。工作重点在于将已有候选方法与机器人约束、任务执行和示教质量检查结合起来。",
+    "purpose": "由证据对象总结研究工作，原创边界不重复自辩"
+  },
+  {
+    "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "before": "由此形成从采集、转换到训练准入的分层检查依据，但指定样本修复不代表全量生产认证，文件Hash也不能替代来源独立性或全局泄漏审计。",
+    "after": "这些检查分别对应采集、转换和训练准入中的不同问题，使指定样本的修复结果、历史缺陷及来源关系能够按版本追踪。",
+    "purpose": "总结质量检查解决的问题"
+  },
+  {
+    "source": "thesis/body/ch07_sections/section_7_1_research_work_summary.tex",
+    "before": "这些工作使用单独登记并冻结的触觉子集，沿用前述数据管理与质量规范，但不将LeRobot导出直接作为跨域模型的训练输入，也不认证两套数据的一一对应。由此形成统计监督、跨域重建与质量诊断的方法探索链路，不意味着全部平台数据均参与训练。",
+    "after": "这些工作使用单独登记并冻结的触觉子集，沿用前述数据管理与质量规范；LeRobot示教导出则保持其独立的数据用途。研究重点由构造统计监督，逐步转向检验重建结构、输入依赖和评价器的可信度。",
+    "purpose": "简明保留数据桥接，移除链路及多次免责声明"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "分别以VAE学习仿真形变和真实电信号的潜表示",
+    "after": "分别以变分自编码器（Variational Autoencoder，VAE）学习仿真形变和真实电信号的潜表示",
+    "purpose": "首次给出VAE名称"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "具体而言，利用Real Train拟合的GMM及Patch响应统计，",
+    "after": "\n\n具体而言，利用真实训练集（Real Train）拟合的高斯混合模型（Gaussian Mixture Model，GMM）及区域（Patch）响应统计，",
+    "purpose": "分开相关工作和本文监督设计，释义统计方法"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "生成与Real窗口统计对应的Paired Sim。",
+    "after": "生成与Real窗口统计对应的伪配对仿真数据（Paired Sim）。",
+    "purpose": "首次说明配对数据角色"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "Real VAE使用真实训练数据，Sim VAE同时使用Natural Sim和Paired Sim训练，",
+    "after": "\n\nReal VAE使用真实训练数据，Sim VAE同时使用自然任务仿真数据（Natural Sim）和Paired Sim训练，",
+    "purpose": "以数据角色说明两域表示，切开长术语段"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "利用Paired Sim与对应Real窗口的潜变量监督训练GRU Translator。",
+    "after": "利用Paired Sim与对应Real窗口的潜变量，训练基于门控循环单元（Gated Recurrent Unit，GRU）的潜变量映射网络（Translator）。",
+    "purpose": "首次解释GRU与Translator的关系"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "Natural Sim依次经Sim Encoder、GRU Translator和Real Decoder生成完整四帧712维触觉，",
+    "after": "自然仿真输入先被编码，再经潜变量映射和真实域解码，生成完整四帧712维触觉，",
+    "purpose": "用实际运算过程替代连续英文模块名"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "因此，本文需要研究的是统计监督的可靠性及其向自然任务输入的适用性，而不是将双VAE与潜映射的组合本身视为新的研究贡献。",
+    "after": "因此，本文需要检验统计监督的可靠性，以及这种对应能否适用于自然任务输入。",
+    "purpose": "相关工作段以研究问题结束"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "例如DANN在保留源域任务判别性的同时，",
+    "after": "例如域对抗神经网络（Domain-Adversarial Neural Network，DANN）在保留源域任务判别性的同时，",
+    "purpose": "首次展开DANN"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex",
+    "before": "本节将该共享参数向量场实验记为P44。这里的扩展是迁移计算形式的改变，并未重新建立公共物理坐标，也不预设两域潜变量具有物理等价性。",
+    "after": "对应实验记录编号为P44。该设计沿用两域独立表示，着重研究积分更新形式对迁移结果的影响；两域物理对应的前提仍采用第五章的问题定义。",
+    "purpose": "用研究变量说明扩展范围，跨域前提引用既有定义"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "before": "局部覆盖沿用PRDC的严格小于号邻域判定，",
+    "after": "局部覆盖采用精确率、召回率、密度与覆盖率四项指标（Precision、Recall、Density、Coverage，PRDC），分别检查真实与生成样本邻域的相互覆盖。沿用严格小于号邻域判定，",
+    "purpose": "定义PRDC及其研究用途"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "before": "对0.5、1、2倍带宽的RBF核取平均，",
+    "after": "对0.5、1、2倍带宽的径向基函数（Radial Basis Function，RBF）核取平均，",
+    "purpose": "首次解释核函数缩写"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "before": "输入依赖采用Root内中心化RBF Gram矩阵的归一化核对齐：",
+    "after": "输入依赖采用基于希尔伯特--施密特独立性准则（Hilbert--Schmidt Independence Criterion，HSIC）的归一化核对齐。先在Root内构造并中心化RBF Gram矩阵，再计算：",
+    "purpose": "说明HSIC度量对象及实际变体"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "before": "HSIC反映统计依赖，既不是因果证明，也不恢复同步物理接触关系。",
+    "after": "HSIC描述的是输入与输出的统计依赖，其物理语义仍需同步接触或任务证据检验。",
+    "purpose": "将多次否定改为统计指标和物理证据的分工"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex",
+    "before": "因此，距离、邻域、依赖与Mask、幅值、短时序结构描述各有分工，FR、BA和AUC则诊断接受及分类表现，彼此不能替代，均不能单独认证物理Sim-to-Real。下一节进一步检查判别器自身的跨Session泛化能力。",
+    "after": "上述评价分别检查分布接近程度、样本覆盖、输入响应及短时序结构，FR、BA和AUC则反映判别器的接受与排序表现。各指标的分歧有助于定位退化发生在哪一层。下一节继续检查判别器对真实数据的跨Session泛化能力，以明确这些分数的可靠参照。",
+    "purpose": "由指标清单提升为如何解释指标分歧"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "全文按七章组织，由实验条件逐步过渡到数据构建、触觉重建及评价。第一章说明研究背景和相关技术，归纳研究问题及工作范围。第二章建立机械臂、欠驱动手和曲面触觉观测的仿真基础，交代控制与信号来源。第三章在此基础上研究抓取候选的适配、可达性筛选和轨迹验证，说明多任务专家示教如何形成。第四章从数据使用角度检查示教记录的组织、关联、转换和质量，使后续研究所使用的数据及其限制具有可追溯依据。第三、四章分别回答示教如何产生及如何成为可核验数据，避免将任务成功与数据质量混为一谈。",
+    "after": "全文按七章组织。第一章说明研究背景、相关工作及研究问题；第二章建立机器人控制与触觉观测的仿真基础；第三章研究抓取候选的适配、可达性筛选和专家轨迹验证；第四章进一步检查记录的组织、时序、转换和质量。第三、四章由操作执行转向样本使用，分别回答示教如何产生，以及记录如何满足学习所需的数据要求。",
+    "purpose": "组织结构不重复前节技术清单"
+  },
+  {
+    "source": "thesis/body/ch01_introduction.tex",
+    "before": "第五章围绕缺少同步物理配对的条件，介绍真实统计先验指导的探针伪配对、独立双域表示和潜变量映射，并分析初始重建的效果与局限。第六章承接初始迁移结果，研究共享参数向量场和迭代对抗优化，结合多视角判别、分布质量、输入保持及跨会话分析检验优化结果，同时讨论评价器的适用范围。第七章归纳各研究方向获得的结论，区分已实现功能、受限实验结果与尚未解决的问题，并提出与现有证据缺口相对应的后续方向。",
+    "after": "第五章研究非配对条件下的统计监督、双域表示和潜变量映射；第六章进一步检验共享向量场与对抗优化，并从生成质量、输入保持和评价器泛化分析其效果；第七章归纳研究结论及未来工作。",
+    "purpose": "保留章节递进，避免重复方法名堆砌"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "仅4个评价Session使不确定性估计受限，组内大量窗口不能补成大量独立Session；该区间也不认证未知采集条件下的覆盖。",
+    "after": "评价仅含4个Session，不确定性估计仍受会话覆盖范围限制；组内窗口主要增加同一条件下的观测。",
+    "purpose": "集中组数限制，避免三句同义否定"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "矩阵是窗口计数，不是组宏比例。高FR只说明生成分数越过阈值，与真实样本接受能力不足可以同时出现；它既不证明域不可区分，也不证明生成分布正确。AUC则描述连续分数的排序能力，并非分布距离或物理质量。",
+    "after": "矩阵按窗口计数，FR与Real宏接受率则另按来源分组。生成样本越过阈值的同时，真实样本仍可能被拒绝；AUC对连续分数排序的检查，为这一阈值现象提供了补充描述。",
+    "purpose": "具体解释阈值与排序结果，不堆叠指标禁区"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "这是经验分数包络，不是经物理标定的触觉置信区间；Joint包络也不同于三支各自包络的交集，不能替代原0.5分类阈值。",
+    "after": "该包络描述inner样本的经验分数范围，与原0.5分类阈值承担不同作用；Joint包络由最小logit直接构造，区别于三支包络的交集。",
+    "purpose": "明确包络构造对象与评价角色"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "说明平均覆盖不能充分代表跨Session稳定性，不能将某一组的较好校准直接推广到另一组。该诊断仍限于8个历史inner Session，未登记新的稳定性硬门槛，不能推出跨Session理论不可达，也不能单凭会话标签归因传感器、任务或物体因素。",
+    "after": "这些差异表明，某一Session上的较好覆盖在转移到另一Session后仍可能失效。诊断范围为8个历史inner Session，未登记新的稳定性硬门槛；具体差异来源还需结合传感器、任务和物体条件进一步区分。",
+    "purpose": "由跨会话结果推导实际意义，保留未归因状态"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "前文区分了边际分布、邻域覆盖、输入依赖和判别接受情况。进一步作出迁移质量判断，还需审查评价器能否稳定接受真实触觉。本节转向评价器自身，分析真实域接受能力、生成分数及跨Session校准差异。相应审计记录编号为P51；审计未执行训练或参数优化，$D_{50}$权重及类别方向均保持冻结。",
+    "after": "迁移评价要求判别器首先能够稳定接受真实触觉。本节考察真实域接受能力、生成分数及跨Session校准差异。审计记录编号为P51，未执行训练或参数优化，$D_{50}$权重与类别方向保持冻结。",
+    "purpose": "集中评价角色，删去已解释的重复限制与重复过渡"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "历史模型文件SHA256与审计登记一致，重放记录给出的最大logit差为0，分类结果相同。",
+    "after": "模型SHA256与登记一致，历史重放最大logit差为0，分类结果相同。",
+    "purpose": "集中评价角色，删去已解释的重复限制与重复过渡"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "因此，宏观结果不能掩盖个别采集会话的低接受能力，780个Real窗口中566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$；其按窗口加权，与Session等权统计对象不同，不能替代正式宏口径。",
+    "after": "合并780个Real窗口后，566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$。该值按窗口加权，正式评价则按Session等权。",
+    "purpose": "集中评价角色，删去已解释的重复限制与重复过渡"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "这解释了单纯追求更高Real分数可能越出既有真实分数范围，但不应由此为包络追加成功判据。未转换Original的Joint包络覆盖约100\\%，也说明落入包络不能单独完成域验收。",
+    "after": "生成分数集中在Real经验范围之外。Original的Joint包络覆盖约100\\%，则显示包络覆盖与域验收的分工不同。",
+    "purpose": "集中评价角色，删去已解释的重复限制与重复过渡"
+  },
+  {
+    "source": "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex",
+    "before": "因此，既定Real宏接受要求未满足，P51保留NO-GO：$D_{50}$不适合作为当前实验的最终可靠迁移评价器。这一判断针对该模型及现有开发数据，P49的$D_3$不在此次审计范围内。前述生成质量分析由此补充了一个必要前提：评价器首先应稳定接受真实触觉，生成样本的高分才具有可解释的参照。",
+    "after": "既定Real宏接受要求未满足，P51保留NO-GO：$D_{50}$不适合作为当前实验的最终可靠迁移评价器。该判断限于现有模型与开发数据，P49的$D_3$不在审计范围。可解释的生成接受率，需要评价器对真实触觉的稳定识别作为参照。",
+    "purpose": "集中评价角色，删去已解释的重复限制与重复过渡"
+  }
+]

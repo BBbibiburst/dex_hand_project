@@ -1,0 +1,14 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/test_basic.tex
+Sum count: 18
+Words in text: 7
+Words in headers: 4
+Words outside text (captions, etc.): 7
+Number of headers: 2
+Number of floats/tables/figures: 2
+Number of math inlines: 1
+Number of math displayed: 1
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+2+0 (1/0/0/0) Chapter: 章题
+  7+2+7 (1/2/1/1) Section: 节题
+

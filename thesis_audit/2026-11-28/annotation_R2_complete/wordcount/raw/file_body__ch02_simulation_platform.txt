@@ -1,0 +1,20 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch02_simulation_platform.tex
+Sum count: 9494
+Words in text: 9028
+Words in headers: 87
+Words outside text (captions, etc.): 379
+Number of headers: 8
+Number of floats/tables/figures: 18
+Number of math inlines: 130
+Number of math displayed: 5
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+17+0 (1/0/0/0) Chapter: 机器人多任务仿真平台与触觉感知建模
+  833+9+26 (1/2/0/0) Section: 系统需求与总体架构
+  1258+16+67 (1/3/37/1) Section: RM75B机械臂与途见科技自研灵巧手模型
+  1511+12+37 (1/2/14/1) Section: 灵巧手接触建模与控制方法
+  2344+10+148 (1/6/60/2) Section: 复杂曲面触觉阵列建模
+  1051+11+41 (1/2/15/1) Section: 712维触觉观测及处理流程
+  1619+8+60 (1/3/4/0) Section: 仿真平台功能验证
+  412+4+0 (1/0/0/0) Section: 本章小结
+

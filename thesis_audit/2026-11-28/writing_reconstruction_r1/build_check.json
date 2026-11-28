@@ -1,0 +1,18 @@
+{
+  "pdf_pages": 94,
+  "before_pdf_pages": 95,
+  "completely_blank_pages": [],
+  "body_pages_under_200_characters": [],
+  "undefined_references": [],
+  "duplicate_labels": [],
+  "existing_overfull_warnings": [
+    "Overfull \\hbox (5.79674pt too wide) in paragraph at lines 82--82",
+    "Overfull \\hbox (2.0989pt too wide) in paragraph at lines 82--82"
+  ],
+  "unexpected_protected_changes": [],
+  "texcount_before": 54641,
+  "texcount_after": 54441,
+  "edited_files": 17,
+  "edit_records": 81,
+  "no_experiments": true
+}

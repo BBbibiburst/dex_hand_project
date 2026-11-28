@@ -1,0 +1,10 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/test_extended.tex
+Sum count: 7
+Words in text: 5
+Words in headers: 0
+Words outside text (captions, etc.): 2
+Number of headers: 0
+Number of floats/tables/figures: 1
+Number of math inlines: 0
+Number of math displayed: 0
+

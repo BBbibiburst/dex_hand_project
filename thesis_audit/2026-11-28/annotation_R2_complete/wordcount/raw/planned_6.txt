@@ -1,0 +1,19 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/planned_6.tex
+Sum count: 9706
+Words in text: 9149
+Words in headers: 87
+Words outside text (captions, etc.): 470
+Number of headers: 7
+Number of floats/tables/figures: 15
+Number of math inlines: 156
+Number of math displayed: 9
+Subcounts:
+  text+headers+captions (#headers/#floats/#inlines/#displayed)
+  0+18+0 (1/0/0/0) Chapter: 基于迭代对抗优化的触觉迁移与综合评价
+  1793+11+89 (1/2/37/3) Section: 共享参数向量场迁移方法
+  1420+12+76 (1/2/23/3) Section: 判别器设计与梯度优化机制
+  1772+8+137 (1/3/45/0) Section: 多轮对抗优化实验
+  1331+12+98 (1/3/15/1) Section: 多视角判别与残差重建探索
+  1679+13+31 (1/2/27/2) Section: 触觉分布质量与输入保持评价
+  1154+13+39 (1/3/9/0) Section: 判别器可靠性及跨Session泛化分析
+

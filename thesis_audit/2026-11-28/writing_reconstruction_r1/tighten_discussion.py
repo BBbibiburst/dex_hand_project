@@ -1,0 +1,7 @@
+from pathlib import Path
+import json
+R=Path('/home/zmy/dex_hand_project');O=R/'thesis_audit/2026-11-28/writing_reconstruction_r1';p=R/'thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex';s=p.read_text();e=json.loads((O/'edits.json').read_text())
+pairs=[('前文区分了边际分布、邻域覆盖、输入依赖和判别接受情况。进一步作出迁移质量判断，还需审查评价器能否稳定接受真实触觉。本节转向评价器自身，分析真实域接受能力、生成分数及跨Session校准差异。相应审计记录编号为P51；审计未执行训练或参数优化，$D_{50}$权重及类别方向均保持冻结。','迁移评价要求判别器首先能够稳定接受真实触觉。本节考察真实域接受能力、生成分数及跨Session校准差异。审计记录编号为P51，未执行训练或参数优化，$D_{50}$权重与类别方向保持冻结。'),('历史模型文件SHA256与审计登记一致，重放记录给出的最大logit差为0，分类结果相同。','模型SHA256与登记一致，历史重放最大logit差为0，分类结果相同。'),('因此，宏观结果不能掩盖个别采集会话的低接受能力，780个Real窗口中566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$；其按窗口加权，与Session等权统计对象不同，不能替代正式宏口径。','合并780个Real窗口后，566个接受、214个拒绝，窗口合并接受率$566/780=0.7256410256$。该值按窗口加权，正式评价则按Session等权。'),('这解释了单纯追求更高Real分数可能越出既有真实分数范围，但不应由此为包络追加成功判据。未转换Original的Joint包络覆盖约100\\%，也说明落入包络不能单独完成域验收。','生成分数集中在Real经验范围之外。Original的Joint包络覆盖约100\\%，则显示包络覆盖与域验收的分工不同。'),('因此，既定Real宏接受要求未满足，P51保留NO-GO：$D_{50}$不适合作为当前实验的最终可靠迁移评价器。这一判断针对该模型及现有开发数据，P49的$D_3$不在此次审计范围内。前述生成质量分析由此补充了一个必要前提：评价器首先应稳定接受真实触觉，生成样本的高分才具有可解释的参照。','既定Real宏接受要求未满足，P51保留NO-GO：$D_{50}$不适合作为当前实验的最终可靠迁移评价器。该判断限于现有模型与开发数据，P49的$D_3$不在审计范围。可解释的生成接受率，需要评价器对真实触觉的稳定识别作为参照。')]
+for a,b in pairs:
+ assert s.count(a)==1,a[:30];s=s.replace(a,b,1);e.append({'source':str(p.relative_to(R)),'before':a,'after':b,'purpose':'集中评价角色，删去已解释的重复限制与重复过渡'})
+p.write_text(s);(O/'edits.json').write_text(json.dumps(e,ensure_ascii=False,indent=2));print(len(e))

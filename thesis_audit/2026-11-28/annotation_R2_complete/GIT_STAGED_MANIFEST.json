@@ -1,0 +1,920 @@
+{
+  "thesis/THESIS_PERSONAL_INFORMATION.csv": {
+    "bytes": 3800
+  },
+  "thesis/back/acknowledgements.tex": {
+    "bytes": 1044
+  },
+  "thesis/body/ch01_introduction.tex": {
+    "bytes": 30152
+  },
+  "thesis/body/ch02_simulation_platform.tex": {
+    "bytes": 39152
+  },
+  "thesis/body/ch03_grasp_demonstrations.tex": {
+    "bytes": 34740
+  },
+  "thesis/body/ch04_multimodal_data.tex": {
+    "bytes": 28362
+  },
+  "thesis/body/ch05_dual_domain_reconstruction.tex": {
+    "bytes": 456
+  },
+  "thesis/body/ch05_sections/section_5_1.tex": {
+    "bytes": 4688
+  },
+  "thesis/body/ch05_sections/section_5_2.tex": {
+    "bytes": 4159
+  },
+  "thesis/body/ch05_sections/section_5_3.tex": {
+    "bytes": 9099
+  },
+  "thesis/body/ch05_sections/section_5_4.tex": {
+    "bytes": 6346
+  },
+  "thesis/body/ch05_sections/section_5_5.tex": {
+    "bytes": 6054
+  },
+  "thesis/body/ch05_sections/section_5_6.tex": {
+    "bytes": 6849
+  },
+  "thesis/body/ch06_adversarial_evaluation.tex": {
+    "bytes": 561
+  },
+  "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": {
+    "bytes": 8204
+  },
+  "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": {
+    "bytes": 6487
+  },
+  "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": {
+    "bytes": 7541
+  },
+  "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": {
+    "bytes": 5960
+  },
+  "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": {
+    "bytes": 7226
+  },
+  "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": {
+    "bytes": 5250
+  },
+  "thesis/body/ch07_conclusion.tex": {
+    "bytes": 285
+  },
+  "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": {
+    "bytes": 3228
+  },
+  "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": {
+    "bytes": 2259
+  },
+  "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": {
+    "bytes": 2419
+  },
+  "thesis/figures/annotation_R2/assembly_failure_records.pdf": {
+    "bytes": 77113
+  },
+  "thesis/figures/annotation_R2/candidate_geometry_feedback.pdf": {
+    "bytes": 92478
+  },
+  "thesis/figures/annotation_R2/data_lineage_instances.pdf": {
+    "bytes": 117493
+  },
+  "thesis/figures/annotation_R2/five_task_phase_records.pdf": {
+    "bytes": 1223621
+  },
+  "thesis/figures/annotation_R2/grasp_evidence_pipeline.pdf": {
+    "bytes": 171048
+  },
+  "thesis/figures/annotation_R2/joint_tendon_geometry.pdf": {
+    "bytes": 177310
+  },
+  "thesis/figures/annotation_R2/platform_actual_architecture.pdf": {
+    "bytes": 206603
+  },
+  "thesis/figures/annotation_R2/recorded_tracking_strict.pdf": {
+    "bytes": 233546
+  },
+  "thesis/figures/annotation_R2/sampling_processes.pdf": {
+    "bytes": 224441
+  },
+  "thesis/figures/annotation_R2/wrist_recorded_targets.pdf": {
+    "bytes": 88362
+  },
+  "thesis/figures/annotation_batch2/control_implementation.pdf": {
+    "bytes": 72293
+  },
+  "thesis/figures/annotation_batch2/historical_lift_trajectory.pdf": {
+    "bytes": 43947
+  },
+  "thesis/figures/annotation_batch2/tactile_processing_operators.pdf": {
+    "bytes": 73111
+  },
+  "thesis/figures/annotation_r2/historical_five_task_scenes.pdf": {
+    "bytes": 3850582
+  },
+  "thesis/figures/annotation_r2/historical_tactile_heatmaps.pdf": {
+    "bytes": 73014
+  },
+  "thesis/figures/ch02/taxel_local_frame.pdf": {
+    "bytes": 30094
+  },
+  "thesis/figures/ch04/sink_historical_precision_r2.pdf": {
+    "bytes": 11871
+  },
+  "thesis/figures/ch06/f0_swd_baseline.pdf": {
+    "bytes": 16077
+  },
+  "thesis/figures/ch06/mask_gradient_paths.pdf": {
+    "bytes": 71311
+  },
+  "thesis/figures/ch06/multi_round_distribution.pdf": {
+    "bytes": 13419
+  },
+  "thesis/figures/ch06/multiview_gradient_training.pdf": {
+    "bytes": 29038
+  },
+  "thesis/figures/ch06/multiview_refiner_architecture.pdf": {
+    "bytes": 38370
+  },
+  "thesis/figures/ch06/round_acceptance_states.pdf": {
+    "bytes": 14809
+  },
+  "thesis/figures/ch06/shared_vector_field.pdf": {
+    "bytes": 67161
+  },
+  "thesis/figures/revision_20261127/ch04_admission.pdf": {
+    "bytes": 34635
+  },
+  "thesis/figures/revision_20261127/ch04_multirate.pdf": {
+    "bytes": 19610
+  },
+  "thesis/figures/revision_20261127/ch04_timing.pdf": {
+    "bytes": 17428
+  },
+  "thesis/figures/revision_20261127/ch05_c0_validation_protocol.pdf": {
+    "bytes": 34967
+  },
+  "thesis/figures/revision_20261127/ch05_dual_vae.pdf": {
+    "bytes": 25106
+  },
+  "thesis/figures/revision_20261127/ch05_gmm_candidate_selection.pdf": {
+    "bytes": 41476
+  },
+  "thesis/figures/revision_20261127/ch05_gmm_physical_pipeline.pdf": {
+    "bytes": 37514
+  },
+  "thesis/figures/revision_20261127/ch05_translator_paths.pdf": {
+    "bytes": 31381
+  },
+  "thesis/figures/revision_20261127/robot_model.pdf": {
+    "bytes": 190561
+  },
+  "thesis/figures/revision_20261127/surface_layout_strategies.pdf": {
+    "bytes": 74241
+  },
+  "thesis/figures/revision_20261127/tactile_layout.pdf": {
+    "bytes": 248974
+  },
+  "thesis/front/abstract.tex": {
+    "bytes": 6743
+  },
+  "thesis/front/cover.tex": {
+    "bytes": 1916
+  },
+  "thesis/gbt7714-numerical-quanjiao.bst": {
+    "bytes": 46146
+  },
+  "thesis/hithesis.bst": {
+    "bytes": 138842
+  },
+  "thesis/hithesis.sty": {
+    "bytes": 12801
+  },
+  "thesis/hithesisbook.cfg": {
+    "bytes": 20147
+  },
+  "thesis/hithesisbook.cls": {
+    "bytes": 87681
+  },
+  "thesis/hitszthesis.bst": {
+    "bytes": 141747
+  },
+  "thesis/reference.bib": {
+    "bytes": 19170
+  },
+  "thesis/thesis.tex": {
+    "bytes": 1245
+  },
+  "thesis/wiseref.sty": {
+    "bytes": 49055
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/ANNOTATION_LEDGER.csv": {
+    "bytes": 43671
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/ANNOTATION_LEDGER.md": {
+    "bytes": 8187
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/CHANGE_REPORT.md": {
+    "bytes": 866
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/FIGURE_SOURCES.json": {
+    "bytes": 3373
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/FIGURE_SOURCES.md": {
+    "bytes": 2450
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/FONT_COMPARISON.pdf": {
+    "bytes": 89188
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/FONT_COMPARISON.png": {
+    "bytes": 99249
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/FONT_SCHEME.md": {
+    "bytes": 1968
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/GIT_DELIVERY.md": {
+    "bytes": 1186
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/LAYOUT_REVIEW.md": {
+    "bytes": 1755
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/LITERATURE_VERIFICATION.md": {
+    "bytes": 2068
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/OPEN_ISSUES_AND_PROPOSALS.md": {
+    "bytes": 2860
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/PDF_REVIEW_PLAN.md": {
+    "bytes": 670
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/REVIEW.md": {
+    "bytes": 2578
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/SHA256SUMS": {
+    "bytes": 8926
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/TEX_SOURCE_MANIFEST.json": {
+    "bytes": 8432
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/WORDCOUNT_REVIEW.md": {
+    "bytes": 814
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/assembly_failure_records_sources.json": {
+    "bytes": 2462
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/baseline.json": {
+    "bytes": 9111
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/build.log": {
+    "bytes": 176953
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/build_preview.py": {
+    "bytes": 1119
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/changes.diff": {
+    "bytes": 59254
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/check_source_bundle.py": {
+    "bytes": 1548
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/close_checks.py": {
+    "bytes": 3653
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/data_lineage_instances_sources.json": {
+    "bytes": 2734
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_architecture.py": {
+    "bytes": 3244
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_failure_cases.py": {
+    "bytes": 2521
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_geometry.py": {
+    "bytes": 4009
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_grasp_evidence.py": {
+    "bytes": 8749
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_lineage.py": {
+    "bytes": 4072
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_sampling.py": {
+    "bytes": 3810
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_task_phases.py": {
+    "bytes": 2304
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/draw_tracking.py": {
+    "bytes": 4491
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/edits.json": {
+    "bytes": 26105
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/equation_preservation.json": {
+    "bytes": 290
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/finalize_delivery.py": {
+    "bytes": 20762
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/five_task_phase_records_sources.json": {
+    "bytes": 7185
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/font_comparison.py": {
+    "bytes": 805
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/grasp_evidence_sources.json": {
+    "bytes": 7895
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/inspect_pdf.py": {
+    "bytes": 1673
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/integrate.py": {
+    "bytes": 10579
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/integrity.json": {
+    "bytes": 54118
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/joint_tendon_geometry_sources.json": {
+    "bytes": 2572
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_1.jpg": {
+    "bytes": 178581
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_2.jpg": {
+    "bytes": 178332
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_3.jpg": {
+    "bytes": 181119
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_4.jpg": {
+    "bytes": 193946
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_5.jpg": {
+    "bytes": 200994
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_6.jpg": {
+    "bytes": 203124
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/page_review/contact_7.jpg": {
+    "bytes": 124184
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/pdf_page_checks.json": {
+    "bytes": 13412
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/platform_actual_architecture_sources.json": {
+    "bytes": 1228
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/recorded_tracking_strict_sources.json": {
+    "bytes": 3115
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/revise_prose.py": {
+    "bytes": 12730
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/sampling_processes_sources.json": {
+    "bytes": 1956
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/source_bundle_build.log": {
+    "bytes": 191903
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/source_bundle_check.json": {
+    "bytes": 223
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/static_checks.json": {
+    "bytes": 238
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/style.py": {
+    "bytes": 1198
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/thesis_annotation_R2.pdf": {
+    "bytes": 8422178
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/thesis_annotation_R2_source.zip": {
+    "bytes": 7479089
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/THESIS_WORD_COUNT.csv": {
+    "bytes": 12183
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/THESIS_WORD_COUNT.json": {
+    "bytes": 187100
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/THESIS_WORD_COUNT.md": {
+    "bytes": 14665
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/integrity.json": {
+    "bytes": 5392
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/actual_body.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/actual_body.txt": {
+    "bytes": 3719
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/actual_full.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/actual_full.txt": {
+    "bytes": 3747
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_back__acknowledgements.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_back__acknowledgements.txt": {
+    "bytes": 336
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch01_introduction.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch01_introduction.txt": {
+    "bytes": 999
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch02_simulation_platform.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch02_simulation_platform.txt": {
+    "bytes": 948
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch03_grasp_demonstrations.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch03_grasp_demonstrations.txt": {
+    "bytes": 937
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch04_multimodal_data.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch04_multimodal_data.txt": {
+    "bytes": 860
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_dual_domain_reconstruction.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_dual_domain_reconstruction.txt": {
+    "bytes": 349
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_1.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_1.txt": {
+    "bytes": 351
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_2.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_2.txt": {
+    "bytes": 349
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_3.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_3.txt": {
+    "bytes": 351
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_4.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_4.txt": {
+    "bytes": 351
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_5.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_5.txt": {
+    "bytes": 351
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_6.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch05_sections__section_5_6.txt": {
+    "bytes": 350
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_adversarial_evaluation.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_adversarial_evaluation.txt": {
+    "bytes": 345
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_1_shared_vector_field.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_1_shared_vector_field.txt": {
+    "bytes": 371
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_2_discriminator_gradient.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_2_discriminator_gradient.txt": {
+    "bytes": 374
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_3_multi_round_adversarial.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_3_multi_round_adversarial.txt": {
+    "bytes": 375
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_4_multiview_residual_refiner.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_4_multiview_residual_refiner.txt": {
+    "bytes": 378
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_5_distribution_quality_and_input_preservation.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_5_distribution_quality_and_input_preservation.txt": {
+    "bytes": 395
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_6_discriminator_reliability_session_generalization.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch06_sections__section_6_6_discriminator_reliability_session_generalization.txt": {
+    "bytes": 399
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_conclusion.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_conclusion.txt": {
+    "bytes": 331
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_1_research_work_summary.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_1_research_work_summary.txt": {
+    "bytes": 368
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_2_main_research_conclusions.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_2_main_research_conclusions.txt": {
+    "bytes": 372
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_3_limitations_and_future_work.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_body__ch07_sections__section_7_3_limitations_and_future_work.txt": {
+    "bytes": 374
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_front__abstract.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_front__abstract.txt": {
+    "bytes": 331
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_front__cover.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/file_front__cover.txt": {
+    "bytes": 326
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_abstract.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_abstract.txt": {
+    "bytes": 329
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_acknowledgements.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_acknowledgements.txt": {
+    "bytes": 335
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_appendix.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_appendix.txt": {
+    "bytes": 323
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_cover.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_cover.txt": {
+    "bytes": 324
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_denotation.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_denotation.txt": {
+    "bytes": 325
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_publications.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/inventory_publications.txt": {
+    "bytes": 329
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_1.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_1.txt": {
+    "bytes": 980
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_2.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_2.txt": {
+    "bytes": 922
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_3.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_3.txt": {
+    "bytes": 910
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_4.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_4.txt": {
+    "bytes": 838
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_6.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_6.txt": {
+    "bytes": 897
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_7.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/planned_7.txt": {
+    "bytes": 591
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_basic.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_basic.txt": {
+    "bytes": 458
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_custom.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_custom.txt": {
+    "bytes": 316
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_extended.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_extended.txt": {
+    "bytes": 318
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_includes_unique.stderr.txt": {
+    "bytes": 35
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_includes_unique.txt": {
+    "bytes": 325
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/raw/test_native_merge.txt": {
+    "bytes": 314
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/run_commands.json": {
+    "bytes": 13202
+  },
+  "thesis_audit/2026-11-28/annotation_R2_complete/wordcount/tests.json": {
+    "bytes": 1303
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/ANNOTATION_LEDGER.csv": {
+    "bytes": 26228
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/ANNOTATION_LEDGER.md": {
+    "bytes": 16485
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/EXECUTION_NOTES.md": {
+    "bytes": 1488
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/READING_DRAFT.md": {
+    "bytes": 222936
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/REVIEW.md": {
+    "bytes": 3294
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/SOURCE_EVIDENCE.md": {
+    "bytes": 1822
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/VALIDATION.md": {
+    "bytes": 1455
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/baseline.json": {
+    "bytes": 4049
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/build.log": {
+    "bytes": 172301
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/build_preview.py": {
+    "bytes": 1133
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/changes.diff": {
+    "bytes": 31931
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/edits.json": {
+    "bytes": 21549
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/finalize.py": {
+    "bytes": 5765
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/integrity.json": {
+    "bytes": 14506
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/make_method_figures.py": {
+    "bytes": 5902
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/make_trajectory_figure.py": {
+    "bytes": 3072
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/pdf_pages.json": {
+    "bytes": 52
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/revise.py": {
+    "bytes": 12994
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/static_checks.json": {
+    "bytes": 817
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/thesis_annotation_batch2.pdf": {
+    "bytes": 6489245
+  },
+  "thesis_audit/2026-11-28/annotation_correction_batch2/trajectory_source.json": {
+    "bytes": 1187
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/ANNOTATION_LEDGER.csv": {
+    "bytes": 25542
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/ANNOTATION_LEDGER.md": {
+    "bytes": 16535
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/F0_PROVENANCE.md": {
+    "bytes": 1574
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/READING_DRAFT.md": {
+    "bytes": 223942
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/REVIEW.md": {
+    "bytes": 3451
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/VALIDATION.md": {
+    "bytes": 1342
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/annotations_original.json": {
+    "bytes": 28203
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/baseline.json": {
+    "bytes": 9125
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/build.log": {
+    "bytes": 184831
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/build_checks.json": {
+    "bytes": 238
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/build_preview.py": {
+    "bytes": 1143
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/changes.diff": {
+    "bytes": 55728
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/figure_sources.json": {
+    "bytes": 4772
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/finalize.py": {
+    "bytes": 4664
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/integrity.json": {
+    "bytes": 38628
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/make_ledger.py": {
+    "bytes": 8025
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/make_record_figures.py": {
+    "bytes": 3097
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/pdf_pages.json": {
+    "bytes": 73
+  },
+  "thesis_audit/2026-11-28/annotation_correction_r2/thesis_annotation_correction_r2.pdf": {
+    "bytes": 6412030
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/BASELINE_GAP_ANALYSIS.md": {
+    "bytes": 7671
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/EXPERIMENT_INVENTORY.md": {
+    "bytes": 11137
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/EXPERIMENT_PRIORITY.md": {
+    "bytes": 5384
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/FIGURE_REDESIGN_PLAN.md": {
+    "bytes": 4344
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/LITERATURE_MATRIX.md": {
+    "bytes": 11429
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/MASTER_PLAN.md": {
+    "bytes": 12695
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/PHASE0_COMPLETION.md": {
+    "bytes": 916
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/RISK_REGISTER.md": {
+    "bytes": 4297
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/asset_catalog.json": {
+    "bytes": 338500
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/audited_result_tables.json": {
+    "bytes": 22699
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/audited_sources.json": {
+    "bytes": 28067
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/baseline.json": {
+    "bytes": 237982
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/bibliography_inventory.json": {
+    "bytes": 19431
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/collect_assets.py": {
+    "bytes": 5769
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/existing_test_inventory.json": {
+    "bytes": 38094
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/experiment_registry.csv": {
+    "bytes": 8395
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/integrity.json": {
+    "bytes": 2375
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/model_inventory.json": {
+    "bytes": 13183
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/p28_status_extract.json": {
+    "bytes": 761
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/resources.json": {
+    "bytes": 287
+  },
+  "thesis_audit/2026-11-28/experiment_strengthening/source_inventory.json": {
+    "bytes": 209215
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/CHANGE_REVIEW.md": {
+    "bytes": 41528
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/EXECUTION_PLAN.md": {
+    "bytes": 890
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/READING_DRAFT.md": {
+    "bytes": 202861
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/VALIDATION.md": {
+    "bytes": 1335
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/WORDCOUNT_REVIEW.md": {
+    "bytes": 1643
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/WRITING_REVIEW.md": {
+    "bytes": 2220
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/baseline.json": {
+    "bytes": 49340
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/build.log": {
+    "bytes": 172282
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/build_check.json": {
+    "bytes": 522
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/build_preview.py": {
+    "bytes": 1146
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/changes.diff": {
+    "bytes": 106452
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/content_checks.json": {
+    "bytes": 6846
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/edits.json": {
+    "bytes": 43435
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/integrity.json": {
+    "bytes": 6943
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/protection_check.json": {
+    "bytes": 4861
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/rewrite_finish.py": {
+    "bytes": 4840
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/rewrite_more.py": {
+    "bytes": 5936
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/rewrite_terms.py": {
+    "bytes": 5294
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/rewrite_thesis.py": {
+    "bytes": 22276
+  },
+  "thesis_audit/2026-11-28/writing_reconstruction_r1/tighten_discussion.py": {
+    "bytes": 2921
+  },
+  "thesis_draft_commented.pdf": {
+    "bytes": 2940542
+  }
+}

@@ -1,0 +1,68 @@
+from pathlib import Path
+import json,hashlib,re,collections,shutil
+R=Path('/home/zmy/dex_hand_project');O=R/'thesis_audit/2026-11-28/writing_reconstruction_r1';P=R/'thesis_audit/2026-11-28/experiment_strengthening';sources=json.loads((P/'source_inventory.json').read_text())['active_sources'];targets=list(sources)+['thesis_audit/2026-11-28/experiment_strengthening/MASTER_PLAN.md','thesis_audit/2026-11-28/experiment_strengthening/EXPERIMENT_PRIORITY.md']
+if (O/'baseline.json').exists():raise RuntimeError('revision already initialized')
+base={'before':{},'protected':json.loads((P/'baseline.json').read_text())['protected']}
+for n in targets:
+ p=R/n;q=O/'before'/n;q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q);base['before'][n]=hashlib.sha256(p.read_bytes()).hexdigest()
+(O/'baseline.json').write_text(json.dumps(base,ensure_ascii=False,indent=2))
+changes=[]
+def replace(n,old,new,reason):
+ p=R/n;s=p.read_text();assert s.count(old)==1,(n,old[:55],s.count(old));s=s.replace(old,new,1);p.write_text(s);changes.append({'source':n,'before':old,'after':new,'purpose':reason})
+def c(n):return 'thesis/body/'+n
+replace(c('ch01_introduction.tex'),'三者分别提供实验条件、可追溯数据和重建分析依据，其贡献需要结合实现与验证范围说明，平台集成、开源适配和迁移效果不作同一层次的创新判断。','三条主线依次回答实验条件如何建立、可执行示教如何转为可追溯数据，以及有限监督能否支持触觉重建。平台集成侧重接口与观测的一致性，方法适配侧重机器人执行约束，跨域研究则通过实验检验重建效果。','将抽象贡献声明改为具体研究问题')
+replace(c('ch01_introduction.tex'),'其验证范围是模型与记录链路的功能，不等同于真实传感器物理标定或实机部署。','相应验证检查模型接口和观测记录的一致性，真实传感器标定与实机部署则属于后续工作。','将防御性否定改为清晰验证对象')
+replace(c('ch01_introduction.tex'),'工作重点是将第三方方法适配到具体驱动和执行约束，连接示教生成与数据审计，而非将原算法作为本文原创，也不以历史汇总代替全量数据验收。','工作重点是适配具体驱动与执行约束，并追踪示教从生成到训练使用的记录关系；候选方法的来源及数据检查范围分别在对应章节说明。','来源/范围集中对应章节，不重复原创免责声明')
+replace(c('ch02_simulation_platform.tex'),'这些环节相互影响，不能仅通过一个抓取姿态或单独的传感器模型描述。','这些环节相互影响，因此需要在同一执行过程中联合描述运动、接触与观测。','从否定替代转为平台设计理由')
+replace(c('ch02_simulation_platform.tex'),'本章讨论仿真实现及其观测含义，不涉及实机集成认证。','本章说明各模块如何协同执行，以及触觉读数在该模型中的具体含义。','章首直接提出论证任务')
+replace(c('ch02_simulation_platform.tex'),'五份NPZ同时包含tactile和sensor\\_tactile两个字段，二者实际数值并不完全相同。记录合同采用后者检查，因而本节非零比例不能与前者的统计直接互换。字段名称相近不构成相同采样时刻或相同处理路径的证据，若需要进一步解释两者关系，必须回到对应版本的记录调用位置。本节保留这一差异，不将某一字段未经核验地命名为原始力，也不依据数组差值推断信号处理的因果作用。','五份NPZ同时保存tactile和sensor\\_tactile，二者数值存在差异。本节按记录合同统一使用sensor\\_tactile计算非零比例。两个字段的具体关系取决于相应版本的采样时刻与处理调用，现有检查尚未定位该差异的完整来源。','明确统计选择，合并三句重复防御')
+replace(c('ch02_simulation_platform.tex'),'Lift另有Strict记录，其证据只适用于对应案例，不能推广为其余四类任务均通过同一严格回放。类似地，五份文件的存在不意味着具有五个独立Root：独立初态、reset关系及轨迹派生方式需要额外lineage证据。当前核查没有将帧数、Episode数和独立物理配置数混合统计，也不把这些开发样本计入新的生产数据时长。','Lift另有Strict严格轨迹回放验证记录，其余任务按各自任务结果报告。Root表示按初态及来源关系划分的仿真样本组；确定五份记录之间的独立性，还需核对重置关系和轨迹派生来源。因此，样本清单分别登记帧数、执行记录数与来源分组，开发样本也单独计量。','首次解释Strict/Root，缩合重复计数边界')
+replace(c('ch02_simulation_platform.tex'),'因此，本章将当前实现描述与历史观测检查并列，而不将它们合并为同一冻结版本的端到端动态验收。若后续需要提出这种更强结论，应补足当时模型及配置档案；本轮没有通过新增实验填补该缺口。','因此，当前实现与历史观测分别报告；端到端动态复验还需补足当时的模型和配置档案。','集中说明缺口，移除本轮工作口吻')
+replace(c('ch02_simulation_platform.tex'),'由此可见，现有材料支持平台具有明确的模型、控制和观测组织方式，并支持五条指定历史记录中触觉数组的数值与基本采样合同。触觉非零不能证明真实力标定正确，仿真观测合法也不意味着Real与Sim物理对应已经建立。抓取候选能否转化为稳定任务轨迹，仍需第三章的可达性和任务验证；全量数据的关联、去重与质量结论，则由第四章另行审计。本节不以有限功能记录替代这些后续论证。','上述检查确认了平台的模型、控制和观测接口，以及五条指定历史记录的数组有效性与基本采样关系。抓取候选如何转化为稳定操作，是下一章的研究问题；第四章则进一步检查这些执行记录的时序、来源及数据质量。真实触觉标定与跨域物理对应将在触觉重建的问题定义中统一讨论。','将章末限制堆叠改为证据总结和章节过渡')
+replace(c('ch02_simulation_platform.tex'),'控制链路将关节目标或末端IK求解与底层位置伺服、物理积分分开','控制过程区分关节目标或末端IK求解、底层位置伺服和物理积分','用实际控制层次替代链路套语')
+replace(c('ch03_grasp_demonstrations.tex'),'因此，本章将专家示教构建组织为候选生成、机器人约束筛选、轨迹执行和质量验收四个层次，研究从物体几何输入到可保存控制序列的转换，而不将某一几何评分直接作为任务成功判据。','因此，本章从候选生成、机器人约束筛选、轨迹执行和质量验收四个层次展开：先寻找可抓取构型，再检验机械臂能否到达、操作能否执行以及所得轨迹是否满足示教要求。','以研究层次解释必要性')
+replace(c('ch03_grasp_demonstrations.tex'),'Wrist Lattice针对候选与具体机械臂的可达关系开展局部扩展。','腕部姿态格点扩展（Wrist Lattice）用于搜索源候选附近更容易被机械臂到达的手腕位姿。','首次中文解释腕姿搜索功能')
+replace(c('ch03_grasp_demonstrations.tex'),'本章围绕几何抓取候选如何转化为可执行专家示教，构建并说明了候选表达、几何与物理反馈细化、机器人约束筛选、连续轨迹执行及严格质量验收的工作链。','本章研究几何抓取候选到可执行专家示教的转换。候选表达限定手部控制变量，物理反馈检查抓持行为，可达性筛选与连续执行检验机器人运动条件，严格回放进一步检查轨迹质量。','小结提炼各方法解决的问题而非罗列工作链')
+replace(c('ch03_grasp_demonstrations.tex'),'这些环节具有不同作用，不以统一算法名称掩盖已有方法来源。','各环节在保留已有方法来源的基础上，分别处理抓持质量与机器人执行约束。','正面交代方法分工及来源')
+replace(c('ch03_grasp_demonstrations.tex'),'专家示教生成只解决了控制序列从何而来的问题。轨迹进入后续学习和数据生产前，还需要检查多模态观测与动作的时间关系、执行来源和质量信息能否可靠关联。下一章据此讨论数据组织与质量审计，而不把示教文件的存在直接等同于训练数据已经完成验收。','执行成功的轨迹还需要转为语义明确的训练样本：策略在何时得到观测、下一步施加什么动作，以及这些记录来自哪次执行，都影响学习目标。下一章据此讨论多模态数据的组织、时序关联和质量审查。','用训练需求解释章节递进')
+replace(c('ch04_multimodal_data.tex'),'本章从训练样本需要具有明确输入、动作和来源关系出发，建立了多模态数据表示、采集关联、规范转换及分层审查的论证。','本章围绕训练样本的输入、动作和来源关系，说明数据采集与转换中需要保持的语义和时序约束。','将元叙事“建立论证”改为研究内容')
+replace(c('ch04_multimodal_data.tex'),'执行前记录、控制缓冲预备和触觉缓存共同说明，采集时机本身是数据定义的一部分，不能由格式和维数代替。','执行前记录确定动作所依据的观测，控制缓冲预备保留实际命令，触觉缓存避免重复读取改变滤波状态；三者共同保证记录时机与样本含义一致。','说明模块为何必要')
+replace(c('ch04_multimodal_data.tex'),'五任务v4开发包及Sink历史回放对照提供了版本化质量控制的有限依据，但不构成服务器全量验收、独立Root认证或全局无泄漏证明。保留来源、Hash、验证层级和失败记录，使这些局限能够被明确识别，而非通过统一文件名掩盖。','五任务v4开发包及Sink历史回放对照检验了指定版本的字段一致性和回放精度。来源、Hash、验证层级与失败记录共同限定了数据的适用范围，便于后续按训练用途筛选；全量库存的独立性和泄漏检查仍需另行完成。','总结实证对象，合并全量认证免责声明')
+replace(c('ch04_multimodal_data.tex'),'本章的数据组织、来源追踪与质量控制为后续研究提供管理基础；','来源和处理版本的登记，使后续研究能够明确区分可比较的数据；','具体说明数据管理如何支持研究')
+replace(c('ch05_sections/section_5_1.tex'),'两者不混合，窗口不作独立采集主体。','后续统计按相应版本分别报告，并以来源分组考察样本独立性。','将连续禁令改为统计安排')
+replace(c('ch05_sections/section_5_1.tex'),'滤波残留等微弱正值也会计入激活；固定通道顺序更不意味着完成两域物理配准，不能将Patch索引热图解释为认证曲面坐标，或对任意同编号Taxel作物理位置叠加。','滤波残留等微弱正值也会计入激活。因此，Mask首先反映数值支持范围；跨域热图按固定通道索引比较，物理配准的前提在下一节统一界定。','集中物理前提至问题定义')
+replace(c('ch05_sections/section_5_2.tex'),'目标输出应为完整$4\\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征，不将其直接称为真实传感器输出，也不以低维统计摘要代替完整观测。','目标输出为完整$4\\times712$的有限非负数值，保留精确零值与非零激活支持，并具有Real域processed统计特征。使用完整观测而非低维摘要，是为了同时检验响应位置、幅值及跨帧结构。','用研究目标解释完整输出必要性')
+replace(c('ch05_sections/section_5_4.tex'),'该分支区分零值事件与连续幅值，且幅值条件于Mask，并非两个无关输出；这不等于已证明显式Mask优于其他建模方式。','这一条件结构将是否激活与激活后的响应幅值分开建模，同时通过Mask保留两者联系。显式Mask与其他表示的比较留待实验部分讨论。','突出设计理由而非方法自我辩护')
+replace(c('ch05_sections/section_5_4.tex'),'独立自重建尚未建立两域语义对应，下一节以有限伪配对监督研究潜变量映射，而不预设同维表示已完成对齐。','因此，域内自重建之后仍需要学习两套潜变量坐标之间的映射。下一节利用有限伪配对提供这种监督。','用未解决的问题自然引出Translator')
+replace(c('ch05_sections/section_5_5.tex'),'这种映射的有效范围受监督来源限制。','配对验证首先考察映射能否拟合所给监督，随后再检验其在自然任务输入上的输出质量。','结果段由问题引出而非免责声明开头')
+replace(c('ch05_sections/section_5_5.tex'),'然而，部分Session例外；这仅支持有限配对上的映射学习。Natural没有同步对应的Real目标，低潜变量误差不能保证712维输出结构或域分布正确，下一节需以冻结评价器及结构指标共同检验。','这一优势未覆盖全部Session，表明映射效果还受配对来源影响。Natural缺少同步Real目标，因此下一节将结合冻结评价器与结构指标，检验潜变量拟合改善能否延伸到712维输出。','保留Session例外并说明为何需要下一阶段评价')
+replace(c('ch05_sections/section_5_6.tex'),'该现象不证明幅值无作用，只说明这一修复范围不足以完成整体转换。','这表明降低目标域自重建误差与消除Natural输出的判别特征是两个不同目标，局部幅值修复只改善了前者。','明确正负结果各自回答的问题')
+replace(c('ch05_sections/section_5_6.tex'),'该结果揭示目标域自重建仍存在可辨识痕迹，不是Natural迁移通过6/11。','这组6/11结果对应Real自重建读出，显示目标域表示和解码本身也会引入可辨识痕迹。','用评价对象解释诊断意义')
+replace(c('ch05_sections/section_5_6.tex'),'这支持有限适配带来局部变化，\\mbox{不能}支持整体成功或稳定优势；D的11/11也不能覆盖其余九个实例的排序差异。','适配后的收益集中在部分判别特征上；D虽为11/11，其余九个实例仍存在排序差异，整体联合验收尚未完成。','以逐实例证据收束，保留整体失败结论')
+replace(c('ch05_sections/section_5_6.tex'),'因而本章完成的是可追溯的重建与诊断链路，尚未完成完整域迁移验收。','综合来看，统计伪配对能够支持潜变量拟合，局部读出和映射修复也改变了部分指标，但这些改善尚未汇合为完整域迁移验收通过的结果。','移除链路空泛总结，归纳实际发现')
+replace(c('ch06_sections/section_6_3_multi_round_adversarial.tex'),'本节将这一多轮实验记为P49，','本节以逐轮冻结判别边界的方式检验这一问题，实验记录编号为P49，','以研究设计为主，实验编号作为追踪信息')
+replace(c('ch06_sections/section_6_3_multi_round_adversarial.tex'),'先对冻结候选开展统一分布评价。','先对冻结候选开展统一分布评价。切片Wasserstein距离（Sliced Wasserstein Distance，SWD）通过多个一维投影比较两组响应分布；最大均值差异（Maximum Mean Discrepancy，MMD）则用核函数度量分布差异。本节联合观察两者，判断判别器接受率的变化是否伴随分布逼近，具体计算见第\\ref{sec:ch06_distribution_quality_input_preservation}节。','首次使用前解释SWD/MMD含义与作用')
+replace(c('ch06_sections/section_6_3_multi_round_adversarial.tex'),'这只支持指定距离合同下的改善，不能解释为迁移成功率。','这里的相对下降描述指定距离下的分布改善，其评价对象是两组样本分布。','简化首次结果解释，保留正式评价讨论')
+replace(c('ch06_sections/section_6_3_multi_round_adversarial.tex'),'FR定义为Sim生成样本被当前冻结判别器按0.5阈值判为Real的接受比例，','生成样本接受率（Fake Acceptance Rate，FR）表示Sim生成样本被当前冻结判别器按0.5阈值判为Real的比例，','正式补英文缩写含义')
+replace(c('ch06_sections/section_6_4_multiview_residual_refiner.tex'),'为此，本节探索条件残差Refiner与Global、Spatial、Temporal多视角判别约束。本实验记为P50，','本节从输出修正和判别信息两方面考察这一问题：条件残差修正器（Refiner）调整已有生成结果，全局（Global）、区域统计（Spatial）和时序（Temporal）分支分别检查不同响应特征。实验记录编号为P50，','先解释改进动机与术语，再给实验编号')
+replace(c('ch06_sections/section_6_4_multiview_residual_refiner.tex'),'但这只证明计算路径存在。诊断针对各Epoch首批分别求导，不能外推为每个样本、每个更新步都具有相同梯度。','说明这些判别特征均能参与生成器更新。该诊断逐Epoch选取首批求导，描述的是这一采样范围内的梯度传递。','把免责声明改为梯度诊断的具体对象')
+replace(c('ch06_sections/section_6_4_multiview_residual_refiner.tex'),'这揭示幅值约束缺口，但不能据此认定失败的唯一原因。','这一检查提示：优化可以在保持相对响应关系的同时放大整体幅值，因而现有保持项仍留下幅值变化的自由度。该机制与终点退化相容，具体贡献还需受控实验区分。','解释保持项的机制局限，不编造唯一因果')
+replace(c('ch06_sections/section_6_4_multiview_residual_refiner.tex'),'这些是历史审计，并非本轮推理，同一评价合同不保证跨后端输出数值等价，故限制架构效果的纯因果归因，但不意味着实验整体无效。','这些历史审计说明，相同评价规则下仍需保留推理后端及近零响应的数值差异；讨论架构效果时应将其与结构变化一并考虑。','移除本轮口吻与反复防御，保留数值限制')
+replace(c('ch06_sections/section_6_4_multiview_residual_refiner.tex'),'因此，残差路径及多视角梯度均已建立，但现有单Seed实验未证明迁移质量改善。接受率不能抵消距离退化，下一节将结合分布距离、邻域覆盖与输入依赖进一步分析其适用边界。','这项单Seed探索呈现出明确的分歧：多视角约束能够影响生成器，生成样本也更易被接受，但固定距离反而退化。下一节据此从分布、邻域覆盖与输入依赖三个角度检查生成结果，以区分对判别器的适应和触觉重建质量。','用实验发现和未解决问题结束小节')
+replace(c('ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex'),'本节依据编号为P51的冻结$D_{50}$历史只读审计，分析真实域接受能力、生成分数及跨Session校准差异，不继续优化生成器。本次P51只读审计未执行训练或参数优化，$D_{50}$权重保持冻结，未改变类别方向；本节仅复核已有记录，不重复历史推理。','本节转向评价器自身，分析真实域接受能力、生成分数及跨Session校准差异。相应审计记录编号为P51；审计未执行训练或参数优化，$D_{50}$权重及类别方向均保持冻结。','以评价可靠性为主线，压缩执行日志式重复')
+replace(c('ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex'),'校准稳定性采用历史Leave-One-Session-Out诊断：','校准稳定性采用留一采集会话诊断（Leave-One-Session-Out，LOSO），考察包络迁移到未参与校准的会话时能否保持覆盖：','首次定义LOSO并说明诊断目的')
+replace(c('ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex'),'梯度有效、生成接受率高与评价器可靠是不同命题；后者是解释前述迁移结果的重要前提。结论仅限该模型及现有开发数据，不外推到P49的$D_3$，不否定所有判别器或迁移方法，也不以调整阈值、翻转AUC或更换包络修饰失败结果。','这一判断针对该模型及现有开发数据，P49的$D_3$不在此次审计范围内。前述生成质量分析由此补充了一个必要前提：评价器首先应稳定接受真实触觉，生成样本的高分才具有可解释的参照。','结尾保留模型范围，删除泛化否定清单')
+replace(c('ch07_sections/section_7_2_main_research_conclusions.tex'),'文件Hash、Manifest和规模只能提供部分追踪依据，不能单独证明来源独立、全局无泄漏或物理真实性，也不能将局部修复扩大为全量生产认证。','文件Hash和Manifest承担版本与来源追踪，来源独立性、跨划分重复和全量生产质量则需要相应层次的检查。','用职责归纳替代多重否定')
+# Preserve all equations, data tables, figures, pseudocode and labels, plus digit strings per file.
+blocks=re.compile(r'\\begin\{(equation\*?|table\*?|figure\*?|algorithm)\}.*?\\end\{\1\}',re.S)
+checks=[]
+for n,h in base['before'].items():
+ if not n.endswith('.tex'):continue
+ old=(O/'before'/n).read_text();new=(R/n).read_text()
+ assert blocks.findall(old)==blocks.findall(new)
+ oldblocks=[x[0] for x in [(m.group(0),) for m in blocks.finditer(old)]];newblocks=[m.group(0) for m in blocks.finditer(new)];assert oldblocks==newblocks,(n,'protected block changed')
+ assert re.findall(r'\\label\{[^}]+\}',old)==re.findall(r'\\label\{[^}]+\}',new),(n,'labels changed')
+ nums=lambda s:collections.Counter(re.findall(r'\d+(?:\.\d+)?',s))
+ if nums(old)!=nums(new):print('NUMBER CHANGE',n,nums(new)-nums(old),nums(old)-nums(new))
+ checks.append({'file':n,'changed':old!=new,'protected_blocks_unchanged':True,'labels_unchanged':True,'numeric_tokens_unchanged':nums(old)==nums(new)})
+(O/'edits.json').write_text(json.dumps(changes,ensure_ascii=False,indent=2));(O/'content_checks.json').write_text(json.dumps(checks,ensure_ascii=False,indent=2));print('EDITS',len(changes),'FILES',sum(x['changed'] for x in checks))

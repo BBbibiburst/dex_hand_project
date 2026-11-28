@@ -1,0 +1,809 @@
+{
+  "baseline": "before snapshot from annotation batch2 state",
+  "changed_existing": {
+    "thesis/body/ch01_introduction.tex": {
+      "before": "638c1d79247bd290c05a1b97310c4fd6b927f4344b4f9280202f05b409c2c344",
+      "after": "21d545d9b41eeadea1db2d0c707d87f1f71d5421ebd6b9b492a1593cf0fb14fa"
+    },
+    "thesis/body/ch03_grasp_demonstrations.tex": {
+      "before": "d150ea38cded810f426ccd315bfd5dc97f66fb4c15b97f1bc51ba5caaf0fe392",
+      "after": "4e29fb92b8c0ec1b361397da5c508be6bd276c47f5f12b3fae441d19ea6e4718"
+    },
+    "thesis/body/ch04_multimodal_data.tex": {
+      "before": "45ee8c56dbe93784e9a89df3f4147c1c499e72c94acc1e077750be137f85cb5b",
+      "after": "bf6610a7d72371d8f040461ccdda4ed9c3f9012e7cfec37c54f2eac208e1cef3"
+    },
+    "thesis/body/ch02_simulation_platform.tex": {
+      "before": "18d79d7f7507ea2bd8ceb9ccbcfaf1189640acc41da8add3ff051d75f7dd7b4f",
+      "after": "2f2944417d4f35c836bd2c37af138dd17555985ba41a2fd6c1d988d1a9e075f8"
+    },
+    "thesis/body/ch05_sections/section_5_3.tex": {
+      "before": "f58219eb819e97810dbe38464d3e8e984dda4175b53cf55fb2ad6e126fa39cb8",
+      "after": "fe161fc0cb3f391824aa38316afc6bd3c0f08e2b06d65c56d3243513446e57c2"
+    },
+    "thesis/front/abstract.tex": {
+      "before": "00d890c75148a5efb4f0a5cfa1b964e3a75c32f1ab46da75b6e2c8fc7fbc09d6",
+      "after": "ef6fdac4cd9c987b98631cadeddbf253585fb5e6f2b5aa36bd1d4811d5c42037"
+    },
+    "thesis/reference.bib": {
+      "before": "e32e476183a85bfcbad604fd6d741df59993bc2fa89744ee84a9edbc55bde101",
+      "after": "b4fe4f81a6a097eaa5c025dc5fcfc660966b9bfd427f259214a4999f60378805"
+    }
+  },
+  "unchanged_baseline_files": {
+    "thesis/body/ch05_dual_domain_reconstruction.tex": {
+      "before": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "after": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+      "unchanged": true
+    },
+    "thesis/body/ch06_adversarial_evaluation.tex": {
+      "before": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "after": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+      "unchanged": true
+    },
+    "thesis/body/ch05_experiments.tex": {
+      "before": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "after": "63f3a4fd51513c3fd66633da1ccee01926390b66d405b5492c1b957b975790bb",
+      "unchanged": true
+    },
+    "thesis/body/ch03_dual_vae.tex": {
+      "before": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "after": "6a251afe39af5656d3bc50d4737b41c8cd662f521cf603bd5bd07533dee6e016",
+      "unchanged": true
+    },
+    "thesis/body/ch04_adversarial_transfer.tex": {
+      "before": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "after": "093a03bb13631cfefb639b3182a9f3d47d147478d6a1b0f62d4096523ea7a5ac",
+      "unchanged": true
+    },
+    "thesis/body/ch06_conclusion.tex": {
+      "before": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "after": "3ee67d5bc850d5acbf2751e0f152c6439509a44ad6d2d507ea6339543132c36c",
+      "unchanged": true
+    },
+    "thesis/body/ch02_data_and_problem.tex": {
+      "before": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "after": "d38fce582b380697d838a6991e955b347de0a739353e7442c45d15a5acfec78f",
+      "unchanged": true
+    },
+    "thesis/body/ch07_conclusion.tex": {
+      "before": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "after": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_5.tex": {
+      "before": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "after": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_4.tex": {
+      "before": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "after": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_6.tex": {
+      "before": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "after": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_1.tex": {
+      "before": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "after": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+      "unchanged": true
+    },
+    "thesis/body/ch05_sections/section_5_2.tex": {
+      "before": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "after": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": {
+      "before": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "after": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": {
+      "before": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "after": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+      "unchanged": true
+    },
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": {
+      "before": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "after": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": {
+      "before": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "after": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": {
+      "before": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "after": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": {
+      "before": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "after": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": {
+      "before": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "after": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": {
+      "before": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "after": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+      "unchanged": true
+    },
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": {
+      "before": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "after": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+      "unchanged": true
+    },
+    "thesis/front/denotation.tex": {
+      "before": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "after": "e860eaad79d943344f34c6ccac08a4fb9de043c9b8f8ddd444ffdda5611e0063",
+      "unchanged": true
+    },
+    "thesis/front/cover.tex": {
+      "before": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+      "after": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+      "unchanged": true
+    },
+    "thesis/thesis.tex": {
+      "before": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "after": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+      "unchanged": true
+    },
+    "thesis/THESIS_PERSONAL_INFORMATION.csv": {
+      "before": "e5d3fa655dc6167d294098afe904161faedf0cb56105ca1db6612a17b2a5466c",
+      "after": "e5d3fa655dc6167d294098afe904161faedf0cb56105ca1db6612a17b2a5466c",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch04_carriers.pdf": {
+      "before": "58bf941b6c09148076e1cfbcb9a986c60cd24aa44f03e3be4766b975766b0a3a",
+      "after": "58bf941b6c09148076e1cfbcb9a986c60cd24aa44f03e3be4766b975766b0a3a",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch03_candidate_sources.pdf": {
+      "before": "d38a107026321ff1138465e858a51f69fc0e56812600a1996536259466450ff3",
+      "after": "d38a107026321ff1138465e858a51f69fc0e56812600a1996536259466450ff3",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch05_translator_paths.pdf": {
+      "before": "7336a349d9b718fae4251769c2a4e2b6dba6a395525c9e3e2a7e43d89117fac8",
+      "after": "7336a349d9b718fae4251769c2a4e2b6dba6a395525c9e3e2a7e43d89117fac8",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch05_dual_vae.pdf": {
+      "before": "8321e482684b91e65abd9341479f953c9b553775a7b3e52fbef414dd92c7deeb",
+      "after": "8321e482684b91e65abd9341479f953c9b553775a7b3e52fbef414dd92c7deeb",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/tactile_layout.pdf": {
+      "before": "999ba2a24120c2b19072383ca9cf9c83124d1eeabeac3d8c859af2423c7e0fe0",
+      "after": "999ba2a24120c2b19072383ca9cf9c83124d1eeabeac3d8c859af2423c7e0fe0",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch02_processing.pdf": {
+      "before": "d1db7fb23fede2d3c70ebe06b34f7a99d315d09f95422a349be3d098447ace4f",
+      "after": "d1db7fb23fede2d3c70ebe06b34f7a99d315d09f95422a349be3d098447ace4f",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/robot_model.pdf": {
+      "before": "c2de4c4a28a262ea6caba379c48e9c492fd695044a4490cc2163cef3480e90a2",
+      "after": "c2de4c4a28a262ea6caba379c48e9c492fd695044a4490cc2163cef3480e90a2",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch03_task_transfer.pdf": {
+      "before": "e245647c2116c9299abda435d9a019a08b132e139bbd46170bdf593b52481bb1",
+      "after": "e245647c2116c9299abda435d9a019a08b132e139bbd46170bdf593b52481bb1",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch05_c0_validation_protocol.pdf": {
+      "before": "e5e6fbefe0cfa662991f770069d6ce82ac7b4ee78b8a649c90771002b9fa5677",
+      "after": "e5e6fbefe0cfa662991f770069d6ce82ac7b4ee78b8a649c90771002b9fa5677",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch04_timing.pdf": {
+      "before": "3e3184dcd850f7f6aeec390e7d6d2eed040373017b2c6bb9bd327f20fe7f3c83",
+      "after": "3e3184dcd850f7f6aeec390e7d6d2eed040373017b2c6bb9bd327f20fe7f3c83",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch05_gmm_candidate_selection.pdf": {
+      "before": "5e0b5054e2314605cd5f8fd6b892b5c2dfcaec22d4695c3bbb61959b0229e94a",
+      "after": "5e0b5054e2314605cd5f8fd6b892b5c2dfcaec22d4695c3bbb61959b0229e94a",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch02_architecture.pdf": {
+      "before": "16aea9830d315fa03fc561305fbf1141006aa9dfebee94730eb1b9741d4e8e38",
+      "after": "16aea9830d315fa03fc561305fbf1141006aa9dfebee94730eb1b9741d4e8e38",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch03_overall_pipeline.pdf": {
+      "before": "ee9ffc3b6cb2992f2bb7ffdffbbd229b9bc6fe3bbae20a6480be7f17bc6d39fc",
+      "after": "ee9ffc3b6cb2992f2bb7ffdffbbd229b9bc6fe3bbae20a6480be7f17bc6d39fc",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch04_multirate.pdf": {
+      "before": "02d19332ed00b0325a0a470652c20ec5306890417d0758470e86f40b9ccafa50",
+      "after": "02d19332ed00b0325a0a470652c20ec5306890417d0758470e86f40b9ccafa50",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch03_strict_replay.pdf": {
+      "before": "0daeb6d4eed4b0e22da1b59d45e730250a1005fff674f8877d47037ed3564f11",
+      "after": "0daeb6d4eed4b0e22da1b59d45e730250a1005fff674f8877d47037ed3564f11",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/surface_layout_strategies.pdf": {
+      "before": "6afca93cfa87bf4fa4e1e226c15cbd5e9264a69bc4293006d9459bd578b92cad",
+      "after": "6afca93cfa87bf4fa4e1e226c15cbd5e9264a69bc4293006d9459bd578b92cad",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/historical_examples.pdf": {
+      "before": "59354ee9730f274e3b75aab71132b4403f2d97736e16ed0411e5e2907104171e",
+      "after": "59354ee9730f274e3b75aab71132b4403f2d97736e16ed0411e5e2907104171e",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch03_reachability.pdf": {
+      "before": "3c2cc19696a91fd43a4c1cb81817f4446f21391b63848f6910367594645f8be1",
+      "after": "3c2cc19696a91fd43a4c1cb81817f4446f21391b63848f6910367594645f8be1",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch02_drive.pdf": {
+      "before": "106a4a918dbf7e1eed7a133b4b034266048361de796e7a72f07ca634cca52a6d",
+      "after": "106a4a918dbf7e1eed7a133b4b034266048361de796e7a72f07ca634cca52a6d",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch04_admission.pdf": {
+      "before": "849346ad7233c75ccf17465ab5b4c975477c6d4e6c75fc1c0419e3e0d96971a5",
+      "after": "849346ad7233c75ccf17465ab5b4c975477c6d4e6c75fc1c0419e3e0d96971a5",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch02_validation.pdf": {
+      "before": "e48e60bdb84a0e83317926008e6fb9a5bc8765fe8d62f5136103296225c5a354",
+      "after": "e48e60bdb84a0e83317926008e6fb9a5bc8765fe8d62f5136103296225c5a354",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch05_gmm_physical_pipeline.pdf": {
+      "before": "04bc1ee791c32bf86d669cb96a8425ea1ef1fa0d7bfa6b5d2621f85b1fc815a1",
+      "after": "04bc1ee791c32bf86d669cb96a8425ea1ef1fa0d7bfa6b5d2621f85b1fc815a1",
+      "unchanged": true
+    },
+    "thesis/figures/revision_20261127/ch02_control.pdf": {
+      "before": "3babc27b5b30dfd7b2c624eac61717d0b0eb3fff65553bd595afe2a6eb48f0be",
+      "after": "3babc27b5b30dfd7b2c624eac61717d0b0eb3fff65553bd595afe2a6eb48f0be",
+      "unchanged": true
+    },
+    "thesis/figures/annotation_r2/historical_five_task_scenes.pdf": {
+      "before": "de250ebdbf9feab06ff46e34f77d5fb3f85a799609d6ba3665a912ced1bf5e2e",
+      "after": "de250ebdbf9feab06ff46e34f77d5fb3f85a799609d6ba3665a912ced1bf5e2e",
+      "unchanged": true
+    },
+    "thesis/figures/annotation_r2/historical_tactile_heatmaps.pdf": {
+      "before": "435843ca7806ef1657ece66054f8e80ef349d810149df42c246d62fb6bacc4e8",
+      "after": "435843ca7806ef1657ece66054f8e80ef349d810149df42c246d62fb6bacc4e8",
+      "unchanged": true
+    },
+    "thesis/figures/annotation_batch2/tactile_processing_operators.pdf": {
+      "before": "b019256d95a75639168bb0d9a884cf042762fb6fd86664776534c7a673c7fb9b",
+      "after": "b019256d95a75639168bb0d9a884cf042762fb6fd86664776534c7a673c7fb9b",
+      "unchanged": true
+    },
+    "thesis/figures/annotation_batch2/control_implementation.pdf": {
+      "before": "af6f9b0c65a8d61605c52895e53d761c02d5bedac9d00b8d503f7b9ccb0f81d2",
+      "after": "af6f9b0c65a8d61605c52895e53d761c02d5bedac9d00b8d503f7b9ccb0f81d2",
+      "unchanged": true
+    },
+    "thesis/figures/annotation_batch2/historical_lift_trajectory.pdf": {
+      "before": "cc8f2d728f2e30aafdde3e0dd3c2d09298d1c9fba5e7762b7e1c8c79ea017483",
+      "after": "cc8f2d728f2e30aafdde3e0dd3c2d09298d1c9fba5e7762b7e1c8c79ea017483",
+      "unchanged": true
+    },
+    "thesis/figures/ch02/assembled_robot_tachin.pdf": {
+      "before": "bb0cc1cdace703486a9cdc11da3dcba9abefbe1601e8fe43cc6fee3b6e15e18a",
+      "after": "bb0cc1cdace703486a9cdc11da3dcba9abefbe1601e8fe43cc6fee3b6e15e18a",
+      "unchanged": true
+    },
+    "thesis/figures/ch02/taxel_local_frame.pdf": {
+      "before": "7e14593a186ea41bb11538d16202378a899e0bedbc3869f4e5ca0dd4af34eb03",
+      "after": "7e14593a186ea41bb11538d16202378a899e0bedbc3869f4e5ca0dd4af34eb03",
+      "unchanged": true
+    },
+    "thesis/figures/ch02/fingertip_sampling.pdf": {
+      "before": "7397b7eaff7881cfa2d963e589045979c69ca56da6b826bd68ad13eb3d818451",
+      "after": "7397b7eaff7881cfa2d963e589045979c69ca56da6b826bd68ad13eb3d818451",
+      "unchanged": true
+    },
+    "thesis/figures/ch04/sink_historical_precision_r2.pdf": {
+      "before": "97746768350b9b253b39bed17d6d7a2b92a9ba73a4cdc8b092feda165025c3f2",
+      "after": "97746768350b9b253b39bed17d6d7a2b92a9ba73a4cdc8b092feda165025c3f2",
+      "unchanged": true
+    },
+    "thesis/figures/ch04/sink_historical_precision.pdf": {
+      "before": "70c628bb4cf5c52fc530eaf2813be660c8306dd3d3ea42a315020ebbe43ca751",
+      "after": "70c628bb4cf5c52fc530eaf2813be660c8306dd3d3ea42a315020ebbe43ca751",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/multiview_gradient_training.pdf": {
+      "before": "a2d6499b4cfa24e1a2c241351f16baaf8b00ae793d48e211852243cf684ea275",
+      "after": "a2d6499b4cfa24e1a2c241351f16baaf8b00ae793d48e211852243cf684ea275",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/multiview_refiner_architecture.pdf": {
+      "before": "45e35c1808d10b48e15990a9c0bb57a3041e3eb649ecf734f529d57bea0d3f50",
+      "after": "45e35c1808d10b48e15990a9c0bb57a3041e3eb649ecf734f529d57bea0d3f50",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/f0_swd_baseline.pdf": {
+      "before": "9eab60eff638272b2520b8b7afb9fefb10eab453c242ba8a957825f42087c4b0",
+      "after": "9eab60eff638272b2520b8b7afb9fefb10eab453c242ba8a957825f42087c4b0",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/shared_vector_field.pdf": {
+      "before": "55b5c2596c6ea160efe3f89f6af61a3a842fdccbe8e153cd0ca8e587936d54da",
+      "after": "55b5c2596c6ea160efe3f89f6af61a3a842fdccbe8e153cd0ca8e587936d54da",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/round_acceptance_states.pdf": {
+      "before": "a1c5a8c496315bff14b672b54aad41d841179e16c01142a63bc6e6d56dee13bb",
+      "after": "a1c5a8c496315bff14b672b54aad41d841179e16c01142a63bc6e6d56dee13bb",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/mask_gradient_paths.pdf": {
+      "before": "32ecdfca47d430485d82b6638a00665436172de8e43c48e05db9dea0b883c342",
+      "after": "32ecdfca47d430485d82b6638a00665436172de8e43c48e05db9dea0b883c342",
+      "unchanged": true
+    },
+    "thesis/figures/ch06/multi_round_distribution.pdf": {
+      "before": "3037634bd0d819e41874c7f0f3c3436a4a9b94453c89693ff929d1cf5d139bae",
+      "after": "3037634bd0d819e41874c7f0f3c3436a4a9b94453c89693ff929d1cf5d139bae",
+      "unchanged": true
+    },
+    "thesis/figures/ch02/revision_v1/assembled_robot.pdf": {
+      "before": "24b76b820e32ed319f9784f27fb967a1e83519e1f6168472ee499b1bf2fff12c",
+      "after": "24b76b820e32ed319f9784f27fb967a1e83519e1f6168472ee499b1bf2fff12c",
+      "unchanged": true
+    }
+  },
+  "source_inputs": {
+    "assets/grippers/dex_hand/dex_hand.xml": {
+      "recorded": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c",
+      "current": "74399f5110ed8880bd8c21795e8b3431a8068a5d90aa8f68aeb6a46bb5d6277c"
+    },
+    "assets/robots/rm75b/rm75b.xml": {
+      "recorded": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc",
+      "current": "366d90de2897e0a5ffd45f5ccdcbb1b728063be0310c9578070c400cae9616fc"
+    },
+    "configs/robot_profiles/rm75b_dex_hand.json": {
+      "recorded": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399",
+      "current": "4e48460129c9d8a0a2bc6285c8d770bc42656b2095fcb35e60d70be07cd86399"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/model.mjb.gz": {
+      "recorded": "c46f4be8da5df09780644ca3455e1dc68cd24ab8eacd52a44bf20cb6209c2a05",
+      "current": "c46f4be8da5df09780644ca3455e1dc68cd24ab8eacd52a44bf20cb6209c2a05"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/episode.npz": {
+      "recorded": "af39b260049e417fae6e079ce72ceeb44fe6c0c5d1a564f58b515c6e3994340b",
+      "current": "af39b260049e417fae6e079ce72ceeb44fe6c0c5d1a564f58b515c6e3994340b"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/source_episode/manifest.json": {
+      "recorded": "6b7cd8f3485fa1b0767a60159102b8956b12e7f3bb27c2d299443b543a0cc74b",
+      "current": "6b7cd8f3485fa1b0767a60159102b8956b12e7f3bb27c2d299443b543a0cc74b"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/strict_final.json": {
+      "recorded": "971d9ddece83dfdca0c66a04197e76ff3a06c95b5f8c3d9d4a8914337645f5bb",
+      "current": "971d9ddece83dfdca0c66a04197e76ff3a06c95b5f8c3d9d4a8914337645f5bb"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/lift_sugar_ac9b12bc48cbf5775e50/independent_replay.json": {
+      "recorded": "7e32bab4f92cf66acac5003ca72f761a23e95175c062eda708218c75c29fdd60",
+      "current": "7e32bab4f92cf66acac5003ca72f761a23e95175c062eda708218c75c29fdd60"
+    },
+    "source/robots/arms/rm75b.py": {
+      "recorded": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56",
+      "current": "a54231d7290689834acd633333aa1bf15e9fc0e450995aa6e216426b87918c56"
+    },
+    "source/data/production_recorder.py": {
+      "recorded": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e",
+      "current": "9a1e4f53e0f377f81ed91f9ce75b93760ad563d84a52c57ab57d2865294f6e0e"
+    },
+    "source/grasping/executor.py": {
+      "recorded": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa",
+      "current": "2a0520f7010d7cb2d22fd469bab588c4ae2da8b505ba3bac22f8978644132baa"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/episode.json": {
+      "recorded": "3e6328dd1343f27d5bd1882f43df447dc1c16f967176643451149448b00a666d",
+      "current": "3e6328dd1343f27d5bd1882f43df447dc1c16f967176643451149448b00a666d"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/source_episode/manifest.json": {
+      "recorded": "f6eff9ae790cc4d4c3d5a0c9ee65144405b9cabc46480b6cb735478c6abbb25d",
+      "current": "f6eff9ae790cc4d4c3d5a0c9ee65144405b9cabc46480b6cb735478c6abbb25d"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/source_episode/episode.npz": {
+      "recorded": "0d87cc11d0280d7963ba7772067b9c6015ec40989b65b94be656af09db028669",
+      "current": "0d87cc11d0280d7963ba7772067b9c6015ec40989b65b94be656af09db028669"
+    },
+    "outputs/five_task_p44_integration_2026-11-05/dataset/episodes/pick_tomato_10e460303770c865bf7e/modalities.npz": {
+      "recorded": "c7ecfc1dc4cd8fca29139a323e4a7b4c719ddef3df44b7c112a3e71b0ec7ba98",
+      "current": "c7ecfc1dc4cd8fca29139a323e4a7b4c719ddef3df44b7c112a3e71b0ec7ba98"
+    },
+    "outputs/dp_p2_2026-10-11/diagnostics/action_chain/action_chain_report.json": {
+      "recorded": "4582adbba1348020880c5a693ede67539808f4a62cb4ed2050fe8b925fe8f67f",
+      "current": "4582adbba1348020880c5a693ede67539808f4a62cb4ed2050fe8b925fe8f67f"
+    },
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/manifest.json": {
+      "recorded": "cd4e9ae42eac4c2fb0e1f279a096ce1d88c68aed027630198bf923944a2f1b85",
+      "current": "cd4e9ae42eac4c2fb0e1f279a096ce1d88c68aed027630198bf923944a2f1b85"
+    },
+    "outputs/dp_p1_2026-10-11/verified_formal_recovery_3x10/ycb_004_sugar_box/p00/candidate_00/episode.npz": {
+      "recorded": "7a83aada2f92fe6bed45813968c57499fd73357c7842414eedb349a72d70336a",
+      "current": "7a83aada2f92fe6bed45813968c57499fd73357c7842414eedb349a72d70336a"
+    },
+    "outputs/dp_p2_2026-10-11/lerobot_single_sugar_fixed/data/chunk-000/file-000.parquet": {
+      "recorded": "6dc185c3ceb9053a1e4064b8777c64f8308125a5a5458fe8623ff2ff541be5ef",
+      "current": "6dc185c3ceb9053a1e4064b8777c64f8308125a5a5458fe8623ff2ff541be5ef"
+    },
+    "outputs/tactile_p44_integrated_iterative_adversarial_2026-11-18/data_contract.csv": {
+      "recorded": "5408a12416fa814d3b54b5b3f4f77207fe3cb491093b7c538632462d487aaf77",
+      "current": "5408a12416fa814d3b54b5b3f4f77207fe3cb491093b7c538632462d487aaf77"
+    },
+    "source/data/production_artifacts.py": {
+      "recorded": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865",
+      "current": "6c50548a075d9cb86257b0e40253e44c2f951f0b3d531bc629269d36cd2bb865"
+    },
+    "assets/grippers/dex_hand/meshes/skin_0_0_p.STL": {
+      "recorded": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1",
+      "current": "46d321641e8f94d8ed08e6703dc20afc622086e4535754769fe659d5917dacb1"
+    },
+    "assets/grippers/dex_hand/meshes/skin_0_2_p.STL": {
+      "recorded": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b",
+      "current": "c0655bcb805863cfcbbbef3dd67c983d52323d0fe8f98daecdeda41fe5a1a64b"
+    },
+    "assets/grippers/dex_hand/meshes/skin_palm_p.STL": {
+      "recorded": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268",
+      "current": "33f8ae905f861d7845cc54a6e7d1a1785b6dd9ff5164e116d82ff3cc50bef268"
+    },
+    "source/sensors/tactile/fitting/segment.py": {
+      "recorded": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd",
+      "current": "7141ae6c4d598140f69a75119568e3752d572ca563938f5185faddf816d81ffd"
+    },
+    "source/sensors/tactile/fitting/fingertip.py": {
+      "recorded": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b",
+      "current": "d7c46b0ed88fb39acba17d5ddea529d8eedd058ee1749c62fbe81cd30bfcfa3b"
+    },
+    "source/sensors/tactile/fitting/projection.py": {
+      "recorded": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f",
+      "current": "b23fdaddcd1225a097d2ef32ff644ceae7bf960216f65fef5808cdbb72bec90f"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/episode.npz": {
+      "recorded": "d32c1025840be38eb62da6ddd05f98dc4fee31eba463de0208e122fe112433e6",
+      "current": "d32c1025840be38eb62da6ddd05f98dc4fee31eba463de0208e122fe112433e6"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/source_episode/manifest.json": {
+      "recorded": "b9443bfdecddf10d849c0fe76551733df081a1835e3b247c5db84ff95f52df7c",
+      "current": "b9443bfdecddf10d849c0fe76551733df081a1835e3b247c5db84ff95f52df7c"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_original_handle_00/result.json": {
+      "recorded": "06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74",
+      "current": "06dec461888b47ac7f0486ed882e17827b8192aba04e6bda37fbe2e28f924c74"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/episode.npz": {
+      "recorded": "8a075a91c2b8bea7c08098342dd84718c8e824ee5c3a074ca5f8db73d52ae13a",
+      "current": "8a075a91c2b8bea7c08098342dd84718c8e824ee5c3a074ca5f8db73d52ae13a"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/source_episode/manifest.json": {
+      "recorded": "cf0d1b20e846ede2969c173fcda63eb1704d0c639d866f1b8a24ca8f28662192",
+      "current": "cf0d1b20e846ede2969c173fcda63eb1704d0c639d866f1b8a24ca8f28662192"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_handle_lower_00/result.json": {
+      "recorded": "3e8b88b81182eefe60551ac932dac0dc478d9bef0788a4cfb1e5dc753900a9b8",
+      "current": "3e8b88b81182eefe60551ac932dac0dc478d9bef0788a4cfb1e5dc753900a9b8"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/episode.npz": {
+      "recorded": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789",
+      "current": "cf4a4ce8a9d9545f0853a7321b5069a498e5f30d4c2fdcaac37b5c9f3eced789"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/source_episode/manifest.json": {
+      "recorded": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9",
+      "current": "6064cbd025f59a020041a9acafecb55fd5e0f5c63420eb841542b47b1917c0b9"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/result.json": {
+      "recorded": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657",
+      "current": "a1586fb8ef03158f4de581b50530a9c37d010266afd7f9e66b05019d27498657"
+    },
+    "assets/maniskill/ycb/models/004_sugar_box/textured.obj": {
+      "recorded": "7bd97d5cb4baaa5a5df4818384c4e2cb2717461d7ef085396e89ff9bc26283c9",
+      "current": "7bd97d5cb4baaa5a5df4818384c4e2cb2717461d7ef085396e89ff9bc26283c9"
+    },
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/graspqp_seed/manifest.json": {
+      "recorded": "0c657710df9f42bead734d5588d0c8aa084615ce1216cf9b6d0d00ad98277b78",
+      "current": "0c657710df9f42bead734d5588d0c8aa084615ce1216cf9b6d0d00ad98277b78"
+    },
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/manifest.json": {
+      "recorded": "c7bccc306dbd27eb0d94342efcf718b9652f721d969eb490db57a9e09edb9485",
+      "current": "c7bccc306dbd27eb0d94342efcf718b9652f721d969eb490db57a9e09edb9485"
+    },
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/run.json": {
+      "recorded": "5f61878749dedbadc64e37533bf94afe3aafcd00464bf15e1c0ce53ef9dfb078",
+      "current": "5f61878749dedbadc64e37533bf94afe3aafcd00464bf15e1c0ce53ef9dfb078"
+    },
+    "outputs/dex_hand_top100_v2/grasp/ycb_004_sugar_box/seed_0000/dexevolve_archive.json": {
+      "recorded": "f25f35ebba5aecc9fdd4664962a33031b0779cd772bd33422c1f953eab617c75",
+      "current": "f25f35ebba5aecc9fdd4664962a33031b0779cd772bd33422c1f953eab617c75"
+    },
+    "outputs/dex_hand_top100_v2/lattice/ycb_004_sugar_box/index.json": {
+      "recorded": "55513f4694daef388ee393402e2944c3bbe76147c61c4871485ab2ea0e09db1d",
+      "current": "55513f4694daef388ee393402e2944c3bbe76147c61c4871485ab2ea0e09db1d"
+    },
+    "outputs/dex_hand_top100_v2/rl/gso_3D_Dollhouse_Refrigerator/best_trajectory/manifest.json": {
+      "recorded": "c3e9695ebef24daf370768f309956d670e01b54f822853a2761ea7b189dcf40d",
+      "current": "c3e9695ebef24daf370768f309956d670e01b54f822853a2761ea7b189dcf40d"
+    },
+    "outputs/dex_hand_top100_v2/logs/ycb_004_sugar_box.log": {
+      "recorded": "9ffb57de61b11d841bc656e3d5ab44212f56912d5cc3c990595c33fc30b112fb",
+      "current": "9ffb57de61b11d841bc656e3d5ab44212f56912d5cc3c990595c33fc30b112fb"
+    },
+    "source/rl/grasp_edit/templates.py": {
+      "recorded": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309",
+      "current": "9e913a60b42040a9f4e3e461f084cedb7afcf99a6f22536ab9295640ae4e7309"
+    },
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/episode.npz": {
+      "recorded": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb",
+      "current": "5acd12c1b7f7ea396c2358e6972042c84c550503693fa9db2075de2de70de5eb"
+    },
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/source_episode/manifest.json": {
+      "recorded": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88",
+      "current": "9237c128d9598824fc2c5964fed3e4945420cb2480ee8930c2b922b9db5d1d88"
+    },
+    "outputs/five_task_p32_b_2026-11-03/lift_sugar_rgb_00/agentview.mp4": {
+      "recorded": "29f3a6a17eaaa3f7db2038e41866ff5a923239ef348a84cabc9e2a41766b93fc",
+      "current": "29f3a6a17eaaa3f7db2038e41866ff5a923239ef348a84cabc9e2a41766b93fc"
+    },
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/episode.npz": {
+      "recorded": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc",
+      "current": "52c5f208995f37914ce429cddf6076315ca439f6922217af89b71c1110f872bc"
+    },
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/source_episode/manifest.json": {
+      "recorded": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8",
+      "current": "7949e5f8608a2d928871cf84ca38949c1291dbe13b66665cbc0f6ac1bfc3dcf8"
+    },
+    "outputs/five_task_p32_b_2026-11-03/pick_tomato_rgb_00/agentview.mp4": {
+      "recorded": "fba9ec63e8613e7a1b5ccccb5ce8879d79dcf527576f565b43306145d2e5d979",
+      "current": "fba9ec63e8613e7a1b5ccccb5ce8879d79dcf527576f565b43306145d2e5d979"
+    },
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/episode.npz": {
+      "recorded": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c",
+      "current": "bda0eca559e1d9d2b2ccd2645c83f7e6ba9e1cc8901fa13c6b97fe62ca86f54c"
+    },
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/source_episode/manifest.json": {
+      "recorded": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139",
+      "current": "e0bea5f4e6ea999798be8c13b3b0fc5abc844aff15a4386128be8d57314d0139"
+    },
+    "outputs/five_task_p32_b_2026-11-03/stack_ring_rgb_01/agentview.mp4": {
+      "recorded": "dc3339feda0b31b1a164c90aceb83a2507dbec118fc4e885fbd3b5ec251b9c11",
+      "current": "dc3339feda0b31b1a164c90aceb83a2507dbec118fc4e885fbd3b5ec251b9c11"
+    },
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/episode.npz": {
+      "recorded": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2",
+      "current": "bae59537a18f8804f8bd475e21834dc90cce57bf6e0b15f9c49e7b1eae8b47f2"
+    },
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/source_episode/manifest.json": {
+      "recorded": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65",
+      "current": "13b1c8d507bbe5207564144ec56637b1e0d5e459efd44a6a912559f001db0d65"
+    },
+    "outputs/five_task_p32_b_2026-11-03/push_tomato_rgb_00/agentview.mp4": {
+      "recorded": "7e7c0db50c16c030146dd603069ec0b6a07fed44d9cf957182475c641ab45d3b",
+      "current": "7e7c0db50c16c030146dd603069ec0b6a07fed44d9cf957182475c641ab45d3b"
+    },
+    "outputs/five_task_p32_b_2026-11-03/nut_retain_lower_rgb_00/agentview.mp4": {
+      "recorded": "a95fbe6c81cdcee0a494cea5566555f9c8dcda5995ca65c85a0f764927e4403c",
+      "current": "a95fbe6c81cdcee0a494cea5566555f9c8dcda5995ca65c85a0f764927e4403c"
+    },
+    "source/grasping/task_transfer.py": {
+      "recorded": "34ba3b501df8d8d20b3b841407ed44ca9e5e387f1870cd1e470049ecfa727a52",
+      "current": "34ba3b501df8d8d20b3b841407ed44ca9e5e387f1870cd1e470049ecfa727a52"
+    },
+    "source/grasping/stack_transfer.py": {
+      "recorded": "ea508777ae8936b4f0fcd65c3ae91cfb2bdf2b9ec5d57a6432c980776cf08e75",
+      "current": "ea508777ae8936b4f0fcd65c3ae91cfb2bdf2b9ec5d57a6432c980776cf08e75"
+    },
+    "source/grasping/push_transfer.py": {
+      "recorded": "16707ff4d2e688b6e46dd109547cf8ba830b67548e2962e49675fd3791139f22",
+      "current": "16707ff4d2e688b6e46dd109547cf8ba830b67548e2962e49675fd3791139f22"
+    },
+    "source/grasping/nut_transfer.py": {
+      "recorded": "dad11466d10fd8e49a6c91dc6655748a2211d76eff6349735344866626aaa95f",
+      "current": "dad11466d10fd8e49a6c91dc6655748a2211d76eff6349735344866626aaa95f"
+    },
+    "source/robots/builder.py": {
+      "recorded": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356",
+      "current": "82815dd6580c69366fb7c580afc28b92a01925c00b7f2a87821ef0ab28357356"
+    },
+    "source/control/composite.py": {
+      "recorded": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9",
+      "current": "6eabc3e21a8a72ad3cd4f1b33daa0cbca778941d7b2bdb4ca4bc7bf103bac9b9"
+    },
+    "source/envs/rl_env.py": {
+      "recorded": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97",
+      "current": "c2dc63454ca94df8983e03ca0e65923fcd8a77cd6f33725736fef0027fbd9b97"
+    },
+    "source/data/lerobot_recorder.py": {
+      "recorded": "cf3d184d7d57f202ed962399e16e6913a9c65002e287b82d853b0b558ed8ac0c",
+      "current": "cf3d184d7d57f202ed962399e16e6913a9c65002e287b82d853b0b558ed8ac0c"
+    }
+  },
+  "source_inputs_hash_match": true,
+  "original_64_comments_preserved": true,
+  "status_counts": {
+    "已处理（待人工验收）": 59,
+    "部分处理": 3,
+    "证据限制／不按字面执行": 2
+  },
+  "source_manifest": {
+    "thesis/back/acknowledgements.tex": "32c04107c42c7fb9cdbb56ff72befe088df73c11ea90c390fd29c870c189b21a",
+    "thesis/body/ch01_introduction.tex": "21d545d9b41eeadea1db2d0c707d87f1f71d5421ebd6b9b492a1593cf0fb14fa",
+    "thesis/body/ch02_simulation_platform.tex": "2f2944417d4f35c836bd2c37af138dd17555985ba41a2fd6c1d988d1a9e075f8",
+    "thesis/body/ch03_grasp_demonstrations.tex": "4e29fb92b8c0ec1b361397da5c508be6bd276c47f5f12b3fae441d19ea6e4718",
+    "thesis/body/ch04_multimodal_data.tex": "bf6610a7d72371d8f040461ccdda4ed9c3f9012e7cfec37c54f2eac208e1cef3",
+    "thesis/body/ch05_dual_domain_reconstruction.tex": "8f575c285f5af50f9f667fb4b786fd929402589dd8ea53240ac40640a99ca76c",
+    "thesis/body/ch05_sections/section_5_1.tex": "35921eb08accae51ddbe374f796bfef63d7ca0b503e2f638ba1c09901f198b24",
+    "thesis/body/ch05_sections/section_5_2.tex": "aa815118dd27a06c6b64f1c51c45277a55d102a6f0ab1e54fdae565253e5ae9b",
+    "thesis/body/ch05_sections/section_5_3.tex": "fe161fc0cb3f391824aa38316afc6bd3c0f08e2b06d65c56d3243513446e57c2",
+    "thesis/body/ch05_sections/section_5_4.tex": "78773e065b65399e190aca34b93cdc37dfedb80c12dcae737ae9e3a436e686f3",
+    "thesis/body/ch05_sections/section_5_5.tex": "c8f85fbfc2a9bb60cf3401219d0912289f86c5d95c020d3bac50735ead5ac486",
+    "thesis/body/ch05_sections/section_5_6.tex": "819f2e2917f878e339407a237478f4ae961a81218edd70ed47027889391aef03",
+    "thesis/body/ch06_adversarial_evaluation.tex": "eb0ea974f1498c9c044cc573a0420fc4ac9d429748f72280f7e90fad7a7a2d1a",
+    "thesis/body/ch06_sections/section_6_1_shared_vector_field.tex": "68b634df2e1fd7fe986abfb25db357a9c89a26bf834dc814d065600620c6d980",
+    "thesis/body/ch06_sections/section_6_2_discriminator_gradient.tex": "9e6e8a77784a48a1b50fe881ce0f492734e826eac0018a2413c01d1defa0bdc6",
+    "thesis/body/ch06_sections/section_6_3_multi_round_adversarial.tex": "944ecda0d952f24ad917d52e2ac59d6b7722cc452c7f09022b238da1c8d5265d",
+    "thesis/body/ch06_sections/section_6_4_multiview_residual_refiner.tex": "33c8b22460553790f9ae1577f177b898ec9ad108254e179f561a592606f663c2",
+    "thesis/body/ch06_sections/section_6_5_distribution_quality_and_input_preservation.tex": "a9d4891fa435b7b84cd0e7074af4b3a25e08483eb0f40bd92a2e67b7f2cc815b",
+    "thesis/body/ch06_sections/section_6_6_discriminator_reliability_session_generalization.tex": "b9d7c84922c837092948e545cefc8f00ec937b97664c1f9b2d693727c82f812f",
+    "thesis/body/ch07_conclusion.tex": "577b49aaa711a1e66b7925970d612bddfc5e7ce4f62efb3fe41e1988d8b560cc",
+    "thesis/body/ch07_sections/section_7_1_research_work_summary.tex": "9d9cd52d26b682e843df371d2322dbf21d64a5d8a2436942114c7cc25883fa54",
+    "thesis/body/ch07_sections/section_7_2_main_research_conclusions.tex": "281426c4798f7acf7e6adbb3a419ec0fe428efdd469b5e8afddb3010123da8e8",
+    "thesis/body/ch07_sections/section_7_3_limitations_and_future_work.tex": "e33dd48af16693d308227dc5a39cc190c23bca5eb99d5d2fafd2a0ee04f670f7",
+    "thesis/figures/annotation_R2/assembly_failure_records.pdf": "e8284952415e314ecaae8af063d202a182b2515adb834ada2014cebde2683a8c",
+    "thesis/figures/annotation_R2/candidate_geometry_feedback.pdf": "acfec527767a0c959e969aef094f2b7c3f4a22d4409dfb8588523fbe017521cb",
+    "thesis/figures/annotation_R2/data_lineage_instances.pdf": "b07da953b2250313425593c41667461552aef79acb375375b7e30d4bcc6677a3",
+    "thesis/figures/annotation_R2/five_task_phase_records.pdf": "302bf3c4b7fb5134f9bdeba8202884183c5a47ce9972301c0e9b74d1978462a3",
+    "thesis/figures/annotation_R2/grasp_evidence_pipeline.pdf": "afb327d9d984ab475e69340abb4c43acd8f45591ee339dfe21c05c2cc65f054f",
+    "thesis/figures/annotation_R2/joint_tendon_geometry.pdf": "f1e37d6984234040ed4b20effc32b0d8c978d68aaf3d21ec961db09768ba385b",
+    "thesis/figures/annotation_R2/platform_actual_architecture.pdf": "da2b0bcd652839aaa7a2208bbea435342f6fc1bedc2890c769be3e7f3517f7ca",
+    "thesis/figures/annotation_R2/recorded_tracking_strict.pdf": "4998725cff21ac0b4e6bf5a162e5a21b99a6a5f0754c71b3cc0854059b2e0224",
+    "thesis/figures/annotation_R2/sampling_processes.pdf": "c77c23b31c14243b6be2b5c3c7fa4d47ee1d9b9737ff02dc4be3055b089dc606",
+    "thesis/figures/annotation_R2/wrist_recorded_targets.pdf": "c8c3727ad6bb7d48ee49c93ccb2471a994f9000becd4a96137f50bda41b907b5",
+    "thesis/figures/annotation_batch2/control_implementation.pdf": "af6f9b0c65a8d61605c52895e53d761c02d5bedac9d00b8d503f7b9ccb0f81d2",
+    "thesis/figures/annotation_batch2/historical_lift_trajectory.pdf": "cc8f2d728f2e30aafdde3e0dd3c2d09298d1c9fba5e7762b7e1c8c79ea017483",
+    "thesis/figures/annotation_batch2/tactile_processing_operators.pdf": "b019256d95a75639168bb0d9a884cf042762fb6fd86664776534c7a673c7fb9b",
+    "thesis/figures/annotation_r2/historical_five_task_scenes.pdf": "de250ebdbf9feab06ff46e34f77d5fb3f85a799609d6ba3665a912ced1bf5e2e",
+    "thesis/figures/annotation_r2/historical_tactile_heatmaps.pdf": "435843ca7806ef1657ece66054f8e80ef349d810149df42c246d62fb6bacc4e8",
+    "thesis/figures/ch02/taxel_local_frame.pdf": "7e14593a186ea41bb11538d16202378a899e0bedbc3869f4e5ca0dd4af34eb03",
+    "thesis/figures/ch04/sink_historical_precision_r2.pdf": "97746768350b9b253b39bed17d6d7a2b92a9ba73a4cdc8b092feda165025c3f2",
+    "thesis/figures/ch06/f0_swd_baseline.pdf": "9eab60eff638272b2520b8b7afb9fefb10eab453c242ba8a957825f42087c4b0",
+    "thesis/figures/ch06/mask_gradient_paths.pdf": "32ecdfca47d430485d82b6638a00665436172de8e43c48e05db9dea0b883c342",
+    "thesis/figures/ch06/multi_round_distribution.pdf": "3037634bd0d819e41874c7f0f3c3436a4a9b94453c89693ff929d1cf5d139bae",
+    "thesis/figures/ch06/multiview_gradient_training.pdf": "a2d6499b4cfa24e1a2c241351f16baaf8b00ae793d48e211852243cf684ea275",
+    "thesis/figures/ch06/multiview_refiner_architecture.pdf": "45e35c1808d10b48e15990a9c0bb57a3041e3eb649ecf734f529d57bea0d3f50",
+    "thesis/figures/ch06/round_acceptance_states.pdf": "a1c5a8c496315bff14b672b54aad41d841179e16c01142a63bc6e6d56dee13bb",
+    "thesis/figures/ch06/shared_vector_field.pdf": "55b5c2596c6ea160efe3f89f6af61a3a842fdccbe8e153cd0ca8e587936d54da",
+    "thesis/figures/revision_20261127/ch04_admission.pdf": "849346ad7233c75ccf17465ab5b4c975477c6d4e6c75fc1c0419e3e0d96971a5",
+    "thesis/figures/revision_20261127/ch04_multirate.pdf": "02d19332ed00b0325a0a470652c20ec5306890417d0758470e86f40b9ccafa50",
+    "thesis/figures/revision_20261127/ch04_timing.pdf": "3e3184dcd850f7f6aeec390e7d6d2eed040373017b2c6bb9bd327f20fe7f3c83",
+    "thesis/figures/revision_20261127/ch05_c0_validation_protocol.pdf": "e5e6fbefe0cfa662991f770069d6ce82ac7b4ee78b8a649c90771002b9fa5677",
+    "thesis/figures/revision_20261127/ch05_dual_vae.pdf": "8321e482684b91e65abd9341479f953c9b553775a7b3e52fbef414dd92c7deeb",
+    "thesis/figures/revision_20261127/ch05_gmm_candidate_selection.pdf": "5e0b5054e2314605cd5f8fd6b892b5c2dfcaec22d4695c3bbb61959b0229e94a",
+    "thesis/figures/revision_20261127/ch05_gmm_physical_pipeline.pdf": "04bc1ee791c32bf86d669cb96a8425ea1ef1fa0d7bfa6b5d2621f85b1fc815a1",
+    "thesis/figures/revision_20261127/ch05_translator_paths.pdf": "7336a349d9b718fae4251769c2a4e2b6dba6a395525c9e3e2a7e43d89117fac8",
+    "thesis/figures/revision_20261127/robot_model.pdf": "c2de4c4a28a262ea6caba379c48e9c492fd695044a4490cc2163cef3480e90a2",
+    "thesis/figures/revision_20261127/surface_layout_strategies.pdf": "6afca93cfa87bf4fa4e1e226c15cbd5e9264a69bc4293006d9459bd578b92cad",
+    "thesis/figures/revision_20261127/tactile_layout.pdf": "999ba2a24120c2b19072383ca9cf9c83124d1eeabeac3d8c859af2423c7e0fe0",
+    "thesis/front/abstract.tex": "ef6fdac4cd9c987b98631cadeddbf253585fb5e6f2b5aa36bd1d4811d5c42037",
+    "thesis/front/cover.tex": "dedc630ca68b5f1ae28b0b7fc473b38361b8a06b20ace180717d54a6710be3c3",
+    "thesis/gbt7714-numerical-quanjiao.bst": "ab67e7aa8601ae835978db572c6ab7c21ad6874a1537844aa0930a1543bf26b4",
+    "thesis/hithesis.bst": "f113136ec2e0e7bf17c38dc69fa883e378d46910290d4779ea807cb9fb314d58",
+    "thesis/hithesis.sty": "ebe9a24873a8c132f70274e1b153c487ea2ebb82a708bb776d5b60e3530a875e",
+    "thesis/hithesisbook.cfg": "106231e5e9a26b9aeb1b503ae997b8351e8b1034a7334662b3cdddd9e9d74b18",
+    "thesis/hithesisbook.cls": "1e3ffaf52eec64e424d741fe459b50dc65baa893157cd1beb74b55004e7adcd1",
+    "thesis/hitszthesis.bst": "a10cfaad4b578d9bae68688e5e7b48c7776633067ef3491055b43022b03c788e",
+    "thesis/reference.bib": "b4fe4f81a6a097eaa5c025dc5fcfc660966b9bfd427f259214a4999f60378805",
+    "thesis/thesis.tex": "c3744242dfa7d74b7691ecd15e6e911adcfd909026617b9666211fda309f7c24",
+    "thesis/wiseref.sty": "10c1be20c0c28fca6c66200f91cb885a15c7597639ca4d7192d7031632909d2f"
+  },
+  "static_checks": {
+    "duplicate_labels": [],
+    "unresolved_references": [],
+    "missing_citation_keys": [],
+    "missing_graphics": [],
+    "active_source_count": 26,
+    "figures": 35,
+    "tables": 32,
+    "bib_entries": 34,
+    "old_bib_preserved_as_prefix": true
+  },
+  "scope": {
+    "training": 0,
+    "neural_inference": 0,
+    "physics_steps": 0,
+    "new_IK_solves": 0,
+    "Test_Holdout_arrays_accessed": false,
+    "commit_push_freeze": false
+  },
+  "note": "只对清单涉及文件作前后/登记Hash核对，不将此解释为全量实验目录审计。",
+  "source_bundle_independent_compile": {
+    "compiled_from_extracted_zip": true,
+    "pages": 106,
+    "main_pdf_pages": 106,
+    "same_page_count": true,
+    "note": "未要求字节完全相同，PDF时间戳与路径可能不同；源和图稿Hash在包内清单。"
+  },
+  "numbered_equation_blocks_unchanged": {
+    "thesis/body/ch01_introduction.tex": true,
+    "thesis/body/ch03_grasp_demonstrations.tex": true,
+    "thesis/body/ch04_multimodal_data.tex": true,
+    "thesis/body/ch02_simulation_platform.tex": true,
+    "thesis/body/ch05_sections/section_5_3.tex": true,
+    "thesis/front/abstract.tex": true
+  },
+  "wordcount_source_hashes_current": true,
+  "reference_annotated_pdf_current_sha256": "5544b61ac75fc8a1f33e6e4361cb3e44c1b648cb22fc02dd3bc3f48ec6a55f1f",
+  "artifacts": {
+    "thesis_audit/2026-11-28/annotation_R2_complete/ANNOTATION_LEDGER.csv": "983e6286cb054e69a6a4c62ebaa02e9fc12072a4676847c13c28cee7dd2c830f",
+    "thesis_audit/2026-11-28/annotation_R2_complete/ANNOTATION_LEDGER.md": "17de759706463115a0730db02a10931fc845cc7334ae8542d5d6be2da0d50fad",
+    "thesis_audit/2026-11-28/annotation_R2_complete/CHANGE_REPORT.md": "dad056e599ba83fb375fd492a619825ee7d3b3de56bd79c4d506a84895f1d631",
+    "thesis_audit/2026-11-28/annotation_R2_complete/FIGURE_SOURCES.json": "8adfdbdfcd80f5a24e127776326018bf8f8448f1a918a18fed39fd0c78b82867",
+    "thesis_audit/2026-11-28/annotation_R2_complete/FIGURE_SOURCES.md": "80d0e07f898205b74ebbb26004676b089d88fca534585a1486ef69a17fc93663",
+    "thesis_audit/2026-11-28/annotation_R2_complete/FONT_COMPARISON.pdf": "38e930927f10464d74bbeb11dc4d7fc3a4a7abc35b50ff77493b6ca584cd15ae",
+    "thesis_audit/2026-11-28/annotation_R2_complete/FONT_COMPARISON.png": "11f862ca0f4d83bd6668c36ee0d7f81cb96386cc39a53961515899fc4000786d",
+    "thesis_audit/2026-11-28/annotation_R2_complete/FONT_SCHEME.md": "b9fb8b7a86e61941c168581ec6345b4c16533ad4937f84521b030c4c2798d82b",
+    "thesis_audit/2026-11-28/annotation_R2_complete/LAYOUT_REVIEW.md": "4f1182180179090911a8310118d8afa52b27514e643e8d2c28c4303866eb09fa",
+    "thesis_audit/2026-11-28/annotation_R2_complete/LITERATURE_VERIFICATION.md": "6c13fc95b014e2144658158728fa9ca19e50264c5438ac6fa48304c4352109d6",
+    "thesis_audit/2026-11-28/annotation_R2_complete/OPEN_ISSUES_AND_PROPOSALS.md": "48ed8cb4b6b429abbf06d1c2456753d676ad4d510d9c107bfeb82e521491b367",
+    "thesis_audit/2026-11-28/annotation_R2_complete/PDF_REVIEW_PLAN.md": "f33acac1afb9b4fb9fde3d81e37e1f41b9efcb283b86594c06c71ce92f06623a",
+    "thesis_audit/2026-11-28/annotation_R2_complete/REVIEW.md": "926b7df0571f0465e0c1ecf822b5cfe2560259e1247c2e8b5dc5e4171816a927",
+    "thesis_audit/2026-11-28/annotation_R2_complete/TEX_SOURCE_MANIFEST.json": "f33abffef3815116f1f98270e1b31d5283f1af75c217bebc112a2c150ecc0ff2",
+    "thesis_audit/2026-11-28/annotation_R2_complete/WORDCOUNT_REVIEW.md": "63158f2c9e5615faf88cf359f8f5b7429adf392d34dc20a594bafb57be5e3f8b",
+    "thesis_audit/2026-11-28/annotation_R2_complete/assembly_failure_records_sources.json": "7ef77b1f655137d6c91c08b81bd65615b75e6e31554054fc8822f83b04cfd127",
+    "thesis_audit/2026-11-28/annotation_R2_complete/baseline.json": "3323f39e126bea2f08b510462365d09b32fb419c3c3f12cefcfc9ab3ff53f0a1",
+    "thesis_audit/2026-11-28/annotation_R2_complete/build.log": "5325d3d24fab71c10b91963a51fd1dc45bf7cbdb6bafa47c589183256e334c65",
+    "thesis_audit/2026-11-28/annotation_R2_complete/build_preview.py": "ef0f4d54f03ddf2dc4c21900d46efb34ecce6d5c13643aa6b4856def41b44ea2",
+    "thesis_audit/2026-11-28/annotation_R2_complete/changes.diff": "fcc7070fe8adfe22b6c7b1f655c187b7bcf7e37f95dc33b4049f65133e2756d8",
+    "thesis_audit/2026-11-28/annotation_R2_complete/check_source_bundle.py": "1aa68538581f9e256fa9554ff7d5ed0465a0b35d51e1d166a90d480adcc0d9a8",
+    "thesis_audit/2026-11-28/annotation_R2_complete/close_checks.py": "edb5c9318c0dbb77838cf986c244ad486f8f652b2b1385bb28d95125d1eee8f0",
+    "thesis_audit/2026-11-28/annotation_R2_complete/data_lineage_instances_sources.json": "962e3f05e2b307dcd7f4b12dadb45c7a92720e49c0f30e3fe51b1753e6fbe5a2",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_architecture.py": "3c15e6c5642900b7adcf9bbc993f217f2ab1c5a9cb74a4414cbc44a61e9d5e0e",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_failure_cases.py": "8951435cae2566f3d8c34c5f875395ca5e58a7a9efca2fe6be77041e1aa5c2e5",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_geometry.py": "5450e311766412e44798383e2d6e25f4697c9ca2d65b64debd1f1ad5d70d97db",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_grasp_evidence.py": "119b0fc89f20de249bf8ca8098dc9a02344f1b6c2d762211aeaee7892c10a475",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_lineage.py": "104594becea0ef4612e61f9ff0e5bba16e40428dedb20dcb8e836a81543bea59",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_sampling.py": "e55ae48845cd0df6914a7b212deca65e5f746f90e96ab1f1660156b43e622a32",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_task_phases.py": "ab642f5382499aeacd7ddc902c418a957b23b2eefbe5856ef0dd6d8e1d2f2996",
+    "thesis_audit/2026-11-28/annotation_R2_complete/draw_tracking.py": "445506ce2bb05db22fcb80d197ffcc30b80095377be97bbb794c6a40b9819037",
+    "thesis_audit/2026-11-28/annotation_R2_complete/edits.json": "aa4a5c719c5781dcfdbec11d0186454d867802415b714861329616f0e2f241d2",
+    "thesis_audit/2026-11-28/annotation_R2_complete/equation_preservation.json": "c53927e37e6edec84a72da43cc73e30ca31ffe36c6588f96ce2f884be2c43d6f",
+    "thesis_audit/2026-11-28/annotation_R2_complete/finalize_delivery.py": "01bffb8b51d1bbfda1d06e5305b7c90dbca3c77b2f9dddb3d7f2163ac677b223",
+    "thesis_audit/2026-11-28/annotation_R2_complete/five_task_phase_records_sources.json": "9528be7d7e7096a2a82c0a338cd00003c25d2636550d8d000425ff6028ee1882",
+    "thesis_audit/2026-11-28/annotation_R2_complete/font_comparison.py": "d9be643110f6a4cc298334e8443bb719bd2ee75c9703f1ef1c644b3acbe3f7d2",
+    "thesis_audit/2026-11-28/annotation_R2_complete/grasp_evidence_sources.json": "7409b6c8948f4905c352ecb884d7a15036714b650c4b67eca6945f614dcae622",
+    "thesis_audit/2026-11-28/annotation_R2_complete/inspect_pdf.py": "c33d9f381b9e7349b6a054a8529751c7e9a254c6774b4157fcf0bd92febbc7fa",
+    "thesis_audit/2026-11-28/annotation_R2_complete/integrate.py": "89b57ceba12502afd793284154849b238d53fb7193066c389cafd144598ded84",
+    "thesis_audit/2026-11-28/annotation_R2_complete/joint_tendon_geometry_sources.json": "3d64437edcbe248c54cf0534df3d8222c3e499877b4ce2ff0c3d763dde6cdc4b",
+    "thesis_audit/2026-11-28/annotation_R2_complete/kinematic_tracking_reconstruction.npz": "91eaf94497d7c2cae2f173a9e3b013e394867d71e14f5262deaba55a6cd5bc5f",
+    "thesis_audit/2026-11-28/annotation_R2_complete/lift_frame312.png": "dbfc4307087d5618e37a9ef9f5e2bf7b161593713b3f0d180ed3db577ddda0b8",
+    "thesis_audit/2026-11-28/annotation_R2_complete/pdf_page_checks.json": "409647972704073f2d819a39f97904ae562be80979dd4cd80594738cf779c439",
+    "thesis_audit/2026-11-28/annotation_R2_complete/platform_actual_architecture_sources.json": "7ae2ce91d94ec118be8027ea9925eb8010ca418621f4250e15d0b554a29cedd8",
+    "thesis_audit/2026-11-28/annotation_R2_complete/recorded_tracking_strict_sources.json": "d1c69bb2609f0707462086246c7e42b95b177a77da50a1db17188c706c7e3694",
+    "thesis_audit/2026-11-28/annotation_R2_complete/revise_prose.py": "8ff30c77106fccf205fa66d57890ff96c68b0d44f126b7358b3e01edb8c2d463",
+    "thesis_audit/2026-11-28/annotation_R2_complete/sampling_processes_sources.json": "07fa09056f0949efd90d6b363fe8a142aec5c954166fd4688d8d801ab62e8713",
+    "thesis_audit/2026-11-28/annotation_R2_complete/skin_0_0_p_sampling.npz": "b11f8a6619f45fd9e540f1138eab15d8e0ba345e0f91fa6fcdac57acd6f0663f",
+    "thesis_audit/2026-11-28/annotation_R2_complete/skin_0_2_p_sampling.npz": "d1fd85a5abef26e738050f66e833448f31a583f333020b6e27083595882f6ff7",
+    "thesis_audit/2026-11-28/annotation_R2_complete/skin_palm_p_sampling.npz": "ed6fe393948098c200476c7bf787d508eeda5f83da3d59ceb778e18e6975b974",
+    "thesis_audit/2026-11-28/annotation_R2_complete/source_bundle_build.log": "5e26c6af7cf839b23ca1ae9f686b6d7113651b7a7c901607424fd9fcfc205744",
+    "thesis_audit/2026-11-28/annotation_R2_complete/source_bundle_check.json": "4ae969fab6528d842f0587540dc783974308d225499d0590b8c3497e4b1ab741",
+    "thesis_audit/2026-11-28/annotation_R2_complete/static_checks.json": "b04c704f4f08cf869343bf1e164cc6fd1c805e0bad0a4e48fd5fedaa9e22cbf0",
+    "thesis_audit/2026-11-28/annotation_R2_complete/style.py": "2153405ca56ace73172fb76d1fd2ea5119f648d0d533f6663b08cadb10b03057",
+    "thesis_audit/2026-11-28/annotation_R2_complete/thesis_annotation_R2.pdf": "c8b5f7a7fd50a73d241112faa45acca718d03955456f87fc04d85bb19b39f82b",
+    "thesis_audit/2026-11-28/annotation_R2_complete/thesis_annotation_R2_source.zip": "4ca672c5b4dd345e45f387569fe968791468755a77c75c03d31d1f93a2edd365"
+  }
+}

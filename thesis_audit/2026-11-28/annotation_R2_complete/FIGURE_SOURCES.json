@@ -1,0 +1,92 @@
+[
+  {
+    "asset": "thesis/figures/annotation_R2/platform_actual_architecture.pdf",
+    "label": "fig:ch02_architecture",
+    "figure_number": "2-1",
+    "printed_page": "13",
+    "description": "当前机器人模型、控制与712维历史观测",
+    "script": "draw_architecture.py",
+    "provenance": "platform_actual_architecture_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/joint_tendon_geometry.pdf",
+    "label": "fig:ch02_drive",
+    "figure_number": "2-3",
+    "printed_page": "15",
+    "description": "实际关节模型、固定腱系数和执行器",
+    "script": "draw_geometry.py",
+    "provenance": "joint_tendon_geometry_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/sampling_processes.pdf",
+    "label": "fig:ch02_sampling_steps",
+    "figure_number": "2-7",
+    "printed_page": "22",
+    "description": "指节、指尖、手掌三类算法实际中间结果",
+    "script": "draw_sampling.py",
+    "provenance": "sampling_processes_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/grasp_evidence_pipeline.pdf",
+    "label": "fig:ch03_overall_pipeline",
+    "figure_number": "3-1",
+    "printed_page": "32",
+    "description": "Sugar Box候选几何、历史执行及物体运动",
+    "script": "draw_grasp_evidence.py",
+    "provenance": "grasp_evidence_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/candidate_geometry_feedback.pdf",
+    "label": "fig:ch03_candidate_sources",
+    "figure_number": "3-2",
+    "printed_page": "34",
+    "description": "候选接触、进化记录及另物体PPO保存动作",
+    "script": "draw_grasp_evidence.py",
+    "provenance": "grasp_evidence_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/wrist_recorded_targets.pdf",
+    "label": "fig:ch03_reachability",
+    "figure_number": "3-3",
+    "printed_page": "36",
+    "description": "已保存末端目标、预检残差及执行状态",
+    "script": "draw_grasp_evidence.py",
+    "provenance": "grasp_evidence_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/recorded_tracking_strict.pdf",
+    "label": "fig:ch03_strict_replay",
+    "figure_number": "3-4",
+    "printed_page": "38",
+    "description": "保存状态的运动学重建与历史Strict结果",
+    "script": "draw_tracking.py",
+    "provenance": "recorded_tracking_strict_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/five_task_phase_records.pdf",
+    "label": "fig:ch03_task_transfer",
+    "figure_number": "3-6",
+    "printed_page": "43",
+    "description": "五任务原始视频的实际阶段帧",
+    "script": "draw_task_phases.py",
+    "provenance": "five_task_phase_records_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/assembly_failure_records.pdf",
+    "label": "fig:ch03_examples",
+    "figure_number": "3-7",
+    "printed_page": "45",
+    "description": "装配成功失败记录的高度、接触与阶段",
+    "script": "draw_failure_cases.py",
+    "provenance": "assembly_failure_records_sources.json"
+  },
+  {
+    "asset": "thesis/figures/annotation_R2/data_lineage_instances.pdf",
+    "label": "fig:ch04_carriers",
+    "figure_number": "4-1",
+    "printed_page": "48",
+    "description": "v4与Sugar导出两个真实来源关系",
+    "script": "draw_lineage.py",
+    "provenance": "data_lineage_instances_sources.json"
+  }
+]

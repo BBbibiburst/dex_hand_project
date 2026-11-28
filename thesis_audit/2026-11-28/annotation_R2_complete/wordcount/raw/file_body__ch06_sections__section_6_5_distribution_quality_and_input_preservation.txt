@@ -1,0 +1,10 @@
+File: /home/zmy/dex_hand_project/thesis_audit/2026-11-28/annotation_R2_complete/wordcount/generated/file_body__ch06_sections__section_6_5_distribution_quality_and_input_preservation.tex
+Sum count: 1723
+Words in text: 1679
+Words in headers: 13
+Words outside text (captions, etc.): 31
+Number of headers: 1
+Number of floats/tables/figures: 2
+Number of math inlines: 27
+Number of math displayed: 2
+

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "UTF8/text/headings/table/caption/footnote/math/comments/cite/ref/code/bibliography",
+    "expected": {
+      "text": 7,
+      "headings": 4,
+      "captions_footnotes": 7,
+      "total": 18,
+      "inline_math": 1,
+      "display_math": 1,
+      "float_count": 2,
+      "code_blocks": 1
+    },
+    "actual": {
+      "text": 7,
+      "headings": 4,
+      "captions_footnotes": 7,
+      "total": 18,
+      "inline_math": 1,
+      "display_math": 1,
+      "float_count": 2,
+      "code_blocks": 1
+    },
+    "passed": true
+  },
+  {
+    "name": "literal input+include; same canonical file counted once",
+    "expected_total": 7,
+    "actual_total": 7,
+    "duplicates": [
+      "scripts/tests/thesis_wordcount/child.tex"
+    ],
+    "passed": true
+  },
+  {
+    "name": "custom text macro rule",
+    "expected_total": 3,
+    "actual_total": 3,
+    "passed": true
+  },
+  {
+    "name": "longtable/multicolumn/multirow/minted/verbatim/hitsetup/ignored-region",
+    "expected_total": 7,
+    "actual_total": 7,
+    "passed": true
+  },
+  {
+    "name": "native TeXcount include integration (comparison, not primary dedup policy)",
+    "native_total": 10,
+    "returncode": 0,
+    "passed": true,
+    "note": "Primary count uses canonical-file deduplication resolver; native trace retained."
+  }
+]
